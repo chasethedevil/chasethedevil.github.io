@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Local Volatility Delta &amp; Dynamic &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Local Volatility Delta &amp; Dynamic</h1>
+    <span class="post-date">Nov 29, 2012 &middot; 2 minute read
+    </span>
+    <p>This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.<br /><div><br /></div><div>Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</div><div><br /></div><div>But this finite-difference grid Delta is also different from a standard numerical Delta where one just move the initial spot up and down, and takes the difference of computed prices. The numerical Delta will eventually include a change in implied volatility, depending if the surface is sticky-strike (vol will stay constant) or sticky-delta (vol will change). So the numerical Delta produced with a sticky-strike surface will be the same as the standard Black-Scholes Delta. In reality, what happens is that the local volatility is different when the spot moves up, if we recompute it: it is not static. The finite difference solver computes Delta with a static local volatility. If we call twice the finite difference solver with a different initial spot, we will reproduce the correct Delta, that takes into account the dynamic of the implied volatility surface.</div><div><br /></div><div>Here how different it can be if the delta is computed from the grid (static local volatility) or numerically (dynamic local volatility) on an exotic trade:</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s1600/static_localvol.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="235" src="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s320/static_localvol.png" width="320" /></a></div><div><br /><br />This is often why people assume the local volatility model is wrong, not consistent. It is wrong if we consider the local volatility surface as static to compute hedges.</div></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

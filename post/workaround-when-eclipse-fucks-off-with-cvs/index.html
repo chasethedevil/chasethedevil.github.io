@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Workaround When Eclipse Fucks Off With CVS &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Workaround When Eclipse Fucks Off With CVS</h1>
+    <span class="post-date">Nov 28, 2006 &middot; 2 minute read
+    </span>
+    <p>Until recently, I always found Eclipse CVS support to be excellent. The synchronize view was really a big plus to do clean commits, without forgetting any file.<br> <br> But I have encountered several problem with Eclipse 3.2+:<br> <br> <blockquote>On one project, it keeps putting the build directory into CVS, and I can&rsquo;t find how to change that setting. Each time I open the project I have to change the CVS/Entries file.<br>   <br> On another, where I have lots of files in, Eclipse delete some of the files (checked in CVS) regularly, although not often. It won&rsquo;t retrieve them back again from CVS. It seems to be the same files each time. I have no clue why.<br>   <br> The diff sometimes tells me the whole file has changed while there is absolutely no change.<br>   <br> I could not make the merge work. It kept on complaining about some parameters.<br>   <br> </blockquote> And now the workaround for all those cases: <br> <blockquote><b>The good old CVS command line.<br>   <br>   </b></blockquote> I never remember how do to a merge with the command line, so I each time go to google and read<a  href="http://www.csc.calpoly.edu/%7Ejdalbey/205/Resources/cvsBranchMerge.html"> this merge example page</a>. Here are the very simple steps if you are in a branch and want to merge:<br> <ol>   <li>     <pre>cvs update -A mypoem.txt (use head as local repository)</pre>   </li>   <li>     <pre class="source">cvs update -j release-1 (merge release-1 changes into local repository)</pre>   </li>   <li>     <pre class="source">cvs update mypoem.txt</pre>   </li>   <li>     <pre class="source">cvs commit mypoem.txt</pre>   </li> </ol> <br></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

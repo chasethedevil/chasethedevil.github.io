@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Non Central Chi Squared Distribution in Java or Scala &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Non Central Chi Squared Distribution in Java or Scala</h1>
+    <span class="post-date">Jan 3, 2013 &middot; 2 minute read
+    </span>
+    <p>I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<br /><br />OpenGamma has a not too bad <a href="http://docs-static.opengamma.com/1.2.0/java/javadocs/com/opengamma/analytics/math/statistics/distribution/NonCentralChiSquaredDistribution.html">implementation</a>. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <a href="http://www.boost.org/doc/libs/1_36_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">implementation in the Boost library</a>. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<br /><br />The Boost implementation seems much more robust in general thanks to:<br /><ul><li>The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding&rsquo;s method.</li><li>Reverts to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.ucs.louisiana.edu%2F~kxk4695%2FCSDA-03.pdf&amp;ei=LKzlUKWvL_K00QX_t4CYBA&amp;usg=AFQjCNFgkeariqMPXVH4LLrO5RRi3nIc0Q">Benton and Krishnamoorthy</a> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;ved=0CEIQFjAC&amp;url=http%3A%2F%2Fdspace.uevora.pt%2Frdpc%2Fbitstream%2F10174%2F4635%2F1%2FSpeedAccuracyCEV_FFM%255B1%255D.pdf&amp;ei=Ea3lULLsBaPL0QXKuoHYAw&amp;usg=AFQjCNGkqkA5e_-0n_DATE9BTQVoL9NTkg&amp;cad=rja">not very precise in general</a>.</li></ul>It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<br /><br />If only it was simple to commit to open-source projects while working for a software company&hellip;</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

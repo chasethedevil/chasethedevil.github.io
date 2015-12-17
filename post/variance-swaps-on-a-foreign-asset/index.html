@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Variance swaps on a foreign asset &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Variance swaps on a foreign asset</h1>
+    <span class="post-date">Feb 24, 2015 &middot; 2 minute read
+    </span>
+    <p>There is very little information on variance swaps on a foreign asset. There can be two kinds of contracts:<br /><ul><li>one that pays the foreign variance in a domestic currency, this is a quanto contract as the exchange rate is implicitly fixed.</li><li>one that pays the foreign variance, multiplied by the fx rate at maturity. This is a flexo contract, and is just about buying a variance swap from a foreign bank. The price of such a contract today is very simple, just the standard variance swap price multiplied by the fx rate today (change of measure).</li></ul>For quanto contracts, it&rsquo;s not so obvious a priori. If we consider a stochastic volatility model for the asset, the replication formula will not be applicable directly as the stochastic volatility will appear in the quanto drift correction. Furthermore, vanilla quanto option prices can not be computed simply as under Black-Scholes, a knowledge of the underlying model is necessary.<br /><br />Interestingly, under the Schobel-Zhu model, it is simple to fit an analytic formula for the quanto variance swap. The standard variance swap price is:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-gfq9trxBHhg/VOxxHi0khTI/AAAAAAAAH00/xD8NbXUSJls/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A33%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-gfq9trxBHhg/VOxxHi0khTI/AAAAAAAAH00/xD8NbXUSJls/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A33%3A17.png" height="50" width="400" /></a></div>The quanto variance swap can be priced with the same formula using a slightly different theta:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-OwYg8Hs9qRw/VOxxMe-iifI/AAAAAAAAH08/xBeV56UEGV8/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A06.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-OwYg8Hs9qRw/VOxxMe-iifI/AAAAAAAAH08/xBeV56UEGV8/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A06.png" /></a></div><br />We can use it to assess the accuracy of a naive quanto option replication where we use the ATM quanto forward instead of the forward in the variance swap replication formula.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ate0oZ41eoY/VOxxhwqGI_I/AAAAAAAAH1E/6LRgNiAHCJg/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A52.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ate0oZ41eoY/VOxxhwqGI_I/AAAAAAAAH1E/6LRgNiAHCJg/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A52.png" height="289" width="640" /></a></div><br />Interestingly, the&nbsp; quanto forward approximation turns out to be very accurate and the correction is important. The price without correction is the price with zero correlation, and we see it can be +/-5% off in this case.<br /><br />The local vol price seems a bit off, I am not sure exactly why. It could be due the discretization, the theoretical variance should be divided by (N-1) but here we divide by N where N is the number of observations. That would still lead to a skewed price but better centered around correlation 0.<br /><br />It&rsquo;s also a bit surprising that local vol is worse than the simpler ATM quanto forward approximation: it seems that it&rsquo;s extracting the wrong information to do a more precise quanto correction, likely related to the shift of stochastic volatility under the domestic measure.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

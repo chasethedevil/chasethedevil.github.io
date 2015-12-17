@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the devil &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="alternate" type="application/rss+xml" title="Chase the devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/monte-carlo--inverse-cumulative-normal-distribution/">Monte Carlo &amp; Inverse Cumulative Normal Distribution</a>
+      </h1>
+      <span class="post-date">Feb 3, 2015 &middot; 2 minute read
+      </span>
+      
+      <p>In most financial Monte-Carlo simulations, there is the need of generating normally distributed random numbers. One technique is to use the inverse cumulative normal distribution function on uniform random numbers. There are several different popular numerical implementations:<br /><ul><li>Wichura AS241 (1988)</li><li>Moro &ldquo;The full Monte&rdquo; (1995)</li><li><a href="http://home.online.no/~pjacklam/notes/invnorm/">Acklam</a> (2004)</li><li><a href="http://arxiv.org/abs/0901.0638">Shaw breakless formula</a> optimized for GPUs (2011) </li></ul>W. Shaw has an excellent overview of the accuracy of the various methods in his paper <i><a href="http://www.mth.kcl.ac.uk/~shaww/web_page/papers/NormalQuantile1.pdf">Refinement of the normal quantile</a></i>.<br /><br />But what about performance? In Monte-Carlo, we could accept a slighly lower accuracy for an increase in performance.<br /><br />I tested the various methods on the Euler full truncation scheme for Heston using a small timestep (0.01). Here are the results with Sobol quasi-rng:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.9186256922511046 0.42s<br />MORO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922459066 0.38s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922549364 0.40s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM REFINED 0.9186256922511045 2.57s<br />SHAW-HYBRID &nbsp;&nbsp; 0.9186256922511048 0.68s</span></span><br /><br />In practice, the most accurate algorithm, AS241, is of comparable speed as the newer but less accurate algorithms of MORO and ACKLAM. Acklam refinement to go to double precision (which AS241 is) kills its performance.<br /><br />What about the Ziggurat on pseudo rng only? Here are the results with Mersenne-Twister-64, and using the Doornik implementation of the Ziggurat algorithm:<br /><br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp; 0.9231388565879476&nbsp; 0.49s<br />ZIGNOR 0.9321405648313437&nbsp; 0.44s</span></span><br /><br />There is a more optimized algorithm, VIZIGNOR, also from Doornik which should be a bit faster. As expected, the accuracy is quite lower than with Sobol, and the Ziggurat looks worse. This is easily visible if one plots the implied volatilities as a function of the spot for AS241 and for ZIGNOR.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">AS241 implied volatility on Mersenne-Twister</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">ZIGNOR implied volatility on Mersenne-Twister</td></tr></tbody></table><br />Zignor is much noisier.<br /><br />Note the slight bump in the scheme EULER-FT-BK that appears because the scheme, that approximates the Broadie-Kaya integrals with a trapeze (as in Andersen QE paper), does not respect martingality that well compared to the standard full truncated Euler scheme EULER-FT, and the slightly improved EULER-FT-MID where the variance integrals are approximated by a trapeze as in Van Haastrecht paper on Schobel-Zhu:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" height="76" width="640" /></a></div>This allows to leak less correlation than the standard full truncated Euler.<br /><br /><br /></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/local-stochastic-volatility---particles-and-bins/">Local Stochastic Volatility - Particles and Bins</a>
+      </h1>
+      <span class="post-date">Jan 30, 2015 &middot; 3 minute read
+      </span>
+      
+      <p>In an <a href="http://chasethedevil.blogspot.fr/2013/10/local-stochastic-volatility-with-monte.html">earlier post</a>, I mentioned the similarities between the Guyon-Labordere <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1885032">particle method</a> and the Vanderstoep-Grzelak-Oosterlee <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fabstract%3D2278122&amp;ei=255eUqaEDMaxhAfdqoBI&amp;usg=AFQjCNF2KqSTT2ouvAyiA2J77foOFTzMKw&amp;sig2=fzb4vlDPp49Hp1oT5Wja4A&amp;bvm=bv.54176721,d.ZG4">&ldquo;bin&rdquo; method</a> to calibrate and price under Local Stochastic volatility. I will be a bit more precise here.<br /><br /><span style="font-size: large;"><b>The same thing, really</b></span><br /><br />The particle method can be seen as a generalization of the &ldquo;bin&rdquo; method. In deed, the bin method consists in doing the particle method using a histogram estimation of the conditional variance. The histogram estimation can be more or less seen as a very basic rectangle kernel with the appropriate bandwidth. The &ldquo;bin&rdquo; method is then just the particle method with another kernel (wiki link) (in the particle method, the kernel is a quartic with bandwidth defined by some slightly elaborate formula). A very good paper on this is Silverman <i><a href="https://ned.ipac.caltech.edu/level5/March02/Silverman/paper.pdf">Density estimation for statistics and data analysis</a></i>, referenced by Guyon-Labordere.<br /><br />In theory, the original particle method has the advantage of using a narrower bandwidth, resulting in a theoretical increase in performance as one does not have to sum over all particles, while providing a more local therefore precise estimate. In practice, the performance advantage is not so clear on my non optimized code.<br /><br /><span style="font-size: large;"><b>Two-pass</b></span><br /><br />There is an additional twist in the particle method: one can compute the expectation and the payoff evaluation in the same Monte-Carlo simulation, or in two sequential Monte-Carlo simulations.<br /><br />Why would we do two? Mainly because the expectation is computed across all paths, at each time step, while, usually, payoff evaluation requires a full path as it will need to store some state at each observation time for path-dependent payoffs.<br /><br />We can avoid recomputing the paths by just caching them at each observation time. The problem is that the size of this cache can quickly become extremely large and blow up the memory. For example a 10y daily knock-out will require 10 * 252 * 8 * 2 * MB = 40 GB for 1 million paths.<br /><br />A side effect of the second simulation is that one can use a Quasi-Random number generator there, while for the first simulation, this is not easy as we compute all paths, dimension by dimension.<br /><br />In practice, both methods work well, particle or bins, single-pass or two-pass. Here is a graph of the error in volatility, SV is a not so well calibrated Heston to market data. LVSV are the local stochastic volatility simulations, using as Vanderstoep 100 steps per year and 500K simulations with 30 bins.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-mU7ODNSv0l0/VMtk-7UmKvI/AAAAAAAAHy8/u-jq0sMMJRc/s1600/Screenshot%2Bfrom%2B2015-01-30%2B09%3A23%3A31.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-mU7ODNSv0l0/VMtk-7UmKvI/AAAAAAAAHy8/u-jq0sMMJRc/s1600/Screenshot%2Bfrom%2B2015-01-30%2B09%3A23%3A31.png" height="288" width="640" /></a></div><br /><br />The advantages of the particle do not show up in terms of accuracy on this example.<br />I have also noticed that short expiries seem trickier, the error being larger. This might just be due to the time-step size, but interestingly the papers only show graphs of medium (min=6m) to large expiries.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/flat-volatility-surfaces--discrete-dividends/">Flat Volatility Surfaces &amp; Discrete Dividends</a>
+      </h1>
+      <span class="post-date">Nov 25, 2014 &middot; 3 minute read
+      </span>
+      
+      <p>In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the <a href="http://www.opengamma.com/sites/default/files/equity-variance-swaps-dividends-opengamma.pdf">OpenGamma paper</a> presents this graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" height="167" width="400" /></a></div><br />It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.<br /><br />This can be traced to the fact that the Black formula does not respect C(S,K,Td-) = C(S,K-d,Td) as the forward drops from F(Td-) to F(Td-)-d where d is dividend amount at td, the dividend ex date.<br /><br />Unfortunately, those examples are not very helpful. In practice, the market observables are just Black volatility points, which can be interpolated to volatility slices for each expiry without regards to dividends, not a full volatility surface. Discrete dividends will mostly happen between two slices: the Black volatility jump will happen on some time-interpolated data.<br /><br />While the jump size is known (it must obey to the call price continuity), the question of how one should interpolate that data until the jump is far from trivial even using two flat Black volatility slices.<br /><br />The most logical is to consider a model that includes discrete dividends consistently. For example, one can fully lookup the Black volatility corresponding the price of an option assuming a piecewise lognormal process with jumps at the dividend dates. It can be priced by applying a finite difference method on the PDE. Alternatively, <a href="http://www.risk.net/risk-magazine/technical-paper/1530307/finessing-fixed-dividends">Bos &amp; Vandermark</a> propose a simple spot and strike adjusted Black formula that obey the continuity requirement (the Lehman model), which, in practice, stays quite close to the piecewise lognormal model price. Another possibility is to rely on a forward modelling of the dividends, as in <a href="http://www.quantitative-research.de/dl/Dividends_And_Volatility.pdf">Buehler</a> (if one is comfortable with the idea that the option price will then depend ultimately on dividends past the option expiry).<br /><br />Recently, a <a href="http://onlinelibrary.wiley.com/doi/10.1002/wilm.10112/abstract">Wilmott article</a> suggested to only rely on the jump adjustment, but did not really mention how to find the volatility just before or just after the dividend. Here is an illustration of how those assumptions can change the volatility in between slices using two dividends at T=0.9 and T=1.1.<br /><br />In the first graph, we just interpolate linearly in forward moneyness the pure vol from the Bos &amp; Vandermark formula, as it should be continuous with the forward (the PDE would give nearly the same result) and compute the equivalent Black volatility (and thus the jump at the dividend dates).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" height="300" width="400" /></a></div><br />In the second graph, we interpolate linearly the two Black slices, until we find a dividend, at which point we impose the jump condition and repeat the process until the next slice. We process forward (while the Wilmott article processes backward) as it seemed a bit more natural to make the interpolation not depend on future dividends. Processing backward would just make the last part flat and first part down-slopping. On this example backward would be closer to the Bos Black volatility, but when the dividends are near the first slice, the opposite becomes true.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" height="300" width="400" /></a></div>While the scale of those changes is not that large on the example considered, the choice can make quite a difference in the price of structures that depend on the volatility in between slices. A recent example I encountered is the variance swap when one includes adjustment for discrete dividends (then the prices just after the dividend date are used).<br /><br />To conclude, if one wants to use the classic Black formula everywhere, the volatility must jump at the dividend dates. Interpolation in time is then not straightforward and one will need to rely on a consistent model to interpolate. It is not exactly clear then why would anyone stay with the Black formula except familiarity.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/machine-learning--quantitative-finance/">Machine Learning &amp; Quantitative Finance</a>
+      </h1>
+      <span class="post-date">Nov 18, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>There is an interesting course on <a href="https://class.coursera.org/ml-007/lecture">Machine Learning on Coursera</a>, it does not require much knowledge and yet manages to teach quite a lot.<br /><br />I was struck by the fact that most techniques and ideas apply also to problems in quantitative finance.<br /><ul><li><i>Linear regression</i>: used for example in the Longstaff-Schwartz approach to price Bermudan options with Monte-Carlo. Interestingly the teacher insists on feature normalization, something we can forget easily, especially with the polynomial features.</li><li><i>Gradient descent</i>: one of the most basic minimizer and we use minimizers all the time for model calibration.</li><li><i>Regularization</i>: in finance, this is sometimes used to smooth out the volatility surface, or can be useful to add stability in calibration. The lessons are very practical, they explain well how to find the right value of the regularization parameter.</li><li><a href="http://en.wikipedia.org/wiki/Artificial_neural_network"><i>Neural networks</i></a>: calibrating a model is very much like training a neural network. The <a href="http://en.wikipedia.org/wiki/Backpropagation"><i>backpropagation</i></a> is the same thing as the adjoint differentiation. It&rsquo;s very interesting to see that it is a key feature for&nbsp; Neural networks, otherwise training would be much too slow and Neural networks would not be practical. Once the network is trained, it is evaluated relatively quickly forward. It&rsquo;s basically the same thing as calibration and then pricing.</li><li><i>Support vector machines</i>: A gaussian kernel is often used to represent the frontier. We find the same idea in the particle Monte-Carlo method.</li><li>Principal component analysis: can be applied to the covariance matrix square root in Monte-Carlo simulations, or to &ldquo;compress&rdquo; large baskets, as well as for portfolio risk.</li></ul>It&rsquo;s also interesting to hear the teacher repeating that people should not try possible improvements at random (often because they have only one idea) but analyze before what makes the most sense. And that can imply digging in the details, looking at what&rsquo;s going on 100 samples.<br /><br />While it sounds like a straightforward remark, I have found that people (including myself) tend to do the same mistakes in finance. We might use some quadrature, find out it does not perform that well in some cases, replace it with another one that behaves a bit better, without investigating the real issue: why does the first quadrature break? is the new quadrature really fixing the issue?</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/pseudo-random-vs-quasi-random-numbers/">Pseudo-Random vs Quasi-Random Numbers</a>
+      </h1>
+      <span class="post-date">Nov 12, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>Quasi-Random numbers (like <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol</a>) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like <a href="http://en.wikipedia.org/wiki/Mersenne_twister">Mersenne-Twister</a>). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).<br /><br />For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions). Later Lemieux gave direction numbers for up to 360 dimensions. Then, P. Jäckel proposed some extension with a random initialization of the direction vectors in his book from 2006. And finally Joe &amp; Kuo published direction numbers for up to 21200 dimensions.<br /><br />But there are very few studies about how good are real world simulations with so many quasi-random dimensions. A recent paper &ldquo;<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2210420">Fast Ninomiya-Victoir Calibration of the Double-Mean-Reverting Model</a>&rdquo; by Bayer, Gatheral &amp; Karlsmark tests this for once, and the results are not so pretty:<br /><div class="separator" style="clear: both; text-align: center;"><a href="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s1600/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="342" src="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s640/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" width="640" /></a></div>With their model, the convergence with Sobol numbers becomes worse when the number of time-steps increases, that is when the number of dimension increases. There seems to be even a threshold around 100 time steps (=300 dimensions for Euler) beyond which a much higher number of paths (2^13) is necessary to restore a proper convergence. And they use the latest and greatest Joe-Kuo direction numbers.<br /><br />Still the total number of paths is not that high compared to what I am usually using (2^13 = 8192). It&rsquo;s an interesting aspect of their paper: the calibration with a low number of paths.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/integrating-an-oscillatory-function/">Integrating an oscillatory function</a>
+      </h1>
+      <span class="post-date">Nov 5, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. <br /><br />The <a href="https://math.nyu.edu/financial_mathematics/content/02_financial/2008-3.pdf">Carr-Lee</a> seasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.<br /><a href="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" height="151" width="640" /></a><br />I&nbsp; first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (<a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">the one from Espelid</a>) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp; Gauschi, present in Quantlib). I tried various choices of adaptive (coteda, modsim, adaptsim,&hellip;) or brute force trapezoidal integration, but either they were order of magnitudes slower or unstable in some cases. Just using the same Gauss-Lobatto implementation for both would fail&hellip;<br /><br />I then noticed you could write the integral as a Fourier transform as well, allowing the use of FFT. Unfortunately, while this worked, it turned out to require a very large number of points for a reasonable accuracy. This, plus the tricky part of defining the proper step size, makes the method not so practical.<br /><br />I had heard before of the <a href="http://www.cs.berkeley.edu/~fateman/papers/oscillate.pdf">Filon quadrature</a>, which I thought was more of a curiosity. The main idea is to integrate exactly x^n * cos(k*x). One then relies on a piecewise parabolic approximation of the function f to integrate f(x) * cos(k*x). Interestingly, a very similar idea has been used in the <a href="http://www.risk.net/risk-magazine/technical-paper/1500323/cutting-edges-domain-integration">Sali quadrature method</a> for option pricing, except one integrates exactly x^n * exp(-k*x^2).<br /><br />It turned out to be remarkable on that problem, combined with a <a href="http://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method">simple adaptive Simpson</a> like method to find the right discretization. Then as if by magic, any outer integration quadrature worked. <br /><br /></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/the-elusive-reference-the-lamperti-transform/">The elusive reference: the Lamperti transform</a>
+      </h1>
+      <span class="post-date">Nov 3, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>Without knowing that it was a well known general concept, I first noticed the use of the Lamperti transform in the Andersen-Piterbarg &ldquo;Interest rate modeling&rdquo; book p292 &ldquo;finite difference solutions for general phi&rdquo;. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s400/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" />&nbsp;</a></div><div class="separator" style="clear: both; text-align: left;">Pat Hagan used that transformation for a better discretization&nbsp; of the <a href="http://chasethedevil.blogspot.fr/2014/01/coordinate-transform-of-andreasen-huge.html">arbitrage free SABR PDE model</a>.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">I then started to notice the use of this transformation in many more papers. The first one I saw naming it &ldquo;Lamperti transform&rdquo; was the paper from Ait-Sahalia &ldquo;<a href="http://www.princeton.edu/~yacine/mle.pdf">Maximum likelyhood estimation of discretely sampled diffusions: a closed-form approximation approach</a>&rdquo;. Recently those closed form formulae have been applied to the quadrature method (where one integrates the transition density by a quadrature rule) in &ldquo;Advancing the universality of quadrature methods to any underlying process for option pricing&rdquo;. There is also a recent interesting application to Monte-Carlo simulation in &ldquo;<a href="http://www-leland.stanford.edu/~glynn/papers/2013/RheeG13a.pdf">Unbiased Estimation with Square Root Convergence for SDE Models</a>&rdquo;.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">So the range of practical applications is quite large. But there was still no reference. A google search pointed me to a well written paper that describes the application of the Lamperti transform to various stochastic differential equations, showing its limits &ldquo;<a href="http://orbit.dtu.dk/en/publications/from-state-dependent-diffusion-to-constant-diffusion-in-stochastic-differential-equations-by-the-lamperti-transform(8c869be7-68e9-4b47-acb1-05529b9a8590).html">From State Dependent Diffusion to Constant Diffusion in Stochastic Differential Equations by the Lamperti Transform</a>&rdquo;.&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" height="245" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">Gary then <a href="http://www.clarusft.com/lamperti-transform/">blogged about the Lamperti transform</a> and various papers from Lamperti, but does not say which one is the source.</div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">After going through some, I noticed that Lamperti&rsquo;s 1964 &ldquo;<a href="http://projecteuclid.org/euclid.kjm/1250524711">A simple construction of certain diffusion processes</a>&rdquo; seemed to be the closest, even though it seems to go beyond stochastic differential equations.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" height="208" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">Today, I found a paper referencing this paper explicitly when presenting the transformation of a stochastic process to a unit diffusion in &ldquo;<a href="http://arxiv.org/pdf/1109.5381">Density estimates for solutions to one dimensional Backward SDE&rsquo;s</a>&rdquo;. In addition it also references one exercise of the Karatzas-Schreve book &ldquo;Brownian motion and Stochastic calculus&rdquo;, which presents again the same idea, without calling it Lamperti transform.</div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/barrier-options-under-negative-rates-complex-numbers-to-the-rescue/">Barrier options under negative rates: complex numbers to the rescue</a>
+      </h1>
+      <span class="post-date">Oct 2, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>I stumbled upon an unexpected problem: the <a href="http://books.google.com/books?id=FU7gam7ZqVsC&amp;q=haug+binary+barrier&amp;dq=haug+binary+barrier&amp;hl=en&amp;sa=X&amp;ei=QyAtVITAGdjdatPxgMAO&amp;ved=0CB0Q6AEwAA">one touch barrier formula</a> can break down under negative rates. While negative rates can sound fancy, they are actually quite real on some markets. Combined with relatively low volatilities, this makes the standard Black-Scholes one touch barrier formula blow up because somewhere the square root of a negative number is taken.<br /><br />At first, I had the idea to just floor the number to 0. But then I needed to see if this rough approximation would be acceptable or not. So I relied on a <a href="http://www.risk.net/journal-of-computational-finance/technical-paper/2330321/tr-bdf2-for-fast-stable-american-option-pricing">TR-BDF2</a> discretization of the Black-Scholes PDE, where negative rates are not a problem.<br /><br />Later, I was convinced that we ought to be able to find a closed form formula for the case of negative rates. I went back to the derivation of the formula, <a href="http://books.google.fr/books?id=2sGwSAfA8eAC&amp;lpg=PA278&amp;dq=kwok%20barrier&amp;pg=PA193#v=onepage&amp;q&amp;f=false">the book from Kwok</a> is quite good on that. The closed form formula just stems from being the solution of an integral of the first passage time density (which is a simpler way to compute the one touch price than the PDE approach). It turns out that, then, the closed form solution to this integral with negative rates is just the same formula with complex numbers (there are actually some simplifications then).<br /><br />It is a bit uncommon to use the cumulative normal distribution on complex numbers, but the error function on complex numbers is more popular: it&rsquo;s actually even on <a href="http://en.wikipedia.org/wiki/Error_function">the wikipedia page of the error function</a>. And it can be computed very quickly with machine precision thanks to the <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package">Faddeeva library</a>.<br /><br />With this simple closed form formula, there is no need anymore for an approximation. I wrote <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2501907">a small paper around this here</a>.<br /><br />Later a collegue made the remark that it could be interesting to have the bivariate complex normal distribution for the case of partial start one touch options or partial barrier option rebates (not sure if those are common). Unfortunately I could not find any code or paper for this. And after asking Prof. Genz (who found a very elegant and fast algorithm for the bivariate normal distribution), it looks like an open problem.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/initial-guesses-for-svi---a-summary/">Initial Guesses for SVI - A Summary</a>
+      </h1>
+      <span class="post-date">Sep 26, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>I have been looking at various ways of finding initial guesses for SVI calibration (<a href="http://chasethedevil.blogspot.com/2014/07/another-svi-initial-guess.html">Another SVI Initial Guess</a>, <a class="GCUXF0KCPB" href="http://chasethedevil.blogspot.com/2014/07/more-svi-initial-guesses.html">More SVI Initial Guesses</a>, <a class="GCUXF0KCPB" href="http://chasethedevil.blogspot.com/2014/08/svi-and-long-maturities-issues.html">SVI and long maturities issues</a>). I decided to write <a href="http://papers.ssrn.com/abstract=2501898">a paper</a> summarizing this. I find that the process of writing a paper makes me think more carefully about a problem.<br /><br />In this case, it turns out that the Vogt initial guess method (guess via asymptotes and minimum variance) is actually very good as long as one has a good way to lookup the asymptotes (the data is not always convex, while SVI is) and as long as rho is not close to -1, that is for long maturity affine like smiles, where SVI is actually more difficult to calibrate properly due to the over-parameterisation in those cases.<br /><br />Still after looking at all of this, one has a sense that, even though it works on a wide variety of surfaces, it could break down because of the complexity (are asymptotes ok, is rho close to -1? how close? is ATM better or maximum curvature better? how do we impose boundaries on a and sigma with Levenberg-Marquardt? (truncation should not be too close to the transform, but how far?)<br /><br />This is where the Quasi-Explicit method from Zeliade is very interesting: it is simpler, not necessarily to code, but the method itself. There are things to take care of (solving at each boundary), but those are mathematically well defined. The only drawback is performance, as it can be around 40 times slower. But then it&rsquo;s still not that slow.<br /><br /><br /></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/asymptotic-behavior-of-svi-vs-sabr/">Asymptotic Behavior of SVI vs SABR</a>
+      </h1>
+      <span class="post-date">Sep 23, 2014 &middot; 1 minute read
+      </span>
+      
+      <p>The variance under SVI becomes linear when the log-moneyness is very large in absolute terms. The lognormal SABR formula with beta=0 or beta=1 has a very different behavior. Of course, the theoretical SABR model has actually a different asymptotic behavior.<br /><br />As an illustration, we calibrate SABR (with two different values of beta) and SVI against the same implied volatility slice and look at the wings behavior. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" height="497" width="640" /></a></div><br />While the Lee moments formula implies that the variance should be at most linear, something that the SABR formula does not respect. It is in practice not the problem with SABR as the actual Lee boundary: V(x) &lt; 2|x|/T (where V is the square of the implied volatility and x the log-moneyness) is attained for extremely low strikes only with SABR, except maybe for very long maturities.<br /><br />A related behavior is the fact that the lognormal SABR formula can actually match steeper curvatures at the money than SVI for given asymptotes.</p>
+
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="/page/2/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="/">1</a></li>
+        
+        <li
+        ><a href="/page/2/">2</a></li>
+        
+        <li
+        class="active"><a href="/page/3/">3</a></li>
+        
+        <li
+        ><a href="/page/4/">4</a></li>
+        
+        <li
+        ><a href="/page/5/">5</a></li>
+        
+        <li
+        ><a href="/page/6/">6</a></li>
+        
+        <li
+        ><a href="/page/7/">7</a></li>
+        
+        <li
+        ><a href="/page/8/">8</a></li>
+        
+        <li
+        ><a href="/page/9/">9</a></li>
+        
+        <li
+        ><a href="/page/10/">10</a></li>
+        
+        <li
+        ><a href="/page/11/">11</a></li>
+        
+        <li
+        ><a href="/page/12/">12</a></li>
+        
+        <li
+        ><a href="/page/13/">13</a></li>
+        
+        <li
+        ><a href="/page/14/">14</a></li>
+        
+        <li
+        ><a href="/page/15/">15</a></li>
+        
+        <li
+        ><a href="/page/16/">16</a></li>
+        
+        <li
+        ><a href="/page/17/">17</a></li>
+        
+        <li
+        ><a href="/page/18/">18</a></li>
+        
+        <li
+        ><a href="/page/19/">19</a></li>
+        
+        <li
+        ><a href="/page/20/">20</a></li>
+        
+        <li
+        ><a href="/page/21/">21</a></li>
+        
+        <li
+        ><a href="/page/22/">22</a></li>
+        
+        <li
+        ><a href="/page/23/">23</a></li>
+        
+        <li
+        ><a href="/page/24/">24</a></li>
+        
+        <li
+        ><a href="/page/25/">25</a></li>
+        
+        <li
+        ><a href="/page/26/">26</a></li>
+        
+        <li
+        ><a href="/page/27/">27</a></li>
+        
+        <li
+        ><a href="/page/28/">28</a></li>
+        
+        <li
+        ><a href="/page/29/">29</a></li>
+        
+        <li
+        ><a href="/page/30/">30</a></li>
+        
+        <li
+        ><a href="/page/31/">31</a></li>
+        
+        <li
+        ><a href="/page/32/">32</a></li>
+        
+        <li
+        ><a href="/page/33/">33</a></li>
+        
+        <li
+        ><a href="/page/34/">34</a></li>
+        
+        <li
+        >
+        <a href="/page/4/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="/page/34/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the devil &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="alternate" type="application/rss+xml" title="Chase the devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
+      </h1>
+      <span class="post-date">Jun 27, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting&hellip; Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm &ldquo;hw:0,1&rdquo;<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         &ldquo;amix&rdquo;      #redirect the output to dmix (instead of &ldquo;hw:0,0&rdquo;)<br />    }<br />    control {<br />        name        &ldquo;PCM&rdquo;       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       &ldquo;softvol&rdquo;   #make use of softvol<br />}<br /></pre></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java-int-overflow-behavior/">Java int Overflow Behavior</a>
+      </h1>
+      <span class="post-date">Jun 15, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>A coworker recently asked me if there was a guaranteed behavior in the case of int overflow. He gave the specific example on:<br />can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?<br /><br />I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.<br /><br />I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if<br />long l = Integer.MAX_VALUE;<br />l = l +1;<br />x = (int)l;<br />x has a guaranteed value.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a><br />paragraph 5.1.3</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/static-fields-and-inheritance/">Static Fields and Inheritance</a>
+      </h1>
+      <span class="post-date">Jun 15, 2009 &middot; 2 minute read
+      </span>
+      
+      <p>Someone asked me recently to find out the real reason why the code from this thread fails. This is a fairly bad code, and not even a very good way to point out the problem. But the question is nonetheless interesting.<br /><br /><pre class="jive-pre"><code class="jive-code jive-java"><span style="color:navy;"><b>class</b></span> Toto <span style="color:navy;"><b>extends</b></span> TotoParent<span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>final</b></span> <span style="color:navy;"><b>static</b></span> Toto a = <span style="color:navy;"><b>new</b></span> Toto (<span style="color:red;">&ldquo;a&rdquo;</span>);<br /><br /> <span style="color:navy;"><b>public</b></span> Toto(String a)<span style="color:navy;">{</span><br />  <span style="color:navy;"><b>super</b></span>(a);<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> java.util.ArrayList;<br /><span style="color:navy;"><b>import</b></span> java.util.List;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>abstract</b></span> <span style="color:navy;"><b>class</b></span> TotoParent <span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>static</b></span> List<string> list = <span style="color:navy;"><b>new</b></span> ArrayList<string>();<br /> <br /> <span style="color:navy;"><b>public</b></span> TotoParent(String a) <span style="color:navy;">{</span><br />  list.add(a);<br /> <span style="color:navy;">}</span><br /><br /> <span style="color:navy;"><b>protected</b></span> <span style="color:navy;"><b>static</b></span> List<string> get() <span style="color:navy;">{</span><br />  <span style="color:navy;"><b>return</b></span> list;<br />  <br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> org.junit.Test;<br /><span style="color:navy;"><b>import</b></span> <span style="color:navy;"><b>static</b></span> org.junit.Assert.*;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>class</b></span> TotoTest <span style="color:navy;">{</span><br /><br /> @Test<br /> <span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>void</b></span> testGet()<span style="color:navy;">{</span><br />  assertEquals(1, Toto.get().size());<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /></code></pre>I am quite used to static initialization, and would have answered the same as the first answer in the thread:<br />&ldquo;Get is static and associated with TotoParent, so that is the same as calling TotoParent.get().size()&rdquo;. I would have even thought that the compiler would compile the call Toto.get() to TotoParent.get(). But running javap, you can see it is still compiled as TotoParent.get(). So there is still a lookup done. This is why the first answer is actually not that correct.<br /><br />The important bit here is that Toto is never initialized, even if we call Toto.get(). The java specs (invaluable reference) explains clearly that calling a static method not declared in the class does not initialize the class.<br /><br />Calling Toto.get() is not exactly the same as calling TotoParent.get().<br />If TotoParent.get() called another TotoSuperParent.get():<br />Toto.get() -&gt; TotoParent.get() -&gt; TotoSuperParent.get()<br />We compile then later we change to make TotoParent have a specific implementation of get(). Toto will then be automatically aware of it, without even recompiling it.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/execution.html" target="_blank"><a href="http://java.sun.com/docs/">http://java.sun.com/docs/</a><wbr>books/jls/third_edition/html/<wbr>execution.html</a><br />paragraph 12.4.1</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/benchmarking-languages-is-difficult/">Benchmarking Languages Is Difficult</a>
+      </h1>
+      <span class="post-date">Jun 3, 2009 &middot; 2 minute read
+      </span>
+      
+      <p>I often looked at the famous computer languages shootout for fun. Recently I noticed they had the infamous <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=all">thread ring test</a>. I posted not very long ago several <a href="http://chasethedevil.blogspot.com/2009/01/end-of-rings-around-plain-java-better.html">blog entries about it showing how silly</a> this test was.<br /><br />Looking at the existing Java implementation for the test I decided to try to submit the tricky one using a pool of thread, and pooling message processing rather creating 1 thread per node. To my surprise, it was accepted without questions and I did have the best score for a Java program for a while. Shortly after <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=3">someone else</a> copied my program and got rid of various stuff not useful for the particular benchmark (breaking the interesting part of the design) and got accepted as well with of course a better result.<br /><br />I decided to see if I could make an <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=6">even more silly program</a> - tailored for the test only. I managed to be orders of magnitude faster - 1 thread, no synchronization, everything processed in a FIFO (linkedlist) queue. This is actually a standard way to reimplement recursion. But I was honest enough not to hide that I consider that kind of program to cheat the test and got my entry in the &ldquo;interesting alternatives&rdquo;.<br /><br />In reality there is no difference in the &ldquo;cheating&rdquo; between my new program and the program that got accepted in the official list, they both cheat by using only 1 thread and process everything 1 by 1. There is not 1 thread per node in any of the program, and they can avoid any concurrency issues. One &ldquo;looks&rdquo; better because it uses a pool of 503 threads (but really use only 1 or 2 threads) and the other does not hide its use of 1 thread for processing. But this is not evident to people accepting the programs.<br /><br />When I look at the haskell code, I can not really tell if it is creating 503 threads in the language or a pool or &hellip;, you have to know each language quite well and sometimes it is not that easy to define what cheating is. Therefore this kind of benchmark is a bit disappointing. One should force the use of the same algorithm. But can you do so (a functional language won&rsquo;t use the same algo as a procedural one)?</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/cholesky--jakarta-commons-math/">Cholesky &amp; Jakarta Commons Math</a>
+      </h1>
+      <span class="post-date">May 15, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>In Finance, <a href="http://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky</a> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <a href="http://www.google.com/codesearch/p?hl=en#W_wVDN7F3h4/tetrad-4.3.2-0/src/edu/cmu/tetrad/util/MatrixUtils.java&amp;q=cholesky%20SEMEditor&amp;l=1332">this one</a>). There is <a href="http://svn.apache.org/viewvc/commons/proper/math/trunk/src/java/org/apache/commons/math/linear/decomposition/CholeskyDecompositionImpl.java?view=co">one</a> in <a href="http://commons.apache.org/math/">Apache Commons Maths</a> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<br /><br />Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<br />cholesky GPL= 5.4ms<br />cholesky BSD=37.1ms<br /><br />So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/hull-american-option-price-fallacies/">Hull American Option Price Fallacies</a>
+      </h1>
+      <span class="post-date">May 15, 2009 &middot; 1 minute read
+      </span>
+      
+      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s1600-h/hull_american_r04_v20_q02_p49.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 320px; height: 240px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s320/hull_american_r04_v20_q02_p49.png" alt="" id="BLOGGER_PHOTO_ID_5336052713901330098" border="0" /></a><br />Hull says American put is best exercised immediately and american call is optimal at expiry like a european. Is this really true?<br /><br />At first it seems really clever and model show clearly this. But if we change the market assumptions only a tiny bit, everything falls down.<br /><br />I could not detail everything in a blog post so I created a <a href="http://31416.appspot.com/static/hullamerican/hull_american_price.html">static web page about it</a>. Everything was produced in Java using algorithm found in popular books and graphs through JFreeChart.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/on-quasi-random-numbers---mersennetwister-vs-sobol-precision-in-asian-option-pricing/">On Quasi Random Numbers - MersenneTwister vs Sobol precision in Asian Option Pricing</a>
+      </h1>
+      <span class="post-date">May 5, 2009 &middot; 3 minute read
+      </span>
+      
+      <p>While starting a side project that does Monte Carlo pricing in Java (<a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a> - nothing yet there I am waiting for Mercurial repository support), I wondered what was the importance of quasi random numbers versus more regular pseudo random numbers in Monte Carlo simulations.<br /><br />This brought me to read more carefully several books about Monte Carlo and Finance (<a href="http://www.amazon.com/Complete-Guide-Option-Pricing-Formulas/dp/0786312408">Haug Option Pricing</a>, <a href="http://www.amazon.com/Primer-Monte-Carlo-Method/dp/084938673X">Sobol Primer on Monte Carlo</a>, and <a href="http://www.amazon.com/Financial-Engineering-Stochastic-Modelling-Probability/dp/0387004513">Glasserman Monte Carlo Methods in Finance Engineering</a>). I had quite a hard time to understand why the dimension of the quasi random generator was so important to price an asian option. Intuitively I thought the averaging points of an asian option were all on the same path, so they should be using the same random generator. This is very wrong as one does not care about the path in the first place but just in simulating each point in the average (using the regular black and scholes hypothesis). Finding the estimation for the average on the given points forces to use independent random generators for each point, because we want to approximate the estimation by the sum over those random points for each point.<br /><br />There is another simple argument to explain why independence of the random generators is so important. If we use the same generator for each point, then each point will move exactly the same way at each simulation. The average of those point will therefore behave exactly the same way as if there was only 1 point using the same generator. And we don&rsquo;t price an asian anymore but just a regular vanilla option.<br /><br />Using a pseudo random generator, one does not see the problem of dimension, because we can create N independent dimensions by just taking numbers N by N on a pseudo random generator. So effectively having 1 or N dimensions is the same on a pseudo random generator.<br /><br />Still I wrote a small test to see if a 1D quasi random generator was so bad when simulating N dimensions (taking values N by N on the quasi random generator). Here are the results:<br /><br /><span style="font-size:85%;"><span style="font-family: courier new;">MersenneTwister vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:43:51,111  INFO MonteCarloSimulationTest:114 - 867970000 &ndash; expPrice=0.978958644504466</span><br /><span style="font-family: courier new;">14:43:51,428  INFO MonteCarloSimulationTest:120 - 314619000 &ndash; expPrice=0.9733220318545934</span><br /><span style="font-family: courier new;">14:43:51,430  INFO MonteCarloSimulationTest:122 - relative difference=-0.005757763804951897</span><br /><span style="font-family: courier new; font-weight: bold;">can be as high as 2%</span><br /><br /><span style="font-family: courier new;">Sobol vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:48:46,909  INFO MonteCarloSimulationTest:115 - 980209000 &ndash; expPrice=0.9895032774079221</span><br /><span style="font-family: courier new;">14:48:47,345  INFO MonteCarloSimulationTest:121 - 433685000 &ndash; expPrice=0.9790264042895171</span><br /><span style="font-family: courier new;">14:48:47,348  INFO MonteCarloSimulationTest:123 - relative difference=-0.010588012548932534</span><br /><span style="font-family: courier new; font-weight: bold;">about 1% it is actually bounded by MersenneTwister precision.</span><br /><br /><span style="font-family: courier new;">Sobol vs Sobol1D on 10D asian:</span><br /><span style="font-family: courier new;">14:47:08,614  INFO MonteCarloSimulationTest:115 - 717444000 &ndash; expPrice=0.8810736428068913</span><br /><span style="font-family: courier new;">14:47:08,925  INFO MonteCarloSimulationTest:121 - 308499000 &ndash; expPrice=0.9791449305055208</span><br /><span style="font-family: courier new;">14:47:08,927  INFO MonteCarloSimulationTest:123 - relative difference=0.11130884290920073</span><br /><span style="font-family: courier new; font-weight: bold;">about 10% and stays that way even when increasing number of simulations.</span></span><br /><br />Using an asian rate with 10 points, we see that Sobol1D will always give a very bad estimate, no matter the number of simulations. While Sobol used properly will give (much) better precision for less iterations. So even though there is the word random in quasi random, the numbers are very far from being random or even behaving like random numbers. It helped me to read about Van der Corput and Halton numbers to really understand quasi random numbers.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java-logging-still-crap-in-2009/">Java Logging Still Crap in 2009</a>
+      </h1>
+      <span class="post-date">Apr 24, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>When java logging API was first introduced in JDK 1.4 in 2002, it caused quite a lot a fuss around, with everybody asking &ldquo;Why did not they just include Log4j instead of creating their own bastard child?&rdquo;.<br /><br />I remember having looked at it very shortly before continuing using Log4j on all projects I have been involved with.<br /><br />Today, while doing a very small project, I tried once more to use <a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html">java logging</a>. The main reason is that I was lazy to add a dependency to one more jar for this small project. While trying I found out that:<br /><ol><li> you still need to use a damned JVM parameter to point to your configuration file</li><li>you can not change the formatting without writing a formatter class!<br /></li></ol>It&rsquo;s 2009! What has Sun done? I am amazed the most elementary things you expect from a Logger are still not included by default in the JDK.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/bachelier-vs.-black/">Bachelier vs. Black</a>
+      </h1>
+      <span class="post-date">Mar 23, 2009 &middot; 1 minute read
+      </span>
+      
+      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s1600-h/bachelier_vs_black_normal.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 400px; height: 300px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s400/bachelier_vs_black_normal.png" alt="" id="BLOGGER_PHOTO_ID_5316431495761732034" border="0" /></a><br />Black and Scholes gives a strange result for the price of a binary option under high volatility.  You will learn here how to simulate a stock price evolution using Java, and how to show it using JFreeChart library. It starts with more complex concepts (don&rsquo;t be afraid) and goes done towards simpler things.<br /><br />I could not write all that in a blog format, so I created a old HTML page about it <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.html">here</a> and a <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.pdf">PDF version</a>.<br /><span style="text-decoration: underline;"></span></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/linux-audio-state--miserable/">Linux Audio State = Miserable</a>
+      </h1>
+      <span class="post-date">Mar 19, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>There are lots of programs for playing MP3 under linux, a few dealing decently with big libraries. But when you start looking for a program that does crossfade well and manage big libraries easily - there is nothing.<br />Rhythmbox does some crossfade, but crashes when you move manually in the song. Audacious does some crossfade but regularly crashes with crossfade plugin.<br /><br />The real alternative are AIMP2 or Foobar2000 in Wine. It is quite incredible that you can have good solid crossfade in wine and not natively in Linux.<br /><br />Maybe people spent too much time on useless Pulseaudio (I have much less issues using only ALSA).</p>
+
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="/page/16/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="/">1</a></li>
+        
+        <li
+        ><a href="/page/2/">2</a></li>
+        
+        <li
+        ><a href="/page/3/">3</a></li>
+        
+        <li
+        ><a href="/page/4/">4</a></li>
+        
+        <li
+        ><a href="/page/5/">5</a></li>
+        
+        <li
+        ><a href="/page/6/">6</a></li>
+        
+        <li
+        ><a href="/page/7/">7</a></li>
+        
+        <li
+        ><a href="/page/8/">8</a></li>
+        
+        <li
+        ><a href="/page/9/">9</a></li>
+        
+        <li
+        ><a href="/page/10/">10</a></li>
+        
+        <li
+        ><a href="/page/11/">11</a></li>
+        
+        <li
+        ><a href="/page/12/">12</a></li>
+        
+        <li
+        ><a href="/page/13/">13</a></li>
+        
+        <li
+        ><a href="/page/14/">14</a></li>
+        
+        <li
+        ><a href="/page/15/">15</a></li>
+        
+        <li
+        ><a href="/page/16/">16</a></li>
+        
+        <li
+        class="active"><a href="/page/17/">17</a></li>
+        
+        <li
+        ><a href="/page/18/">18</a></li>
+        
+        <li
+        ><a href="/page/19/">19</a></li>
+        
+        <li
+        ><a href="/page/20/">20</a></li>
+        
+        <li
+        ><a href="/page/21/">21</a></li>
+        
+        <li
+        ><a href="/page/22/">22</a></li>
+        
+        <li
+        ><a href="/page/23/">23</a></li>
+        
+        <li
+        ><a href="/page/24/">24</a></li>
+        
+        <li
+        ><a href="/page/25/">25</a></li>
+        
+        <li
+        ><a href="/page/26/">26</a></li>
+        
+        <li
+        ><a href="/page/27/">27</a></li>
+        
+        <li
+        ><a href="/page/28/">28</a></li>
+        
+        <li
+        ><a href="/page/29/">29</a></li>
+        
+        <li
+        ><a href="/page/30/">30</a></li>
+        
+        <li
+        ><a href="/page/31/">31</a></li>
+        
+        <li
+        ><a href="/page/32/">32</a></li>
+        
+        <li
+        ><a href="/page/33/">33</a></li>
+        
+        <li
+        ><a href="/page/34/">34</a></li>
+        
+        <li
+        >
+        <a href="/page/18/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="/page/34/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

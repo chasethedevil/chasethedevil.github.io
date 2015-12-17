@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Less Productive With Maven2. &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Less Productive With Maven2.</h1>
+    <span class="post-date">Apr 29, 2007 &middot; 2 minute read
+    </span>
+    <p>My <a href="http://chasethedevil.blogspot.com/2006/11/maven-game-over-try-again.html">first trials</a> of Maven were failures. As I am stubborn, I tried again, on a new project, a quite simple one. It works, but it makes some easy things overkill. And the default way of using it makes a developer lose lots of time.<br /><br />If I have a project with common classes, a standalone app, and a web app, then logically you do 3 projects, 2 of them depending on the common one. That&rsquo;s how the default maven setup works, and that&rsquo;s what their documentation presents. Now when using maven eclipse, this will create 3 project, none depending on each other. If you modify something in the common code, it won&rsquo;t be seen by any of the other code, you have to publish it with maven first, this takes way too much time. Furthermore I did not see any way to force rebuild the common automatically from one of the other project. If you modify code in common and web app project, you need to call maven twice. I find all this very counterproductive, because you do those steps extremely often. Now there are probably some ways to do that with Maven2, but it is not the default behavior. I could add project dependencies in eclipse manually, and forget about maven while working in eclipse, but then the maven eclipse plugin is really useless. And you&rsquo;ll face the same issues when you want to use maven tomcat deploy.<br /><br />Even more worrying, after moving back to Ant, I saw a strange bug with Spring context loading disappear. Maven is hiding so much, that it becomes not obvious how your app is deployed.<br /><br />Developers lose power with Maven. It&rsquo;s a pain to do something a bit differently that the default Maven way. With Ant, people gain power. I see both as being the distinction between a framework approach (Maven) and a library API approach (Ant). By default, Maven tries to do a lot, while Ant tries to do nothing. It&rsquo;s very easy to build exactly what you need with Ant, while it is of course difficult with Maven.<br /><br />Some parts of Spring have a similar disadvantage to Maven. If you do everything in XML with the most Spring magic, you&rsquo;ll spend hours trying to figure out how to do things and why it does not seem to work like you think it should. If you use Spring as an API, like the wonderful Spring JDBC, development will be fast (faster than with straight JDBC for example), and your program flow is easy to follow.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

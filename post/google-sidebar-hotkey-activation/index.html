@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Google Sidebar Hotkey Activation &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Google Sidebar Hotkey Activation</h1>
+    <span class="post-date">Aug 25, 2005 &middot; 2 minute read
+    </span>
+    <p>I like the new <a href="http://desktop.google.com/en/">Google Desktop</a> with the sidebar. It shares similarities with <a href="http://www.konfabulator.com/">Konfabulator</a>, recently bought by yahoo. They both allow easy access to some custom little widgets that I would call &ldquo;active&rdquo;. They are active because they are refreshed periodically with new information (processor usage, news, scratch pad, emails, etc). But while Konfabulator choose to emphasize on visual effects, Google prefers a more standard information presentation. This shows as well in their choice of technologies:<br /><ul>   <li>Google Sidebar plug-ins are just Windows appz that can take advantage of Google Interfaces. That makes them quite powerful in theory, but programming them is less accessible.<br />  </li>   <li>Konfabulator plug-ins are Javascript+XML, the Javascript is not just regular client-side javascript, it can use Konfabulator API (containing many effect and rudimentary network access), and COM objects . That makes them very focused on presentation, and the Internet.</li> </ul> In the long run, Google choice makes sense, the forthcoming <a href="http://fortes.com/work">Avalon</a> will make visual effects very accessible to windows developers.<br /><br />Now back to the subject, I missed the &lsquo;activation on hotkey&rsquo; feature from Konfabulator for the Google Sidebar. Fortunately, I a have found a powerful little open-source program, <a href="http://www.autohotkey.com/">Autohotkey</a>, that allowed me to do that very quickly. Here is the script I use (it&rsquo;s a hack since it relies on toolbar size (but not position), but I like the default position and it works (only using floating deskbar, i let you figure out for the non floating version)):<br /><span style="font-family:Courier New, Courier, monospace;">F12::<br />MouseGetPos, X, Y<br />if WinExist(&ldquo;ahk_class _GD_Sidebar&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left, 160, 16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}<br />else if WinExist(&ldquo;ahk_class ATL:0044A4C8&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left,  158,  16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}</span><br /><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/google" rel="tag">google</a>, <a href="http://del.icio.us/tag/desktop" rel="tag">desktop</a>, <a href="http://del.icio.us/tag/sidebar" rel="tag">sidebar</a>, <a href="http://del.icio.us/tag/hotkey" rel="tag">hotkey</a>, <a href="http://del.icio.us/tag/autohotkey" rel="tag">autohotkey</a>, <a href="http://del.icio.us/tag/hack" rel="tag">hack</a></span></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

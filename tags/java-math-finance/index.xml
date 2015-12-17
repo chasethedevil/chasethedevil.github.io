@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java Math Finance on Chase the devil</title>
+    <link>http://replace-this-with-your-hugo-site.com/tags/java-math-finance/</link>
+    <description>Recent content in Java Math Finance on Chase the devil</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Nov 2009 09:17:00 +0000</lastBuildDate>
+    <atom:link href="http://replace-this-with-your-hugo-site.com/tags/java-math-finance/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>The Pain of Java Matrix Libraries</title>
+      <link>http://replace-this-with-your-hugo-site.com/post/the-pain-of-java-matrix-libraries/</link>
+      <pubDate>Thu, 26 Nov 2009 09:17:00 +0000</pubDate>
+      
+      <guid>http://replace-this-with-your-hugo-site.com/post/the-pain-of-java-matrix-libraries/</guid>
+      <description>&lt;p&gt;Looking for a good Java Matrix (and actually also math) library, I was a bit surprised to find out there does not seem to be any really serious one still maintained.&lt;br /&gt;&lt;br /&gt;Sure, there is &lt;a href=&#34;http://commons.apache.org/math/&#34;&gt;Apache Commons Math&lt;/a&gt;, but it is still changing a lot, and it is not very performance optimized yet, while it has been active for several years already. There is also Java3D, it does Matrix through GMatrix, but not much linear algebra and if you look at their implementation, it is very basic, not performance oriented.&lt;br /&gt;&lt;br /&gt;The other candidates seem to be 1-man projects that can disappear any other day (some of them look quite good like ojalgo, most of them are not interesting). Then you also have the serious but not maintained anymore &lt;a href=&#34;http://dsd.lbl.gov/~hoschek/colt/&#34;&gt;Cern Colt&lt;/a&gt; library.&lt;br /&gt;&lt;br /&gt;Compared to C/C++, the Java world is worrying if you want to do maths.&lt;br /&gt;&lt;br /&gt;In those libraries, a dense matrix of double can be implemented two ways:&lt;br /&gt;&lt;div&gt;&lt;ol&gt;&lt;li&gt;by maintaining internally a double[][]. Usually those libraries allow for not copying the array, so it can be neat if your interfaces have this kind of arrays.&lt;/li&gt;&lt;li&gt;by maintaining internally a double[]. The reason is for performance, but then each time you build a matrix from a double[][], an expensive copy will happen. So you need to use the Matrix object in your interfaces instead of double[][].&lt;/li&gt;&lt;/ol&gt;&lt;div&gt;This is a pain because you can be very quickly stuck in one or the other Matrix library. A &amp;ldquo;solution&amp;rdquo; is to have your own interface, but that is a pain to write. There is &lt;a href=&#34;http://www.ujmp.org/&#34;&gt;UJMP&lt;/a&gt;, but it can hide some important methods (like transpose &amp;amp; multiply in one go from Colt or the ability to reuse an existing matrix in various operations to avoid allocating new memory), it is a students project (like parallel colt), but if it was a standard, it could be much more interesting.&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;In summary it does really look like scientific people, universities don&amp;rsquo;t use Java for computation otherwise Colt surely would have been maintained.&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Better Java Swing Development &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Better Java Swing Development</h1>
+    <span class="post-date">Apr 17, 2008 &middot; 3 minute read
+    </span>
+    <p>It has been a while since I have looked at the different options for building GUIs in Java. I like the approach taken by Eclipse, they provide not only GUI components, but a complete GUI application framework. Several years ago, I have stolen ideas from it (how they manage plugins) and applied it for Swing applications. This worked out quite well. The Netbeans platform now offers a more interesting alternative if you have to do Swing. The major drawback when compared to Eclipse, is that since the beginning Eclipse was all about making a platform, while Netbeans copied that idea only relatively recently and is less active about making it so. IBM uses Eclipse foundations for many of their products successfully.<br> <br>Unfortunately on many projects, a Swing application is already there and all you have to do is add more screens, more forms. What I am trying to see here, is what could help Swing development is those cases.<br><a href="http://www.jgoodies.com/"><br> <b>JGoodies</b></a><br><br>JGoodies is old now, but can be quite useful in creating nice looking forms quickly. It is basically all around a layout better tailored to forms that the can do everything GridBagLayout.<br>It can help but it does not make a significant difference vs good practices with the GridBagLayout.<br> <b><a href="http://www.jidesoft.com"><br>Jide Software</a></b><br><br>Jidesoft provides much more than JGoodies, but is not free (except the <a href="https://jide-oss.dev.java.net/">Jide Common Layer</a>). I have used it in the past and found their API quite clean and easy to use. They offer more elaborated Swing components that should be part of the JDK. They started to go to the platform area only recently with their Jide Desktop Application Framework, which is not free either. I am not sure I would base an application around an unfree framework.<br> <a href="http://swixat.org/"><br><b>SwiXAT</b></a><br><br>It is a recent BSD licensed project based on top of Swix. It is basically MVC for Swix, with command binding in XML. I need to look more into it, it seems to provide an &quot;application framework&quot; as well where you have to launch your app through a SwixAt class (which IMHO sucks). I hope it is not a requirement and that only parts of it can be used and integrated into an existing application. I will hopefully have time to try it more concretely and will blog about it. In any cases it looks interesting.<br> <br><b><a href="http://www.swixml.org/">SwiXml</a></b><br><br>An Apache licensed project, it seems like a decently used way of laying out swing components in XML, inspired by XUL. It might just be enough. Or is it just too similar to&nbsp; Java code translated to XML? I need to investigate this more.<br> <br><b><a href="http://www.sun.com/software/javafx/index.jsp">JavaFX</a></b><br><br>JavaFX is probably the serious alternative to SwiXml. I like the idea of a better grammar to lay out and assemble components instead of using XML. Unfortunately it seems a bit invasive to start using for a part only of an application<br> <br>I took a quick look at Swing Application Framework (JDNC2 redone once again). While it has interesting use of annotations, it seems very far from what Eclipse offers. And I don&#39;t feel like it will improve working with Swing a lot. I think except JavaFx, Sun seriously fucked around during many years with Swing. IBM has been much more focused and effective.<br> <br><br><br></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Root finding in Lord Kahl Method to Compute Heston Call Price (Part II) &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Root finding in Lord Kahl Method to Compute Heston Call Price (Part II)</h1>
+    <span class="post-date">Apr 11, 2013 &middot; 3 minute read
+    </span>
+    <p>In my <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to.html">previous post</a>, I explored the <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the call option prices under the Heston model. One of the advantages of this method is to go beyond machine epsilon accuracy and be able to compute very far out of the money prices or very short maturities. The standard methods to compute the Heston price are based on a sum/difference where both sides are far from 0 and will therefore be limited to less than machine epsilon accuracy even if the integration is very precise.<br /><br />However the big trick in it is to find the optimal alpha used in the integration. A suboptimal alpha will often lead to high inaccuracy, because of some strong oscillations that will appear in the integration. So the method is robust only if the root finding (for the optimal alpha) is robust.<br /><br />The original paper looks the Ricatti equation for B where B is the following term in the characteristic function:<br />$$\phi(u) = e^{iuf+A(u,t)+B(u,t)\sigma<em>0}$$<br />The solution defines the (\alpha</em>{max}) where the characteristic function explodes. While the Ricatti equation is complex but not complicated:<br />$$ dB/dt = \hat{\alpha}(u)-\beta(u) B+\gamma B^2 $$<br />I initially did not understand its role (to compute (\alpha_{max})), so that, later, one can compute alpha<em>optimal with a good bracketing. The bracketing is particularly important to use a decent solver, like the Brent solver. Otherwise, one is left with, mostly, Newton&rsquo;s method. It turns out that I explored a reduced function, which is quite simpler than the Ricatti and seems to work in all the cases I have found/tried: solve $$1/B = 0$$<br />&nbsp;If B explodes, (\phi) will explode. The trick, like when solving the Ricatti equation, is to have either a good starting point (for Newton) or, better, a bracketing. It turns out that Lord and Kahl give a bracketing for (1/B), even if they don&rsquo;t present it like this: their (\tau</em>{D+}) on page 10 for the lower bracket, and (\tau<em>+) for the upper bracket. (\tau</em>+) will make (1/B) explode, exactly. One could also find the next periods by adding (4\pi/t) instead of (2\pi/t) like they do to move from (\tau<em>{D+}) to (\tau</em>+). But this does not have much interest as we don&rsquo;t want to go past the first explosion.<br /><br />It&rsquo;s quite interesting to see that my simple approach is actually closely related to the more involved Ricatti approach. The starting point could be the same. Although it is much more robust to just use Brent solver on the bracketed max. I actually believe that the Ricatti equation explodes at the same points, except, maybe for some rare combination of Heston parameters.<br /><br />From a coding perspective, I found that <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDUQFjAA&amp;url=http%3A%2F%2Fcommons.apache.org%2Fmath&amp;ei=kctmUajvIoWs0QXC-4HoDQ&amp;usg=AFQjCNFaOPmpFKpVp5Ba9fVtRNSgefKwhA&amp;sig2=vQZ7geKUB1iGDu5cDOjO0g&amp;bvm=bv.45107431,d.d2k">Apache commons maths</a> was a decent library to do complex calculus or solve/minimize functions. The complex part was better than some in-house implementation: for example the square root was more precise in commons maths, and the solvers are robust. It even made me think that it is often a mistake to reinvent to wheel. It&rsquo;s good to choose the best implementations/algorithms as possible. But reinventing a Brent solver??? a linear interpolator??? Also the commons maths library imposes a good structure. In house stuff tends to be messy (not real interfaces, or many different ones). I believe the right approach is to use and embrace/extends Apache commons maths. If some algorithms are badly coded/not performing well, then write your own using the same kind of interfaces as commons maths (or some other good maths library).<br /><br />The next part of this series on Lord-Kahl method is <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to_12.html">here</a>.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Heston vs SABR slice by slice fit &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Heston vs SABR slice by slice fit</h1>
+    <span class="post-date">May 15, 2014 &middot; 3 minute read
+    </span>
+    <p>Some people use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1496982&amp;ei=nx11U6QOoozQBcrfgIAK&amp;usg=AFQjCNHi149E0_JiOzZRT9kgDWWYvHWlFQ&amp;sig2=ZnhySOuJd8V-jBcWo4Ky2w&amp;bvm=bv.66699033,d.d2k" target="_blank">Heston to fit one slice </a>of a volatility surface. In this case, some parameters are clearly redundant. Still, I was wondering how it fared against SABR, which is always used to fit a slice. And what about Schobel-Zhu?<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-sy-AiaNcXMs/U3UUPfJdrOI/AAAAAAAAHMI/N_WsmNiYEqA/s1600/Screenshot+from+2014-05-15+21:20:28.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-sy-AiaNcXMs/U3UUPfJdrOI/AAAAAAAAHMI/N_WsmNiYEqA/s1600/Screenshot+from+2014-05-15+21:20:28.png" height="317" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Aggregated error in fit per slice on 10 surfaces</td></tr></tbody></table>With Heston, the calibration is actually slightly better with kappa=0, that is, without mean reversion, because the global optimization is easier and the mean reversion is fully redundant. It&rsquo;s still quite remarkable that 3 parameters result in a fit as good as 5 parameters.<br />This is however not the case for Schobel-Zhu, where each &ldquo;redundant parameter&rdquo; seem to make a slight difference in the quality of calibration. kappa = 0 deteriorate a little bit the fit (the mean error is clearly higher), and theta near 0 (so calibrating 4 parameters) is also a little worse (although better than kappa = 0). Also interestingly, the five parameters Schobel-Zhu fit is slightly better than Heston, but not so when one reduce the number of free parameters.<br /><br />So what about Heston vs SABR. It is interesting to consider the case of general Beta and Beta=1: it turns out that as confirmed for equities, beta=1 is actually a better choice.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-F8dl70uVMdY/U3UXMSvx3lI/AAAAAAAAHMQ/IvKzxaEo6NI/s1600/Screenshot+from+2014-05-15+21:34:49.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-F8dl70uVMdY/U3UXMSvx3lI/AAAAAAAAHMQ/IvKzxaEo6NI/s1600/Screenshot+from+2014-05-15+21:34:49.png" height="507" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Aggregated error in fit per slice on 10 surfaces</td></tr></tbody></table><br />Overall on my 10 surfaces composed each of around 10 slices, an admittedly small sample, Heston (without mean-reversion) fit is a little bit better than SABR. Also the <a href="http://chasethedevil.blogspot.fr/2014/02/svi-on-top-of-sabr.html" target="_blank">SVI-SABR</a> idea from Gatheral is not great: the fit is clearly worse than SABR with Beta=1 and even worse than a simple quadratic.<br />Of course the best overall fit is achieved with the classic SVI, because it has 6 parameters while the others have only 3.<br /><br />All the calibrations so far were done slice by slice independently, using levenberg marquardt on an initial guess found by differential evolution. Some people advocate for speed or stability of parameters reasons the idea of calibrating each slice using the previous slice as initial guess with a local optimizer like levenberg marquardt, in a bootstrapping fashion.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-9d15Ef2O-eo/U3UaxZ_lsOI/AAAAAAAAHMc/JmE5Feup4f0/s1600/Screenshot+from+2014-05-15+21:51:18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-9d15Ef2O-eo/U3UaxZ_lsOI/AAAAAAAAHMc/JmE5Feup4f0/s1600/Screenshot+from+2014-05-15+21:51:18.png" height="317" width="400" /></a></div>The results can be quite different, especially for SVI, which then becomes the worst, even worse than SVI-SABR, which is actually a subset of SVI with fewer parameters. How can this be? <br /><br />This is because as the number of parameters increases, the first slices optimizations have a disproportionate influence, and finding the real minimum is much more difficult, even with differential evolution for the first slice. It&rsquo;s easy to picture that you&rsquo;ll have much more chances to get stuck in some local minimum.<br />It&rsquo;s interesting to note that the real stochastic volatility models are actually better behaved in this regard, but I am not so sure that this kind of calibration is such a great idea in general.<br /><br />In practice, the SVI parameters fitted independently evolve in a given surface on each slice in a smooth manner, mostly monotonically. It&rsquo;s just that to go from one set on one slice to the other on the next slice, you might have to do something more than a local optimization.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

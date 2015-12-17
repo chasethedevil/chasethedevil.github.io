@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the devil &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="alternate" type="application/rss+xml" title="Chase the devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/quasi-monte-carlo--longstaff-schwartz-american-option-price/">Quasi Monte-Carlo &amp; Longstaff-Schwartz American Option price</a>
+      </h1>
+      <span class="post-date">Apr 22, 2013 &middot; 3 minute read
+      </span>
+      
+      <p>In the book <i><a href="http://books.google.fr/books?id=e9GWUsQkPNMC&amp;lpg=PA461&amp;vq=longstaff&amp;hl=fr&amp;pg=PA459#v=snippet&amp;q=longstaff&amp;f=false">Monte Carlo Methods in Financial Engineering</a></i>, Glasserman explains that if one reuses the paths used in the optimization procedure for the parameters of the exercise boundary (in this case the result of the regression in Longstaff-Schwartz method) to compute the Monte-Carlo mean value, we will introduce a bias: the estimate will be biased high because it will include knowledge about future paths.<br /><br />However Longstaff and Schwartz seem to just reuse the paths in <a href="http://rfs.oxfordjournals.org/content/14/1/113.short">their paper</a>, and Glasserman himself, when presenting Longstaff-Schwartz method later in the book just use the same paths for the regression and to compute the Monte-Carlo mean value.<br /><br />How large is this bias? What is the correct methodology?<br /><br />I have tried with Sobol quasi random numbers to evaluate that bias on a simple Bermudan put option of maturity 180 days, exercisable at 30 days, 60 days, 120 days and 180 days using a Black Scholes volatility of 20% and a dividend yield of 6%. As a reference I use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDcQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1648878&amp;ei=9151UZ3pM4LZPZ-ugeAF&amp;usg=AFQjCNFS9fdRJt9RoerSnb87YDIZmLcCtw&amp;sig2=k8lHjhUe14ep4giVM5Mr5Q&amp;bvm=bv.45512109,d.ZWU">a finite difference solver based on TR-BDF2</a>.<br /><br />I found it particularly difficult to evaluate it: should we use the same number of paths for the 2 methods or should we use the same number of paths for the monte carlo mean computation only? Should we use the same number of paths for regression and for monte carlo mean computation or should the monte carlo mean computation use much more paths?<br /><br />I have tried those combinations and was able to clearly see the bias only in one case: a large number of paths for the Monte-Carlo mean computation compared to the number of paths used for the regression using a fixed total number of paths of 256*1024+1, and 32*1024+1 paths for the regression.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">FDM price=2.83858387194312</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff discarded paths price=2.8385854695510426&nbsp;</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff reused paths price=2.8386108892756847</span><br /><br />Those numbers are too good to be a real. If one reduces too much the total number of paths or the number of paths for the regression, the result is not precise enough to see the bias. For example, using 4K paths for the regression leads to 2.83770 vs 2.83767. Using 4K paths for regression and only 16K paths in total leads to 2.8383 vs 2.8387. Using 32K paths for regressions and increasing to 1M paths in total leads to 2.838539 vs 2.838546.<br /><br />For this example the Longstaff-Schwartz price is biased low, the slight increase due to path reuse is not very visible and most of the time does not deteriorate the overall accuracy. But as a result of reusing the paths, the Longstaff-Schwartz price might be higher than the real value.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/a-fast-exponential-function-in-java/">A Fast Exponential Function in Java</a>
+      </h1>
+      <span class="post-date">Apr 19, 2013 &middot; 2 minute read
+      </span>
+      
+      <p>In finance, because one often dicretize the log process instead of the direct process for Monte-Carlo simulation, the Math.exp function can be called a lot (millions of times for a simulation) and can be a bottleneck. I have noticed that the simpler Euler discretization was for local volatility Monte-Carlo around 30% faster, because it avoids the use of Math.exp.<br /><br />Can we improve the speed of exp over the JDK one? At first it would seem that the JDK would just call either the processor exp using an <a href="http://bad-concurrency.blogspot.co.uk/2012/08/arithmetic-overflow-and-intrinsics.html">intrinsic function call</a> and that should be difficult to beat. However what if one is ok for a bit lower accuracy? Could a simple <a href="http://www.siam.org/books/ot99/OT99SampleChapter.pdf">Chebyshev polynomial expansion</a> be faster?<br /><br />Out of curiosity, I tried a Chebyshev polynomial expansion with 10 coefficients stored in a final double array. I computed the coefficient using a precise quadrature (Newton-Cotes) and end up with 1E-9, 1E-10 absolute and relative accuracy on [-1,1].<br /><br />Here are the results of a simple sum of 10M random numbers:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.75s for Math.exp sum=1.7182816693332244E7<br />0.48s for ChebyshevExp sum=1.718281669341388E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span><br /><br />So while this simple implementation is actually faster than Math.exp (but only works within [-1,1]), FastMath from Apache commons maths, that relies on a table lookup algorithm is just faster (in addition to being more precise and not limited to [-1,1]).<br /><br />Of course if I use only 5 coefficients, the speed is better, but the relative error becomes around 1e-4 which is unlikely to be satisfying for a finance application.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.78s for Math.exp sum=1.7182816693332244E7<br />0.27s for ChebyshevExp sum=1.718193001875838E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</a>
+      </h1>
+      <span class="post-date">Apr 12, 2013 &middot; 2 minute read
+      </span>
+      
+      <p>I forgot two important points in my <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to_11.html">previous post</a> about <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the Heston call price:<br /><br />- Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl</a>, <a href="http://pjaeckel.webspace.virginmedia.com/NotSoComplexLogarithmsInTheHestonModel.pdf">Kahl-Jaeckel</a> (the more usual way limited to machine epsilon accuracy), <a href="http://epubs.siam.org/doi/abs/10.1137/110830241">Forde-Jacquier-Lee</a> ATM implied volatility without scaling for a maturity of 1 day:<br /><br />strike 62.5=2.919316809400033E-34 8.405720564041985E-12 0.0<br />strike 68.75=-8.923683388191852E-28 1.000266536266281E-11 0.0<br />strike 75.0=-3.2319611910032E-22 2.454925152051146E-12 0.0<br />strike 81.25=1.9401743410877718E-16 2.104982854689297E-12 0.0 <br />strike 87.5=-Infinity -1.6480150577535824E-11 0.0<br />strike 93.75=Infinity 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.4174318393886519 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.326968012594355E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=-5.205783145942609E-21 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=4.537094156599318E-25 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=1.006555799739525E-27 3.2365221613872563E-12 2.3126009701775733E-240<br />strike&nbsp; 131.25=4.4339539263484925E-31 2.4794388764348696E-11 0.0<br /><br />One can see negative prices and meaningless prices outside ATM. With scaling it changes to: <br />strike 62.5=2.6668642552659466E-182 8.405720564041985E-12 0.0<br />strike 68.75=7.156278101597845E-132 1.000266536266281E-11 0.0<br />strike 81.25=7.863105641534119E-55 2.104982854689297E-12 0.0<br />strike 87.5=7.073641308465115E-28 -1.6480150577535824E-11 0.0<br />strike 93.75=1.8375145950924849E-9 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.41743183938755385 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.3269785342953315E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=8.803247187972696E-42 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=5.594342441346233E-90 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=7.6539757567179276E-149 3.2365221613872563E-12 2.3126009701775733E-240<br />strike 131.25=0.0 2.4794388764348696E-11 0.0<br /><br />One can now now see that the Jacquier-Lee approximation is quickly not very good.<br /><br />- Put: the put option price can be computed using the exact same <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan </a>formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part II)</a>
+      </h1>
+      <span class="post-date">Apr 11, 2013 &middot; 3 minute read
+      </span>
+      
+      <p>In my <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to.html">previous post</a>, I explored the <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the call option prices under the Heston model. One of the advantages of this method is to go beyond machine epsilon accuracy and be able to compute very far out of the money prices or very short maturities. The standard methods to compute the Heston price are based on a sum/difference where both sides are far from 0 and will therefore be limited to less than machine epsilon accuracy even if the integration is very precise.<br /><br />However the big trick in it is to find the optimal alpha used in the integration. A suboptimal alpha will often lead to high inaccuracy, because of some strong oscillations that will appear in the integration. So the method is robust only if the root finding (for the optimal alpha) is robust.<br /><br />The original paper looks the Ricatti equation for B where B is the following term in the characteristic function:<br />$$\phi(u) = e^{iuf+A(u,t)+B(u,t)\sigma<em>0}$$<br />The solution defines the (\alpha</em>{max}) where the characteristic function explodes. While the Ricatti equation is complex but not complicated:<br />$$ dB/dt = \hat{\alpha}(u)-\beta(u) B+\gamma B^2 $$<br />I initially did not understand its role (to compute (\alpha_{max})), so that, later, one can compute alpha<em>optimal with a good bracketing. The bracketing is particularly important to use a decent solver, like the Brent solver. Otherwise, one is left with, mostly, Newton&rsquo;s method. It turns out that I explored a reduced function, which is quite simpler than the Ricatti and seems to work in all the cases I have found/tried: solve $$1/B = 0$$<br />&nbsp;If B explodes, (\phi) will explode. The trick, like when solving the Ricatti equation, is to have either a good starting point (for Newton) or, better, a bracketing. It turns out that Lord and Kahl give a bracketing for (1/B), even if they don&rsquo;t present it like this: their (\tau</em>{D+}) on page 10 for the lower bracket, and (\tau<em>+) for the upper bracket. (\tau</em>+) will make (1/B) explode, exactly. One could also find the next periods by adding (4\pi/t) instead of (2\pi/t) like they do to move from (\tau<em>{D+}) to (\tau</em>+). But this does not have much interest as we don&rsquo;t want to go past the first explosion.<br /><br />It&rsquo;s quite interesting to see that my simple approach is actually closely related to the more involved Ricatti approach. The starting point could be the same. Although it is much more robust to just use Brent solver on the bracketed max. I actually believe that the Ricatti equation explodes at the same points, except, maybe for some rare combination of Heston parameters.<br /><br />From a coding perspective, I found that <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDUQFjAA&amp;url=http%3A%2F%2Fcommons.apache.org%2Fmath&amp;ei=kctmUajvIoWs0QXC-4HoDQ&amp;usg=AFQjCNFaOPmpFKpVp5Ba9fVtRNSgefKwhA&amp;sig2=vQZ7geKUB1iGDu5cDOjO0g&amp;bvm=bv.45107431,d.d2k">Apache commons maths</a> was a decent library to do complex calculus or solve/minimize functions. The complex part was better than some in-house implementation: for example the square root was more precise in commons maths, and the solvers are robust. It even made me think that it is often a mistake to reinvent to wheel. It&rsquo;s good to choose the best implementations/algorithms as possible. But reinventing a Brent solver??? a linear interpolator??? Also the commons maths library imposes a good structure. In house stuff tends to be messy (not real interfaces, or many different ones). I believe the right approach is to use and embrace/extends Apache commons maths. If some algorithms are badly coded/not performing well, then write your own using the same kind of interfaces as commons maths (or some other good maths library).<br /><br />The next part of this series on Lord-Kahl method is <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to_12.html">here</a>.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price/">Root finding in Lord Kahl Method to Compute Heston Call Price</a>
+      </h1>
+      <span class="post-date">Apr 9, 2013 &middot; 2 minute read
+      </span>
+      
+      <p><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/--7JNbvzFOTA/UWRTIdNqqvI/AAAAAAAAGUw/Aa7HmEB0LlU/s1600/Screenshot+from+2013-04-09+19:42:09.png" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/--7JNbvzFOTA/UWRTIdNqqvI/AAAAAAAAGUw/Aa7HmEB0LlU/s320/Screenshot+from+2013-04-09+19:42:09.png" width="297" /></a></div><br />I just tried to implement <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord Kahl algorithm to compute the Heston call price</a>. The big difficulty of their method is to find the optimal alpha.  That&rsquo;s what make it work or break. The tricky part is that the function  of alpha we want to minimize has multiple discontinuities (it&rsquo;s  periodic in some ways). This is why the authors rely on the computation  of an alpha_max: bracketing is very important, otherwise your optimizer  will jump the discontinuity without even noticing it, while you really  want to stay in the region before the first discontinuity.<br /><br />To find alpha_max, they solve a non linear differential equation,  for which I would need a few more readings to really understand it.  Given that the problem looked simple: if you graph the function to  minimize, it seems so simple to find the first discontinuity. So I just  tried to do it directly. Numerically, I was surprised it was not so  simple. I did find a solution that, amazingly seems to work in all the  examples of the paper, but it&rsquo;s luck. I use Newton-Raphson to find the  discontinuity, on a reduced function where the discontinuity really  lies. I solve the inverse of the discontinuity so that I can just solve  for 0. Earlier on I reduced the function too much and it did not work,  this is why I believe it is not very robust. Newton-Raphson is quite  simple, but also simple to understand why it breaks if it breaks, and  does not need a bracketing (what I am looking for in the first place).  Once I find the discontinuity, I can just use Brent on the right  interval and it works well.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-4u9Lo1gSCTc/UWRTIaG6yQI/AAAAAAAAGU8/WDwK_Hu-n_0/s1600/Screenshot+from+2013-04-09+19%253A42%253A30.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://2.bp.blogspot.com/-4u9Lo1gSCTc/UWRTIaG6yQI/AAAAAAAAGU8/WDwK_Hu-n_0/s320/Screenshot+from+2013-04-09+19%253A42%253A30.png" width="299" /></a><a href="http://4.bp.blogspot.com/-veJTNC7C4Rk/UWRT_SjU-tI/AAAAAAAAGVE/DXacavkVhhQ/s1600/Screenshot+from+2013-04-09+19%253A45%253A39.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-veJTNC7C4Rk/UWRT_SjU-tI/AAAAAAAAGVE/DXacavkVhhQ/s320/Screenshot+from+2013-04-09+19%253A45%253A39.png" width="299" /></a></div><br />In the end, it&rsquo;s neat to be able to compute option prices under  machine epsilon. But in practice, it&rsquo;s probably not that useful. For  calibration, those options should have a very small (insignificant)  weight. The only use case I found is really for graphing so that you  don&rsquo;t have some flat extrapolation too quickly, especially for short  maturities. I was curious as well about the accuracy of some  approximations of the implied volatility in the wings, to see if I could  use them instead of all this machinery.<br /><br />In any case I did not think that such a simple problem was so challenging numerically.<br /><br />There is a <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to_11.html">part II</a> to this article.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/">From Double Precision Normal Density to Double Precision Cumulative Normal Distribution</a>
+      </h1>
+      <span class="post-date">Apr 2, 2013 &middot; 3 minute read
+      </span>
+      
+      <p>Marsaglia in <a href="http://www.jstatsoft.org/v11/a05/paper">his paper on Normal Distribution</a> made the same mistake I initially did while trying to verify <a href="http://chasethedevil.blogspot.fr/2013/03/cracking-double-precision-gaussian.html">the accuracy of the normal density</a>.<br /><br />In his table of values comparing the true value computed by Maple for some values of x to the values computed by Sun or Ooura erfc, he actually does not really use the same input for the comparison. One example is the last number: 16.6. 16.6 does not have an exact representation in double precision, even though it is displayed as 16.6 because of the truncation at machine epsilon precision. Using Python mpmath, one can see that:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; mpf(-16.6)<br />mpf(&lsquo;-16.6000000000000014210854715202004&rsquo;)</span></span><br /><br />This is the more accurate representation if one goes beyond double precision (here 30 digits). And the value of the cumulative normal distribution is:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; ncdf(-16.6)<br />mpf(&lsquo;3.4845465199503256054808152068743e-62&rsquo;)</span></span><br /><br />It is different from:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; ncdf(mpf(&ldquo;-16.6&rdquo;))<br />mpf(&lsquo;3.48454651995040810217553910503186e-62&rsquo;)</span></span><br /><br />where in this case it is really evaluated around -16.6 (up to 30 digits precision). Marsaglia gives this second number as reference. But all the other algorithms will actually take as input the first input. It is more meaningful to compare results using the exact same input. Using human readable but computer truncated numbers is not the best.  The cumulative normal distribution will often be computed using some output of some calculation where one does not have an exact human readable input.<br /><br />The standard code for Ooura and Schonfelder (as well as Marsaglia) algorithms for the cumulative normal distribution don&rsquo;t use Cody&rsquo;s trick to evaluate the exp(-x*x). This function appears in all those implementations because it is part of the dominant term in the usual expansions. Out of curiosity, I replaced this part with Cody trick. For Ooura I also made minor changes to make it work directly on the CND instead of going through the error function erfc indirection. Here are the results without the Cody trick (except for Cody):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-mNamXn3QlGQ/UVrMEkkqrWI/AAAAAAAAGUU/1hihN6pqiC4/s1600/Screenshot+from+2013-04-02+14:15:51.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="307" src="http://4.bp.blogspot.com/-mNamXn3QlGQ/UVrMEkkqrWI/AAAAAAAAGUU/1hihN6pqiC4/s640/Screenshot+from+2013-04-02+14:15:51.png" width="640" /></a></div>and with it:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-bFq5HVfCCOs/UVrMEjJbuJI/AAAAAAAAGUQ/uyHKMbEsmco/s1600/Screenshot+from+2013-04-02+14:14:02.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="307" src="http://4.bp.blogspot.com/-bFq5HVfCCOs/UVrMEjJbuJI/AAAAAAAAGUQ/uyHKMbEsmco/s640/Screenshot+from+2013-04-02+14:14:02.png" width="640" /></a></div><br />All 3 algorithms are now of similiar accuracy (note the difference of scale compared to the previous graph), with Schonfelder being a bit worse, especially for x &gt;= -20. If one uses only easily representable numbers (for example -37, -36,75, -36,5, &hellip;) in double precision then, of course, Cody trick importance won&rsquo;t be visible and here is how the 3 algorithms would fare with or without Cody trick:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-zOHn3Lp96zY/UVrM8iOtgaI/AAAAAAAAGUg/7GdvJ534F60/s1600/Screenshot+from+2013-04-02+11:24:08.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="301" src="http://1.bp.blogspot.com/-zOHn3Lp96zY/UVrM8iOtgaI/AAAAAAAAGUg/7GdvJ534F60/s400/Screenshot+from+2013-04-02+11:24:08.png" width="400" /></a></div>Schonfelder looks now worse than it actually is compared to Cody and Ooura.<br /><br />To conclude, if someone claims that a cumulative normal distribution is up to double precision accuracy and it does not use any tricks to compute exp(-x*x), then beware, it probably is quite a bit less than double precision.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/cracking-the-double-precision-gaussian-puzzle/">Cracking the Double Precision Gaussian Puzzle</a>
+      </h1>
+      <span class="post-date">Mar 22, 2013 &middot; 3 minute read
+      </span>
+      
+      <p><br />In my <a href="http://chasethedevil.blogspot.fr/2013/03/a-double-precision-puzzle-with-gaussian.html">previous post</a>, I stated that some library (SPECFUN by W.D. Cody) computes $$e^{-\frac{x^2}{2}}$$ the following way:<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">xsq = fint(x * 1.6) / 1.6;<br />del = (x - xsq) * (x + xsq);<br />result = exp(-xsq * xsq * 0.<span style="font-size: x-small;">5</span>) * exp(-del <em>&nbsp;<span style="font-size: x-small;">0.5</span>);</span></span><br /><br />where fint(z) computes the floor of z.<br /><br /><b>1. Why 1.6?</b><br /><br />An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.6 is equivalent to multiplying by 10 and dividing by 16 which is an exact operation). It also allows to have something very close to a rounding function: x=2.6 will make xsq=2.5, x=2.4 will make xsq=1.875, x=2.5 will make xsq=2.5. The maximum difference between x and xsq will be 0.625.<br /><br /><div><b>2. (a-b)</em>(a+b) decomposition</b></div><div><br /></div><div>del is of the order of 2<em>x</em>(x-xsq). When (x-xsq) is very small, del will, most of the cases be small as well: when x is too high (beyond 39), the result will always be 0, because there is no small enough number to represent exp(-0.5*39*39) in double precision, while (x-xsq) can be as small as machine epsilon (around 2E-16). By splitting x*x into xsq*xsq and del, one allow exp to work on a more refined value of the remainder del, which in turn should lead to an increase of accuracy.</div><div><br /></div><div><b>3. Real world effect</b></div><div><br /></div><div>Let&rsquo;s make x move by machine epsilon and see how the result varies using the naive implementation exp(-0.5*x*x) and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac).&nbsp;</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s1600/snapshot1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s400/snapshot1.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what&rsquo;s interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.</div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: left;">This is the relative error between the Naive implementation and Cody. The difference is higher than one could expect: a factor of 20. But it has one big drawbacks: it requires 2 exponential evaluations, which are relatively costly.&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"><b>Update March 22, 2013</b></div><div class="separator" style="clear: both; text-align: left;">I looked for a higher precision exp implementation, that can go beyond double precision. I found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library.</div><div class="separator" style="clear: both; text-align: left;">I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.7000000000000028421709430404007434844970703125.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s1600/snapshot5.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="291" src="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s400/snapshot5.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7</div><div class="separator" style="clear: both; text-align: center;">&nbsp;<a href="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s1600/snapshot7.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="265" src="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s400/snapshot7.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</div><div><br /></div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
+      </h1>
+      <span class="post-date">Mar 20, 2013 &middot; 1 minute read
+      </span>
+      
+      <p>Some library computes $$e^{-\frac{x^2}{2}}$$ the following way:<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">xsq = fint(x * 1.6) / 1.6;<br />del = (x - xsq) * (x + xsq);<br />result = exp(-xsq * xsq * 0.<span style="font-size: x-small;">5</span>) * exp(-del * <span style="font-size: x-small;">0.5</span>);</span></span><br /><br />where fint(z) computes the floor of z.<br /><br />Basically, x*x is rewritten as xsq*xsq+del. I have seen that trick once before, but I just can&rsquo;t figure out where and why (except that it is probably related to high accuracy issues).<br /><br />The answer is in the next post.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/a-seasoned-volatility-swap/">A Seasoned Volatility Swap</a>
+      </h1>
+      <span class="post-date">Mar 14, 2013 &middot; 1 minute read
+      </span>
+      
+      <p>This is very much what&rsquo;s in the Carr-Lee paper &ldquo;Robust Replication of Volatility Derivatives&rdquo;, but it wasn&rsquo;t so easy to obtain in practice:<br /><ul><li>The formulas as written in the paper are not usable as is: they can be simplified (not too difficult, but intimidating at first)</li><li>The numerical integration is not trivial: a simple Gauss-Laguerre is not precise enough (maybe if I had an implementation with more points), a Gauss-Kronrod is not either (maybe if we split it in different regions). Funnily a simple adaptive Simpson works ok (but my boundaries are very basic: 1e-5 to 1e5).</li></ul><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s1600/Screenshot+from+2013-03-14+19:33:04.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s320/Screenshot+from+2013-03-14+19:33:04.png" width="320" /></a></div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
+      </h1>
+      <span class="post-date">Mar 12, 2013 &middot; 1 minute read
+      </span>
+      
+      <p>A <a href="http://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<i>robust replication of volatility derivatives</i>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s1600/Screenshot+from+2013-03-12+18:14:34.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="312" src="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s400/Screenshot+from+2013-03-12+18:14:34.png" width="400" /></a></div>Those are very close payoffs!<br /><br />I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<br /><br />The real payoff (very easy to obtain through Carr-Lee Bessel formula):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s1600/Screenshot+from+2013-03-14+19:46:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s320/Screenshot+from+2013-03-14+19:46:16.png" width="320" /></a></div>&nbsp;</p>
+
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="/page/10/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="/">1</a></li>
+        
+        <li
+        ><a href="/page/2/">2</a></li>
+        
+        <li
+        ><a href="/page/3/">3</a></li>
+        
+        <li
+        ><a href="/page/4/">4</a></li>
+        
+        <li
+        ><a href="/page/5/">5</a></li>
+        
+        <li
+        ><a href="/page/6/">6</a></li>
+        
+        <li
+        ><a href="/page/7/">7</a></li>
+        
+        <li
+        ><a href="/page/8/">8</a></li>
+        
+        <li
+        ><a href="/page/9/">9</a></li>
+        
+        <li
+        ><a href="/page/10/">10</a></li>
+        
+        <li
+        class="active"><a href="/page/11/">11</a></li>
+        
+        <li
+        ><a href="/page/12/">12</a></li>
+        
+        <li
+        ><a href="/page/13/">13</a></li>
+        
+        <li
+        ><a href="/page/14/">14</a></li>
+        
+        <li
+        ><a href="/page/15/">15</a></li>
+        
+        <li
+        ><a href="/page/16/">16</a></li>
+        
+        <li
+        ><a href="/page/17/">17</a></li>
+        
+        <li
+        ><a href="/page/18/">18</a></li>
+        
+        <li
+        ><a href="/page/19/">19</a></li>
+        
+        <li
+        ><a href="/page/20/">20</a></li>
+        
+        <li
+        ><a href="/page/21/">21</a></li>
+        
+        <li
+        ><a href="/page/22/">22</a></li>
+        
+        <li
+        ><a href="/page/23/">23</a></li>
+        
+        <li
+        ><a href="/page/24/">24</a></li>
+        
+        <li
+        ><a href="/page/25/">25</a></li>
+        
+        <li
+        ><a href="/page/26/">26</a></li>
+        
+        <li
+        ><a href="/page/27/">27</a></li>
+        
+        <li
+        ><a href="/page/28/">28</a></li>
+        
+        <li
+        ><a href="/page/29/">29</a></li>
+        
+        <li
+        ><a href="/page/30/">30</a></li>
+        
+        <li
+        ><a href="/page/31/">31</a></li>
+        
+        <li
+        ><a href="/page/32/">32</a></li>
+        
+        <li
+        ><a href="/page/33/">33</a></li>
+        
+        <li
+        ><a href="/page/34/">34</a></li>
+        
+        <li
+        >
+        <a href="/page/12/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="/page/34/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

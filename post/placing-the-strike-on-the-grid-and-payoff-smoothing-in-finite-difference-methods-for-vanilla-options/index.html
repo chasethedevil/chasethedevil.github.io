@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options</h1>
+    <span class="post-date">Jan 12, 2014 &middot; 2 minute read
+    </span>
+    <p>Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Convergence Remedies for non-smooth payoffs in option pricing</a> suggest that placing the strike on the grid for a Vanilla option is good enough:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" height="48" width="640" /></a></div><br />At the same time, Tavella and Randall show in their book that numerically, placing the strike in the middle of two nodes leads to a more accurate result. My own numerical experiments confirm Tavella and Randall suggestion.<br /><br />In reality, what Pooley et al. really mean, is that quadratic convergence is maintained if the strike is on the grid for vanilla payoffs, contrary to the case of discontinuous payoffs (like digital options) where the convergence decreases to order 1. So it&rsquo;s ok to place the strike on the grid for a vanilla payoff, but it&rsquo;s not optimal, it&rsquo;s still better to place it in the middle of two nodes. Here are absolute errors in a put option price:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.04473021824995271</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 0.003942854282069419<br />on grid, projection smoothing 0.044730218065351934<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.004040359609906119</span><br /><br />As expected (and mentioned in Pooley et al.), the projection does not do anything here. When the grid size is doubled, the convergence ratio of all methods is the same (order 2), but placing the strike in the middle still increases accuracy significantly.<br /><br />Here is are the same results, but for a digital put option:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing &nbsp; &nbsp; &nbsp; &nbsp; 0.03781319921461046<br />on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 8.289052335705427E-4<br />on grid, projection smoothing 1.9698293587372406E-4<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.5122153011418744E-4</span><br /><br />Here only the 3 last methods are of order-2 convergence, and projection is in deed the most accurate method, but placing the strike in the middle is really not that much worse, and much simpler.<br /><br />A disadvantage of Simpson smoothing (or smoothing by averaging), is that it breaks put-call parity (see the paper &ldquo;<a href="http://papers.ssrn.com/abstract=2362969">Exact Forward and Put Call Parity with TR-BDF2</a>&rdquo;) <br /><br />I think the emphasis in their paper on &ldquo;no smoothing is required&rdquo; for vanilla payoffs can be misleading. I hope I have clarified it in this post.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the devil &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="alternate" type="application/rss+xml" title="Chase the devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/building-with-ant--maven-antlib/">Building With Ant &#43; Maven Antlib?</a>
+      </h1>
+      <span class="post-date">Dec 14, 2006 &middot; 1 minute read
+      </span>
+      
+      <p>I discovered a new baby in the build world. Some open source projects use a combination of ant and maven. I thought you could vaguely use ant from maven. But I did not know of <a href="http://maven.apache.org/ant-tasks.html"> Maven Antlib</a> that allows you to use maven2 from Ant. Why would you use Maven2 from Ant?<br><br><ul><li>because Maven2 requires to adapt your project to its standard hierarchy, or to have excellent Maven2 skills to create your own archetype for each existing project. </li><li>because everybody knows Ant, but Ant does not manage dependencies well. Maven2 Antlib can be used just for that: managing dependencies.</li></ul>I have to try that on a real project to see if it is really an easy and flexible approach, better than plain Maven2. <br><br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/the-hibernate-network-proxy-a-dumb-idea./">The Hibernate Network Proxy, A Dumb Idea.</a>
+      </h1>
+      <span class="post-date">Dec 4, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>A friend of mine had a good idea for a Java project named &ldquo;hibernate proxy&rdquo;. I renamed it &ldquo;hibernate network proxy&rdquo; because hibernate proxies are already a well known concept among hibernate users (it allows lazy loading through a Java Proxy class). <br> <br> The hibernate network proxy, is a way to use hibernate remotely, that is to proxy hibernate calls through TCP (or even HTTP) to another machine, that will execute the session.saveOrUpdate or the session.load, etc. calls and return the corresponding objects, serialize them and deserialize them for use on the client.<br> <br> As most projects in my company involves several distributed services, this idea could have been potentially very interesting, allowing hibernate use in several services that would interact with a common service in charge of the db. It made me think about other standard patterns:<br> <br> <ul>   <li>This is not very different from the classical EJB session facade architecture, except we don&rsquo;t expose application functionalities, only hibernate stuff. In fact we don&rsquo;t want to expose application functionalities since they are not shared between services.</li>   <li>This is very similar to Entity EJBs used without facade, remotely, the first kind of design we heard about when EJBs came out. This would actually be a good fit for doing this kind of stuff, amazingly. I never thought remote entity EJBs were of any real use. Unfortunately for our projects, we already have a messaging infrastructure, and I am not sure how feasible it is to change of EJB transport protocol. Seeing the complexity of something like IIOP, it looks like a dead end.</li>   <li>This is a kind of Hibernate Second Level Cache, a cache with remote capabilities. The cache would proxy the request to the db service, and the db service would answer to that. This is a possible implementation that seems very flexible.</li>   <li>Use a regular TCP connection to the DB, and hibernate in a standard way. Ok, it does not use our internal message bus, but it is so simple and standard.&nbsp;</li> </ul> The last solution raises the most important question: <br> <blockquote>Why does it need to be proxied?&nbsp;<br> </blockquote> To go through some particular port? -&gt; use a port forwarder.<br> To go through HTTP? -&gt; use HTTPTunnel.<br> You want Java only? -&gt; use <a  href="http://www.jcraft.com/jhttptunnel/">JHttpTunnel</a>,there is even JSch for ssh<br> <br> <br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/workaround-when-eclipse-fucks-off-with-cvs/">Workaround When Eclipse Fucks Off With CVS</a>
+      </h1>
+      <span class="post-date">Nov 28, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>Until recently, I always found Eclipse CVS support to be excellent. The synchronize view was really a big plus to do clean commits, without forgetting any file.<br> <br> But I have encountered several problem with Eclipse 3.2+:<br> <br> <blockquote>On one project, it keeps putting the build directory into CVS, and I can&rsquo;t find how to change that setting. Each time I open the project I have to change the CVS/Entries file.<br>   <br> On another, where I have lots of files in, Eclipse delete some of the files (checked in CVS) regularly, although not often. It won&rsquo;t retrieve them back again from CVS. It seems to be the same files each time. I have no clue why.<br>   <br> The diff sometimes tells me the whole file has changed while there is absolutely no change.<br>   <br> I could not make the merge work. It kept on complaining about some parameters.<br>   <br> </blockquote> And now the workaround for all those cases: <br> <blockquote><b>The good old CVS command line.<br>   <br>   </b></blockquote> I never remember how do to a merge with the command line, so I each time go to google and read<a  href="http://www.csc.calpoly.edu/%7Ejdalbey/205/Resources/cvsBranchMerge.html"> this merge example page</a>. Here are the very simple steps if you are in a branch and want to merge:<br> <ol>   <li>     <pre>cvs update -A mypoem.txt (use head as local repository)</pre>   </li>   <li>     <pre class="source">cvs update -j release-1 (merge release-1 changes into local repository)</pre>   </li>   <li>     <pre class="source">cvs update mypoem.txt</pre>   </li>   <li>     <pre class="source">cvs commit mypoem.txt</pre>   </li> </ol> <br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/maven-game-over-try-again/">Maven: Game Over, Try Again</a>
+      </h1>
+      <span class="post-date">Nov 24, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>I am writing only as a newbie on Maven2. I tried to use it several times on small projects, but each time I found out that the time involved to make it work with an existing project was too much a pain in the a**. When confronted to very simple hierarchies that are not the standard of the documentation, I was a bit lost on how to arrange things, except changing the whole hierarchy to adapt to Maven.  <br><br>Also on small scale code, Maven requires you again to adapt your project to it and it will make your small code look like an important enterprise project. For example if you want to build a small test that can be executed as a server (with one particular class), as a client (with another class), or as a servlet, using one or two other common classes, Maven requires at least 3 source hierarchies (with src directory). <br><br>I think it is not only because I know ant (much) better that ant proved many times to be quite flexible, and I have never been on a project where switching from Makefile to ant was a problem. I am not an ant fan. I have a preference of code over XML that ends up here and there being like code, in a much less flexible way. However Ant, as I said, is flexible. One can always use the good old scripting languages (javascript, beanshell, etc.) to define new tasks, and therefore bypass any inflexibility of the original design. <br><br>Still Maven2 has plenty of very good stuff, especially for more normal projects. It provides versioning, central repository and dependency checking for you. It is probably a good idea to use it rather than bad ant scripts, or, even worse, old Makefiles. Also Maven2 hierarchy conventions are not stupid, it is just not fitted for quick and dirty stuff. <br><br><br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/how-jdepend-changed-my-java-packaging/">How JDepend Changed My Java Packaging</a>
+      </h1>
+      <span class="post-date">Oct 13, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>One important feature of Java language is the package keyword. It helps a lot in modularizing your code. But how exactly one should use it is not that clear.<br /><br />I have been on projects where 100s of classes are in a same package and more often where you have packages for every 2 classes. Often, packages are chosen so as to split functionalities. But often as well, people are packages maniacs and create way too many of them, because they want to sort things out, not necessarily applying a consistent logic. For example, I am sure many of you have seen the &ldquo;blahblah.exceptions&rdquo; packages where you dump exceptions classes.<br /><br />Without any precise intention for packages, you encounter quickly cyclic dependencies in your project, and your build system becomes overly complicated. Then you try to remove cyclic dependencies, not by using the package keyword better, but by building jars differently (=ugly jars) and &ldquo;refactoring&rdquo; a bit.<br /><br />I fell myself in many of those traps. Fortunately I stumbled on my way on <a href="http://clarkware.com/software/JDepend.html">JDepend</a> package analysis program. At first I wondered why JDepend calculated dependencies between Java packages and not between Jars, as in your project what matters is jar interdependencies. After using it regularly, first for the fun of trying not to have cyclic dependencies in my Java packages - the green light effect (I wanted my green light on my project), I understood much better its interest. I now make Java packages that are much more meaningful. They not only separate functionalities, but also create excellent modularity. Building a project is very easy, reusing parts of it is very clear. If one needs to split a jar in a project, it&rsquo;s very clear how to split it (by Java packages). And I find that in the end my packages make much more sense.<br /><br />Placing a class in the right package is most of the time not difficult, especially for experienced programmers. But now and then, with JDepend, I find mistakes. Correcting those mistakes regularly, when it&rsquo;s just about one or two classes is quick and easy. Correcting them on a project where dependency analysis was never done is a nightmare.<br /><br />Now I don&rsquo;t really care about JDepend metrics about abstractness and instability so much, I did not find any good use of them. But <a href="http://clarkware.com/software/JDepend.html">JDepend</a> (or a package dependencies checker) really is an essential program for good Java development.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/you-know-ioexception-think-again/">You Know IOException? Think Again!</a>
+      </h1>
+      <span class="post-date">Sep 14, 2006 &middot; 1 minute read
+      </span>
+      
+      <p>I was amazed today to find out that there was no constructor <tt>IOException(String, Throwable)</tt> or<tt> IOException(Throwable)</tt> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.<br> <br> So the workaround is:<br> <blockquote><tt>IOException ioe = new IOException(&ldquo;message&rdquo;);</tt><br>   <tt>ioe.initCause(e);</tt><br>   <tt>throw ioe;</tt><br> </blockquote> It can also be written as:<br> <blockquote><tt>throw (IOException) new IOException(&ldquo;message&rdquo;).initCause(e);</tt><br> </blockquote> It is not a major problem, but still. We can all thank the guy who <a  href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5070673">reported that as a bug</a> to Sun in 2004.<br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/good-software-books---2006-version/">Good Software Books - 2006 version</a>
+      </h1>
+      <span class="post-date">Sep 11, 2006 &middot; 3 minute read
+      </span>
+      
+      <p>Here is an update of the most interesting software books I found interesting. I already made <a  href="http://chasethedevil.blogspot.com/2005/11/good-software-books.html">such a list in 2005</a>:<br> <br> <ul>   <li><i>Object Oriented Software Construction, 2nd Ed</i>, by Bertrand Meyer. This made me understand why OOP is important, what is important in OOP and why it is still relevant. It contains lots of important guidelines you can apply to better design programs. One famous quote is &ldquo;<b>Real systems have no top</b>&rdquo;. <i>Code Complete</i> (Microsoft Press) covers some of the same ideas as Meyer&rsquo;s book, and some more pragmatic issues that arise in software projects (&rdquo;<b>measure twice, cut once</b>&rdquo;). I also liked the chapter on &ldquo;table driven design&rdquo;.</li>   <li><i>Concurrent Programming in Java, Second Edition</i>, by Doug&nbsp;Lea: there is all you need to know about programming in a multithreaded environment in it. The chapter on synchronization should be a must read for every Java developer.</li>   <li><i>Design Patterns</i> by the GoF: simply the best presentation of most common design patterns. I have a glance on it once in a while.<br>   </li>   <li><i>Artificial Intelligence through Prolog</i>, by Neil C. Rowe (Prentice-Hall): if you don&rsquo;t remember much about Prolog, it&rsquo;s a good book. It details how Prolog interpreters work.</li>   <li><i>File Systems Forensic Analysis, </i>by Brian Carrier (Addison Wesley): everything you need to know about disks and file systems, every trick to recover lost data. To go more in depth into file systems theory, you can read the free <i><a  href="http://www.nobius.org/%7Edbg/">Practical File System Design with the Be File System</a> </i>from D. Giampaolo, the creator of BeFS.<br>   </li>   <li><i>Mind Hacks </i>(O&rsquo;Reilly): you probably already bought that one. Not about software, but excellent.<br>   </li>   <li><i>Practical Issues in Database Management</i> by Fabian Pascal (Addison Wesley): short but concise book on relational database theory. F Pascal is of CJ Date school of thoughts, &ldquo;null are evil&rdquo;. You don&rsquo;t need to read it if you have read any other similar book (by CJ Date for example).<br>   </li>   <li><i>Inside The Java Virtual Machine,</i> by Bill Venners (McGraw-Hill): there are other books on the same subject. While this book has some bad reviews, I found it an easy read, and it explain well enough for me all the inner details of Java. I found &ldquo;Programming for the Java Virtual Machine&rdquo; not better, and with some bad example of a Prolog language for the JVM (1 full chapter for this to present a way too simple thing to be of any use).</li>   <li><i>Programming Jabber</i>, by O&rsquo;Reilly: I have read it 2 years ago, I enjoyed how they made you go through building a Jabber server.</li>   <li><i>Lucene In Action</i>: the only book about Lucene, some of the info is useful to understand how it is designed.</li>   <li><i>Hibernate In Action:</i> if you have to use hibernate, this is the book to read. It presents different ways of using it.</li>   <li>some Javascript+DHTML(+CSS) book: useful if you have none. They often have good tricks to solve the usual problems. In the AJAX days, it becomes useful again. I find O&rsquo;Reilly&rsquo;s &ldquo;<i>Javascript - The Definitive Guide</i>&rdquo; good to have an API reference (as ebook), and &ldquo;<i>Javascript and DHTML Cookbook</i>&rdquo; has the most useful recipes.</li>   <li><i>Lean Software Development </i>by Poppendieck (Addison Wesley): easy to read, good presentation of software dev management problems and pragmatic solutions. My favorite on the subject. Another good one but very specific is &ldquo;<i>Requirements Management</i>&rdquo; (MS Press).</li>   <li><i>UML Distilled </i>by M Fowler: always useful to have if you need to draw UML diagrams.</li> </ul></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/i-get-spring/">I Get Spring</a>
+      </h1>
+      <span class="post-date">Aug 23, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>When you google up Java Spring, one of the best results is a post from crazybob called &ldquo;<a  href="http://crazybob.org/2006/01/i-dont-get-spring.html">I Don&rsquo;t Get Spring</a>&rdquo;. For a long time, I shared a similar opinion. But now that I have used it, I get it. I only use it for defining replaceable services, so when I talk about Spring, I mean spring-core and spring-beans. <br> <br> These two packages are not big, and have only very few dependencies. So it is quite easy to use Spring in any project, be it small or not. It is actually easier than using NanoContainer because Spring has less external dependencies.<br> <br> I did not talk about <a  href="http://www.martinfowler.com/articles/injection.html">Dependency Injection</a> yet, because that was not my primary goal. Many times I had to write by hand configurable factories. By using Spring, I avoid writing all that boilerplate code. I was surprised that with 1 line of code I actually had my factory done. Granted, the config file is xml, an I am not necessarily an xml fan. But 1) it&rsquo;s very simple, and 2) if you don&rsquo;t want your custom factory to depend on all implementations, you will either use strings in your code or a config file, which in the end is no better than Spring config file.<br> <br> Dependency Injection is the big plus that Springs gives on top of it. It&rsquo;s very useful to define your dependencies explicitly in the config file, since all beans instantiated from the config file are instantiated dynamically. And by defining the dependencies, you also get for free the injection.<br> <br> Spring is not big and strange and unknown. It solves a fairly simple problem. But again I don&rsquo;t use it for everything, every class. I don&rsquo;t think it brings much versus straight Java code when you don&rsquo;t want replaceable services. And putting it in places where it is not needed would be dangerous, because of the unneeded xml configuration.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java-serialization-vs-.net-serialization---java-perverse/">Java Serialization vs .NET Serialization - Java Perverse?</a>
+      </h1>
+      <span class="post-date">Aug 22, 2006 &middot; 2 minute read
+      </span>
+      
+      <p>Did you know what happens in Java when you serialize a subclass of a non serializable class? I was surprised by the answer: it works!<br> <!--+GtkHTML:<DATA class="ClueFlow" key="orig" value="0">--><br> Unfortunately it is not a good thing, because it will serialize fields from your subclass and no fields from the parent class. So you&rsquo;ll end up with a half serialized instance.<br> <br> In .NET, it breaks at runtime, throwing an exception, which is I think, much more logical, because then you don&rsquo;t end up with half data somewhere.<br> <br> <ul>   <li>Java Code:</li> </ul> <div class="java" align="left"> <div class="java" align="left"> <div class="java" align="left"> <table bgcolor="#ffffff" border="0" cellpadding="3" cellspacing="0">   <tbody>     <tr> <!-- start source code --> <td align="left" nowrap="nowrap"  valign="top"> <code><font color="#7f0055"><b>import </b></font><font  color="#000000">java.io.ByteArrayInputStream;</font><br>       <font color="#7f0055"><b>import </b></font><font color="#000000">java.io.ByteArrayOutputStream;</font><br>       <font color="#7f0055"><b>import </b></font><font color="#000000">java.io.ObjectInputStream;</font><br>       <font color="#7f0055"><b>import </b></font><font color="#000000">java.io.ObjectOutputStream;</font><br>       <font color="#7f0055"><b>import </b></font><font color="#000000">java.io.Serializable;</font><br>       <br>       <br>       <br>       <font color="#7f0055"><b>public class </b></font><font  color="#000000">Test</font><br>       <font color="#000000">{</font><br>       <font color="#ffffff">  </font><font color="#7f0055"><b>public static class </b></font><font  color="#000000">Toto </font><br>       <font color="#ffffff">  </font><font color="#000000">{</font><br>       <font color="#ffffff">    </font><font color="#7f0055"><b>public </b></font><font  color="#000000">String me;    </font><br>       <font color="#ffffff">  </font><font color="#000000">}</font><br>       <font color="#ffffff">  </font><br>       <font color="#ffffff">  </font><font color="#7f0055"><b>public static class </b></font><font  color="#000000">Toto2 </font><font color="#7f0055"><b>extends </b></font><font  color="#000000">Toto </font><font color="#7f0055"><b>implements </b></font><font  color="#000000">Serializable</font><br>       <font color="#ffffff">  </font><font color="#000000">{</font><br>       <font color="#ffffff">    </font><font color="#7f0055"><b>public </b></font><font  color="#000000">String you;</font><br>       <font color="#ffffff">    </font><font color="#7f0055"><b>public </b></font><font  color="#000000">String toString</font><font color="#000000">()</font><br>       <font color="#ffffff">    </font><font color="#000000">{</font><br>       <font color="#ffffff">      </font><font color="#7f0055"><b>return </b></font><font  color="#000000">me+</font><font color="#2a00ff">&ldquo; &rdquo;</font><font  color="#000000">+you;</font><br>       <font color="#ffffff">    </font><font color="#000000">}</font><br>       <font color="#ffffff">  </font><font color="#000000">}</font><br>       <font color="#ffffff">  </font><br>       <font color="#ffffff">  </font><font color="#7f0055"><b>public static </b></font><font  color="#7f0055"><b>void </b></font><font color="#000000">main</font><font  color="#000000">(</font><font color="#000000">String</font><font  color="#000000">[] </font><font color="#000000">args</font><font  color="#000000">) </font><font color="#7f0055"><b>throws </b></font><font  color="#000000">Exception</font><br>       <font color="#ffffff">  </font><font color="#000000">{</font><br>       <font color="#ffffff">    </font><font color="#000000">Toto2 t = </font><font  color="#7f0055"><b>new </b></font><font color="#000000">Toto2</font><font  color="#000000">()</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">t.me = </font><font  color="#2a00ff">&ldquo;it&rsquo;s me&rdquo;</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">t.you = </font><font  color="#2a00ff">&ldquo;it&rsquo;s you&rdquo;</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">System.out.println</font><font  color="#000000">(</font><font color="#2a00ff">&ldquo;t=&rdquo;</font><font  color="#000000">+t</font><font color="#000000">)</font><font  color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">ByteArrayOutputStream b = </font><font  color="#7f0055"><b>new </b></font><font color="#000000">ByteArrayOutputStream</font><font  color="#000000">()</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">ObjectOutputStream oos = </font><font  color="#7f0055"><b>new </b></font><font color="#000000">ObjectOutputStream</font><font  color="#000000">(</font><font color="#000000">b</font><font  color="#000000">)</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">oos.writeObject</font><font  color="#000000">(</font><font color="#000000">t</font><font  color="#000000">)</font><font color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">ObjectInputStream ois = </font><font  color="#7f0055"><b>new </b></font><font color="#000000">ObjectInputStream</font><font  color="#000000">(</font><font color="#7f0055"><b>new </b></font><font  color="#000000">ByteArrayInputStream</font><font color="#000000">(</font><font  color="#000000">b.toByteArray</font><font color="#000000">()))</font><font  color="#000000">;</font><br>       <font color="#ffffff">    </font><font color="#000000">System.out.println</font><font  color="#000000">(</font><font color="#2a00ff">&ldquo;u=&rdquo;</font><font  color="#000000">+ois.readObject</font><font color="#000000">())</font><font  color="#000000">;</font><br>       <font color="#ffffff">  </font><font color="#000000">}</font><br>       <font color="#000000">}</font></code> </td> <!-- end source code --> </tr>   </tbody> </table> </div> </div> </div> <br> will output:<br> t=it&rsquo;s me it&rsquo;s you<br> u=null it&rsquo;s you<br> <br> <ul>   <li>.NET Code:</li> </ul> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System;</font><br> <!--+GtkHTML:<DATA class="ClueFlow" clear="orig">--><font size="2"><font  color="#0000ff">using</font></font><font size="2"> System.Collections.Generic;</font><br> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System.Text;</font><br> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System.IO;</font><br> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System.Xml;</font><br> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System.Xml.Serialization;</font><br> <font size="2"><font color="#0000ff">using</font></font><font size="2"> System.Runtime.Serialization.Formatters.Binary;<br> <br> </font><font size="2"><font color="#0000ff">namespace</font></font><font  size="2"> ConsoleApplication</font><br> <font size="2">{</font><br> <font size="2"></font><font size="2">    </font><font size="2"><font  color="#0000ff">public</font></font><font size="2"> </font><font  size="2"><font color="#0000ff">class</font></font><font size="2"> Toto</font><br> <font size="2">    {</font><br> <font size="2">        </font><font size="2"><font color="#0000ff">public</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">string</font></font><font  size="2"> me</font><font size="2">;</font><br> <font size="2">        </font><font size="2"><font color="#0000ff">public</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">override</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">string</font></font><font  size="2"> ToString() <br>        {</font><br> <font size="2">            </font><font size="2"><font color="#0000ff">return</font></font><font  size="2"> me;</font><br> <font size="2">       }</font><br> <font size="2">    }</font><br>   <font size="2"></font> <br> <font size="2">    [Serializable]</font><br> <font size="2">    </font><font size="2"><font color="#0000ff">public</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">class</font></font><font  size="2"> Toto2 : Toto</font><br> <font size="2">    {</font><br> <font size="2">        </font><font size="2"><font color="#0000ff">public</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">string</font></font><font  size="2"> you</font><font size="2">;</font><font size="2"> </font><br> <font size="2">        </font><font size="2"><font color="#0000ff">public override</font></font><font size="2"> </font><font size="2"><font  color="#0000ff">string</font></font><font size="2"> ToString() <br>        {</font><br> <font size="2">            </font><font size="2"><font color="#0000ff">return</font></font><font  size="2"> you + </font><font size="2"><font color="#b03060">&rdquo; &ldquo;</font></font><font  size="2"> + me;</font><br> <font size="2">        }</font><br> <font size="2">    }</font><font size="2"> </font><br> <br> <font size="2">    </font><font size="2"><font color="#0000ff">class</font></font><font  size="2"> Program</font><br> <font size="2">    {</font><br> <font size="2">        </font><font size="2"><font color="#0000ff">static</font></font><font  size="2"> </font><font size="2"><font color="#0000ff">void</font></font><font  size="2"> Main(</font><font size="2"><font color="#0000ff">string</font></font><font  size="2">[] args) <br>         {</font><br> <font size="2">            Toto2 t = </font><font size="2"><font  color="#0000ff">new</font></font><font size="2"> Toto2();<br>             t.me = </font><font size="2"><font color="#b03060">&ldquo;it&rsquo;s me&rdquo;</font></font><font size="2">;<br>             t.you = </font><font size="2"><font color="#b03060">&ldquo;it&rsquo;s you&rdquo;</font></font><font size="2">;<br> </font><font size="2">            </font><font size="2"><font  color="#0000ff">using</font></font><font size="2"> (FileStream fs = File.Create(</font><font size="2"><font color="#b03060">@&ldquo;c:\test.bin&rdquo;</font></font><font  size="2">)) <br>            {</font><br> <font size="2">                BinaryFormatter bFormatter = </font><font  size="2"><font color="#0000ff">new</font></font><font size="2"> BinaryFormatter();</font><br> <font size="2">                bFormatter.Serialize(fs, t);</font><br> <font size="2">            }</font><br> <font size="2">            Console.WriteLine(</font><font size="2"><font  color="#b03060">&ldquo;t=&rdquo;</font></font><font size="2"> + t.ToString());</font><font  size="2"> </font><br> <font size="2">            Toto2u = </font><font size="2"><font  color="#0000ff">null</font></font><font size="2">;</font><br> <font size="2">            </font><font size="2"><font color="#0000ff">using</font></font><font  size="2"> (FileStream fs = File.Open(</font><font size="2"><font  color="#b03060">@&ldquo;c:\test.bin&rdquo;</font></font><font size="2">, FileMode.Open)) <br>             {</font><br> <font size="2">                BinaryFormatter bFormatter = </font><font  size="2"><font color="#0000ff">new</font></font><font size="2"> BinaryFormatter();</font><br> <font size="2">                u = (Toto2)bFormatter.Deserialize(fs);</font><br> <font size="2">            }</font><br> <font size="2">            Console.WriteLine(</font><font size="2"><font  color="#b03060">&ldquo;u=&rdquo;</font></font><font size="2">+u.ToString());</font><font  size="2"> </font><br> <font size="2">            Console.ReadKey();</font><br> <font size="2">        }</font><br> <font size="2">    }</font><br> <font size="2">}</font><br> <!--+GtkHTML:<DATA class="ClueFlow" key="orig" value="0">--><br> will throw an exception.<br> <br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/5-minutes-of-google-spreadsheets/">5 Minutes of Google Spreadsheets</a>
+      </h1>
+      <span class="post-date">Aug 17, 2006 &middot; 1 minute read
+      </span>
+      
+      <p class="mobile-post">Today I noticed a Google Spreadsheets link in my gmail screen. I had read about it but never bothered to try before. In the finance industry, a lot of traders use excel, so I was wondering if Google spreadsheets could be another fit. </p><p class="mobile-post">Unfortunately for Google, under Linux at least, I don't find Google Spreadsheets usable for anything else than storing and sharing some information, not often updated. Although I admire the engineers that managed to write the Javascript behind Google Spreasheet, it is way too slow for using it in interesting ways. Editing is slow, copy/paste is slow, sorting is slow. </p><p class="mobile-post">I then wondered if it could read my contacts CSV from GMail (you can export contacts to a CSV file in Gmail). It could be a better interface to edit contacts. But strangely, importing Gmail CSV in Google Spreadsheets does not work.</p><p class="mobile-post">I don't think I'll use it another 5 more minutes.</p>
+
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="/page/24/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="/">1</a></li>
+        
+        <li
+        ><a href="/page/2/">2</a></li>
+        
+        <li
+        ><a href="/page/3/">3</a></li>
+        
+        <li
+        ><a href="/page/4/">4</a></li>
+        
+        <li
+        ><a href="/page/5/">5</a></li>
+        
+        <li
+        ><a href="/page/6/">6</a></li>
+        
+        <li
+        ><a href="/page/7/">7</a></li>
+        
+        <li
+        ><a href="/page/8/">8</a></li>
+        
+        <li
+        ><a href="/page/9/">9</a></li>
+        
+        <li
+        ><a href="/page/10/">10</a></li>
+        
+        <li
+        ><a href="/page/11/">11</a></li>
+        
+        <li
+        ><a href="/page/12/">12</a></li>
+        
+        <li
+        ><a href="/page/13/">13</a></li>
+        
+        <li
+        ><a href="/page/14/">14</a></li>
+        
+        <li
+        ><a href="/page/15/">15</a></li>
+        
+        <li
+        ><a href="/page/16/">16</a></li>
+        
+        <li
+        ><a href="/page/17/">17</a></li>
+        
+        <li
+        ><a href="/page/18/">18</a></li>
+        
+        <li
+        ><a href="/page/19/">19</a></li>
+        
+        <li
+        ><a href="/page/20/">20</a></li>
+        
+        <li
+        ><a href="/page/21/">21</a></li>
+        
+        <li
+        ><a href="/page/22/">22</a></li>
+        
+        <li
+        ><a href="/page/23/">23</a></li>
+        
+        <li
+        ><a href="/page/24/">24</a></li>
+        
+        <li
+        class="active"><a href="/page/25/">25</a></li>
+        
+        <li
+        ><a href="/page/26/">26</a></li>
+        
+        <li
+        ><a href="/page/27/">27</a></li>
+        
+        <li
+        ><a href="/page/28/">28</a></li>
+        
+        <li
+        ><a href="/page/29/">29</a></li>
+        
+        <li
+        ><a href="/page/30/">30</a></li>
+        
+        <li
+        ><a href="/page/31/">31</a></li>
+        
+        <li
+        ><a href="/page/32/">32</a></li>
+        
+        <li
+        ><a href="/page/33/">33</a></li>
+        
+        <li
+        ><a href="/page/34/">34</a></li>
+        
+        <li
+        >
+        <a href="/page/26/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="/page/34/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

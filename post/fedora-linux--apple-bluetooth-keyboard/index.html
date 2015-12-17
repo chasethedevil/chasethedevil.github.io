@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Fedora Linux &amp; Apple Bluetooth Keyboard &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Fedora Linux &amp; Apple Bluetooth Keyboard</h1>
+    <span class="post-date">Jun 5, 2008 &middot; 2 minute read
+    </span>
+    <p>It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd &ndash;search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS=&ldquo;&ndash;timeout 8 &ndash;connect 00:1D:4F:A7:15:CC &ndash;server&rdquo;</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name &ldquo;Apple Wireless Keyboard&rdquo;;</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are &ldquo;lm master&rdquo; (makes it connect automatically), and &ldquo;&ndash;timeout 8&rdquo; that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

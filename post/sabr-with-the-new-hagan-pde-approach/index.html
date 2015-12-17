@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>SABR with the new Hagan PDE Approach &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>SABR with the new Hagan PDE Approach</h1>
+    <span class="post-date">May 28, 2013 &middot; 3 minute read
+    </span>
+    <p>At a presentation of the Thalesians, Hagan has presented a new PDE based approach to compute arbitrage free prices under SABR. This is similar in spirit as Andreasen-Huge, but the PDE is directly on the density, not on the prices, and there is no one-step procedure: it&rsquo;s just like a regular PDE with proper boundary conditions.<br /><br />I was wondering how it compared to Andreasen Huge results.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-yg9JIC5LoI0/UaSx8aHdOpI/AAAAAAAAGbo/8LI0NAKhI_A/s1600/snapshot14.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-yg9JIC5LoI0/UaSx8aHdOpI/AAAAAAAAGbo/8LI0NAKhI_A/s640/snapshot14.png" height="304" width="640" /></a></div><br /><br />My first implementation was quite slow. I postulated it was likely the Math.pow function calls. It turns out they could be reduced a great deal. As a result, it&rsquo;s now quite fast. But it would still be much slower than Andreasen Huge. Typically, one might use 40 time steps, while Andreasen Huge is 1, so it could be around a 40 to 1 ratio. In practice it&rsquo;s likely to be less than 10x slower, but still.<br /><br />While looking at the implied volatilities I found something intriguing with Andreasen Huge: the implied volatilities from the refined solution using the corrected forward volatility look further away from the Hagan implied volatilitilies than without adjustment, and it&rsquo;s quite pronounced at the money.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-SgFohuLcgdE/UaSzjuSlcAI/AAAAAAAAGb4/AwXdfuDDQ7o/s1600/snapshot15.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-SgFohuLcgdE/UaSzjuSlcAI/AAAAAAAAGb4/AwXdfuDDQ7o/s640/snapshot15.png" height="304" width="640" /></a></div>Interestingly, the authors don&rsquo;t plot that graph in their paper. They  plot a similar graph of their own closed form analytic formula, that is  in reality used to compute the forward volatility. I suppose that  because they calibrate and price through their method, they don&rsquo;t really  care so much that the ATM prices don&rsquo;t match Hagan original formula.<br /><br />We can see something else on that graph: Hagan PDE boundary is not as nice as Andreasen Huge boundary for high strikes (they use a Hagan like approx at the boundaries, this is why it crosses the Hagan implied volatilities there). <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-xttZ_oNvVCk/UaS0j2wO29I/AAAAAAAAGcI/6oaerlRt0Ps/s1600/snapshot16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-xttZ_oNvVCk/UaS0j2wO29I/AAAAAAAAGcI/6oaerlRt0Ps/s640/snapshot16.png" height="304" width="640" /></a></div><br /><br />If we use a simple option gamma = 0 boundary in Andreasen Huge, this results in a very similar shape as the Hagan PDE. This is because the option price is effectively 0 at the boundary.<br />Hagan chose a specifically taylored Crank-Nicolson scheme. I was wondering how it fared when I reduced the number of time-steps. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-691gk88PTt8/UaS2smPqGnI/AAAAAAAAGcY/_VYXXFTjVVM/s1600/snapshot17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-691gk88PTt8/UaS2smPqGnI/AAAAAAAAGcY/_VYXXFTjVVM/s400/snapshot17.png" height="190" width="400" /></a></div><br />The answer is: not good. This is the typical Crank-Nicolson issue. It could be interesting to adapt the method to use Lawson-Morris-Goubet or TR-BDF2, or a simple Euler Richardson extrapolation. This would allow to use less time steps, as in practice, the accuracy is not so bad with 10 time steps only.<br /><br />What I like about the Hagan PDE approach is that the implied vols and the probability density converge well to the standard Hagan formula, when there is no negative density problem, for example for shorter maturities. This is better than Andreasen Huge, where there seems to be always 1 vol point difference. However their method is quite slow compared to the original simple analytic formula.<br /><br /><b>Update March 2014</b> - I have now a paper around this &ldquo;<a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a>&ldquo;</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Arbitrage Free SABR - Another View on Hagan Approach &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Arbitrage Free SABR - Another View on Hagan Approach</h1>
+    <span class="post-date">Dec 14, 2013 &middot; 2 minute read
+    </span>
+    <p>Several months ago, I took a look at<a href="http://chasethedevil.blogspot.co.uk/2013/05/sabr-with-new-hagan-pde-approach.html"> two interesting recent ways</a> to price under SABR with no arbitrage:<br /><ul><li>One way is due to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1980726&amp;ei=F4yrUoL7Kq2M7AasuIFg&amp;usg=AFQjCNHDopVl4pLOYEqepVK8Odhk9Td3iA&amp;sig2=-fFTrJR1wY1elyXBC1EC0A&amp;bvm=bv.57967247,d.ZGU">Andreasen and Huge</a>, where they find an equivalent local volatility expansion, and then use a one-step finite difference technique to price.</li><li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li></ul>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the<a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation"> Fokker-Planck</a> (forward) equation.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-sGJXcJe9o8Q/UquJvTp8X3I/AAAAAAAAG5I/dpnsKNNYXEc/s1600/Screenshot+from+2013-12-13+23:26:43.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-sGJXcJe9o8Q/UquJvTp8X3I/AAAAAAAAG5I/dpnsKNNYXEc/s1600/Screenshot+from+2013-12-13+23:26:43.png" height="106" width="320" /></a></div>The <tt class="docutils literal"><span class="pre">(\alpha D(F))</span></tt> is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-vgD02-rlq90/UquLJCUhd7I/AAAAAAAAG5U/y5A0gUfua4Q/s1600/Screenshot+from+2013-12-13+23:31:18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-vgD02-rlq90/UquLJCUhd7I/AAAAAAAAG5U/y5A0gUfua4Q/s1600/Screenshot+from+2013-12-13+23:31:18.png" /></a></div>A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a>) of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:<br /><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-XBoURhuv0kM/UqudNkLeWUI/AAAAAAAAG5s/hFVXSDT34Lg/s1600/hagan_dens1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-XBoURhuv0kM/UqudNkLeWUI/AAAAAAAAG5s/hFVXSDT34Lg/s1600/hagan_dens1.png" height="288" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-jqeFbzgYuA4/UqudOW68uxI/AAAAAAAAG58/hcbIP4UUR0A/s1600/hagan_iv.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-jqeFbzgYuA4/UqudOW68uxI/AAAAAAAAG58/hcbIP4UUR0A/s1600/hagan_iv.png" height="288" width="400" /></a></div><br />The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-ZLcQY71T_No/UqudNr-32_I/AAAAAAAAG5w/7U5MMsZ-Vbo/s1600/ah_dens1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-ZLcQY71T_No/UqudNr-32_I/AAAAAAAAG5w/7U5MMsZ-Vbo/s1600/ah_dens1.png" height="288" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-tpaOH_0fN4c/UqudNiFlLSI/AAAAAAAAG50/yDvJRoKaZ7I/s1600/ah_iv1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-tpaOH_0fN4c/UqudNiFlLSI/AAAAAAAAG50/yDvJRoKaZ7I/s1600/ah_iv1.png" height="288" width="400" /></a></div><br />One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.<br /><br />Hagan managed to derive a slightly more precise local volatility by going through the probability density route, and his paper formalizes his model in a clearer way: the probability density accumulates at the boundaries. But in practice, this formalism does not seem to matter. The forward Dupire way is more direct and slightly faster. This later way also allows to use alternative boundaries, like Andreasen-Huge did. <br /><br /><b>Update March 2014</b> - I have now a paper around this &ldquo;<a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a>&ldquo;</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

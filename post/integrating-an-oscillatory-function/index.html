@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Integrating an oscillatory function &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Integrating an oscillatory function</h1>
+    <span class="post-date">Nov 5, 2014 &middot; 2 minute read
+    </span>
+    <p>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. <br /><br />The <a href="https://math.nyu.edu/financial_mathematics/content/02_financial/2008-3.pdf">Carr-Lee</a> seasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.<br /><a href="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" height="151" width="640" /></a><br />I&nbsp; first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (<a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">the one from Espelid</a>) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp; Gauschi, present in Quantlib). I tried various choices of adaptive (coteda, modsim, adaptsim,&hellip;) or brute force trapezoidal integration, but either they were order of magnitudes slower or unstable in some cases. Just using the same Gauss-Lobatto implementation for both would fail&hellip;<br /><br />I then noticed you could write the integral as a Fourier transform as well, allowing the use of FFT. Unfortunately, while this worked, it turned out to require a very large number of points for a reasonable accuracy. This, plus the tricky part of defining the proper step size, makes the method not so practical.<br /><br />I had heard before of the <a href="http://www.cs.berkeley.edu/~fateman/papers/oscillate.pdf">Filon quadrature</a>, which I thought was more of a curiosity. The main idea is to integrate exactly x^n * cos(k*x). One then relies on a piecewise parabolic approximation of the function f to integrate f(x) * cos(k*x). Interestingly, a very similar idea has been used in the <a href="http://www.risk.net/risk-magazine/technical-paper/1500323/cutting-edges-domain-integration">Sali quadrature method</a> for option pricing, except one integrates exactly x^n * exp(-k*x^2).<br /><br />It turned out to be remarkable on that problem, combined with a <a href="http://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method">simple adaptive Simpson</a> like method to find the right discretization. Then as if by magic, any outer integration quadrature worked. <br /><br /></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

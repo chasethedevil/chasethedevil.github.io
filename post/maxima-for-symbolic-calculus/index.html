@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Maxima for Symbolic Calculus &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Maxima for Symbolic Calculus</h1>
+    <span class="post-date">Oct 2, 2013 &middot; 1 minute read
+    </span>
+    <p>A few years ago, I found an interesting open source symbolic calculus software called <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html%E2%80%8E">Xcas</a>. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.<br />Google pointed me to another popular open source package, <a href="http://maxima.sourceforge.net/">Maxima</a>. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</p>
+
+<p>(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
+(%o14)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D(x) := sqrt((lambda - rho eta x)&nbsp; + (- x&nbsp; + x) eta )
+(%i15) G(x) := (lambda - rho*eta*x - D(x))/(lambda - rho*eta*x +D(x));
+(%o15)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; G(x) := &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lambda - rho eta x + D(x)
+(%i16) tex(taylor((1-exp(-t*D(x)))/(1-G(x)*exp(-t<em>D(x)))</em>(lambda - rho*eta*x - D(x)),x,0,3));
+$$-{{\left(e^{t\,\lambda}-1\right)\,\eta^2\,x}\over{2\,e^{t\,\lambda}\,\lambda}}+{{\left(\left(4\,e^{t\,\lambda}\,t\,\eta^3\,\rho+\left(4\,\left(e^{t\,\lambda}\right)^2-4\,e^{t\,\lambda}\right)\,\eta^2\right)\,\lambda^2+\left(\left(-4\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,\eta^3\,\rho-2\,e^{t\,\lambda}\,t\,\eta^4\right)\,\lambda+\left(\left(e^{t\,\lambda}\right)^2-1\right)\,\eta^4\right)\,x^2}\over{8\,\left(e^{t\,\lambda}\right)^2\,\lambda^3}}+{{\left(\left(8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^4\,\rho^2-16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^3\,\rho\right)\,\lambda^4+\left(16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\,\rho^2+\left(-8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^5+\left(16\,\left(e^{t\,\lambda}\right)^3-16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^3\right)\,\rho+16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\right)\,\lambda^3+\left(\left(-16\,\left(e^{t\,\lambda}\right)^3+16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^4\,\rho^2+\left(-16\,\left(e^{t\,\lambda}\right)^2-8\,e^{t\,\lambda}\right)\,t\,\eta^5\,\rho+2\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^6+\left(-8\,\left(e^{t\,\lambda}\right)^3+8\,e^{t\,\lambda}\right)\,\eta^4\right)\,\lambda^2+\left(\left(12\,\left(e^{t\,\lambda}\right)^3-12\,e^{t\,\lambda}\right)\,\eta^5\,\rho+\left(2\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,t\,\eta^6\right)\,\lambda+\left(-2\,\left(e^{t\,\lambda}\right)^3-\left(e^{t\,\lambda}\right)^2+2\,e^{t\,\lambda}+1\right)\,\eta^6\right)\,x^3}\over{32\,\left(e^{t\,\lambda}\right)^3\,\lambda^5}}+\cdots $$
+Regarding Taylor expansion, there seems to be quite a few options possible, but I found that the default expansion was already relatively easy to read. XCas produced less readable expansions, or just failed.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

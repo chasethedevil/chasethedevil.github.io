@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Monte Carlo &amp; Inverse Cumulative Normal Distribution &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Monte Carlo &amp; Inverse Cumulative Normal Distribution</h1>
+    <span class="post-date">Feb 3, 2015 &middot; 2 minute read
+    </span>
+    <p>In most financial Monte-Carlo simulations, there is the need of generating normally distributed random numbers. One technique is to use the inverse cumulative normal distribution function on uniform random numbers. There are several different popular numerical implementations:<br /><ul><li>Wichura AS241 (1988)</li><li>Moro &ldquo;The full Monte&rdquo; (1995)</li><li><a href="http://home.online.no/~pjacklam/notes/invnorm/">Acklam</a> (2004)</li><li><a href="http://arxiv.org/abs/0901.0638">Shaw breakless formula</a> optimized for GPUs (2011) </li></ul>W. Shaw has an excellent overview of the accuracy of the various methods in his paper <i><a href="http://www.mth.kcl.ac.uk/~shaww/web_page/papers/NormalQuantile1.pdf">Refinement of the normal quantile</a></i>.<br /><br />But what about performance? In Monte-Carlo, we could accept a slighly lower accuracy for an increase in performance.<br /><br />I tested the various methods on the Euler full truncation scheme for Heston using a small timestep (0.01). Here are the results with Sobol quasi-rng:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.9186256922511046 0.42s<br />MORO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922459066 0.38s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922549364 0.40s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM REFINED 0.9186256922511045 2.57s<br />SHAW-HYBRID &nbsp;&nbsp; 0.9186256922511048 0.68s</span></span><br /><br />In practice, the most accurate algorithm, AS241, is of comparable speed as the newer but less accurate algorithms of MORO and ACKLAM. Acklam refinement to go to double precision (which AS241 is) kills its performance.<br /><br />What about the Ziggurat on pseudo rng only? Here are the results with Mersenne-Twister-64, and using the Doornik implementation of the Ziggurat algorithm:<br /><br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp; 0.9231388565879476&nbsp; 0.49s<br />ZIGNOR 0.9321405648313437&nbsp; 0.44s</span></span><br /><br />There is a more optimized algorithm, VIZIGNOR, also from Doornik which should be a bit faster. As expected, the accuracy is quite lower than with Sobol, and the Ziggurat looks worse. This is easily visible if one plots the implied volatilities as a function of the spot for AS241 and for ZIGNOR.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">AS241 implied volatility on Mersenne-Twister</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">ZIGNOR implied volatility on Mersenne-Twister</td></tr></tbody></table><br />Zignor is much noisier.<br /><br />Note the slight bump in the scheme EULER-FT-BK that appears because the scheme, that approximates the Broadie-Kaya integrals with a trapeze (as in Andersen QE paper), does not respect martingality that well compared to the standard full truncated Euler scheme EULER-FT, and the slightly improved EULER-FT-MID where the variance integrals are approximated by a trapeze as in Van Haastrecht paper on Schobel-Zhu:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" height="76" width="640" /></a></div>This allows to leak less correlation than the standard full truncated Euler.<br /><br /><br /></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

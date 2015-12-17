@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>double[][] Is Fine &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>double[][] Is Fine</h1>
+    <span class="post-date">Nov 26, 2009 &middot; 1 minute read
+    </span>
+    <p>In my previous post, I suggest that keeping a double[] performs better than keeping a double[][] if you do matrix multiplications and other operations.<div><br /></div><div>This is actually not true. I benchmarked 3 libraries, Colt (uses double[]), Apache Commons Math (uses double[][]) and Jama (uses double[][] cleverly). At first it looks like Jama has a similar performance as Colt (they avoid [][] slow access by a clever algorithm). But once hotspot hits, the difference is crazy and Jama becomes the fastest (Far ahead).</div><br /><table border="1"><tr><td colspan="4"  valign="bottom"  align="center"  style=" font-size:10pt;"><b>JDK 1.6.0 Linux 1000x1000 matrix multiplication on Intel Q6600</b></td></tr><tr><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">loop index</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">Colt</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">Commons Math</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">Jama</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">1</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">11.880748</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">24.455125</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.828977</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">2</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">11.874975</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">24.265102</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.848916</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">3</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.772616</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.374153</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.826572</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">4</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.759679</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.368105</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.655915</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">5</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.799622</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.238928</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.649129</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">6</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.780556</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.741863</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.668104</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">7</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.72831</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.509909</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646811</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">8</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.79838</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.724348</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646069</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.726143</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.988762</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646052</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">10</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">9.784505</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">15.121782</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.644572</td></tr><tr></tr><tr><td  style=""></td><td colspan="10"  valign="bottom"  align="left"  style=" font-size:10pt;">We don&rsquo;t include matrix construction time, and fetching the result. Only the multiplication is taken into account.</td></tr></table><br />The difference is less pronounced on smaller matrices, but still there. Jama looks very good in this simple test case. In more real scenarios, the difference is not so obvious. For example Commons Math SVD is faster than Jama one.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

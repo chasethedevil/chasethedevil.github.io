@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Haskell Fibonacci Revisited &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Haskell Fibonacci Revisited</h1>
+    <span class="post-date">Dec 12, 2007 &middot; 2 minute read
+    </span>
+    <p>Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a <em>MILLION</em> times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

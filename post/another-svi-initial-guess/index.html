@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Another SVI Initial Guess &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Another SVI Initial Guess</h1>
+    <span class="post-date">Jul 29, 2014 &middot; 3 minute read
+    </span>
+    <p>The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$$<br />where k is the log-moneyness, w(k) the implied variance at a given moneyness and a,b,rho,m,sigma the 5 SVI parameters.<br /><br />A. Vogt described a particularly simple way to find an initial guess to fit SVI to an implied volatility slice <a href="http://www.nuclearphynance.com/User%20Files/66/GatheralSmile_estimation_for_one_expiry_NP.pdf" target="_blank">a while ago</a>. The idea to compute rho and sigma from the left and right asymptotic slopes. a,m are recovered from the crossing point of the asymptotes and sigma using the minimum variance.<br /><br />Later, <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CB4QFjAA&amp;url=http%3A%2F%2Fwww.zeliade.com%2Fwhitepapers%2Fzwp-0005.pdf&amp;ei=xI3XU9T3OYme7AbzwoHQDw&amp;usg=AFQjCNGsvbseObGCDAZ1QbYtvOL9J2-aRw&amp;sig2=rz4SilY2q1RSuD9XgWKFig&amp;bvm=bv.71778758,d.ZGU" target="_blank">Zeliade has shown</a> a very nice reduction of the problem to 2 variables, while the remaining 3 can be deduced explicitly. The practical side is that constraints are automatically included, the less practical side is the choice of minimizer for the two variables (Nelder-Mead) and of initial guess (a few random points).<br /><br />Instead, a simple alternative is the following: given b and rho from the asymptotic slopes, one could also just fit a parabola at-the-money, in a similar spirit as the <a href="http://papers.ssrn.com/abstract=2467231" target="_blank">explicit SABR calibration</a>, and recover explicitly a, m and sigma.<br /><br />To illustrate I take the data from Zeliade, where the input is already some SVI fit to market data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" height="385" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">3M expiry - Zeliade data</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" height="391" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry, Zeliade data</td></tr></tbody></table>We clearly see that ATM the fit is better for the parabolic initial guess than for Vogt, but as one goes further away from ATM, Vogt guess seems better.<br /><br />Compared to SABR, the parabola itself fits decently only very close to ATM. If one computes the higher order Taylor expansion of SVI around k=0, powers of (k/sigma) appear, while sigma is often relatively small especially for short expiries: the fourth derivative will quickly make a difference.<br /><br />On implied volatilities stemming from a SABR fit of the SP500, here is how the various methods behave:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">1M expiry on SABR data</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry on SABR data</td></tr></tbody></table>As expected, because SABR (and thus the input implied vol) is much closer to a parabola, the parabolic initial guess is much better than Vogt. The initial guess of Vogt is particularly bad on long expiries, although it will still converge quite quickly to the true minimum with Levenberg-Marquardt.<br /><br />In practice, I have found the method of Zeliade to be very robust, even if a bit slower than Vogt, while Vogt can sometimes (rarely) be too sensitive to the estimate of the asymptotes.<br /><br />The parabolic guess method could also be applied to always fit exactly ATM vol, slope and curvature, and calibrate rho, b to gives the best overall fit. It might be an idea for the next blog post.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

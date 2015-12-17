@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Smart Initial Guess for Schobel-Zhu &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Smart Initial Guess for Schobel-Zhu</h1>
+    <span class="post-date">Feb 19, 2014 &middot; 2 minute read
+    </span>
+    <p>With a <a href="http://chasethedevil.blogspot.fr/2014/02/a-small-time-schobel-zhu-expansion.html">small time expansion</a>, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.<br /><br />Like <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">Forde &amp; al did for Heston</a>, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).<br /><br />We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points. In practice, I have noticed that using a more refined expansion with more terms resulted not only in more complex formulas to lookup the original stochastic volatility parameters, but also in an increased error, because of the redundancy of parameters in the polynomial expansion. My previous Schobel-Zhu expansion becomes just:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uBWPjGvFZtU/UwTk03igscI/AAAAAAAAHAo/u4unVlkOFG0/s1600/Screenshot+from+2014-02-19+18:07:07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-uBWPjGvFZtU/UwTk03igscI/AAAAAAAAHAo/u4unVlkOFG0/s1600/Screenshot+from+2014-02-19+18:07:07.png" height="137" width="320" /></a></div><br />In practice, I have found that the procedure works rather well.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-SAv0EczOlvA/UwTkNixNOfI/AAAAAAAAHAg/LE4yfQZfC3s/s1600/Screenshot+from+2014-02-19+18:04:33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-SAv0EczOlvA/UwTkNixNOfI/AAAAAAAAHAg/LE4yfQZfC3s/s1600/Screenshot+from+2014-02-19+18:04:33.png" height="116" width="400" /></a></div>On some more extreme surfaces, where theta=0, the error in kappa and theta is higher. Interestingly, I received a few real world surfaces like this, where theta=0, which I found a bit puzzling. I wondered if it was because those surfaces were preprocessed with SABR, that has no mean reversion, but I could not fit those exactly with SABR.<br /><br /><b>Update March 2014</b> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.&nbsp;</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

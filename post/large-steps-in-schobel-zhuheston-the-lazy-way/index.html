@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Large Steps in Schobel-Zhu/Heston the Lazy Way &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Large Steps in Schobel-Zhu/Heston the Lazy Way</h1>
+    <span class="post-date">May 17, 2013 &middot; 2 minute read
+    </span>
+    <p><a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1485403&amp;ei=ODqVUY-8GY2v7AaSsIHgDw&amp;usg=AFQjCNGxk1TqaYu0mxni-OQib6V6lU-M0g&amp;sig2=xzLPCiO5kdF97KN4Tz474A&amp;bvm=bv.46471029,d.ZGU">Van Haastrecht, Lord and Pelsser</a> present an effective way to price derivatives by Monte-Carlo under the Schobel-Zhu model (as well as under the Schobel-Zhu-Hull-White model). It&rsquo;s quite similar to Andersen QE scheme for Heston in spirit.<br /><br />In their paper they evolve the (log) asset process together with the volatility process, using the same discretization times. A while ago, when looking at&nbsp; <a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.risk.net%2Fdigital_assets%2F6415%2Fjcf_chan_web.pdf&amp;ei=MzyVUaHGO6qI7AbxwIDICQ&amp;usg=AFQjCNGKOILWMeH-0GMgfF-xv35Zq0XfLw&amp;sig2=iQ5RuV32i-pokPP5lzal-Q&amp;bvm=bv.46471029,d.ZGU">Joshi and Chan</a> large steps for Heston, I noticed that, inspired by Broadie-Kaya exact Heston scheme, they present the idea to evolve the variance process using small steps and the asset process using large steps (depending on the payoff) using the integrated variance value computed by small steps. The asset steps correspond to payoff evaluation dates&nbsp; At that time I had applied this idea to Andersen QE scheme and it worked reasonably well.<br /><br />So I tried to apply the same logic to Schobel Zhu, and my first tests show that it works too. Interestingly, the speed gain is about 2x. Here are the results for a vanilla call option of different strikes.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-mQzBUiL9Sz0/UZYJOvoQApI/AAAAAAAAGaA/1GnmgQQOIfs/s1600/Screenshot+from+2013-05-17+12:33:07.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="276" src="http://4.bp.blogspot.com/-mQzBUiL9Sz0/UZYJOvoQApI/AAAAAAAAGaA/1GnmgQQOIfs/s400/Screenshot+from+2013-05-17+12:33:07.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Similar Error between long and short asset steps</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-TtzRz_UvaRw/UZYJh9AHgCI/AAAAAAAAGaI/RBYU33FUdOs/s1600/Screenshot+from+2013-05-17+12:32:50.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="276" src="http://1.bp.blogspot.com/-TtzRz_UvaRw/UZYJh9AHgCI/AAAAAAAAGaI/RBYU33FUdOs/s400/Screenshot+from+2013-05-17+12:32:50.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Long steps take around <sup>1</sup>&frasl;<sub>2</sub> the time to compute</td></tr></tbody></table>I would have expected the difference in performance to increase when the step size is decreasing, but it&rsquo;s not the case on my computer.<br /><br />It&rsquo;s not truly large steps like <a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.risk.net%2Fdigital_assets%2F6415%2Fjcf_chan_web.pdf&amp;ei=MzyVUaHGO6qI7AbxwIDICQ&amp;usg=AFQjCNGKOILWMeH-0GMgfF-xv35Zq0XfLw&amp;sig2=iQ5RuV32i-pokPP5lzal-Q&amp;bvm=bv.46471029,d.ZGU">Joshi and Chan</a> do in their integrated double gamma scheme as the variance is still discretized in relatively small steps in my case, but it seems like a good, relatively simple optimization. A while ago, I did also implement the full Joshi and Chan scheme, but it&rsquo;s really interesting if one is always looking for long steps: it is horribly slow when the step size is small, which might occur for many exotic payoffs, while Andersen QE scheme perform almost as well as log-Euler in terms of computational cost.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Pseudo-Random vs Quasi-Random Numbers &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Pseudo-Random vs Quasi-Random Numbers</h1>
+    <span class="post-date">Nov 12, 2014 &middot; 2 minute read
+    </span>
+    <p>Quasi-Random numbers (like <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol</a>) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like <a href="http://en.wikipedia.org/wiki/Mersenne_twister">Mersenne-Twister</a>). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).<br /><br />For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions). Later Lemieux gave direction numbers for up to 360 dimensions. Then, P. Jäckel proposed some extension with a random initialization of the direction vectors in his book from 2006. And finally Joe &amp; Kuo published direction numbers for up to 21200 dimensions.<br /><br />But there are very few studies about how good are real world simulations with so many quasi-random dimensions. A recent paper &ldquo;<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2210420">Fast Ninomiya-Victoir Calibration of the Double-Mean-Reverting Model</a>&rdquo; by Bayer, Gatheral &amp; Karlsmark tests this for once, and the results are not so pretty:<br /><div class="separator" style="clear: both; text-align: center;"><a href="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s1600/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="342" src="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s640/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" width="640" /></a></div>With their model, the convergence with Sobol numbers becomes worse when the number of time-steps increases, that is when the number of dimension increases. There seems to be even a threshold around 100 time steps (=300 dimensions for Euler) beyond which a much higher number of paths (2^13) is necessary to restore a proper convergence. And they use the latest and greatest Joe-Kuo direction numbers.<br /><br />Still the total number of paths is not that high compared to what I am usually using (2^13 = 8192). It&rsquo;s an interesting aspect of their paper: the calibration with a low number of paths.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

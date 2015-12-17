@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Brownian Bridge or Not with Heston Quadratic Exponential QMC &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Brownian Bridge or Not with Heston Quadratic Exponential QMC</h1>
+    <span class="post-date">Jan 24, 2014 &middot; 2 minute read
+    </span>
+    <p>At first I did not make use of the Brownian Bridge technique in Heston QMC, because the variance process is not simulated like a Brownian Motion under the <a href="http://www.google.com/url?q=http://www.javaquant.net/papers/LeifAndersenHeston.pdf&amp;sa=U&amp;ei=p9jjUtPJK8uUhQfb_YGgAw&amp;ved=0CB4QFjAA&amp;sig2=EjKPr39tR0ni1vq5gK9mkA&amp;usg=AFQjCNGQyqSaDu2kl6_KpP-s-KwMvJ6hPg">Quadratic Exponential algorithm from Andersen</a>.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" /></a></div><br />It is, however, perfectly possible to use the Brownian Bridge on the asset process. Does it make a difference? In my small test, it does not seem to make a difference. An additional question would be, is it better to take first N for the asset and next N for the variance or vice versa or intertwined? Intertwined would seem the most natural (this is what I used without Brownian Bridge, but for simplicity I did Brownian bridge on first N).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" height="222" width="320" /></a></div><br /><br />By contrast, Schobel-Zhu QE scheme can make full use of the Brownian Bridge technique, in the asset process as well as in the variance process. Here is a summary of the volatility process under the QE scheme from <a href="http://www.google.com/url?q=http://arno.uvt.nl/show.cgi%3Ffid%3D99534&amp;sa=U&amp;ei=itjjUo2jD6Wa0AXqzYHgCQ&amp;ved=0CB4QFjAA&amp;sig2=KdYdo3sAFjV6fwPS4Gak0A&amp;usg=AFQjCNEZ8DRGCf4EXOxCXs3oPc_98628hA">van Haastrecht</a>:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" /></a></div><br />Another nice property of Schobel-Zhu is that the QE simulation is as fast as Euler, and therefore 2.5x faster than the Heston QE.<br /><br />I calibrated the model to the same surface, and the QMC price of a ATM call option seems to have a similar accuracy as Heston QMC. But we can see that the Brownian Bridge does increase accuracy in this case. I was surprised that accuracy was not much better than Heston, but maybe it is because I did yet not implement the Martingale correction, while I did so in the Heston case.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" height="222" width="320" /></a></div><br /><br /></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the devil &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="alternate" type="application/rss+xml" title="Chase the devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java-enum-is-evil/">Java enum Is Evil</a>
+      </h1>
+      <span class="post-date">Aug 12, 2010 &middot; 1 minute read
+      </span>
+      
+      <p>Before Java 1.5, I never really complained about the lack of <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> keyword. Sure the <a href="http://java.sun.com/developer/Books/shiftintojava/page1.html">old enum via class pattern</a> was a bit verbose at first (N.B.: Java 1.5 enums can also be verbose once you start adding methods to them). But more importantly, you would often use the table lookup pattern in combination.<br /><br />The problem with Java 1.5 <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> is that it is not Object-Oriented. You <u>can&rsquo;t extend</u> an <b><span class="Apple-style-span" style="color: purple;"><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">enum</span></span></b>, you can&rsquo;t add an element in an existing enum. Many will say &ldquo;but that&rsquo;s what enum is for, a static list of things&rdquo;. In my experience, &nbsp;the list of things often changes with time, or needs to be extended at one point. Furthermore, most people (including me when I am very lazy) end up writing switch statements on enum values. Enum promotes bad programming practices.<br /><br />Think twice about using enum, this is often not what you want.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/a-very-interesting-feature-of-scala/">A Very Interesting Feature of Scala</a>
+      </h1>
+      <span class="post-date">Aug 7, 2010 &middot; 2 minute read
+      </span>
+      
+      <p>I tried Scala <a href="http://chasethedevil.blogspot.com/2007/09/fast-web-development-with-scala.html">a few years ago</a>. There are several good ideas in it, but I found the language to be a bit too complicated to master. But I recently stubbled upon <a href="http://lamp.epfl.ch/~dragos/files/scala-spec.pdf">a paper on Scala generics</a>&nbsp;that might change my mind about using Scala.<br /><br />Scala Generics used to work in a similar way as Java Generics: via type erasure. One main reason is compatibility with Java, another is that C++ like templates make the code base blow up. Scala Generics offered some additional behavior (the variance/covariance notion).&nbsp;C++ templates, however, have some very interesting aspects: one is that everything is done at compile time, the other is &nbsp;performance. If the generics are involved in any kind of computation intensive task, all the Java type conversion will create a significant overhead.<br /><br />Now Scala has <b><a href="http://www.scala-lang.org/api/current/scala/specialized.html">@specialized</a></b>&nbsp;(since Scala 2.8). Annotating a generic type with @specialized will generate code. One has the choice to accept the performance penalty or to get all the performance but accept the code blow up. I think this is very useful.<br /><br />If you read the paper you will see that the performance implications of this are not always small.<br /><br />UPDATE: I thank the readers for pointing that this work only with primitive types to avoid autoboxing. It is still valuable but less than I first thought.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/street-fighting-mathematics-book/">Street Fighting Mathematics Book</a>
+      </h1>
+      <span class="post-date">Jul 28, 2010 &middot; 1 minute read
+      </span>
+      
+      <p>The&nbsp;MIT has a downloadable book on basic mathematics: <a href="http://mitpress.mit.edu/catalog/item/default.asp?ttype=2&amp;tid=12156">Street Fighting Mathematics</a>. I liked the part focused on the geometrical approach. It reminded me of the early greek mathematics.<div><br /></div><div>Overall it does look like a very American approach to Maths: answering a multiple choices questions test by elimination. But it is still an interesting book.</div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/bye-bye-firefox/">Bye Bye Firefox</a>
+      </h1>
+      <span class="post-date">Jul 21, 2010 &middot; 1 minute read
+      </span>
+      
+      <p>I have been a long user of Firefox, mostly thanks to the adblock extension. But recently, Firefox decided to change the way arrows work on the web pages, they don&rsquo;t make the page scroll anymore. Meanwhile Chrome has now a good adblock plugin (that filters ads on load, not after load like it use to be) and is really much much faster than Firefox. So there is no more reason not to use it.<br /><br />Hello Chrome, bye bye Firefox. Google has won the web browsers war.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/diffusion-limited-aggregation-applet/">Diffusion Limited Aggregation Applet</a>
+      </h1>
+      <span class="post-date">Jun 9, 2010 &middot; 1 minute read
+      </span>
+      
+      <p>Yes, I wrote an applet. I know it is very 1990s but, amazingly, it still does the job quite well. Ok, next time I should really use Flash to do this.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s1600/dla.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s320/dla.png" /></a></div><br />The Applet simulates <a href="http://en.wikipedia.org/wiki/Diffusion-limited_aggregation">Diffusion Limited Aggregation</a> as described in Chaos And Fractals from Peitgen, Juergens, and Saupe. It represents ions randomly wandering around (in a Brownian motion) until they are caught by an attractive force in electrochemical deposition experiment. This kind of phenomenon occurs at all scales, for example it happens in the distribution of galaxies. You can play around with the applet at <a href="http://31416.appspot.com/dla.vm">http://31416.appspot.com/dla.vm</a></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java--3d-surface/">Java &amp; 3D Surface</a>
+      </h1>
+      <span class="post-date">Dec 18, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts. <br /><br />I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/double-is-fine/">double[][] Is Fine</a>
+      </h1>
+      <span class="post-date">Nov 26, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>In my previous post, I suggest that keeping a double[] performs better than keeping a double[][] if you do matrix multiplications and other operations.<div><br /></div><div>This is actually not true. I benchmarked 3 libraries, Colt (uses double[]), Apache Commons Math (uses double[][]) and Jama (uses double[][] cleverly). At first it looks like Jama has a similar performance as Colt (they avoid [][] slow access by a clever algorithm). But once hotspot hits, the difference is crazy and Jama becomes the fastest (Far ahead).</div><br /><table border="1"><tr><td colspan="4"  valign="bottom"  align="center"  style=" font-size:10pt;"><b>JDK 1.6.0 Linux 1000x1000 matrix multiplication on Intel Q6600</b></td></tr><tr><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">loop index</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">Colt</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">Commons Math</td><td  valign="bottom"  align="left"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">Jama</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">1</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">11.880748</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">24.455125</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.828977</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">2</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">11.874975</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">24.265102</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.848916</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">3</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.772616</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.374153</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">9.826572</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">4</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.759679</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.368105</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.655915</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">5</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.799622</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.238928</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.649129</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">6</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.780556</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">14.741863</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.668104</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">7</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.72831</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.509909</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646811</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">8</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.79838</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.724348</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646069</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">9.726143</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000;">15.988762</td><br /><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.646052</td></tr><tr><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">10</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">9.784505</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000;">15.121782</td><td  valign="bottom"  align="right"  style=" font-size:10pt; border-top:thin solid #000000; border-bottom:thin solid #000000; border-left:thin solid #000000; border-right:thin solid #000000;">2.644572</td></tr><tr></tr><tr><td  style=""></td><td colspan="10"  valign="bottom"  align="left"  style=" font-size:10pt;">We don&rsquo;t include matrix construction time, and fetching the result. Only the multiplication is taken into account.</td></tr></table><br />The difference is less pronounced on smaller matrices, but still there. Jama looks very good in this simple test case. In more real scenarios, the difference is not so obvious. For example Commons Math SVD is faster than Jama one.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/the-pain-of-java-matrix-libraries/">The Pain of Java Matrix Libraries</a>
+      </h1>
+      <span class="post-date">Nov 26, 2009 &middot; 2 minute read
+      </span>
+      
+      <p>Looking for a good Java Matrix (and actually also math) library, I was a bit surprised to find out there does not seem to be any really serious one still maintained.<br /><br />Sure, there is <a href="http://commons.apache.org/math/">Apache Commons Math</a>, but it is still changing a lot, and it is not very performance optimized yet, while it has been active for several years already. There is also Java3D, it does Matrix through GMatrix, but not much linear algebra and if you look at their implementation, it is very basic, not performance oriented.<br /><br />The other candidates seem to be 1-man projects that can disappear any other day (some of them look quite good like ojalgo, most of them are not interesting). Then you also have the serious but not maintained anymore <a href="http://dsd.lbl.gov/~hoschek/colt/">Cern Colt</a> library.<br /><br />Compared to C/C++, the Java world is worrying if you want to do maths.<br /><br />In those libraries, a dense matrix of double can be implemented two ways:<br /><div><ol><li>by maintaining internally a double[][]. Usually those libraries allow for not copying the array, so it can be neat if your interfaces have this kind of arrays.</li><li>by maintaining internally a double[]. The reason is for performance, but then each time you build a matrix from a double[][], an expensive copy will happen. So you need to use the Matrix object in your interfaces instead of double[][].</li></ol><div>This is a pain because you can be very quickly stuck in one or the other Matrix library. A &ldquo;solution&rdquo; is to have your own interface, but that is a pain to write. There is <a href="http://www.ujmp.org/">UJMP</a>, but it can hide some important methods (like transpose &amp; multiply in one go from Colt or the ability to reuse an existing matrix in various operations to avoid allocating new memory), it is a students project (like parallel colt), but if it was a standard, it could be much more interesting.</div><div><br /></div><div>In summary it does really look like scientific people, universities don&rsquo;t use Java for computation otherwise Colt surely would have been maintained.</div></div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/java-calendar-is-broken-on-jvm-upgrade/">Java Calendar Is Broken On JVM Upgrade</a>
+      </h1>
+      <span class="post-date">Aug 19, 2009 &middot; 2 minute read
+      </span>
+      
+      <p>We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<br /><br />The reason behind this is the daylight saving time conventions. An old JVM won&rsquo;t necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<br /><br />Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<br /><br />JVM 1.5.0_12<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/17/09 11:59 PM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />JVM 1.5.0_20<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/18/09 12:59 AM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />The source code:<pre><br />public class DateBug {       <br />   <br />    private static String FILE_NAME = &ldquo;datebug.txt&rdquo;;<br />   <br />    public static void load() throws IOException {<br />        FileReader fr = new FileReader(FILE_NAME);<br />        BufferedReader br = new BufferedReader(fr);<br />        String l = br.readLine();<br />        br.close();<br />        long time = new Long(l);<br />        Date d = new Date(time);<br />        System.out.println(&ldquo;loading date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />    }<br />   <br />    public static void saveNew() throws IOException {<br />        Calendar c = Calendar.getInstance(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        c.set(2009, 06, 17, 23, 59);<br />        Date d = c.getTime();<br />        System.out.println(&ldquo;saving date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />       <br />        FileWriter fw = new FileWriter(FILE_NAME);<br />        PrintWriter pw = new PrintWriter(fw);<br />        pw.println(d.getTime());<br />        pw.close();<br />    }<br />   <br />    public static void main(String[] args) throws IOException {<br />        System.out.println(&ldquo;JVM &ldquo;+System.getProperty(&ldquo;java.version&rdquo;));<br />        if (args.length == 1) {<br />            if (args[0].equals(&ldquo;save&rdquo;)) {<br />                saveNew();<br />            }<br />        } else {<br />            load();<br />        }<br />    }<br /></pre>What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<br />This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://replace-this-with-your-hugo-site.com/post/implicit-finite-differences-method-for-pricing-barrier-option/">Implicit Finite Differences Method For Pricing Barrier Option</a>
+      </h1>
+      <span class="post-date">Aug 17, 2009 &middot; 1 minute read
+      </span>
+      
+      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s1600-h/implicit_method_barrier_option_html_m531cf9ea.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;width: 320px; height: 74px;" src="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s320/implicit_method_barrier_option_html_m531cf9ea.jpg" border="0" alt=""id="BLOGGER_PHOTO_ID_5370871824730605074" /></a><br />While trying to price a simple knock down and out barrier option, I encountered several difficulties I did not expect with the implicit finite differences method. The explicit method has less issues with barrier options pricing. I will show here what the tricky parts are and why explicit seems simpler in this case.<br /><br />The full article is <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.pdf">here (pdf)</a> or <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.html">here (html)</a> (the later is not very well formatted).<br /><br />Algorithms used in this article can be found at <a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a></p>
+
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="/page/15/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="/">1</a></li>
+        
+        <li
+        ><a href="/page/2/">2</a></li>
+        
+        <li
+        ><a href="/page/3/">3</a></li>
+        
+        <li
+        ><a href="/page/4/">4</a></li>
+        
+        <li
+        ><a href="/page/5/">5</a></li>
+        
+        <li
+        ><a href="/page/6/">6</a></li>
+        
+        <li
+        ><a href="/page/7/">7</a></li>
+        
+        <li
+        ><a href="/page/8/">8</a></li>
+        
+        <li
+        ><a href="/page/9/">9</a></li>
+        
+        <li
+        ><a href="/page/10/">10</a></li>
+        
+        <li
+        ><a href="/page/11/">11</a></li>
+        
+        <li
+        ><a href="/page/12/">12</a></li>
+        
+        <li
+        ><a href="/page/13/">13</a></li>
+        
+        <li
+        ><a href="/page/14/">14</a></li>
+        
+        <li
+        ><a href="/page/15/">15</a></li>
+        
+        <li
+        class="active"><a href="/page/16/">16</a></li>
+        
+        <li
+        ><a href="/page/17/">17</a></li>
+        
+        <li
+        ><a href="/page/18/">18</a></li>
+        
+        <li
+        ><a href="/page/19/">19</a></li>
+        
+        <li
+        ><a href="/page/20/">20</a></li>
+        
+        <li
+        ><a href="/page/21/">21</a></li>
+        
+        <li
+        ><a href="/page/22/">22</a></li>
+        
+        <li
+        ><a href="/page/23/">23</a></li>
+        
+        <li
+        ><a href="/page/24/">24</a></li>
+        
+        <li
+        ><a href="/page/25/">25</a></li>
+        
+        <li
+        ><a href="/page/26/">26</a></li>
+        
+        <li
+        ><a href="/page/27/">27</a></li>
+        
+        <li
+        ><a href="/page/28/">28</a></li>
+        
+        <li
+        ><a href="/page/29/">29</a></li>
+        
+        <li
+        ><a href="/page/30/">30</a></li>
+        
+        <li
+        ><a href="/page/31/">31</a></li>
+        
+        <li
+        ><a href="/page/32/">32</a></li>
+        
+        <li
+        ><a href="/page/33/">33</a></li>
+        
+        <li
+        ><a href="/page/34/">34</a></li>
+        
+        <li
+        >
+        <a href="/page/17/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="/page/34/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

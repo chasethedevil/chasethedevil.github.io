@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>On Quasi Random Numbers - MersenneTwister vs Sobol precision in Asian Option Pricing &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>On Quasi Random Numbers - MersenneTwister vs Sobol precision in Asian Option Pricing</h1>
+    <span class="post-date">May 5, 2009 &middot; 3 minute read
+    </span>
+    <p>While starting a side project that does Monte Carlo pricing in Java (<a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a> - nothing yet there I am waiting for Mercurial repository support), I wondered what was the importance of quasi random numbers versus more regular pseudo random numbers in Monte Carlo simulations.<br /><br />This brought me to read more carefully several books about Monte Carlo and Finance (<a href="http://www.amazon.com/Complete-Guide-Option-Pricing-Formulas/dp/0786312408">Haug Option Pricing</a>, <a href="http://www.amazon.com/Primer-Monte-Carlo-Method/dp/084938673X">Sobol Primer on Monte Carlo</a>, and <a href="http://www.amazon.com/Financial-Engineering-Stochastic-Modelling-Probability/dp/0387004513">Glasserman Monte Carlo Methods in Finance Engineering</a>). I had quite a hard time to understand why the dimension of the quasi random generator was so important to price an asian option. Intuitively I thought the averaging points of an asian option were all on the same path, so they should be using the same random generator. This is very wrong as one does not care about the path in the first place but just in simulating each point in the average (using the regular black and scholes hypothesis). Finding the estimation for the average on the given points forces to use independent random generators for each point, because we want to approximate the estimation by the sum over those random points for each point.<br /><br />There is another simple argument to explain why independence of the random generators is so important. If we use the same generator for each point, then each point will move exactly the same way at each simulation. The average of those point will therefore behave exactly the same way as if there was only 1 point using the same generator. And we don&rsquo;t price an asian anymore but just a regular vanilla option.<br /><br />Using a pseudo random generator, one does not see the problem of dimension, because we can create N independent dimensions by just taking numbers N by N on a pseudo random generator. So effectively having 1 or N dimensions is the same on a pseudo random generator.<br /><br />Still I wrote a small test to see if a 1D quasi random generator was so bad when simulating N dimensions (taking values N by N on the quasi random generator). Here are the results:<br /><br /><span style="font-size:85%;"><span style="font-family: courier new;">MersenneTwister vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:43:51,111  INFO MonteCarloSimulationTest:114 - 867970000 &ndash; expPrice=0.978958644504466</span><br /><span style="font-family: courier new;">14:43:51,428  INFO MonteCarloSimulationTest:120 - 314619000 &ndash; expPrice=0.9733220318545934</span><br /><span style="font-family: courier new;">14:43:51,430  INFO MonteCarloSimulationTest:122 - relative difference=-0.005757763804951897</span><br /><span style="font-family: courier new; font-weight: bold;">can be as high as 2%</span><br /><br /><span style="font-family: courier new;">Sobol vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:48:46,909  INFO MonteCarloSimulationTest:115 - 980209000 &ndash; expPrice=0.9895032774079221</span><br /><span style="font-family: courier new;">14:48:47,345  INFO MonteCarloSimulationTest:121 - 433685000 &ndash; expPrice=0.9790264042895171</span><br /><span style="font-family: courier new;">14:48:47,348  INFO MonteCarloSimulationTest:123 - relative difference=-0.010588012548932534</span><br /><span style="font-family: courier new; font-weight: bold;">about 1% it is actually bounded by MersenneTwister precision.</span><br /><br /><span style="font-family: courier new;">Sobol vs Sobol1D on 10D asian:</span><br /><span style="font-family: courier new;">14:47:08,614  INFO MonteCarloSimulationTest:115 - 717444000 &ndash; expPrice=0.8810736428068913</span><br /><span style="font-family: courier new;">14:47:08,925  INFO MonteCarloSimulationTest:121 - 308499000 &ndash; expPrice=0.9791449305055208</span><br /><span style="font-family: courier new;">14:47:08,927  INFO MonteCarloSimulationTest:123 - relative difference=0.11130884290920073</span><br /><span style="font-family: courier new; font-weight: bold;">about 10% and stays that way even when increasing number of simulations.</span></span><br /><br />Using an asian rate with 10 points, we see that Sobol1D will always give a very bad estimate, no matter the number of simulations. While Sobol used properly will give (much) better precision for less iterations. So even though there is the word random in quasi random, the numbers are very far from being random or even behaving like random numbers. It helped me to read about Van der Corput and Halton numbers to really understand quasi random numbers.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

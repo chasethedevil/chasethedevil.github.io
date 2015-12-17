@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Java development without Ant &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Java development without Ant</h1>
+    <span class="post-date">Jul 12, 2005 &middot; 2 minute read
+    </span>
+    <p>When <a href="http://jakarta.apache.org/ant">Ant</a> came out, I welcomed it. It was better than Makefiles for Java, it solved the path and classpath format difference between Windows and Linux, did not rely on shell programs. It did provide a platform independent way for building Java software. At that time, there was another alternative, <a  href="http://jmk.sourceforge.net">JMK</a> which had a lisp like syntax, and solved the same problems as Ant. But Ant was backed by apache, and this were the times of XML everywhere.<br> I got more and more fed up with ant scripts over the years. During a long time you had to resort to an XML trick just to include other ant file, you did not have conditionals, but more importantly, it is quite a pain to write long ant scripts in XML. XML is not that good to write logic with, XSLT did not become as big as it could have been partly for this reason.<br> Recently, Java IDEs (<a href="http://www.eclipse.org">Eclipse</a>) have made Java coding really comfortable, but why is it that for each project, you need to have to setup your project classpath, build, and write an ant script that does the same? In many companies I have seen ant scripts taking minutes to do a build in order to test your latest modification. This is crazy when it took a few seconds to eclipse to compile it, and it&rsquo;s already compiled, so why not using that output for testing your development? Ant, despite its codebase and age, does not do much: it does not calculate dependencies, it leaves that to the java compiler, it does not keep checksums of files to check if one has changed, it just uses file system dates (which can be a problem if you retrieve an older version of some file).<br> Now I am using a <a href="http://www.jython.org">Jython </a>script that justs copies my eclipse build and packages it appropriately, it works well, it is fast, it is flexible (all the power of python), and platform independent. You need to be a bit careful how you choose to design your Jython script, but hey, even with Ant limitations on messing everything around, I have seen so many awful Ant scripts.<br> <br><br />Technorati tags: <a href="http://technorati.com/tag/java" rel="tag">java</a></p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

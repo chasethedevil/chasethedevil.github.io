@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>More SVI Initial Guesses &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://replace-this-with-your-hugo-site.com/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://replace-this-with-your-hugo-site.com/touch-icon-144-precomposed.png">
+  <link href="http://replace-this-with-your-hugo-site.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-ff">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://replace-this-with-your-hugo-site.com/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://replace-this-with-your-hugo-site.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>More SVI Initial Guesses</h1>
+    <span class="post-date">Jul 31, 2014 &middot; 3 minute read
+    </span>
+    <p>In the previous post, I showed one could extract the SVI parameters from a best fit parabola at-the-money. It seemed to work reasonably well, but I found some real market data where it can be much less satisfying.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-NBr8TEcIAXQ/U9o1x6oA6AI/AAAAAAAAHc8/g6-auObo244/s1600/Screenshot+from+2014-07-31+14:24:59.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-NBr8TEcIAXQ/U9o1x6oA6AI/AAAAAAAAHc8/g6-auObo244/s1600/Screenshot+from+2014-07-31+14:24:59.png" height="588" width="640" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"></div>Sometimes (actually not so rarely) the ATM slope and curvatures can&rsquo;t be matched given rho and b found through the asymptotes. As a result if I force to just match the curvature and set m=0 (when the slope can&rsquo;t be matched), the simple ATM parabolic guess looks shifted. It can be much worse than this specific example.<br /><br />It is then a bit clearer why Vogt looked to match the lowest variance instead of ATM. We can actually also fit a parabola at the lowest variance (MV suffix in the graph) instead of ATM. It seems to fit generally better.<br /><br />I also tried to estimate the asymptotic slopes more precisely (using the slope of the 5-points parabola at each end), but it seems to not always be an improvement.<br /><br />However this does not work when rho is close to -1 or 1 as there is then no minimum. Often, matching ATM also does not work when rho is -1 or 1. This specific case, but quite common as well for longer expiries in equities need more thoughts, usually a constant slice is ok, but this is clearly where Zeliade&rsquo;s quasi explicit method shines.<br /><br />So far it still all looks good, but then looking at medium maturities (1 year), sometimes all initial guesses don&rsquo;t look comforting (although Levenberg-Marquardt minimization still works on those - but one can easily imagine that it can break as well, for example by tweaking slightly the rho/b and look at what happens then).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-ft_Sj8P5LuU/U9pLLDlt1nI/AAAAAAAAHdY/vMsuRvqonHs/s1600/Screenshot+from+2014-07-31+15:56:06.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-ft_Sj8P5LuU/U9pLLDlt1nI/AAAAAAAAHdY/vMsuRvqonHs/s1600/Screenshot+from+2014-07-31+15:56:06.png" height="640" width="640" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"></div>There is lots of data on this 1 year example. One can clearly see the problem when the slope can not be fitted ATM (SimpleParabolicATM-guess), and even if by chance when it can (TripleParabolicATM-guess), it&rsquo;s not so great.<br />Similarly fitting the lowest variance leads only to a good fit of the right wing and a bad fit everywhere else.<br /><br />Still, as if by miracle, everything converges to the best fit on this example (again one can find cases where some guesses don&rsquo;t converge to the best fit). I have added some weights +-20% around the money, to ensure that we capture the ATM behavior accurately (otherwise the best fit is funny).<br /><br />It is interesting to see that if one minimizes the min square sum of variances (what I do in Vogt-LM, it&rsquo;s in theory slightly faster as there is no sqrt function cost) it results in an ugly looking steeper curvature, while if we just minimize the min square sum of volatilities (what I do in SimpleParabolicMV_LM), it looks better.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<script src="http://replace-this-with-your-hugo-site.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
