@@ -80,6 +80,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/">Find Grep And Vi Keys Small Memo</a>
+      </h1>
+      <span class="post-date">Apr 5, 2007 &middot; 1 minute read
+      </span>
+      
+      <p>I tend to forget this now and then to grep on a specific list of files:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; font-weight: bold;" class="gmail_quote"> find . -name &ldquo;<em>.xml&rdquo; | xargs grep &ldquo;iwantthis&rdquo;</blockquote><div><br />And I also tend to forget the <a href="http://www.mathlab.cornell.edu/local_help/vi.html">vi keys</a>. Small extract:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>h</b> - move left one character<br /><b>j</b> - move down one line<br /><b>k</b> - move up<br /><b>l</b> - move right<br /><b>$</b> - go to the end of the current line<br /><b>0</b> - go to the beginning of the current line<br /><b>G</b> - go to the last line in the file<br /><b>15G</b> - go to line 15<br /><b>control-F</b> - forward one page<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b>control-B</b> - backwards one page </blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div><b>n (N)</b> - next (previous) in search mode (/ or ? forward or backward)  </div></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"></span>s/OLD/NEW/g</b> - replace on current line<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"><span style="font-weight: bold;"></span> %</span>s/OLD/NEW/g</b> - replace every occurence in file (or use 0,$ instead of %)<br /></blockquote><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>x</b> - delete one character</blockquote><br /><div><span style="font-weight: bold;">Update </span>I have to add the standard replace in multiple files via sed command. Here is an example of how to move your eclipse workspace to another directory:<br /><blockquote></blockquote><ul><li>find . -name &ldquo;</em>.xml&rdquo; | xargs sed -i &ldquo;s,c:[/\]java[/\]eclipse,d:/eclipse302,gi&rdquo;</li></ul> </div><br />        </div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/how-to-build-good-software-ms-press-code-complete-says-measure-twice-cut-once/">How to Build Good Software? MS Press Code Complete says Measure twice, cut once</a>
       </h1>
       <span class="post-date">Apr 5, 2007 &middot; 1 minute read
@@ -182,18 +194,6 @@
       </span>
       
       <p>I tried a bit <a href="http://djangoproject.com">django</a> for one very simple thing, where django is not of much use, but it was a way to try it with something else than examples on the site. <br><br>Even if django templates features seem very good and very convenient when reading the docs (for example the extends keyword), I found out that the template system is very annoying. Firstly one has to learn another templating system. Secondly, and much more importantly, the debug facilities for templates are close to non existent. I have a better memory using ruby on rails templates (which are not the best either). <br><br>Java templates, based on Velocity, JSPs or JSF are much nicer to debug. PHP (which I consider an ugly language that can unfortunately often gets the job done) used to be crap at debugging, but with eclipse plugin phpeclipse it is much better these days. <br><br>I think templates play a very important role in web application development, and I am surprised that a framework with so many good ideas fails in reality (at least for me) because debugging templates is a pain. Hopefully it will become better one day, but until then bye bye Django. <br></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/a-proof-that-javascript-sucks./">A Proof That JavaScript Sucks.</a>
-      </h1>
-      <span class="post-date">Dec 15, 2006 &middot; 1 minute read
-      </span>
-      
-      <p>Google developed <a href="http://code.google.com/webtoolkit">GWT</a>.<br><br>Why would GWT be so well acclaimed if JavaScript was a good language. When you talk about GWT to someone (a developer preferably), the first reaction is often  <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&quot;great I don&rsquo;t need to do any JavaScript&quot;.<br></blockquote><br>I recently discovered another similar open source project,  <a href="http://www.zkoss.org">ZK</a>. The first thing you can read on the website is <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&quot;ZK is an open source Ajax Web framework that enables rich user interface for web applications  <span style="font-weight: bold;">with no JavaScript</span> and little programming.&quot;<br></blockquote><br>If you compare that with how JRuby is (or Jython used to be) trendy, you will agree there must be a problem with JavaScript. <br><br>JavaScript is not bad at everything, for very simple scripting, it is quite decent, the recent inclusion of Rhino in the JDK 1.6 is useful anywhere you need simple dynamic behavior. But most developers obviously don&rsquo;t want to deal with it. <br><br><br></p>
 
       
     </div>

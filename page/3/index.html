@@ -80,6 +80,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/gtk-3.0--gnome-3.0-annoyance/">GTK 3.0 / Gnome 3.0 annoyance</a>
+      </h1>
+      <span class="post-date">Feb 8, 2015 &middot; 2 minute read
+      </span>
+      
+      <p>It&rsquo;s quite incredible that Gnome 3.0 was almost an identical mess as KDE 4.0 had been a year or two earlier. Both are much better now, more stable, but both also still have their issues, and don&rsquo;t feel like a real improvement over Gnome 2.0 or KDE 3.5.<br /><br />Now the main file manager for Gnome 3.0, Nautilus has buttons with nearly identical icons that mean vastly different things, one is a menu, the other is a list view. Also it does not integrate with other desktops well from a look and feel perpective, here is a screenshot under XFCE (KDE would not look better).The push for window buttons inside the toolbar makes for a funny looking window. In Gnome Shell, it&rsquo;s not much better, plus there are some windows with a dark theme and some with a standard theme all mixed together.<br /><br />On the left is Caja: an updated GTK 2.0 version of Nautilus. I find it more functional, I don&rsquo;t really understand the push to remove most options from the screen in Gnome 3.0. The only positive thing I can see on for the new Nautilus, is the grey color for the left side, which looks more readable and polished.<br /><br />Interestingly, Nautilus within Ubuntu Unity feels better, it has a real menu and standard looking window. I suppose they customized it quite a bit. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-edQQUDP-LOo/VNfTxeA9YyI/AAAAAAAAHz4/ezOAmMYoiS0/s1600/Screenshot%2B-%2B02082015%2B-%2B10%3A12%3A25%2BPM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-edQQUDP-LOo/VNfTxeA9YyI/AAAAAAAAHz4/ezOAmMYoiS0/s1600/Screenshot%2B-%2B02082015%2B-%2B10%3A12%3A25%2BPM.png" height="254" width="640" /></a></div>When it comes to HiDPI support, Gnome shell is often touted has having one of the best. Well maybe for laptop screens, but certainly not for larger screens, where it just double everything and everything just looks too big. XFCE is actually decent on HiDPI screens.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/monte-carlo--inverse-cumulative-normal-distribution/">Monte Carlo &amp; Inverse Cumulative Normal Distribution</a>
       </h1>
       <span class="post-date">Feb 3, 2015 &middot; 2 minute read
@@ -182,18 +194,6 @@
       </span>
       
       <p>I have been looking at various ways of finding initial guesses for SVI calibration (<a href="http://chasethedevil.blogspot.com/2014/07/another-svi-initial-guess.html">Another SVI Initial Guess</a>, <a class="GCUXF0KCPB" href="http://chasethedevil.blogspot.com/2014/07/more-svi-initial-guesses.html">More SVI Initial Guesses</a>, <a class="GCUXF0KCPB" href="http://chasethedevil.blogspot.com/2014/08/svi-and-long-maturities-issues.html">SVI and long maturities issues</a>). I decided to write <a href="http://papers.ssrn.com/abstract=2501898">a paper</a> summarizing this. I find that the process of writing a paper makes me think more carefully about a problem.<br /><br />In this case, it turns out that the Vogt initial guess method (guess via asymptotes and minimum variance) is actually very good as long as one has a good way to lookup the asymptotes (the data is not always convex, while SVI is) and as long as rho is not close to -1, that is for long maturity affine like smiles, where SVI is actually more difficult to calibrate properly due to the over-parameterisation in those cases.<br /><br />Still after looking at all of this, one has a sense that, even though it works on a wide variety of surfaces, it could break down because of the complexity (are asymptotes ok, is rho close to -1? how close? is ATM better or maximum curvature better? how do we impose boundaries on a and sigma with Levenberg-Marquardt? (truncation should not be too close to the transform, but how far?)<br /><br />This is where the Quasi-Explicit method from Zeliade is very interesting: it is simpler, not necessarily to code, but the method itself. There are things to take care of (solving at each boundary), but those are mathematically well defined. The only drawback is performance, as it can be around 40 times slower. But then it&rsquo;s still not that slow.<br /><br /><br /></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/asymptotic-behavior-of-svi-vs-sabr/">Asymptotic Behavior of SVI vs SABR</a>
-      </h1>
-      <span class="post-date">Sep 23, 2014 &middot; 1 minute read
-      </span>
-      
-      <p>The variance under SVI becomes linear when the log-moneyness is very large in absolute terms. The lognormal SABR formula with beta=0 or beta=1 has a very different behavior. Of course, the theoretical SABR model has actually a different asymptotic behavior.<br /><br />As an illustration, we calibrate SABR (with two different values of beta) and SVI against the same implied volatility slice and look at the wings behavior. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" height="497" width="640" /></a></div><br />While the Lee moments formula implies that the variance should be at most linear, something that the SABR formula does not respect. It is in practice not the problem with SABR as the actual Lee boundary: V(x) &lt; 2|x|/T (where V is the square of the implied volatility and x the log-moneyness) is attained for extremely low strikes only with SABR, except maybe for very long maturities.<br /><br />A related behavior is the fact that the lognormal SABR formula can actually match steeper curvatures at the money than SVI for given asymptotes.</p>
 
       
     </div>

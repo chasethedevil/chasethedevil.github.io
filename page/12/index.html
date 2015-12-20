@@ -80,6 +80,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
+      </h1>
+      <span class="post-date">Mar 12, 2013 &middot; 1 minute read
+      </span>
+      
+      <p>A <a href="http://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<i>robust replication of volatility derivatives</i>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s1600/Screenshot+from+2013-03-12+18:14:34.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="312" src="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s400/Screenshot+from+2013-03-12+18:14:34.png" width="400" /></a></div>Those are very close payoffs!<br /><br />I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<br /><br />The real payoff (very easy to obtain through Carr-Lee Bessel formula):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s1600/Screenshot+from+2013-03-14+19:46:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s320/Screenshot+from+2013-03-14+19:46:16.png" width="320" /></a></div>&nbsp;</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/parallel-can-be-slower/">Parallel Can Be Slower</a>
       </h1>
       <span class="post-date">Feb 13, 2013 &middot; 1 minute read
@@ -191,18 +203,6 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
       </span>
       
       <p>I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<br /><br />For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<br /><br />And then the quickSort method somehow does not work if invoked on a generic&hellip; like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<br /><br />In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<br /><br /><b>Update Dec 12 2012</b>: here is the actual code (this is kept close to the Java equivalent on purpose):<br /><pre>object Point {<br />  def sortAndRemoveIdenticalPoints<a href="points : Array[T]">T &lt;: Point : ClassManifest</a> : Array[T] = {<br />      Sorting.quickSort(points.asInstanceOf[Array[Point]])<br />      val l = new ArrayBuffer<a href="points.length">T</a><br />      var previous = points(0)<br />      l += points(0)<br />      for (i &lt;- 1 until points.length) {<br />        if(math.abs(points(i).value - previous.value)&lt; Epsilon.MACHINE_EPSILON_SQRT) {<br />          l += points(i)<br />        }<br />      }<br />      return l.toArray<br />    }<br />    return points<br />  }<br />}<br /><br />class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<br />  def compare(that: Point): Int = {<br />    return math.signum(this.value - that.value).toInt<br />  }<br />}<br /><!-----><!--:-->&lt;/-&gt;&lt;/:&gt;</pre>In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/local-volatility-delta--dynamic/">Local Volatility Delta &amp; Dynamic</a>
-      </h1>
-      <span class="post-date">Nov 29, 2012 &middot; 2 minute read
-      </span>
-      
-      <p>This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.<br /><div><br /></div><div>Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</div><div><br /></div><div>But this finite-difference grid Delta is also different from a standard numerical Delta where one just move the initial spot up and down, and takes the difference of computed prices. The numerical Delta will eventually include a change in implied volatility, depending if the surface is sticky-strike (vol will stay constant) or sticky-delta (vol will change). So the numerical Delta produced with a sticky-strike surface will be the same as the standard Black-Scholes Delta. In reality, what happens is that the local volatility is different when the spot moves up, if we recompute it: it is not static. The finite difference solver computes Delta with a static local volatility. If we call twice the finite difference solver with a different initial spot, we will reproduce the correct Delta, that takes into account the dynamic of the implied volatility surface.</div><div><br /></div><div>Here how different it can be if the delta is computed from the grid (static local volatility) or numerically (dynamic local volatility) on an exotic trade:</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s1600/static_localvol.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="235" src="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s320/static_localvol.png" width="320" /></a></div><div><br /><br />This is often why people assume the local volatility model is wrong, not consistent. It is wrong if we consider the local volatility surface as static to compute hedges.</div></p>
 
       
     </div>

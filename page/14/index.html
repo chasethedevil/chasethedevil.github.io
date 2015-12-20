@@ -80,6 +80,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/adaptive-quadrature-for-pricing-european-option-with-heston/">Adaptive Quadrature for Pricing European Option with Heston</a>
+      </h1>
+      <span class="post-date">Jun 25, 2012 &middot; 2 minute read
+      </span>
+      
+      <p>The Quantlib code to evaluate the Heston integral for European options is quite nice. It proposes <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=4&amp;ved=0CGoQFjAD&amp;url=http%3A%2F%2Fwww.math.uni-wuppertal.de%2F%7Ekahl%2Fpublications%2FNotSoComplexLogarithmsInTheHestonModel.pdf&amp;ei=MkDoT8HHOaO_0QXS_6SeCQ&amp;usg=AFQjCNFbAMQBLoKRd0BR_-HC0CkP4zrMtg">Kahl &amp; Jaeckel</a> method as well as Gatheral method for the complex logarithm. It also contains expansions where it matters so that the resulting code is very robust. One minor issue is that it does not integrate both parts at the same time, and also does not propose Attari method for the Heston integral that is supposed to be more stable.<br /><br />I was surprised to find out that out of the money, short expiry options seemed badly mispriced. In the end I discovered it was just that it required sometimes more than 3500 function evaluations to have an accuracy of 1e-6.<br /><br />As this sounds a bit crazy, I thought that Jaeckel log transform was the culprit. In reality, it turned out that it was <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CFMQFjAA&amp;url=http%3A%2F%2Fusers.wpi.edu%2F%7Ewalker%2FMA510%2FHANDOUTS%2Fw.gander%2Cw.gautschi%2CAdaptive_Quadrature%2CBIT_40%2C2000%2C84-101.pdf&amp;ei=U0HoT_HWBeXP0QW23O3xBw&amp;usg=AFQjCNH4KRWMprUvL8yBPKRxO_sVNyc2Pg">Gauss Lobatto Gander &amp; Gautschi implementation</a>. I tried the simplest algorithm in <a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">Espelid improved algorithms</a>: modsim, an adaptive extrapolated Simpson method, and it was 4x faster for the same accuracy. That plus the fact that it worked out of the box (translated to Java) on my problem was impressive.<br /><br />Jaeckel log transform (to change the interval from 0,+inf to 0,1) works well, and seems to offer a slight speedup (10% to 15%) for around ATM options, mid to long term for the same accuracy. Unfortunately, it can also slow down by up to 50% the convergence for more OTM options or shorter expiries. So I am not so sure about its interest vs just cutting off the integration at phi=200.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/gnome-shell-more-stable-than-unity-on-ubuntu-12.04/">Gnome Shell more stable than Unity on Ubuntu 12.04</a>
       </h1>
       <span class="post-date">Jun 14, 2012 &middot; 1 minute read
@@ -182,18 +194,6 @@
       </span>
       
       <p>Recently, I interviewed someone for a quant position. I was very surprised to find out that someone who did one of the best master in probabilities and finance in France could not solve a very basic probability problem:<br /><br /><div class="separator" style="clear: both; text-align: left;"><a href="http://2.bp.blogspot.com/-64ejCSg9Y8o/TvIHEF4PgwI/AAAAAAAAFio/uxVwdwVnQ54/s1600/Screenshot+at+2011-12-21+17%253A18%253A28.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="43" src="http://2.bp.blogspot.com/-64ejCSg9Y8o/TvIHEF4PgwI/AAAAAAAAFio/uxVwdwVnQ54/s400/Screenshot+at+2011-12-21+17%253A18%253A28.png" width="400" /></a></div>This is accessible to someone with very little knowledge of probabilities <br /><br />When I asked this problem around to co-workers (who have all at least a master in a scientific subject), very few could actually answer it properly. Most of the time, I suspect it is because they did not dedicate enough time to do it properly, and wanted to answer it too quickly.<br /><br />It was more shocking that someone just out of school, with a major in probabilities could not answer that properly. It raises the question: what is all this education worth?<br /><br />The results were not better as soon as the question was not exactly like what students in those masters are used to, like for example, this simple stochastic calculus question:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-K9mO8qrp1Ow/TvIKO_MTOSI/AAAAAAAAFiw/igPGRdnFNEo/s1600/Screenshot+at+2011-12-21+17%253A19%253A11.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-K9mO8qrp1Ow/TvIKO_MTOSI/AAAAAAAAFiw/igPGRdnFNEo/s1600/Screenshot+at+2011-12-21+17%253A19%253A11.png" /></a></div><br /><br />My opinion is that, today in our society, people study for too long. The ideal system for me would be one where people learn a lot in math/physics the first 2 years of university, and then have more freedom in their education, much like a doctorate.<br /><br />We still offered the job to this person, because live problem solving is not the most important criteria. Other qualities like seriousness and motivation are much more valuable.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/gnome-3-not-so-crap-after-all/">Gnome 3 not so crap after all</a>
-      </h1>
-      <span class="post-date">Nov 30, 2011 &middot; 1 minute read
-      </span>
-      
-      <p>In a previous post, I was complaining how <a href="http://chasethedevil.blogspot.com/2011/08/gnome-3-unity-crap.html">bad Gnome 3</a> was. Since I have installed a real dock: docky, it is now much more usable. I can easily switch / launch applications without an annoying full screen change.<br /><br />In addition I found out that it had a good desktop search (tracker). The ALT+F2 also does some sort of completion, too bad it can not use tracker here as well.<br /><br />So it looks like Gnome 3 + gnome-tweak-tool + docky makes a reasonably good desktop. XFCE does not really fit the bill for me: bad handling of sound, bad default applications, not so good integration with gnome application notifications.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s1600/Screenshot+at+2011-11-30+18%253A20%253A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s320/Screenshot+at+2011-11-30+18%253A20%253A29.png" width="320" /></a></div><br /><br />Now if only I found a way to change this ugly big white scrollbar&hellip;</p>
 
       
     </div>
