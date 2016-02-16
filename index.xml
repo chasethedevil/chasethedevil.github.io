@@ -6,8 +6,47 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Feb 2016 16:45:58 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 16 Feb 2016 22:13:53 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>The Mystic Parabola</title>
+      <link>http://chasethedevil.github.io/post/mystic_parabola/</link>
+      <pubDate>Tue, 16 Feb 2016 22:13:53 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/mystic_parabola/</guid>
+      <description>&lt;p&gt;I recently had some fun trying to work directly with the option chain from the &lt;a href=&#34;http://www.nasdaq.com/symbol/aapl/option-chain&#34;&gt;Nasdaq website&lt;/a&gt;.
+The data there is quite noisy, but a simple parabola can still give an amazing fit. I will consider the options of maturity two years as illustration.
+I also relied on a simple implied volatility algorithm that can be summarized in the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Compute a rough guess for the forward price by using interest, borrow curves and by extrapolating the dividends.&lt;/li&gt;
+&lt;li&gt;Imply the forward from the European Put-Call parity relationship on the mid prices of the two strikes closes to the rough forward guess. A simple linear interpolation between the two strikes can be used to compute the forward.&lt;/li&gt;
+&lt;li&gt;Compute the Black implied volatilities as if the option were European using P. Jaeckel algorithm.&lt;/li&gt;
+&lt;li&gt;Calibrate the proportional dividend amount or the growth rate by minimizing, for example with a Levenberg-Marquardt minimizer, the difference between model and mid-option prices corresponding to the three strikes closest to the forward. The parameters in this case are effectively the dividend amount and the volatilities for Put and Call options (the same volatility is used for both options). The initial guess stems directly from the two previous steps. American option prices are computed by the finite difference method.&lt;/li&gt;
+&lt;li&gt;Solve numerically the volatilities one by one with the TOMS748 algorithm so that the model prices match the market mid out-of-the-money option prices.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/mystic_parabola.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;least squares parabola on 2y AAPL options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;Isn&amp;rsquo;t the fit just amazing?
+Even if I found it surprising, it&amp;rsquo;s probably not so surprising. The curve has to be smooth, somewhat monotone, and will be therefore like a parabola near the money. While there is no guarantee it will fit that well far away, it&amp;rsquo;s actually a matter of scale. Short maturities will lead to not so great fit in the wings, while long maturities will correspond to a narrower range of scaled strikes and match better a parabola.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Yahoo Finance Implied Volatility</title>
@@ -237,16 +276,6 @@ $$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$&lt;/p&gt;
 Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
 I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).
 &lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s1600/Screenshot-Untitled%2BWindow-2.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;297&#34; src=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s400/Screenshot-Untitled%2BWindow-2.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Linux Desktops in 2015</title>
-      <link>http://chasethedevil.github.io/post/linux-desktops-in-2015/</link>
-      <pubDate>Wed, 24 Jun 2015 18:53:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/linux-desktops-in-2015/</guid>
-      <description>&lt;p&gt;I seem to &lt;a href=&#34;http://chasethedevil.blogspot.fr/2014/05/kde-xfce-gnome-shell-in-2014.html&#34;&gt;never be entirely happy with any of the linux desktops&lt;/a&gt; these days. I have used XFCE on Ubuntu quite a bit in the past year, it mostly works, but I still had minor annoyances:&lt;br /&gt;- sometimes (rarely) my laptop would not wake up from sleep.&lt;br /&gt;- notifications sometimes keep popping up too much.&lt;br /&gt;- on my desktop, experienced strong tearing issues with the Radeon graphic card, except with some very specific combination of video player settings and desktop settings (and then I had annoying redraw issue when pushing volume up/down in movies).&lt;br /&gt;&lt;br /&gt;I am satisfied with two different approaches since:&lt;br /&gt;- OpenSuse 13.2 with KDE 4. I use that on my desktop, all issues are gone, and the integration of KDE in OpenSuse is clearly the best I have experienced. In contrast, KDE 5 on Ubuntu was a disaster for me. I also managed to fuck up the apt dependencies so much that I thought it would be simpler to reinstall a new distribution.&lt;br /&gt;- Mate on Ubuntu 15.04. Very impressed so far. It&amp;rsquo;s probably what Gnome should have been instead of going to 3.0. Even if there are nice aspects of the Gnome shell, Mate is fast, pretty, user friendly, much better than Cinnamon. There are even a few layouts to choose (most of them are good), here is &amp;ldquo;Eleven with Mate menu&amp;rdquo; (it installed and setup the Plank dock automatically for that layout, more traditional layouts without dock are available):&lt;br /&gt;&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s1600/Mate-Eleven.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;358&#34; src=&#34;http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s640/Mate-Eleven.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;/p&gt;
 </description>
     </item>
     

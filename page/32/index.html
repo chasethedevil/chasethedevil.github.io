@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/java-puzzlers---can-you-figure-this-out/">Java Puzzlers - Can you figure this out?</a>
+      </h1>
+      <span class="post-date">Sep 28, 2005 &middot; 1 minute read
+      </span>
+      
+      <p><iframe src="http://rcm.amazon.com/e/cm?t=michelin-20&o=1&p=8&l=as1&asins=032133678X&fc1=000000&=1&lc1=0000ff&bc1=000000&lt1=_blank&IS2=1&bg1=ffffff&f=ifr" style="width:120px;height:240px;margin:5px" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" align="left"></iframe>The book Java Puzzlers is quite good. I don&rsquo;t think anyone can get every puzzle right. This shows again how you can very easily make someone fail interviews if you ask too silly questions. I suppose that if people were asking those questions they would not expect the right answers, but study the candidate reactions.<br /><br />Here is a sample:<br /><br /><tt>public class DosEquis {<br />&nbsp;&nbsp;public static void main(String[] args) {<br />&nbsp;&nbsp;&nbsp;&nbsp;char x = &lsquo;X&rsquo;;<br />&nbsp;&nbsp;&nbsp;&nbsp;int i = 0;<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(true ? x : 0);<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(false ? i : x);<br />&nbsp;&nbsp;}<br />} </tt><br /><br />This will output &ldquo;X88&rdquo;. Obviously this is not good code, which is precisely one of the book objectives: to show how bad some practices can be. But at the same time you learn a bit more about the Java language and its possibilities. In the latter chapters they have more interesting puzzles.<br /><br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/book" rel="tag">book</a>, <a href="http://del.icio.us/tag/review" rel="tag">review</a></span></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/is-prolog-better-suited-than-sql/">Is Prolog Better Suited Than SQL?</a>
       </h1>
       <span class="post-date">Sep 26, 2005 &middot; 2 minute read
@@ -184,18 +196,6 @@
       </span>
       
       <p>There are some open source projects that can help you in generating or reading RSS feeds in Java. I found only two libraries a bit mature, other code is often embedded in other open source products (jroller for example):<br /><ul>    <li><a href="http://informa.sourceforge.net/">Informa</a>: Does various RSS formats and Atom 0.3. Documentation is better than its alternative, but less focused (has some hibernate helper thingy, some lucene helper, etc.).<br /></li>   <li><a href="http://sourceforge.net/projects/sandler/">Sandler</a>: There is no working homepage while I am writing this. But the code is of decent quality, supports Atom 0.3 and RSS 1.0. It is easy to use it. However in reality it is not much more than a wrapper around some XML parser specialized in generating an RSS structure or an Atom structure.</li><li>Ooops, I forgot another important one, <a href="https://rome.dev.java.net/">Rome</a>. This RSS/Atom framework with a catchy name is very similar to Informa, has good documentation and good looking code. Under the hood it makes use of jdom.</li> </ul> I personally use <a href="http://dom4j.org/">dom4j</a> since I only need to generate RSS, and RSS, or Atom are just XML. I don&rsquo;t find it particularly verbose to use dom4j for that, and it is very flexible.<br /><br />If you need to parse feeds, then those libraries might make sense and save you a bit of time. For generating, I think their main interest is to abstract you from the differences in formats. So if you need to handle different formats, a framework will allow you to do it through only one API, which can be a big time-saver.<br /><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/rss" rel="tag">rss</a>, <a href="http://del.icio.us/tag/atom" rel="tag">atom</a></span></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/the-evil-port-80/">The Evil Port 80</a>
-      </h1>
-      <span class="post-date">Sep 1, 2005 &middot; 1 minute read
-      </span>
-      
-      <p>I was writing an Atom feed generator for my current project. I chosed to support <a href="http://www.atomenabled.org/developers/syndication/">Atom 1.0</a> since it looks like it has the capabilities to establish as the next standard. Unfortunately I quickly saw that it was quite hard to test it in the real world (out of the good feedvalidator), as almost nobody seems to accept Atom 1.0 feeds yet, even if it is rapidely changing (there is support for it in Firefox CVS version).<br /><br />So I decided to support RSS as well, the big question was: which RSS version? After grabbing lots of info on the subject, I opted for 1.0 again (more flexible, more different than Atom). It was actually quick to support RSS, but then when in real world, neither <a href="http://desktop.google.com/en/">Google Desktop</a> nor <a href="http://my.yahoo.com/">My Yahoo</a> was willing to accept my feed. I looked at every bit of my xml, fiddled with Tomcat configuration in any possible way when I saw that no request was coming to my server from Yahoo or Google. And finally I thought, hmm maybe it&rsquo;s the port. I restarted my server on port 80, and yup, it worked!<br /><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/mubot_local.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/320/mubot_local.jpg" alt="" border="0" /></a><br /><br />I wonder why Google Desktop and My Yahoo don&rsquo;t support another port than port 80 for RSS feeds.<br /><br />tags: <span class="technoratitag">Categories: <a href="http://del.icio.us/tag/atom" rel="tag">atom</a>, <a href="http://del.icio.us/tag/rss" rel="tag">rss</a>, <a href="http://del.icio.us/tag/gdesktop" rel="tag">gdesktop</a>, <a href="http://del.icio.us/tag/syndication" rel="tag">syndication</a></span></p>
 
       
     </div>

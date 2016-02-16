@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quant on Chase the Devil</title>
+    <link>http://chasethedevil.github.io/categories/quant/</link>
+    <description>Recent content in Quant on Chase the Devil</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Feb 2016 22:13:53 +0100</lastBuildDate>
+    <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>The Mystic Parabola</title>
+      <link>http://chasethedevil.github.io/post/mystic_parabola/</link>
+      <pubDate>Tue, 16 Feb 2016 22:13:53 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/mystic_parabola/</guid>
+      <description>&lt;p&gt;I recently had some fun trying to work directly with the option chain from the &lt;a href=&#34;http://www.nasdaq.com/symbol/aapl/option-chain&#34;&gt;Nasdaq website&lt;/a&gt;.
+The data there is quite noisy, but a simple parabola can still give an amazing fit. I will consider the options of maturity two years as illustration.
+I also relied on a simple implied volatility algorithm that can be summarized in the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Compute a rough guess for the forward price by using interest, borrow curves and by extrapolating the dividends.&lt;/li&gt;
+&lt;li&gt;Imply the forward from the European Put-Call parity relationship on the mid prices of the two strikes closes to the rough forward guess. A simple linear interpolation between the two strikes can be used to compute the forward.&lt;/li&gt;
+&lt;li&gt;Compute the Black implied volatilities as if the option were European using P. Jaeckel algorithm.&lt;/li&gt;
+&lt;li&gt;Calibrate the proportional dividend amount or the growth rate by minimizing, for example with a Levenberg-Marquardt minimizer, the difference between model and mid-option prices corresponding to the three strikes closest to the forward. The parameters in this case are effectively the dividend amount and the volatilities for Put and Call options (the same volatility is used for both options). The initial guess stems directly from the two previous steps. American option prices are computed by the finite difference method.&lt;/li&gt;
+&lt;li&gt;Solve numerically the volatilities one by one with the TOMS748 algorithm so that the model prices match the market mid out-of-the-money option prices.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/mystic_parabola.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;least squares parabola on 2y AAPL options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;Isn&amp;rsquo;t the fit just amazing?
+Even if I found it surprising, it&amp;rsquo;s probably not so surprising. The curve has to be smooth, somewhat monotone, and will be therefore like a parabola near the money. While there is no guarantee it will fit that well far away, it&amp;rsquo;s actually a matter of scale. Short maturities will lead to not so great fit in the wings, while long maturities will correspond to a narrower range of scaled strikes and match better a parabola.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
