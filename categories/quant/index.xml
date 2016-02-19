@@ -6,8 +6,41 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2016 22:13:53 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 19 Feb 2016 18:29:33 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Least Squares Spline for Volatility Interpolation</title>
+      <link>http://chasethedevil.github.io/post/least_squares_spline/</link>
+      <pubDate>Fri, 19 Feb 2016 18:29:33 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/least_squares_spline/</guid>
+      <description>&lt;p&gt;I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
+with B-splines, a relatively simple explanation of how it works is given in &lt;a href=&#34;http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf&#34;&gt;this paper&lt;/a&gt; (I think this is how De Boor coded it in the NSWC library).
+Interestingly there is &lt;a href=&#34;http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf&#34;&gt;an equivalent formulation in terms of standard cubic splines&lt;/a&gt;, although it seems that the
+pseudo code on that paper has errors.&lt;/p&gt;
+
+&lt;p&gt;Least squares splines give a very good fit for option implied volatilities with only a few parameters.
+In theory, the number of parameters is N+2 where N is the number of interpolation points.
+I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/least_squares_spline.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;least squares spline on 1m AAPL options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>The Mystic Parabola</title>

@@ -6,8 +6,41 @@
     <description>Recent content in Posts on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2016 22:13:53 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 19 Feb 2016 18:29:33 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Least Squares Spline for Volatility Interpolation</title>
+      <link>http://chasethedevil.github.io/post/least_squares_spline/</link>
+      <pubDate>Fri, 19 Feb 2016 18:29:33 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/least_squares_spline/</guid>
+      <description>&lt;p&gt;I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
+with B-splines, a relatively simple explanation of how it works is given in &lt;a href=&#34;http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf&#34;&gt;this paper&lt;/a&gt; (I think this is how De Boor coded it in the NSWC library).
+Interestingly there is &lt;a href=&#34;http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf&#34;&gt;an equivalent formulation in terms of standard cubic splines&lt;/a&gt;, although it seems that the
+pseudo code on that paper has errors.&lt;/p&gt;
+
+&lt;p&gt;Least squares splines give a very good fit for option implied volatilities with only a few parameters.
+In theory, the number of parameters is N+2 where N is the number of interpolation points.
+I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/least_squares_spline.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;least squares spline on 1m AAPL options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>The Mystic Parabola</title>
@@ -259,16 +292,6 @@ $$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$&lt;/p&gt;
 Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
 I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).
 &lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s1600/Screenshot-Untitled%2BWindow-2.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;297&#34; src=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s400/Screenshot-Untitled%2BWindow-2.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Linux Desktops in 2015</title>
-      <link>http://chasethedevil.github.io/post/linux-desktops-in-2015/</link>
-      <pubDate>Wed, 24 Jun 2015 18:53:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/linux-desktops-in-2015/</guid>
-      <description>&lt;p&gt;I seem to &lt;a href=&#34;http://chasethedevil.blogspot.fr/2014/05/kde-xfce-gnome-shell-in-2014.html&#34;&gt;never be entirely happy with any of the linux desktops&lt;/a&gt; these days. I have used XFCE on Ubuntu quite a bit in the past year, it mostly works, but I still had minor annoyances:&lt;br /&gt;- sometimes (rarely) my laptop would not wake up from sleep.&lt;br /&gt;- notifications sometimes keep popping up too much.&lt;br /&gt;- on my desktop, experienced strong tearing issues with the Radeon graphic card, except with some very specific combination of video player settings and desktop settings (and then I had annoying redraw issue when pushing volume up/down in movies).&lt;br /&gt;&lt;br /&gt;I am satisfied with two different approaches since:&lt;br /&gt;- OpenSuse 13.2 with KDE 4. I use that on my desktop, all issues are gone, and the integration of KDE in OpenSuse is clearly the best I have experienced. In contrast, KDE 5 on Ubuntu was a disaster for me. I also managed to fuck up the apt dependencies so much that I thought it would be simpler to reinstall a new distribution.&lt;br /&gt;- Mate on Ubuntu 15.04. Very impressed so far. It&amp;rsquo;s probably what Gnome should have been instead of going to 3.0. Even if there are nice aspects of the Gnome shell, Mate is fast, pretty, user friendly, much better than Cinnamon. There are even a few layouts to choose (most of them are good), here is &amp;ldquo;Eleven with Mate menu&amp;rdquo; (it installed and setup the Plank dock automatically for that layout, more traditional layouts without dock are available):&lt;br /&gt;&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s1600/Mate-Eleven.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;358&#34; src=&#34;http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s640/Mate-Eleven.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;/p&gt;
 </description>
     </item>
     

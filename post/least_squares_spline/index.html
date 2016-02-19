@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Quant &middot; Chase the Devil</title>
+  <title>Least Squares Spline for Volatility Interpolation &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -26,10 +26,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   <link rel="author" href="http://plus.google.com/105444622997415581493">
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -77,24 +77,45 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="http://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
+  <div class="post">
+    <h1>Least Squares Spline for Volatility Interpolation</h1>
+    <span class="post-date">Feb 19, 2016 &middot; 1 minute read
     
-    &middot;
+    <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Feb 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
+    <p>I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
+with B-splines, a relatively simple explanation of how it works is given in <a href="http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf">this paper</a> (I think this is how De Boor coded it in the NSWC library).
+Interestingly there is <a href="http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf">an equivalent formulation in terms of standard cubic splines</a>, although it seems that the
+pseudo code on that paper has errors.</p>
+
+<p>Least squares splines give a very good fit for option implied volatilities with only a few parameters.
+In theory, the number of parameters is N+2 where N is the number of interpolation points.
+I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
+
+
+<figure >
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 16, 2016</time></li>
+        <img src="/post/least_squares_spline.png" />
+    
+    
+    <figcaption>
+        <h4>least squares spline on 1m AAPL options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
+
+  </div>
   
-  </ul>
 </div>
+
+
+
+
 <div class="content container" style="padding-top: 0rem;">
 <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
 <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
