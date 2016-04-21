@@ -6,8 +6,116 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Feb 2016 18:29:33 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 21 Apr 2016 16:37:24 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Least Squares Rational Function</title>
+      <link>http://chasethedevil.github.io/post/rational_fit/</link>
+      <pubDate>Thu, 21 Apr 2016 16:37:24 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/rational_fit/</guid>
+      <description>&lt;p&gt;In my paper &lt;a href=&#34;http://ssrn.com/abstract=2420757&#34;&gt;&amp;ldquo;Fast and Accurate Analytic Basis Point Volatility&amp;rdquo;&lt;/a&gt;,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the &lt;a href=&#34;http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package&#34;&gt;Faddeeva package&lt;/a&gt; to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.&lt;/p&gt;
+
+&lt;p&gt;Still, it would have been nice to have also a more visually appealing rational function representation, as &lt;a href=&#34;http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf&#34;&gt;W. Shaw&lt;/a&gt;
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in &lt;a href=&#34;http://www.chebfun.org&#34;&gt;chebfun&lt;/a&gt; but this depends on Matlab.&lt;/p&gt;
+
+&lt;p&gt;The Numerical recipe book provides a simple algorithm in &lt;a href=&#34;http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf&#34;&gt;chapter 5.13&lt;/a&gt;, not looking for the best possible rational function, but just for one
+that would be &amp;ldquo;good enough&amp;rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some &lt;a href=&#34;http://www.scientificpython.net/pyblog/rational-least-squares-approximation&#34;&gt;least squares python code&lt;/a&gt; which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&amp;rsquo;t fully understand why one would propose such a code.&lt;/p&gt;
+
+&lt;p&gt;It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on &lt;a href=&#34;http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions&#34;&gt;this matrix representation&lt;/a&gt;.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).&lt;/p&gt;
+
+&lt;p&gt;The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.&lt;/p&gt;
+
+&lt;p&gt;Interestingly, I thought, that, maybe, a &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;gradient descent&lt;/a&gt; could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.&lt;/p&gt;
+
+&lt;p&gt;Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.&lt;/p&gt;
+
+&lt;p&gt;Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_value.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit of degree 20 zoomed.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;RMSE&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Polynomial Naive&lt;/td&gt;
+&lt;td&gt;0.234&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Polynomial NRI&lt;/td&gt;
+&lt;td&gt;0.039&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Rational   NRI&lt;/td&gt;
+&lt;td&gt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;A &lt;sup&gt;10&lt;/sup&gt;&amp;frasl;&lt;sub&gt;10&lt;/sub&gt; rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_error.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit error of degree 20.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;I still can draw a conclusion to my quest for a rational function approximation: I won&amp;rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+ away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.&lt;/p&gt;
+
+&lt;p&gt;I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Least Squares Spline for Volatility Interpolation</title>

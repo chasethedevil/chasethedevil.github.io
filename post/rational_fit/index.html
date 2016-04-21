@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Least Squares Rational Function &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="quant">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Least Squares Rational Function</h1>
+    <span class="post-date">Apr 21, 2016 &middot; 4 minute read
+    
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    <p>In my paper <a href="http://ssrn.com/abstract=2420757">&ldquo;Fast and Accurate Analytic Basis Point Volatility&rdquo;</a>,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package">Faddeeva package</a> to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.</p>
+
+<p>Still, it would have been nice to have also a more visually appealing rational function representation, as <a href="http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf">W. Shaw</a>
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in <a href="http://www.chebfun.org">chebfun</a> but this depends on Matlab.</p>
+
+<p>The Numerical recipe book provides a simple algorithm in <a href="http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf">chapter 5.13</a>, not looking for the best possible rational function, but just for one
+that would be &ldquo;good enough&rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some <a href="http://www.scientificpython.net/pyblog/rational-least-squares-approximation">least squares python code</a> which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&rsquo;t fully understand why one would propose such a code.</p>
+
+<p>It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on <a href="http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions">this matrix representation</a>.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).</p>
+
+<p>The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.</p>
+
+<p>Interestingly, I thought, that, maybe, a <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.</p>
+
+<p>Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.</p>
+
+<p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
+
+
+<figure >
+    
+        <img src="/post/rational_fit_value.png" />
+    
+    
+    <figcaption>
+        <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>RMSE</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Polynomial Naive</td>
+<td>0.234</td>
+</tr>
+
+<tr>
+<td>Polynomial NRI</td>
+<td>0.039</td>
+</tr>
+
+<tr>
+<td>Rational   NRI</td>
+<td>0.001</td>
+</tr>
+</tbody>
+</table>
+
+<p>A <sup>10</sup>&frasl;<sub>10</sub> rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:</p>
+
+
+<figure >
+    
+        <img src="/post/rational_fit_error.png" />
+    
+    
+    <figcaption>
+        <h4>Least squares polynomial fit error of degree 20.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+ away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.</p>
+
+<p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<div class="content container" style="padding-top: 0rem;">
+<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
+<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

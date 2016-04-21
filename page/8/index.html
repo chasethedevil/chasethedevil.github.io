@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/random-hardware-issues/">Random Hardware Issues</a>
+      </h1>
+      <span class="post-date">Jan 6, 2014 &middot; 2 minute read
+      </span>
+      
+      <p>Today, after wondering why my desktop computer became so unstable (frequent crashes under Fedora), I found out that the micro usb port of my cell phone has some kind of short circuit. My phone behaves strangely in 2014, it lasted nearly 1 week on battery (I lost it for half of the week), and seems to shutdown for no particular reason once in a while.<br /><br />On the positive side, I also discovered, after owning my monitor for around 5 years, that it has SD card slots on the side, as well as USB ports. I always used the USB ports of my desktop and never really looked at the side of my monitor&hellip;<br /><br />I also managed to seriously boost the speed of my home network with a cheap TP-Link wifi router. The one included in the ISP box-modem only supported 802.11g and had really crap coverage, so crap that it was seriously limiting the internet traffic. In the end it was just a matter of disabling wifi and DHCP on the box, adding the new router in the DMZ, and adding a static WAN IP for the box in the router configuration. I did not realize how much of a difference this could make, even on simple websites. I was also surprised that, for some strange reason, routers are cheaper than access points these days.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/levenberg-marquardt--constraints-by-domain-transformation/">Levenberg Marquardt &amp; Constraints by Domain Transformation</a>
       </h1>
       <span class="post-date">Dec 17, 2013 &middot; 3 minute read
@@ -192,18 +204,6 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
       </span>
       
       <p>I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a>&nbsp;by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What&rsquo;s nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.<br /><br />I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).<br /><br />I believe it will make my code more functional programming oriented in the future, especially at the high level.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/setting-values-in-java-enum---a-bad-idea/">Setting Values in Java Enum - A Bad Idea</a>
-      </h1>
-      <span class="post-date">Sep 12, 2013 &middot; 1 minute read
-      </span>
-      
-      <p>My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <a href="http://www.scala-lang.org/old/node/107">case classes</a> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<br /><br />I wrote an enum with a setter like:<br /><br />&nbsp;<span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; public static enum BlackVariateType {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V0,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZERO_DERIVATIVE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private double volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public double getBlackVolatilitySquare() {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void setBlackVolatilitySquare(double volSquare) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.volSquare = volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; }</span></span><br /><br />Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<br /><br />I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <br /><br /></p>
 
       
     </div>

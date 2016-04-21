@@ -6,8 +6,116 @@
     <description>Recent content in Posts on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Feb 2016 18:29:33 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 21 Apr 2016 16:37:24 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Least Squares Rational Function</title>
+      <link>http://chasethedevil.github.io/post/rational_fit/</link>
+      <pubDate>Thu, 21 Apr 2016 16:37:24 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/rational_fit/</guid>
+      <description>&lt;p&gt;In my paper &lt;a href=&#34;http://ssrn.com/abstract=2420757&#34;&gt;&amp;ldquo;Fast and Accurate Analytic Basis Point Volatility&amp;rdquo;&lt;/a&gt;,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the &lt;a href=&#34;http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package&#34;&gt;Faddeeva package&lt;/a&gt; to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.&lt;/p&gt;
+
+&lt;p&gt;Still, it would have been nice to have also a more visually appealing rational function representation, as &lt;a href=&#34;http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf&#34;&gt;W. Shaw&lt;/a&gt;
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in &lt;a href=&#34;http://www.chebfun.org&#34;&gt;chebfun&lt;/a&gt; but this depends on Matlab.&lt;/p&gt;
+
+&lt;p&gt;The Numerical recipe book provides a simple algorithm in &lt;a href=&#34;http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf&#34;&gt;chapter 5.13&lt;/a&gt;, not looking for the best possible rational function, but just for one
+that would be &amp;ldquo;good enough&amp;rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some &lt;a href=&#34;http://www.scientificpython.net/pyblog/rational-least-squares-approximation&#34;&gt;least squares python code&lt;/a&gt; which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&amp;rsquo;t fully understand why one would propose such a code.&lt;/p&gt;
+
+&lt;p&gt;It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on &lt;a href=&#34;http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions&#34;&gt;this matrix representation&lt;/a&gt;.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).&lt;/p&gt;
+
+&lt;p&gt;The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.&lt;/p&gt;
+
+&lt;p&gt;Interestingly, I thought, that, maybe, a &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;gradient descent&lt;/a&gt; could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.&lt;/p&gt;
+
+&lt;p&gt;Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.&lt;/p&gt;
+
+&lt;p&gt;Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_value.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit of degree 20 zoomed.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;RMSE&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Polynomial Naive&lt;/td&gt;
+&lt;td&gt;0.234&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Polynomial NRI&lt;/td&gt;
+&lt;td&gt;0.039&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Rational   NRI&lt;/td&gt;
+&lt;td&gt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;A &lt;sup&gt;10&lt;/sup&gt;&amp;frasl;&lt;sub&gt;10&lt;/sub&gt; rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_error.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit error of degree 20.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;I still can draw a conclusion to my quest for a rational function approximation: I won&amp;rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+ away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.&lt;/p&gt;
+
+&lt;p&gt;I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Least Squares Spline for Volatility Interpolation</title>
@@ -261,37 +369,6 @@ Another work-around would be to model this via proportional dividends instead of
       
       <guid>http://chasethedevil.github.io/post/andreasen-huge-extrapolation/</guid>
       <description>&lt;p&gt;There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&amp;rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&amp;rsquo;t obey Lee&amp;rsquo;s moments condition.&lt;br /&gt;&lt;br /&gt;On a Wilmott forum, &lt;a href=&#34;http://www.wilmott.com/messageview.cfm?catid=4&amp;amp;threadid=95309&#34;&gt;P. Caspers proposed&lt;/a&gt; the following counter-example based on extrapolating SABR: \( \alpha=15\%, \beta=80\%, \nu=50\%, \rho=-48\%, f=3\%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.&lt;br /&gt;&lt;br /&gt;A truly arbitrage free extrapolation can be obtained through &lt;a href=&#34;http://ssrn.com/abstract=1694972&#34;&gt;Andreasen Huge volatility interpolation&lt;/a&gt;, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s1600/Screenshot-Untitled%2BWindow-5.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s400/Screenshot-Untitled%2BWindow-5.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Smile&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s1600/Screenshot-Untitled%2BWindow-4.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s400/Screenshot-Untitled%2BWindow-4.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Density with piecewise linear local volatility&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.&lt;br /&gt;Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.&lt;br /&gt;&lt;br /&gt;It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then: &lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s1600/Screenshot-Untitled%2BWindow-3.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s400/Screenshot-Untitled%2BWindow-3.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Density with cubic spline local volatility&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;Interestingly, the right side of the density is much better captured.&lt;br /&gt;The wiggle persists, although it is smaller. This is likely due to the fact that I am using a cubic spline on top of the finite difference prices (in order to have a C2 density). Using a better C2 convexity preserving interpolation would likely remove this artefact.&lt;br /&gt;&lt;br /&gt;Those figures also show why relying just on extrapolation to fix SABR is not necessarily a good idea: even a real arbitrage free extrapolation will make a not so meaningful density. The proper solution is to really use &lt;a href=&#34;http://chasethedevil.blogspot.fr/2013/12/arbitrage-free-sabr-another-view-on.html&#34;&gt;Hagan&amp;rsquo;s arbitrage free SABR PDE&lt;/a&gt;, which would be as nearly fast in this case.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Unintuitive behavior of the Black-Scholes formula - negative volatilities in displaced diffusion extrapolation</title>
-      <link>http://chasethedevil.github.io/post/unintuitive-behavior-of-the-black-scholes-formula---negative-volatilities-in-displaced-diffusion-extrapolation/</link>
-      <pubDate>Tue, 07 Jul 2015 16:43:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/unintuitive-behavior-of-the-black-scholes-formula---negative-volatilities-in-displaced-diffusion-extrapolation/</guid>
-      <description>&lt;p&gt;I am looking at various extrapolation schemes of the implied volatilities. An interesting one I stumbled upon is due to Kahale. Even if &lt;a href=&#34;http://nkahale.free.fr/papers/Interpolation.pdf&#34;&gt;his paper&lt;/a&gt; is on interpolation, there is actually a small paragraph on using the same kind of function for extrapolation. His idea is to simply lookup the standard deviation \( \Sigma \) and the forward \(f\) corresponding to a given market volatility and slope:
-$$ c_{f,\Sigma} = f N(d_1) - k N(d_2)$$
-with
-$$ d_1 = \frac{\log(f/k)+\Sigma^2 /2}{\Sigma} $$&lt;/p&gt;
-
-&lt;p&gt;We have simply:
-$$ c&amp;rsquo;(k) = - N(d_2)$$&lt;/p&gt;
-
-&lt;p&gt;He also proves that we can always find those two parameters for any \( k_0 &amp;gt; c_0 &amp;gt; 0,  -1 &amp;lt; c_0&amp;rsquo; &amp;lt; 0 \)&lt;/p&gt;
-
-&lt;p&gt;Then I had the silly idea of trying to match with a put&amp;nbsp; instead of a call for the left wing (as those are out-of-the-money, and therefore easier to invert numerically). It turns out that it works in most cases in practice and produces relatively nice looking extrapolations, but it does not always work. This is because contrary to the call, the put value is bounded with \(f\).
-$$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$&lt;/p&gt;
-
-&lt;p&gt;Inverting \( p_0&amp;rsquo; \) is going to lead to a specific \( d_2 \), and you are not guaranteed that you can push \( f \) high and have \( p_{f, \Sigma} \) large enough to match \( p_0 \). As example we can just take \(p_0 \geq k N(-d_2)\) which will only be matched if \( f \leq 0 \).&lt;/p&gt;
-
-&lt;p&gt;This is slightly unintuitive as put-call parity would suggest some kind of equivalence. The problem here is that we would need to consider the function of \(k\) instead of \(f\) for it to work, so we can&amp;rsquo;t really work with a put directly.&lt;/p&gt;
-
-&lt;p&gt;Here are the two different extrapolations on Kahale own example:
-&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s1600/Screenshot-Untitled%2BWindow.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;297&#34; src=&#34;http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s400/Screenshot-Untitled%2BWindow.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Extrapolation of the left wing with calls (blue doted line)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s1600/Screenshot-Untitled%2BWindow-1.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;297&#34; src=&#34;http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s400/Screenshot-Untitled%2BWindow-1.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Extrapolation of the left wing with puts (blue doted line)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
-Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
-I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).
-&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s1600/Screenshot-Untitled%2BWindow-2.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;297&#34; src=&#34;http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s400/Screenshot-Untitled%2BWindow-2.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/p&gt;
 </description>
     </item>
     

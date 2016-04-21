@@ -6,8 +6,116 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Feb 2016 18:29:33 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 21 Apr 2016 16:37:24 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Least Squares Rational Function</title>
+      <link>http://chasethedevil.github.io/post/rational_fit/</link>
+      <pubDate>Thu, 21 Apr 2016 16:37:24 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/rational_fit/</guid>
+      <description>&lt;p&gt;In my paper &lt;a href=&#34;http://ssrn.com/abstract=2420757&#34;&gt;&amp;ldquo;Fast and Accurate Analytic Basis Point Volatility&amp;rdquo;&lt;/a&gt;,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the &lt;a href=&#34;http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package&#34;&gt;Faddeeva package&lt;/a&gt; to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.&lt;/p&gt;
+
+&lt;p&gt;Still, it would have been nice to have also a more visually appealing rational function representation, as &lt;a href=&#34;http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf&#34;&gt;W. Shaw&lt;/a&gt;
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in &lt;a href=&#34;http://www.chebfun.org&#34;&gt;chebfun&lt;/a&gt; but this depends on Matlab.&lt;/p&gt;
+
+&lt;p&gt;The Numerical recipe book provides a simple algorithm in &lt;a href=&#34;http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf&#34;&gt;chapter 5.13&lt;/a&gt;, not looking for the best possible rational function, but just for one
+that would be &amp;ldquo;good enough&amp;rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some &lt;a href=&#34;http://www.scientificpython.net/pyblog/rational-least-squares-approximation&#34;&gt;least squares python code&lt;/a&gt; which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&amp;rsquo;t fully understand why one would propose such a code.&lt;/p&gt;
+
+&lt;p&gt;It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on &lt;a href=&#34;http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions&#34;&gt;this matrix representation&lt;/a&gt;.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).&lt;/p&gt;
+
+&lt;p&gt;The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.&lt;/p&gt;
+
+&lt;p&gt;Interestingly, I thought, that, maybe, a &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;gradient descent&lt;/a&gt; could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.&lt;/p&gt;
+
+&lt;p&gt;Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.&lt;/p&gt;
+
+&lt;p&gt;Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_value.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit of degree 20 zoomed.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;RMSE&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Polynomial Naive&lt;/td&gt;
+&lt;td&gt;0.234&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Polynomial NRI&lt;/td&gt;
+&lt;td&gt;0.039&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Rational   NRI&lt;/td&gt;
+&lt;td&gt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;A &lt;sup&gt;10&lt;/sup&gt;&amp;frasl;&lt;sub&gt;10&lt;/sub&gt; rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/rational_fit_error.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Least squares polynomial fit error of degree 20.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;I still can draw a conclusion to my quest for a rational function approximation: I won&amp;rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+ away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.&lt;/p&gt;
+
+&lt;p&gt;I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Least Squares Spline for Volatility Interpolation</title>
@@ -268,16 +376,6 @@ In addition you might find the following interesting:&lt;/p&gt;
       
       <guid>http://chasethedevil.github.io/post/bumping-correlations/</guid>
       <description>&lt;p&gt;In his book &amp;ldquo;&lt;i&gt;Monte Carlo Methods in Finance&lt;/i&gt;&amp;rdquo;, P. Jäckel explains a simple way to clean up a correlation matrix. When a given correlation matrix is not positive semi-definite, the idea is to do a &lt;a href=&#34;https://en.wikipedia.org/wiki/Singular_value_decomposition&#34;&gt;singular value decomposition&lt;/a&gt; (SVD), replace the negative eigenvalues by 0, and renormalize the corresponding eigenvector accordingly.&lt;br /&gt;&lt;br /&gt;One of the cited applications is &amp;ldquo;&lt;i&gt;stress testing and scenario analysis for market risk&lt;/i&gt;&amp;rdquo; or &amp;ldquo;&lt;i&gt;comparative pricing in order to ascertain the extent of correlation exposure for multi-asset derivatives&lt;/i&gt;&amp;rdquo;, saying that &amp;ldquo;&lt;i&gt;In many of these cases we end up with a matrix that is no longer positive semi-definite&lt;/i&gt;&amp;rdquo;.&lt;br /&gt;&lt;br /&gt;It turns out that if one bumps an invalid correlation matrix (the input), that is then cleaned up automatically, the effect can be a very different bump. Depending on how familiar you are with SVD, this could be more or less obvious from the procedure,&lt;br /&gt;&lt;br /&gt;As a simple illustration I take the matrix representing 3 assets A, B, C with rho_ab = -0.6, rho_ac = rho_bc = -0.5.&lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.60000&amp;nbsp; -0.50000&lt;br /&gt;&amp;nbsp; -0.60000&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.50000&lt;br /&gt;&amp;nbsp; -0.50000&amp;nbsp; -0.50000&amp;nbsp;&amp;nbsp; 1.00000&lt;br /&gt;&lt;br /&gt;For those rho_ac and rho_bc, the correlation matrix is not positive definite unless rho_ab in in the range (-0.5, 1). One way to verify this is to use the fact that positive definiteness is equivalent to a positive determinant. The determinant will be 1 - 2*0.25 - rho_ab^2 + 2*0.25*rho_ab.&lt;br /&gt;&lt;br /&gt;After using P. Jaeckel procedure, we end up with: &lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.56299&amp;nbsp; -0.46745&lt;br /&gt;&amp;nbsp; -0.56299&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.46745&lt;br /&gt;&amp;nbsp; -0.46745&amp;nbsp; -0.46745&amp;nbsp;&amp;nbsp; 1.00000&lt;br /&gt;&lt;br /&gt;If we bump now rho_bc by 1% (absolute), we end up after cleanup with:&lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.56637&amp;nbsp; -0.47045&lt;br /&gt;&amp;nbsp; -0.56637&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.46081&lt;br /&gt;&amp;nbsp; -0.47045&amp;nbsp; -0.46081 &amp;nbsp; 1.00000&lt;br /&gt;&lt;br /&gt;It turns out that rho_bc has changed by only 0.66% and rho_ac by -0.30%, rho_ab by -0.34%. So our initial bump (0,0,1) has been translated to a bump (-0.34, -0.30, 0.66). In other words, it does not work to compute sensitivities.&lt;br /&gt;&lt;br /&gt;One can optimize to obtain the nearest correlation matrix in some norm. Jaeckel proposes a hypersphere decomposition based optimization, using as initial guess the SVD solution. &lt;a href=&#34;https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/&#34;&gt;Higham proposed a specific algorithm&lt;/a&gt; just for that purpose. It turns out that on this example, they will converge to the same solution (if we use the same norm). I tried out of curiosity to see if that would lead to some improvement. The first matrix becomes&lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.56435&amp;nbsp; -0.46672&lt;br /&gt;&amp;nbsp; -0.56435&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.46672&lt;br /&gt;&amp;nbsp; -0.46672&amp;nbsp; -0.46672&amp;nbsp;&amp;nbsp; 1.00000&lt;br /&gt;&lt;br /&gt;And the bumped one becomes&lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.56766&amp;nbsp; -0.46984&lt;br /&gt;&amp;nbsp; -0.56766&amp;nbsp;&amp;nbsp; 1.00000&amp;nbsp; -0.46002&lt;br /&gt;&amp;nbsp; -0.46984&amp;nbsp; -0.46002&amp;nbsp;&amp;nbsp; 1.00000&lt;br /&gt;&lt;br /&gt;We find back the same issue, rho_bc has changed by only 0.67%, rho_ac by -0.31% and rho_ab by -0.33%. We also see that the SVD correlation or the real near correlation matrix are quite close, as noticed by P. Jaeckel.&lt;br /&gt;&lt;br /&gt;Of course, one should apply the bump directly to the cleaned up matrix, in which case it will actually work as expected, unless our bump produces another non positive definite matrix, and then we would have correlation leaking a bit everywhere. It&amp;rsquo;s not entirely clear what kind of meaning the risk figures would have then.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Andreasen Huge extrapolation</title>
-      <link>http://chasethedevil.github.io/post/andreasen-huge-extrapolation/</link>
-      <pubDate>Mon, 13 Jul 2015 17:35:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/andreasen-huge-extrapolation/</guid>
-      <description>&lt;p&gt;There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&amp;rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&amp;rsquo;t obey Lee&amp;rsquo;s moments condition.&lt;br /&gt;&lt;br /&gt;On a Wilmott forum, &lt;a href=&#34;http://www.wilmott.com/messageview.cfm?catid=4&amp;amp;threadid=95309&#34;&gt;P. Caspers proposed&lt;/a&gt; the following counter-example based on extrapolating SABR: \( \alpha=15\%, \beta=80\%, \nu=50\%, \rho=-48\%, f=3\%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.&lt;br /&gt;&lt;br /&gt;A truly arbitrage free extrapolation can be obtained through &lt;a href=&#34;http://ssrn.com/abstract=1694972&#34;&gt;Andreasen Huge volatility interpolation&lt;/a&gt;, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s1600/Screenshot-Untitled%2BWindow-5.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s400/Screenshot-Untitled%2BWindow-5.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Smile&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s1600/Screenshot-Untitled%2BWindow-4.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s400/Screenshot-Untitled%2BWindow-4.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Density with piecewise linear local volatility&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.&lt;br /&gt;Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.&lt;br /&gt;&lt;br /&gt;It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then: &lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s1600/Screenshot-Untitled%2BWindow-3.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;283&#34; src=&#34;http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s400/Screenshot-Untitled%2BWindow-3.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Density with cubic spline local volatility&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;Interestingly, the right side of the density is much better captured.&lt;br /&gt;The wiggle persists, although it is smaller. This is likely due to the fact that I am using a cubic spline on top of the finite difference prices (in order to have a C2 density). Using a better C2 convexity preserving interpolation would likely remove this artefact.&lt;br /&gt;&lt;br /&gt;Those figures also show why relying just on extrapolation to fix SABR is not necessarily a good idea: even a real arbitrage free extrapolation will make a not so meaningful density. The proper solution is to really use &lt;a href=&#34;http://chasethedevil.blogspot.fr/2013/12/arbitrage-free-sabr-another-view-on.html&#34;&gt;Hagan&amp;rsquo;s arbitrage free SABR PDE&lt;/a&gt;, which would be as nearly fast in this case.&lt;/p&gt;
 </description>
     </item>
     
