@@ -6,8 +6,52 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Apr 2016 16:37:24 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 12 May 2016 19:32:42 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SVI, SABR, or parabola on AAPL?</title>
+      <link>http://chasethedevil.github.io/post/svi_sabr_or_parabola/</link>
+      <pubDate>Thu, 12 May 2016 19:32:42 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/svi_sabr_or_parabola/</guid>
+      <description>&lt;p&gt;In a &lt;a href=&#34;http://chasethedevil.github.io/post/least_squares_spline&#34;&gt;previous post&lt;/a&gt;, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.&lt;/p&gt;
+
+&lt;p&gt;It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_sabr_parabola.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;SVI, SABR, least squares parabola fitted to AAPL 1m options&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adaptive Filon quadrature for stochastic volatility models</title>
+      <link>http://chasethedevil.github.io/post/filon_for_heston/</link>
+      <pubDate>Thu, 12 May 2016 19:08:18 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/filon_for_heston/</guid>
+      <description>&lt;p&gt;A while ago, I have applied a relatively simple adaptive Filon quadrature to the problem of &lt;a href=&#34;http://papers.ssrn.com/abstract=2620166&#34;&gt;volatility swap pricing&lt;/a&gt;. The &lt;a href=&#34;https://www.google.fr/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=1&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0ahUKEwi18brlh9XMAhWIVhoKHdnGA2UQFggdMAA&amp;amp;url=http%3A%2F%2Fwww.ams.org%2Fmcom%2F1968-22-101%2FS0025-5718-1968-0225485-5%2FS0025-5718-1968-0225485-5.pdf&amp;amp;usg=AFQjCNEQvSMm6vOaXIX2MqAJ-GQt79QRiA&amp;amp;sig2=HLHd-rc74qnCuo5yp1Q13A&#34;&gt;Filon quadrature&lt;/a&gt; is an old quadrature from 1928 that allows to integrate oscillatory integrand like \(f(x)\cos(k x) \) or \(f(x)\sin(k x) \). It turns out that combined with an adaptive Simpson like method, it has many advantages over more generic adaptive quadrature methods like Gauss-Lobatto, which is often used on similar problems.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://dl.acm.org/citation.cfm?id=321029&#34;&gt;Flinn&lt;/a&gt; derived a similar quadrature, but taking into account the derivative values, which are likely to be easily available on those problems. This produces a even more robust quadrature and of higher convergence order.&lt;/p&gt;
+
+&lt;p&gt;I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to &lt;strong&gt;five times faster&lt;/strong&gt; than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).&lt;/p&gt;
+
+&lt;p&gt;If you are interested, you will find much more details in &lt;a href=&#34;http://chasethedevil.github.io/lefloch_heston_filon.pdf&#34;&gt;this document&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Least Squares Rational Function</title>
@@ -114,6 +158,8 @@ change of variables I am using in my paper, as I would imagine the least squares
 all that appealing compared to the table of Chebyshev polynomials.&lt;/p&gt;
 
 &lt;p&gt;I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt; - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.&lt;/p&gt;
 </description>
     </item>
     

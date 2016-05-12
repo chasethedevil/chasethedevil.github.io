@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Quant &middot; Chase the Devil</title>
+  <title>Adaptive Filon quadrature for stochastic volatility models &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -26,10 +26,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   <link rel="author" href="http://plus.google.com/105444622997415581493">
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -77,45 +77,28 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="http://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+  <div class="post">
+    <h1>Adaptive Filon quadrature for stochastic volatility models</h1>
+    <span class="post-date">May 12, 2016 &middot; 1 minute read
     
-    &middot;
+    <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>May 12, 2016</time></li>
+    <p>A while ago, I have applied a relatively simple adaptive Filon quadrature to the problem of <a href="http://papers.ssrn.com/abstract=2620166">volatility swap pricing</a>. The <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi18brlh9XMAhWIVhoKHdnGA2UQFggdMAA&amp;url=http%3A%2F%2Fwww.ams.org%2Fmcom%2F1968-22-101%2FS0025-5718-1968-0225485-5%2FS0025-5718-1968-0225485-5.pdf&amp;usg=AFQjCNEQvSMm6vOaXIX2MqAJ-GQt79QRiA&amp;sig2=HLHd-rc74qnCuo5yp1Q13A">Filon quadrature</a> is an old quadrature from 1928 that allows to integrate oscillatory integrand like \(f(x)\cos(k x) \) or \(f(x)\sin(k x) \). It turns out that combined with an adaptive Simpson like method, it has many advantages over more generic adaptive quadrature methods like Gauss-Lobatto, which is often used on similar problems.</p>
+
+<p><a href="http://dl.acm.org/citation.cfm?id=321029">Flinn</a> derived a similar quadrature, but taking into account the derivative values, which are likely to be easily available on those problems. This produces a even more robust quadrature and of higher convergence order.</p>
+
+<p>I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to <strong>five times faster</strong> than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).</p>
+
+<p>If you are interested, you will find much more details in <a href="/lefloch_heston_filon.pdf">this document</a>.</p>
+
+  </div>
   
-    <li><a href="http://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 12, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Apr 21, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 16, 2016</time></li>
-  
-  </ul>
 </div>
+
+
+
+
 <div class="content container" style="padding-top: 0rem;">
 <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
 <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
