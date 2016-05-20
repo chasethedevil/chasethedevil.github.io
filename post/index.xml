@@ -6,8 +6,128 @@
     <description>Recent content in Posts on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 May 2016 19:32:42 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 19 May 2016 17:01:00 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Dupire Local Volatility with Cash Dividends</title>
+      <link>http://chasethedevil.github.io/post/dupire_cash_dividend/</link>
+      <pubDate>Thu, 19 May 2016 17:01:00 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/dupire_cash_dividend/</guid>
+      <description>&lt;p&gt;The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
+The extension to continuous dividend yield is described in many papers or books:
+&lt;div&gt;$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial C}{\partial T}+(r_B-q)K \frac{\partial C}{\partial K} + q C(K,T)}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$&lt;/div&gt;
+In this case, \(C\) is a regular market Call option price, that can also be obtained from market volatilities via the Black-Scholes formula.&lt;/p&gt;
+
+&lt;p&gt;With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
+approximations available to price an option supposing a constant (spot) volatility and jumps, for example, &lt;a href=&#34;http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Labordère, in his paper &lt;a href=&#34;http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306&#34;&gt;Calibration of local stochastic volatility models to market smiles&lt;/a&gt;, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:
+&lt;div&gt;$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial \hat{C}}{\partial T}}{\frac{1}{2}K^2\frac{\partial^2 \hat{C}}{\partial K^2}}$$&lt;/div&gt;
+where \( \hat{C} \) is the market Call option price, that can be obtained via an approximation of the spot model with dividend jumps, of strike K and maturity T. Yes, if you look carefully at the Labordere formulae, most of it simplifies.&lt;/p&gt;
+
+&lt;p&gt;While it appears very simple, in practice, it is not so much. For example, let&amp;rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
+we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).&lt;/p&gt;
+
+&lt;p&gt;It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll1.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have
+&lt;div&gt;$$C(S&lt;em&gt;0,K,t&lt;/em&gt;{\alpha_i}^-) = C(S_0, K-\alpha&lt;em&gt;i,t&lt;/em&gt;{\alpha_i}^+)$$&lt;/div&gt;
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3shift.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Look, when we shift by the dividend!&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
+quite larger than the regular local volatility, even with a somewhat discontinuous yield.&lt;/p&gt;
+
+&lt;p&gt;Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_policy.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The analytical approximations lead to another different local volatility from both policies, but don&amp;rsquo;t differ much from each other.
+Those differences however don&amp;rsquo;t impact the prices very much as the prices with the various methods are very close, and differ of a magnitude much smaller than the error to the true price.&lt;/p&gt;
+
+&lt;p&gt;The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_yield3.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the forward model.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+The huge spike at 3.5 don&amp;rsquo;t allow us to see much about what&amp;rsquo;s happening around:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_yield3e.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the forward model.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I would have expected a much better accuracy from Labordère&amp;rsquo;s approach, it&amp;rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>SVI, SABR, or parabola on AAPL?</title>
@@ -385,16 +505,6 @@ Another work-around would be to model this via proportional dividends instead of
       
       <guid>http://chasethedevil.github.io/post/clouds/</guid>
       <description>&lt;p&gt;I was wondering how to generate some nice cloudy like texture with a simple program. I first thought about using the Brownian motion, but of course if one uses it raw, with one pixel representing one movement in time, it&amp;rsquo;s just going to look like a very noisy and grainy picture like this:&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-QfeLi5F03oQ/Vebs3C-XWyI/AAAAAAAAIG4/5q1kKip0PlA/s1600/normal_rng.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://4.bp.blogspot.com/-QfeLi5F03oQ/Vebs3C-XWyI/AAAAAAAAIG4/5q1kKip0PlA/s200/normal_rng.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Normal noise&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;There is however a nice continuous representation of the Brownian motion : the Paley-Wiener representation&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-fkDLapfROaY/Vebtgtm2BCI/AAAAAAAAIHA/-EgKgEF_rEM/s1600/Screenshot%2Bfrom%2B2015-09-02%2B14-37-02.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;31&#34; src=&#34;http://1.bp.blogspot.com/-fkDLapfROaY/Vebtgtm2BCI/AAAAAAAAIHA/-EgKgEF_rEM/s400/Screenshot%2Bfrom%2B2015-09-02%2B14-37-02.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-JdA4jtT3J-A/VebtgjUKcfI/AAAAAAAAIHE/4HCx4BaAPDY/s1600/Screenshot%2Bfrom%2B2015-09-02%2B14-36-42.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;60&#34; src=&#34;http://1.bp.blogspot.com/-JdA4jtT3J-A/VebtgjUKcfI/AAAAAAAAIHE/4HCx4BaAPDY/s400/Screenshot%2Bfrom%2B2015-09-02%2B14-36-42.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;This can produce an interesting smooth pattern, but it is just 1D. In the following picture, I apply it to each row (the column index being time), and then for each column (the row index being time). Of course this produces a symmetric picture, especially as I reused the same random numbers&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-CzAUnTU3V7w/VebuSjnBuLI/AAAAAAAAIHQ/t6a1FGCsIMA/s1600/constructive.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://4.bp.blogspot.com/-CzAUnTU3V7w/VebuSjnBuLI/AAAAAAAAIHQ/t6a1FGCsIMA/s200/constructive.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;/div&gt;If I use new random numbers for the columns, it is still symmetric, but destructive rather than constructive.&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-zb3pUtY1ZMo/VebvK0C1xdI/AAAAAAAAIHY/A0-vaxGMwdI/s1600/destructive.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://3.bp.blogspot.com/-zb3pUtY1ZMo/VebvK0C1xdI/AAAAAAAAIHY/A0-vaxGMwdI/s200/destructive.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;It turns out that spatial processes are something more complex than I first imagined. It is not a simple as using a N-dimensional Brownian motion, as it would produce a very similar picture as the 1-dimensional one. But &lt;a href=&#34;http://www.maths.uq.edu.au/~kroese/ps/MCSpatial.pdf&#34;&gt;this paper has a nice overview of spatial processes&lt;/a&gt;. Interestingly they even suggest to generate a Gaussian process using a &lt;a href=&#34;https://en.wikipedia.org/wiki/Precision_%28statistics%29&#34;&gt;Precision matrix&lt;/a&gt; (inverse of covariance matrix). I never thought about doing such a thing and I am not sure what is the advantage of such a scheme.&lt;br /&gt;&lt;br /&gt;There is a standard graphic technique to generate nice textures, originating from Ken Perlin for Disney, it is called simply &lt;a href=&#34;https://en.wikipedia.org/wiki/Perlin_noise&#34;&gt;Perlin Noise&lt;/a&gt;. It turns out that several web pages in the top Google results &lt;a href=&#34;https://en.wikipedia.org/wiki/Talk%3APerlin_noise&#34;&gt;confuse&lt;/a&gt; simple Perlin noise with fractal sum of noise that Ken Perlin also helped popularize (see his slides: &lt;a href=&#34;http://www.noisemachine.com/talk1/20.html&#34;&gt;standard Perlin noise&lt;/a&gt;, &lt;a href=&#34;http://www.noisemachine.com/talk1/21.html&#34;&gt;fractal noise&lt;/a&gt;). Those pages also believe that the later is simpler/faster. But there are two issues with fractal sum of noise: the first one is that it relies on an existing noise function - you need to first build one (it can be done with a random number generator and an interpolator), and the second one is that it ends up being more complex to program and likely to evaluate as well, see for example the code needed &lt;a href=&#34;http://devmag.org.za/2009/04/25/perlin-noise/&#34;&gt;here&lt;/a&gt;. The fractal sum of noise is really a complementary technique.&lt;br /&gt;&lt;br /&gt;The insight of Perlin noise is to not generate random color values that would be assigned to shades of grey as in my examples, but to generate random gradients, and interpolate on those gradient in a smooth manner. In computer graphics they like the cosine function to give a little bit of non-linearity in the colors. A good approximation, usually used as a replacement in this context is &lt;a href=&#34;http://codeplea.com/simple-interpolation&#34;&gt;3x^2 - 2x^3&lt;/a&gt;.  It&amp;rsquo;s not much more complicated than that, &lt;a href=&#34;http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/perlin-noise-math-faq.html&#34;&gt;this web page&lt;/a&gt; explains it in great details. It can be programmed in a few lines of code.&lt;br /&gt;&lt;br /&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-Yo5dgKoD5P8/Veb6rAQ9jAI/AAAAAAAAIHo/uISQjpVzLfI/s1600/perlin_bw.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://3.bp.blogspot.com/-Yo5dgKoD5P8/Veb6rAQ9jAI/AAAAAAAAIHo/uISQjpVzLfI/s200/perlin_bw.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;a href=&#34;http://4.bp.blogspot.com/-MovHUFAGbnI/Veb6rsjhkBI/AAAAAAAAIHs/4raZRohDySs/s1600/perlin_color.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://4.bp.blogspot.com/-MovHUFAGbnI/Veb6rsjhkBI/AAAAAAAAIHs/4raZRohDySs/s200/perlin_color.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-__3z1MEB92o/Veb65IEgVZI/AAAAAAAAIH4/1B9npSW9XKo/s1600/Screenshot%2Bfrom%2B2015-09-02%2B15-33-11.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;512&#34; src=&#34;http://3.bp.blogspot.com/-__3z1MEB92o/Veb65IEgVZI/AAAAAAAAIH4/1B9npSW9XKo/s640/Screenshot%2Bfrom%2B2015-09-02%2B15-33-11.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;very procedural and non-optimized Go code for Perlin noise&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Go for Monte-Carlo</title>
-      <link>http://chasethedevil.github.io/post/go-for-monte-carlo/</link>
-      <pubDate>Sat, 22 Aug 2015 16:13:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/go-for-monte-carlo/</guid>
-      <description>&lt;p&gt;I have &lt;a href=&#34;http://chasethedevil.blogspot.fr/2015/04/modern-programming-language-for-monte.html&#34;&gt;looked&lt;/a&gt; a few months ago already at Julia, Dart, Rust and Scala programming languages to see how practical they could be for a simple Monte-Carlo option pricing.&lt;br /&gt;&lt;br /&gt;I forgot &lt;a href=&#34;https://golang.org/&#34;&gt;the Go language&lt;/a&gt;. I had tried it 1 or 2 years ago, and at that time, did not enjoy it too much. Looking at Go 1.5 benchmarks on the&lt;a href=&#34;http://benchmarksgame.alioth.debian.org/&#34;&gt; computer language shootout&lt;/a&gt;, I was surprised that it seemed so close to Java performance now, while having a GC that guarantees pauses of less 10ms and consuming much less memory.&lt;br /&gt;&lt;br /&gt;I am in general a bit skeptical about those benchmarks, some can be rigged. A few years ago, I &lt;a href=&#34;http://chasethedevil.blogspot.fr/2009/01/end-of-rings-around-plain-java-better.html&#34;&gt;tried my hand at the thread ring&lt;/a&gt; test, and found that it actually performed fastest on a single thread while it is supposed to measure the language threading performance. I looked yesterday at one Go source code (I think it was for pidigits) and saw that it just called a C library (gmp) to compute with big integers. It&amp;rsquo;s no surprise then that Go would be faster than Java on this test.&lt;br /&gt;&lt;br /&gt;So what about my small Monte-Carlo test?&lt;br /&gt;Well it turns out that Go is quite fast on it:&lt;br /&gt;&lt;span style=&#34;font-family: &amp;quot;Courier New&amp;quot;,Courier,monospace;&#34;&gt;Multipl. Rust&amp;nbsp;&amp;nbsp;&amp;nbsp; Go&lt;br /&gt;1&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 0.005&amp;nbsp; 0.007&lt;br /&gt;10&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 0.03&amp;nbsp;&amp;nbsp; 0.03&lt;br /&gt;100&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 0.21&amp;nbsp;&amp;nbsp; 0.29&lt;/span&gt;&lt;br /&gt;&lt;span style=&#34;font-family: &amp;quot;Courier New&amp;quot;,Courier,monospace;&#34;&gt;1000&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 2.01&amp;nbsp;&amp;nbsp; 2.88&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;It is faster than Java/Scala and not too far off Rust, except if one uses FastMath in Scala, then the longest test is slighly faster with Java (not the other ones).&lt;br /&gt;&lt;br /&gt;There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.&lt;br /&gt;&lt;br /&gt;Still it was extremely quick to grasp and write code, because it&amp;rsquo;s so simple, especially when compared to Rust. But then, contrary to Rust, there is not as much safety provided by the language. Rust is quite impressive on this side (but unfortunately that implies less readable code). I&amp;rsquo;d say that Go could become a serious alternative to Java.&lt;br /&gt;&lt;br /&gt;I also found an interesting minor performance issue with the default Go &lt;a href=&#34;https://golang.org/src/math/rand/rand.go&#34;&gt;Rand.Float64&lt;/a&gt;, the library convert an Int63 to a double precision number this way:&lt;br /&gt;&lt;br /&gt;&lt;pre&gt;func (r *Rand) Float64() float64 {&lt;/pre&gt;&lt;pre&gt;  f := float64(r.Int63()) / (1 &amp;lt;&amp;lt; 63)&lt;br /&gt;  if f == 1 {&lt;br /&gt;&lt;span class=&#34;ln&#34; id=&#34;L128&#34;&gt;    &lt;/span&gt;f = 0&lt;br /&gt;&lt;span class=&#34;ln&#34; id=&#34;L129&#34;&gt;  }&lt;/span&gt;&lt;br /&gt;&lt;span class=&#34;ln&#34; id=&#34;L130&#34;&gt;  &lt;/span&gt;return f&lt;br /&gt; }&lt;/pre&gt;&lt;br /&gt;I was interested in having a number in (0,1) and not [0,1), so I just used the conversion pattern from MersenneTwister 64 code:&lt;br /&gt;&lt;br /&gt;&lt;pre&gt;f := (float64(r.Int63() &amp;gt;&amp;gt; 11) + 0.5) * (1.0/4503599627370496.0)&lt;/pre&gt;&lt;pre&gt;&amp;nbsp;&lt;/pre&gt;The reasoning behind this later code is that the mantissa is 52 bits, and this is the most accuracy we can have between 0 and 1. There is no need to go further, this also avoids the issue around 1. It&amp;rsquo;s also straightforward that is will preserve the uniform property, while it&amp;rsquo;s not so clear to me that r.Int63()/2^63 is going to preserve uniformity as double accuracy is higher around 0 (as the exponent part can be used there) and lesser around 1: there is going to be much more multiple identical results near 1 than near 0.&lt;br /&gt;&lt;br /&gt;It turns out that the if check adds 5% performance penalty on this test, likely because of processor caching issues. I was surprised by that since there are many other ifs afterwards in the code, for the inverse cumulative function, and for the payoff.&lt;/p&gt;
 </description>
     </item>
     
