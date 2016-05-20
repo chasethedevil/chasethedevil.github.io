@@ -48,7 +48,10 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 
 &lt;p&gt;The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have
 &lt;div&gt;$$C(S_0,K,t_{\alpha_i}^-) = C(S_0, K-\alpha_i,t_{\alpha_i}^+)$$&lt;/div&gt;
+As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
+quite larger than the regular local volatility, even with a somewhat discontinuous yield.&lt;/p&gt;
 
+&lt;p&gt;
 &lt;figure &gt;
     
         &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3.png&#34; /&gt;
@@ -75,8 +78,7 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 &lt;/figure&gt;
 &lt;/p&gt;
 
-&lt;p&gt;As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
-quite larger than the regular local volatility, even with a somewhat discontinuous yield.&lt;/p&gt;
+&lt;p&gt;The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.&lt;/p&gt;
 
 &lt;p&gt;Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
 
@@ -93,8 +95,8 @@ quite larger than the regular local volatility, even with a somewhat discontinuo
 &lt;/figure&gt;
 &lt;/p&gt;
 
-&lt;p&gt;The analytical approximations lead to another different local volatility from both policies, but don&amp;rsquo;t differ much from each other.
-Those differences however don&amp;rsquo;t impact the prices very much as the prices with the various methods are very close, and differ of a magnitude much smaller than the error to the true price.&lt;/p&gt;
+&lt;p&gt;The analytical approximations lead to another different local volatility from both policies, but don&amp;rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
+Those differences  however don&amp;rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.&lt;/p&gt;
 
 &lt;p&gt;The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
 
@@ -124,6 +126,8 @@ The huge spike at 3.5 don&amp;rsquo;t allow us to see much about what&amp;rsquo;
     
 &lt;/figure&gt;
 &lt;/p&gt;
+
+&lt;p&gt;Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.&lt;/p&gt;
 
 &lt;p&gt;I would have expected a much better accuracy from Labordère&amp;rsquo;s approach, it&amp;rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.&lt;/p&gt;
 </description>
