@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/gnome-3-not-so-crap-after-all/">Gnome 3 not so crap after all</a>
+      </h1>
+      <span class="post-date">Nov 30, 2011 &middot; 1 minute read
+      </span>
+      
+      <p>In a previous post, I was complaining how <a href="http://chasethedevil.blogspot.com/2011/08/gnome-3-unity-crap.html">bad Gnome 3</a> was. Since I have installed a real dock: docky, it is now much more usable. I can easily switch / launch applications without an annoying full screen change.<br /><br />In addition I found out that it had a good desktop search (tracker). The ALT+F2 also does some sort of completion, too bad it can not use tracker here as well.<br /><br />So it looks like Gnome 3 + gnome-tweak-tool + docky makes a reasonably good desktop. XFCE does not really fit the bill for me: bad handling of sound, bad default applications, not so good integration with gnome application notifications.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s1600/Screenshot+at+2011-11-30+18%253A20%253A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s320/Screenshot+at+2011-11-30+18%253A20%253A29.png" width="320" /></a></div><br /><br />Now if only I found a way to change this ugly big white scrollbar&hellip;</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/good--popular-algorithms-are-simple/">Good &amp; Popular Algorithms are Simple</a>
       </h1>
       <span class="post-date">Nov 17, 2011 &middot; 3 minute read
@@ -184,18 +196,6 @@
       </span>
       
       <p>I temporarily <a href="http://chasethedevil.blogspot.com/2010/07/bye-bye-firefox.html">abandonned Firefox</a> for Chrome/Chromium. I am now back at using Firefox as Firefox 4 is as fast or faster than Chrome and seems more stable, especially under linux. Also it does not send anything to Google and there is bookmark sync independently of Google.<br /><br />I am impressed that Mozilla managed to improve Firefox that much.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/another-look-at-java-matrix-libraries/">Another Look at Java Matrix Libraries</a>
-      </h1>
-      <span class="post-date">Nov 29, 2010 &middot; 2 minute read
-      </span>
-      
-      <p>A while ago, <a href="http://chasethedevil.blogspot.com/2009/11/pain-of-java-matrix-libraries.html">I was already looking</a> for a good Java Matrix library, complaining that there does not seem any real good one where development is still active: the 2 best ones are in my opinion <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> and <a href="http://dsd.lbl.gov/~hoschek/colt/">Colt</a>.<br /><br />Recently I tried to <a href="http://www.wilmott.com/detail.cfm?articleID=345">price options via RBF</a> (radial basis functions) based on <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1648878">TR-BDF2</a> time stepping.&nbsp;This is a problem where one needs to do a few matrix multiplications and inverses (or better, LU solve) in a loop. The size of the matrix is typically 50x50 to 100x100, and one can loop between 10 and 1000 times.<br /><br />Out of curiosity I decided to give <a href="http://ojalgo.org/">ojalgo</a> and <a href="http://code.google.com/p/matrix-toolkits-java/">MTJ</a> a chance. I had read benchmarks (<a href="http://blog.mikiobraun.de/2009/04/some-benchmark-numbers-for-jblas.html">here about jblas</a>&nbsp;and <a href="http://code.google.com/p/java-matrix-benchmark/wiki/Runtime_2xXeon_2010_08">here the java matrix benchmark</a>) where those libraries performed really well.<br /><br />On my core i5 laptop under the latest 64bit JVM (Windows 7), I found out that for the 100x100 case, <b>Jama was actually 30% faster than MTJ</b>, and ojalgo was more than 50% slower. I also found out that I did not like ojalgo API at all. I was quite disappointed by those results.<br /><br />So I tried the same test on a 6-core Phenom II (ubuntu 64bit), Jama was faster than MTJ by 0-10%. Ojalgo and ParallelColt were slower than Jama by more than 50% and 30%.<br /><br />This does not mean that ojalgo and ParallelColt are so bad, maybe they behave much better than the simple Jama on large matrices. They also have more features, including sparse matrices. But Jama is quite a good choice for a default library, MTJ can also be a good choice, it can be faster and use less memory because most methods take the output matrix/vector as a parameter. Furthermore MTJ can use the native lapack and blas libraries for improved performance. The bigger the matrices, the most difference it will make.<br /><br /><table border=1><tbody><tr><td>Run</td><td>Jama</td><td>MTJ</td><td>MTJ native</td></tr><tr><td>1</td><td>0.160</td><td>0.240</td><td>0.140</td></tr><tr><td>2</td><td>0.086</td><td>0.200</td><td>0.220</td></tr><tr><td>10</td><td>0.083</td><td>0.089</td><td>0.056</td></tr></tbody></table>(On a Phenom II under Ubuntu 10.10 64-bit)</p>
 
       
     </div>

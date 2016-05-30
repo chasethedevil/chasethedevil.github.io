@@ -6,8 +6,145 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 May 2016 17:01:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 29 May 2016 17:01:00 +0200</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Dupire Local Volatility with Cash Dividends Part 2</title>
+      <link>http://chasethedevil.github.io/post/dupire_cash_dividend_part2/</link>
+      <pubDate>Sun, 29 May 2016 17:01:00 +0200</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/dupire_cash_dividend_part2/</guid>
+      <description>&lt;p&gt;I had a look at how to price under Local Volatility with Cash dividends in &lt;a href=&#34;http://chasethedevil.github.io/post/dupire_cash_dividend/&#34;&gt;my previous post&lt;/a&gt;. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).&lt;/p&gt;
+
+&lt;p&gt;I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends &lt;a href=&#34;http://www.lorenzobergomi.com/#!blank/cnec&#34;&gt;in the book of Lorenzo Bergomi&lt;/a&gt;, one can rely on the
+classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:
+&lt;div&gt;$$\sigma^{\star 2}\left(y, T\right) = \frac{ \frac{\partial w}{\partial T}}{1 - \frac{y}{w}\frac{\partial w}{\partial y}   + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}} \text{.}$$&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference is the model volatilities of the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example &lt;a href=&#34;http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283&#34;&gt;the improved Etore-Gobet expansion of this paper&lt;/a&gt;, not with the Black formula directly.&lt;/p&gt;
+
+&lt;p&gt;In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.&lt;/p&gt;
+
+&lt;p&gt;I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3_modelvolraw.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Actually it&amp;rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3_modelvol.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pure process model volatility.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The equivalent pure process Black vols looks like this:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3_blackvol.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pure process Black volatility&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3_localvol.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the spot model with jump at dividend date = 3.5&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;While the one of the pure process is:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_ll3_purelv.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pure Process Local Volatility under the spot model with jump at dividend date = 3.5&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;It falls to zero at the strike corresponding to the dividend amount.&lt;/p&gt;
+
+&lt;p&gt;So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as&lt;/p&gt;
+
+&lt;p&gt;\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
+\(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.&lt;/p&gt;
+
+&lt;p&gt;Not applying any particular policy would mean that the stock price can become negative:
+\(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &amp;lt; \alpha \).&lt;/p&gt;
+
+&lt;p&gt;Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &amp;ldquo;no dividend policy&amp;rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.&lt;/p&gt;
+
+&lt;p&gt;It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. 
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_liquidator_modelvol.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/dupire_labordere_liquidator_localvol.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.&lt;/p&gt;
+
+&lt;p&gt;Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Dupire Local Volatility with Cash Dividends</title>
@@ -130,6 +267,8 @@ The huge spike at 3.5 don&amp;rsquo;t allow us to see much about what&amp;rsquo;
 &lt;p&gt;Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.&lt;/p&gt;
 
 &lt;p&gt;I would have expected a much better accuracy from Labordère&amp;rsquo;s approach, it&amp;rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: A &lt;a href=&#34;http://chasethedevil.github.io/post/dupire_cash_dividend_part2&#34;&gt;follow-up&lt;/a&gt; to this post where I resolve the mysterious remaining error.&lt;/p&gt;
 </description>
     </item>
     
@@ -506,16 +645,6 @@ In addition you might find the following interesting:&lt;/p&gt;
       
       <guid>http://chasethedevil.github.io/post/holidays-read---dfw---everything-and-more/</guid>
       <description>&lt;p&gt;I am ambivalent towards David Foster Wallace. He can write the most creative sentences and make innocuous subjects very interesting. At the same time, i never finished his book &lt;a href=&#34;https://en.wikipedia.org/wiki/Infinite_Jest&#34;&gt;Infinite Jest&lt;/a&gt;, partly because the characters names are too awkward for me so that i never exactly remember who is who, but also because the story itself is a bit too crazy.&lt;br /&gt;I knew however that &lt;a href=&#34;http://www.amazon.com/Everything-More-Compact-History-Infinity/dp/0393339289&#34;&gt;a non fiction book on the subject of infinity&lt;/a&gt; written by him would make for a very interesting read. And I have not been disappointed. It&amp;rsquo;s in between maths and philosophy going back to the Greeks up to Gödel through a lot of Cantor following more or less the historical chronology.&lt;br /&gt;Most of it is easy to read and follow, except the last part around sets and transfinite numbers. This last part is actually quite significant as it tries to explain why we still have no satisfying theory around the problems raised by infinity especially in the context of a Sets theory.&amp;nbsp;I did not expect to learn much around the subject, I was disappointed. The book showed me how naive I was and how tricky the concept of infinity can be.&lt;br /&gt;While I found the different explanations around &lt;a href=&#34;https://en.wikipedia.org/wiki/Zeno%27s_paradoxes&#34;&gt;Zeno&amp;rsquo;s paradox of the arrow&lt;/a&gt; very clever, there is one other view possible: the arrow really does not move at each instant (you could think of those as a snapshot) but an interval of time is just not a simple succession of instants. This is not so far of Aristotle attack, but the key here is around what is an interval really. DFW suggests slightly this interpretation as well p144 but it&amp;rsquo;s not very explicit.&lt;br /&gt;I had not heard about Kronecker&amp;rsquo;s conception that only integers were mathematically real (against decimals, irrationals, infinite sets). I find it very appropriate in the frame of computer science. Everything ends up as finite integers (a binary representation) and we are always confronted to the process of transforming the continuous, that despite all its conceptual issues is often simpler to reason in to solve concrete problems, to the finite discrete.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Crank-Nicolson and Rannacher Issues with Touch options</title>
-      <link>http://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/</link>
-      <pubDate>Wed, 30 Sep 2015 13:34:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/</guid>
-      <description>&lt;p&gt;I just stumbled upon this particularly illustrative case where the Crank-Nicolson finite difference scheme behaves badly, and the Rannacher smoothing (2-steps backward Euler) is less than ideal: &lt;a href=&#34;http://www.investopedia.com/terms/d/doubleonetouch.asp&#34;&gt;double one touch&lt;/a&gt; and &lt;a href=&#34;http://www.investopedia.com/terms/d/doublenotouch.asp&#34;&gt;double no touch&lt;/a&gt; options.&lt;br /&gt;&lt;br /&gt;It is particularly evident when the option is sure to be hit, for example when the barriers are narrow, that is our delta should be around zero as well as our gamma. Let&amp;rsquo;s consider a double one touch option with spot=100, upBarrier=101, downBarrier=99.9, vol=20%, T=1 month and a payout of 50K.&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;326&#34; src=&#34;http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Crank-Nicolson shows big spikes in the delta near the boundary&lt;/td&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;&lt;br /&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;325&#34; src=&#34;http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Rannacher shows spikes in the delta as well&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;Crank-Nicolson spikes are so high that the price is actually a off itself.&lt;br /&gt;&lt;br /&gt;The Rannacher smoothing reduces the spikes by 100x but it&amp;rsquo;s still quite high, and would be higher had we placed the spot closer to the boundary. The gamma is worse. Note that we applied the smoothing only at maturity. In reality as the barrier is continuous, the smoothing should really be applied at each step, but then the scheme would be not so different from a simple Backward Euler.&lt;br /&gt;&lt;br /&gt;In contrast, with a proper second order finite difference scheme, there is no spike.&lt;br /&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;325&#34; src=&#34;http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Delta with the TR-BDF2 finite difference method - the scale goes from -0.00008 to 0.00008.&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;table align=&#34;center&#34; cellpadding=&#34;0&#34; cellspacing=&#34;0&#34; class=&#34;tr-caption-container&#34; style=&#34;margin-left: auto; margin-right: auto; text-align: center;&#34;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;325&#34; src=&#34;http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png&#34; width=&#34;400&#34; /&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&#34;tr-caption&#34; style=&#34;text-align: center;&#34;&gt;Delta with the Lawson-Morris finite difference scheme - the scale goes from -0.00005 to 0.00005&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;Both &lt;a href=&#34;http://www.risk.net/journal-of-computational-finance/technical-paper/2330321/tr-bdf2-for-fast-stable-american-option-pricing&#34;&gt;TR-BDF2&lt;/a&gt; and Lawson-Morris (based on a local Richardson extrapolation of backward Euler) have a very low delta error, similarly, their gamma is very clean. This is reminiscent of the behavior on American options, but the effect is magnified here.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
 </description>
     </item>
     
