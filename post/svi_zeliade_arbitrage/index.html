@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Arbitrage in Zeliade&#39;s SVI example &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="quant">
+  <link rel="author" href="http://plus.google.com/105444622997415581493">
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Arbitrage in Zeliade&#39;s SVI example</h1>
+    <span class="post-date">Jun 14, 2016 &middot; 3 minute read
+    
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
+that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
+they vary wildly between the first and the second expiry.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">T</th>
+<th align="center">a</th>
+<th align="center">b</th>
+<th align="center">rho</th>
+<th align="center">m</th>
+<th align="center">s</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">0.082</td>
+<td align="center">0.027</td>
+<td align="center">0.234</td>
+<td align="center">0.068</td>
+<td align="center">0.100</td>
+<td align="center">0.028</td>
+</tr>
+
+<tr>
+<td align="center">0.16</td>
+<td align="center">0.030</td>
+<td align="center">0.125</td>
+<td align="center">-1.0</td>
+<td align="center">0.074</td>
+<td align="center">0.050</td>
+</tr>
+
+<tr>
+<td align="center">0.26</td>
+<td align="center">0.032</td>
+<td align="center">0.094</td>
+<td align="center">-1.0</td>
+<td align="center">0.093</td>
+<td align="center">0.041</td>
+</tr>
+</tbody>
+</table>
+
+<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
+in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
+
+<figure >
+    
+        <img src="/post/svi_zeliade_arb.png" />
+    
+    
+    <figcaption>
+        <h4>Arbitrage in Zeliade&#39;s example</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Why does this happen?</p>
+
+<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
+SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
+
+<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
+It is interesting to look at what happens to the implied volatility if we decide either to:</p>
+
+<ul>
+<li>set the undefined local volatility to zero</li>
+<li>take the absolute value of the local variance</li>
+<li>search for the closest defined local volatility on the log-moneyness axis</li>
+<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
+</ul>
+
+
+<figure >
+    
+        <img src="/post/svi_zeliade_arb_zero.png" />
+    
+    
+    <figcaption>
+        <h4>Total variance after flooring the local variance at zero.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
+that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
+
+<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
+is not going to improve anything.</p>
+
+<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
+
+<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
+Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
+More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
+So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
+
+  </div>
+  
+</div>
+
+
+
+
+<div class="content container" style="padding-top: 0rem;">
+<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
+<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

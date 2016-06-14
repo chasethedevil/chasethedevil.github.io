@@ -6,8 +6,120 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 29 May 2016 17:01:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jun 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Arbitrage in Zeliade&#39;s SVI example</title>
+      <link>http://chasethedevil.github.io/post/svi_zeliade_arbitrage/</link>
+      <pubDate>Tue, 14 Jun 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/svi_zeliade_arbitrage/</guid>
+      <description>&lt;p&gt;Zeliade wrote an &lt;a href=&#34;http://www.zeliade.com/whitepapers/zwp-0005.pdf&#34;&gt;excellent paper&lt;/a&gt; about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
+that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
+they vary wildly between the first and the second expiry.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;T&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;a&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;b&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;rho&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;m&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;s&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;0.082&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.027&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.234&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.068&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.100&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.028&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;0.16&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.030&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.125&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;-1.0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.074&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.050&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;0.26&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.032&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.094&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;-1.0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.093&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.041&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
+in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_zeliade_arb.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Arbitrage in Zeliade&amp;#39;s example&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Why does this happen?&lt;/p&gt;
+
+&lt;p&gt;This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
+SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.&lt;/p&gt;
+
+&lt;p&gt;A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
+It is interesting to look at what happens to the implied volatility if we decide either to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set the undefined local volatility to zero&lt;/li&gt;
+&lt;li&gt;take the absolute value of the local variance&lt;/li&gt;
+&lt;li&gt;search for the closest defined local volatility on the log-moneyness axis&lt;/li&gt;
+&lt;li&gt;search for the closest positive local variance on the expiry axis and interpolate it linearly.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_zeliade_arb_zero.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Total variance after flooring the local variance at zero.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
+that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.&lt;/p&gt;
+
+&lt;p&gt;We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
+is not going to improve anything.&lt;/p&gt;
+
+&lt;p&gt;Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.&lt;/p&gt;
+
+&lt;p&gt;Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
+Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
+More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
+So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Dupire Local Volatility with Cash Dividends Part 2</title>
