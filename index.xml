@@ -6,8 +6,68 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Jun 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jun 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Dearbitraging a weak smile on SVI with Damghani&#39;s method</title>
+      <link>http://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/</link>
+      <pubDate>Wed, 15 Jun 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/</guid>
+      <description>&lt;p&gt;Yesterday, I wrote about some &lt;a href=&#34;http://chasethedevil.github.io/post/svi_zeliade_arbitrage/&#34;&gt;calendar spread arbitrages with SVI&lt;/a&gt;. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
+&lt;div&gt;$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$&lt;/div&gt;
+The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
+Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on &lt;a href=&#34;http://ssrn.com/abstract=2033323&#34;&gt;arbitrage free SVI volatility surfaces&lt;/a&gt; and also in Damghani&amp;rsquo;s paper &lt;a href=&#34;http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532&#34;&gt;dearbitraging a weak smile&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
+The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):
+&lt;div&gt;$$g(y)=1 - \frac{y}{w}\frac{\partial w}{\partial y}    + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$&lt;/div&gt;
+where \(w\) is the total implied variance in log-moneyness \(y\) coming from the SVI formula.&lt;/p&gt;
+
+&lt;p&gt;It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&amp;rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
+While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&amp;rsquo;s one.&lt;/p&gt;
+
+&lt;p&gt;I was curious to see what Damghani&amp;rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
+on the first derivative:
+&lt;div&gt;$$|\frac{\partial w}{\partial y}|&lt;4 e $$&lt;/div&gt;
+and iteratively search for \(e \in [0,1]\) so that no arbitrage remains in \(w\). The standard weak no-arbitrage constraint stands for \(e=1\). Dhamgani thus proposes to enforce a stronger &amp;ldquo;weak&amp;rdquo; constraint during the minimization, in order to de-arbitrage.
+Note, the equations in the paper have a typo (everywhere), the \(b\) parameter should be a factor in front of the parenthesis.&lt;/p&gt;
+
+&lt;p&gt;Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
+There would be no loop over the minimization needed. Does this produce any good result?
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_variance.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;implied variance with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The graph is clear, the technique produces crap. This is the local variance denominator:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_g.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;local variance denominator g with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Maybe I misunderstood something big in this paper, but I have the impression that it&amp;rsquo;s just a bad paper, even though it was published in Wilmott. After all, this Damghani paper was a waste of time.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Arbitrage in Zeliade&#39;s SVI example</title>
@@ -741,16 +801,6 @@ In addition you might find the following interesting:&lt;/p&gt;
       
       <guid>http://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/</guid>
       <description>&lt;p&gt;On the &lt;a href=&#34;http://www.wilmott.com/messageview.cfm?catid=4&amp;amp;threadid=78001&amp;amp;FTVAR_MSGDBTABLE=&amp;amp;STARTPAGE=4&#34;&gt;Wilmott forum&lt;/a&gt;, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when&lt;br /&gt;&lt;div&gt;$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$&lt;/div&gt;&lt;div&gt;is close to 1.&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;div&gt;In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;400&#34; src=&#34;http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png&#34; width=&#34;385&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.&lt;br /&gt;&lt;br /&gt;The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.&lt;/div&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Broken Internet?</title>
-      <link>http://chasethedevil.github.io/post/broken-internet/</link>
-      <pubDate>Mon, 09 Nov 2015 13:40:00 +0000</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/broken-internet/</guid>
-      <description>&lt;p&gt;There is something funny going on with upcoming generic top level domains (gTLDs), they seem to be looked up in a strange manner (at least on latest Linux). For example:&lt;br /&gt;&lt;br /&gt;&lt;span style=&#34;font-family: &amp;quot;Courier New&amp;quot;,Courier,monospace;&#34;&gt;ping chrome&amp;nbsp;&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;or&lt;br /&gt;&lt;br /&gt;&lt;span style=&#34;font-family: &amp;quot;Courier New&amp;quot;,Courier,monospace;&#34;&gt;ping nexus&amp;nbsp;&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;returns 127.0.53.53.&lt;br /&gt;&lt;br /&gt;While existing &lt;a href=&#34;https://www.name.com/new-gtld&#34;&gt;official gTLD&lt;/a&gt;s don&amp;rsquo;t (&lt;span style=&#34;font-family: &amp;quot;Courier New&amp;quot;,Courier,monospace;&#34;&gt;ping dental&lt;/span&gt; returns &amp;ldquo;unknown host&amp;rdquo; as expected). I first thought it was a network misconfiguration, but as &lt;a href=&#34;https://groups.google.com/forum/#!msg/public-dns-discuss/bzhTQnFqE6I/E9F46xhka98J&#34;&gt;I am not the only one to notice this&lt;/a&gt;, it&amp;rsquo;s likely a genuine internet issue.&lt;br /&gt;&lt;br /&gt;Strange times.&lt;/p&gt;
 </description>
     </item>
     

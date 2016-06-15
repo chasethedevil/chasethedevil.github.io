@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Quant &middot; Chase the Devil</title>
+  <title>Dearbitraging a weak smile on SVI with Damghani&#39;s method &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -26,10 +26,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   <link rel="author" href="http://plus.google.com/105444622997415581493">
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -77,73 +77,72 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="http://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
+  <div class="post">
+    <h1>Dearbitraging a weak smile on SVI with Damghani&#39;s method</h1>
+    <span class="post-date">Jun 15, 2016 &middot; 3 minute read
     
-    &middot;
+    <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Jun 15, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
+    <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
+<div>$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$</div>
+The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
+Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
+
+<p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
+The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):
+<div>$$g(y)=1 - \frac{y}{w}\frac{\partial w}{\partial y}    + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$</div>
+where \(w\) is the total implied variance in log-moneyness \(y\) coming from the SVI formula.</p>
+
+<p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
+While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
+
+<p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
+on the first derivative:
+<div>$$|\frac{\partial w}{\partial y}|<4 e $$</div>
+and iteratively search for \(e \in [0,1]\) so that no arbitrage remains in \(w\). The standard weak no-arbitrage constraint stands for \(e=1\). Dhamgani thus proposes to enforce a stronger &ldquo;weak&rdquo; constraint during the minimization, in order to de-arbitrage.
+Note, the equations in the paper have a typo (everywhere), the \(b\) parameter should be a factor in front of the parenthesis.</p>
+
+<p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
+There would be no loop over the minimization needed. Does this produce any good result?
+
+<figure >
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Jun 14, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
+        <img src="/post/svi_dearbitraging_variance.png" />
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 29, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+    <figcaption>
+        <h4>implied variance with Axel Vogt SVI parameters</h4>
+        
+    </figcaption>
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 12, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
+</figure>
+</p>
+
+<p>The graph is clear, the technique produces crap. This is the local variance denominator:
+
+<figure >
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 12, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
+        <img src="/post/svi_dearbitraging_g.png" />
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Apr 21, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
+    <figcaption>
+        <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        
+    </figcaption>
     
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 16, 2016</time></li>
+</figure>
+</p>
+
+<p>Maybe I misunderstood something big in this paper, but I have the impression that it&rsquo;s just a bad paper, even though it was published in Wilmott. After all, this Damghani paper was a waste of time.</p>
+
+  </div>
   
-  </ul>
 </div>
+
+
+
+
 <div class="content container" style="padding-top: 0rem;">
 <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
 <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
