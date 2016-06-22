@@ -6,8 +6,92 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Jun 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jun 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Shooting arbitrage</title>
+      <link>http://chasethedevil.github.io/post/shooting_arbitrage/</link>
+      <pubDate>Wed, 22 Jun 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/shooting_arbitrage/</guid>
+      <description>&lt;p&gt;In my &lt;a href=&#34;(/post/damghani_dearbitraging_a_weak_smile_on_svi/&#34;&gt;previous post&lt;/a&gt;, I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
+The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
+and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_variance_spline.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;implied variance with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_g_spline.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;local variance denominator g with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.&lt;/p&gt;
+
+&lt;p&gt;I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.
+&lt;div&gt;$$10^{-4}=1 - \frac{y}{w}\frac{\partial w}{\partial y} + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$&lt;/div&gt;
+The equation can be easily solved with the &lt;a href=&#34;https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods&#34;&gt;Runge Kutta method&lt;/a&gt; by
+&lt;a href=&#34;http://www.engr.colostate.edu/~thompson/hPage/CourseMat/Tutorials/CompMethods/Rungekutta.pdf&#34;&gt;reducing it&lt;/a&gt; to a system of first order ordinary differential equations.
+As the following figure will show, as the initial conditions are the variance and the slope at the glueing point, the volatility is not continuous anymore at the next point where the denominator goes back to 1E-4. So this is only good
+if we replace the whole right wing: not so nice.&lt;/p&gt;
+
+&lt;p&gt;A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
+this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_variance_rk.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;implied variance with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
+is even smaller.&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_g_rk.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;local variance denominator g with Axel Vogt SVI parameters&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Dearbitraging a weak smile on SVI with Damghani&#39;s method</title>
@@ -65,7 +149,7 @@ There would be no loop over the minimization needed. Does this produce any good 
 &lt;/figure&gt;
 &lt;/p&gt;
 
-&lt;p&gt;Maybe I misunderstood something big in this paper, but I have the impression that it&amp;rsquo;s just a bad paper, even though it was published in Wilmott. After all, this Damghani paper was a waste of time.&lt;/p&gt;
+&lt;p&gt;Maybe I misunderstood something big in this paper, but so far it was just a waste of time.&lt;/p&gt;
 </description>
     </item>
     

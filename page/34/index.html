@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/google-sidebar-hotkey-activation/">Google Sidebar Hotkey Activation</a>
+      </h1>
+      <span class="post-date">Aug 25, 2005 &middot; 2 minute read
+      </span>
+      
+      <p>I like the new <a href="http://desktop.google.com/en/">Google Desktop</a> with the sidebar. It shares similarities with <a href="http://www.konfabulator.com/">Konfabulator</a>, recently bought by yahoo. They both allow easy access to some custom little widgets that I would call &ldquo;active&rdquo;. They are active because they are refreshed periodically with new information (processor usage, news, scratch pad, emails, etc). But while Konfabulator choose to emphasize on visual effects, Google prefers a more standard information presentation. This shows as well in their choice of technologies:<br /><ul>   <li>Google Sidebar plug-ins are just Windows appz that can take advantage of Google Interfaces. That makes them quite powerful in theory, but programming them is less accessible.<br />  </li>   <li>Konfabulator plug-ins are Javascript+XML, the Javascript is not just regular client-side javascript, it can use Konfabulator API (containing many effect and rudimentary network access), and COM objects . That makes them very focused on presentation, and the Internet.</li> </ul> In the long run, Google choice makes sense, the forthcoming <a href="http://fortes.com/work">Avalon</a> will make visual effects very accessible to windows developers.<br /><br />Now back to the subject, I missed the &lsquo;activation on hotkey&rsquo; feature from Konfabulator for the Google Sidebar. Fortunately, I a have found a powerful little open-source program, <a href="http://www.autohotkey.com/">Autohotkey</a>, that allowed me to do that very quickly. Here is the script I use (it&rsquo;s a hack since it relies on toolbar size (but not position), but I like the default position and it works (only using floating deskbar, i let you figure out for the non floating version)):<br /><span style="font-family:Courier New, Courier, monospace;">F12::<br />MouseGetPos, X, Y<br />if WinExist(&ldquo;ahk_class _GD_Sidebar&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left, 160, 16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}<br />else if WinExist(&ldquo;ahk_class ATL:0044A4C8&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left,  158,  16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}</span><br /><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/google" rel="tag">google</a>, <a href="http://del.icio.us/tag/desktop" rel="tag">desktop</a>, <a href="http://del.icio.us/tag/sidebar" rel="tag">sidebar</a>, <a href="http://del.icio.us/tag/hotkey" rel="tag">hotkey</a>, <a href="http://del.icio.us/tag/autohotkey" rel="tag">autohotkey</a>, <a href="http://del.icio.us/tag/hack" rel="tag">hack</a></span></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/i-need-another-db-framework/">I Need Another DB Framework!</a>
       </h1>
       <span class="post-date">Aug 23, 2005 &middot; 2 minute read
@@ -184,18 +196,6 @@
       </span>
       
       <p>Simple benchmark but with interesting comments <a  href="http://acker3.ath.cx/wordpress/archives/7">here</a>:<br> <br> Some of the conclusions are:<br> <ul>   <li>Java interpreter is very good</li>   <li>Java JIT is as fast as C++</li>   <li>Ruby, JavaScript, Python are of similar order of magnitude speed, Ruby the slowest.<br>   </li> </ul> It would have been interesting to benchmark interpreted languages for the JVM.<br> <br> Now for most projects, architecture, not language is key in achieving good performance.<br> <br> Tags: <a rel="tag" href="http://technorati.com/tag/java">java</a> <a  rel="tag" href="http://technorati.com/tag/benchmark">benchmark</a> <a  rel="tag" href="http://technorati.com/tag/programming">programming</a><br></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/fowler-on-your-future-editing-the-abstract-representation-of-a-program/">Fowler On Your Future: editing the abstract representation of a program</a>
-      </h1>
-      <span class="post-date">Jul 19, 2005 &middot; 2 minute read
-      </span>
-      
-      <p>This <a href="http://martinfowler.com/articles/languageWorkbench.html">Fowler article</a> on &ldquo;language workbench&rdquo; reminds me of <a  href="http://www.artima.com/intv/jackpot.html">Gosling Jackpot</a> ideas: it is about a different interaction with your program where the source code does not matter so much, but its structure. It must be fascinating to work on this kind of project.<br> <br> Maybe MDA sounds similar to you, after all, actual language workbench systems are generating source code. But the fundamental difference is that a workbench generated program is much richer and can capture everything you want to do (MDA is too based on UML to be that powerful), also, the source could disappear and be replaced by byte codes only.<br> <br> Now this all seems very nice, but unfortunately, there are always problems, and Fowler does not miss them: vendor lock-in (not that big of a deal if source is generated), integration with dev tools (especially version control), maturity. It looks like an open source language workbench would help here.<br> <br> It is interesting to see that Intellij (yes, the company behind IDEA) is already well on its way. You can check it out in <a  href="http://martinfowler.com/articles/mpsAgree.html">Fowler examples</a>. His examples are a bit too simple and not very far off rules in rules engines, but the language definition tool does look very neat.<br> <br> As <a href="http://lispm.dyndns.org/news?ID=NEWS-2005-07-08-1">Rainer Joswig</a> shows in his video, LISP seems like a particularly good language to do this. This is hardly surprising since LISP is very near the abstract tree structure and therefore already very used in the AI circles.<br> <br> Tags: <a href="http://technorati.com/tag/java" rel="tag">java</a> <a href="http://technorati.com/tag/programming" rel="tag">programming</a></p>
 
       
     </div>
