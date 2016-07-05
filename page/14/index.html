@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/non-central-chi-squared-distribution-in-java-or-scala/">Non Central Chi Squared Distribution in Java or Scala</a>
+      </h1>
+      <span class="post-date">Jan 3, 2013 &middot; 2 minute read
+      </span>
+      
+      <p>I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<br /><br />OpenGamma has a not too bad <a href="http://docs-static.opengamma.com/1.2.0/java/javadocs/com/opengamma/analytics/math/statistics/distribution/NonCentralChiSquaredDistribution.html">implementation</a>. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <a href="http://www.boost.org/doc/libs/1_36_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">implementation in the Boost library</a>. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<br /><br />The Boost implementation seems much more robust in general thanks to:<br /><ul><li>The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding&rsquo;s method.</li><li>Reverts to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.ucs.louisiana.edu%2F~kxk4695%2FCSDA-03.pdf&amp;ei=LKzlUKWvL_K00QX_t4CYBA&amp;usg=AFQjCNFgkeariqMPXVH4LLrO5RRi3nIc0Q">Benton and Krishnamoorthy</a> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;ved=0CEIQFjAC&amp;url=http%3A%2F%2Fdspace.uevora.pt%2Frdpc%2Fbitstream%2F10174%2F4635%2F1%2FSpeedAccuracyCEV_FFM%255B1%255D.pdf&amp;ei=Ea3lULLsBaPL0QXKuoHYAw&amp;usg=AFQjCNGkqkA5e_-0n_DATE9BTQVoL9NTkg&amp;cad=rja">not very precise in general</a>.</li></ul>It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<br /><br />If only it was simple to commit to open-source projects while working for a software company&hellip;</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/">Finite Difference Approximation of Derivatives</a>
       </h1>
       <span class="post-date">Dec 21, 2012 &middot; 2 minute read
@@ -193,18 +205,6 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
       </span>
       
       <p>How many reports have you had to fill up with a number of stars to choose? How much useless time is spent on figuring the this number just because it is always very ambiguous?<br /><br />Some blogger wrote an interesting entry on <a href="http://davidcelis.com/blog/2012/02/01/why-i-hate-five-star-ratings/">Why I Hate Five Stars Reviews</a>. Basically he advocates binary voting instead via like/dislike. Maybe a ternary system via like/dislike/don&rsquo;t care would be ok too.<br /><br />One coworker used to advocate the same for a similar reason: people reading those reports only pay attention to the extremes: the 5 stars or the 0 stars. So if you want to have a voice, you need to express it via 5 or 0, nothing in between.<br /><br /><br /></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/moving-the-needle/">Moving The Needle</a>
-      </h1>
-      <span class="post-date">Aug 21, 2012 &middot; 2 minute read
-      </span>
-      
-      <p><span class="yj-message">These days the expression &ldquo;move the needle&rdquo; is popular where I work. I did not know it was an expression of Steve Jobs.</span><br /><span class="yj-message"><br /> “The company starts valuing the great salesmen, because they’re the  ones who can move the needle on revenues, not the product engineers and  designers. So the salespeople end up running the company.… [Then] the  product guys don’t matter so much, and a lot of them just turn off. It  happened at Apple when [John] Sculley came in, which was my fault, and  it happened when Ballmer took over at Microsoft. Apple was lucky and it  rebounded, but I don’t think anything will change at Microsoft as long  as Ballmer is running it.”</span><br /><span class="yj-message"><br /> This is from the biography, just saw that in an interesting article about Microsoft problems:&nbsp;</span><br /><span class="yj-message"><a href="http://www.vanityfair.com/business/2012/08/microsoft-lost-mojo-steve-ballmer?mbid=social_retweet"><a href="http://www.vanityfair.com/business/2012/08/microsoft-lost-mojo-steve-ballmer?mbid=social_retweet">http://www.vanityfair.com/business/2012/08/microsoft-lost-mojo-steve-ballmer?mbid=social_retweet</a> </a></span><br /><span class="yj-message"><br /></span><span class="yj-message">I would not take those words literally: I have seen a company with the inverse problem: developping technical stuff for the sake of it, without a connection to what the market (or the users) are really after.&nbsp;</span><br /><br /><span class="yj-message">In the case of Apple, the engineers and designers actually know quite well what the market is after, maybe more so than the salespeople. But it is unfortunately not the case in every company. Still the case of people turning off because it is too hard to convince the hierarchy is probably quite common.</span></p>
 
       
     </div>

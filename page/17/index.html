@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/simd-and-mersenne-twister/">SIMD and Mersenne-Twister</a>
+      </h1>
+      <span class="post-date">Feb 5, 2011 &middot; 1 minute read
+      </span>
+      
+      <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <a href="http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/SFMT/">SFMT</a>. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.<br /><br />I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.<br /><br />This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/xorwow-lecuyer-testu01-results/">XORWOW L&#39;ecuyer TestU01 Results</a>
       </h1>
       <span class="post-date">Jan 12, 2011 &middot; 2 minute read
@@ -184,18 +196,6 @@
       </span>
       
       <p>Yes, I wrote an applet. I know it is very 1990s but, amazingly, it still does the job quite well. Ok, next time I should really use Flash to do this.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s1600/dla.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s320/dla.png" /></a></div><br />The Applet simulates <a href="http://en.wikipedia.org/wiki/Diffusion-limited_aggregation">Diffusion Limited Aggregation</a> as described in Chaos And Fractals from Peitgen, Juergens, and Saupe. It represents ions randomly wandering around (in a Brownian motion) until they are caught by an attractive force in electrochemical deposition experiment. This kind of phenomenon occurs at all scales, for example it happens in the distribution of galaxies. You can play around with the applet at <a href="http://31416.appspot.com/dla.vm">http://31416.appspot.com/dla.vm</a></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
-      </h1>
-      <span class="post-date">Dec 18, 2009 &middot; 1 minute read
-      </span>
-      
-      <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts. <br /><br />I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
 
       
     </div>

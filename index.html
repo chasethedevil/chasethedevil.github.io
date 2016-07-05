@@ -82,7 +82,66 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage</a>
+        <a href="http://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
+      </h1>
+      <span class="post-date">Jul 5, 2016 &middot; 2 minute read
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In my <a href="(/post/shooting_arbitrage/">previous post</a>, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+ where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+ Plugging this into the local variance formula leads to
+<div>$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
+    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$</div>
+for \(t\leq T\). In particular, for \(t=0\), we have
+<div>$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
+{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$</div>
+But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
+
+
+<figure >
+    
+        <img src="/post/svi_dearbitraging_lv_rk.png" />
+    
+    
+    <figcaption>
+        <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+
+<figure >
+    
+        <img src="/post/svi_dearbitraging_vol_rk_cap.png" />
+    
+    
+    <figcaption>
+        <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage - part I</a>
       </h1>
       <span class="post-date">Jun 22, 2016 &middot; 2 minute read
       
@@ -831,50 +890,6 @@ I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 spline
 
 
 <p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
-      </h1>
-      <span class="post-date">Feb 16, 2016 &middot; 2 minute read
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>I recently had some fun trying to work directly with the option chain from the <a href="http://www.nasdaq.com/symbol/aapl/option-chain">Nasdaq website</a>.
-The data there is quite noisy, but a simple parabola can still give an amazing fit. I will consider the options of maturity two years as illustration.
-I also relied on a simple implied volatility algorithm that can be summarized in the following steps:</p>
-
-<ul>
-<li>Compute a rough guess for the forward price by using interest, borrow curves and by extrapolating the dividends.</li>
-<li>Imply the forward from the European Put-Call parity relationship on the mid prices of the two strikes closes to the rough forward guess. A simple linear interpolation between the two strikes can be used to compute the forward.</li>
-<li>Compute the Black implied volatilities as if the option were European using P. Jaeckel algorithm.</li>
-<li>Calibrate the proportional dividend amount or the growth rate by minimizing, for example with a Levenberg-Marquardt minimizer, the difference between model and mid-option prices corresponding to the three strikes closest to the forward. The parameters in this case are effectively the dividend amount and the volatilities for Put and Call options (the same volatility is used for both options). The initial guess stems directly from the two previous steps. American option prices are computed by the finite difference method.</li>
-<li>Solve numerically the volatilities one by one with the TOMS748 algorithm so that the model prices match the market mid out-of-the-money option prices.</li>
-</ul>
-
-<p>Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:</p>
-
-
-<figure >
-    
-        <img src="/post/mystic_parabola.png" />
-    
-    
-    <figcaption>
-        <h4>least squares parabola on 2y AAPL options.</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>Isn&rsquo;t the fit just amazing?
-Even if I found it surprising, it&rsquo;s probably not so surprising. The curve has to be smooth, somewhat monotone, and will be therefore like a parabola near the money. While there is no guarantee it will fit that well far away, it&rsquo;s actually a matter of scale. Short maturities will lead to not so great fit in the wings, while long maturities will correspond to a narrower range of scaled strikes and match better a parabola.</p>
 
       
     </div>

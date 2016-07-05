@@ -6,11 +6,65 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Jun 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 05 Jul 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Shooting arbitrage</title>
+      <title>Shooting arbitrage - part II</title>
+      <link>http://chasethedevil.github.io/post/shooting_arbitrage2/</link>
+      <pubDate>Tue, 05 Jul 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/shooting_arbitrage2/</guid>
+      <description>&lt;p&gt;In my &lt;a href=&#34;(/post/shooting_arbitrage/&#34;&gt;previous post&lt;/a&gt;, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&amp;rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+ where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+ Plugging this into the local variance formula leads to
+&lt;div&gt;$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
+    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$&lt;/div&gt;
+for \(t\leq T\). In particular, for \(t=0\), we have
+&lt;div&gt;$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
+{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$&lt;/div&gt;
+But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_lv_rk.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;jumping local volatility on Axel Vogt example fixed by shooting&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_vol_rk_cap.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;implied volatility on Axel Vogt example fixed by shooting or by capping&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Shooting arbitrage - part I</title>
       <link>http://chasethedevil.github.io/post/shooting_arbitrage/</link>
       <pubDate>Wed, 22 Jun 2016 09:55:32 +0100</pubDate>
       

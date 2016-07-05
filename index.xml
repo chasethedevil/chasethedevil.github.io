@@ -6,11 +6,65 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Jun 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 05 Jul 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Shooting arbitrage</title>
+      <title>Shooting arbitrage - part II</title>
+      <link>http://chasethedevil.github.io/post/shooting_arbitrage2/</link>
+      <pubDate>Tue, 05 Jul 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/shooting_arbitrage2/</guid>
+      <description>&lt;p&gt;In my &lt;a href=&#34;(/post/shooting_arbitrage/&#34;&gt;previous post&lt;/a&gt;, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&amp;rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+ where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+ Plugging this into the local variance formula leads to
+&lt;div&gt;$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
+    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$&lt;/div&gt;
+for \(t\leq T\). In particular, for \(t=0\), we have
+&lt;div&gt;$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
+{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$&lt;/div&gt;
+But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_lv_rk.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;jumping local volatility on Axel Vogt example fixed by shooting&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/svi_dearbitraging_vol_rk_cap.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;implied volatility on Axel Vogt example fixed by shooting or by capping&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Shooting arbitrage - part I</title>
       <link>http://chasethedevil.github.io/post/shooting_arbitrage/</link>
       <pubDate>Wed, 22 Jun 2016 09:55:32 +0100</pubDate>
       
@@ -858,24 +912,6 @@ Another work-around would be to model this via proportional dividends instead of
 &lt;p&gt;I was always attracted by the static web sites concept, because there is actually very little things that ought to be truely dynamic from a individual point of view. Dynamic hosting also tends to be problematic in the long-run, for example I never found the time to upgrade my chord search engine to the newer Google appengine and now it&amp;rsquo;s just off. I used to freeze my personal website (created with a dynamic templating tool Velocity, django, etc.) with a python script. So a static blog was the next logical step, and these days, it&amp;rsquo;s quite popular. Static blogs put the author fully in control of the content and its presentation. &lt;a href=&#34;http://jekyllrb.com&#34;&gt;Jekyll&lt;/a&gt; started the trend along with github allowing good old personal websites. It offers a modern looking blog, with very little configuration steps. I tried Hugo instead because it&amp;rsquo;s written in &lt;a href=&#34;http://golang.com&#34;&gt;the Go language&lt;/a&gt;. It&amp;rsquo;s much faster, but I don&amp;rsquo;t really care about that for something of the size of my blog. I was curious however how good was the Go language on real world projects, and I knew I could always customize it if I ever needed to. Interestingly, I did stumble on a few panics (core dump equivalent where the program just crashes, in this case the hugo local server), something that does not happen with Java based tools or even with Ruby or Python based tools. Even though I like the Go language more and more (I am doing some pet project with it - I believe in the focus on fast compilation and simple language), I found this a bit alarming. This is clearly a result of the errors versus exceptions choice, as it&amp;rsquo;s up to the programmer to handle the errors properly and not panic unnecessarily (I even wonder if it makes any sense to panic for a server).&lt;/p&gt;
 
 &lt;p&gt;Anyway I think it looks better now, maybe a bit too minimalist. I&amp;rsquo;ll add details when I have more time.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>http://chasethedevil.github.io/about/</link>
-      <pubDate>Thu, 17 Dec 2015 10:05:07 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/about/</guid>
-      <description>&lt;p&gt;I just moved my blog to a static website, created with &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;, I explain the reasons why &lt;a href=&#34;http://chasethedevil.github.io/post/moved-to-hugo/&#34;&gt;here&lt;/a&gt;.
-You can find more about me on my &lt;a href=&#34;https://fr.linkedin.com/in/fabien-le-floc-h-8aa306&#34;&gt;linkedin profile&lt;/a&gt;.
-In addition you might find the following interesting:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784&#34;&gt;List of quantitative finance papers&lt;/a&gt; I have freely available on SSRN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://chasethedevil.github.io/lefloch_trbdf2_draft.pdf&#34;&gt;TR-BDF2 for Stable American Option Pricing&lt;/a&gt;. This is the first draft, not the final version that was published in the Journal of Computational Finance.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://chasethedevil.github.io/lefloch_sabr_slides.pdf&#34;&gt;Presentation on finite difference techniques for arbitrage-free SABR&lt;/a&gt; I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     

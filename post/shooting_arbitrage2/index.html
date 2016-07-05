@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Shooting arbitrage - part I &middot; Chase the Devil</title>
+  <title>Shooting arbitrage - part II &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -78,87 +78,57 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Shooting arbitrage - part I</h1>
-    <span class="post-date">Jun 22, 2016 &middot; 2 minute read
+    <h1>Shooting arbitrage - part II</h1>
+    <span class="post-date">Jul 5, 2016 &middot; 2 minute read
     
     <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    <p>In my <a href="(/post/damghani_dearbitraging_a_weak_smile_on_svi/">previous post</a>, I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
-The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
-and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
+    <p>In my <a href="(/post/shooting_arbitrage/">previous post</a>, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+ where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+ Plugging this into the local variance formula leads to
+<div>$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
+    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$</div>
+for \(t\leq T\). In particular, for \(t=0\), we have
+<div>$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
+{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$</div>
+But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
 
 
 <figure >
     
-        <img src="/post/svi_dearbitraging_variance_spline.png" />
+        <img src="/post/svi_dearbitraging_lv_rk.png" />
     
     
     <figcaption>
-        <h4>implied variance with Axel Vogt SVI parameters</h4>
+        <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
         
     </figcaption>
     
 </figure>
 
 
-<p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
+<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
 
 <figure >
     
-        <img src="/post/svi_dearbitraging_g_spline.png" />
+        <img src="/post/svi_dearbitraging_vol_rk_cap.png" />
     
     
     <figcaption>
-        <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
-
-<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.
-<div>$$10^{-4}=1 - \frac{y}{w}\frac{\partial w}{\partial y} + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$</div>
-The equation can be easily solved with the <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge Kutta method</a> by
-<a href="http://www.engr.colostate.edu/~thompson/hPage/CourseMat/Tutorials/CompMethods/Rungekutta.pdf">reducing it</a> to a system of first order ordinary differential equations.
-As the following figure will show, as the initial conditions are the variance and the slope at the glueing point, the volatility is not continuous anymore at the next point where the denominator goes back to 1E-4. So this is only good
-if we replace the whole right wing: not so nice.</p>
-
-<p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
-this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
-
-<p>
-<figure >
-    
-        <img src="/post/svi_dearbitraging_variance_rk.png" />
-    
-    
-    <figcaption>
-        <h4>implied variance with Axel Vogt SVI parameters</h4>
+        <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
         
     </figcaption>
     
 </figure>
 </p>
 
-<p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
-is even smaller.</p>
-
-<p>
-<figure >
-    
-        <img src="/post/svi_dearbitraging_g_rk.png" />
-    
-    
-    <figcaption>
-        <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
+<p>The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
 
   </div>
   
