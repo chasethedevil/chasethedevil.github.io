@@ -6,8 +6,37 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Jul 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 26 Jul 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Number of regressors in a BSDE</title>
+      <link>http://chasethedevil.github.io/post/number_of_regressors_in_bdse/</link>
+      <pubDate>Tue, 26 Jul 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/number_of_regressors_in_bdse/</guid>
+      <description>&lt;p&gt;Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.&lt;/p&gt;
+
+&lt;p&gt;It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables.
+Solving a BSDE on 10 variables for EDF was given as an illustration at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^{10}\) regression factors. The answer of the speaker was more or less that it was what they do, with no particular trick but with a large computing power, as if \(10^{10}\) was not so big.&lt;/p&gt;
+
+&lt;p&gt;At this point I was really wondering why \(10^{10}\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&amp;rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).&lt;/p&gt;
+
+&lt;p&gt;We can count then how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
+This number is simply \( C^{N+D-1}_{D-1} \) where \(C_k^n \) denotes the &lt;a href=&#34;https://en.wikipedia.org/wiki/Binomial_coefficient&#34;&gt;binomial coefficient&lt;/a&gt;. Thus the total number of \(N\) variables is
+&lt;div&gt;$$ 1+\sum_{i=1}^N C^{N+i-1}_{i-1} $$&lt;/div&gt;
+where 1 stands for the constant coefficient (power of zero).&lt;/p&gt;
+
+&lt;p&gt;For \(N=10\), the total number of factors is 184756.
+Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Shooting arbitrage - part II</title>
@@ -898,20 +927,6 @@ In the case of the Black-Scholes drift, the drift rate is defined so that the fo
 In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:
 &lt;div&gt;$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$&lt;/div&gt;
 Another work-around would be to model this via proportional dividends instead of a &amp;ldquo;continuous&amp;rdquo; yield curve.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Moved to hugo</title>
-      <link>http://chasethedevil.github.io/post/moved-to-hugo/</link>
-      <pubDate>Sun, 20 Dec 2015 21:00:57 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/moved-to-hugo/</guid>
-      <description>&lt;p&gt;I moved my blog from blogger to &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;. Blogger really did not evolve since Google take-over in 2003. Wordpress is today much nicer and prettier. It&amp;rsquo;s clear that Google did not invest at all, possibly because blogs are passé. Compared to mid 2000, there are very few blogs today. Even programming blogs are scarce. It could be interesting to quantify this. My theory is that it is the direct consequence of the popularity of social networks, and especially facebook (possibly also stackoverflow for programmers): people don&amp;rsquo;t have time anymore to write as their extra-time is used on social networks. Similarly I noticed that almost nobody comments anymore to the point that even Disqus is very rarely used, and again I attribute that to the popularity of sites like reddit. This is why I did not bother with a comment section on my blog, just email me or tweet about it instead.&lt;/p&gt;
-
-&lt;p&gt;I was always attracted by the static web sites concept, because there is actually very little things that ought to be truely dynamic from a individual point of view. Dynamic hosting also tends to be problematic in the long-run, for example I never found the time to upgrade my chord search engine to the newer Google appengine and now it&amp;rsquo;s just off. I used to freeze my personal website (created with a dynamic templating tool Velocity, django, etc.) with a python script. So a static blog was the next logical step, and these days, it&amp;rsquo;s quite popular. Static blogs put the author fully in control of the content and its presentation. &lt;a href=&#34;http://jekyllrb.com&#34;&gt;Jekyll&lt;/a&gt; started the trend along with github allowing good old personal websites. It offers a modern looking blog, with very little configuration steps. I tried Hugo instead because it&amp;rsquo;s written in &lt;a href=&#34;http://golang.com&#34;&gt;the Go language&lt;/a&gt;. It&amp;rsquo;s much faster, but I don&amp;rsquo;t really care about that for something of the size of my blog. I was curious however how good was the Go language on real world projects, and I knew I could always customize it if I ever needed to. Interestingly, I did stumble on a few panics (core dump equivalent where the program just crashes, in this case the hugo local server), something that does not happen with Java based tools or even with Ruby or Python based tools. Even though I like the Go language more and more (I am doing some pet project with it - I believe in the focus on fast compilation and simple language), I found this a bit alarming. This is clearly a result of the errors versus exceptions choice, as it&amp;rsquo;s up to the programmer to handle the errors properly and not panic unnecessarily (I even wonder if it makes any sense to panic for a server).&lt;/p&gt;
-
-&lt;p&gt;Anyway I think it looks better now, maybe a bit too minimalist. I&amp;rsquo;ll add details when I have more time.&lt;/p&gt;
 </description>
     </item>
     
