@@ -82,18 +82,6 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/diffusion-limited-aggregation-applet/">Diffusion Limited Aggregation Applet</a>
-      </h1>
-      <span class="post-date">Jun 9, 2010 &middot; 1 minute read
-      </span>
-      
-      <p>Yes, I wrote an applet. I know it is very 1990s but, amazingly, it still does the job quite well. Ok, next time I should really use Flash to do this.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s1600/dla.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/TA-C4-xEq8I/AAAAAAAAFH8/OwEFEpO4eA8/s320/dla.png" /></a></div><br />The Applet simulates <a href="http://en.wikipedia.org/wiki/Diffusion-limited_aggregation">Diffusion Limited Aggregation</a> as described in Chaos And Fractals from Peitgen, Juergens, and Saupe. It represents ions randomly wandering around (in a Brownian motion) until they are caught by an attractive force in electrochemical deposition experiment. This kind of phenomenon occurs at all scales, for example it happens in the distribution of galaxies. You can play around with the applet at <a href="http://31416.appspot.com/dla.vm">http://31416.appspot.com/dla.vm</a></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
       </h1>
       <span class="post-date">Dec 18, 2009 &middot; 1 minute read
@@ -196,6 +184,18 @@
       </span>
       
       <p>I often looked at the famous computer languages shootout for fun. Recently I noticed they had the infamous <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=all">thread ring test</a>. I posted not very long ago several <a href="http://chasethedevil.blogspot.com/2009/01/end-of-rings-around-plain-java-better.html">blog entries about it showing how silly</a> this test was.<br /><br />Looking at the existing Java implementation for the test I decided to try to submit the tricky one using a pool of thread, and pooling message processing rather creating 1 thread per node. To my surprise, it was accepted without questions and I did have the best score for a Java program for a while. Shortly after <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=3">someone else</a> copied my program and got rid of various stuff not useful for the particular benchmark (breaking the interesting part of the design) and got accepted as well with of course a better result.<br /><br />I decided to see if I could make an <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=6">even more silly program</a> - tailored for the test only. I managed to be orders of magnitude faster - 1 thread, no synchronization, everything processed in a FIFO (linkedlist) queue. This is actually a standard way to reimplement recursion. But I was honest enough not to hide that I consider that kind of program to cheat the test and got my entry in the &ldquo;interesting alternatives&rdquo;.<br /><br />In reality there is no difference in the &ldquo;cheating&rdquo; between my new program and the program that got accepted in the official list, they both cheat by using only 1 thread and process everything 1 by 1. There is not 1 thread per node in any of the program, and they can avoid any concurrency issues. One &ldquo;looks&rdquo; better because it uses a pool of 503 threads (but really use only 1 or 2 threads) and the other does not hide its use of 1 thread for processing. But this is not evident to people accepting the programs.<br /><br />When I look at the haskell code, I can not really tell if it is creating 503 threads in the language or a pool or &hellip;, you have to know each language quite well and sometimes it is not that easy to define what cheating is. Therefore this kind of benchmark is a bit disappointing. One should force the use of the same algorithm. But can you do so (a functional language won&rsquo;t use the same algo as a procedural one)?</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/cholesky--jakarta-commons-math/">Cholesky &amp; Jakarta Commons Math</a>
+      </h1>
+      <span class="post-date">May 15, 2009 &middot; 1 minute read
+      </span>
+      
+      <p>In Finance, <a href="http://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky</a> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <a href="http://www.google.com/codesearch/p?hl=en#W_wVDN7F3h4/tetrad-4.3.2-0/src/edu/cmu/tetrad/util/MatrixUtils.java&amp;q=cholesky%20SEMEditor&amp;l=1332">this one</a>). There is <a href="http://svn.apache.org/viewvc/commons/proper/math/trunk/src/java/org/apache/commons/math/linear/decomposition/CholeskyDecompositionImpl.java?view=co">one</a> in <a href="http://commons.apache.org/math/">Apache Commons Maths</a> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<br /><br />Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<br />cholesky GPL= 5.4ms<br />cholesky BSD=37.1ms<br /><br />So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>
 
       
     </div>

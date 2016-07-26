@@ -6,37 +6,8 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Jul 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 05 Jul 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>Number of regressors in a BSDE</title>
-      <link>http://chasethedevil.github.io/post/number_of_regressors_in_bdse/</link>
-      <pubDate>Tue, 26 Jul 2016 09:55:32 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/number_of_regressors_in_bdse/</guid>
-      <description>&lt;p&gt;Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
-It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
-workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.&lt;/p&gt;
-
-&lt;p&gt;It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
-very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables.
-Solving a BSDE on 10 variables for EDF was given as an illustration at the end of an otherwise excellent presentation.
-Someone in the audience asked how possibly they could do that in practice since it would involve \(10^{10}\) regression factors. The answer of the speaker was more or less that it was what they do, with no particular trick but with a large computing power, as if \(10^{10}\) was not so big.&lt;/p&gt;
-
-&lt;p&gt;At this point I was really wondering why \(10^{10}\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&amp;rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
-We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).&lt;/p&gt;
-
-&lt;p&gt;We can count then easily how many factors would be needed for 10 variables.
-We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(N\).
-This number is simply \( C^{N}_{N-1} \) where \(C_k^n \) denotes the &lt;a href=&#34;https://en.wikipedia.org/wiki/Binomial_coefficient&#34;&gt;binomial coefficient&lt;/a&gt;. Thus the total number of N variables is
-&lt;div&gt;$$ 1+\sum_{i=1}^N C^{i}_{i-1} $$&lt;/div&gt;
-where 1 stands for the constant coefficient (power of zero).&lt;/p&gt;
-
-&lt;p&gt;For \(N=10\), the total number of factors is 125477.
-Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.&lt;/p&gt;
-</description>
-    </item>
     
     <item>
       <title>Shooting arbitrage - part II</title>
