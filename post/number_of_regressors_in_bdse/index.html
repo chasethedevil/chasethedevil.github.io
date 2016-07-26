@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Quant &middot; Chase the Devil</title>
+  <title>Number of regressors in a BSDE &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -26,10 +26,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   <link rel="author" href="http://plus.google.com/105444622997415581493">
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -77,94 +77,41 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="http://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
+  <div class="post">
+    <h1>Number of regressors in a BSDE</h1>
+    <span class="post-date">Jul 26, 2016 &middot; 2 minute read
     
-    &middot;
+    <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Jul 26, 2016</time></li>
+    <p>Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.</p>
+
+<p>It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables. This was an
+example given at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^10\) regression factors. The answer of the speaker was more or less that it was what they do, as if \(10^10\) was not so big, with no particular trick.</p>
+
+<p>At this point I was really wondering why \(10^10\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).</p>
+
+<p>We can count then easily how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(N\).
+This number is simply \( C^{N}_{N-1} \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>. Thus the total number of N variables is
+<div>$$1+\sum<em>{i=1}^N C^{i}</em>{i-1} $$</div>
+where 1 stands for the constant coefficient (power of zero).</p>
+
+<p>For \(N=10\), the total number of factors is 125477.
+Although, the total number of factors is large, it is much less than \(10^10\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
+
+  </div>
   
-    <li><a href="http://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Jul 5, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage - part I</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Jun 22, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Jun 15, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Jun 14, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 29, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 12, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>May 12, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Apr 21, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 19, 2016</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-    </span>
-    &middot; <time>Feb 16, 2016</time></li>
-  
-  </ul>
 </div>
+
+
+
+
 <div class="content container" style="padding-top: 0rem;">
 <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
 <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>

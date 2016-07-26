@@ -82,6 +82,40 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
+      </h1>
+      <span class="post-date">Jul 26, 2016 &middot; 2 minute read
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.</p>
+
+<p>It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables. This was an
+example given at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^10\) regression factors. The answer of the speaker was more or less that it was what they do, as if \(10^10\) was not so big, with no particular trick.</p>
+
+<p>At this point I was really wondering why \(10^10\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).</p>
+
+<p>We can count then easily how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(N\).
+This number is simply \( C^{N}_{N-1} \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>. Thus the total number of N variables is
+<div>$$1+\sum<em>{i=1}^N C^{i}</em>{i-1} $$</div>
+where 1 stands for the constant coefficient (power of zero).</p>
+
+<p>For \(N=10\), the total number of factors is 125477.
+Although, the total number of factors is large, it is much less than \(10^10\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
       </h1>
       <span class="post-date">Jul 5, 2016 &middot; 2 minute read
@@ -852,44 +886,6 @@ all that appealing compared to the table of Chebyshev polynomials.</p>
 <p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
 
 <p><strong>Update</strong> - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
-      </h1>
-      <span class="post-date">Feb 19, 2016 &middot; 1 minute read
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
-with B-splines, a relatively simple explanation of how it works is given in <a href="http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf">this paper</a> (I think this is how De Boor coded it in the NSWC library).
-Interestingly there is <a href="http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf">an equivalent formulation in terms of standard cubic splines</a>, although it seems that the
-pseudo code on that paper has errors.</p>
-
-<p>Least squares splines give a very good fit for option implied volatilities with only a few parameters.
-In theory, the number of parameters is N+2 where N is the number of interpolation points.
-I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
-
-
-<figure >
-    
-        <img src="/post/least_squares_spline.png" />
-    
-    
-    <figcaption>
-        <h4>least squares spline on 1m AAPL options.</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
 
       
     </div>
