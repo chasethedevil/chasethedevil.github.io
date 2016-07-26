@@ -84,7 +84,7 @@
       <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
       </h1>
-      <span class="post-date">Jul 26, 2016 &middot; 2 minute read
+      <span class="post-date">Jul 26, 2016 &middot; 3 minute read
       
       <br/>
       <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
@@ -104,8 +104,14 @@ We only consider polynomials of degree 10, that is all the cross-combinations th
 
 <p>We can count then how many factors would be needed for 10 variables.
 We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
-This number is simply \( C^{N+D-1}_{D-1} \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>. Thus the total number of \(N\) variables is
-<div>$$ 1+\sum_{i=1}^N C^{N+i-1}_{i-1} $$</div>
+This number is simply \( C^{N+D-1}_{N-1} = C^{N+D-1}_D \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>.</p>
+
+<p>If this number is not so obvious, we can proceed step by step as well: for degree 1, there is just \( N \) factors (we assign 1 to one of the variables).
+For degree 2, there is \(N\) factors to place the number 2 on each variable, plus \( C^N_2 \) to place (1,1) on the variables. From Pascal triangle, we have \( C^{N+1}_{2} = C^N_2 + C^N_1\).
+For degree 3, there is \(N\) factors to place the number 3 on each variable, plus \( C^N_3 \) to place the numbers (1,1,1) on the variables plus \(2C^N_2\) to place (1,2) and (2,1). Applying the Pascal identity twice, we have \( C^{N+2}_{3} = (C^N_1+ C^N_2) + (C^N_2 + C^N_3)\). etc.</p>
+
+<p>Thus the total number of factors for \(N\) variables is
+<div>$$ 1+\sum_{i=1}^N C^{N+i-1}_{N-1} $$</div>
 where 1 stands for the constant coefficient (power of zero).</p>
 
 <p>For \(N=10\), the total number of factors is 184756.

@@ -29,8 +29,14 @@ We only consider polynomials of degree 10, that is all the cross-combinations th
 
 &lt;p&gt;We can count then how many factors would be needed for 10 variables.
 We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
-This number is simply \( C^{N+D-1}_{D-1} \) where \(C_k^n \) denotes the &lt;a href=&#34;https://en.wikipedia.org/wiki/Binomial_coefficient&#34;&gt;binomial coefficient&lt;/a&gt;. Thus the total number of \(N\) variables is
-&lt;div&gt;$$ 1+\sum_{i=1}^N C^{N+i-1}_{i-1} $$&lt;/div&gt;
+This number is simply \( C^{N+D-1}_{N-1} = C^{N+D-1}_D \) where \(C_k^n \) denotes the &lt;a href=&#34;https://en.wikipedia.org/wiki/Binomial_coefficient&#34;&gt;binomial coefficient&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If this number is not so obvious, we can proceed step by step as well: for degree 1, there is just \( N \) factors (we assign 1 to one of the variables).
+For degree 2, there is \(N\) factors to place the number 2 on each variable, plus \( C^N_2 \) to place (1,1) on the variables. From Pascal triangle, we have \( C^{N+1}_{2} = C^N_2 + C^N_1\).
+For degree 3, there is \(N\) factors to place the number 3 on each variable, plus \( C^N_3 \) to place the numbers (1,1,1) on the variables plus \(2C^N_2\) to place (1,2) and (2,1). Applying the Pascal identity twice, we have \( C^{N+2}_{3} = (C^N_1+ C^N_2) + (C^N_2 + C^N_3)\). etc.&lt;/p&gt;
+
+&lt;p&gt;Thus the total number of factors for \(N\) variables is
+&lt;div&gt;$$ 1+\sum_{i=1}^N C^{N+i-1}_{N-1} $$&lt;/div&gt;
 where 1 stands for the constant coefficient (power of zero).&lt;/p&gt;
 
 &lt;p&gt;For \(N=10\), the total number of factors is 184756.
