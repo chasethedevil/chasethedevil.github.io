@@ -6,8 +6,28 @@
     <description>Recent content in Posts on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Jul 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 02 Aug 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A review of Thomas Piketty - Le capital au XXI siecle</title>
+      <link>http://chasethedevil.github.io/post/piketty_capital/</link>
+      <pubDate>Tue, 02 Aug 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/piketty_capital/</guid>
+      <description>&lt;p&gt;I found back some old notes I had written about the book &amp;ldquo;Le capital au XXI siecle&amp;rdquo; from Thomas Piketty. It took me a while to finish that book last summer.&lt;/p&gt;
+
+&lt;p&gt;So many journalists have written around Piketty, that I had to buy the book and read it. It turns out that some of the criticism I have read is not really founded once one reads the book, but here are other real obvious criticisms that I suprisingly did not hear.&lt;/p&gt;
+
+&lt;p&gt;The best part of the book is probably the introduction. It&amp;rsquo;s actually not so short and gives a good overall view of the main subjects of the book. But it&amp;rsquo;s a bit too concise to truely understand the point. Unfortunately as the book progresses, it feels more like someone trying to fill up empty pages than real content. The first half of the first chapter is still interesting, and then we are overwhelmed with too many graphs and even more words to just state the obvious in the graph, or to repeat over and over the same idea. His economic &amp;ldquo;laws&amp;rdquo; should really be summarized on one (or two) simple page, there is no need for hundreds of pages to understand them. Banks could learn a bit of basic statistics: Piketty makes the point of not considering only one measure of inequality like the Gini index, very much like banks should not consider only one measure of risk like the VaR.&lt;/p&gt;
+
+&lt;p&gt;The title is clever, as it is a direct reference to Marx &amp;ldquo;The Capital&amp;rdquo;, but it&amp;rsquo;s very far from the quality of Marx book. Marx can be wrong about many things, but in each chapter, he presents new ideas, a different way of looking at the problem. There is a real philosophical effort of defining the meaning of words, and there is fascinating analysis of the economic world of the 19th century. I am refering to the first volume, the only one Marx truly wrote.&lt;/p&gt;
+
+&lt;p&gt;I hardly understand why Piketty is so popular in the US. I remember how much fun it was to read Adam Smith &amp;ldquo;The Wealth of Nations&amp;rdquo;, and again how different perpectives it tries to bring, and it&amp;rsquo;s no small book either. Piketty is boring, extremely boring to read (except the intro). Maybe the Americans just stopped at the introduction. Likely it has more to do with Piketty being the intellectual defending the same ideas as the very popular Occupy movement (which we somehow don&amp;rsquo;t hear about so much anymore). Bourdieu was very talented in mixing the right amount of statistics with extremely original views along with a philosophical stance. I expected more from Piketty, an admirer of the likes of Bourdieu.&lt;/p&gt;
+
+&lt;p&gt;A much more interesting book would be something like a spiced up introduction to this book. One main leitmotiv is the fact that the 21st century will not look like the 20th century, but maybe more like the 19th century. Why wouldn&amp;rsquo;t the 21st century look like the 21st century, that is different from the 20th and the 19th century? Still, where Picketty is interesting is in the fact that there is something to learn from the 19th century economics, and something to unlearn from the 20th century economics which might be too prevalent today.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Number of regressors in a BSDE</title>
@@ -891,48 +911,6 @@ something the good old desktop publishing software allow you to do quite well.&l
 &lt;p&gt;I was also wondering a bit on what design to use for a book. And I realised that the best layout to consider is simply the layout
 of a book I enjoyed to read. For example, I like the recent SIAM book design, I find that it gives enough space to read the text
 and the maths without having the impression of deciphering some codex, and without headache. It turns out there is even a &lt;a href=&#34;http://www.siam.org/books/authors/p_handbook8.php&#34;&gt;latex template&lt;/a&gt; available.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Linear and Flat forward interpolation with cash dividends</title>
-      <link>http://chasethedevil.github.io/post/linear_flat_forward_interpolation/</link>
-      <pubDate>Tue, 19 Jan 2016 09:55:32 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/linear_flat_forward_interpolation/</guid>
-      <description>&lt;p&gt;When the dividend curve is built from discrete cash dividends, the dividend yield is discontinuous at the dividend time as the asset price jumps from the dividend amount.
-This can be particularly problematic for numerical schemes like finite difference methods. In deed, a finite difference grid
-will make use of the forward yield (eventually adjusted to the discretisation scheme), which explodes then.
-Typically, if one is not careful about this, then increasing the number of time steps does not increase accuracy anymore, as
-the spike just becomes bigger on a smaller time interval. A simple work-around is to limit the resolution to one day.
-This means that intraday, we interpolate the dividend yield.&lt;/p&gt;
-
-&lt;p&gt;If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
-But if we take a look at the actual curve of &amp;ldquo;forward&amp;rdquo; yields, it becomes sawtooth shaped!
-
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://chasethedevil.github.io/post/linear_flat_forward.png&#34; /&gt;
-    
-    
-    &lt;figcaption&gt;
-        &lt;h4&gt;effective forward drift used in the finite difference grid with 4 time-steps per day&lt;/h4&gt;
-        
-    &lt;/figcaption&gt;
-    
-&lt;/figure&gt;
-
-On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.&lt;/p&gt;
-
-&lt;p&gt;In reality, one should use flat forward interpolation instead, where the forward yield is maintained constant during the day. The forward rate is defined as
-&lt;div&gt;$$f(t_0,t_1)= \frac{r(t_1) t_1 -r(t_0) t_0}{t_1-t_0}$$&lt;/div&gt;
-where the continuously compounded rate \(r\) is defined so that \(Z(0,t)= e^{-r(t)t}\).
-In the case of the Black-Scholes drift, the drift rate is defined so that the forward price (not to confuse with the forward rate) \(F(0,t)= e^{-q(t)t}\).&lt;/p&gt;
-
-&lt;p&gt;The flat forward interpolation is equivalent to a linear interpolation on the logarithm of discount factors.
-In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:
-&lt;div&gt;$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$&lt;/div&gt;
-Another work-around would be to model this via proportional dividends instead of a &amp;ldquo;continuous&amp;rdquo; yield curve.&lt;/p&gt;
 </description>
     </item>
     
