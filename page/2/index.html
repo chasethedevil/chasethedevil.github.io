@@ -82,6 +82,27 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
+      </h1>
+      <span class="post-date">May 12, 2016 &middot; 1 minute read
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>A while ago, I have applied a relatively simple adaptive Filon quadrature to the problem of <a href="http://papers.ssrn.com/abstract=2620166">volatility swap pricing</a>. The <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi18brlh9XMAhWIVhoKHdnGA2UQFggdMAA&amp;url=http%3A%2F%2Fwww.ams.org%2Fmcom%2F1968-22-101%2FS0025-5718-1968-0225485-5%2FS0025-5718-1968-0225485-5.pdf&amp;usg=AFQjCNEQvSMm6vOaXIX2MqAJ-GQt79QRiA&amp;sig2=HLHd-rc74qnCuo5yp1Q13A">Filon quadrature</a> is an old quadrature from 1928 that allows to integrate oscillatory integrand like \(f(x)\cos(k x) \) or \(f(x)\sin(k x) \). It turns out that combined with an adaptive Simpson like method, it has many advantages over more generic adaptive quadrature methods like Gauss-Lobatto, which is often used on similar problems.</p>
+
+<p><a href="http://dl.acm.org/citation.cfm?id=321029">Flinn</a> derived a similar quadrature, but taking into account the derivative values, which are likely to be easily available on those problems. This produces a even more robust quadrature and of higher convergence order.</p>
+
+<p>I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to <strong>five times faster</strong> than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).</p>
+
+<p>If you are interested, you will find much more details in <a href="/lefloch_heston_filon.pdf">this document</a>.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
       </h1>
       <span class="post-date">Apr 21, 2016 &middot; 4 minute read
@@ -420,18 +441,6 @@ Another work-around would be to model this via proportional dividends instead of
       </span>
       
       <p>There is something funny going on with upcoming generic top level domains (gTLDs), they seem to be looked up in a strange manner (at least on latest Linux). For example:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping chrome&nbsp;</span><br /><br />or<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping nexus&nbsp;</span><br /><br />returns 127.0.53.53.<br /><br />While existing <a href="https://www.name.com/new-gtld">official gTLD</a>s don&rsquo;t (<span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping dental</span> returns &ldquo;unknown host&rdquo; as expected). I first thought it was a network misconfiguration, but as <a href="https://groups.google.com/forum/#!msg/public-dns-discuss/bzhTQnFqE6I/E9F46xhka98J">I am not the only one to notice this</a>, it&rsquo;s likely a genuine internet issue.<br /><br />Strange times.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/holidays-read---dfw---everything-and-more/">Holiday&#39;s read - DFW - Everything and more</a>
-      </h1>
-      <span class="post-date">Nov 1, 2015 &middot; 2 minute read
-      </span>
-      
-      <p>I am ambivalent towards David Foster Wallace. He can write the most creative sentences and make innocuous subjects very interesting. At the same time, i never finished his book <a href="https://en.wikipedia.org/wiki/Infinite_Jest">Infinite Jest</a>, partly because the characters names are too awkward for me so that i never exactly remember who is who, but also because the story itself is a bit too crazy.<br />I knew however that <a href="http://www.amazon.com/Everything-More-Compact-History-Infinity/dp/0393339289">a non fiction book on the subject of infinity</a> written by him would make for a very interesting read. And I have not been disappointed. It&rsquo;s in between maths and philosophy going back to the Greeks up to Gödel through a lot of Cantor following more or less the historical chronology.<br />Most of it is easy to read and follow, except the last part around sets and transfinite numbers. This last part is actually quite significant as it tries to explain why we still have no satisfying theory around the problems raised by infinity especially in the context of a Sets theory.&nbsp;I did not expect to learn much around the subject, I was disappointed. The book showed me how naive I was and how tricky the concept of infinity can be.<br />While I found the different explanations around <a href="https://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno&rsquo;s paradox of the arrow</a> very clever, there is one other view possible: the arrow really does not move at each instant (you could think of those as a snapshot) but an interval of time is just not a simple succession of instants. This is not so far of Aristotle attack, but the key here is around what is an interval really. DFW suggests slightly this interpretation as well p144 but it&rsquo;s not very explicit.<br />I had not heard about Kronecker&rsquo;s conception that only integers were mathematically real (against decimals, irrationals, infinite sets). I find it very appropriate in the frame of computer science. Everything ends up as finite integers (a binary representation) and we are always confronted to the process of transforming the continuous, that despite all its conceptual issues is often simpler to reason in to solve concrete problems, to the finite discrete.</p>
 
       
     </div>
