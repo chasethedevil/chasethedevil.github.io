@@ -6,8 +6,59 @@
     <description>Recent content in Quant on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Aug 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 04 Oct 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Benaim et al. extrapolation does not work on equities</title>
+      <link>http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/</link>
+      <pubDate>Tue, 04 Oct 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/</guid>
+      <description>&lt;p&gt;We have seen &lt;a href=&#34;http://chasethedevil.github.io/mystic_parabola.md&#34;&gt;earlier&lt;/a&gt; that a simple parabola allows to capture the smile of AAPL 1m options surprisingly well. For very high and very low strikes,
+the parabola does not obey Lee&amp;rsquo;s moments formula (the behavior in the wings needs to be at most linear in variance/log-moneyness).&lt;/p&gt;
+
+&lt;p&gt;Extrapolating the volatility smile in the low or high strikes in a smooth \(C^2\) fashion is however not easy.
+A surprisingly popular so called &amp;ldquo;arbitrage-free&amp;rdquo;
+method is the &lt;a href=&#34;http://www.quarchome.org/RiskTailsPaper_v5.pdf&#34;&gt;extrapolation of Benaim, Dodgson and Kainth&lt;/a&gt; developed to remedy the negative density of SABR in interest rates as
+well as to give more control over the wings.&lt;/p&gt;
+
+&lt;p&gt;The call options prices (right wing) are extrapolated as:
+$$
+C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
+$$
+\(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
+$$
+c_R =\frac{{C&amp;rsquo;}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C&amp;rsquo;}_{R}^{2}}{C_{R}^2}+ \frac{{C&amp;rdquo;}_R}{C_R}\right) + \nu \right)\text{,} \
+$$
+$$
+b_R =  - \frac{{C&amp;rsquo;}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\
+$$
+$$
+a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
+$$
+The \( \nu \) parameters allow to adjust the shape of the extrapolation.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately it does not really work for equities.
+Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
+our best fit parabola of the AAPL 1m options:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/bdk-explodes.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;BDK explodes on AAPL 1m options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The \( \nu\) parameter does not help either.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>AES for Monte-Carlo</title>

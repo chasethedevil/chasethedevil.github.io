@@ -6,8 +6,59 @@
     <description>Recent content on Chase the Devil</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Aug 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 04 Oct 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Benaim et al. extrapolation does not work on equities</title>
+      <link>http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/</link>
+      <pubDate>Tue, 04 Oct 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/</guid>
+      <description>&lt;p&gt;We have seen &lt;a href=&#34;http://chasethedevil.github.io/mystic_parabola.md&#34;&gt;earlier&lt;/a&gt; that a simple parabola allows to capture the smile of AAPL 1m options surprisingly well. For very high and very low strikes,
+the parabola does not obey Lee&amp;rsquo;s moments formula (the behavior in the wings needs to be at most linear in variance/log-moneyness).&lt;/p&gt;
+
+&lt;p&gt;Extrapolating the volatility smile in the low or high strikes in a smooth \(C^2\) fashion is however not easy.
+A surprisingly popular so called &amp;ldquo;arbitrage-free&amp;rdquo;
+method is the &lt;a href=&#34;http://www.quarchome.org/RiskTailsPaper_v5.pdf&#34;&gt;extrapolation of Benaim, Dodgson and Kainth&lt;/a&gt; developed to remedy the negative density of SABR in interest rates as
+well as to give more control over the wings.&lt;/p&gt;
+
+&lt;p&gt;The call options prices (right wing) are extrapolated as:
+$$
+C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
+$$
+\(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
+$$
+c_R =\frac{{C&amp;rsquo;}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C&amp;rsquo;}_{R}^{2}}{C_{R}^2}+ \frac{{C&amp;rdquo;}_R}{C_R}\right) + \nu \right)\text{,} \
+$$
+$$
+b_R =  - \frac{{C&amp;rsquo;}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\
+$$
+$$
+a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
+$$
+The \( \nu \) parameters allow to adjust the shape of the extrapolation.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately it does not really work for equities.
+Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
+our best fit parabola of the AAPL 1m options:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://chasethedevil.github.io/post/bdk-explodes.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;BDK explodes on AAPL 1m options.&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The \( \nu\) parameter does not help either.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>AES for Monte-Carlo</title>
@@ -943,25 +994,6 @@ I also relied on a simple implied volatility algorithm that can be summarized in
 
 &lt;p&gt;Isn&amp;rsquo;t the fit just amazing?
 Even if I found it surprising, it&amp;rsquo;s probably not so surprising. The curve has to be smooth, somewhat monotone, and will be therefore like a parabola near the money. While there is no guarantee it will fit that well far away, it&amp;rsquo;s actually a matter of scale. Short maturities will lead to not so great fit in the wings, while long maturities will correspond to a narrower range of scaled strikes and match better a parabola.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Yahoo Finance Implied Volatility</title>
-      <link>http://chasethedevil.github.io/post/yahoo_finance_implied_volatility/</link>
-      <pubDate>Wed, 03 Feb 2016 16:45:58 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/yahoo_finance_implied_volatility/</guid>
-      <description>&lt;p&gt;The &lt;a href=&#34;https://finance.yahoo.com/q/op?s=GOOG&amp;amp;date=1457049600&#34;&gt;option chain&lt;/a&gt; on Yahoo finance shows an implied volatility number for each call or put option in the last column.
-I was wondering a bit how they computed that number. I did not exactly find out their methodology, especially since we don&amp;rsquo;t even know the daycount convention used, but
-I did find that it was likely just garbage.&lt;/p&gt;
-
-&lt;p&gt;A red-herring is for example the large discrepancy between put vols and call vols. For example strike 670, call vol=50%, put vol=32%.
-This suggests that the two are completely decoupled, and they use some wrong forward (spot price?) to obtain those numbers. If I compute
-the implied volatilities using put-call parity close to the money to find out the implied forward price, I end up with ask vols of 37% and 34% or call and put mid vols of 33%.
-By considering the put-call parity, I assume European option prices, which is not correct in this case. It turns out however, that with the low interest rates we live in, there is nearly zero additional value due to the American early exercise.&lt;/p&gt;
-
-&lt;p&gt;I am not sure what use people can have of Yahoo implied volatilities.&lt;/p&gt;
 </description>
     </item>
     
