@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Caching HTTP Responses in Java</h1>
-    <span class="post-date">Apr 19, 2006 &middot; 2 minute read
+    <span class="post-date">Apr 19, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/caching-http-responses-in-java/#disqus_thread">Comments</a>
     </span>
     <div>Caching HTTP response can dramatically improve performance of your app if what you generate is in reality not very dynamic. There are many free caching frameworks in Java. Most popular seem to be <a href="http://ehcache.sourceforge.net/"> ehcache</a>, <a href="http://www.opensymphony.com/oscache/">oscache</a>, jcs and JBoss Cache.</div> <div>&nbsp;</div> <div>ehcache is quite simple to use and its code is clean. They have a CachingFilter that you can put in your webapp server to cache transparently HTTP responses. However as the framework only allows you to store Objects (which makes sense for most uses), I was wondering how they cached the HttpResponse which is a stream. I was a bit disappointed by the answer, they just create a copy ByteArrayOutputStream and call toBytes() to store it in the cache. While this is optimal for a memory cache store (the whole response will anyway be in the cache, although I am not sure if they check for particularly big responses to avoid caching those or try to cache those) I don't think it is that good for a disk cache store. </div> <div>&nbsp;</div> <div>Ideally one would like the response to be stored using a buffer, to avoid having the whole response in memory. This would enable a much higher concurrent use. I think it is doable&nbsp;by writing your own CachingFilter and by using the concurrent utils Queue to block writing&nbsp;when the buffer is full. </div> <div>&nbsp;</div> <div>I googled for this kind of stuff without success. I only found solutions similar to ehcache one (for example sun <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingResponseWrapper.java?r=1.4"> CachingResponseWrapper</a> and <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingFilter.java?r=1.4">CachingFilter</a>&nbsp;or oscache <a href="https://xwork.dev.java.net/source/browse/oscache/src/java/com/opensymphony/oscache/web/filter/CacheFilter.java?rev=1.12&amp;view=markup"> CacheFilter</a> (a bit more careful, but still a toBytes()))&nbsp;I wonder why it is not already done and public.</div> <div>&nbsp;</div>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

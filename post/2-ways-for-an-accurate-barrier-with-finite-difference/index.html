@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>2 Ways for an Accurate Barrier with Finite Difference </h1>
-    <span class="post-date">Jun 2, 2013 &middot; 2 minute read
+    <span class="post-date">Jun 2, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/2-ways-for-an-accurate-barrier-with-finite-difference/#disqus_thread">Comments</a>
     </span>
     <p>I had explored the issue of pricing a barrier using finite difference discretization of the Black-Scholes PDE a few years ago. Briefly, for explicit schemes, one just need to place the barrier on the grid and not worry about much else, but for implicit schemes, either the barrier should be placed on the grid and the grid&nbsp; <b>truncated </b>at the barrier, or a <b>fictitious point</b> should be introduced to force the correct price at the barrier level (0, typically).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s1600/barrier_grid.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="135" src="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s400/barrier_grid.png" width="400" /></a></div><br />The fictitious point approach is interesting for the case of varying rebates, or when the barrier moves around. I first saw this idea in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo;.<br /><br />Recently, I noticed that Hagan made use of the ficitious point approach in its &ldquo;Arbitrage free SABR&rdquo; paper, specifically he places the barrier in the middle of 2 grid points. There is very little difference between truncating the grid and the fictitious point for a constant barrier.<br /><br />In this specific case there is a difference because there are 2 additional ODE solved on the same grid, at the boundaries. I was especially curious if one could place the barrier exactly at 0 with the fictitious point, because then one would potentially need to evaluate coefficients for negative values. It turns out you can, as values at the fictitious point are actually not used: the mirror point inside is used because of the mirror boundary conditions.<br /><br />So the only difference is the evaluation of the first derivative at the barrier (used only for the ODE): the fictitious point uses the value at barrier+h/2 where h is the space between two points at the same timestep, while the truncated barrier uses a value at barrier+h (which can be seen as standard forward/backward first order finite difference discretization at the boundaries). For this specific case, the fictitious point will be a little bit more precise for the ODE.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

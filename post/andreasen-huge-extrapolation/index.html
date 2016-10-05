@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Andreasen Huge extrapolation</h1>
-    <span class="post-date">Jul 13, 2015 &middot; 2 minute read
+    <span class="post-date">Jul 13, 2015 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/andreasen-huge-extrapolation/#disqus_thread">Comments</a>
     </span>
     <p>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&rsquo;t obey Lee&rsquo;s moments condition.<br /><br />On a Wilmott forum, <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=95309">P. Caspers proposed</a> the following counter-example based on extrapolating SABR: \( \alpha=15\%, \beta=80\%, \nu=50\%, \rho=-48\%, f=3\%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.<br /><br />A truly arbitrage free extrapolation can be obtained through <a href="http://ssrn.com/abstract=1694972">Andreasen Huge volatility interpolation</a>, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s1600/Screenshot-Untitled%2BWindow-5.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s400/Screenshot-Untitled%2BWindow-5.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Smile</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s1600/Screenshot-Untitled%2BWindow-4.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s400/Screenshot-Untitled%2BWindow-4.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Density with piecewise linear local volatility</td></tr></tbody></table>There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.<br />Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.<br /><br />It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then: <br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s1600/Screenshot-Untitled%2BWindow-3.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s400/Screenshot-Untitled%2BWindow-3.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Density with cubic spline local volatility</td></tr></tbody></table>Interestingly, the right side of the density is much better captured.<br />The wiggle persists, although it is smaller. This is likely due to the fact that I am using a cubic spline on top of the finite difference prices (in order to have a C2 density). Using a better C2 convexity preserving interpolation would likely remove this artefact.<br /><br />Those figures also show why relying just on extrapolation to fix SABR is not necessarily a good idea: even a real arbitrage free extrapolation will make a not so meaningful density. The proper solution is to really use <a href="http://chasethedevil.blogspot.fr/2013/12/arbitrage-free-sabr-another-view-on.html">Hagan&rsquo;s arbitrage free SABR PDE</a>, which would be as nearly fast in this case.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

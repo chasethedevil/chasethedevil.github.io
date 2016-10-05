@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Another SVI Initial Guess</h1>
-    <span class="post-date">Jul 29, 2014 &middot; 3 minute read
+    <span class="post-date">Jul 29, 2014 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/another-svi-initial-guess/#disqus_thread">Comments</a>
     </span>
     <p>The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$$<br />where k is the log-moneyness, w(k) the implied variance at a given moneyness and a,b,rho,m,sigma the 5 SVI parameters.<br /><br />A. Vogt described a particularly simple way to find an initial guess to fit SVI to an implied volatility slice <a href="http://www.nuclearphynance.com/User%20Files/66/GatheralSmile_estimation_for_one_expiry_NP.pdf" target="_blank">a while ago</a>. The idea to compute rho and sigma from the left and right asymptotic slopes. a,m are recovered from the crossing point of the asymptotes and sigma using the minimum variance.<br /><br />Later, <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CB4QFjAA&amp;url=http%3A%2F%2Fwww.zeliade.com%2Fwhitepapers%2Fzwp-0005.pdf&amp;ei=xI3XU9T3OYme7AbzwoHQDw&amp;usg=AFQjCNGsvbseObGCDAZ1QbYtvOL9J2-aRw&amp;sig2=rz4SilY2q1RSuD9XgWKFig&amp;bvm=bv.71778758,d.ZGU" target="_blank">Zeliade has shown</a> a very nice reduction of the problem to 2 variables, while the remaining 3 can be deduced explicitly. The practical side is that constraints are automatically included, the less practical side is the choice of minimizer for the two variables (Nelder-Mead) and of initial guess (a few random points).<br /><br />Instead, a simple alternative is the following: given b and rho from the asymptotic slopes, one could also just fit a parabola at-the-money, in a similar spirit as the <a href="http://papers.ssrn.com/abstract=2467231" target="_blank">explicit SABR calibration</a>, and recover explicitly a, m and sigma.<br /><br />To illustrate I take the data from Zeliade, where the input is already some SVI fit to market data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" height="385" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">3M expiry - Zeliade data</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" height="391" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry, Zeliade data</td></tr></tbody></table>We clearly see that ATM the fit is better for the parabolic initial guess than for Vogt, but as one goes further away from ATM, Vogt guess seems better.<br /><br />Compared to SABR, the parabola itself fits decently only very close to ATM. If one computes the higher order Taylor expansion of SVI around k=0, powers of (k/sigma) appear, while sigma is often relatively small especially for short expiries: the fourth derivative will quickly make a difference.<br /><br />On implied volatilities stemming from a SABR fit of the SP500, here is how the various methods behave:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">1M expiry on SABR data</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry on SABR data</td></tr></tbody></table>As expected, because SABR (and thus the input implied vol) is much closer to a parabola, the parabolic initial guess is much better than Vogt. The initial guess of Vogt is particularly bad on long expiries, although it will still converge quite quickly to the true minimum with Levenberg-Marquardt.<br /><br />In practice, I have found the method of Zeliade to be very robust, even if a bit slower than Vogt, while Vogt can sometimes (rarely) be too sensitive to the estimate of the asymptotes.<br /><br />The parabolic guess method could also be applied to always fit exactly ATM vol, slope and curvature, and calibrate rho, b to gives the best overall fit. It might be an idea for the next blog post.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

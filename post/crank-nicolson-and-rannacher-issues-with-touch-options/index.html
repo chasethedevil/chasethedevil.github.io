@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Crank-Nicolson and Rannacher Issues with Touch options</h1>
-    <span class="post-date">Sep 30, 2015 &middot; 2 minute read
+    <span class="post-date">Sep 30, 2015 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/#disqus_thread">Comments</a>
     </span>
     <p>I just stumbled upon this particularly illustrative case where the Crank-Nicolson finite difference scheme behaves badly, and the Rannacher smoothing (2-steps backward Euler) is less than ideal: <a href="http://www.investopedia.com/terms/d/doubleonetouch.asp">double one touch</a> and <a href="http://www.investopedia.com/terms/d/doublenotouch.asp">double no touch</a> options.<br /><br />It is particularly evident when the option is sure to be hit, for example when the barriers are narrow, that is our delta should be around zero as well as our gamma. Let&rsquo;s consider a double one touch option with spot=100, upBarrier=101, downBarrier=99.9, vol=20%, T=1 month and a payout of 50K.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="326" src="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson shows big spikes in the delta near the boundary</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher shows spikes in the delta as well</td></tr></tbody></table>Crank-Nicolson spikes are so high that the price is actually a off itself.<br /><br />The Rannacher smoothing reduces the spikes by 100x but it&rsquo;s still quite high, and would be higher had we placed the spot closer to the boundary. The gamma is worse. Note that we applied the smoothing only at maturity. In reality as the barrier is continuous, the smoothing should really be applied at each step, but then the scheme would be not so different from a simple Backward Euler.<br /><br />In contrast, with a proper second order finite difference scheme, there is no spike.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the TR-BDF2 finite difference method - the scale goes from -0.00008 to 0.00008.</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the Lawson-Morris finite difference scheme - the scale goes from -0.00005 to 0.00005</td></tr></tbody></table>Both <a href="http://www.risk.net/journal-of-computational-finance/technical-paper/2330321/tr-bdf2-for-fast-stable-american-option-pricing">TR-BDF2</a> and Lawson-Morris (based on a local Richardson extrapolation of backward Euler) have a very low delta error, similarly, their gamma is very clean. This is reminiscent of the behavior on American options, but the effect is magnified here.<br /><br /><br /></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

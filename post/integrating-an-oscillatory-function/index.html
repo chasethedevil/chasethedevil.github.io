@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Integrating an oscillatory function</h1>
-    <span class="post-date">Nov 5, 2014 &middot; 2 minute read
+    <span class="post-date">Nov 5, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/integrating-an-oscillatory-function/#disqus_thread">Comments</a>
     </span>
     <p>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. <br /><br />The <a href="https://math.nyu.edu/financial_mathematics/content/02_financial/2008-3.pdf">Carr-Lee</a> seasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.<br /><a href="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" height="151" width="640" /></a><br />I&nbsp; first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (<a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">the one from Espelid</a>) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp; Gauschi, present in Quantlib). I tried various choices of adaptive (coteda, modsim, adaptsim,&hellip;) or brute force trapezoidal integration, but either they were order of magnitudes slower or unstable in some cases. Just using the same Gauss-Lobatto implementation for both would fail&hellip;<br /><br />I then noticed you could write the integral as a Fourier transform as well, allowing the use of FFT. Unfortunately, while this worked, it turned out to require a very large number of points for a reasonable accuracy. This, plus the tricky part of defining the proper step size, makes the method not so practical.<br /><br />I had heard before of the <a href="http://www.cs.berkeley.edu/~fateman/papers/oscillate.pdf">Filon quadrature</a>, which I thought was more of a curiosity. The main idea is to integrate exactly x^n * cos(k*x). One then relies on a piecewise parabolic approximation of the function f to integrate f(x) * cos(k*x). Interestingly, a very similar idea has been used in the <a href="http://www.risk.net/risk-magazine/technical-paper/1500323/cutting-edges-domain-integration">Sali quadrature method</a> for option pricing, except one integrates exactly x^n * exp(-k*x^2).<br /><br />It turned out to be remarkable on that problem, combined with a <a href="http://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method">simple adaptive Simpson</a> like method to find the right discretization. Then as if by magic, any outer integration quadrature worked. <br /><br /></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

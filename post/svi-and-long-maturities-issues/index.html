@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>SVI and long maturities issues</h1>
-    <span class="post-date">Aug 1, 2014 &middot; 3 minute read
+    <span class="post-date">Aug 1, 2014 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/svi-and-long-maturities-issues/#disqus_thread">Comments</a>
     </span>
     <p>On long maturities equity options, the smile is usually very much like a skew:&nbsp; very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).<br /><br />In terms of initial guess, <a href="http://chasethedevil.blogspot.com/2014/07/another-svi-initial-guess.html" target="_blank">we looked</a> at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings. We will see here that we can do also something a bit better than just a flat slice at-the-money in the case where rho is close to -1.<br /><br />In general when the asymptotes lead to rho &lt; -1, it means that we can&rsquo;t compute b from the asymptotes as there is in reality only one usable asymptote, the other one having a slope of 0 (rho=-1). The right way is to just recompute b by matching the ATM slope (which can be estimated by fitting a parabola at the money). Then we can try to match the ATM curvature, there are two possibilities to simplify the problem: s &gt;&gt; m or m &gt;&gt; s.<br /><br /><br />Interestingly, there is some kind of discontinuity at m = 0:<br /><ul><li>when m = 0, the at-the-money slope is just b<em>rho.&nbsp;</li></ul><ul><li>when m != 0 and m &gt;&gt; s, the at-the-money slope is b</em>(rho-1).&nbsp;</li></ul>In general it is therefore a bad idea to use m=0 in the initial guess. It appears then that assuming m &gt;&gt; s is better. However, in practice, with this choice, the curvature at the money is matched for a tiny m, even though actually the curvature explodes (sigma=5e-4) at m (so very close to the money). This produces this kind of graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" height="640" width="608" /></a></div>This apparently simple issue is actually a core problem with SVI. Looking back at our slopes but this time in the moneyness coordinate, the slope at m is b<em>rho while the slope at the money is b</em>(rho-1) if m != 0. If s is small, as the curvature at m is just b/s this means that our there will always be this funny shape if s is small. It seems then that the best we can do is hide it: let m&gt;max(moneyness) and compute the sigma to match the ATM curvature. This leads to the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" height="640" width="608" /></a></div>This is all good so far. Unfortunately running a minimizer on it will lead to a solution with a small s. And the bigger picture looks like this (QE is Zeliade Quasi-Explicit, Levenberg-Marquardt would give the same result):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" height="454" width="640" /></a></div>Of course a simple fix is to not let s to be too small, but how do we defined what is too small? I have found that a simple rule is too always ensure that s is increasing with the maturity supposing that we have to fit a surface. This rule has also a very nice side effect that spurious arbitrages will tend to disappear as well. On the figure above, I can bet that there is a big arbitrage at k=m for the QE result.<br /><br /><br /><br /><br /></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

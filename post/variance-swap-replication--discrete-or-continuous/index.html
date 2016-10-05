@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Variance Swap Replication : Discrete or Continuous?</h1>
-    <span class="post-date">Feb 19, 2015 &middot; 1 minute read
+    <span class="post-date">Feb 19, 2015 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/variance-swap-replication--discrete-or-continuous/#disqus_thread">Comments</a>
     </span>
     <p>People regularly believe that Variance swaps need to be priced by discrete replication, because the market trades only a discrete set of options.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-9dEW7QRFa7k/VOYguM8BHOI/AAAAAAAAH0Q/RPFxCeyq6nU/s1600/Screenshot%2B-%2B190215%2B-%2B18%3A36%3A26.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-9dEW7QRFa7k/VOYguM8BHOI/AAAAAAAAH0Q/RPFxCeyq6nU/s1600/Screenshot%2B-%2B190215%2B-%2B18%3A36%3A26.png" height="340" width="640" /></a></div><br />In reality, a discrete replication will misrepresent the tail, and can be quite arbitrary. It looks like the discrete replication as described in <a href="http://bfi.cl/papers/Derman%201999%20-%20More%20about%20Variance%20Swaps.pdf">Derman Goldman Sachs paper</a> is in everybody&rsquo;s mind, probably because it&rsquo;s easy to grasp. Strangely, it looks like most forget the section &ldquo;Practical problems with replication&rdquo; on p27 of his paper, where you can understand that discrete replication is not all that practical.<br /><br />Reflecting on all of this, I noticed it was possible to create more accurate discrete replications easily, and that those can have vastly different hedging weights. It is a much better idea to just replicate the log payoff continuously with a decent model for interpolation and extrapolation and imply the hedge from the greeks.<br /><br />I wrote <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2567398">a small paper around this here</a>.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

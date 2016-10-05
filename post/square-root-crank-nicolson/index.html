@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Square Root Crank-Nicolson</h1>
-    <span class="post-date">Jun 19, 2015 &middot; 3 minute read
+    <span class="post-date">Jun 19, 2015 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/square-root-crank-nicolson/#disqus_thread">Comments</a>
     </span>
     <p>C. Reisinger kindly pointed out to me <a href="http://arxiv.org/abs/1210.5487">this paper around square root Crank-Nicolson</a>. The idea is to apply a square root of time transformation to the PDE, and discretize the resulting PDE with Crank-Nicolson. Two reasons come to mind to try this: <br /><ul><li>the square root transform will result in small steps initially, where the solution is potentially not so smooth, making Crank-Nicolson behave better.</li><li>&nbsp;it is the natural time of the Brownian motion.</li></ul>Interestingly, it has nicer properties than what those reasons may suggest. On the Fokker-Planck density PDE, it does not oscillate under some very mild conditions and <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2605160">preserves density positivity at the peak</a>.<br /><br />Out of curiosity I tried it to price a one touch barrier option. Of course there is an analytical solution in my test case (Black-Scholes assumptions), but as soon as rates are assumed not constant or local volatility is used, there is no other solution than a numerical method. In the later case, finite difference methods are quite good in terms of performance vs accuracy.<br /><br />The classic Crank-Nicolson gives a reasonable price, but the strong oscillations near the barrier, at every time step are not very comforting.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="337" src="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />Moving to square root of time removes nearly all oscillations on this problem, even with a relatively low number of time steps compared to the number of space steps.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Square Root Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />We can see that the second step prices are a bit higher than the third step (the lines cross), which looks like a small numerical oscillation in time, even if there is no oscillation is space.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">TR-BDF2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />As a comparison, the TR-BDF2 scheme does relatively well: oscillations are removed after the second step, even with the extreme ratio of time steps vs space steps used on this example so that illustrations are clearer - Crank-Nicolson would still oscillate a lot with 10 times less space steps but we would not see oscillation on the square root Crank-Nicolson and a very mild one on TR-BDF2.<br /><br />The LMG2 scheme (a local richardson extrapolation) does not oscillate at all on this problem but is the slowest:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">LMG2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />The square root Crank-Nicolson is quite elegant. It can however not be applied to that many problems in practice, as often some grid times are imposed by the payoff to evaluate, for example in a case of a discrete weekly barrier. But for continuous time problems (density PDE, Vanilla, American, continuous barriers) it&rsquo;s quite good.<br /><br />In reality, with a continuous barrier, the payoff is not discontinuous at every step, but it is only discontinuous at the first step. So Rannacher smoothing would work very well on that problem:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s1600/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s640/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher Prices near the Barrier. Each line is a different time.</td></tr></tbody></table>The somewhat interesting payoff left for the square root Crank-Nicolson is the American.<br /></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

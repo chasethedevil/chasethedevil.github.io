@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Java Calendar Is Broken On JVM Upgrade</h1>
-    <span class="post-date">Aug 19, 2009 &middot; 2 minute read
+    <span class="post-date">Aug 19, 2009 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/#disqus_thread">Comments</a>
     </span>
     <p>We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<br /><br />The reason behind this is the daylight saving time conventions. An old JVM won&rsquo;t necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<br /><br />Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<br /><br />JVM 1.5.0_12<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/17/09 11:59 PM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />JVM 1.5.0_20<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/18/09 12:59 AM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />The source code:<pre><br />public class DateBug {       <br />   <br />    private static String FILE_NAME = &ldquo;datebug.txt&rdquo;;<br />   <br />    public static void load() throws IOException {<br />        FileReader fr = new FileReader(FILE_NAME);<br />        BufferedReader br = new BufferedReader(fr);<br />        String l = br.readLine();<br />        br.close();<br />        long time = new Long(l);<br />        Date d = new Date(time);<br />        System.out.println(&ldquo;loading date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />    }<br />   <br />    public static void saveNew() throws IOException {<br />        Calendar c = Calendar.getInstance(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        c.set(2009, 06, 17, 23, 59);<br />        Date d = c.getTime();<br />        System.out.println(&ldquo;saving date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />       <br />        FileWriter fw = new FileWriter(FILE_NAME);<br />        PrintWriter pw = new PrintWriter(fw);<br />        pw.println(d.getTime());<br />        pw.close();<br />    }<br />   <br />    public static void main(String[] args) throws IOException {<br />        System.out.println(&ldquo;JVM &ldquo;+System.getProperty(&ldquo;java.version&rdquo;));<br />        if (args.length == 1) {<br />            if (args[0].equals(&ldquo;save&rdquo;)) {<br />                saveNew();<br />            }<br />        } else {<br />            load();<br />        }<br />    }<br /></pre>What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<br />This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

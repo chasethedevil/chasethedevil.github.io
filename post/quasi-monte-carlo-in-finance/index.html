@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Quasi Monte Carlo in Finance</h1>
-    <span class="post-date">May 13, 2013 &middot; 1 minute read
+    <span class="post-date">May 13, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/#disqus_thread">Comments</a>
     </span>
     <p>I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.<br /><br />Here is what I found:<br /><ol><li>Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed. This is all very well described in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=6&amp;cad=rja&amp;ved=0CFwQFjAF&amp;url=http%3A%2F%2Fwww-stat.stanford.edu%2F~owen%2Fcourses%2F362%2Freadings%2Fsiggraph03.pdf&amp;ei=08CQUea-F4jMhAfx5YDgCA&amp;usg=AFQjCNGLnKapkdJ4_caiSE3Ro_kf21NvkQ&amp;sig2=j2b_JqQuO9JNU0ko7yTeOw&amp;bvm=bv.46340616,d.ZG4">Owen Quasi Monte Carlo document</a> </li><li>Lattice rules. It is another form of quasi random sequences, which so far was not very well adapted to finance problems. A <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDYQFjAB&amp;url=https%3A%2F%2Fwww.maths.unsw.edu.au%2Fsites%2Fdefault%2Ffiles%2Famr08_9_0.pdf&amp;ei=ysKQUebXO4axO7ungPAN&amp;usg=AFQjCNErqQvM1IyLlUJH2EX5_mVG3f-ZCw&amp;sig2=gYbfQebTwUP4mtj6bteCcQ&amp;bvm=bv.46340616,d.ZWU">presentation from Giles &amp; Kuo</a> look like it&rsquo;s changing.</li><li>Fast PCA. An alternative to Brownian Bridge is the standard PCA. The problem with PCA is the performance in O(n^2). A possible speedup is possible in the case of a equidistant time steps. <a href="http://www.google.com/url?q=http://citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.142.5057%26rep%3Drep1%26type%3Dpdf&amp;sa=U&amp;ei=5MWQUaioA8KXhQfDnYCYDQ&amp;ved=0CB0QFjAC&amp;usg=AFQjCNHUhpr6_Ofiqqw2XeU8SY_amnx0pw">This paper</a> shows it can be generalized. But the data in it shows it is only advantageous for more than 1024 steps - not so interesting in Finance.</li></ol></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

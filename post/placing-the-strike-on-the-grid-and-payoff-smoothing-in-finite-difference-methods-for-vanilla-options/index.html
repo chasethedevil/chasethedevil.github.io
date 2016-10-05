@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options</h1>
-    <span class="post-date">Jan 12, 2014 &middot; 2 minute read
+    <span class="post-date">Jan 12, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/placing-the-strike-on-the-grid-and-payoff-smoothing-in-finite-difference-methods-for-vanilla-options/#disqus_thread">Comments</a>
     </span>
     <p>Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Convergence Remedies for non-smooth payoffs in option pricing</a> suggest that placing the strike on the grid for a Vanilla option is good enough:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" height="48" width="640" /></a></div><br />At the same time, Tavella and Randall show in their book that numerically, placing the strike in the middle of two nodes leads to a more accurate result. My own numerical experiments confirm Tavella and Randall suggestion.<br /><br />In reality, what Pooley et al. really mean, is that quadratic convergence is maintained if the strike is on the grid for vanilla payoffs, contrary to the case of discontinuous payoffs (like digital options) where the convergence decreases to order 1. So it&rsquo;s ok to place the strike on the grid for a vanilla payoff, but it&rsquo;s not optimal, it&rsquo;s still better to place it in the middle of two nodes. Here are absolute errors in a put option price:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.04473021824995271</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 0.003942854282069419<br />on grid, projection smoothing 0.044730218065351934<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.004040359609906119</span><br /><br />As expected (and mentioned in Pooley et al.), the projection does not do anything here. When the grid size is doubled, the convergence ratio of all methods is the same (order 2), but placing the strike in the middle still increases accuracy significantly.<br /><br />Here is are the same results, but for a digital put option:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing &nbsp; &nbsp; &nbsp; &nbsp; 0.03781319921461046<br />on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 8.289052335705427E-4<br />on grid, projection smoothing 1.9698293587372406E-4<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.5122153011418744E-4</span><br /><br />Here only the 3 last methods are of order-2 convergence, and projection is in deed the most accurate method, but placing the strike in the middle is really not that much worse, and much simpler.<br /><br />A disadvantage of Simpson smoothing (or smoothing by averaging), is that it breaks put-call parity (see the paper &ldquo;<a href="http://papers.ssrn.com/abstract=2362969">Exact Forward and Put Call Parity with TR-BDF2</a>&rdquo;) <br /><br />I think the emphasis in their paper on &ldquo;no smoothing is required&rdquo; for vanilla payoffs can be misleading. I hope I have clarified it in this post.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

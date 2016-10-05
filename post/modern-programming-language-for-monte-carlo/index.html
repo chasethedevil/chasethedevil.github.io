@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Modern Programming Language for Monte-Carlo</h1>
-    <span class="post-date">Apr 18, 2015 &middot; 4 minute read
+    <span class="post-date">Apr 18, 2015 &middot; 4 minute read &middot; <a href="http://chasethedevil.github.io/post/modern-programming-language-for-monte-carlo/#disqus_thread">Comments</a>
     </span>
     <p>A few recent programming languages sparked my interest:<br /><ul><li><a href="http://julialang.org/">Julia</a>: because of the wide coverage of mathematical functions, and great attention to quality of the implementations. It has also some interesting web interface.</li><li><a href="https://www.dartlang.org/">Dart</a>: because it&rsquo;s a language focused purely on building apps for the web, and has a supposedly good VM.</li><li><a href="http://www.rust-lang.org/">Rust</a>: it&rsquo;s the latest fad. It has interesting concepts around concurrency and a focus on being low level all the while being simpler than C.</li></ul>I decided to see how well suited they would be on a simple Monte-Carlo simulation of a forward start option under the Black model. I am no expert at all in any of the languages, so this is a beginner&rsquo;s test. I compared the runtime for executing 16K simulations times a multiplier.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Multipl. Scala&nbsp; Julia&nbsp; JuliaA&nbsp; Dart&nbsp; Python&nbsp; Rust<br />1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.03&nbsp;&nbsp; 0.08&nbsp;&nbsp;&nbsp; 0.09&nbsp;&nbsp; 0.03&nbsp;&nbsp;&nbsp;&nbsp; 0.4&nbsp; 0.004 <br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.07&nbsp;&nbsp; 0.02 &nbsp;&nbsp; 0.06&nbsp;&nbsp; 0.11&nbsp;&nbsp;&nbsp;&nbsp; 3.9&nbsp; 0.04<br />100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.51&nbsp;&nbsp; 0.21 &nbsp;&nbsp; 0.40&nbsp;&nbsp; 0.88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.23<br />1000&nbsp;&nbsp;&nbsp;&nbsp; 4.11&nbsp;&nbsp; 2.07 &nbsp;&nbsp; 4.17&nbsp;&nbsp; 8.04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.01</span><br /><br /><b>About performance</b><br /><br />I am quite impressed at Dart performance versus Scala (or vs. Java, as it has the same performance as Scala) given that it is much less strict about types and its focus is not at all on this kind of stuff.<br /><br />Julia performance is great, that is if one is careful about types. Julia is very <a href="http://julia.readthedocs.org/en/latest/manual/performance-tips/#man-performance-tips">finicky about casting and optimizations</a>, fortunately @time helps spotting the issues (often an inefficient cast will lead to copy and thus high allocation). JuliaA is my first attempt, with an implicit badly performing conversion of MersenneTwister to AbstractRNG. It is slower first, as the JIT costs is reflected on the first run, very much like in Java (although it appears to be even worse).<br /><br />Rust is the most impressive. I had to add the &ndash;release flag to the cargo build tool to produce a properly optimized binary, otherwise the performance is up to 7x worse.<br /><br /><b>About the languages</b><br /><br />My Python code is not vectorized, just like any of the other implementations. While the code looks relatively clean, I made the most errors compared to Julia or Scala. Python numpy isn&rsquo;t always great: norm.ppf is very slow, slower than my hand coded python implementation of AS241.<br /><br />Dart does not have fixed arrays: everything is a list. It also does not have strict 64 bit int: they can be arbitrarily large. The dev environment is ok but not great. <br /><br />Julia is a bit funny, not very OO (no object method) but more functional, although many OO concepts are there (type inheritence, type constructors). It was relatively straightforward, although I do not find intuitive the type conversion issues (eventual copy on conversion).<br /><br />Rust took me the most time to write, as it has quite new concepts around mutable variables, and &ldquo;pointers&rdquo; scope. I relied on an existing MersenneTwister64 that worked with latest Rust. It was a bit disappointing to see that some dSFMT git project did not compile with the latest Rust, likely because Rust is still a bit too young. This does not sound so positive, but I found it to be the language the most interesting to learn.<br /><br />I was familiar with Scala before this exercise. I used a non functional approach, with while loops in order to make sure I had maximum performance. This is something I find a bit annoying in Scala, I always wonder if for performance I need to do a while instead of a for, when the classic for makes much more sense (that and the fact that the classic for leads to some annoying delegation in runtime errors/on debug).<br /><br />I relied on the default RNG for Dart but MersenneTwister for Scala, Julia, Python, Rust. All implementations use a hand coded AS241 for the inverse cumulative normal.<br /><br /><b>Update&nbsp;</b><br /><br />Using FastMath.exp instead of Math.exp leads a slightly better performance for Scala:<br /><br />1 0.06<br />10 0.05<br />100 0.39<br />1000 2.66<br /><br />I did not expect that this would still be true in 2015 with Java 8 Oracle JVM.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

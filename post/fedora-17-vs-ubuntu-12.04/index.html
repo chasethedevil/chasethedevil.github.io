@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Fedora 17 vs Ubuntu 12.04</h1>
-    <span class="post-date">Sep 12, 2012 &middot; 2 minute read
+    <span class="post-date">Sep 12, 2012 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/fedora-17-vs-ubuntu-12.04/#disqus_thread">Comments</a>
     </span>
     <p>I had the bad idea to upgrade to the beta Ubuntu 12.10. Something awfully broke in the upgrade. After too much struggling with apt-get &amp; dpkg, I decided to install Fedora 17.<br /><br />Strangely Fedora feels much faster than Ubuntu 12.04 (the boot time especially). Yum seems also faster than apt-get, especially the update part. Also while the Unity dock is not bad (better than gnome shell dock), the Unity dash thing just makes me crazy, the gnome shell activities, while close, are much easier to use.<br /><br />But it needs a bit more steps to install, although I had no problem to install <a href="http://www.if-not-true-then-false.com/2012/fedora-17-nvidia-guide/">nvidia drivers</a>,&nbsp;<a href="http://obiee2go.blogspot.fr/2012/06/oracle-11g-oracle-database-11g.html">Oracle 11g xe</a>, Java, MP3, nice fonts, nice icons thanks to the guides <a href="http://www.mjmwired.net/resources/mjm-fedora-f17.html">here</a> and <a href="http://smashingweb.info/fedora-17-post-installation-guide-things-to-do-after-installing-fedora-17/">there</a>. SSD Trim instructions are the same (basically use &ldquo;discard&rdquo; instead of &ldquo;default&rdquo; in /etc/fstab). I have the most troubles with Oracle: somehow the start script does not work and I currently log in as &ldquo;oracle&rdquo; and start&nbsp;/u01/app/oracle/product/11.2.0/xe/config/scripts/startdb.sh from there (after having added the proper .bashrc for this user)<br /><br />I even managed the peculiarities of my laptop a similar way as ubuntu: I want Nvidia card when plugged in to a monitor (to be able to use it) and Intel card when not (to be able to use the LCD screen). My solution is to use the boot screen (in reality one just need to restart X11): this amounted to add a &ldquo;hdmi&rdquo; in &ldquo;/etc/grub.d/40_custom&rdquo; and creating a link to &ldquo;/etc/rc3.d/S10DriverSelect&rdquo; the following script (a dirty hack):<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">#!/bin/sh</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">if grep -q hdmi /proc/cmdline</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules.bak/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.hdmi /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules.bak/extensions/nvidia /usr/lib64/xorg/modules/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">else</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.intel /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules/extensions/nvidia /usr/lib64/xorg/modules.bak/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">fi</span><br /><br />Linux distros are really becoming closer in terms of configuration, LSB has made great progress.<br /><div><br />Edit from November 29: After a few weeks, I noticed that the system was quite unstable unfortunately. As a result, I moved back to Ubuntu on my laptop. I am running OpenSuse on my home computer. 1 year later, I am back to Fedora 19, 20 on my desktop - no stability issue, I prefer Gnome over KDE. </div></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

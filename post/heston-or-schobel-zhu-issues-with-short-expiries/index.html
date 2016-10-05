@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Heston or Schobel-Zhu issues with short expiries</h1>
-    <span class="post-date">Jul 3, 2014 &middot; 2 minute read
+    <span class="post-date">Jul 3, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/heston-or-schobel-zhu-issues-with-short-expiries/#disqus_thread">Comments</a>
     </span>
     <p>It&rsquo;s relatively well known that Heston does not fit the market for short expiries. Given that there are just 5 parameters to fit a full surface, it&rsquo;s almost logical that one part of the surface of it is not going to fit well the market.<br />I was more surprised to see how bad Heston or Schobel-Zhu were to fit a single short expiry volatility slice. As an example I looked at SP500 options with 1 week expiry. It does not really matter if one forces kappa and rho to constant values (even to 0) the behavior is the same and the error in fit does not change much.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" height="400" width="390" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu fit for a slice of maturity 1 week</td></tr></tbody></table>In this graph, the brown, green and red smiles corresponds to Schobel-Zhu fit using an explicit guess (matching skew &amp; curvature ATM), using Levenberg-Marquardt on this guess, and using plain differential evolution. <br />What happens is that the smiles flattens to quickly in the strike dimension. One consequence is that the implied volatility can not be computed for extreme strikes: the smile being too low, the price becomes extremely small, under machine epsilon and the numerical method (Cos) fails. There is also a bogus angle in the right wing, because of numerical error. I paid attention to ignore too small prices in the calibration by truncating the initial data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston fit, with Lord-Kahl (exact wings)</td></tr></tbody></table><br />SABR behaves much better (fixing beta=1 in this case) in comparison (As I use the same truncation as for Schobel-Zhu, the flat left wing part is ignored). <br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">SABR fit for a slice of maturity 1 week</td></tr></tbody></table>For longer expiries, Heston &amp; Schobel-Zhu, even limited to 3 parameters, actually give a better fit in general than SABR.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

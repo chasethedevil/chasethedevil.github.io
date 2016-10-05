@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>On the importance of accuracy for bpvol solvers</h1>
-    <span class="post-date">Jun 12, 2014 &middot; 2 minute read
+    <span class="post-date">Jun 12, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/on-the-importance-of-accuracy-for-bpvol-solvers/#disqus_thread">Comments</a>
     </span>
     <p>While I was playing around calibrating the arbitrage free SABR model from Hagan (using the PDE on probability density approach), I noticed a misbehavior for some short maturity smiles. I thought it was due to the PDE implementation. Actually some of it was, but the remaining large error was due to the bpvol solver.<br /><br />I initially took the same approach as Choi et al. in <a href="http://chasethedevil.blogspot.fr/2014/04/building-more-accurate-basis-point.html" target="_blank">my solver</a>, that is to work with in-the-money prices (they work with straddles) because it&rsquo;s nice and convenient. I thought it was no big deal if prices lower than 1E-16 were not solved. It turns out I was wrong. Choi et al. solver has the same issue.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-OhKc0_EA0oI/U5nGPTB2ybI/AAAAAAAAHUM/DrRvgORONZo/s1600/Screenshot+-+06122014+-+05:24:27+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-OhKc0_EA0oI/U5nGPTB2ybI/AAAAAAAAHUM/DrRvgORONZo/s1600/Screenshot+-+06122014+-+05:24:27+PM.png" height="302" width="400" /></a></div>In the above figure, CKK denotes the Choi et al algorithm (similar with my old algorithm) and Chebyshev is my updated algorithm that is accurate with far out-of-the-money option. What happens is that even though the market price at the lowest strike is not very low, the price at the lowest strike stemming from the best fit smile is extremely low, and when we want to invert it, CKK produces a large error due to lack of representation of numbers near 1.0 as it uses indirectly the in-the-money price. That&rsquo;s where it introduces a particularly big error in this case.<br /><br /><br />I have updated my solver since, to work with out-of-the-money option prices as well, and have near machine accuracy on the whole range. I also reduced the number of Chebyshev polynomials used in the process. All the details are in my updated paper at <a href="http://papers.ssrn.com/abstract=2420757">http://papers.ssrn.com/abstract=2420757</a><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-VpIX_Pxw3k8/U5nHvLaORvI/AAAAAAAAHUY/hqzbAvsPO9w/s1600/Screenshot+-+06122014+-+05:24:13+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-VpIX_Pxw3k8/U5nHvLaORvI/AAAAAAAAHUY/hqzbAvsPO9w/s1600/Screenshot+-+06122014+-+05:24:13+PM.png" height="356" width="400" /></a></div><br /><br /><br /></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

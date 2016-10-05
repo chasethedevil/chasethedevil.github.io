@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Google Sidebar Hotkey Activation</h1>
-    <span class="post-date">Aug 25, 2005 &middot; 2 minute read
+    <span class="post-date">Aug 25, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/google-sidebar-hotkey-activation/#disqus_thread">Comments</a>
     </span>
     <p>I like the new <a href="http://desktop.google.com/en/">Google Desktop</a> with the sidebar. It shares similarities with <a href="http://www.konfabulator.com/">Konfabulator</a>, recently bought by yahoo. They both allow easy access to some custom little widgets that I would call &ldquo;active&rdquo;. They are active because they are refreshed periodically with new information (processor usage, news, scratch pad, emails, etc). But while Konfabulator choose to emphasize on visual effects, Google prefers a more standard information presentation. This shows as well in their choice of technologies:<br /><ul>   <li>Google Sidebar plug-ins are just Windows appz that can take advantage of Google Interfaces. That makes them quite powerful in theory, but programming them is less accessible.<br />  </li>   <li>Konfabulator plug-ins are Javascript+XML, the Javascript is not just regular client-side javascript, it can use Konfabulator API (containing many effect and rudimentary network access), and COM objects . That makes them very focused on presentation, and the Internet.</li> </ul> In the long run, Google choice makes sense, the forthcoming <a href="http://fortes.com/work">Avalon</a> will make visual effects very accessible to windows developers.<br /><br />Now back to the subject, I missed the &lsquo;activation on hotkey&rsquo; feature from Konfabulator for the Google Sidebar. Fortunately, I a have found a powerful little open-source program, <a href="http://www.autohotkey.com/">Autohotkey</a>, that allowed me to do that very quickly. Here is the script I use (it&rsquo;s a hack since it relies on toolbar size (but not position), but I like the default position and it works (only using floating deskbar, i let you figure out for the non floating version)):<br /><span style="font-family:Courier New, Courier, monospace;">F12::<br />MouseGetPos, X, Y<br />if WinExist(&ldquo;ahk_class _GD_Sidebar&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left, 160, 16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}<br />else if WinExist(&ldquo;ahk_class ATL:0044A4C8&rdquo;)<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left,  158,  16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}</span><br /><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/google" rel="tag">google</a>, <a href="http://del.icio.us/tag/desktop" rel="tag">desktop</a>, <a href="http://del.icio.us/tag/sidebar" rel="tag">sidebar</a>, <a href="http://del.icio.us/tag/hotkey" rel="tag">hotkey</a>, <a href="http://del.icio.us/tag/autohotkey" rel="tag">autohotkey</a>, <a href="http://del.icio.us/tag/hack" rel="tag">hack</a></span></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

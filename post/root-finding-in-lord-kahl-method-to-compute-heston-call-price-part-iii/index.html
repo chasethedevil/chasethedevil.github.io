@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</h1>
-    <span class="post-date">Apr 12, 2013 &middot; 2 minute read
+    <span class="post-date">Apr 12, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/#disqus_thread">Comments</a>
     </span>
     <p>I forgot two important points in my <a href="http://chasethedevil.blogspot.fr/2013/04/root-finding-in-lord-kahl-method-to_11.html">previous post</a> about <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the Heston call price:<br /><br />- Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl</a>, <a href="http://pjaeckel.webspace.virginmedia.com/NotSoComplexLogarithmsInTheHestonModel.pdf">Kahl-Jaeckel</a> (the more usual way limited to machine epsilon accuracy), <a href="http://epubs.siam.org/doi/abs/10.1137/110830241">Forde-Jacquier-Lee</a> ATM implied volatility without scaling for a maturity of 1 day:<br /><br />strike 62.5=2.919316809400033E-34 8.405720564041985E-12 0.0<br />strike 68.75=-8.923683388191852E-28 1.000266536266281E-11 0.0<br />strike 75.0=-3.2319611910032E-22 2.454925152051146E-12 0.0<br />strike 81.25=1.9401743410877718E-16 2.104982854689297E-12 0.0 <br />strike 87.5=-Infinity -1.6480150577535824E-11 0.0<br />strike 93.75=Infinity 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.4174318393886519 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.326968012594355E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=-5.205783145942609E-21 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=4.537094156599318E-25 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=1.006555799739525E-27 3.2365221613872563E-12 2.3126009701775733E-240<br />strike&nbsp; 131.25=4.4339539263484925E-31 2.4794388764348696E-11 0.0<br /><br />One can see negative prices and meaningless prices outside ATM. With scaling it changes to: <br />strike 62.5=2.6668642552659466E-182 8.405720564041985E-12 0.0<br />strike 68.75=7.156278101597845E-132 1.000266536266281E-11 0.0<br />strike 81.25=7.863105641534119E-55 2.104982854689297E-12 0.0<br />strike 87.5=7.073641308465115E-28 -1.6480150577535824E-11 0.0<br />strike 93.75=1.8375145950924849E-9 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.41743183938755385 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.3269785342953315E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=8.803247187972696E-42 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=5.594342441346233E-90 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=7.6539757567179276E-149 3.2365221613872563E-12 2.3126009701775733E-240<br />strike 131.25=0.0 2.4794388764348696E-11 0.0<br /><br />One can now now see that the Jacquier-Lee approximation is quickly not very good.<br /><br />- Put: the put option price can be computed using the exact same <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan </a>formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

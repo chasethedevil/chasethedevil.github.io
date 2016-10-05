@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Use ORM For Better Performance</h1>
-    <span class="post-date">Jun 12, 2007 &middot; 3 minute read
+    <span class="post-date">Jun 12, 2007 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/use-orm-for-better-performance/#disqus_thread">Comments</a>
     </span>
     <p>This is not something I would have though a few years ago. It is something I learnt after working on many different projects, some using an ORM layer like Hibernate, Entity EJBs, or JDO, some using JDBC approach via Spring Templates or custom frameworks. Many projects that use ORM have performance problems, that don&#39;t seem that common with projects using JDBC. But the size of the database model of ORM projects is often much bigger than the one of JDBC projects (which actually makes sense). If you have only a few queries to do, why bother with ORM? This would be complexity for nothing.  <br><br>But for most enterprise projects, the size of the database model is quite big, and the model itself can be complex (many relations between many tables). With this kind of model, ORM is more efficient. It is faster to develop with, creates less bugs due to string misspelled, or types badly read. It is also better performing. Doing 1 giant query to retrieve everything in 1 step is not faster, especially if you don&#39;t always need all the information retrieved. In a complex model, many cases are specifics, only useful in 10% of the cases. The temptation is high with a JDBC approach to do one giant query, because it is substantially longer (and more work) to do N queries.&nbsp; With ORM, it is a bit the opposite, by default N queries is easier to do. The problem is that N(ORM) tends to be very high if one is not careful with the mapping to  <a href="http://www.hibernate.org/118.html#A23">avoid the N+1 problem</a>. However it is simpler to reduce the number of queries by joining tables, rather than splitting queries, ORM performance optimization feels more natural. <br><br>Martin Fowler tends to be also pro ORM in its <a href="http://www.martinfowler.com/articles/dblogic.html">&quot;Domain Logic and SQL&quot; article</a>. He also mentions something interesting about SQL query optimization: <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p>It&#39;s also worth pointing out that this example is one that plays to a database&#39;s strengths. Many queries don&#39;t have the strong elements of selection and aggregation that this one does, and won&#39;t show such a performance change. In addition multi-user scenarios often cause surprising changes to the way queries behave, so real profiling has to be done under a realistic multi-user load. You may find that locking issues outweigh anything you can get by faster individual queries.</p>      <a name="id2249937"></a>     </blockquote><br>In the end it is up to us to make ORM or JDBC approach perform. JDBC provides much more direct access to database, and in benchmarks (always simple database models) or in theory it should be faster. But in the real world, I argue that ORM optimization is simpler and therefore, often ORM projects will perform better. <br></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

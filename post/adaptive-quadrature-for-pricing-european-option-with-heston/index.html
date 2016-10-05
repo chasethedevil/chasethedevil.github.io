@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Adaptive Quadrature for Pricing European Option with Heston</h1>
-    <span class="post-date">Jun 25, 2012 &middot; 2 minute read
+    <span class="post-date">Jun 25, 2012 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/adaptive-quadrature-for-pricing-european-option-with-heston/#disqus_thread">Comments</a>
     </span>
     <p>The Quantlib code to evaluate the Heston integral for European options is quite nice. It proposes <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=4&amp;ved=0CGoQFjAD&amp;url=http%3A%2F%2Fwww.math.uni-wuppertal.de%2F%7Ekahl%2Fpublications%2FNotSoComplexLogarithmsInTheHestonModel.pdf&amp;ei=MkDoT8HHOaO_0QXS_6SeCQ&amp;usg=AFQjCNFbAMQBLoKRd0BR_-HC0CkP4zrMtg">Kahl &amp; Jaeckel</a> method as well as Gatheral method for the complex logarithm. It also contains expansions where it matters so that the resulting code is very robust. One minor issue is that it does not integrate both parts at the same time, and also does not propose Attari method for the Heston integral that is supposed to be more stable.<br /><br />I was surprised to find out that out of the money, short expiry options seemed badly mispriced. In the end I discovered it was just that it required sometimes more than 3500 function evaluations to have an accuracy of 1e-6.<br /><br />As this sounds a bit crazy, I thought that Jaeckel log transform was the culprit. In reality, it turned out that it was <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CFMQFjAA&amp;url=http%3A%2F%2Fusers.wpi.edu%2F%7Ewalker%2FMA510%2FHANDOUTS%2Fw.gander%2Cw.gautschi%2CAdaptive_Quadrature%2CBIT_40%2C2000%2C84-101.pdf&amp;ei=U0HoT_HWBeXP0QW23O3xBw&amp;usg=AFQjCNH4KRWMprUvL8yBPKRxO_sVNyc2Pg">Gauss Lobatto Gander &amp; Gautschi implementation</a>. I tried the simplest algorithm in <a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">Espelid improved algorithms</a>: modsim, an adaptive extrapolated Simpson method, and it was 4x faster for the same accuracy. That plus the fact that it worked out of the box (translated to Java) on my problem was impressive.<br /><br />Jaeckel log transform (to change the interval from 0,+inf to 0,1) works well, and seems to offer a slight speedup (10% to 15%) for around ATM options, mid to long term for the same accuracy. Unfortunately, it can also slow down by up to 50% the convergence for more OTM options or shorter expiries. So I am not so sure about its interest vs just cutting off the integration at phi=200.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

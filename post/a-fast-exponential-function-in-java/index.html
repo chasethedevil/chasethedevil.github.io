@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>A Fast Exponential Function in Java</h1>
-    <span class="post-date">Apr 19, 2013 &middot; 2 minute read
+    <span class="post-date">Apr 19, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/a-fast-exponential-function-in-java/#disqus_thread">Comments</a>
     </span>
     <p>In finance, because one often dicretize the log process instead of the direct process for Monte-Carlo simulation, the Math.exp function can be called a lot (millions of times for a simulation) and can be a bottleneck. I have noticed that the simpler Euler discretization was for local volatility Monte-Carlo around 30% faster, because it avoids the use of Math.exp.<br /><br />Can we improve the speed of exp over the JDK one? At first it would seem that the JDK would just call either the processor exp using an <a href="http://bad-concurrency.blogspot.co.uk/2012/08/arithmetic-overflow-and-intrinsics.html">intrinsic function call</a> and that should be difficult to beat. However what if one is ok for a bit lower accuracy? Could a simple <a href="http://www.siam.org/books/ot99/OT99SampleChapter.pdf">Chebyshev polynomial expansion</a> be faster?<br /><br />Out of curiosity, I tried a Chebyshev polynomial expansion with 10 coefficients stored in a final double array. I computed the coefficient using a precise quadrature (Newton-Cotes) and end up with 1E-9, 1E-10 absolute and relative accuracy on [-1,1].<br /><br />Here are the results of a simple sum of 10M random numbers:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.75s for Math.exp sum=1.7182816693332244E7<br />0.48s for ChebyshevExp sum=1.718281669341388E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span><br /><br />So while this simple implementation is actually faster than Math.exp (but only works within [-1,1]), FastMath from Apache commons maths, that relies on a table lookup algorithm is just faster (in addition to being more precise and not limited to [-1,1]).<br /><br />Of course if I use only 5 coefficients, the speed is better, but the relative error becomes around 1e-4 which is unlikely to be satisfying for a finance application.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.78s for Math.exp sum=1.7182816693332244E7<br />0.27s for ChebyshevExp sum=1.718193001875838E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Local Stochastic Volatility - Particles and Bins</h1>
-    <span class="post-date">Jan 30, 2015 &middot; 3 minute read
+    <span class="post-date">Jan 30, 2015 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/local-stochastic-volatility---particles-and-bins/#disqus_thread">Comments</a>
     </span>
     <p>In an <a href="http://chasethedevil.blogspot.fr/2013/10/local-stochastic-volatility-with-monte.html">earlier post</a>, I mentioned the similarities between the Guyon-Labordere <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1885032">particle method</a> and the Vanderstoep-Grzelak-Oosterlee <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fabstract%3D2278122&amp;ei=255eUqaEDMaxhAfdqoBI&amp;usg=AFQjCNF2KqSTT2ouvAyiA2J77foOFTzMKw&amp;sig2=fzb4vlDPp49Hp1oT5Wja4A&amp;bvm=bv.54176721,d.ZG4">&ldquo;bin&rdquo; method</a> to calibrate and price under Local Stochastic volatility. I will be a bit more precise here.<br /><br /><span style="font-size: large;"><b>The same thing, really</b></span><br /><br />The particle method can be seen as a generalization of the &ldquo;bin&rdquo; method. In deed, the bin method consists in doing the particle method using a histogram estimation of the conditional variance. The histogram estimation can be more or less seen as a very basic rectangle kernel with the appropriate bandwidth. The &ldquo;bin&rdquo; method is then just the particle method with another kernel (wiki link) (in the particle method, the kernel is a quartic with bandwidth defined by some slightly elaborate formula). A very good paper on this is Silverman <i><a href="https://ned.ipac.caltech.edu/level5/March02/Silverman/paper.pdf">Density estimation for statistics and data analysis</a></i>, referenced by Guyon-Labordere.<br /><br />In theory, the original particle method has the advantage of using a narrower bandwidth, resulting in a theoretical increase in performance as one does not have to sum over all particles, while providing a more local therefore precise estimate. In practice, the performance advantage is not so clear on my non optimized code.<br /><br /><span style="font-size: large;"><b>Two-pass</b></span><br /><br />There is an additional twist in the particle method: one can compute the expectation and the payoff evaluation in the same Monte-Carlo simulation, or in two sequential Monte-Carlo simulations.<br /><br />Why would we do two? Mainly because the expectation is computed across all paths, at each time step, while, usually, payoff evaluation requires a full path as it will need to store some state at each observation time for path-dependent payoffs.<br /><br />We can avoid recomputing the paths by just caching them at each observation time. The problem is that the size of this cache can quickly become extremely large and blow up the memory. For example a 10y daily knock-out will require 10 * 252 * 8 * 2 * MB = 40 GB for 1 million paths.<br /><br />A side effect of the second simulation is that one can use a Quasi-Random number generator there, while for the first simulation, this is not easy as we compute all paths, dimension by dimension.<br /><br />In practice, both methods work well, particle or bins, single-pass or two-pass. Here is a graph of the error in volatility, SV is a not so well calibrated Heston to market data. LVSV are the local stochastic volatility simulations, using as Vanderstoep 100 steps per year and 500K simulations with 30 bins.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-mU7ODNSv0l0/VMtk-7UmKvI/AAAAAAAAHy8/u-jq0sMMJRc/s1600/Screenshot%2Bfrom%2B2015-01-30%2B09%3A23%3A31.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-mU7ODNSv0l0/VMtk-7UmKvI/AAAAAAAAHy8/u-jq0sMMJRc/s1600/Screenshot%2Bfrom%2B2015-01-30%2B09%3A23%3A31.png" height="288" width="640" /></a></div><br /><br />The advantages of the particle do not show up in terms of accuracy on this example.<br />I have also noticed that short expiries seem trickier, the error being larger. This might just be due to the time-step size, but interestingly the papers only show graphs of medium (min=6m) to large expiries.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

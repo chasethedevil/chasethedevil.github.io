@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Pseudo-Random vs Quasi-Random Numbers</h1>
-    <span class="post-date">Nov 12, 2014 &middot; 2 minute read
+    <span class="post-date">Nov 12, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/pseudo-random-vs-quasi-random-numbers/#disqus_thread">Comments</a>
     </span>
     <p>Quasi-Random numbers (like <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol</a>) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like <a href="http://en.wikipedia.org/wiki/Mersenne_twister">Mersenne-Twister</a>). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).<br /><br />For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions). Later Lemieux gave direction numbers for up to 360 dimensions. Then, P. Jäckel proposed some extension with a random initialization of the direction vectors in his book from 2006. And finally Joe &amp; Kuo published direction numbers for up to 21200 dimensions.<br /><br />But there are very few studies about how good are real world simulations with so many quasi-random dimensions. A recent paper &ldquo;<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2210420">Fast Ninomiya-Victoir Calibration of the Double-Mean-Reverting Model</a>&rdquo; by Bayer, Gatheral &amp; Karlsmark tests this for once, and the results are not so pretty:<br /><div class="separator" style="clear: both; text-align: center;"><a href="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s1600/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="342" src="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s640/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" width="640" /></a></div>With their model, the convergence with Sobol numbers becomes worse when the number of time-steps increases, that is when the number of dimension increases. There seems to be even a threshold around 100 time steps (=300 dimensions for Euler) beyond which a much higher number of paths (2^13) is necessary to restore a proper convergence. And they use the latest and greatest Joe-Kuo direction numbers.<br /><br />Still the total number of paths is not that high compared to what I am usually using (2^13 = 8192). It&rsquo;s an interesting aspect of their paper: the calibration with a low number of paths.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

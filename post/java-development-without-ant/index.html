@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Java development without Ant</h1>
-    <span class="post-date">Jul 12, 2005 &middot; 2 minute read
+    <span class="post-date">Jul 12, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/java-development-without-ant/#disqus_thread">Comments</a>
     </span>
     <p>When <a href="http://jakarta.apache.org/ant">Ant</a> came out, I welcomed it. It was better than Makefiles for Java, it solved the path and classpath format difference between Windows and Linux, did not rely on shell programs. It did provide a platform independent way for building Java software. At that time, there was another alternative, <a  href="http://jmk.sourceforge.net">JMK</a> which had a lisp like syntax, and solved the same problems as Ant. But Ant was backed by apache, and this were the times of XML everywhere.<br> I got more and more fed up with ant scripts over the years. During a long time you had to resort to an XML trick just to include other ant file, you did not have conditionals, but more importantly, it is quite a pain to write long ant scripts in XML. XML is not that good to write logic with, XSLT did not become as big as it could have been partly for this reason.<br> Recently, Java IDEs (<a href="http://www.eclipse.org">Eclipse</a>) have made Java coding really comfortable, but why is it that for each project, you need to have to setup your project classpath, build, and write an ant script that does the same? In many companies I have seen ant scripts taking minutes to do a build in order to test your latest modification. This is crazy when it took a few seconds to eclipse to compile it, and it&rsquo;s already compiled, so why not using that output for testing your development? Ant, despite its codebase and age, does not do much: it does not calculate dependencies, it leaves that to the java compiler, it does not keep checksums of files to check if one has changed, it just uses file system dates (which can be a problem if you retrieve an older version of some file).<br> Now I am using a <a href="http://www.jython.org">Jython </a>script that justs copies my eclipse build and packages it appropriately, it works well, it is fast, it is flexible (all the power of python), and platform independent. You need to be a bit careful how you choose to design your Jython script, but hey, even with Ant limitations on messing everything around, I have seen so many awful Ant scripts.<br> <br><br />Technorati tags: <a href="http://technorati.com/tag/java" rel="tag">java</a></p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>From Double Precision Normal Density to Double Precision Cumulative Normal Distribution</h1>
-    <span class="post-date">Apr 2, 2013 &middot; 3 minute read
+    <span class="post-date">Apr 2, 2013 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/#disqus_thread">Comments</a>
     </span>
     <p>Marsaglia in <a href="http://www.jstatsoft.org/v11/a05/paper">his paper on Normal Distribution</a> made the same mistake I initially did while trying to verify <a href="http://chasethedevil.blogspot.fr/2013/03/cracking-double-precision-gaussian.html">the accuracy of the normal density</a>.<br /><br />In his table of values comparing the true value computed by Maple for some values of x to the values computed by Sun or Ooura erfc, he actually does not really use the same input for the comparison. One example is the last number: 16.6. 16.6 does not have an exact representation in double precision, even though it is displayed as 16.6 because of the truncation at machine epsilon precision. Using Python mpmath, one can see that:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; mpf(-16.6)<br />mpf(&lsquo;-16.6000000000000014210854715202004&rsquo;)</span></span><br /><br />This is the more accurate representation if one goes beyond double precision (here 30 digits). And the value of the cumulative normal distribution is:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; ncdf(-16.6)<br />mpf(&lsquo;3.4845465199503256054808152068743e-62&rsquo;)</span></span><br /><br />It is different from:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&gt;&gt;&gt; ncdf(mpf(&ldquo;-16.6&rdquo;))<br />mpf(&lsquo;3.48454651995040810217553910503186e-62&rsquo;)</span></span><br /><br />where in this case it is really evaluated around -16.6 (up to 30 digits precision). Marsaglia gives this second number as reference. But all the other algorithms will actually take as input the first input. It is more meaningful to compare results using the exact same input. Using human readable but computer truncated numbers is not the best.  The cumulative normal distribution will often be computed using some output of some calculation where one does not have an exact human readable input.<br /><br />The standard code for Ooura and Schonfelder (as well as Marsaglia) algorithms for the cumulative normal distribution don&rsquo;t use Cody&rsquo;s trick to evaluate the exp(-x*x). This function appears in all those implementations because it is part of the dominant term in the usual expansions. Out of curiosity, I replaced this part with Cody trick. For Ooura I also made minor changes to make it work directly on the CND instead of going through the error function erfc indirection. Here are the results without the Cody trick (except for Cody):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-mNamXn3QlGQ/UVrMEkkqrWI/AAAAAAAAGUU/1hihN6pqiC4/s1600/Screenshot+from+2013-04-02+14:15:51.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="307" src="http://4.bp.blogspot.com/-mNamXn3QlGQ/UVrMEkkqrWI/AAAAAAAAGUU/1hihN6pqiC4/s640/Screenshot+from+2013-04-02+14:15:51.png" width="640" /></a></div>and with it:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-bFq5HVfCCOs/UVrMEjJbuJI/AAAAAAAAGUQ/uyHKMbEsmco/s1600/Screenshot+from+2013-04-02+14:14:02.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="307" src="http://4.bp.blogspot.com/-bFq5HVfCCOs/UVrMEjJbuJI/AAAAAAAAGUQ/uyHKMbEsmco/s640/Screenshot+from+2013-04-02+14:14:02.png" width="640" /></a></div><br />All 3 algorithms are now of similiar accuracy (note the difference of scale compared to the previous graph), with Schonfelder being a bit worse, especially for x &gt;= -20. If one uses only easily representable numbers (for example -37, -36,75, -36,5, &hellip;) in double precision then, of course, Cody trick importance won&rsquo;t be visible and here is how the 3 algorithms would fare with or without Cody trick:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-zOHn3Lp96zY/UVrM8iOtgaI/AAAAAAAAGUg/7GdvJ534F60/s1600/Screenshot+from+2013-04-02+11:24:08.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="301" src="http://1.bp.blogspot.com/-zOHn3Lp96zY/UVrM8iOtgaI/AAAAAAAAGUg/7GdvJ534F60/s400/Screenshot+from+2013-04-02+11:24:08.png" width="400" /></a></div>Schonfelder looks now worse than it actually is compared to Cody and Ooura.<br /><br />To conclude, if someone claims that a cumulative normal distribution is up to double precision accuracy and it does not use any tricks to compute exp(-x*x), then beware, it probably is quite a bit less than double precision.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

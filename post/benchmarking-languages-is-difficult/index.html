@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Benchmarking Languages Is Difficult</h1>
-    <span class="post-date">Jun 3, 2009 &middot; 2 minute read
+    <span class="post-date">Jun 3, 2009 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/benchmarking-languages-is-difficult/#disqus_thread">Comments</a>
     </span>
     <p>I often looked at the famous computer languages shootout for fun. Recently I noticed they had the infamous <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=all">thread ring test</a>. I posted not very long ago several <a href="http://chasethedevil.blogspot.com/2009/01/end-of-rings-around-plain-java-better.html">blog entries about it showing how silly</a> this test was.<br /><br />Looking at the existing Java implementation for the test I decided to try to submit the tricky one using a pool of thread, and pooling message processing rather creating 1 thread per node. To my surprise, it was accepted without questions and I did have the best score for a Java program for a while. Shortly after <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=3">someone else</a> copied my program and got rid of various stuff not useful for the particular benchmark (breaking the interesting part of the design) and got accepted as well with of course a better result.<br /><br />I decided to see if I could make an <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=6">even more silly program</a> - tailored for the test only. I managed to be orders of magnitude faster - 1 thread, no synchronization, everything processed in a FIFO (linkedlist) queue. This is actually a standard way to reimplement recursion. But I was honest enough not to hide that I consider that kind of program to cheat the test and got my entry in the &ldquo;interesting alternatives&rdquo;.<br /><br />In reality there is no difference in the &ldquo;cheating&rdquo; between my new program and the program that got accepted in the official list, they both cheat by using only 1 thread and process everything 1 by 1. There is not 1 thread per node in any of the program, and they can avoid any concurrency issues. One &ldquo;looks&rdquo; better because it uses a pool of 503 threads (but really use only 1 or 2 threads) and the other does not hide its use of 1 thread for processing. But this is not evident to people accepting the programs.<br /><br />When I look at the haskell code, I can not really tell if it is creating 503 threads in the language or a pool or &hellip;, you have to know each language quite well and sometimes it is not that easy to define what cheating is. Therefore this kind of benchmark is a bit disappointing. One should force the use of the same algorithm. But can you do so (a functional language won&rsquo;t use the same algo as a procedural one)?</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

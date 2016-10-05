@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>I Get Spring</h1>
-    <span class="post-date">Aug 23, 2006 &middot; 2 minute read
+    <span class="post-date">Aug 23, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/i-get-spring/#disqus_thread">Comments</a>
     </span>
     <p>When you google up Java Spring, one of the best results is a post from crazybob called &ldquo;<a  href="http://crazybob.org/2006/01/i-dont-get-spring.html">I Don&rsquo;t Get Spring</a>&rdquo;. For a long time, I shared a similar opinion. But now that I have used it, I get it. I only use it for defining replaceable services, so when I talk about Spring, I mean spring-core and spring-beans. <br> <br> These two packages are not big, and have only very few dependencies. So it is quite easy to use Spring in any project, be it small or not. It is actually easier than using NanoContainer because Spring has less external dependencies.<br> <br> I did not talk about <a  href="http://www.martinfowler.com/articles/injection.html">Dependency Injection</a> yet, because that was not my primary goal. Many times I had to write by hand configurable factories. By using Spring, I avoid writing all that boilerplate code. I was surprised that with 1 line of code I actually had my factory done. Granted, the config file is xml, an I am not necessarily an xml fan. But 1) it&rsquo;s very simple, and 2) if you don&rsquo;t want your custom factory to depend on all implementations, you will either use strings in your code or a config file, which in the end is no better than Spring config file.<br> <br> Dependency Injection is the big plus that Springs gives on top of it. It&rsquo;s very useful to define your dependencies explicitly in the config file, since all beans instantiated from the config file are instantiated dynamically. And by defining the dependencies, you also get for free the injection.<br> <br> Spring is not big and strange and unknown. It solves a fairly simple problem. But again I don&rsquo;t use it for everything, every class. I don&rsquo;t think it brings much versus straight Java code when you don&rsquo;t want replaceable services. And putting it in places where it is not needed would be dangerous, because of the unneeded xml configuration.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>

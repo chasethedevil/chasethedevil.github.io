@@ -79,20 +79,46 @@
 <div class="content container">
   <div class="post">
     <h1>Haskell Fibonacci Revisited</h1>
-    <span class="post-date">Dec 12, 2007 &middot; 2 minute read
+    <span class="post-date">Dec 12, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/#disqus_thread">Comments</a>
     </span>
     <p>Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a <em>MILLION</em> times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.</p>
 
   </div>
-  
+   <div id="disqus_thread"></div>
 </div>
 
 
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 
 
-<div class="content container" style="padding-top: 0rem;">
-<a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" /> </a>
-<a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil">Tweet</a>
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
