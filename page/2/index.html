@@ -82,6 +82,137 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
+      </h1>
+      <span class="post-date">May 19, 2016 &middot; 5 minute read &middot; <a href="http://chasethedevil.github.io/post/dupire_cash_dividend/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
+The extension to continuous dividend yield is described in many papers or books:
+<div>$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial C}{\partial T}+(r_B-q)K \frac{\partial C}{\partial K} + q C(K,T)}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$</div>
+In this case, \(C\) is a regular market Call option price, that can also be obtained from market volatilities via the Black-Scholes formula.</p>
+
+<p>With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
+approximations available to price an option supposing a constant (spot) volatility and jumps, for example, <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">this one</a>.</p>
+
+<p>Labordère, in his paper <a href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306">Calibration of local stochastic volatility models to market smiles</a>, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:
+<div>$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial \hat{C}}{\partial T}}{\frac{1}{2}K^2\frac{\partial^2 \hat{C}}{\partial K^2}}$$</div>
+where \( \hat{C} \) is the market Call option price, that can be obtained via an approximation of the spot model with dividend jumps, of strike K and maturity T. Yes, if you look carefully at the Labordere formulae, most of it simplifies.</p>
+
+<p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
+we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
+
+<p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
+
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll1.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have
+<div>$$C(S_0,K,t_{\alpha_i}^-) = C(S_0, K-\alpha_i,t_{\alpha_i}^+)$$</div>
+As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
+quite larger than the regular local volatility, even with a somewhat discontinuous yield.</p>
+
+<p>
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3shift.png" />
+    
+    
+    <figcaption>
+        <h4>Look, when we shift by the dividend!</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
+
+<p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
+
+<figure >
+    
+        <img src="/post/dupire_labordere_policy.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>The analytical approximations lead to another different local volatility from both policies, but don&rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
+Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
+
+<p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_yield3.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the forward model.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_yield3e.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the forward model.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
+
+<p>I would have expected a much better accuracy from Labordère&rsquo;s approach, it&rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.</p>
+
+<p><strong>Update</strong>: A <a href="/post/dupire_cash_dividend_part2">follow-up</a> to this post where I resolve the mysterious remaining error.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
       </h1>
       <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/svi_sabr_or_parabola/#disqus_thread">Comments</a>
@@ -454,18 +585,6 @@ Another work-around would be to model this via proportional dividends instead of
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/">Controlling the SABR wings with Hagan PDE </a>
-      </h1>
-      <span class="post-date">Dec 15, 2015 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div></p>
-
-      
-    </div>
-    
     
     
     <ul class="pagination">
@@ -585,12 +704,15 @@ Another work-around would be to model this via proportional dividends instead of
         ><a href="/page/35/">35</a></li>
         
         <li
+        ><a href="/page/36/">36</a></li>
+        
+        <li
         >
         <a href="/page/3/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
         
         <li>
-            <a href="/page/35/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+            <a href="/page/36/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
         </li>
         
     </ul>

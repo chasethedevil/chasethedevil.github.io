@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/opensuse-12.2/">OpenSuse 12.2</a>
+      </h1>
+      <span class="post-date">Nov 14, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/opensuse-12.2/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>After too many upgrades of Ubuntu, and switching from Gnome to KDE and back, my Ubuntu system became behaving strangely in KDE: authorization issues, frequent crashes, pulseaudio &amp; ardour problems. I decided to give another try to OpenSuse, as Linux makes it easy to switch system without losing too much time reinstalling the useful applications.<br /><br />It&rsquo;s been only a few days, but I am pleasantly surprised with OpenSuse. It feels more polished than Kubuntu. I could not point out to a specific feature, but so far I have not had to fiddle with any configuration file, everything works well out of the box. Somehow Kubuntu always felt flaky, read to break at any moment, while OpenSuse feels solid. But they should consider changing the default font settings in KDE to take advantage properly of antialiasing and pretty fonts (it&rsquo;s only a few clicks away, but still the default is not the prettiest).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/gpu-computing-in-finance/">GPU computing in Finance</a>
       </h1>
       <span class="post-date">Oct 15, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/gpu-computing-in-finance/#disqus_thread">Comments</a>
@@ -184,18 +196,6 @@
       </span>
       
       <p>The Quantlib code to evaluate the Heston integral for European options is quite nice. It proposes <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=4&amp;ved=0CGoQFjAD&amp;url=http%3A%2F%2Fwww.math.uni-wuppertal.de%2F%7Ekahl%2Fpublications%2FNotSoComplexLogarithmsInTheHestonModel.pdf&amp;ei=MkDoT8HHOaO_0QXS_6SeCQ&amp;usg=AFQjCNFbAMQBLoKRd0BR_-HC0CkP4zrMtg">Kahl &amp; Jaeckel</a> method as well as Gatheral method for the complex logarithm. It also contains expansions where it matters so that the resulting code is very robust. One minor issue is that it does not integrate both parts at the same time, and also does not propose Attari method for the Heston integral that is supposed to be more stable.<br /><br />I was surprised to find out that out of the money, short expiry options seemed badly mispriced. In the end I discovered it was just that it required sometimes more than 3500 function evaluations to have an accuracy of 1e-6.<br /><br />As this sounds a bit crazy, I thought that Jaeckel log transform was the culprit. In reality, it turned out that it was <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CFMQFjAA&amp;url=http%3A%2F%2Fusers.wpi.edu%2F%7Ewalker%2FMA510%2FHANDOUTS%2Fw.gander%2Cw.gautschi%2CAdaptive_Quadrature%2CBIT_40%2C2000%2C84-101.pdf&amp;ei=U0HoT_HWBeXP0QW23O3xBw&amp;usg=AFQjCNH4KRWMprUvL8yBPKRxO_sVNyc2Pg">Gauss Lobatto Gander &amp; Gautschi implementation</a>. I tried the simplest algorithm in <a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">Espelid improved algorithms</a>: modsim, an adaptive extrapolated Simpson method, and it was 4x faster for the same accuracy. That plus the fact that it worked out of the box (translated to Java) on my problem was impressive.<br /><br />Jaeckel log transform (to change the interval from 0,+inf to 0,1) works well, and seems to offer a slight speedup (10% to 15%) for around ATM options, mid to long term for the same accuracy. Unfortunately, it can also slow down by up to 50% the convergence for more OTM options or shorter expiries. So I am not so sure about its interest vs just cutting off the integration at phi=200.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/gnome-shell-more-stable-than-unity-on-ubuntu-12.04/">Gnome Shell more stable than Unity on Ubuntu 12.04</a>
-      </h1>
-      <span class="post-date">Jun 14, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/gnome-shell-more-stable-than-unity-on-ubuntu-12.04/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Regularly, the unity dock made some applications inaccessible: clicking on the app icon did not show or start the app anymore, a very annoying bug. This is quite incredible given that this version of Ubuntu is supposed to be long term support.  So I decided to give one more chance to Gnome Shell. Installing it on Ubuntu 12.04 is simple with <a href="http://www.filiwiese.com/installing-gnome-on-ubuntu-12-04-precise-pangolin/">this guide</a>. <br /><br />To my surprise it is very stable so far. Earlier Gnome Shell versions were not as stable. After installing various extensions (dock especially) it is as usable as Unity for my needs. It seems more responsive as well. I am not really into the Unity new features like HUD. It sounds to me like Ubuntu is making a mistake with Unity compared to Gnome Shell.<br /><br />To make an old extension support latest Gnome Shell version, it is sometimes necessary&nbsp; to update&nbsp; the extension metadata with what&rsquo;s given by <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">gnome-shell &ndash;version</span>. For the weather extension you can just edit using gedit:<br /><br /><blockquote class="tr_bq">sudo gedit /usr/share/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org/metadata.json </blockquote></p>
 
       
     </div>
@@ -319,12 +319,15 @@
         ><a href="/page/35/">35</a></li>
         
         <li
+        ><a href="/page/36/">36</a></li>
+        
+        <li
         >
         <a href="/page/16/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
         
         <li>
-            <a href="/page/35/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+            <a href="/page/36/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
         </li>
         
     </ul>

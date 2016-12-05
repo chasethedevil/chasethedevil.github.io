@@ -7,8 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 04 Oct 2016 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 05 Dec 2016 09:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Put-Call parity and the log-transformed Black-Scholes PDE</title>
+      <link>http://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/</link>
+      <pubDate>Mon, 05 Dec 2016 09:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/</guid>
+      <description>We will assume zero interest rates and no dividends on the asset \(S\) for clarity. The results can be easily generalized to the case with non-zero interest rates and dividends. Under those assumptions, the Black-Scholes PDE is: $$ \frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = 0.$$ An implicit Euler discretisation on a uniform grid in \(S\) of width \(h\) with linear boundary conditions (zero Gamma) leads to: $$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t S_i^2 \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}.$$ for \(i=1,&amp;hellip;,m-1\) with boundaries $$ V^{k+1}_i - V^{k}_i = 0.$$ for \(i=0,m\). <a href="/post/put_call_parity_with_log_transformed_pde/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
+    </item>
     
     <item>
       <title>Benaim et al. extrapolation does not work on equities</title>
@@ -89,15 +98,6 @@
       
       <guid>http://chasethedevil.github.io/post/dupire_cash_dividend_part2/</guid>
       <description>I had a look at how to price under Local Volatility with Cash dividends in my previous post. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \). <a href="/post/dupire_cash_dividend_part2/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
-    </item>
-    
-    <item>
-      <title>Dupire Local Volatility with Cash Dividends</title>
-      <link>http://chasethedevil.github.io/post/dupire_cash_dividend/</link>
-      <pubDate>Thu, 19 May 2016 17:01:00 +0200</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/dupire_cash_dividend/</guid>
-      <description>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates. The extension to continuous dividend yield is described in many papers or books: $$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial C}{\partial T}+(r_B-q)K \frac{\partial C}{\partial K} + q C(K,T)}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$ In this case, \(C\) is a regular market Call option price, that can also be obtained from market volatilities via the Black-Scholes formula. <a href="/post/dupire_cash_dividend/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
     </item>
     
   </channel>
