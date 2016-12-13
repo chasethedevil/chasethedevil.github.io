@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/less-productive-with-maven2./">Less Productive With Maven2.</a>
+      </h1>
+      <span class="post-date">Apr 29, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/less-productive-with-maven2./#disqus_thread">Comments</a>
+      </span>
+      
+      <p>My <a href="http://chasethedevil.blogspot.com/2006/11/maven-game-over-try-again.html">first trials</a> of Maven were failures. As I am stubborn, I tried again, on a new project, a quite simple one. It works, but it makes some easy things overkill. And the default way of using it makes a developer lose lots of time.<br /><br />If I have a project with common classes, a standalone app, and a web app, then logically you do 3 projects, 2 of them depending on the common one. That&rsquo;s how the default maven setup works, and that&rsquo;s what their documentation presents. Now when using maven eclipse, this will create 3 project, none depending on each other. If you modify something in the common code, it won&rsquo;t be seen by any of the other code, you have to publish it with maven first, this takes way too much time. Furthermore I did not see any way to force rebuild the common automatically from one of the other project. If you modify code in common and web app project, you need to call maven twice. I find all this very counterproductive, because you do those steps extremely often. Now there are probably some ways to do that with Maven2, but it is not the default behavior. I could add project dependencies in eclipse manually, and forget about maven while working in eclipse, but then the maven eclipse plugin is really useless. And you&rsquo;ll face the same issues when you want to use maven tomcat deploy.<br /><br />Even more worrying, after moving back to Ant, I saw a strange bug with Spring context loading disappear. Maven is hiding so much, that it becomes not obvious how your app is deployed.<br /><br />Developers lose power with Maven. It&rsquo;s a pain to do something a bit differently that the default Maven way. With Ant, people gain power. I see both as being the distinction between a framework approach (Maven) and a library API approach (Ant). By default, Maven tries to do a lot, while Ant tries to do nothing. It&rsquo;s very easy to build exactly what you need with Ant, while it is of course difficult with Maven.<br /><br />Some parts of Spring have a similar disadvantage to Maven. If you do everything in XML with the most Spring magic, you&rsquo;ll spend hours trying to figure out how to do things and why it does not seem to work like you think it should. If you use Spring as an API, like the wonderful Spring JDBC, development will be fast (faster than with straight JDBC for example), and your program flow is easy to follow.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/how-to-build-good-software-good-network-connection/">How to Build Good Software? Good network connection</a>
       </h1>
       <span class="post-date">Apr 27, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/how-to-build-good-software-good-network-connection/#disqus_thread">Comments</a>
@@ -184,18 +196,6 @@
       </span>
       
       <p>Someone modified a simple launch script on a integration machine. This pissed off the author of the script. Why?</p> <p>Just because the guy who modified the script never worked before with the author of the script. If only the author had been notified verbally or by mail of the modification, he would have been happy. Furthermore this would increase the quality of the change since the new guy might have made a change that has other impacts, that the author will best evaluate quickly.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/">Find Grep And Vi Keys Small Memo</a>
-      </h1>
-      <span class="post-date">Apr 5, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I tend to forget this now and then to grep on a specific list of files:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; font-weight: bold;" class="gmail_quote"> find . -name &ldquo;<em>.xml&rdquo; | xargs grep &ldquo;iwantthis&rdquo;</blockquote><div><br />And I also tend to forget the <a href="http://www.mathlab.cornell.edu/local_help/vi.html">vi keys</a>. Small extract:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>h</b> - move left one character<br /><b>j</b> - move down one line<br /><b>k</b> - move up<br /><b>l</b> - move right<br /><b>$</b> - go to the end of the current line<br /><b>0</b> - go to the beginning of the current line<br /><b>G</b> - go to the last line in the file<br /><b>15G</b> - go to line 15<br /><b>control-F</b> - forward one page<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b>control-B</b> - backwards one page </blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div><b>n (N)</b> - next (previous) in search mode (/ or ? forward or backward)  </div></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"></span>s/OLD/NEW/g</b> - replace on current line<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"><span style="font-weight: bold;"></span> %</span>s/OLD/NEW/g</b> - replace every occurence in file (or use 0,$ instead of %)<br /></blockquote><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>x</b> - delete one character</blockquote><br /><div><span style="font-weight: bold;">Update </span>I have to add the standard replace in multiple files via sed command. Here is an example of how to move your eclipse workspace to another directory:<br /><blockquote></blockquote><ul><li>find . -name &ldquo;</em>.xml&rdquo; | xargs sed -i &ldquo;s,c:[/\]java[/\]eclipse,d:/eclipse302,gi&rdquo;</li></ul> </div><br />        </div></p>
 
       
     </div>
