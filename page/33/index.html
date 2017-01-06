@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/7-years-later-still-ejbs/">7 Years Later: Still EJBs</a>
+      </h1>
+      <span class="post-date">Nov 7, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/7-years-later-still-ejbs/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In 1998, a student of my school had a project with Sun about EJBs. This was the beginning of EJBs, they were not public, and there was no J2EE. At that time he found it utterly complicated, and had difficulties to understand why they made it so complicated.<br /><br />In 2000, I worked for a company who had built in-house most components of a today J2EE application server. For example, they had their own unified messaging system, on the JSP side, they were already using custom tags, etc.. Their problem is that they took lots of time to develop in-house, all what later became standard, and almost freely available.<br /><br />Today, 7 years later, the big talk, new Java products, be it Spring, or JBoss Seam, are still all about the same ideas as in the first J2EE. Spring has the freedom to include whatever technology, but in the end, their scope closely matches J2EE scope. Service Oriented Architecture (SOA), the current buzzword, will come out relatively naturally with J2EE, session EJBs being natural candidate to expose functionalities to the outer world. JBoss (or Geronimo) architecture is fully SOA: a small kernel managing services, that are exposed for other to use.<br /><br />To learn about EJBs, I still find <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/059600530X&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Enterprise JavaBeans</a> by Richard Monson-Haefel, the best book. The chapter (in the 2nd Edition of the book, not in the 4th unfortunately) where he rolls his own distributed objects system is for me a testimony on how well he wants you to understand what&rsquo;s behind EJBs. And if you want to better understand what&rsquo;s behind RMI, <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/1565922069&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Java Distributed Computing (O&rsquo;Reilly)</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=as2&amp;o=1&amp;a=1565922069" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /> has a chapter where the author rolls his own RMI.<br /><br />To conclude, Sun was really clever in defining J2EE scope and branding several Java technologies as J2EE (despite the awful version naming). While the ideas were very good, the developer&rsquo;s life was forgotten. It was too much a pain in the a** and not flexible enough (especially the ORM side). JBoss gets it right, what people need is a way to use pieces of J2EE, without imposing too much unnecessary hurdle on development.<br /><br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/ejb" rel="tag">ejb</a>, <a href="http://del.icio.us/tag/j2ee" rel="tag">j2ee</a>, <a href="http://del.icio.us/tag/book" rel="tag">book</a></span></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/job-hunting-interview-madness/">Job Hunting: Interview Madness</a>
       </h1>
       <span class="post-date">Nov 4, 2005 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/job-hunting-interview-madness/#disqus_thread">Comments</a>
@@ -184,18 +196,6 @@
       </span>
       
       <p><a href='http://photos1.blogger.com/img/257/6856/1024/IMG_20050918_0012.jpg'><img border='0' style='border:1px solid #AAAAAA; margin:2px' src='http://photos1.blogger.com/img/257/6856/400/IMG_20050918_0012.jpg'></a><br />This is from an old (1680s) big (2 tons) Coronelli globe, currently displayed in Grand Palais, Paris. Can you spot San Francisco there?</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/currying---a-very-interesting-use-of-generics/">Currying - A Very Interesting Use Of Generics</a>
-      </h1>
-      <span class="post-date">Sep 16, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/currying---a-very-interesting-use-of-generics/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>In <a href="http://bamboo-dht.org/">bamboo-dht</a>, a distributed java hashtable project, the main developer, Sean C. Rhea, advocates the use of Curries and Thunks (of LISP and ML). He wrote an interesting and valuable document, <a href="http://bamboo-dht.org/async-tutorial/async-tutorial.pdf">Async Tutorial</a>, presenting a use of it. I will present the concept here shortly:<br /><br /><tt>public interface Thunk1&lt;T&gt; { void run (T t ) ; }<br /><br />Thunk1&lt;Integer&gt; intThunk = new Thunk1&lt;Integer&gt;() {<br />void run (Integer i ) { System.out.println( i ) ; }<br />}<br /><br />public static &lt;T&gt; Runnable curry(final Thunk1&lt;T&gt; f ,final T t ) {<br />return new Runnable () { public void run ( ) { f.run ( t ) ; } } ;<br />}<br /><br />Runnable print42  = curry( intThunk , new Integer ( 42 ) ) ;<br />print42.run ( ) ;  //prints 42 to standard output</tt><br /><br />So it is a very clever way to have a callback in java. Very clever because you can declare your code to take only a run(), and pass any parameter in it by using a curry. It is very simple to use, even if the small framework around it can scare some people.<br /><br />However neat the idea is, I am not sure it is practically useful. Sean C. Rhea used that because he did not want to use &ldquo;unnecessary&rdquo; instance variables. Ok, but the curry is still creating another instance (actually 2 but one could be static), is the overhead of a class instance without variables that much more than one with variables? And there is another way, without the Curry framework:<br /><tt><br />Runnable print42 = new Runnable({ public void run() {intThunk.run(new Integer(42));}});</tt><br /><tt>print42.run();</tt><br /><br />This is actually exactly what the Curry framework would do behind the scenes. The Curry framework makes it a bit more elegant, but I am not sure if that&rsquo;s really more readable for most programmers. I would personally advise the traditional way, use instance variables.<br /><br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/programming" rel="tag">programming</a></span></p>
 
       
     </div>
