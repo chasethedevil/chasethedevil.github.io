@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>About &middot; Chase the Devil</title>
+  <title>Bachelier Normal Volatility Asymptotics &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -29,7 +29,7 @@
   
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   <link rel="author" href="http://plus.google.com/105444622997415581493">
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -78,22 +78,63 @@
 
 <div class="content container">
   <div class="post">
-    <h1>About</h1>
-    <p>I just moved my blog to a static website, created with <a href="https://gohugo.io/">Hugo</a>, I explain the reasons why <a href="/post/moved-to-hugo/">here</a>.
-You can find more about me on my <a href="https://fr.linkedin.com/in/fabien-le-floc-h-8aa306">linkedin profile</a>.
-In addition you might find the following interesting:</p>
+    <h1>Bachelier Normal Volatility Asymptotics</h1>
+    <span class="post-date">Jan 17, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/normal_volatility_asymptotics/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    
 
-<ul>
-<li><a href="http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">List of quantitative finance papers</a> I have freely available on SSRN</li>
-<li><a href="/lefloch_trbdf2_draft.pdf">TR-BDF2 for Stable American Option Pricing</a>. This is the first draft, not the final version that was published in the Journal of Computational Finance.</li>
-<li><a href="/lefloch_sabr_slides.pdf">Presentation on finite difference techniques for arbitrage-free SABR</a> I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.</li>
-<li><a href="/lefloch_heston_filon.pdf">An adaptive Filon quadrature for stochastic volatility models</a>.</li>
-<li><a href="/lefloch_exact_log.pdf">Exact Forward for Finite-Difference Schemes on the Log-transformed Black-Scholes PDE</a>.</li>
-<li><a href="/lefloch_volatility_asymptotics.pdf">Asymptotic bounds of the normal volatility</a>.</li>
-</ul>
+<p>It is relatively well known that the Black-Scholes volatility can not grow faster than \(\sqrt{\ln(K)}\).
+The rule is also sometimes simply stated as &ldquo;the implied variance can not grow faster than linear&rdquo; (in log-moneyness).
+The proof comes from Roger Lee <a href="http://math.uchicago.edu/~rogerlee/moment.pdf">&ldquo;The moment formula for implied volatility at extreme strikes&rdquo;</a> but the rule was suggested
+earlier, for example in Hodge&rsquo;s paper from 1996 <a href="http://www.iijournals.com/doi/pdfplus/10.3905/jod.1996.407950">&ldquo;Arbitrage bounds of the implied volatility strike and term structures of European-style options&rdquo;</a>.</p>
+
+<p>With the increasing use of the b.p. (a.k.a Normal, a.k.a Bachelier) vols, a natural question (that Gary asked) is:</p>
+
+<h4 id="is-there-a-similar-rule-for-the-normal-volatility:d3ae909426d23373bff9526dffe8b900">Is there a similar rule for the Normal volatility?</h4>
+
+<p>It turns out that the answer is not as simple. It can easily be shown that the normal volatility can not grow faster than linear
+in strike (not the variance this time). But it does not mean that linear is acceptable, in fact, it is not.
+The upper bound can be refined to
+$$ \frac{K-F}{\sqrt{2T \ln \frac{K}{F}}} $$</p>
+
+<p>It is still an asymptotic upper bound only.
+It can be shown that any number larger than the factor 2 in the denominator will not lead to asymptotic arbitrage.
+The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
+simple exact formula for the limit as in the Black-Scholes world.</p>
+
+<p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
 
   </div>
+   <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
@@ -116,3 +157,4 @@ In addition you might find the following interesting:</p>
 
 </body>
 </html>
+

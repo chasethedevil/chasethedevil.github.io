@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/how-to-build-good-software-lay-off-quickly./">How to Build Good Software? Lay Off Quickly.</a>
+      </h1>
+      <span class="post-date">Apr 10, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/how-to-build-good-software-lay-off-quickly./#disqus_thread">Comments</a>
+      </span>
+      
+      <p>If you have to lay off in your job, do it quickly. I don&rsquo;t understand companies that want to keep someone as long as legally possible when this someone wants to leave. First the employee won&rsquo;t be as motivated, but more importantly, you will continue to train that person to your company&rsquo;s software and ways of work. This would be much better used on another person, that will stay in the company. Time for layoffs should exclusively be used for knowledge transfer.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/how-to-build-good-software-talk-to-people-especially-the-ones-you-dont-know-well./">How to Build Good Software? Talk to people, especially the ones you don&#39;t know well.</a>
       </h1>
       <span class="post-date">Apr 6, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/how-to-build-good-software-talk-to-people-especially-the-ones-you-dont-know-well./#disqus_thread">Comments</a>
@@ -184,18 +196,6 @@
       </span>
       
       <p>While looking through some code for a project, I saw that:<br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&nbsp; public static final ProductYP instance = new ProductYP(); <br>&nbsp; <br>&nbsp; public ProductYP()<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; if (instance != null)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new RuntimeException(&quot;Only one instance allowed&quot;);<br><br>&nbsp;&nbsp;&nbsp; prods = new HashMap();<br>&nbsp; }<br><br>&nbsp; public static ProductYP getInstance() <br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; return instance;<br>&nbsp; }<br></blockquote><br>And I don&#39;t think it was done by a newbie&hellip; It&#39;s actually not far from being correct, it&#39;s just that the guy obviously does not know about private constructors. I have seen several broken singleton implementations in previous projects and had several debates on the  <a href="http://www.cs.umd.edu/%7Epugh/java/memoryModel/DoubleCheckedLocking.html">double-checked locking pattern</a> (<a href="http://en.wikipedia.org/wiki/Double-checked_locking">it works since JDK1.5</a> with volatiles but is useless). I am upset to see another half broken implementation. Everybody should have read at least  <a href="http://java.sun.com/developer/technicalArticles/Programming/singletons/">this</a>.<br><br>What have you seen as broken singletons?<br><br></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/declaring-your-logger---no-problem/">Declaring Your Logger - No Problem</a>
-      </h1>
-      <span class="post-date">Dec 29, 2006 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/declaring-your-logger---no-problem/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I used to like the <a href="http://www.javaspecialists.co.za/archive/newsletter.do?issue=137&amp;locale=en_US">java specialists newsletter</a>, most news used to be a bit challenging. Nowadays however the quality is lower. In the  <a href="http://www.javaspecialists.co.za/archive/newsletter.do?issue=137&amp;locale=en_US">latest news</a>, the author proposes to use the StackTrace to get the class name, in order to declare a Logger independently of any explicit reference to the class name. <br><br>While this is a clever hack, it still requires some code to be duplicated in every class, compared to Aspect/IoC approach. But was there really a problem with declaring loggers the usual way in the first place?<br>  <br> With modern IDEs, most people just create a template for the logger declaration line. Also, renaming MyClass to MyClass2 will rename MyClass.class to MyClass2.class automatically. Here is my template for Eclipse to which I assigned the short name log4j:<br> <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> private static final Logger LOG = Logger.getLogger(${enclosing_type}.class);</blockquote><br><br></p>
 
       
     </div>

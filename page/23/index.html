@@ -82,6 +82,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/swixml-review/">SwiXml Review</a>
+      </h1>
+      <span class="post-date">Apr 24, 2008 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/swixml-review/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Externalizing the screen layout is a natural step for many applications. It can be because a customer might want a slightly different presentation, or just for the sake of clearly separating layout code, or for using a kind of screen generator. Back in 2003, I wrote <a href="http://easygridbag.sourceforge.net">a small utility to help with GridBagLayout</a>, nothing fantastic,  but there was the feature of saving a generated layout in XML (or Beanshell) and using it in an application.<br /><br /><a href="http://swixml.org">SwiXml</a> saves a bit more than a layout as it instantiates the components as well, allowing to represent a hierarchy of components in XML. But it does not more than that. The &ldquo;no generation&rdquo; approach is interesting, I bet the author thinks the XML should be kept concise enough to be used easily without using a kind of generator. the XML is almost a mirror of Java code, but fortunately makes layouts more compact and easier to read. I tried version 1.51, and while it is quite well done, its documentation is a bit lacking and to me an important functionality is missing:<br /><br />There is no &ldquo;component&rdquo; tag by default. One needs to explicitely name the class of component we want to add. I think there could be a component tag that instantiate an 0 parameter constructor by default, using reflection for example. The class of component to instantiate would be found through the field name.<br /><br />Fortunately SwiXml is quite well done and this is not that big of an issue since you can just interpret new tags with 1 line of code:<br /><span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  ><blockquote></blockquote>engine.getTaglib().registerTag(&ldquo;datecombobox&rdquo;, DateComboBox.class);</span><br />for a Jide DateComboBox.<br /><br />I said documentation was lacking, because in my first non Hello World trial, I wanted to use the standard constant names for GridBagConstraints (RELATIVE,REMAINDER, FIRST_LINE, LAST_LINE, &hellip;). Putting <span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  >&lt;gridbagconstraint anchor=&ldquo;FIRST_LINE&rdquo;&gt;</span>did not work. By reading the code, I found out you could achieve it but you have to do <span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  >&lt;gridbagconstraint anchor=&ldquo;GridBagConstraint.FIRST_LINE&rdquo;&gt;</span>.<br /><br />In the end SwiXml left me with a good impression. It is non intrusive, and handle well enough what it is done for. One major drawback, you can only use either BorderLayout or GridBagLayout or FormLayout (from JGoodies).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/better-java-swing-development/">Better Java Swing Development</a>
       </h1>
       <span class="post-date">Apr 17, 2008 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/better-java-swing-development/#disqus_thread">Comments</a>
@@ -184,18 +196,6 @@
       </span>
       
       <p>I am disappointed about the Jarkarta Commons DbUtils project. I give a link to it, because it&#39;s a bad project (even if written in clean code). It is very simple, but it really does not do much for you. <br><br>I was looking for a very simple abstraction of JDBC. I thought bringing Spring in my project would be overkill. After trying DbUtils, I think again. It does not help. It does not handle frequent cases well, and it does not save many lines of code. <br><br>I am a bit angry about it as I noticed that by using it, my test program that was taking 2s with straight JDBC before is now using 1 minute!<br><br>The reason behind this huge performance penalty is that there is no way to just reuse a PreparedStatement with the existing classes. For each query with a same sql, it will create a new PreparedStatement object, even if you reuse the connection. I am surprised since this is probably why PreparedStatement is used in the first place. How can such a project be part of Jakarta repository? <br><br>Now I just wish Spring was more Guice like, maybe I should write a Spring JDBC like layer for Guice.<br></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/i-fell-in-the-trap-of-boolean.getboolean/">I fell in the trap of Boolean.getBoolean()</a>
-      </h1>
-      <span class="post-date">Oct 12, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/i-fell-in-the-trap-of-boolean.getboolean/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I was struggling to find a bug in a very simple application, it ended up being something as simple as using the damned Boolean.getBoolean(&quot;true&quot;) call instead of Boolean.valueOf(&quot;true&quot;).booleanValue() call. <br><br>The Boolean.getBoolean method is something you almost never need to use, as it checks if a particular system property is true or false. There is a similar method for Integer.getInteger, and a quick <a href="http://toadbalancing.blogspot.com/2005/10/java-api-pitfalls-booleangetbooleanstr.html"> google search shows</a> I am not the only one to think those method should never have been part of the basic API for Boolean/Integer. It is too easy to confuse with parseBoolean/parseInt, especially as parseBoolean does not exist in JDKs prior to JDK  1.5 (parseInt is older).<br><br>I can not imagine the improductivity this method has produced given its part of one of the most used class in the world.<br></p>
 
       
     </div>
