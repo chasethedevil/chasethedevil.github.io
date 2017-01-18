@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>The Pain of Java Matrix Libraries</h1>
+    <h1 class="post-title">The Pain of Java Matrix Libraries</h1>
     <span class="post-date">Nov 26, 2009 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/the-pain-of-java-matrix-libraries/#disqus_thread">Comments</a>
     </span>
     <p>Looking for a good Java Matrix (and actually also math) library, I was a bit surprised to find out there does not seem to be any really serious one still maintained.<br /><br />Sure, there is <a href="http://commons.apache.org/math/">Apache Commons Math</a>, but it is still changing a lot, and it is not very performance optimized yet, while it has been active for several years already. There is also Java3D, it does Matrix through GMatrix, but not much linear algebra and if you look at their implementation, it is very basic, not performance oriented.<br /><br />The other candidates seem to be 1-man projects that can disappear any other day (some of them look quite good like ojalgo, most of them are not interesting). Then you also have the serious but not maintained anymore <a href="http://dsd.lbl.gov/~hoschek/colt/">Cern Colt</a> library.<br /><br />Compared to C/C++, the Java world is worrying if you want to do maths.<br /><br />In those libraries, a dense matrix of double can be implemented two ways:<br /><div><ol><li>by maintaining internally a double[][]. Usually those libraries allow for not copying the array, so it can be neat if your interfaces have this kind of arrays.</li><li>by maintaining internally a double[]. The reason is for performance, but then each time you build a matrix from a double[][], an expensive copy will happen. So you need to use the Matrix object in your interfaces instead of double[][].</li></ol><div>This is a pain because you can be very quickly stuck in one or the other Matrix library. A &ldquo;solution&rdquo; is to have your own interface, but that is a pain to write. There is <a href="http://www.ujmp.org/">UJMP</a>, but it can hide some important methods (like transpose &amp; multiply in one go from Colt or the ability to reuse an existing matrix in various operations to avoid allocating new memory), it is a students project (like parallel colt), but if it was a standard, it could be much more interesting.</div><div><br /></div><div>In summary it does really look like scientific people, universities don&rsquo;t use Java for computation otherwise Colt surely would have been maintained.</div></div></p>

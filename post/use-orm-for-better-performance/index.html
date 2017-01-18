@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Use ORM For Better Performance</h1>
+    <h1 class="post-title">Use ORM For Better Performance</h1>
     <span class="post-date">Jun 12, 2007 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/use-orm-for-better-performance/#disqus_thread">Comments</a>
     </span>
     <p>This is not something I would have though a few years ago. It is something I learnt after working on many different projects, some using an ORM layer like Hibernate, Entity EJBs, or JDO, some using JDBC approach via Spring Templates or custom frameworks. Many projects that use ORM have performance problems, that don&#39;t seem that common with projects using JDBC. But the size of the database model of ORM projects is often much bigger than the one of JDBC projects (which actually makes sense). If you have only a few queries to do, why bother with ORM? This would be complexity for nothing.  <br><br>But for most enterprise projects, the size of the database model is quite big, and the model itself can be complex (many relations between many tables). With this kind of model, ORM is more efficient. It is faster to develop with, creates less bugs due to string misspelled, or types badly read. It is also better performing. Doing 1 giant query to retrieve everything in 1 step is not faster, especially if you don&#39;t always need all the information retrieved. In a complex model, many cases are specifics, only useful in 10% of the cases. The temptation is high with a JDBC approach to do one giant query, because it is substantially longer (and more work) to do N queries.&nbsp; With ORM, it is a bit the opposite, by default N queries is easier to do. The problem is that N(ORM) tends to be very high if one is not careful with the mapping to  <a href="http://www.hibernate.org/118.html#A23">avoid the N+1 problem</a>. However it is simpler to reduce the number of queries by joining tables, rather than splitting queries, ORM performance optimization feels more natural. <br><br>Martin Fowler tends to be also pro ORM in its <a href="http://www.martinfowler.com/articles/dblogic.html">&quot;Domain Logic and SQL&quot; article</a>. He also mentions something interesting about SQL query optimization: <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p>It&#39;s also worth pointing out that this example is one that plays to a database&#39;s strengths. Many queries don&#39;t have the strong elements of selection and aggregation that this one does, and won&#39;t show such a performance change. In addition multi-user scenarios often cause surprising changes to the way queries behave, so real profiling has to be done under a realistic multi-user load. You may find that locking issues outweigh anything you can get by faster individual queries.</p>      <a name="id2249937"></a>     </blockquote><br>In the end it is up to us to make ORM or JDBC approach perform. JDBC provides much more direct access to database, and in benchmarks (always simple database models) or in theory it should be faster. But in the real world, I argue that ORM optimization is simpler and therefore, often ORM projects will perform better. <br></p>

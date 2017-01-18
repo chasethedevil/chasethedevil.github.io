@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>XORWOW L&#39;ecuyer TestU01 Results</h1>
+    <h1 class="post-title">XORWOW L&#39;ecuyer TestU01 Results</h1>
     <span class="post-date">Jan 12, 2011 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/xorwow-lecuyer-testu01-results/#disqus_thread">Comments</a>
     </span>
     <p><div style="font-family: &quot;Courier New&quot;,Courier,monospace;"><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">Nvidia uses XorWow random number generator in its CURAND library. It is a simple and fast random number generator with a reasonably long period. It can also be parallelized relatively easily. Nvidia suggests it passes L&rsquo;Ecuyer TestU01, but is not very explicit about it. So I&rsquo;ve decided to see how it performed on TestU01.</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">I found very simple to test a new random number generator on TestU01, the documentation is great and the examples helpful. Basically there is just a simple C file to create &amp; compile &amp; run.</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">XORWOW passes the SmallCrush battery, and according to Marsaglia, it also passes DieHard. But it fails on 1 test in Crush and 3 in BigCrush. By comparison, Mersenne-Twister fails on 2 tests in Crush and 2 in BigCrush. Here are the results of the failures:</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><span style="font-family: inherit;"><br /></span></div><div style="font-family: &quot;Courier New&quot;,Courier,monospace;">========= Summary results of Crush =========<br /><br />&nbsp;Version:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TestU01 1.2.3<br />&nbsp;Generator:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Xorwow<br />&nbsp;Number of statistics:&nbsp; 144<br />&nbsp;Total CPU time:&nbsp;&nbsp; 00:50:15.92<br />&nbsp;The following tests gave p-values outside [0.001, 0.9990]:<br />&nbsp;(eps&nbsp; means a value &lt; 1.0e-300):<br />&nbsp;(eps1 means a value &lt; 1.0e-15):<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p-value<br />&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-<br />&nbsp;72&nbsp; LinearComp, r = 29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 - eps1<br />&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-<br />&nbsp;All other tests were passed</div><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">========= Summary results of BigCrush =========</span><br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Version:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TestU01 1.2.3</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Generator:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Xorwow</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Number of statistics:&nbsp; 160</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Total CPU time:&nbsp;&nbsp; 06:12:38.79</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;The following tests gave p-values outside [0.001, 0.9990]:</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;(eps&nbsp; means a value &lt; 1.0e-300):</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;(eps1 means a value &lt; 1.0e-15):</span><br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p-value</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp; 7&nbsp; CollisionOver, t = 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.6e-6</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;27&nbsp; SimpPoker, r = 27&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eps&nbsp; </span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;81&nbsp; LinearComp, r = 29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 - eps1</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;All other tests were passed</span></p>

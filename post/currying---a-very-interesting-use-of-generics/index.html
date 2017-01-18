@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Currying - A Very Interesting Use Of Generics</h1>
+    <h1 class="post-title">Currying - A Very Interesting Use Of Generics</h1>
     <span class="post-date">Sep 16, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/currying---a-very-interesting-use-of-generics/#disqus_thread">Comments</a>
     </span>
     <p>In <a href="http://bamboo-dht.org/">bamboo-dht</a>, a distributed java hashtable project, the main developer, Sean C. Rhea, advocates the use of Curries and Thunks (of LISP and ML). He wrote an interesting and valuable document, <a href="http://bamboo-dht.org/async-tutorial/async-tutorial.pdf">Async Tutorial</a>, presenting a use of it. I will present the concept here shortly:<br /><br /><tt>public interface Thunk1&lt;T&gt; { void run (T t ) ; }<br /><br />Thunk1&lt;Integer&gt; intThunk = new Thunk1&lt;Integer&gt;() {<br />void run (Integer i ) { System.out.println( i ) ; }<br />}<br /><br />public static &lt;T&gt; Runnable curry(final Thunk1&lt;T&gt; f ,final T t ) {<br />return new Runnable () { public void run ( ) { f.run ( t ) ; } } ;<br />}<br /><br />Runnable print42  = curry( intThunk , new Integer ( 42 ) ) ;<br />print42.run ( ) ;  //prints 42 to standard output</tt><br /><br />So it is a very clever way to have a callback in java. Very clever because you can declare your code to take only a run(), and pass any parameter in it by using a curry. It is very simple to use, even if the small framework around it can scare some people.<br /><br />However neat the idea is, I am not sure it is practically useful. Sean C. Rhea used that because he did not want to use &ldquo;unnecessary&rdquo; instance variables. Ok, but the curry is still creating another instance (actually 2 but one could be static), is the overhead of a class instance without variables that much more than one with variables? And there is another way, without the Curry framework:<br /><tt><br />Runnable print42 = new Runnable({ public void run() {intThunk.run(new Integer(42));}});</tt><br /><tt>print42.run();</tt><br /><br />This is actually exactly what the Curry framework would do behind the scenes. The Curry framework makes it a bit more elegant, but I am not sure if that&rsquo;s really more readable for most programmers. I would personally advise the traditional way, use instance variables.<br /><br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/programming" rel="tag">programming</a></span></p>

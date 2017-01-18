@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Find Grep And Vi Keys Small Memo</h1>
+    <h1 class="post-title">Find Grep And Vi Keys Small Memo</h1>
     <span class="post-date">Apr 5, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/#disqus_thread">Comments</a>
     </span>
     <p>I tend to forget this now and then to grep on a specific list of files:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; font-weight: bold;" class="gmail_quote"> find . -name &ldquo;<em>.xml&rdquo; | xargs grep &ldquo;iwantthis&rdquo;</blockquote><div><br />And I also tend to forget the <a href="http://www.mathlab.cornell.edu/local_help/vi.html">vi keys</a>. Small extract:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>h</b> - move left one character<br /><b>j</b> - move down one line<br /><b>k</b> - move up<br /><b>l</b> - move right<br /><b>$</b> - go to the end of the current line<br /><b>0</b> - go to the beginning of the current line<br /><b>G</b> - go to the last line in the file<br /><b>15G</b> - go to line 15<br /><b>control-F</b> - forward one page<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b>control-B</b> - backwards one page </blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div><b>n (N)</b> - next (previous) in search mode (/ or ? forward or backward)  </div></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"></span>s/OLD/NEW/g</b> - replace on current line<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"><span style="font-weight: bold;"></span> %</span>s/OLD/NEW/g</b> - replace every occurence in file (or use 0,$ instead of %)<br /></blockquote><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>x</b> - delete one character</blockquote><br /><div><span style="font-weight: bold;">Update </span>I have to add the standard replace in multiple files via sed command. Here is an example of how to move your eclipse workspace to another directory:<br /><blockquote></blockquote><ul><li>find . -name &ldquo;</em>.xml&rdquo; | xargs sed -i &ldquo;s,c:[/\]java[/\]eclipse,d:/eclipse302,gi&rdquo;</li></ul> </div><br />        </div></p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>throws Exception</h1>
+    <h1 class="post-title">throws Exception</h1>
     <span class="post-date">May 27, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/throws-exception/#disqus_thread">Comments</a>
     </span>
     <p>There was a big debate at work around Exception declaration in a Java API. I was quite surprised that such an apparently simple subject could end up being so controversial. The controversy was around the choice of declaring in the interfaces:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">void myMethod() throws Exception</span></span><br /><br />instead of<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIRuntimeException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() </span></span><br /><br />where MyAPI represents either a generic API related exception or a specific exception related to the method in question.<br /><br />The choice of &ldquo;throws Exception&rdquo; did not even occur to me as a possibility, but after some digging, I found that some relatively famous libraries actually followed that principle at one point, for example Apache Struts 1.x or Spring MVC. <br /><br />More modern libraries, like Google Guava, commons-math 3.x, Struts 2.x generally favor MyAPIRuntimeException where MyAPI is actually context-specific. Some old popular libraries declare a checked Exception, for example the HibernateException in Hibernate.<br /><br />This seems to be a recurring subject on Stackoverflow:<br /><a href="http://stackoverflow.com/questions/20530221/java-interface-throws-exception-best-practice" target="_blank">Stackoverflow - Java interface throws Exception best practice</a><br /><a href="http://stackoverflow.com/questions/4283634/what-to-put-in-the-throws-clause-of-an-interface-method" target="_blank">Stackoverflow - What to put in the throws clause of an interface method</a><br /><br />But those are quite poor in terms of explanations. The best comments on this subjects are from:<br /><a href="http://www.artima.com/intv/handcuffs.html"><span class="ts">Anders         Hejlsberg (C#, Delphi, Turbo Pascal creator) - The Trouble with         Checked Exceptions</span></a><br />    <a href="http://www.artima.com/intv/solid2.html"><span class="ts">James         Gosling (Java creator) - Failure and Exceptions</span></a><br /><br />    <br />This comment from Anders is particularly acute:<br />    &ldquo;<b>To work around this requirement, people do ridiculous things.       For example, they decorate every method with, &ldquo;</b><b><code>throws         Exception</code></b><b>.&rdquo; That just completely defeats the       feature, and you just made the programmer write more gobbledy       gunk. That doesn&rsquo;t help anybody.</b>    &ldquo;<br />    <br /><br />         <br />Today I believe the API in question declares &ldquo;throws Exception&rdquo;&hellip; <br />         <br /><br /></p>

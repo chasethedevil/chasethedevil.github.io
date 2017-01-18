@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Caching HTTP Responses in Java</h1>
+    <h1 class="post-title">Caching HTTP Responses in Java</h1>
     <span class="post-date">Apr 19, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/caching-http-responses-in-java/#disqus_thread">Comments</a>
     </span>
     <div>Caching HTTP response can dramatically improve performance of your app if what you generate is in reality not very dynamic. There are many free caching frameworks in Java. Most popular seem to be <a href="http://ehcache.sourceforge.net/"> ehcache</a>, <a href="http://www.opensymphony.com/oscache/">oscache</a>, jcs and JBoss Cache.</div> <div>&nbsp;</div> <div>ehcache is quite simple to use and its code is clean. They have a CachingFilter that you can put in your webapp server to cache transparently HTTP responses. However as the framework only allows you to store Objects (which makes sense for most uses), I was wondering how they cached the HttpResponse which is a stream. I was a bit disappointed by the answer, they just create a copy ByteArrayOutputStream and call toBytes() to store it in the cache. While this is optimal for a memory cache store (the whole response will anyway be in the cache, although I am not sure if they check for particularly big responses to avoid caching those or try to cache those) I don't think it is that good for a disk cache store. </div> <div>&nbsp;</div> <div>Ideally one would like the response to be stored using a buffer, to avoid having the whole response in memory. This would enable a much higher concurrent use. I think it is doable&nbsp;by writing your own CachingFilter and by using the concurrent utils Queue to block writing&nbsp;when the buffer is full. </div> <div>&nbsp;</div> <div>I googled for this kind of stuff without success. I only found solutions similar to ehcache one (for example sun <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingResponseWrapper.java?r=1.4"> CachingResponseWrapper</a> and <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingFilter.java?r=1.4">CachingFilter</a>&nbsp;or oscache <a href="https://xwork.dev.java.net/source/browse/oscache/src/java/com/opensymphony/oscache/web/filter/CacheFilter.java?rev=1.12&amp;view=markup"> CacheFilter</a> (a bit more careful, but still a toBytes()))&nbsp;I wonder why it is not already done and public.</div> <div>&nbsp;</div>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Original Pattern: ServletRequest in ThreadLocal</h1>
+    <h1 class="post-title">Original Pattern: ServletRequest in ThreadLocal</h1>
     <span class="post-date">Aug 2, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/original-pattern-servletrequest-in-threadlocal/#disqus_thread">Comments</a>
     </span>
     <p>After seeing <a href="http://www.scala-lang.org/">Scala</a> had elements of Erlang through Actors, I decided to take a closer look at the language. There is an interesting new web framework in Scala, called <a href="http://liftweb.net/"> Lift</a>. One drawback of Lift is that it seems to be very cutting edge and not that easy to grasp. While reading its source code, I stumbled upon a strange pattern: <span style="font-weight: bold;">Storing the ServletRequest in a ThreadLocal </span>.<br><br>I had not seen that before, and was wondering why one would do such a thing. It seems to be unintuitive. I found my answer through&hellip; GWT widgets. In <a href="http://gwt-widget.sourceforge.net/?q=node/39"> this page</a>, the author explain motivations behind doing such a thing:<br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p> While not 100% in tune with the MVC pattern, it is often convenient to access the servlet<br> container, the HTTP session or the current HTTP request from the business layer. The GWT-SL<br> provides several strategies to achieve this which pose a compromise in the amount of configuration<br> required to set up and the class dependencies introduced to the business code. </p> <p> The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class<br> which provides convenience methods for accessing the <code>HttpServletRequest</code> and<br> <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables<br> and will obviously not return correct values if used in any other than the invoking thread. </p></blockquote><div>Still one can doubt if this is good design. In my long experience of web apps in Java I never had the need to do such a thing. Have you seen that pattern before? <br></div><br></p>

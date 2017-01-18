@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Integrating an oscillatory function</h1>
+    <h1 class="post-title">Integrating an oscillatory function</h1>
     <span class="post-date">Nov 5, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/integrating-an-oscillatory-function/#disqus_thread">Comments</a>
     </span>
     <p>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. <br /><br />The <a href="https://math.nyu.edu/financial_mathematics/content/02_financial/2008-3.pdf">Carr-Lee</a> seasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.<br /><a href="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-9Fh24CvDs_4/VFpCjz8_sMI/AAAAAAAAHig/Q0iTCTb3f9E/s1600/Screenshot%2Bfrom%2B2014-11-05%2B16%3A30%3A00.png" height="151" width="640" /></a><br />I&nbsp; first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (<a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">the one from Espelid</a>) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp; Gauschi, present in Quantlib). I tried various choices of adaptive (coteda, modsim, adaptsim,&hellip;) or brute force trapezoidal integration, but either they were order of magnitudes slower or unstable in some cases. Just using the same Gauss-Lobatto implementation for both would fail&hellip;<br /><br />I then noticed you could write the integral as a Fourier transform as well, allowing the use of FFT. Unfortunately, while this worked, it turned out to require a very large number of points for a reasonable accuracy. This, plus the tricky part of defining the proper step size, makes the method not so practical.<br /><br />I had heard before of the <a href="http://www.cs.berkeley.edu/~fateman/papers/oscillate.pdf">Filon quadrature</a>, which I thought was more of a curiosity. The main idea is to integrate exactly x^n * cos(k*x). One then relies on a piecewise parabolic approximation of the function f to integrate f(x) * cos(k*x). Interestingly, a very similar idea has been used in the <a href="http://www.risk.net/risk-magazine/technical-paper/1500323/cutting-edges-domain-integration">Sali quadrature method</a> for option pricing, except one integrates exactly x^n * exp(-k*x^2).<br /><br />It turned out to be remarkable on that problem, combined with a <a href="http://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method">simple adaptive Simpson</a> like method to find the right discretization. Then as if by magic, any outer integration quadrature worked. <br /><br /></p>

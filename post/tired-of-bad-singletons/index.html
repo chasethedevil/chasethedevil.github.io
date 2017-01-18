@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Tired Of Bad Singletons</h1>
+    <h1 class="post-title">Tired Of Bad Singletons</h1>
     <span class="post-date">Jan 4, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/tired-of-bad-singletons/#disqus_thread">Comments</a>
     </span>
     <p>While looking through some code for a project, I saw that:<br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&nbsp; public static final ProductYP instance = new ProductYP(); <br>&nbsp; <br>&nbsp; public ProductYP()<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; if (instance != null)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new RuntimeException(&quot;Only one instance allowed&quot;);<br><br>&nbsp;&nbsp;&nbsp; prods = new HashMap();<br>&nbsp; }<br><br>&nbsp; public static ProductYP getInstance() <br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; return instance;<br>&nbsp; }<br></blockquote><br>And I don&#39;t think it was done by a newbie&hellip; It&#39;s actually not far from being correct, it&#39;s just that the guy obviously does not know about private constructors. I have seen several broken singleton implementations in previous projects and had several debates on the  <a href="http://www.cs.umd.edu/%7Epugh/java/memoryModel/DoubleCheckedLocking.html">double-checked locking pattern</a> (<a href="http://en.wikipedia.org/wiki/Double-checked_locking">it works since JDK1.5</a> with volatiles but is useless). I am upset to see another half broken implementation. Everybody should have read at least  <a href="http://java.sun.com/developer/technicalArticles/Programming/singletons/">this</a>.<br><br>What have you seen as broken singletons?<br><br></p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>A Discontinuity</h1>
+    <h1 class="post-title">A Discontinuity</h1>
     <span class="post-date">Dec 12, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/a-discontinuity/#disqus_thread">Comments</a>
     </span>
     <p>I am comparing various finite difference schemes on simple problems and am currently stumbling upon a strange discontinuity at the boundary for some of the schemes (Crank-Nicolson, Rannacher, and TR-BDF2) when I plot an American Put Option Gamma using a log grid. It actually is more pronounced with some values of the strike, not all. The amplitude oscillates with the strike. And it does not happen on a European Put, so it&rsquo;s not a boundary approximation error in the code. It might well be due to the nature of the scheme as schemes based on implicit Euler work (maybe monotonicity preservation is important). This appears on this graph around S=350.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s1600/gamma_american_boundary.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="160" src="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s640/gamma_american_boundary.png" width="640" /></a></div><br /><b>Update December 13, 2012</b>: after a close look at what was happening. It was after all a boundary issue. It&rsquo;s more visible on the American because the Gamma is more spread out. But I reproduced it on a European as well.</p>

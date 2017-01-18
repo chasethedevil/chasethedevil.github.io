@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>The CUDA Performance Myth</h1>
+    <h1 class="post-title">The CUDA Performance Myth</h1>
     <span class="post-date">Jan 3, 2011 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/#disqus_thread">Comments</a>
     </span>
     <p>There is an <a href="http://arxiv.org/PS_cache/arxiv/pdf/0901/0901.0638v4.pdf">interesting</a> article on how to generate efficiently the inverse of the normal cumulative distribution on the GPU. This is useful for Monte-Carlo simulations based on normally distributed variables.<br /><br />Another result of the paper is a method (breakless algorithm) to compute it apparently faster than the very good <a href="http://www.mth.kcl.ac.uk/~shaww/web_page/papers/Wichura.pdf">Wichura&rsquo;s AS241</a> algorithm on the CPU as well keeping a similar precision. The key is to avoid branches (if-then) at the cost of not avoiding log() calls. As the algorithm is very simple, I decided to give it a try in Java.<br /><br />Unfortunately I found out that in Java, on 64 bit machines, the breakless algorithm is actually around twice slower. Intrigued, I tried in Visual C++ the same, and found this time it was 1.5x slower. Then I tried in gcc and found that it was 10% faster&hellip; But the total time was significant, because I had not applied any optimization in the gcc compilation. With -O3 flag AS241 became much faster and we were back at the Java result: the breakless algorithm was twice slower. The first result is that the JITed java code is as fast as optimized C++ compiled code. The second result is that the authors did not think of compiling with optimization flag.<br /><br />Then I decided to benchmark the CUDA float performance of similar algorithms. The CUDA program was 7x faster than the double precision multithreaded CPU program. This is comparing Nvidia GT330m vs Core i5 520m and float precision vs double precision on a naturally parallel problem. This is very far from the usually announced x80 speedup. Of course if one compares the algorithms with GCC single threaded no optimization, we might attain x50, but this is not a realistic comparison at all. I have heard that double precision is 8x slower on the GPU when compared to float precision: the difference then becomes quite small. Apparently Fermi cards are much faster, unfortunately I don&rsquo;t have any. And still I would not expect much better than 10x speedup. This is good but very far from the usually advertised speedup.</p>

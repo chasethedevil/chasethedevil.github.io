@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Double.NaN Is Evil</h1>
+    <h1 class="post-title">Double.NaN Is Evil</h1>
     <span class="post-date">Dec 9, 2008 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/double.nan-is-evil/#disqus_thread">Comments</a>
     </span>
     <p>I <span class="blsp-spelling-error" id="SPELLING_ERROR_0">don&rsquo;t</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_1">know</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_2">what</span> Sun <span class="blsp-spelling-error" id="SPELLING_ERROR_3">had</span> in <span class="blsp-spelling-error" id="SPELLING_ERROR_4">mind</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_5">when</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_6">creating</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_7">Double.NaN</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_8">number</span>. <span class="blsp-spelling-error" id="SPELLING_ERROR_9">It</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_10">is</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_11">very</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_12">inintuitive</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_13">to</span> use. I <span class="blsp-spelling-error" id="SPELLING_ERROR_14">am</span> sure <span class="blsp-spelling-error" id="SPELLING_ERROR_15">every</span> single <span class="blsp-spelling-error" id="SPELLING_ERROR_16">developer</span> out <span class="blsp-spelling-error" id="SPELLING_ERROR_17">there</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_18">fell</span> in <span class="blsp-spelling-error" id="SPELLING_ERROR_19">the</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_20">trap</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_21">of</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_22">trying</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_23">to</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_24">find</span> out if a double <span class="blsp-spelling-error" id="SPELLING_ERROR_25">was</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_26">NaN</span> or <span class="blsp-spelling-error" id="SPELLING_ERROR_27">not</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_28">using</span>:<br /><span class="blsp-spelling-error" id="SPELLING_ERROR_29"></span><blockquote style="font-weight: bold; font-family: courier new;"><span class="blsp-spelling-error" id="SPELLING_ERROR_29">Double.NaN</span> == <span class="blsp-spelling-error" id="SPELLING_ERROR_30">myDouble</span></blockquote><span class="blsp-spelling-error" id="SPELLING_ERROR_30"></span><br /><br /><span class="blsp-spelling-error" id="SPELLING_ERROR_31">This</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_32">does</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_33">not</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_34">work</span> (I <span class="blsp-spelling-error" id="SPELLING_ERROR_35">don&rsquo;t</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_36">know</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_37">the</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_38">real</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_39">reason</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_40">why</span>), <span class="blsp-spelling-error" id="SPELLING_ERROR_41">one</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_42">has</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_43">to</span> use:<br /><blockquote style="font-weight: bold; font-family: courier new;"><span class="blsp-spelling-error" id="SPELLING_ERROR_44">Double.isNaN</span>(<span class="blsp-spelling-error" id="SPELLING_ERROR_45">myDouble</span>)</blockquote><br /><span class="blsp-spelling-error" id="SPELLING_ERROR_46">Not</span> intuitive!</p>

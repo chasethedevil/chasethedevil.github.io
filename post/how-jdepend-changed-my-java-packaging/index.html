@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>How JDepend Changed My Java Packaging</h1>
+    <h1 class="post-title">How JDepend Changed My Java Packaging</h1>
     <span class="post-date">Oct 13, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/how-jdepend-changed-my-java-packaging/#disqus_thread">Comments</a>
     </span>
     <p>One important feature of Java language is the package keyword. It helps a lot in modularizing your code. But how exactly one should use it is not that clear.<br /><br />I have been on projects where 100s of classes are in a same package and more often where you have packages for every 2 classes. Often, packages are chosen so as to split functionalities. But often as well, people are packages maniacs and create way too many of them, because they want to sort things out, not necessarily applying a consistent logic. For example, I am sure many of you have seen the &ldquo;blahblah.exceptions&rdquo; packages where you dump exceptions classes.<br /><br />Without any precise intention for packages, you encounter quickly cyclic dependencies in your project, and your build system becomes overly complicated. Then you try to remove cyclic dependencies, not by using the package keyword better, but by building jars differently (=ugly jars) and &ldquo;refactoring&rdquo; a bit.<br /><br />I fell myself in many of those traps. Fortunately I stumbled on my way on <a href="http://clarkware.com/software/JDepend.html">JDepend</a> package analysis program. At first I wondered why JDepend calculated dependencies between Java packages and not between Jars, as in your project what matters is jar interdependencies. After using it regularly, first for the fun of trying not to have cyclic dependencies in my Java packages - the green light effect (I wanted my green light on my project), I understood much better its interest. I now make Java packages that are much more meaningful. They not only separate functionalities, but also create excellent modularity. Building a project is very easy, reusing parts of it is very clear. If one needs to split a jar in a project, it&rsquo;s very clear how to split it (by Java packages). And I find that in the end my packages make much more sense.<br /><br />Placing a class in the right package is most of the time not difficult, especially for experienced programmers. But now and then, with JDepend, I find mistakes. Correcting those mistakes regularly, when it&rsquo;s just about one or two classes is quick and easy. Correcting them on a project where dependency analysis was never done is a nightmare.<br /><br />Now I don&rsquo;t really care about JDepend metrics about abstractness and instability so much, I did not find any good use of them. But <a href="http://clarkware.com/software/JDepend.html">JDepend</a> (or a package dependencies checker) really is an essential program for good Java development.</p>

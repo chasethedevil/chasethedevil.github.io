@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Is Prolog Better Suited Than SQL?</h1>
+    <h1 class="post-title">Is Prolog Better Suited Than SQL?</h1>
     <span class="post-date">Sep 26, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/is-prolog-better-suited-than-sql/#disqus_thread">Comments</a>
     </span>
     <p>I am currently reading a Prolog book &ldquo;<i>Artificial Intelligence Through Prolog</i>&rdquo;, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.<br /><br />It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project. With Prolog, there is no need to think about joins, type of joins, SQL syntax. It is at the level just higher. I wonder very much why Prolog did not become more mainstream as it seems to solve some problems in a much nicer, natural way.<br />Here is a short example to get reviews of things by user or by user and tags or &hellip;:<br /><ol>   <li>let&rsquo;s define some facts:<br />  </li>   <ul>     <li>is_tag(tag1, user1, thing_id)</li>     <li>is_tag(tag2, user1, thing_id)</li>     <li>&hellip;<br />    </li>     <li>review(user1, thing_id, description, extended, date)</li>     <li>&hellip;<br />    </li>   </ul>   <li>review for user &ldquo;user_x&rdquo;</li>   <ul>     <li>?review(user_x, THING_ID, DESC, EXT, DATE)<br />    </li>   </ul>   <li>review for user &ldquo;user_x&rdquo; with tag &ldquo;tag_y&rdquo;</li>   <ul>     <li>?review(user_x, THING_ID, DESC, EXT, DATE), is_tag(tag_y, user_x, THING_ID)</li>   </ul> </ol> We could imagine some better ways to lay out information. This is just a first draft.<br /><br />Now of course, Prolog does not necessary makes sense for us because:<br />  a) We already have it working in SQL<br />  b) SQL is much more used and should therefore be more tunable, stable, etc.<br /><br />Still the Prolog way of things is interesting and powerful. We could have written a code with a logic near Prolog instead of our custom code.<br /><span class="technoratitag">Tags: <a target=_top href="http://del.icio.us/tag/book" rel="tag">book</a> <a target=_top href="http://del.icio.us/tag/review" rel="tag">review</a></span></p>

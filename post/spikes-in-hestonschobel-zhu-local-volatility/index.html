@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Spikes in Heston/Schobel-Zhu Local Volatility</h1>
+    <h1 class="post-title">Spikes in Heston/Schobel-Zhu Local Volatility</h1>
     <span class="post-date">Nov 20, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/#disqus_thread">Comments</a>
     </span>
     <p>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s1600/Screenshot+from+2013-11-20+12:53:32.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="203" src="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s400/Screenshot+from+2013-11-20+12:53:32.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Local Volatility</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s1600/Screenshot+from+2013-11-20+12:54:39.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="213" src="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s400/Screenshot+from+2013-11-20+12:54:39.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Volatility</td></tr></tbody></table><br /><br />The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.<br /><br />After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.<br /><br /><br /></p>

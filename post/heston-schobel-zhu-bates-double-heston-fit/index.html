@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Heston, Schobel-Zhu, Bates, Double-Heston Fit</h1>
+    <h1 class="post-title">Heston, Schobel-Zhu, Bates, Double-Heston Fit</h1>
     <span class="post-date">Oct 7, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/heston-schobel-zhu-bates-double-heston-fit/#disqus_thread">Comments</a>
     </span>
     <p><div class="separator" style="clear: both; text-align: center;"></div>I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a real world equity index implied volatility surface. I used a global optimizer (differential evolution).<br /><br />To my surprise, the Heston fit is quite good: the implied volatility error is less than 0.42% on average. Schobel-Zhu fit is also good (0.47% RMSE), but a bit worse than Heston. Bates improves quite a bit on Heston although it has 3 more parameters, we can see the fit is better for short maturities (0.33% RMSE). Double-Heston has the best fit overall but it is not that much better than simple Heston while it has twice the number of parameters, that is 10 (0.24 RMSE). Going beyond, for example Triple-Heston, does not improve anything, and the optimization becomes very challenging. With Double-Heston, I already noticed that kappa is very low (and theta high) for one of the processes, and kappa is very high (and theta low) for the other process: so much that I had to add a penalty to enforce constraints in my local optimizer. The best fit is at the boundary for kappa and theta. So double Heston already feels over-parameterized.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s1600/heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s640/heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s1600/schobelzhu_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s640/schobelzhu_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu  volatility error</td></tr></tbody></table><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s1600/bates_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s640/bates_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Bates  volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s1600/double_heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s640/double_heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Double Heston  volatility error</td></tr></tbody></table><br /><br />Another advantage of Heston is that one can find tricks to find a good initial guess for a local optimizer.<br /><br /><b>Update October 7: </b>My initial fit relied only on differential evolution and was not the most stable as a result. Adding Levenberg-Marquardt at the end stabilizes the fit, and improves the fit a lot, especially for Bates and Double Heston. I updated the graphs and conclusions accordingly. Bates fit is not so bad at all.</p>

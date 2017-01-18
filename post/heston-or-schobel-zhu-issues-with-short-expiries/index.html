@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Heston or Schobel-Zhu issues with short expiries</h1>
+    <h1 class="post-title">Heston or Schobel-Zhu issues with short expiries</h1>
     <span class="post-date">Jul 3, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/heston-or-schobel-zhu-issues-with-short-expiries/#disqus_thread">Comments</a>
     </span>
     <p>It&rsquo;s relatively well known that Heston does not fit the market for short expiries. Given that there are just 5 parameters to fit a full surface, it&rsquo;s almost logical that one part of the surface of it is not going to fit well the market.<br />I was more surprised to see how bad Heston or Schobel-Zhu were to fit a single short expiry volatility slice. As an example I looked at SP500 options with 1 week expiry. It does not really matter if one forces kappa and rho to constant values (even to 0) the behavior is the same and the error in fit does not change much.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" height="400" width="390" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu fit for a slice of maturity 1 week</td></tr></tbody></table>In this graph, the brown, green and red smiles corresponds to Schobel-Zhu fit using an explicit guess (matching skew &amp; curvature ATM), using Levenberg-Marquardt on this guess, and using plain differential evolution. <br />What happens is that the smiles flattens to quickly in the strike dimension. One consequence is that the implied volatility can not be computed for extreme strikes: the smile being too low, the price becomes extremely small, under machine epsilon and the numerical method (Cos) fails. There is also a bogus angle in the right wing, because of numerical error. I paid attention to ignore too small prices in the calibration by truncating the initial data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston fit, with Lord-Kahl (exact wings)</td></tr></tbody></table><br />SABR behaves much better (fixing beta=1 in this case) in comparison (As I use the same truncation as for Schobel-Zhu, the flat left wing part is ignored). <br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">SABR fit for a slice of maturity 1 week</td></tr></tbody></table>For longer expiries, Heston &amp; Schobel-Zhu, even limited to 3 parameters, actually give a better fit in general than SABR.</p>

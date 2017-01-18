@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>People Using Spring, EJBs Don&#39;t Know Basic JDBC</h1>
+    <h1 class="post-title">People Using Spring, EJBs Don&#39;t Know Basic JDBC</h1>
     <span class="post-date">May 30, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/people-using-spring-ejbs-dont-know-basic-jdbc/#disqus_thread">Comments</a>
     </span>
     <p>I recently found a bug in software we are developing. I traced it and found the root was improper JDBC handling. The application is written using EJBs, Spring and plenty of other relatively complex technologies. I was surprised that developers who were able to use all those technologies had no understanding of basic JDBC.  <br><br>They fetched all the data (including double, decimal numbers) from the database as String using rs.getString() !<br><br>While this is most of the time <a href="http://java.sun.com/docs/books/tutorial/jdbc/basics/retrieving.html"> possible</a>, it is also most of the time not desirable (in the code they were actually converting it to numbers, etc.). More importantly, this can lead to nasty bugs due to different Locales (the . vs , game for example). And this is what&#39;s happening in our application. <br></p>

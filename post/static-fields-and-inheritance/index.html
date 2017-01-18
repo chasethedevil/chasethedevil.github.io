@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Static Fields and Inheritance</h1>
+    <h1 class="post-title">Static Fields and Inheritance</h1>
     <span class="post-date">Jun 15, 2009 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/static-fields-and-inheritance/#disqus_thread">Comments</a>
     </span>
     <p>Someone asked me recently to find out the real reason why the code from this thread fails. This is a fairly bad code, and not even a very good way to point out the problem. But the question is nonetheless interesting.<br /><br /><pre class="jive-pre"><code class="jive-code jive-java"><span style="color:navy;"><b>class</b></span> Toto <span style="color:navy;"><b>extends</b></span> TotoParent<span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>final</b></span> <span style="color:navy;"><b>static</b></span> Toto a = <span style="color:navy;"><b>new</b></span> Toto (<span style="color:red;">&ldquo;a&rdquo;</span>);<br /><br /> <span style="color:navy;"><b>public</b></span> Toto(String a)<span style="color:navy;">{</span><br />  <span style="color:navy;"><b>super</b></span>(a);<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> java.util.ArrayList;<br /><span style="color:navy;"><b>import</b></span> java.util.List;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>abstract</b></span> <span style="color:navy;"><b>class</b></span> TotoParent <span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>static</b></span> List<string> list = <span style="color:navy;"><b>new</b></span> ArrayList<string>();<br /> <br /> <span style="color:navy;"><b>public</b></span> TotoParent(String a) <span style="color:navy;">{</span><br />  list.add(a);<br /> <span style="color:navy;">}</span><br /><br /> <span style="color:navy;"><b>protected</b></span> <span style="color:navy;"><b>static</b></span> List<string> get() <span style="color:navy;">{</span><br />  <span style="color:navy;"><b>return</b></span> list;<br />  <br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> org.junit.Test;<br /><span style="color:navy;"><b>import</b></span> <span style="color:navy;"><b>static</b></span> org.junit.Assert.*;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>class</b></span> TotoTest <span style="color:navy;">{</span><br /><br /> @Test<br /> <span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>void</b></span> testGet()<span style="color:navy;">{</span><br />  assertEquals(1, Toto.get().size());<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /></code></pre>I am quite used to static initialization, and would have answered the same as the first answer in the thread:<br />&ldquo;Get is static and associated with TotoParent, so that is the same as calling TotoParent.get().size()&rdquo;. I would have even thought that the compiler would compile the call Toto.get() to TotoParent.get(). But running javap, you can see it is still compiled as TotoParent.get(). So there is still a lookup done. This is why the first answer is actually not that correct.<br /><br />The important bit here is that Toto is never initialized, even if we call Toto.get(). The java specs (invaluable reference) explains clearly that calling a static method not declared in the class does not initialize the class.<br /><br />Calling Toto.get() is not exactly the same as calling TotoParent.get().<br />If TotoParent.get() called another TotoSuperParent.get():<br />Toto.get() -&gt; TotoParent.get() -&gt; TotoSuperParent.get()<br />We compile then later we change to make TotoParent have a specific implementation of get(). Toto will then be automatically aware of it, without even recompiling it.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/execution.html" target="_blank"><a href="http://java.sun.com/docs/">http://java.sun.com/docs/</a><wbr>books/jls/third_edition/html/<wbr>execution.html</a><br />paragraph 12.4.1</p>

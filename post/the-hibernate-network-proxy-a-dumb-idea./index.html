@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>The Hibernate Network Proxy, A Dumb Idea.</h1>
+    <h1 class="post-title">The Hibernate Network Proxy, A Dumb Idea.</h1>
     <span class="post-date">Dec 4, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/the-hibernate-network-proxy-a-dumb-idea./#disqus_thread">Comments</a>
     </span>
     <p>A friend of mine had a good idea for a Java project named &ldquo;hibernate proxy&rdquo;. I renamed it &ldquo;hibernate network proxy&rdquo; because hibernate proxies are already a well known concept among hibernate users (it allows lazy loading through a Java Proxy class). <br> <br> The hibernate network proxy, is a way to use hibernate remotely, that is to proxy hibernate calls through TCP (or even HTTP) to another machine, that will execute the session.saveOrUpdate or the session.load, etc. calls and return the corresponding objects, serialize them and deserialize them for use on the client.<br> <br> As most projects in my company involves several distributed services, this idea could have been potentially very interesting, allowing hibernate use in several services that would interact with a common service in charge of the db. It made me think about other standard patterns:<br> <br> <ul>   <li>This is not very different from the classical EJB session facade architecture, except we don&rsquo;t expose application functionalities, only hibernate stuff. In fact we don&rsquo;t want to expose application functionalities since they are not shared between services.</li>   <li>This is very similar to Entity EJBs used without facade, remotely, the first kind of design we heard about when EJBs came out. This would actually be a good fit for doing this kind of stuff, amazingly. I never thought remote entity EJBs were of any real use. Unfortunately for our projects, we already have a messaging infrastructure, and I am not sure how feasible it is to change of EJB transport protocol. Seeing the complexity of something like IIOP, it looks like a dead end.</li>   <li>This is a kind of Hibernate Second Level Cache, a cache with remote capabilities. The cache would proxy the request to the db service, and the db service would answer to that. This is a possible implementation that seems very flexible.</li>   <li>Use a regular TCP connection to the DB, and hibernate in a standard way. Ok, it does not use our internal message bus, but it is so simple and standard.&nbsp;</li> </ul> The last solution raises the most important question: <br> <blockquote>Why does it need to be proxied?&nbsp;<br> </blockquote> To go through some particular port? -&gt; use a port forwarder.<br> To go through HTTP? -&gt; use HTTPTunnel.<br> You want Java only? -&gt; use <a  href="http://www.jcraft.com/jhttptunnel/">JHttpTunnel</a>,there is even JSch for ssh<br> <br> <br></p>

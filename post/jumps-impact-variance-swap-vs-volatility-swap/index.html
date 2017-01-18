@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Jumps impact: Variance swap vs volatility swap</h1>
+    <h1 class="post-title">Jumps impact: Variance swap vs volatility swap</h1>
     <span class="post-date">Feb 20, 2015 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/#disqus_thread">Comments</a>
     </span>
     <p><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-9BEKyX_gWc0/VOclAJRe19I/AAAAAAAAH0g/AxbdgL48GaA/s1600/Screenshot%2B-%2B200215%2B-%2B13%3A13%3A38.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-9BEKyX_gWc0/VOclAJRe19I/AAAAAAAAH0g/AxbdgL48GaA/s1600/Screenshot%2B-%2B200215%2B-%2B13%3A13%3A38.png" height="388" width="640" /></a></div>Beside <a href="http://chasethedevil.github.io/post/variance-swap-replication--discrete-or-continuous/">the problem with the discreteness</a> of the replication, variance swaps are sensitive to jumps. This is an often mentioned reason for the collapse of the single name variance swap market in 2008 as jumps are more likely on single name equities.<br /><br />Those graphs are the result of Monte-Carlo simulations with various jump sizes using the Bates model, and using Local Volatility implied from the Bates vanilla prices. The local volatility price will be the same price as per static replication for the variance swap, and we can see it they converge when there is no jump.<br /><br />The presence of jumps lead to a theoretically higher variance swap price, again, which we miss completely with the static replication. As jumps go higher, the difference is more pronounced.<br /><br />Volatility swaps are a bit better behaved in this regard. Interestingly, local volatility overestimate the value in this case (which for variance swaps it underestimates the value). I also noticed that the relatively <a href="http://chasethedevil.blogspot.fr/2013/03/a-volatility-swap-and-straddle.html">recent formula from Carr-Lee</a> will underestimate jumps even more so than local volatility: it is more precise in the absence of jumps, very close to Heston, but less precise than local volatility when jumps increase in size.<br /><br />I have added a small section around this in <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2567398">my paper on SSRN</a>.<br /><br /></p>

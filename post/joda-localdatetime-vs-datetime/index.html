@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Joda LocalDateTime vs DateTime</h1>
+    <h1 class="post-title">Joda LocalDateTime vs DateTime</h1>
     <span class="post-date">Jul 17, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/joda-localdatetime-vs-datetime/#disqus_thread">Comments</a>
     </span>
     <p>Joda has the concept of LocalDate/<a href="http://joda-time.sourceforge.net/api-release/org/joda/time/LocalDateTime.html">LocalDateTime</a> and <a href="http://joda-time.sourceforge.net/api-release/org/joda/time/DateTime.html">DateTime</a>. The LocalDate is just a simple date, while DateTime is a date and a time zone.<br /><br />Where I work we have a similar distinction, although not the same: a simple &ldquo;absolute&rdquo; date object without time vs a relative date (a timestamp) like the JDK Date.<br /><br />The standard JDK Date class is a date without a time zone, but Sun deprecated in JDK 1.1 all methods allowing to use it like a LocalDate, forcing to use it through a Calendar (i.e. like a DateTime), that is, with a TimeZone.<br /><br />I have found one explanation for a potential use case of LocalDateTime vs DateTime: when you take an appointment to the doctor for July 22nd at 10am, the future date is a fixed event. Some people say you just don&rsquo;t care about the TimeZone in this case, and therefore use LocalDateTime. I think it is a bit more subtle than that. One could think of using fixed arbitrary TimeZone, it could just easily be set to UTC or to the default Java time zone or even the correct one. While it&rsquo;s not typically what the user want to worry about, it could be a default setting (like in Google Calendar or in your OS). And that is exactly what the LocalDateTime does internally, it uses a fixed, non modifiable TimeZone.<br /><br /><br />If the future event is in a few years and you want to store it in a database, it can become more problematic because daylight saving might not be well determined yet. The number stored today might not mean the same thing in a few years. I am not sure if it can be a real issue, but I am <a href="http://stackoverflow.com/questions/9047501/how-do-you-keep-timezone-and-calendar-up-to-date-after-a-time-zone-change">not the only one</a> to worry about that. As the LocalDateTime internally relies on UTC, it is not affected by this.<br /><br />There is another more technical use case for LocalDateTime, if you have a list of dates in a contract, they are all according to the contract TimeZone, you then probably don&rsquo;t want to specify the TimeZone for each date. The question is then more is the DateTime concept a good idea?</p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Scala is Mad</h1>
+    <h1 class="post-title">Scala is Mad</h1>
     <span class="post-date">Dec 12, 2012 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/scala-is-mad/#disqus_thread">Comments</a>
     </span>
     <p>I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<br /><br />For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<br /><br />And then the quickSort method somehow does not work if invoked on a generic&hellip; like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<br /><br />In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<br /><br /><b>Update Dec 12 2012</b>: here is the actual code (this is kept close to the Java equivalent on purpose):<br /><pre>object Point {<br />  def sortAndRemoveIdenticalPoints<a href="points : Array[T]">T &lt;: Point : ClassManifest</a> : Array[T] = {<br />      Sorting.quickSort(points.asInstanceOf[Array[Point]])<br />      val l = new ArrayBuffer<a href="points.length">T</a><br />      var previous = points(0)<br />      l += points(0)<br />      for (i &lt;- 1 until points.length) {<br />        if(math.abs(points(i).value - previous.value)&lt; Epsilon.MACHINE_EPSILON_SQRT) {<br />          l += points(i)<br />        }<br />      }<br />      return l.toArray<br />    }<br />    return points<br />  }<br />}<br /><br />class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<br />  def compare(that: Point): Int = {<br />    return math.signum(this.value - that.value).toInt<br />  }<br />}<br /><!-----><!--:-->&lt;/-&gt;&lt;/:&gt;</pre>In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point.</p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Generate your RSS feed in Java</h1>
+    <h1 class="post-title">Generate your RSS feed in Java</h1>
     <span class="post-date">Sep 5, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/generate-your-rss-feed-in-java/#disqus_thread">Comments</a>
     </span>
     <p>There are some open source projects that can help you in generating or reading RSS feeds in Java. I found only two libraries a bit mature, other code is often embedded in other open source products (jroller for example):<br /><ul>    <li><a href="http://informa.sourceforge.net/">Informa</a>: Does various RSS formats and Atom 0.3. Documentation is better than its alternative, but less focused (has some hibernate helper thingy, some lucene helper, etc.).<br /></li>   <li><a href="http://sourceforge.net/projects/sandler/">Sandler</a>: There is no working homepage while I am writing this. But the code is of decent quality, supports Atom 0.3 and RSS 1.0. It is easy to use it. However in reality it is not much more than a wrapper around some XML parser specialized in generating an RSS structure or an Atom structure.</li><li>Ooops, I forgot another important one, <a href="https://rome.dev.java.net/">Rome</a>. This RSS/Atom framework with a catchy name is very similar to Informa, has good documentation and good looking code. Under the hood it makes use of jdom.</li> </ul> I personally use <a href="http://dom4j.org/">dom4j</a> since I only need to generate RSS, and RSS, or Atom are just XML. I don&rsquo;t find it particularly verbose to use dom4j for that, and it is very flexible.<br /><br />If you need to parse feeds, then those libraries might make sense and save you a bit of time. For generating, I think their main interest is to abstract you from the differences in formats. So if you need to handle different formats, a framework will allow you to do it through only one API, which can be a big time-saver.<br /><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/rss" rel="tag">rss</a>, <a href="http://del.icio.us/tag/atom" rel="tag">atom</a></span></p>

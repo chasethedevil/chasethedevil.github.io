@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>The elusive reference: the Lamperti transform</h1>
+    <h1 class="post-title">The elusive reference: the Lamperti transform</h1>
     <span class="post-date">Nov 3, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/the-elusive-reference-the-lamperti-transform/#disqus_thread">Comments</a>
     </span>
     <p>Without knowing that it was a well known general concept, I first noticed the use of the Lamperti transform in the Andersen-Piterbarg &ldquo;Interest rate modeling&rdquo; book p292 &ldquo;finite difference solutions for general phi&rdquo;. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s400/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" />&nbsp;</a></div><div class="separator" style="clear: both; text-align: left;">Pat Hagan used that transformation for a better discretization&nbsp; of the <a href="http://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/">arbitrage free SABR PDE model</a>.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">I then started to notice the use of this transformation in many more papers. The first one I saw naming it &ldquo;Lamperti transform&rdquo; was the paper from Ait-Sahalia &ldquo;<a href="http://www.princeton.edu/~yacine/mle.pdf">Maximum likelyhood estimation of discretely sampled diffusions: a closed-form approximation approach</a>&rdquo;. Recently those closed form formulae have been applied to the quadrature method (where one integrates the transition density by a quadrature rule) in &ldquo;Advancing the universality of quadrature methods to any underlying process for option pricing&rdquo;. There is also a recent interesting application to Monte-Carlo simulation in &ldquo;<a href="http://www-leland.stanford.edu/~glynn/papers/2013/RheeG13a.pdf">Unbiased Estimation with Square Root Convergence for SDE Models</a>&rdquo;.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">So the range of practical applications is quite large. But there was still no reference. A google search pointed me to a well written paper that describes the application of the Lamperti transform to various stochastic differential equations, showing its limits &ldquo;<a href="http://orbit.dtu.dk/en/publications/from-state-dependent-diffusion-to-constant-diffusion-in-stochastic-differential-equations-by-the-lamperti-transform(8c869be7-68e9-4b47-acb1-05529b9a8590).html">From State Dependent Diffusion to Constant Diffusion in Stochastic Differential Equations by the Lamperti Transform</a>&rdquo;.&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" height="245" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">Gary then <a href="http://www.clarusft.com/lamperti-transform/">blogged about the Lamperti transform</a> and various papers from Lamperti, but does not say which one is the source.</div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">After going through some, I noticed that Lamperti&rsquo;s 1964 &ldquo;<a href="http://projecteuclid.org/euclid.kjm/1250524711">A simple construction of certain diffusion processes</a>&rdquo; seemed to be the closest, even though it seems to go beyond stochastic differential equations.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" height="208" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">Today, I found a paper referencing this paper explicitly when presenting the transformation of a stochastic process to a unit diffusion in &ldquo;<a href="http://arxiv.org/pdf/1109.5381">Density estimates for solutions to one dimensional Backward SDE&rsquo;s</a>&rdquo;. In addition it also references one exercise of the Karatzas-Schreve book &ldquo;Brownian motion and Stochastic calculus&rdquo;, which presents again the same idea, without calling it Lamperti transform.</div></p>

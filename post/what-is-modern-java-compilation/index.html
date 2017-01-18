@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>What Is &#39;Modern&#39; Java Compilation?</h1>
+    <h1 class="post-title">What Is &#39;Modern&#39; Java Compilation?</h1>
     <span class="post-date">Feb 7, 2006 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/what-is-modern-java-compilation/#disqus_thread">Comments</a>
     </span>
     <p><span class="gmail_quote"></span>Occasionally in <a href="http://ant.apache.org" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">Ant</a> you can see messages like this:<br><span style="background-color: rgb(255, 204, 0);"> &quot;</span><font size="-1"><span style="background-color: rgb(255, 204, 0);">[javac] </span><b style="background-color: rgb(255, 204, 0);">Using modern compiler</b><span style="background-color: rgb(255, 204, 0);">&quot; </span><br><br>What does this mean? <br><br></font><div style="text-align: left;"><font size="-1">In Ant you have the property &quot; <span style="font-weight: bold;">build.compiler</span>&quot; to specify if you want to use a classic or modern compiler. Now what do they mean by modern or classic. Well, they call classic compiler the compilers of JDK 1.1   and 1.2 and they call modern compiler the ones of JDK 1.3+. They made that distinction because a classic compiler does not support the same options as modern compilers: the semantics of javac tool changed in JDK 1.3.</font> <br></div><font size="-1"> <br>This terminology can easily be confused with java class file compatibility. Java class file compatibility is changed using the &quot;<span style="font-weight: bold;">-target</span>&quot; option of javac tool. One can specify in ant to compile with modern compilers and a target  1.4, the result is likely to not run on JVM 1.3. One can specify modern and a target 1.1, the resulting classes will run on JVM 1.1, but ant build.xml file will not be usable with JDK 1.1 without changing modern to classic. <br><br>I find Ant choice of word a bit confusing as using a &quot;modern&quot; compiler has little to do with the resulting class files.<br></font></p>

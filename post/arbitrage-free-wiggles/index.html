@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Arbitrage Free Wiggles</h1>
+    <h1 class="post-title">Arbitrage Free Wiggles</h1>
     <span class="post-date">Mar 3, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/arbitrage-free-wiggles/#disqus_thread">Comments</a>
     </span>
     <p>Peter Jaeckel, in a <a href="http://www.pjaeckel.webspace.virginmedia.com/ClampingDownOnArbitrage.pdf">recent paper (pdf)</a>, shows that something that sounds like a reasonable arbitrage free interpolation can produce wiggles in the implied volatility slice.<br /><br />The interpolation in question is using some convexity preserving spline on call and put option prices directly and in strike, assuming those input prices are arbitrage free. This is very similar to <a href="http://nkahale.free.fr/papers/Interpolation.pdf">Kahale interpolation (pdf)</a>.<br /><br />It seemed too crazy for me so I had to try out his example. And using a <a href="http://papers.ssrn.com/abstract=2175002">harmonic spline</a>, it does produce arbitrage free wiggles.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-HhHvYhvdlwU/UxSkNCTJiXI/AAAAAAAAHBQ/buAU6Q_wALM/s1600/Screenshot+from+2014-03-03+16:29:29.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-HhHvYhvdlwU/UxSkNCTJiXI/AAAAAAAAHBQ/buAU6Q_wALM/s1600/Screenshot+from+2014-03-03+16:29:29.png" height="297" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Wiggles in the implied volatility</td></tr></tbody></table>If we look at the probability density (the curvature), the Harmonic spline maintains a positive density, nearly piecewise flat in log scale, while Hyman, because it preserves only monotonicity, has some negative density which are cut out from the graph.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-UKuoXUcVRYY/UxSk1ylZ7jI/AAAAAAAAHBY/RDxMR2Q69GY/s1600/Screenshot+from+2014-03-03+16:47:46.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-UKuoXUcVRYY/UxSk1ylZ7jI/AAAAAAAAHBY/RDxMR2Q69GY/s1600/Screenshot+from+2014-03-03+16:47:46.png" height="297" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Probability Density</td></tr></tbody></table>In reality, if we look at the interpolation of prices in log scale, one can see that splines won&rsquo;t behave as expected at first on small numbers: they will give a much higher weight to the high values, producing something like a piecewise linear interpolation.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-5WOPPmW088c/UxSml6PGWmI/AAAAAAAAHBk/xOfiaaRcpLI/s1600/Screenshot+from+2014-03-03+16:57:33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-5WOPPmW088c/UxSml6PGWmI/AAAAAAAAHBk/xOfiaaRcpLI/s1600/Screenshot+from+2014-03-03+16:57:33.png" height="297" width="400" /></a></div><br />In reality, what one really wants for such data is to just interpolate the log prices with a spline, not the prices. This is the curve named &ldquo;Log&rdquo; in the graphs, where a simple cubic spline is used on the log prices, and fed to exp after interpolation.<br /><br />Now it sounds like a reasonable arbitrage free interpolation would be to interpolate the discrete density log linearly, in a similar spirit as <a href="http://finmod.co.za/interpreview.pdf">Hagan-West yield curve interpolation</a> (pdf).<br /><br />In general, if you interpolate very small numbers with a spline, you probably are doing something wrong.</p>

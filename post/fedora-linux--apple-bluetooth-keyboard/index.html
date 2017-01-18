@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Fedora Linux &amp; Apple Bluetooth Keyboard</h1>
+    <h1 class="post-title">Fedora Linux &amp; Apple Bluetooth Keyboard</h1>
     <span class="post-date">Jun 5, 2008 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/fedora-linux--apple-bluetooth-keyboard/#disqus_thread">Comments</a>
     </span>
     <p>It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd &ndash;search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS=&ldquo;&ndash;timeout 8 &ndash;connect 00:1D:4F:A7:15:CC &ndash;server&rdquo;</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name &ldquo;Apple Wireless Keyboard&rdquo;;</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are &ldquo;lm master&rdquo; (makes it connect automatically), and &ldquo;&ndash;timeout 8&rdquo; that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.</p>

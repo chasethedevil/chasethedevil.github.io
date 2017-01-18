@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>I Need Another DB Framework!</h1>
+    <h1 class="post-title">I Need Another DB Framework!</h1>
     <span class="post-date">Aug 23, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/i-need-another-db-framework/#disqus_thread">Comments</a>
     </span>
     <p>I am currently facing a problem that neither <a  href="http://www.hibernate.org">Hibernate</a> nor <a  href="http://ibatis.apache.org/">iBatis</a> solves nicely. I also looked at other ORM or just DB framework, without success. <br> <br> What I would need is a framework that generates PreparedStatements with a query by Criteria like API. I have many queries that are similar but varying according to different input parameters. iBatis can handle this, but for complex queries and scenarios, the XML becomes completely unreadable, and you therefore loose any advantage that iBatis was bringing with the externalization of SQL statements in XML. The other issue I have with using iBatis is that for another part of my project, the automatic generation of SQL statements a-la Hibernate is useful.<br> <br> Hibernate has a very nice <a  href="http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html">Query by Criteria</a> API, but it lacks just a tiny bit of flexibility in customizing queries. For example, I could not find a way to specify a &ldquo;USE INDEX(index_name)&rdquo; in the generated SQL, after the SELECT FROM xxx and before the rest of the query. I did not find either a way to specify the use of a &ldquo;STRAIGHT_JOIN&rdquo; instead of an INNER JOIN. These are all MySQL specific issues, but those little things are extremely useful at improving some of my queries performances. Writing N sql queries hard coded is not a good option, since this N can be quite big, which is why I am using Query by Criteria in the first place.<br> <br> So is there a need for yet another DB framework?<br></p>

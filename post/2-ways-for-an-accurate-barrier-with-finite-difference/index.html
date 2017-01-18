@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>2 Ways for an Accurate Barrier with Finite Difference </h1>
+    <h1 class="post-title">2 Ways for an Accurate Barrier with Finite Difference </h1>
     <span class="post-date">Jun 2, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/2-ways-for-an-accurate-barrier-with-finite-difference/#disqus_thread">Comments</a>
     </span>
     <p>I had explored the issue of pricing a barrier using finite difference discretization of the Black-Scholes PDE a few years ago. Briefly, for explicit schemes, one just need to place the barrier on the grid and not worry about much else, but for implicit schemes, either the barrier should be placed on the grid and the grid&nbsp; <b>truncated </b>at the barrier, or a <b>fictitious point</b> should be introduced to force the correct price at the barrier level (0, typically).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s1600/barrier_grid.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="135" src="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s400/barrier_grid.png" width="400" /></a></div><br />The fictitious point approach is interesting for the case of varying rebates, or when the barrier moves around. I first saw this idea in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo;.<br /><br />Recently, I noticed that Hagan made use of the ficitious point approach in its &ldquo;Arbitrage free SABR&rdquo; paper, specifically he places the barrier in the middle of 2 grid points. There is very little difference between truncating the grid and the fictitious point for a constant barrier.<br /><br />In this specific case there is a difference because there are 2 additional ODE solved on the same grid, at the boundaries. I was especially curious if one could place the barrier exactly at 0 with the fictitious point, because then one would potentially need to evaluate coefficients for negative values. It turns out you can, as values at the fictitious point are actually not used: the mirror point inside is used because of the mirror boundary conditions.<br /><br />So the only difference is the evaluation of the first derivative at the barrier (used only for the ODE): the fictitious point uses the value at barrier+h/2 where h is the space between two points at the same timestep, while the truncated barrier uses a value at barrier+h (which can be seen as standard forward/backward first order finite difference discretization at the boundaries). For this specific case, the fictitious point will be a little bit more precise for the ODE.</p>

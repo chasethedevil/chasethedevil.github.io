@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>A Look at Small Time Expansions for Heston</h1>
+    <h1 class="post-title">A Look at Small Time Expansions for Heston</h1>
     <span class="post-date">Feb 12, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/#disqus_thread">Comments</a>
     </span>
     <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.<br /><br />In 2011, Forde et al. proposed <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">a second order small time expansion</a> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <a href="http://arxiv.org/abs/1306.5447">different expansions up to order-3</a> around the money. I already looked at the later in my <a href="http://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">previous post</a>, applying the idea to Schobel-Zhu.<br /><br />I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.<br /><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-86ukJOiiEq8/UvtkhCljuKI/AAAAAAAAHAI/J7349pkWjsU/s1600/heston_expansions_order3a.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-86ukJOiiEq8/UvtkhCljuKI/AAAAAAAAHAI/J7349pkWjsU/s1600/heston_expansions_order3a.png" height="378" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">T=0.5, Feller condition largely violated</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-fO0cCblLkFk/UvtkjiYK1PI/AAAAAAAAHAQ/8jwHVPg0Tp8/s1600/heston_expansions_order3b.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-fO0cCblLkFk/UvtkjiYK1PI/AAAAAAAAHAQ/8jwHVPg0Tp8/s1600/heston_expansions_order3b.png" height="378" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">T=0.5, Feller condition slightly violated</td></tr></tbody></table><br /><br />Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.<br />The order-3 formula, even though it is more precise at the money, was actually more problematic for calibration: it failed to find a good enough initial guess in some cases, maybe because the reference data should be truncated, to possibly keep the few shortest expiries, and close to ATM strikes.<br /><br /></p>

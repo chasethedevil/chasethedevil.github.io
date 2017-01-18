@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>I Get Spring</h1>
+    <h1 class="post-title">I Get Spring</h1>
     <span class="post-date">Aug 23, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/i-get-spring/#disqus_thread">Comments</a>
     </span>
     <p>When you google up Java Spring, one of the best results is a post from crazybob called &ldquo;<a  href="http://crazybob.org/2006/01/i-dont-get-spring.html">I Don&rsquo;t Get Spring</a>&rdquo;. For a long time, I shared a similar opinion. But now that I have used it, I get it. I only use it for defining replaceable services, so when I talk about Spring, I mean spring-core and spring-beans. <br> <br> These two packages are not big, and have only very few dependencies. So it is quite easy to use Spring in any project, be it small or not. It is actually easier than using NanoContainer because Spring has less external dependencies.<br> <br> I did not talk about <a  href="http://www.martinfowler.com/articles/injection.html">Dependency Injection</a> yet, because that was not my primary goal. Many times I had to write by hand configurable factories. By using Spring, I avoid writing all that boilerplate code. I was surprised that with 1 line of code I actually had my factory done. Granted, the config file is xml, an I am not necessarily an xml fan. But 1) it&rsquo;s very simple, and 2) if you don&rsquo;t want your custom factory to depend on all implementations, you will either use strings in your code or a config file, which in the end is no better than Spring config file.<br> <br> Dependency Injection is the big plus that Springs gives on top of it. It&rsquo;s very useful to define your dependencies explicitly in the config file, since all beans instantiated from the config file are instantiated dynamically. And by defining the dependencies, you also get for free the injection.<br> <br> Spring is not big and strange and unknown. It solves a fairly simple problem. But again I don&rsquo;t use it for everything, every class. I don&rsquo;t think it brings much versus straight Java code when you don&rsquo;t want replaceable services. And putting it in places where it is not needed would be dangerous, because of the unneeded xml configuration.</p>

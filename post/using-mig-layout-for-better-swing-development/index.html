@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Using MiG Layout For Better Swing Development</h1>
+    <h1 class="post-title">Using MiG Layout For Better Swing Development</h1>
     <span class="post-date">Apr 29, 2008 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/#disqus_thread">Comments</a>
     </span>
     <p>I have forgotten a few libraries in my <a href="http://chasethedevil.blogspot.com/2008/04/better-java-swing-development.html">Better Swing Development</a> article, and notably <a href="http://www.miglayout.com">MiGLayout</a>.<br /><br />GridBagLayout is too verbose, and still feels too clumsy. This is why a while back I wrote <a href="http://easygridbag.sourceforge.net">a small tool</a> to help visualize various GridBagLayouts for people who are not used to it. But it would have been much simpler to use a better layout instead.<br /><br />MiGLayout is good, I managed to have good results without almost any practices on not so simple layouts. It also makes the code more concise.<br /><br />Related to my <a href="http://chasethedevil.blogspot.com/2008/04/swixml-review.html">previous post about SwiXml</a>, and as SwiXml does not yet support MiGLayout, I was thinking how easy it would be to achieve something relatively similar. With proper code conventions it is quite easy to describe the GUI outside a Java file, for example, for an easy start in a Beanshell file.<br /><br />The beanshell file would contain components construction, and MiGLayout of them afterwards, that&rsquo;s it. All listeners and component behaviours would be kept in java classes. With this kind of code split. The beanshell file is then extremely simple, as simple as the SwiXml.<br /><br />MiGLayout also has plenty of extra functionalities like &ldquo;<span style="font-size:85%;"><span style="font-family: courier new;">hidemode 1</span></span>&rdquo; that can help automatically redoing the layout if a component becomes visible/invisible.</p>

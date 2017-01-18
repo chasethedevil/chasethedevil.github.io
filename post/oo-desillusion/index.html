@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>OO Desillusion</h1>
+    <h1 class="post-title">OO Desillusion</h1>
     <span class="post-date">Aug 28, 2008 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/oo-desillusion/#disqus_thread">Comments</a>
     </span>
     <p>I have read many inspiring books about object oriented programming. I find <a href="http://archive.eiffel.com/doc/oosc/">B. Meyer Object Oriented Software Construction</a> one of the best in the lot. B. Meyer tries to explain in a progressive way why OO is better, by introducing it bit by bit. I have read different related <a href="http://en.wikipedia.org/wiki/Design_Patterns">design patterns</a> book, the GoF one, Martin Fowler ones. I have been programming Java for about 10 years now. And yet, today, I feel unconvinced.<br /><br />Maybe it is because I have been recently on different bigger projects, maybe it is because I have worked with different people. What I see today, is a tendency to overcomplexity. A simple example is you need a code to do only 3 different things in particular cases. Instead of using if-then-else, because it reminds you of the devils of procedural programming, you write 3 classes and 1 interface. Now the usual excuse for such a behavior is to say, we don&rsquo;t know, maybe there will be a 4th one, my code will make it easy to handle the 4th one. Often when there are requirements change, you don&rsquo;t expect at all where it will be, and it is not what a developer thought would change that actually changes. So the dev with the 3 classes has now to change its interface, update the 3 classes, and create a 4th one. The &ldquo;procedural&rdquo; guy has no such problem because he did not try to abstract something that did not need any abstraction in the first place.<br /><br />Now on millions lines of code software, it is important to have a few basic principles in the overall design, to identify components that talk to each other, to define a global structure. But at the developer dimension, there is often no need for that, except in the few cases where it makes sense.<br /><br />I do use design patterns sometimes, when I feel it is the simplest flexible way, but it is quite rare overall. There are 2 common jokes about design patterns. One is from people who don&rsquo;t know what they are. They often take the piss of architects doing design patterns all the time that in the end don&rsquo;t really know how to do things and spend a lot of time and money on crap. Other is from Pythonists and Rubyists. They say that you do not need design patterns if the language is done right.<br /><br />The Java language, with the Generics, and the propositions for <a href="http://java.dzone.com/news/java-7-predictions">Java 7</a> is also evolving in the overcomplex side (ok, the Generics are probably much worse than Java 7 propositions). Soon people will be more confortable reading <a href="http://www.haskell.org/">Haskell</a>. Joke aside, Haskell while being different to read, has really something for it. It brings a new way of writing programs, moves the complexity somewhere else.<br /><br />I still think lots of ideas in B. Meyer book are valid today. But an essential part must be missing. Overdesign seems to be too recurrent in OO projects.</p>

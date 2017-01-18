@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Haskell Fibonacci Revisited</h1>
+    <h1 class="post-title">Haskell Fibonacci Revisited</h1>
     <span class="post-date">Dec 12, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/#disqus_thread">Comments</a>
     </span>
     <p>Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a <em>MILLION</em> times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.</p>

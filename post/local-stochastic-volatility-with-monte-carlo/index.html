@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Local Stochastic Volatility with Monte-Carlo</h1>
+    <h1 class="post-title">Local Stochastic Volatility with Monte-Carlo</h1>
     <span class="post-date">Oct 16, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/#disqus_thread">Comments</a>
     </span>
     <p>I always imagined local stochastic volatility to be complicated, and thought it would be very slow to calibrate.<br /><br />After reading a bit about it, I noticed that the calibration phase could just consist in calibrating independently a Dupire local volatility model and a stochastic volatility model the usual way.<br /><br />One can then choose to compute on the fly the local volatility component (not equal the Dupire one, but including the stochastic adjustment) in the Monte-Carlo simulation to price a product. <br /><br />There are two relatively simple algorithms that are remarkably similar, one by Guyon and Henry-Labordère in &ldquo;<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1885032">The Smile Calibration Problem Solved</a>&ldquo;:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-uV792mNz4Xo/Ul6baEs2ktI/AAAAAAAAG1Q/RpvCpcEygXc/s1600/Screenshot+from+2013-10-16+15:51:46.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="157" src="http://4.bp.blogspot.com/-uV792mNz4Xo/Ul6baEs2ktI/AAAAAAAAG1Q/RpvCpcEygXc/s400/Screenshot+from+2013-10-16+15:51:46.png" width="400" /></a></div><br />And one from Van der Stoep, Grzelak &amp; Oosterlee &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fabstract%3D2278122&amp;ei=255eUqaEDMaxhAfdqoBI&amp;usg=AFQjCNF2KqSTT2ouvAyiA2J77foOFTzMKw&amp;sig2=fzb4vlDPp49Hp1oT5Wja4A&amp;bvm=bv.54176721,d.ZG4">The Heston Stochastic-Local Volatility Model: Efficient Monte Carlo Simulation</a>&ldquo;:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-6-0MMofCHVo/Ul6cWo9JtkI/AAAAAAAAG1Y/xBQnqY_J8tM/s1600/Screenshot+from+2013-10-16+16:01:01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="63" src="http://1.bp.blogspot.com/-6-0MMofCHVo/Ul6cWo9JtkI/AAAAAAAAG1Y/xBQnqY_J8tM/s400/Screenshot+from+2013-10-16+16:01:01.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-UkLwvQNeeak/Ul6cWrspGxI/AAAAAAAAG1c/S_X907BJur4/s1600/Screenshot+from+2013-10-16+15:59:08.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="256" src="http://3.bp.blogspot.com/-UkLwvQNeeak/Ul6cWrspGxI/AAAAAAAAG1c/S_X907BJur4/s400/Screenshot+from+2013-10-16+15:59:08.png" width="400" /></a></div><br />In the particle method, the delta function is a regularizing kernel approximating the Dirac function. If we use the notation of the second paper, we have a = psi.<br /><br />The methods are extremely similar, the evaluation of the expectation is slightly different, but even that is not very different. The disadvantage is that all paths are needed at each time step. As a payoff is evaluated over one full path, this is quite memory intensive.<br /><br /><br /></p>

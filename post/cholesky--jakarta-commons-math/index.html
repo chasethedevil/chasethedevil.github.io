@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Cholesky &amp; Jakarta Commons Math</h1>
+    <h1 class="post-title">Cholesky &amp; Jakarta Commons Math</h1>
     <span class="post-date">May 15, 2009 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/cholesky--jakarta-commons-math/#disqus_thread">Comments</a>
     </span>
     <p>In Finance, <a href="http://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky</a> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <a href="http://www.google.com/codesearch/p?hl=en#W_wVDN7F3h4/tetrad-4.3.2-0/src/edu/cmu/tetrad/util/MatrixUtils.java&amp;q=cholesky%20SEMEditor&amp;l=1332">this one</a>). There is <a href="http://svn.apache.org/viewvc/commons/proper/math/trunk/src/java/org/apache/commons/math/linear/decomposition/CholeskyDecompositionImpl.java?view=co">one</a> in <a href="http://commons.apache.org/math/">Apache Commons Maths</a> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<br /><br />Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<br />cholesky GPL= 5.4ms<br />cholesky BSD=37.1ms<br /><br />So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>

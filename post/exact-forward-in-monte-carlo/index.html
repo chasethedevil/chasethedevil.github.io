@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Exact Forward in Monte-Carlo</h1>
+    <h1 class="post-title">Exact Forward in Monte-Carlo</h1>
     <span class="post-date">May 13, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/exact-forward-in-monte-carlo/#disqus_thread">Comments</a>
     </span>
     <p>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.<br /><br />In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices.<br /><br />Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <a href="http://ssrn.com/abstract=2264327">this paper</a>.<br /><br />In short, for log-Euler, one can use the intuitive forward drift rate: r1*t1-r0*t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>

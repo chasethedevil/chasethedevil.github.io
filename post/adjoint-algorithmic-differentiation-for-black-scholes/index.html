@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Adjoint Algorithmic Differentiation for Black-Scholes</h1>
+    <h1 class="post-title">Adjoint Algorithmic Differentiation for Black-Scholes</h1>
     <span class="post-date">Jan 21, 2014 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/#disqus_thread">Comments</a>
     </span>
     <p><a href="http://en.wikipedia.org/wiki/Automatic_differentiation">Adjoint algorithmic differentiation</a> is particularly interesting in finance as we often encounter the case of a function that takes many input (the market data) and returns one output (the price) and we would like to also compute sensitivities (greeks) to each input.<br /><br />As I am just starting around it, to get a better grasp, I first tried to apply the idea to the analytic knock out barrier option formula, by hand, only to find out I was making way too many errors by hand to verify anything. So I tried the simpler vanilla Black-Scholes formula. I also made various errors, but managed to fix all of them relatively easily.<br /><br />I decided to compare how much time it took to compute price, delta, vega, theta, rho, rho2 between single sided finite difference and the adjoint approach. Here are the results for 1 million options:<br /><br /><blockquote class="tr_bq">FD time=2.13s<br />Adjoint time=0.63s</blockquote><br /><b>It works well</b>, but doing it by hand is crazy and too error prone. It might be simpler for Monte-Carlo payoffs however.<br /><br />There are not many Java tools that can do reverse automatic differentiation, I found <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=5&amp;cad=rja&amp;ved=0CFAQFjAE&amp;url=http%3A%2F%2Fcluster.grid.pub.ro%2Fwiki%2Findex.php%2FADiJaC_-_Automatic_Differentiation_of_Java_Classfiles&amp;ei=SmDeUtDLCYrG0QWrlIHQDw&amp;usg=AFQjCNHLMwobO6u5jSoUifCdHvE2yPZ6oQ&amp;sig2=wFbGRYjgLenCNGRbrQ1gKQ&amp;bvm=bv.59568121,d.d2k">some thesis</a> on it, with an interesting byte code oriented approach (one difficulty is that you need to reverse loops, while statements).</p>

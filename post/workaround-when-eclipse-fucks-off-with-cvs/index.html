@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Workaround When Eclipse Fucks Off With CVS</h1>
+    <h1 class="post-title">Workaround When Eclipse Fucks Off With CVS</h1>
     <span class="post-date">Nov 28, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/workaround-when-eclipse-fucks-off-with-cvs/#disqus_thread">Comments</a>
     </span>
     <p>Until recently, I always found Eclipse CVS support to be excellent. The synchronize view was really a big plus to do clean commits, without forgetting any file.<br> <br> But I have encountered several problem with Eclipse 3.2+:<br> <br> <blockquote>On one project, it keeps putting the build directory into CVS, and I can&rsquo;t find how to change that setting. Each time I open the project I have to change the CVS/Entries file.<br>   <br> On another, where I have lots of files in, Eclipse delete some of the files (checked in CVS) regularly, although not often. It won&rsquo;t retrieve them back again from CVS. It seems to be the same files each time. I have no clue why.<br>   <br> The diff sometimes tells me the whole file has changed while there is absolutely no change.<br>   <br> I could not make the merge work. It kept on complaining about some parameters.<br>   <br> </blockquote> And now the workaround for all those cases: <br> <blockquote><b>The good old CVS command line.<br>   <br>   </b></blockquote> I never remember how do to a merge with the command line, so I each time go to google and read<a  href="http://www.csc.calpoly.edu/%7Ejdalbey/205/Resources/cvsBranchMerge.html"> this merge example page</a>. Here are the very simple steps if you are in a branch and want to merge:<br> <ol>   <li>     <pre>cvs update -A mypoem.txt (use head as local repository)</pre>   </li>   <li>     <pre class="source">cvs update -j release-1 (merge release-1 changes into local repository)</pre>   </li>   <li>     <pre class="source">cvs update mypoem.txt</pre>   </li>   <li>     <pre class="source">cvs commit mypoem.txt</pre>   </li> </ol> <br></p>

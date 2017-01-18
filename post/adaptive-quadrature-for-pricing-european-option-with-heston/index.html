@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Adaptive Quadrature for Pricing European Option with Heston</h1>
+    <h1 class="post-title">Adaptive Quadrature for Pricing European Option with Heston</h1>
     <span class="post-date">Jun 25, 2012 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/adaptive-quadrature-for-pricing-european-option-with-heston/#disqus_thread">Comments</a>
     </span>
     <p>The Quantlib code to evaluate the Heston integral for European options is quite nice. It proposes <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=4&amp;ved=0CGoQFjAD&amp;url=http%3A%2F%2Fwww.math.uni-wuppertal.de%2F%7Ekahl%2Fpublications%2FNotSoComplexLogarithmsInTheHestonModel.pdf&amp;ei=MkDoT8HHOaO_0QXS_6SeCQ&amp;usg=AFQjCNFbAMQBLoKRd0BR_-HC0CkP4zrMtg">Kahl &amp; Jaeckel</a> method as well as Gatheral method for the complex logarithm. It also contains expansions where it matters so that the resulting code is very robust. One minor issue is that it does not integrate both parts at the same time, and also does not propose Attari method for the Heston integral that is supposed to be more stable.<br /><br />I was surprised to find out that out of the money, short expiry options seemed badly mispriced. In the end I discovered it was just that it required sometimes more than 3500 function evaluations to have an accuracy of 1e-6.<br /><br />As this sounds a bit crazy, I thought that Jaeckel log transform was the culprit. In reality, it turned out that it was <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CFMQFjAA&amp;url=http%3A%2F%2Fusers.wpi.edu%2F%7Ewalker%2FMA510%2FHANDOUTS%2Fw.gander%2Cw.gautschi%2CAdaptive_Quadrature%2CBIT_40%2C2000%2C84-101.pdf&amp;ei=U0HoT_HWBeXP0QW23O3xBw&amp;usg=AFQjCNH4KRWMprUvL8yBPKRxO_sVNyc2Pg">Gauss Lobatto Gander &amp; Gautschi implementation</a>. I tried the simplest algorithm in <a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">Espelid improved algorithms</a>: modsim, an adaptive extrapolated Simpson method, and it was 4x faster for the same accuracy. That plus the fact that it worked out of the box (translated to Java) on my problem was impressive.<br /><br />Jaeckel log transform (to change the interval from 0,+inf to 0,1) works well, and seems to offer a slight speedup (10% to 15%) for around ATM options, mid to long term for the same accuracy. Unfortunately, it can also slow down by up to 50% the convergence for more OTM options or shorter expiries. So I am not so sure about its interest vs just cutting off the integration at phi=200.</p>

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>A Volatility Swap and a Straddle</h1>
+    <h1 class="post-title">A Volatility Swap and a Straddle</h1>
     <span class="post-date">Mar 12, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/#disqus_thread">Comments</a>
     </span>
     <p>A <a href="http://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<i>robust replication of volatility derivatives</i>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s1600/Screenshot+from+2013-03-12+18:14:34.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="312" src="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s400/Screenshot+from+2013-03-12+18:14:34.png" width="400" /></a></div>Those are very close payoffs!<br /><br />I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<br /><br />The real payoff (very easy to obtain through Carr-Lee Bessel formula):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s1600/Screenshot+from+2013-03-14+19:46:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s320/Screenshot+from+2013-03-14+19:46:16.png" width="320" /></a></div>&nbsp;</p>

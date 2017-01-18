@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Volatility Swap vs Variance Swap Replication - Truncation</h1>
+    <h1 class="post-title">Volatility Swap vs Variance Swap Replication - Truncation</h1>
     <span class="post-date">Mar 16, 2015 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/volatility-swap-vs-variance-swap-replication---truncation/#disqus_thread">Comments</a>
     </span>
     <p>I have looked at <a href="http://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/">jump effects on volatility vs. variance swaps</a>. There is a similar behavior on tail events, that is, on truncating the replication.<br /><br />One main <a href="http://chasethedevil.blogspot.fr/2015/02/variance-swap-replication-discrete-or.html">problem with discrete replication of variance swaps</a> is the implicit domain truncation, mainly because the variance swap equivalent log payoff is far from being linear in the wings.<br /><br />The equivalent payoff with Carr-Lee for a volatility swap is much more linear in the wings (<a href="http://chasethedevil.blogspot.fr/2013/03/a-volatility-swap-and-straddle.html">not so far of a straddle</a>). So we could expect the replication to be less sensitive to the wings truncation.<br /><br />I have done a simple test on flat 40% volatility:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-hxdKaTQrj4w/VQbYgb7IB9I/AAAAAAAAH6o/z2NDk9wtC3w/s1600/Screenshot%2Bfrom%2B2015-03-16%2B14%3A19%3A33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-hxdKaTQrj4w/VQbYgb7IB9I/AAAAAAAAH6o/z2NDk9wtC3w/s1600/Screenshot%2Bfrom%2B2015-03-16%2B14%3A19%3A33.png" height="113" width="320" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-kv6b3fbejKI/VQbYjGOv3dI/AAAAAAAAH6w/M0YfIZ1WlPc/s1600/Screenshot%2B-%2B03162015%2B-%2B02%3A19%3A47%2BPM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-kv6b3fbejKI/VQbYjGOv3dI/AAAAAAAAH6w/M0YfIZ1WlPc/s1600/Screenshot%2B-%2B03162015%2B-%2B02%3A19%3A47%2BPM.png" height="72" width="320" /></a></div>As expected, the vol swap is much less sensitive, and interestingly, very much like for the jumps, it moves in the opposite direction: the truncated price is higher than the non truncated price.<br /><br /></p>

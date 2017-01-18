@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>SIMD and Mersenne-Twister</h1>
+    <h1 class="post-title">SIMD and Mersenne-Twister</h1>
     <span class="post-date">Feb 5, 2011 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/simd-and-mersenne-twister/#disqus_thread">Comments</a>
     </span>
     <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <a href="http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/SFMT/">SFMT</a>. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.<br /><br />I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.<br /><br />This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>

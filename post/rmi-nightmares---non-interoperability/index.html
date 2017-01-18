@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>RMI Nightmares - Non Interoperability</h1>
+    <h1 class="post-title">RMI Nightmares - Non Interoperability</h1>
     <span class="post-date">Jan 31, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/rmi-nightmares---non-interoperability/#disqus_thread">Comments</a>
     </span>
     <p>These days we tried to make Websphere and <a href="http://jonas.objectweb.org">Jonas</a> interoperate. Some EJBs are deployed in Jonas and we just try to call them from Websphere. The most natural way is to use RMI (with JRMP) for that. Jonas uses  JDK1.4.2 (conforms to J2EE 1.4) and Websphere IBM JVM 1.3.1 (conforms to J2EE 1.3). Because of RMI serialization, an EJB from Jonas will not work on Websphere, because this EJB has references to J2EE 1.4 classes which are different from J2EE  1.3. The exact root cause is not exactly clear to me, it probably has to do with the Naming Factory and the EJB Stub, but we tried every possible thing here without success.<br /><span style="font-weight: bold;">Update: </span>JRMP worked between JBoss 3.X on JDK 1.4 and Websphere 5.X (IBM JDK 1.3) using JBoss NamingFactory. So RMI interoperation seems quite unpredictable. One thing is that you have to pay attention to the naming factory you use. If it is a special library like in JBoss case, make sure it is compatible with your JDK.<br /><br />One solution is to use RMI-IIOP, as it does not rely on serialization. It almost works. In our case we use Websphere Portal that needs to have security enabled. You might ask what security has to do with all that. Well, enabling security on websphere means that CORBA exchange will also be secured (using CSIv2). Tuning Jonas to understand what websphere asks is something we did not manage to do (and we don&rsquo;t know if it is possible at all).<br /><span style="font-weight: bold;">Update: </span>We did manage to make it work by disabling Jonas CSIv2 support.<br /><br />So there we are using Axis to do the communication!<br /><span style="font-weight: bold;">Update: </span>Axis is not needed anymore  as RMI-IIOP works as advertised.<br /><br />There is an interesting <a href="http://www.lifl.fr/%7Emerle/benchmarking.pdf">benchmark of Axis vs JRMP vs RMI-IIOP (pdf)</a>. Axis is more than 10x slower than pure JRMP. Application servers use of JRMP seems to matter a lot, JBoss looks bad.</p>

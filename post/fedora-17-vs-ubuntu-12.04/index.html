@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>Fedora 17 vs Ubuntu 12.04</h1>
+    <h1 class="post-title">Fedora 17 vs Ubuntu 12.04</h1>
     <span class="post-date">Sep 12, 2012 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/fedora-17-vs-ubuntu-12.04/#disqus_thread">Comments</a>
     </span>
     <p>I had the bad idea to upgrade to the beta Ubuntu 12.10. Something awfully broke in the upgrade. After too much struggling with apt-get &amp; dpkg, I decided to install Fedora 17.<br /><br />Strangely Fedora feels much faster than Ubuntu 12.04 (the boot time especially). Yum seems also faster than apt-get, especially the update part. Also while the Unity dock is not bad (better than gnome shell dock), the Unity dash thing just makes me crazy, the gnome shell activities, while close, are much easier to use.<br /><br />But it needs a bit more steps to install, although I had no problem to install <a href="http://www.if-not-true-then-false.com/2012/fedora-17-nvidia-guide/">nvidia drivers</a>,&nbsp;<a href="http://obiee2go.blogspot.fr/2012/06/oracle-11g-oracle-database-11g.html">Oracle 11g xe</a>, Java, MP3, nice fonts, nice icons thanks to the guides <a href="http://www.mjmwired.net/resources/mjm-fedora-f17.html">here</a> and <a href="http://smashingweb.info/fedora-17-post-installation-guide-things-to-do-after-installing-fedora-17/">there</a>. SSD Trim instructions are the same (basically use &ldquo;discard&rdquo; instead of &ldquo;default&rdquo; in /etc/fstab). I have the most troubles with Oracle: somehow the start script does not work and I currently log in as &ldquo;oracle&rdquo; and start&nbsp;/u01/app/oracle/product/11.2.0/xe/config/scripts/startdb.sh from there (after having added the proper .bashrc for this user)<br /><br />I even managed the peculiarities of my laptop a similar way as ubuntu: I want Nvidia card when plugged in to a monitor (to be able to use it) and Intel card when not (to be able to use the LCD screen). My solution is to use the boot screen (in reality one just need to restart X11): this amounted to add a &ldquo;hdmi&rdquo; in &ldquo;/etc/grub.d/40_custom&rdquo; and creating a link to &ldquo;/etc/rc3.d/S10DriverSelect&rdquo; the following script (a dirty hack):<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">#!/bin/sh</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">if grep -q hdmi /proc/cmdline</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules.bak/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.hdmi /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules.bak/extensions/nvidia /usr/lib64/xorg/modules/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">else</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.intel /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules/extensions/nvidia /usr/lib64/xorg/modules.bak/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">fi</span><br /><br />Linux distros are really becoming closer in terms of configuration, LSB has made great progress.<br /><div><br />Edit from November 29: After a few weeks, I noticed that the system was quite unstable unfortunately. As a result, I moved back to Ubuntu on my laptop. I am running OpenSuse on my home computer. 1 year later, I am back to Fedora 19, 20 on my desktop - no stability issue, I prefer Gnome over KDE. </div></p>

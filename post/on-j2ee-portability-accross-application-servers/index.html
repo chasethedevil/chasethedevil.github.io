@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
@@ -30,7 +31,17 @@
 
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <link rel="author" href="http://plus.google.com/105444622997415581493">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
 <script type="text/javascript"
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
@@ -78,7 +89,7 @@
 
 <div class="content container">
   <div class="post">
-    <h1>On J2EE Portability Accross Application Servers</h1>
+    <h1 class="post-title">On J2EE Portability Accross Application Servers</h1>
     <span class="post-date">Sep 13, 2005 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/on-j2ee-portability-accross-application-servers/#disqus_thread">Comments</a>
     </span>
     <p>Brian Alexander Lee <a  href="http://www.prepend.com/2005/09/porting-j2ee-apps-to-websphere.html">wrote</a>:<br> &ldquo;dismal interview where I asked about the candidate&rsquo;s experience with porting a J2EE application from WebLogic to WebSphere (which was listed on his resume). The candidate said that it was very easy and he just deployed his application with no problems or changes necessary, he had no changes made for the application to run properly. This was one of many bad signs for the candidate.&rdquo;<br> <br> I disagree. I would even use his example to show that the portability game is more about configuration and packaging rather than about anything else so that many developers would in-deed not see a big deal into porting an application to a new application server.<br> <br> You can make a port to Websphere or Weblogic quite transparent if you externalize the JNDI strings (for example in properties file), which is anyway what you should do. Repeating a same string everywhere in your code is bad practice in Java.<br> The most problematic is usually the packaging, weblogic and websphere, for example used to manage the jar dependencies a different way (websphere being very strict, weblogic a bit more practicle). And actually JNDI settings, DataSources and Security should boil down to packaging problems, which is why, I think, your candidate did not know of any problem unless he worked on the packaging of the app.<br> <br> Recruitment is no easy task. I did not find yet a magic formula for it, except maybe, try the person for a month. Personality is more important than knowing technical details. I am not sure if one can see if a person is serious, rigorous, and reasonably fast in an interview.<br></p>
