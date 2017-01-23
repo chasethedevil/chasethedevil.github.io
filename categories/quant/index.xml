@@ -7,8 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 18 Jan 2017 09:55:32 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 23 Jan 2017 07:55:32 +0100</lastBuildDate>
     <atom:link href="http://chasethedevil.github.io/categories/quant/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A new scheme for Heston - Part 2</title>
+      <link>http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/</link>
+      <pubDate>Mon, 23 Jan 2017 07:55:32 +0100</pubDate>
+      
+      <guid>http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/</guid>
+      <description>A couple weeks ago, I wrote about a new Heston discretisation scheme which was at least as accurate as Andersen QE scheme and faster, called DVSS2. It turns out that it does not behave very well on the following Vanilla forward start option example (which is quite benign). The Heston parameters comes from a calibration to the market and are $$v_0= 0.0718, \kappa= 1.542, \theta= 0.0762, \sigma= 0.582, \rho= -0.352$$ with a maturity of one year. <a href="/post/a-new-scheme-for-heston_part2/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
+    </item>
     
     <item>
       <title>Equivalence between floating-strike and fixed-strike Asian options</title>
@@ -89,15 +98,6 @@
       
       <guid>http://chasethedevil.github.io/post/shooting_arbitrage2/</guid>
       <description>In my previous post, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method. In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&amp;rsquo;t be so at the times \( t \lt T \) because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\), it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\) where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\). <a href="/post/shooting_arbitrage2/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
-    </item>
-    
-    <item>
-      <title>Shooting arbitrage - part I</title>
-      <link>http://chasethedevil.github.io/post/shooting_arbitrage/</link>
-      <pubDate>Wed, 22 Jun 2016 09:55:32 +0100</pubDate>
-      
-      <guid>http://chasethedevil.github.io/post/shooting_arbitrage/</guid>
-      <description>In my previous post, I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration. The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities: implied variance with Axel Vogt SVI parameters Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading): local variance denominator g with Axel Vogt SVI parameters The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then. <a href="/post/shooting_arbitrage/">Read More…</a> <p>Copyright 2006-2016 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</p></description>
     </item>
     
   </channel>

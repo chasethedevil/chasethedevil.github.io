@@ -93,6 +93,30 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/">Using MiG Layout For Better Swing Development</a>
+      </h1>
+      <span class="post-date">Apr 29, 2008 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I have forgotten a few libraries in my <a href="http://chasethedevil.blogspot.com/2008/04/better-java-swing-development.html">Better Swing Development</a> article, and notably <a href="http://www.miglayout.com">MiGLayout</a>.<br /><br />GridBagLayout is too verbose, and still feels too clumsy. This is why a while back I wrote <a href="http://easygridbag.sourceforge.net">a small tool</a> to help visualize various GridBagLayouts for people who are not used to it. But it would have been much simpler to use a better layout instead.<br /><br />MiGLayout is good, I managed to have good results without almost any practices on not so simple layouts. It also makes the code more concise.<br /><br />Related to my <a href="http://chasethedevil.blogspot.com/2008/04/swixml-review.html">previous post about SwiXml</a>, and as SwiXml does not yet support MiGLayout, I was thinking how easy it would be to achieve something relatively similar. With proper code conventions it is quite easy to describe the GUI outside a Java file, for example, for an easy start in a Beanshell file.<br /><br />The beanshell file would contain components construction, and MiGLayout of them afterwards, that&rsquo;s it. All listeners and component behaviours would be kept in java classes. With this kind of code split. The beanshell file is then extremely simple, as simple as the SwiXml.<br /><br />MiGLayout also has plenty of extra functionalities like &ldquo;<span style="font-size:85%;"><span style="font-family: courier new;">hidemode 1</span></span>&rdquo; that can help automatically redoing the layout if a component becomes visible/invisible.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/_the_-google-1998-paper/">_the_ Google 1998 paper</a>
+      </h1>
+      <span class="post-date">Apr 25, 2008 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/_the_-google-1998-paper/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I have just read &ldquo;<a href="http://infolab.stanford.edu/%7Ebackrub/google.html">the anatomy of a search engine</a>&rdquo; from S. Brin and L. Page. For those who don&rsquo;t know, it is <em>the</em> Google paper. I have read other google labs papers in the past. What I like in this one is that you can follow how they came into having the Google ideas, how they assembled their ideas.<br /><br />I should have read that a long time ago.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/fedora-9-already-stable/">Fedora 9 Already Stable</a>
       </h1>
       <span class="post-date">Apr 25, 2008 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/fedora-9-already-stable/#disqus_thread">Comments</a>
@@ -183,30 +207,6 @@
       </span>
       
       <p>My previous post about <a href="http://chasethedevil.blogspot.com/2007/11/ubuntu-710-vs-fedora-core-8-gutsy-vs.html">Ubuntu Gutsy vs Fedora 8</a> was weak. It is difficult to find a very good distro. Depending on the computer, I have had different experiences. On some computers, Ubuntu really shines and work with minimal tweaking. On some others, Ubuntu is unstable/does not handle wireless correctly and Fedora is much more stable.<br /><br />The main issues I can see with Fedora 8 are:<br />- LVM by default. I don&rsquo;t think it is a good idea to go LVM by default since lots of basic tools are still not handling it properly. And if you want to read your disk by something else than a distro with LVM you are screwed. Ext3 straight is imho a much wiser choice. Plus it is rarely a problem to resize partitions as it is not something one does often.<br />- Fewer programs in the repositories available. Under ubuntu, I was using gtkguitune to tune my guitar, it was in the default repositories. It does not exist for Fedora and I did not manage to compile it due to too old dependencies (GTK 1.2). I found accordeur on sourceforge which is a better program and is available as RPM, so in the end I found something. But while searching I saw the choice was not as wide as with Ubuntu.<br />- Packages too small: it is not exactly clear what packages you need to start compiling programs with Fedora. If you look in the default categorization, way too many things are silly to enable by default. Also generally package management seems less stable/less easy to use than with Ubuntu.<br /><br />What I like:<br />- newer Linux kernel, with better scheduler. Fedora seems more responsive.<br />- bluetooth relatively well handled by default. The standard method of editing /etc/bluetooth/default works well to plug keyboard.<br />- wifi well handled by default. I had lots of problems with Ubuntu on my computer and the wifi card, I don&rsquo;t have them with Fedora.<br /><br />Next step:<br />- maybe try Suse 10.3 as I just found out that Amarok is the best music player on earth today. As music playing is very important for my computer, a KDE based distro makes sense.<br /><br />But that would be a silly typical Linux user reaction.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/">Haskell Fibonacci Revisited</a>
-      </h1>
-      <span class="post-date">Dec 12, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a <em>MILLION</em> times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/ubuntu-7.10-vs-fedora-core-8---gutsy-vs-werewolf/">Ubuntu 7.10 vs Fedora Core 8 - Gutsy vs Werewolf</a>
-      </h1>
-      <span class="post-date">Nov 20, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/ubuntu-7.10-vs-fedora-core-8---gutsy-vs-werewolf/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I was pretty happy with Ubuntu 7.10, but when Fedora 8 came out I decided to give it a try. Last time I tried it it was Core 2 or something like that, and it was NOT good.<br><br>At first Fedora 8 looks quite good, has a good Live CD install, reminiscent of Ubuntu.&nbsp; The positive side is that it is based on the latest Kernel. It manages my Thinkpad T42 very well (suspend, hibernate work). But after a few days, one notice Fedora is not as stable as Ubuntu, for example: <br><ul><li>I have had weird behavior with windows not being updated properly</li><li>I experienced big problems when playing with LVM, <br></li><li>It is also a general impression when interacting with the system.<br></li> </ul>One can wonder why Fedora 8 does not install OpenOffice by default.<br>Ubuntu is IMHO still the king of distros.<br></p>
 
       
     </div>
