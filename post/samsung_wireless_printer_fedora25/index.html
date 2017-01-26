@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Linux &middot; Chase the Devil</title>
+  <title>Samsung Wireless Printer under Fedora 25 &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -27,10 +27,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/categories/linux/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="linux">
   
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -88,24 +88,62 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="http://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/">Samsung Wireless Printer under Fedora 25</a>
+  <div class="post">
+    <h1 class="post-title">Samsung Wireless Printer under Fedora 25</h1>
+    <span class="post-date">Jan 26, 2017 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/#disqus_thread">Comments</a>
     
-    &middot;
+    <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/linux">linux</a>
     </span>
-    &middot; <time>Jan 26, 2017</time></li>
-  
-    <li><a href="http://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
-    
-    &middot;
-    <a class="label" href="http://chasethedevil.github.io/categories/linux">linux</a>
-    </span>
-    &middot; <time>Jan 19, 2017</time></li>
-  
-  </ul>
+    <p>This is a note for those who want to setup a Samsung wireless printer under Linux. It is quite simple,
+<a href="https://ubuntuforums.org/showthread.php?t=2263245">this forum post</a> helped me, the actual useful steps on Fedora 25 are:</p>
+
+<ul>
+<li>download tar.gz linux driver from <a href="http://www.samsungsetup.com/">Samsung website</a>. As root, unpack &amp; install:
+<code>
+tar xvzf SamsungPrinterInstaller.tar.gz 
+cd uld
+./install.sh
+</code></li>
+<li>in the printer menu, lookup for the wireless key (8 digits),</li>
+<li>connect to the printer Wifi network with a computer using the wireless key,</li>
+<li>enter the network gateway IP, this is typically <a href="http://192.168.3.1">http://192.168.3.1</a>,</li>
+<li>click on Login with user &ldquo;admin&rdquo; and password &ldquo;sec00000&rdquo;,</li>
+<li>open the network wifi settings and select &ldquo;Easy Wi-Fi Settings&rdquo;,</li>
+<li>connect back to your wireless network,</li>
+<li>add the network printer via the printer settings wizard, or alternatively through CUPS interface <a href="http://localhost:631">http://localhost:631</a>.</li>
+</ul>
+
+<p>That&rsquo;s it. Printer and scanner will then work on your local Wi-Fi network.</p>
+
+  </div>
+   <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
