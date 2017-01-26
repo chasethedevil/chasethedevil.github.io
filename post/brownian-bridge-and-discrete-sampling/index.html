@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Brownian Bridge and Discrete Random Variables &middot; Chase the Devil</title>
+
+  
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="quant">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1 class="post-title">Brownian Bridge and Discrete Random Variables</h1>
+    <span class="post-date">Jan 26, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    <p>The <a href="/post/a-new-scheme-for-heston">new Heston discretisation scheme</a> I wrote about a few weeks ago makes use
+a discrete random variable matching the first five moments of the normal distribution instead of the usual
+normally distributed random variable, computed via the inverse cumulative distribution function. Their discrete random
+variable is:
+$$\xi = \sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3\,,$$
+$$  \xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4\,,$$
+$$\xi = \sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3\,,$$
+$$\xi = -\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4\,,$$
+with \(U_1 \in \{0,1,&hellip;,7\}\)</p>
+
+<p>The advantage of the discrete variable is that it is much faster to generate. But there are some interesting
+side-effects. The first clue I found is a loss of accuracy on forward-start vanilla options.</p>
+
+<p>By accident, I found a much more interesting side-effect: you can not use the Brownian-Bridge variance reduction
+on the discrete random variable. This is very well illustrated by the case
+of a digital option in the Black model, for example with volatility 10% and a 3 months maturity, zero interest rate and dividends. For the following graph,
+I use 16000 Sobol paths composed of 100 time-steps.</p>
+
+
+<figure >
+    
+        <img src="/post/black_discrete_sampling.png" />
+    
+    
+    <figcaption>
+        <h4>Digital Call price with different random variables.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>The &ldquo;-BB&rdquo; suffix stands for the Brownian-Bridge path construction, &ldquo;Five&rdquo; for five moments discrete variable
+and &ldquo;AS241&rdquo; for the inverse cumulative distribution function (continuous approach). As you can see,
+the price is discrete, and follows directly from the discrete distribution.
+The use of any random number generator with a large enough number of paths would lead to the same conclusion.</p>
+
+<p>This is because with the Brownian-Bridge technique, the last point in the path, corresponding to the maturity,
+is sampled first, and the other path points are then completed inside from the first and last points.
+But the digital option depends only on the value of the path at maturity, that is, on this last point.
+As this point corresponds follows our discrete distribution, the price of the digital option is a step function.</p>
+
+<p>In contrast, for the incremental path construction, each point is computed from the previous point.
+The last point will thus include the variation of all points in the path, which will be very close to normal, even with a discrete distribution per point.</p>
+
+<p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
+and the incremental path construction, is that several intermediate time-steps (between payoff observations)
+are a must-have with discrete random variables, however small is the original time-step size.</p>
+
+  </div>
+   <div id="disqus_thread"></div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
