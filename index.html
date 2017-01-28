@@ -95,7 +95,7 @@
       <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/">Brownian Bridge and Discrete Random Variables</a>
       </h1>
-      <span class="post-date">Jan 26, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
+      <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
       
       <br/>
       <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
@@ -149,6 +149,14 @@ The last point will thus include the variation of all points in the path, which 
 <p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
 and the incremental path construction, is that several intermediate time-steps (between payoff observations)
 are a must-have with discrete random variables, however small is the original time-step size.</p>
+
+<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of <sup>1</sup>&frasl;<sub>32</sub> (meaning 8 intermediate time-steps in
+our digital option example). I suppose this is a direct consequence of the digital payoff discontinuity. In Talay
+<a href="http://link.springer.com/chapter/10.1007/BFb0006577">&ldquo;Efficient numerical schemes for the approximation of expectations of functionals of the solution of a SDE, and applications&rdquo;</a> (which you can
+read by adding .sci-hub.cc to the URL host name), second order convergence
+is proven only if the payoff function and its derivatives up to order 6 are continuous. There is something natural
+that a discrete random variable imposes continuity conditions on the payoff, not necessary with a continuous,
+smooth random variable: either the payoff or the distribution needs to be smooth.</p>
 
       
     </div>
