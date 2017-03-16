@@ -106,14 +106,29 @@
     
     
     <figcaption>
-        <h4>SPXW implied volatilities on March 16, 2017.</h4>
+        <h4>SPXW implied volatilities on March 16, 2017 with strictly positive volume.</h4>
         
     </figcaption>
     
 </figure>
 
 
-<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, although it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
+<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, even though it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
+
+<p>If we include all options with non zero open interest and use ask/(bid-ask) weights, SVI is even worse:
+
+<figure >
+    
+        <img src="/post/spxw_03242017f.png" />
+    
+    
+    <figcaption>
+        <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
 
 <p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
 
