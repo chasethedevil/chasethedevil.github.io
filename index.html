@@ -93,6 +93,41 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/when-svi-breaks-down/">When SVI Breaks Down</a>
+      </h1>
+      <span class="post-date">Mar 16, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/when-svi-breaks-down/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In order to fit the implied volatility smile of equity options, one of the most popular parameterization is Jim Gatheral&rsquo;s SVI, which I have written about before <a href="/post/another-svi-initial-guess/">here</a>.</p>
+
+<p>It turns out that in the current market conditions, SVI does not work well for short maturities. <a href="http://www.optionistics.com/quotes/stock-option-chains/SPX">SPX options</a> expiring on March 24, 2017 (one week) offer a good example. I paid attention to include only options with non zero volume, that is options that are actually traded.</p>
+
+
+<figure >
+    
+        <img src="/post/spxw_03242017.png" />
+    
+    
+    <figcaption>
+        <h4>SPXW implied volatilities on March 16, 2017.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, although it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
+
+<p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/">Brownian Bridge and Discrete Random Variables</a>
       </h1>
       <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
@@ -628,85 +663,6 @@ $$\bar{\sigma}^2 = \frac{\sigma^2 h}{2} \coth\left(\frac{h}{2} \right) .$$
 This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
 
 <p>This is actually the same adjustment as the exponential fitting technique with a drift of zero. For a non-zero drift, the two adjustments would differ, as the exact forward adjustment will stay the same, along with an adjusted discrete drift.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/">Benaim et al. extrapolation does not work on equities</a>
-      </h1>
-      <span class="post-date">Oct 4, 2016 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/issues_with_bdk_extrapolation/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>We have seen <a href="/mystic_parabola.md">earlier</a> that a simple parabola allows to capture the smile of AAPL 1m options surprisingly well. For very high and very low strikes,
-the parabola does not obey Lee&rsquo;s moments formula (the behavior in the wings needs to be at most linear in variance/log-moneyness).</p>
-
-<p>Extrapolating the volatility smile in the low or high strikes in a smooth \(C^2\) fashion is however not easy.
-A surprisingly popular so called &ldquo;arbitrage-free&rdquo;
-method is the <a href="http://www.quarchome.org/RiskTailsPaper_v5.pdf">extrapolation of Benaim, Dodgson and Kainth</a> developed to remedy the negative density of SABR in interest rates as
-well as to give more control over the wings.</p>
-
-<p>The call options prices (right wing) are extrapolated as:
-$$
-C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
-$$
-\(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
-$$
-c_R =\frac{{C&rsquo;}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C&rsquo;}_{R}^{2}}{C_{R}^2}+ \frac{{C&rdquo;}_R}{C_R}\right) + \nu \right)\text{,} \
-$$
-$$
-b_R =  - \frac{{C&rsquo;}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\
-$$
-$$
-a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
-$$
-The \( \ nu \) parameters allow to adjust the shape of the extrapolation.</p>
-
-<p>Unfortunately it does not really work for equities.
-Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
-our best fit parabola of the AAPL 1m options:
-
-<figure >
-    
-        <img src="/post/bdk-explodes.png" />
-    
-    
-    <figcaption>
-        <h4>BDK explodes on AAPL 1m options.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>The \( \nu\) parameter does not help either.</p>
-
-<p><strong>Update Dec 5 2016</strong>
-Here are details about call option price, slope, curvature:
-The strike cutoff is \(K_R=115.00001307390328\). For the parabola,</p>
-
-<p>$$\begin{align}
-C(K_R)&amp;=0.014516747104643029,\\
-C&rsquo;(K_R)&amp;=-0.002899391065224203,\\
-C&rdquo;(K_R)&amp;=0.000750774042345718.
-\end{align}$$</p>
-
-<p>And the BDK parameters for the right wing:</p>
-
-<p>$$a_R=34.279812, b_R=-10292.881677, c_R=737108.461636.$$</p>
-
-<p>For the least squares spline,
-$$\begin{align}
-C(K_R)&amp;=0.03892674300426042,\\
-C&rsquo;(K_R)&amp;=-0.00171386452499034,\\
-C&rdquo;(K_R)&amp;=0.0007835686926501496.
-\end{align}$$
-which results in
-$$a_R=131.894286, b_R=-26839.217814, c_R=1550285.706087.$$</p>
 
       
     </div>

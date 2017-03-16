@@ -93,6 +93,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/original-pattern-servletrequest-in-threadlocal/">Original Pattern: ServletRequest in ThreadLocal</a>
+      </h1>
+      <span class="post-date">Aug 2, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/original-pattern-servletrequest-in-threadlocal/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>After seeing <a href="http://www.scala-lang.org/">Scala</a> had elements of Erlang through Actors, I decided to take a closer look at the language. There is an interesting new web framework in Scala, called <a href="http://liftweb.net/"> Lift</a>. One drawback of Lift is that it seems to be very cutting edge and not that easy to grasp. While reading its source code, I stumbled upon a strange pattern: <span style="font-weight: bold;">Storing the ServletRequest in a ThreadLocal </span>.<br><br>I had not seen that before, and was wondering why one would do such a thing. It seems to be unintuitive. I found my answer through&hellip; GWT widgets. In <a href="http://gwt-widget.sourceforge.net/?q=node/39"> this page</a>, the author explain motivations behind doing such a thing:<br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p> While not 100% in tune with the MVC pattern, it is often convenient to access the servlet<br> container, the HTTP session or the current HTTP request from the business layer. The GWT-SL<br> provides several strategies to achieve this which pose a compromise in the amount of configuration<br> required to set up and the class dependencies introduced to the business code. </p> <p> The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class<br> which provides convenience methods for accessing the <code>HttpServletRequest</code> and<br> <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables<br> and will obviously not return correct values if used in any other than the invoking thread. </p></blockquote><div>Still one can doubt if this is good design. In my long experience of web apps in Java I never had the need to do such a thing. Have you seen that pattern before? <br></div><br></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/vim-setup/">Vim setup</a>
       </h1>
       <span class="post-date">Jul 27, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/vim-setup/#disqus_thread">Comments</a>
@@ -195,18 +207,6 @@
       </span>
       
       <p>Not having good internet connection can be problematic to download new libraries, read or search for documentation on development subjects. But not having a good internal network connection is  killer of productivity. It means sometimes not being able to access integration, preprod or even production environment, or ssh session not responding in the middle of an action. As software makes an increasing use of the network, it means not being able to test or to use correctly all kind of software.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/how-to-build-good-software-private-office-again/">How to Build Good Software? Private office, again</a>
-      </h1>
-      <span class="post-date">Apr 25, 2007 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/how-to-build-good-software-private-office-again/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Apparently it&rsquo;s more a habit of French companies to have big open spaces with no separation at all between people. There is nothing more annoying than having people in conference call in front of you while you are trying to work on something completely different. French people forgot the cubicle part in the American open space idea. So sometimes the room is just a big mess, everybody being able to disturb you anytime. Even if I have no private office, please give me at least a cubicle.</p>
 
       
     </div>
