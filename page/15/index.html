@@ -93,6 +93,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/parallel-can-be-slower/">Parallel Can Be Slower</a>
+      </h1>
+      <span class="post-date">Feb 13, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/parallel-can-be-slower/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step.<br /><br />I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.<br /><br />I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).<br /><br /><br /></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/scala-is-mad-part-2/">Scala is Mad (part 2)</a>
       </h1>
       <span class="post-date">Feb 13, 2013 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/scala-is-mad-part-2/#disqus_thread">Comments</a>
@@ -204,18 +216,6 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
       </span>
       
       <p>This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.<br /><div><br /></div><div>Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</div><div><br /></div><div>But this finite-difference grid Delta is also different from a standard numerical Delta where one just move the initial spot up and down, and takes the difference of computed prices. The numerical Delta will eventually include a change in implied volatility, depending if the surface is sticky-strike (vol will stay constant) or sticky-delta (vol will change). So the numerical Delta produced with a sticky-strike surface will be the same as the standard Black-Scholes Delta. In reality, what happens is that the local volatility is different when the spot moves up, if we recompute it: it is not static. The finite difference solver computes Delta with a static local volatility. If we call twice the finite difference solver with a different initial spot, we will reproduce the correct Delta, that takes into account the dynamic of the implied volatility surface.</div><div><br /></div><div>Here how different it can be if the delta is computed from the grid (static local volatility) or numerically (dynamic local volatility) on an exotic trade:</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s1600/static_localvol.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="235" src="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s320/static_localvol.png" width="320" /></a></div><div><br /><br />This is often why people assume the local volatility model is wrong, not consistent. It is wrong if we consider the local volatility surface as static to compute hedges.</div></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/opensuse-12.2/">OpenSuse 12.2</a>
-      </h1>
-      <span class="post-date">Nov 14, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/opensuse-12.2/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>After too many upgrades of Ubuntu, and switching from Gnome to KDE and back, my Ubuntu system became behaving strangely in KDE: authorization issues, frequent crashes, pulseaudio &amp; ardour problems. I decided to give another try to OpenSuse, as Linux makes it easy to switch system without losing too much time reinstalling the useful applications.<br /><br />It&rsquo;s been only a few days, but I am pleasantly surprised with OpenSuse. It feels more polished than Kubuntu. I could not point out to a specific feature, but so far I have not had to fiddle with any configuration file, everything works well out of the box. Somehow Kubuntu always felt flaky, read to break at any moment, while OpenSuse feels solid. But they should consider changing the default font settings in KDE to take advantage properly of antialiasing and pretty fonts (it&rsquo;s only a few clicks away, but still the default is not the prettiest).</p>
 
       
     </div>
@@ -342,12 +342,15 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
         ><a href="/page/36/">36</a></li>
         
         <li
+        ><a href="/page/37/">37</a></li>
+        
+        <li
         >
         <a href="/page/16/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
         
         <li>
-            <a href="/page/36/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+            <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
         </li>
         
     </ul>

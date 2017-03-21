@@ -93,6 +93,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/gnome-shell-more-stable-than-unity-on-ubuntu-12.04/">Gnome Shell more stable than Unity on Ubuntu 12.04</a>
+      </h1>
+      <span class="post-date">Jun 14, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/gnome-shell-more-stable-than-unity-on-ubuntu-12.04/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Regularly, the unity dock made some applications inaccessible: clicking on the app icon did not show or start the app anymore, a very annoying bug. This is quite incredible given that this version of Ubuntu is supposed to be long term support.  So I decided to give one more chance to Gnome Shell. Installing it on Ubuntu 12.04 is simple with <a href="http://www.filiwiese.com/installing-gnome-on-ubuntu-12-04-precise-pangolin/">this guide</a>. <br /><br />To my surprise it is very stable so far. Earlier Gnome Shell versions were not as stable. After installing various extensions (dock especially) it is as usable as Unity for my needs. It seems more responsive as well. I am not really into the Unity new features like HUD. It sounds to me like Ubuntu is making a mistake with Unity compared to Gnome Shell.<br /><br />To make an old extension support latest Gnome Shell version, it is sometimes necessary&nbsp; to update&nbsp; the extension metadata with what&rsquo;s given by <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">gnome-shell &ndash;version</span>. For the weather extension you can just edit using gedit:<br /><br /><blockquote class="tr_bq">sudo gedit /usr/share/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org/metadata.json </blockquote></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/john-carmack-on-parallelism/">John Carmack on Parallelism</a>
       </h1>
       <span class="post-date">Apr 27, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/john-carmack-on-parallelism/#disqus_thread">Comments</a>
@@ -195,18 +207,6 @@
       </span>
       
       <p>In a previous post, I was complaining how <a href="http://chasethedevil.blogspot.com/2011/08/gnome-3-unity-crap.html">bad Gnome 3</a> was. Since I have installed a real dock: docky, it is now much more usable. I can easily switch / launch applications without an annoying full screen change.<br /><br />In addition I found out that it had a good desktop search (tracker). The ALT+F2 also does some sort of completion, too bad it can not use tracker here as well.<br /><br />So it looks like Gnome 3 + gnome-tweak-tool + docky makes a reasonably good desktop. XFCE does not really fit the bill for me: bad handling of sound, bad default applications, not so good integration with gnome application notifications.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s1600/Screenshot+at+2011-11-30+18%253A20%253A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://4.bp.blogspot.com/-2DF1jycI5ZU/TtZmvdt2k-I/AAAAAAAAFic/ej8a7g1Gswg/s320/Screenshot+at+2011-11-30+18%253A20%253A29.png" width="320" /></a></div><br /><br />Now if only I found a way to change this ugly big white scrollbar&hellip;</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/good--popular-algorithms-are-simple/">Good &amp; Popular Algorithms are Simple</a>
-      </h1>
-      <span class="post-date">Nov 17, 2011 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/good--popular-algorithms-are-simple/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I recently tried to minimise a function according to some constraints. One popular method to minimise a function in several dimensions is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CB0QFjAA&amp;url=http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FNelder%25E2%2580%2593Mead_method&amp;ei=PfHETsKYDdG9sAb_q935Cw&amp;usg=AFQjCNEVD7lMV4buMbVCJ3fuiyupPA6B1w">Nelder-Mead Simplex</a>. It is quite simple, so simple that I programmed it in Java in 1h30, including a small design and a test. It helped that the original paper from Nelder-Mead is very clear:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-glZ52IB0SkA/TsTxF4VmyFI/AAAAAAAAFhw/zSDQ0Het9MU/s1600/neldermeadalgo.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="184" src="http://3.bp.blogspot.com/-glZ52IB0SkA/TsTxF4VmyFI/AAAAAAAAFhw/zSDQ0Het9MU/s320/neldermeadalgo.png" width="320" /></a></div>However the main issue is that it works only for unconstrained problems. Nelder and Mead suggested to add a penalty, but in practice this does not work so well. For constrained problems, there is an adaptation of the original idea by Box (incredible name for a constrained method) that he called <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CB4QFjAA&amp;url=http%3A%2F%2Fcomjnl.oxfordjournals.org%2Fcontent%2F8%2F1%2F42.full.pdf&amp;ei=EvLETqz6LcTvsgbN4I2ADA&amp;usg=AFQjCNHq6JD1ik4rTLO4a1v4G9adbGMRzQ">the Complex method</a>, a deliberate pun to the Nelder-Mead Simplex method. The basic idea is to reset the trial point near the fixed boundary if it goes outside. Now this took me much longer to program, as the paper is not as clear, even if the method is still relatively simple. But worst, after a day of deciphering the paper and programming the complex method, I find out that it does not works so well: it does not manage to minimise a simple multidimensional quadratic with a simple bound constraint: f(X)=sum(X)^2 with X &gt;= 0 where X is an N-dimensional vector. In the end, I don&rsquo;t want to work with such a simple function, but it is a good simple test to see if the method is really working or not. Here is how the function looks with N=2:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-ncMKzKcYdtA/TsT_TEyNHDI/AAAAAAAAFiA/er1pQWNcHXc/s1600/quadfull.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://2.bp.blogspot.com/-ncMKzKcYdtA/TsT_TEyNHDI/AAAAAAAAFiA/er1pQWNcHXc/s320/quadfull.png" width="302" /></a></div>And if we restrict to x,y &gt;= 0 it becomes:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-msyZ9eQ7GnM/TsT_d36SD7I/AAAAAAAAFiI/Kt4QBwjsAE8/s1600/quadpart.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="304" src="http://1.bp.blogspot.com/-msyZ9eQ7GnM/TsT_d36SD7I/AAAAAAAAFiI/Kt4QBwjsAE8/s320/quadpart.png" width="320" /></a></div><br />I suspected an error in my program, so I decided to try with scilab, that has also the Box method as part of their <a href="http://help.scilab.org/docs/5.3.3/en_US/neldermead.html">neldermead_search</a> functionality. Scilab also failed to compute the minimum in 8 dimensions of my simple quadratic. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-vO6JhSwv3MU/TsT1ge1H96I/AAAAAAAAFh4/DTnsYjnMeHE/s1600/neldermeadalgo1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-vO6JhSwv3MU/TsT1ge1H96I/AAAAAAAAFh4/DTnsYjnMeHE/s320/neldermeadalgo1.png" width="265" /></a></div>I tried various settings, without ever obtaining a decent result (I expect to find a value near 0).<br /><br />There is another algorithm that can find a global minimum, also very popular: the <a href="http://www.icsi.berkeley.edu/%7Estorn/TR-95-012.pdf">Differential Evolution</a>. At first, being a genetic algorithm, you would think it would be complicated to write. But no, the main loop is around 20 lines.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-cNeeYo8EQeQ/TsUB7Ek6rQI/AAAAAAAAFiQ/PTc4qwwAa7E/s1600/dealgo.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-cNeeYo8EQeQ/TsUB7Ek6rQI/AAAAAAAAFiQ/PTc4qwwAa7E/s320/dealgo.png" width="297" /></a></div><br />Those 20 lines are a bit more difficult than Nelder-Mead, but still, when I saw that, I understood that &ldquo;this is a classic algorithm&rdquo;. And it does work with constraints easily. How to do this is explained well in K. Price book &ldquo;Differential Evolution&rdquo;, and takes only a few lines of code. Here is the result I got in dimension 29:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace; font-size: x-small;">dim=29 min=1.2601854176573729E-12 genMax=412 x=[3.340096901536317E-8, 8.889252404343621E-8, 7.163904251807348E-10, 9.71847877381699E-9, 2.7423324674150668E-8, 2.4022269439114537E-9, 1.7336434478718816E-11, 7.244238163901778E-9, 1.0013136274729337E-8, 7.412154679865083E-9, 5.4694460144807974E-9, 2.3682413086417524E-9, 4.241739250073559E-7, 4.821920889534676E-10, 2.115396281722523E-9, 8.750883007882899E-8, 2.512011485133975E-9, 4.811507109129279E-9, 1.0752997894113096E-7, 5.120475258343548E-9, 8.404448964497456E-9, 4.1062290228305595E-9, 1.7030766521603753E-8, 5.589430643552073E-9, 8.237098544820173E-10, 3.5796523161196554E-9, 5.186299547466997E-9, 2.430326342762937E-7, 5.493850433494286E-9]</span><br /><br />It works well, although there is quite a bit of parameters. I noticed that the strategy was especially important.</p>
 
       
     </div>
@@ -333,12 +333,15 @@
         ><a href="/page/36/">36</a></li>
         
         <li
+        ><a href="/page/37/">37</a></li>
+        
+        <li
         >
         <a href="/page/18/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
         
         <li>
-            <a href="/page/36/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+            <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
         </li>
         
     </ul>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>When SVI Breaks Down &middot; Chase the Devil</title>
+  <title>The VIX starts smiling &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -89,63 +89,29 @@
 
 <div class="content container">
   <div class="post">
-    <h1 class="post-title">When SVI Breaks Down</h1>
-    <span class="post-date">Mar 16, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/when-svi-breaks-down/#disqus_thread">Comments</a>
+    <h1 class="post-title">The VIX starts smiling</h1>
+    <span class="post-date">Mar 21, 2017 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/vix-starts-smiling/#disqus_thread">Comments</a>
     
     <br/>
     <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    <p>In order to fit the implied volatility smile of equity options, one of the most popular parameterization is Jim Gatheral&rsquo;s SVI, which I have written about before <a href="/post/another-svi-initial-guess/">here</a>.</p>
-
-<p>It turns out that in the current market conditions, SVI does not work well for short maturities. <a href="http://www.optionistics.com/quotes/stock-option-chains/SPX">SPX options</a> expiring on March 24, 2017 (one week) offer a good example. I paid attention to include only options with non zero volume, that is options that are actually traded.</p>
+    <p>The VIX implied volatilities used to look like a logarithmic function of the strikes. I don&rsquo;t look at them often, but today, I noticed that the VIX had the start of a smile shape.</p>
 
 
 <figure >
     
-        <img src="/post/spxw_03242017.png" />
+        <img src="/post/vix_smile.png" />
     
     
     <figcaption>
-        <h4>SPXW implied volatilities on March 16, 2017 with strictly positive volume.</h4>
+        <h4>1m VIX implied volatilities on March 21, 2017 with strictly positive volume.</h4>
         
     </figcaption>
     
 </figure>
 
 
-<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, even though it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
-
-<p>If we include all options with non zero open interest and use ask/(bid-ask) weights, SVI is even worse:
-
-<figure >
-    
-        <img src="/post/spxw_03242017f.png" />
-    
-    
-    <figcaption>
-        <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>We can do a bit better with SVI by squaring the weights and it shows the problem of SVI more clearly:
-
-<figure >
-    
-        <img src="/post/spxw_03242017f2.png" />
-    
-    
-    <figcaption>
-        <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest and SVI weights squared.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
+<p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
 
   </div>
    <div id="disqus_thread"></div>
