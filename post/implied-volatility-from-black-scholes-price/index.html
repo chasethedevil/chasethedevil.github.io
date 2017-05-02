@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Chase the Devil &middot; Chase the Devil</title>
+  <title>Implied Volatility from Black-Scholes price &middot; Chase the Devil</title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -27,10 +27,10 @@
   
   
   
-  <link href="http://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -88,169 +88,143 @@
 
 
 <div class="content container">
-  <div class="posts">
+  <div class="post">
+    <h1 class="post-title">Implied Volatility from Black-Scholes price</h1>
+    <span class="post-date">Apr 2, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/#disqus_thread">Comments</a>
     
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/lion/">lion</a>
-      </h1>
-      <span class="post-date">Jun 28, 2005 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/lion/#disqus_thread">Comments</a>
-      </span>
-      
-      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/top_lion.1.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/400/top_lion.1.jpg" alt="" border="0" /></a><br /><br />test</p>
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
 
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/this-is-who-i-am/">This is who I am</a>
-      </h1>
-      <span class="post-date">Jun 19, 2005 &middot; 0 minute read &middot; <a href="http://chasethedevil.github.io/post/this-is-who-i-am/#disqus_thread">Comments</a>
-      </span>
-      
-      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/IMG_3839-1.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/200/IMG_3839-1.jpg" border="0" alt="" /></a></p>
+<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
 
-      
-    </div>
-    
-    
-    
-    <ul class="pagination">
-        
-        <li>
-            <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-        </li>
-        
-        <li
-        >
-        <a href="/page/36/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-        </li>
-        
-        <li
-        ><a href="/">1</a></li>
-        
-        <li
-        ><a href="/page/2/">2</a></li>
-        
-        <li
-        ><a href="/page/3/">3</a></li>
-        
-        <li
-        ><a href="/page/4/">4</a></li>
-        
-        <li
-        ><a href="/page/5/">5</a></li>
-        
-        <li
-        ><a href="/page/6/">6</a></li>
-        
-        <li
-        ><a href="/page/7/">7</a></li>
-        
-        <li
-        ><a href="/page/8/">8</a></li>
-        
-        <li
-        ><a href="/page/9/">9</a></li>
-        
-        <li
-        ><a href="/page/10/">10</a></li>
-        
-        <li
-        ><a href="/page/11/">11</a></li>
-        
-        <li
-        ><a href="/page/12/">12</a></li>
-        
-        <li
-        ><a href="/page/13/">13</a></li>
-        
-        <li
-        ><a href="/page/14/">14</a></li>
-        
-        <li
-        ><a href="/page/15/">15</a></li>
-        
-        <li
-        ><a href="/page/16/">16</a></li>
-        
-        <li
-        ><a href="/page/17/">17</a></li>
-        
-        <li
-        ><a href="/page/18/">18</a></li>
-        
-        <li
-        ><a href="/page/19/">19</a></li>
-        
-        <li
-        ><a href="/page/20/">20</a></li>
-        
-        <li
-        ><a href="/page/21/">21</a></li>
-        
-        <li
-        ><a href="/page/22/">22</a></li>
-        
-        <li
-        ><a href="/page/23/">23</a></li>
-        
-        <li
-        ><a href="/page/24/">24</a></li>
-        
-        <li
-        ><a href="/page/25/">25</a></li>
-        
-        <li
-        ><a href="/page/26/">26</a></li>
-        
-        <li
-        ><a href="/page/27/">27</a></li>
-        
-        <li
-        ><a href="/page/28/">28</a></li>
-        
-        <li
-        ><a href="/page/29/">29</a></li>
-        
-        <li
-        ><a href="/page/30/">30</a></li>
-        
-        <li
-        ><a href="/page/31/">31</a></li>
-        
-        <li
-        ><a href="/page/32/">32</a></li>
-        
-        <li
-        ><a href="/page/33/">33</a></li>
-        
-        <li
-        ><a href="/page/34/">34</a></li>
-        
-        <li
-        ><a href="/page/35/">35</a></li>
-        
-        <li
-        ><a href="/page/36/">36</a></li>
-        
-        <li
-        class="active"><a href="/page/37/">37</a></li>
-        
-        <li
-        class="disabled">
-        <a href="" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-        </li>
-        
-        <li>
-            <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-        </li>
-        
-    </ul>
-    
+<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
+
+<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Original volatility</th>
+<th align="center">Method</th>
+<th align="left">Implied Volatility</th>
+<th align="right">Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">64%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.6400000000000002</td>
+<td align="right">1005 ns</td>
+</tr>
+
+<tr>
+<td align="center">64%</td>
+<td align="center">Rational</td>
+<td align="left">0.6495154924570236</td>
+<td align="right">72 ns</td>
+</tr>
+
+<tr>
+<td align="center">64%</td>
+<td align="center">SR</td>
+<td align="left">0.6338265040549524</td>
+<td align="right">200 ns</td>
+</tr>
+
+<tr>
+<td align="center">64%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.6400000010047917</td>
+<td align="right">436 ns</td>
+</tr>
+
+<tr>
+<td align="center">64%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.6400000001905617</td>
+<td align="right">568 ns</td>
+</tr>
+
+<tr>
+<td align="center">16%</td>
+<td align="center">Rational</td>
+<td align="left">0.1575005551326285</td>
+<td align="right">72 ns</td>
+</tr>
+
+<tr>
+<td align="center">16%</td>
+<td align="center">SR</td>
+<td align="left">0.15117970813645165</td>
+<td align="right">200 ns</td>
+</tr>
+
+<tr>
+<td align="center">16%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.16000000000000025</td>
+<td align="right">1323 ns</td>
+</tr>
+
+<tr>
+<td align="center">16%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.16000000000219483</td>
+<td align="right">714 ns</td>
+</tr>
+
+<tr>
+<td align="center">16%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.16000000000018844</td>
+<td align="right">1030 ns</td>
+</tr>
+
+<tr>
+<td align="center">4%</td>
+<td align="center">Rational</td>
+<td align="left">0.1528010258201771</td>
+<td align="right">72 ns</td>
+</tr>
+
+<tr>
+<td align="center">4%</td>
+<td align="center">SR</td>
+<td align="left">0.043006234681405076</td>
+<td align="right">190 ns</td>
+</tr>
+
+<tr>
+<td align="center">4%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.03999999999999886</td>
+<td align="right">1519 ns</td>
+</tr>
+
+<tr>
+<td align="center">4%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.040000000056277685</td>
+<td align="right">10235 ns</td>
+</tr>
+
+<tr>
+<td align="center">4%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.040000000000453895</td>
+<td align="right">2405 ns</td>
+</tr>
+</tbody>
+</table>
+
+<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
+
   </div>
+   <div id="disqus_thread"></div>
 </div>
 
 
@@ -263,6 +237,19 @@ var disqus_shortname = "chasethedevil";
     (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 }());
 </script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
