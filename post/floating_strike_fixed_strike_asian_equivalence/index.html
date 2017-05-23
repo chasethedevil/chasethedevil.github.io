@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Equivalence between floating-strike and fixed-strike Asian options &middot; Chase the Devil</title>
+  <title>Equivalence between floating-strike and fixed-strike Asian options &middot; </title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -52,7 +52,7 @@
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
       
-      <h1>Chase the Devil</h1>
+      <h1></h1>
       <p class="lead">Technical blog for Fabien.</p>
     </div>
 
@@ -111,7 +111,7 @@ None of those really consider the simple case of Black-Scholes with a term-struc
 
 <p>We have:
 $$
-    V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\
+    V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\<br />
     \quad k V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
 $$
     where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are the Vanilla options implied volatilities at the averaging times \(t_i\), \(C(0,t_i)\) are the capitalization factors, and \(B(0,T)\) is the discount factor.</p>
@@ -120,17 +120,17 @@ $$
     We assume that \(S\) follows \(dS = \mu_t S dt + \sigma_t S dW_t\). The discount factor \(B\) is defined as \(B(0,T)=e^{-\int_{0}^T r_s ds}\). Let \(C(0,t) = e^{\int_{0}^t \mu_s ds}\). The process associated to the forward to time \(t\) is \(F_t=S_0 C(0,t)M_t\) with \(M_t = e^{\int_0^t \sigma_s dW_s - \frac{1}{2}\int_0^t \sigma_s^2 ds}\) being a martingale.
         We have:
 $$
-V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
-= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
-= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\<br />
+= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\<br />
+= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\<br />
 =k B(0,T)C(0,T)\mathbb{E}\left[ M_T \max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)M_{t_i}}{C(0,T) M_T },0\right)\right]
 $$
 We now proceed to a change of measure defined by \(M_T\). Under the new measure \(\mathbb{Q}^T\), \(\bar{W}_t = W_t - \int_0^t \sigma_s ds\) is a Brownian motion. \(\frac{M_t}{M_T}\) under \(\mathbb{Q}\) has the same law as \(\frac{M_t}{M_T} e^{-\int_t^T \sigma_s^2 ds}\) under \(\mathbb{Q}^T\) or equivalently as
 \(\bar{M}_t = e^{\int_t^T \sigma_s d\bar{W}_s - \frac{1}{2}\int_t^T \sigma_s^2 ds}\)  under \(\mathbb{Q}^T\).
 Defining \(\mathbb{E}^T\) to be the expectation under \(\mathbb{Q}^T\), we thus have
 $$
-V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
-=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\
+V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\<br />
+=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\<br />
 =k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
 $$
         This concludes the proof.</p>

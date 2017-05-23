@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Typo in Hyman non-negative constraint - 28 years later &middot; </title>
+
+  
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="quant,math">
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1></h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1 class="post-title">Typo in Hyman non-negative constraint - 28 years later</h1>
+    <span class="post-date">May 23, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="http://chasethedevil.github.io/categories/math">math</a>
+    </span>
+    <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \Delta x_{i-<sup>1</sup>&frasl;<sub>2</sub>}  is interverted with  \Delta x_{i+<sup>1</sup>&frasl;<sub>2</sub>}.</p>
+
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>	x <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #666666">-</span><span style="color: #40a070">2.427680355823974</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.3481443181227126</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.268608280421452</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.189072242720191</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.1095362050189297</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.0300001673176684</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.9504641296164076</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.8709280919151465</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7913920542138855</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7118560165126244</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6323199788113634</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.5527839411101023</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.4732479034088413</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3937118657075802</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3141758280063192</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.234639790305058</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.155103752603797</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.075567714902536</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.996031677201275</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.9164956395000139</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.8369596017987528</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.7574235640974918</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.6778875263962307</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5983514886949697</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5188154509937086</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.4392794132924476</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.3597433755911865</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.28020733788992525</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.20067130018866441</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.12113526248740358</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.04159922478614231</span>, <span style="color: #40a070">0.03793681291511897</span>, <span style="color: #40a070">0.1174728506163798</span>, <span style="color: #40a070">0.19700888831764063</span>, <span style="color: #40a070">0.2765449260189019</span>, <span style="color: #40a070">0.3560809637201632</span>, <span style="color: #40a070">0.435617001421424</span>, <span style="color: #40a070">0.5151530391226848</span>, <span style="color: #40a070">0.5946890768239461</span>, <span style="color: #40a070">0.6742251145252074</span>, <span style="color: #40a070">0.7537611522264682</span>}
+	y <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #40a070">0.22303659708933243</span>, <span style="color: #40a070">0.22655584607177778</span>, <span style="color: #40a070">0.16305913092318047</span>, <span style="color: #40a070">0.10448859033589929</span>, <span style="color: #40a070">0.16002349837315494</span>, <span style="color: #40a070">0.15632461201014838</span>, <span style="color: #40a070">0.20216975718723287</span>, <span style="color: #40a070">0.15780097999496998</span>, <span style="color: #40a070">0.1293436080647528</span>, <span style="color: #40a070">0.13101037880853464</span>, <span style="color: #40a070">0.13496819587884762</span>, <span style="color: #40a070">0.1241082758487616</span>, <span style="color: #40a070">0.13677319399415233</span>, <span style="color: #40a070">0.11493379360854317</span>, <span style="color: #40a070">0.10181073092072719</span>, <span style="color: #40a070">0.10390553149978735</span>, <span style="color: #40a070">0.09705141597989163</span>, <span style="color: #40a070">0.09469310717587004</span>, <span style="color: #40a070">0.09397968424452849</span>, <span style="color: #40a070">0.08115526370674754</span>, <span style="color: #40a070">0.07021707117654993</span>, <span style="color: #40a070">0.07896827656600293</span>, <span style="color: #40a070">0.0733165278111029</span>, <span style="color: #40a070">0.06626131630031683</span>, <span style="color: #40a070">0.06036157053511007</span>, <span style="color: #40a070">0.05598416466538939</span>, <span style="color: #40a070">0.049613807117723785</span>, <span style="color: #40a070">0.04821691404672292</span>, <span style="color: #40a070">0.04274830629369516</span>, <span style="color: #40a070">0.04053002586588819</span>, <span style="color: #40a070">0.03690680495068648</span>, <span style="color: #40a070">0.03232925805830648</span>, <span style="color: #40a070">0.02686034599416645</span>, <span style="color: #40a070">0.02152456554605186</span>, <span style="color: #40a070">0.01281016667726421</span>, <span style="color: #40a070">0.005672278716525797</span>, <span style="color: #40a070">0.0021938540693167367</span>, <span style="color: #40a070">0.0015582304062002356</span>, <span style="color: #40a070">0.0002050615897307207</span>, <span style="color: #40a070">3.232807285235909e-07</span>, <span style="color: #40a070">4.059553937573009e-06</span>}
+	z <span style="color: #666666">:=</span> <span style="color: #40a070">0.7410184269884271</span>
+</pre></div>
+</p>
+
+<p>In the above example, even though the step size \Delta x is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
+
+  </div>
+   <div id="disqus_thread"></div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
