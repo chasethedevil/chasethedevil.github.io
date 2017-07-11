@@ -221,6 +221,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
 
 function animateContinuous(time) {
   var index = Math.floor(((time - animationStartTime) % (3*delay))/delay);
+  if (index < 0) index = 0
   if (index != currentIndex) {
     //g.clearRect(0,0,c.width, c.height);
     //paintImage(g, x, y, angles[index]);
