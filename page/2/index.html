@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.24.1" />
+	<meta name="generator" content="Hugo 0.25.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,36 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
+      </h1>
+      <span class="post-date">Jan 19, 2017 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/xfce_fedora25/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/linux">linux</a>
+      </span>
+      
+      <p>The gnome shell has been crashing on me more regularly lately.
+XFCE is a good and fast more tradional desktop, but, from past experiences,
+it does not play well with power management if you only install it via</p>
+
+<pre><code>dnf install @xfce-desktop-environment
+</code></pre>
+
+<p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
+most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
+to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
+
+<pre><code>systemctl disable gdm
+systemctl enable lightdm
+systemctl stop gdm
+systemctl start lightdm
+</code></pre>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -607,65 +637,6 @@ where 1 stands for the constant coefficient (power of zero).</p>
 
 <p>For \(N=10\), the total number of factors is 184756.
 Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
-      </h1>
-      <span class="post-date">Jul 5, 2016 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/shooting_arbitrage2/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>In my <a href="(/post/shooting_arbitrage/), I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
-In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won't be so at the times \( t lt T \">previous post</a>
-because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
-it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
- where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
- Plugging this into the local variance formula leads to
-<div>$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
-    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$</div>
-for \(t\leq T\). In particular, for \(t=0\), we have
-<div>$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
-{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$</div>
-But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
-
-
-<figure >
-    
-        <img src="/post/svi_dearbitraging_lv_rk.png" />
-    
-    
-    <figcaption>
-        <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
-is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
-
-<figure >
-    
-        <img src="/post/svi_dearbitraging_vol_rk_cap.png" />
-    
-    
-    <figcaption>
-        <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>The discontinuity renders the shooting technique useless.
-The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
 
       
     </div>

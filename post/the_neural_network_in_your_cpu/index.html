@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Benham disc in web canvas &middot; </title>
+  <title>The Neural Network in Your CPU &middot; </title>
 
   
   <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
@@ -31,7 +31,7 @@
   
 
   <meta name="description" content="">
-  <meta name="keywords" content="web">
+  <meta name="keywords" content="programming">
   
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -90,164 +90,37 @@
 
 <div class="content container">
   <div class="post">
-    <h1 class="post-title">Benham disc in web canvas</h1>
-    <span class="post-date">Jul 10, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/benham_disc_in_web_canvas/#disqus_thread">Comments</a>
+    <h1 class="post-title">The Neural Network in Your CPU</h1>
+    <span class="post-date">Aug 6, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/the_neural_network_in_your_cpu/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="http://chasethedevil.github.io/categories/programming">programming</a>
     </span>
-    <p>Around 15 years ago, I wrote a small Java applet to try and show the <a href="https://en.wikipedia.org/wiki/Benham%27s_top">Benham disk</a> effect. Even back then applets were already passé and Flash would have been more appropriate. These days, no browser support Java applets anymore, and very few web users have Java installed. Flash also mostly disappeared. The <a href="https://www.w3schools.com/html/html5_canvas.asp">web canvas</a> is today&rsquo;s standard allowing to embbed animations in a web page.</p>
+    <p>Machine learning and artificial intelligence are the current hype (again). In their new Ryzen processors, <a href="http://www.anandtech.com/Gallery/Album/5197#18">AMD advertises the Neural Net Prediction</a>. It turns out this is was already used in their older (2012) Piledriver architecture used for example in the <a href="http://www.anandtech.com/show/5831/amd-trinity-review-a10-4600m-a-new-hope">AMD A10-4600M</a>. It is also present in recent Samsung processors such as <a href="https://www.theregister.co.uk/2016/08/22/samsung_m1_core/">the one powering the Galaxy S7</a>. What is it really?</p>
 
-<p>This effect shows color perception from a succession of black and white pictures. It is a computer reproduction from the Benham disc with ideas borrowed from &ldquo;Pour La Science Avril/Juin 2003&rdquo;.
-Using a delay between 40 and 60ms, the inner circle should appear <font color="#770000">red</font>, the one in the middle
-<font color="#000077">blue</font> and the outer one <font color="#007700">green</font>. When you reverse the rotation direction,
-blue and red circles should be inverted.</p>
+<p>The basic idea can be traced to a paper from Daniel Jimenez and Calvin Lin <a href="https://www.cs.utexas.edu/~lin/papers/hpca01.pdf">&ldquo;Dynamic Branch Prediction with Perceptrons&rdquo;</a>, more precisely described in the subsequent paper <a href="http://taco.cse.tamu.edu/pdfs/tocs02.pdf">&ldquo;Neural methods for dynamic branch prediction&rdquo;</a>. Branches typically occur  in <code>if-then-else</code> statements. <a href="https://en.wikipedia.org/wiki/Branch_predictor">Branch prediction</a> consists in guessing which code branch, the <code>then</code> or the <code>else</code>, the code will execute, thus allowing to precompute the branch in parallel for faster evaluation.</p>
 
-<form>
-  Delay: <input type="number" name="delay" value="60" id="delayInput"> Reverse <input type="checkbox" value="false" id="reverseInput" onclick="javascript:reverse()"> <input type="button" value="Start" onclick="javascript:startStop()" id="startButton">
-</form>
+<p>Jimenez and Lin rely on a simple single-layer perceptron neural network whose input are the branch outcome (global or hybrid local and global) histories and the output predicts which branch will be taken. In reality, because there is a single layer, the output y is simply a weighted average of the input (x, and the constant 1):</p>
 
-<canvas id="myCanvas" width="480" height="480" style="border:1px solid #000000;">
-</canvas> 
+<p>$$ y = w_0 + \sum_{i=1}^n x_i w_i $$</p>
 
-<script type="text/javascript">
-var c = document.getElementById("myCanvas");
-  c.style.width ='100%';
-  c.style.height='100%';
-  // ...then set the internal size to match
-  c.width  = c.offsetWidth;
-  c.height = c.offsetWidth;
-var x=c.width/2;
-var y=x;
-linewidth = c.width / 100;
-var g = c.getContext("2d");
+<p>\( x_i = \pm 1 \) for a taken or not taken. \( y &gt; 0 \) predicts to take the branch.</p>
 
-function paintImage(g, x,y,startArcAngle) {
-var radius = 0.9;
-var r = radius*x; endAngle = 2*Math.PI/3+startArcAngle;
-g.beginPath();
-g.arc(x, y, r, Math.PI/3+startArcAngle, endAngle, false);
-g.lineWidth = linewidth;
-g.strokeStyle = "black";
-g.stroke();
+<p>Ideally, each static branch is allocated its own perceptron. In practice, a hash of the branch address is used.</p>
 
-radius = 0.8; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
-g.stroke();
+<p>The training consists in updating each weight according to the actual branch outcome t : \( w_i = w_i + 1 \) if \( x_i = t \) otherwise \( w_i = w_i - 1 \). But this is done only if the predicted outcome is lower than the training (stopping) threshold or if the branch was mispredicted. The threshold keeps from overtraining and allow to adapt quickly to changing behavior.</p>
 
-radius = 0.7; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
-g.stroke();
+<p>The perceptron is one of those algorithms created by a psychologist. In this case, the culprit is Frank Rosenblatt. Another more recent algorithm created by a psychologist is the <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">particle swarm optimization</a> from James Kennedy. As <a href="https://quantsrus.github.io/post/particle_swarm_optimization/">in the case of</a> particle swarm optimization, there is not a single well defined perceptron, but many variations around some key principles. A reference seems to be the perceptron from H.D. Block, probably because he describes the perceptron in terms closer to code, while Rosenblatt was really describing a perceptron machine.</p>
 
-radius = 0.6; r = radius*x; endAngle = Math.PI/3+startArcAngle;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
-g.stroke();
+<p>The perceptron from H.D. Block is slightly more general than the perceptron used for branch prediction:</p>
 
-radius = 0.5; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
-g.stroke();
+<ul>
+<li>the output can be -1, 0 or 1. The output is zero if the weighted average is below a threshold (a different constant from the training threshold of the branch prediction perceptron).</li>
+<li>reinforcement is not done on inactive connections, that is for \( x_i = 0 \).</li>
+<li>a learning rate \( \alpha \) is used to update the weight: \( w_i += \alpha t x_i \)</li>
+</ul>
 
-radius = 0.4; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false);
-g.stroke();
-
-//  paintImage(g, startArcAngle, 60, 0.3); //red -180 to -60
-radius = 0.3; r = radius*x; endAngle = Math.PI+startArcAngle;// if (endAngle > Math.PI*2) endAngle = endAngle - 2*Math.PI 
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-        
-radius = 0.2; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-
-radius = 0.1; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-
-g.beginPath();
-g.arc(x, y, x,  Math.PI+startArcAngle, Math.PI*2+startArcAngle, false); 
-g.fill();
-}
-
-var delay = 40;
-var currentAnimate = 0;
-var animationStartTime = window.performance.now();
-var currentIndex = 3;
-var angles = [0.0, 2*Math.PI/3, 4*Math.PI/3];
-
-var offscreenCanvas = [document.createElement('canvas'),document.createElement('canvas'),document.createElement('canvas')];
-for (var i in offscreenCanvas) {
-  offscreenCanvas[i].width = c.offsetWidth;
-  offscreenCanvas[i].height = c.offsetWidth;
-  g = offscreenCanvas[i].getContext("2d");
-  paintImage(g, x, y, angles[i]);
-}
-g = c.getContext("2d");
-
-//function animate0() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y,  0.0);
-//  currentAnimate = setTimeout(animate1, delay);
-//}
-//function animate1() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y,  2*Math.PI/3);
-//  currentAnimate = setTimeout(animate2, delay);
-//}
-//function animate2() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y, 4*Math.PI/3);
-//  currentAnimate= setTimeout(animate0, delay);
-//}
-
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
-
-function animateContinuous(time) {
-  var index = Math.floor(((time - animationStartTime) % (3*delay))/delay);
-  if (index < 0) index = 0
-  if (index != currentIndex) {
-    //g.clearRect(0,0,c.width, c.height);
-    //paintImage(g, x, y, angles[index]);
-    var offscreenContext = offscreenCanvas[index].getContext('2d');
-    var image = offscreenContext.getImageData(0,0,c.width,c.height); 
-    g.putImageData(image, 0, 0);       
-    currentIndex = index;
-  }
-  currentAnimate = requestAnimationFrame(animateContinuous);
-}
-
-function reverse() {
-  //tmp = angles[2]; angles[2] = angles[0]; angles[0] = tmp;
-  tmp = offscreenCanvas[2]; offscreenCanvas[2] = offscreenCanvas[0]; offscreenCanvas[0] = tmp;
-}
-
-function startStop() {
-  var elem = document.getElementById("startButton");
-  var delayElem = document.getElementById("delayInput");
- if (elem.value=="Stop") {
-    elem.value = "Start";
-    //clearTimeout(currentAnimate);
-    window.cancelAnimationFrame(currentAnimate);
-    currentAnimate = 0;
-  } else {
-    elem.value = "Stop";
-    delay = delayElem.value;
-    animationStartTime = window.performance.now();
-    //animate0();
-    currentAnimate = requestAnimationFrame(animateContinuous);
-  }
-}
-</script>
+<p>The perceptron used for branch prediction is quite different from the deep learning neural networks fad, which have many more layers, with some feedback loop. The challenge of those is the training: when many layers are added to the perceptron, the gradients of each layer activation function multiply in the backpropagation algorithm. This makes the &ldquo;effective&rdquo; gradient at the first layers to be very small, which translates to tiny changes in the weights, making training not only very slow but also likely stuck in a sub-optimal local minimum. Beside the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient</a> problem, there is also the <a href="https://en.wikipedia.org/wiki/Catastrophic_interference">catastrophic interference</a> problem to pay attention to. Those issues are today dealt with the use of <a href="http://neuralnetworksanddeeplearning.com/chap6.html">specific strategies to train / structure the network</a> combined with raw computational power that was unavailable in the 90s.</p>
 
   </div>
    <div id="disqus_thread"></div>

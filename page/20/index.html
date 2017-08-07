@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.24.1" />
+	<meta name="generator" content="Hugo 0.25.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
+      </h1>
+      <span class="post-date">Dec 18, 2009 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/java--3d-surface/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts. <br /><br />I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -197,18 +209,6 @@
       </span>
       
       <p>In Finance, <a href="http://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky</a> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <a href="http://www.google.com/codesearch/p?hl=en#W_wVDN7F3h4/tetrad-4.3.2-0/src/edu/cmu/tetrad/util/MatrixUtils.java&amp;q=cholesky%20SEMEditor&amp;l=1332">this one</a>). There is <a href="http://svn.apache.org/viewvc/commons/proper/math/trunk/src/java/org/apache/commons/math/linear/decomposition/CholeskyDecompositionImpl.java?view=co">one</a> in <a href="http://commons.apache.org/math/">Apache Commons Maths</a> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<br /><br />Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<br />cholesky GPL= 5.4ms<br />cholesky BSD=37.1ms<br /><br />So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/hull-american-option-price-fallacies/">Hull American Option Price Fallacies</a>
-      </h1>
-      <span class="post-date">May 15, 2009 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/hull-american-option-price-fallacies/#disqus_thread">Comments</a>
-      </span>
-      
-      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s1600-h/hull_american_r04_v20_q02_p49.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 320px; height: 240px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s320/hull_american_r04_v20_q02_p49.png" alt="" id="BLOGGER_PHOTO_ID_5336052713901330098" border="0" /></a><br />Hull says American put is best exercised immediately and american call is optimal at expiry like a european. Is this really true?<br /><br />At first it seems really clever and model show clearly this. But if we change the market assumptions only a tiny bit, everything falls down.<br /><br />I could not detail everything in a blog post so I created a <a href="http://31416.appspot.com/static/hullamerican/hull_american_price.html">static web page about it</a>. Everything was produced in Java using algorithm found in popular books and graphs through JFreeChart.</p>
 
       
     </div>
