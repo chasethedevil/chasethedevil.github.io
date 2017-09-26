@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.25.1" />
+	<meta name="generator" content="Hugo 0.27" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/">Haskell Fibonacci Revisited</a>
+      </h1>
+      <span class="post-date">Dec 12, 2007 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/haskell-fibonacci-revisited/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a <em>MILLION</em> times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -201,18 +213,6 @@
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/tapestry5-vs-wicket-1---0/">Tapestry5 vs Wicket: 1 - 0</a>
-      </h1>
-      <span class="post-date">Jul 11, 2007 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/tapestry5-vs-wicket-1---0/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Getting started with <a href="http://tapestry.apache.org/tapestry5/">Tapestry 5</a> is easier than with <a href="http://incubator.apache.org/wicket/">Wicket 1.3</a>. Some readers will complain that it is again the view of someone who has no deep knowledge of either Tapestry or Wicket. But I think it is important for projects to be easily accessible to developers. Wicket seems to have more buzz around these days, and has a detailed wiki with plenty of useful information in it. But that&#39;s the problem I see with Wicket, it is not simple to do simple things, that is why there is so much information to do simple things in the Wicket wiki. <br><br>Granted my test was based on a specific case for component frameworks, I was not so much interested into statefulness, I wanted to display a bookmarkable &quot;user page&quot; with content coming from hibernate.This  kind of behaviour is quite general in web applications, especially in web  2.0.<br><br>It was relatively easy to have the page working with Wicket, although I was disappointed at their hibernate integration. Hibernate integration in wicket means either using the full databinder project, or creating your own solution. I chose the later based on source code from databinder, but I actually rewrote everything in the end. I was disappointed that  <a href="http://databinder.net/">databinder</a>, a specific Hibernate oriented framework did not really <a href="http://www.hibernate.org/42.html">handle Hibernate sessions the simplest way possible</a>. Tapestry5 <a href="http://svn.apache.org/viewvc/tapestry/tapestry5/trunk/tapestry-hibernate/src/main/java/org/apache/tapestry/hibernate/HibernateModule.java?revision=548175&amp;view=markup"> got that right</a>. To manage Hibernate sessions right, I had to dwelve into Wicket code as no documentation offers insight about inner workings of wicket. The code was too complex for my taste. In my short experience, I saw it seemed the developers are changing it to the better, removing some unnecessary abstractions. <br><br>In the end I got frustrated many times with Wicket, and did not manage to have a bookmarkable page the way I wanted. You can have a bookmarkable page, but after some action on the page, it would become unbookmarkable. Furthermore, the structure of the URL is not very flexible without yourself rewriting completely the bookmarkable page feature of Wicket. <br><br>With Tapestry5, I was at first worried about the small amount of documentation on the site, the use of maven in the tutorial. I was wrong, documentation proved to be exactly what I needed, and detailed enough. It is much easier to understand how Tapestry5 works after reading the doc than Wicket. Concepts in Tapestry5 are simpler and more powerful. Maven use is in the end not that big of a deal, I am still not as comfortable with it but I am productive enough that it is not an issue, much more productive than with Wicket. The standard tutorial setup is a very good one. <br><br>Doing a bookmarkable page was trivial, it also was easy to have the format i wanted, and it was kept after action in the location bar. Hibernate integration was trivial, since Tapestry5 provides the tapestry-hibernate module, a few classes that helps managing the session and transactions for you. The only drawback is maybe the yet another inversion control system to learn. Tapestry5 IoC is very near from Guice in its philosophy. I wish Guice was made the default for IoC in Tapestry5. <br><br>To conclude, there is no doubt about it, Tapestry5 is the winner.<br></p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -230,7 +230,7 @@
     
     
     
-     
+    
         
         
     
@@ -242,7 +242,7 @@
     
     
     
-     
+    
         
         
     
@@ -254,7 +254,7 @@
     
     
     
-     
+    
         
         
     
@@ -448,7 +448,7 @@
     
     
     
-     
+    
         
         
     
@@ -460,7 +460,7 @@
     
     
     
-     
+    
         
         
     
@@ -472,7 +472,7 @@
     
     
     
-     
+    
         
         
     
@@ -576,7 +576,7 @@
     
     
     
-     
+    
         
         
     

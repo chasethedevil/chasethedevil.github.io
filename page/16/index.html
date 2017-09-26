@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.25.1" />
+	<meta name="generator" content="Hugo 0.27" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/">Better Finite Difference Boundaries with a Tridiagonal Solver</a>
+      </h1>
+      <span class="post-date">Jan 10, 2013 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In <i><a href="http://www.amazon.com/Pricing-Financial-Instruments-Finite-Difference/dp/0471197602/ref=sr_1_1?ie=UTF8&amp;qid=1357840985&amp;sr=8-1&amp;keywords=tavella+randall">Pricing Financial Instruments - The Finite Difference Method</a></i>, Tavella and Randall explain that boundary conditions using a higher order discretization (for example their &ldquo;BC2&rdquo; boundary condition) can not be solved in one pass with a simple tridiagonal solver, and suggest the use of SOR or some conjugate gradient based solver.<br /><br />It is actually very simple to reduce the system to a tridiagonal system. The more advanced boundary conditions only use 3 adjacent values, just 1 value makes it non tridiagonal, the one in <b>bold</b> is the following matrix representation<br />x x <b>x</b><br />x x x<br />&nbsp;&nbsp; x x x <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;&hellip;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x x x<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x x x<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>x</b> x x<br />One just needs to replace the first line by a simple linear combination of the first 2 lines to remove the extra <b>x</b> and similarly for the last 2 lines. This amounts to ver little computational work. Then one can use a standard tridiagonal solver. This is how I implemented it in a past post about <a href="http://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/">boundary conditions of a bond in the CIR model</a>. It is very surprising that they did not propose that simple solution in an otherwise very good book.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -210,18 +222,6 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/binary-voting/">Binary Voting</a>
-      </h1>
-      <span class="post-date">Sep 7, 2012 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/binary-voting/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>How many reports have you had to fill up with a number of stars to choose? How much useless time is spent on figuring the this number just because it is always very ambiguous?<br /><br />Some blogger wrote an interesting entry on <a href="http://davidcelis.com/blog/2012/02/01/why-i-hate-five-star-ratings/">Why I Hate Five Stars Reviews</a>. Basically he advocates binary voting instead via like/dislike. Maybe a ternary system via like/dislike/don&rsquo;t care would be ok too.<br /><br />One coworker used to advocate the same for a similar reason: people reading those reports only pay attention to the extremes: the 5 stars or the 0 stars. So if you want to have a voice, you need to express it via 5 or 0, nothing in between.<br /><br /><br /></p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -239,7 +239,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -251,7 +251,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -263,7 +263,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -376,7 +376,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -388,7 +388,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -400,7 +400,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     
@@ -585,7 +585,7 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
     
     
     
-     
+    
         
         
     

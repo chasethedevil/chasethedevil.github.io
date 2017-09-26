@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.25.1" />
+	<meta name="generator" content="Hugo 0.27" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,36 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/svn_is_dead/">SVN is dead</a>
+      </h1>
+      <span class="post-date">Sep 26, 2017 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/svn_is_dead/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/programming">programming</a>
+      </span>
+      
+      <p>A few years ago, when <a href="https://git-scm.com/">Git</a> was rising fast and <a href="https://subversion.apache.org/">SVN</a> was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:</p>
+
+<ol>
+<li>Who needs decentralization for a small team or a small company working together?</li>
+<li>‎SVN is proven, works well and is simple to use and put in place.</li>
+</ol>
+
+<p>Each argument is in reality not so strong. It becomes clear now that Git is much more established.</p>
+
+<p>Regarding the first argument, a long time ago some people had trouble with CVS as it introduced the idea of merging instead of locking files. Git represents a similar paradigm shift between the centralized and the decentralized. It can scare people in not so rational ways. You could lock files with CVS as you did with visual sourcesafe or any other crappy old source control system. It&rsquo;s just that people favored merges as it was effectively more convenient and more productive. You can also use Git with a centralized workflow. Another more scary paradigm shift with Git is to move away from the idea that branches are separate folders. With Git you just switch branches as it is instantaneous even though, again, you could use it in the old fashioned SVN way.</p>
+
+<p>Now onto the second argument, SVN is proven to work well. But so is Cobol. Today it should be clear that SVN is essentially dead. Most big projects move or have moved to git. Tools work better with Git, even <a href="https://www.eclipse.org/">Eclipse</a> works natively with Git but requires buggy plugins for SVN. New developers don&rsquo;t know SVN.</p>
+
+<p>I heard other much worse arguments against Git since. For example, some people believed that, with Git, they could lose some of their code changes. This was partially due to sensational news article such as the <a href="https://www.theregister.co.uk/2017/02/01/gitlab_data_loss/">Gitlab.com data loss</a>, where in reality some administrator deleted some directory and had non-working backups. As a result, some Git repositories were deleted, but in reality it&rsquo;s a common data loss situation, unrelated to the use of Git as version control system. This Stackoverflow question gives a nice overview of <a href="https://stackoverflow.com/questions/21048765/what-can-cause-data-loss-in-git">data loss risks with Git</a>.</p>
+
+<p>What I feel is true however is that Git is more complex than SVN, because it is more powerful and more flexible. But if you adopt a simple workflow, it&rsquo;s not necessarily more complicated.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -705,116 +735,6 @@ cd uld
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/">A new scheme for Heston - Part 2</a>
-      </h1>
-      <span class="post-date">Jan 23, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      
-
-<p>A couple weeks ago, I wrote about <a href="/post/a-new-scheme-for-heston">a new Heston discretisation scheme</a> which was at least as accurate as Andersen QE scheme and faster, called DVSS2.</p>
-
-<p>It turns out that it does not behave very well on the following Vanilla forward start option example (which is quite benign).
-The Heston parameters comes from a calibration to the market and are</p>
-
-<p>$$v_0= 0.0718, \kappa= 1.542, \theta= 0.0762, \sigma= 0.582, \rho= -0.352$$</p>
-
-<p>with a maturity of one year.</p>
-
-<p>On a standard vanilla option, DVSS2 behaves as advertised in the paper but not on a forward-start option
-with forward start date at \(T_1=\frac{7}{8}\) (relatively close to the maturity).
-A forward start call option will pay \(\max(S(T)-k S(T_1),0)\).
-This is particularly visible on the following graph of the price against
- the time-step size (1,<sup>1</sup>&frasl;<sub>2</sub>,<sup>1</sup>&frasl;<sub>4</sub>,<sup>1</sup>&frasl;<sub>8</sub>,<sup>1</sup>&frasl;<sub>16</sub>,<sup>1</sup>&frasl;<sub>32</sub>), for strikes 100% and 140% (it works well for strike=70%)
- where 32 time-steps are necessary.
-
-<figure >
-    
-        <img src="/post/heston_dvss2.png" />
-    
-    
-    <figcaption>
-        <h4>Forward start Call price with different discretization schemes.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>It would appear that the forward dynamic is sometimes poorly captured by the DVSS2 scheme.
-This makes DVSS2 not competitive in practice compared to Andersen&rsquo;s QE or even Alfonsi as it can not be trusted
-for a time step larger than <sup>1</sup>&frasl;<sub>32</sub>.
-Note that I insert an extra step at <sup>7</sup>&frasl;<sub>8</sub> for time step sizes greater or equal than <sup>1</sup>&frasl;<sub>4</sub>: a time-step size of 1 corresponds in reality
-to two time-steps respectively of size <sup>7</sup>&frasl;<sub>8</sub> and <sup>1</sup>&frasl;<sub>8</sub>.</p>
-
-<p>The error is actually because the log-asset process is sampled using a discrete random variables that matches
-the first 5 moments of the normal distribution. The so-called step 5 of the algorithm specifies:
-$$\hat{X} := \bar{x} + \xi \sqrt{\frac{1}{2}(\bar{y}+\hat{Y})h}$$
-The notation is quite specific to the paper, what you need to know is that \(\hat{X}\) corresponds to the log-asset process
-while \(\hat{Y}\) corresponds to the stochastic volatility process and \(\xi\) is the infamous discrete random variable.</p>
-
-<p>In reality, there is no good reason to use a discrete random variable beside lowering the computational cost.
-And it is obviously detrimental in the limit case where the volatility is deterministic (Black-Scholes case) as then
-the log-process will only match the first 5 moments of the normal distribution, while it should be exactly normal.</p>
-
-<p>Replacing \(\xi\) by a standard normally distributed random variable is enough to fix DVSS2. Note
-that it could also be discretized like the QE scheme, using a Broadie-Kaya interpolation scheme.
-
-<figure >
-    
-        <img src="/post/heston_dvss2x.png" />
-    
-    
-    <figcaption>
-        <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with continuous normal random variable.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>The problem is that then, it is not faster than QE anymore. So it is not clear why it would be preferable.</p>
-
-<h3 id="a-discrete-distribution-matching-the-first-9-moments-of-the-normal-distribution">A discrete distribution matching the first 9 moments of the normal distribution</h3>
-
-<p>I then tried to see if matching more moments with a discrete distribution would help. More than 8 bits
-are available when generating a uniform random double precision number (as it is represented by 53 bits).
-The game is then to find nodes so that the distribution with discrete probabilities in i/256 with some interger i
-match the moments of the normal distribution. It is a non linear problem unfortunately, but I found a solution
-for the probabilities
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">32</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">94</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">94</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">32</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>
-</pre></div>
-
-The nodes are:
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #666666">-</span><span style="color: #40a070">3.1348958252117543</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.6510063991157273</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6397086267587215</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5168230803049496</span>, <span style="color: #40a070">0.5168230803049496</span>, <span style="color: #40a070">1.6397086267587215</span>, <span style="color: #40a070">2.6510063991157273</span>, <span style="color: #40a070">3.1348958252117543</span>
-</pre></div>
-
-The probabilities approximate those given by the ideal solution on 8 nodes,
-that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
-
-<p>While this helps a bit for small steps as shown on the following graph, it is far from good:
-
-<figure >
-    
-        <img src="/post/heston_dvss2xd.png" />
-    
-    
-    <figcaption>
-        <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with discrete random variable matching the first 9 moments of the normal distribution.</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -832,7 +752,7 @@ that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="h
     
     
     
-     
+    
         
         
     
@@ -844,7 +764,7 @@ that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="h
     
     
     
-     
+    
         
         
     
@@ -856,7 +776,7 @@ that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="h
     
     
     
-     
+    
         
         
     
@@ -1167,7 +1087,7 @@ that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="h
     
     
     
-     
+    
         
         
     
