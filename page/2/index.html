@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.27" />
+	<meta name="generator" content="Hugo 0.29" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -95,6 +95,47 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/">Samsung Wireless Printer under Fedora 25</a>
+      </h1>
+      <span class="post-date">Jan 26, 2017 &middot; 1 minute read &middot; <a href="http://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://chasethedevil.github.io/categories/linux">linux</a>
+      </span>
+      
+      <p>This is a note for those who want to setup a Samsung wireless printer under Linux. It is quite simple,
+<a href="https://ubuntuforums.org/showthread.php?t=2263245">this forum post</a> helped me, the actual useful steps on Fedora 25 are:</p>
+
+<ul>
+<li><p>download tar.gz linux driver from <a href="http://www.samsungsetup.com/">Samsung website</a>. As root, unpack &amp; install:</p>
+
+<pre><code>tar xvzf SamsungPrinterInstaller.tar.gz 
+cd uld
+./install.sh
+</code></pre></li>
+
+<li><p>in the printer menu, lookup for the wireless key (8 digits),</p></li>
+
+<li><p>connect to the printer Wifi network with a computer using the wireless key,</p></li>
+
+<li><p>enter the network gateway IP, this is typically <a href="http://192.168.3.1">http://192.168.3.1</a>,</p></li>
+
+<li><p>click on Login with user &ldquo;admin&rdquo; and password &ldquo;sec00000&rdquo;,</p></li>
+
+<li><p>open the network wifi settings and select &ldquo;Easy Wi-Fi Settings&rdquo;,</p></li>
+
+<li><p>connect back to your wireless network,</p></li>
+
+<li><p>add the network printer via the printer settings wizard, or alternatively through CUPS interface <a href="http://localhost:631">http://localhost:631</a>.</p></li>
+</ul>
+
+<p>That&rsquo;s it. Printer and scanner will then work on your local Wi-Fi network.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/">A new scheme for Heston - Part 2</a>
       </h1>
       <span class="post-date">Jan 23, 2017 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/#disqus_thread">Comments</a>
@@ -175,13 +216,11 @@ are available when generating a uniform random double precision number (as it is
 The game is then to find nodes so that the distribution with discrete probabilities in i/256 with some interger i
 match the moments of the normal distribution. It is a non linear problem unfortunately, but I found a solution
 for the probabilities
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">32</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">94</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">94</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">32</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>, <span style="color: #40a070">1</span><span style="color: #666666">/</span><span style="color: #40a070">256</span>
-</pre></div>
-
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span></code></pre>
+</div>
 The nodes are:
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #666666">-</span><span style="color: #40a070">3.1348958252117543</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.6510063991157273</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6397086267587215</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5168230803049496</span>, <span style="color: #40a070">0.5168230803049496</span>, <span style="color: #40a070">1.6397086267587215</span>, <span style="color: #40a070">2.6510063991157273</span>, <span style="color: #40a070">3.1348958252117543</span>
-</pre></div>
-
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#666">-</span><span style="color:#40a070">3.1348958252117543</span>, <span style="color:#666">-</span><span style="color:#40a070">2.6510063991157273</span>, <span style="color:#666">-</span><span style="color:#40a070">1.6397086267587215</span>, <span style="color:#666">-</span><span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">1.6397086267587215</span>, <span style="color:#40a070">2.6510063991157273</span>, <span style="color:#40a070">3.1348958252117543</span></code></pre>
+</div>
 The probabilities approximate those given by the ideal solution on 8 nodes,
 that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
 
@@ -631,40 +670,39 @@ which can result in a 5\% performance loss for a local volatility simulation.
 The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
 
 <p>The code is extremely simple, with many possible variations around the same idea. Here is mine
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">type</span> AES2RNG <span style="color: #007020; font-weight: bold">struct</span> {
-	counter <span style="color: #902000">uint64</span>
-	bs      []<span style="color: #902000">byte</span>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
+	counter <span style="color:#902000">uint64</span>
+	bs      []<span style="color:#902000">byte</span>
 	block   cipher.Block
 }
 
-<span style="color: #007020; font-weight: bold">func</span> New2() (<span style="color: #666666">*</span>AES2RNG, <span style="color: #902000">error</span>) {
-	bs <span style="color: #666666">:=</span> <span style="color: #007020">make</span>([]<span style="color: #902000">byte</span>, aes.BlockSize)
-	counter <span style="color: #666666">:=</span> <span style="color: #007020">uint64</span>(<span style="color: #40a070">0</span>)
-	key <span style="color: #666666">:=</span> []<span style="color: #007020">byte</span>(<span style="color: #4070a0">&quot;AES128_16charkey&quot;</span>) <span style="color: #60a0b0; font-style: italic">//16 bytes</span>
-	block, err <span style="color: #666666">:=</span> aes.NewCipher(key)
-	<span style="color: #007020; font-weight: bold">if</span> err <span style="color: #666666">!=</span> <span style="color: #007020; font-weight: bold">nil</span> {
-		<span style="color: #007020; font-weight: bold">return</span> <span style="color: #007020; font-weight: bold">nil</span>, err
+<span style="color:#007020;font-weight:bold">func</span> New2() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
+	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
+	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
+	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
+</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.NewCipher(key)
+	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
+		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
 	}
-	<span style="color: #007020; font-weight: bold">return</span> <span style="color: #666666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color: #007020; font-weight: bold">nil</span>
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
 }
 
-<span style="color: #007020; font-weight: bold">func</span> (u <span style="color: #666666">*</span>AES2RNG) Uint64() <span style="color: #902000">uint64</span> {
-	<span style="color: #007020; font-weight: bold">if</span> u.counter<span style="color: #666666">&amp;</span><span style="color: #40a070">0x1</span> <span style="color: #666666">==</span> <span style="color: #40a070">0</span> {
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) Uint64() <span style="color:#902000">uint64</span> {
+	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
 		binary.LittleEndian.PutUint64(u.bs, u.counter)
-		u.counter<span style="color: #666666">++</span>
-		binary.LittleEndian.PutUint64(u.bs[<span style="color: #40a070">8</span>:], u.counter)
+		u.counter<span style="color:#666">++</span>
+		binary.LittleEndian.PutUint64(u.bs[<span style="color:#40a070">8</span>:], u.counter)
 		u.block.Encrypt(u.bs, u.bs)
-		<span style="color: #007020; font-weight: bold">return</span> binary.LittleEndian.Uint64(u.bs)
+		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.Uint64(u.bs)
 	}
-	u.counter<span style="color: #666666">++</span>
-	<span style="color: #007020; font-weight: bold">return</span> binary.LittleEndian.Uint64(u.bs[<span style="color: #40a070">8</span>:])
+	u.counter<span style="color:#666">++</span>
+	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.Uint64(u.bs[<span style="color:#40a070">8</span>:])
 }
 
-<span style="color: #007020; font-weight: bold">func</span> (u <span style="color: #666666">*</span>AES2RNG) Float64OO() <span style="color: #902000">float64</span> {
-	<span style="color: #007020; font-weight: bold">return</span> (<span style="color: #007020">float64</span>(u.Uint64()<span style="color: #666666">&gt;&gt;</span><span style="color: #40a070">12</span>) <span style="color: #666666">+</span> <span style="color: #40a070">0.5</span>) <span style="color: #666666">*</span> (<span style="color: #40a070">1.0</span> <span style="color: #666666">/</span> <span style="color: #40a070">4503599627370496.0</span>)
-}
-</pre></div>
-</p>
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) Float64OO() <span style="color:#902000">float64</span> {
+	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.Uint64()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
+}</code></pre>
+</div></p>
 
 <p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10\%.</p>
 
@@ -682,31 +720,6 @@ While it led to sensible results, there does not seem any study yet of its equid
  Furthermore, alternate keys can be used to create independent substreams:
  the strong cryptographic property will guarantee the statistical independence.
   A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/piketty_capital/">A review of Thomas Piketty - Le capital au XXI siecle</a>
-      </h1>
-      <span class="post-date">Aug 2, 2016 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/piketty_capital/#disqus_thread">Comments</a>
-      
-      <br/>
-      
-      </span>
-      
-      <p>I found back some old notes I had written about the book &ldquo;Le capital au XXI siecle&rdquo; from Thomas Piketty. It took me a while to finish that book last summer.</p>
-
-<p>So many journalists have written around Piketty, that I had to buy the book and read it. It turns out that some of the criticism I have read is not really founded once one reads the book, but here are other real obvious criticisms that I suprisingly did not hear.</p>
-
-<p>The best part of the book is probably the introduction. It&rsquo;s actually not so short and gives a good overall view of the main subjects of the book. But it&rsquo;s a bit too concise to truely understand the point. Unfortunately as the book progresses, it feels more like someone trying to fill up empty pages than real content. The first half of the first chapter is still interesting, and then we are overwhelmed with too many graphs and even more words to just state the obvious in the graph, or to repeat over and over the same idea. His economic &ldquo;laws&rdquo; should really be summarized on one (or two) simple page, there is no need for hundreds of pages to understand them. Banks could learn a bit of basic statistics: Piketty makes the point of not considering only one measure of inequality like the Gini index, very much like banks should not consider only one measure of risk like the VaR.</p>
-
-<p>The title is clever, as it is a direct reference to Marx &ldquo;The Capital&rdquo;, but it&rsquo;s very far from the quality of Marx book. Marx can be wrong about many things, but in each chapter, he presents new ideas, a different way of looking at the problem. There is a real philosophical effort of defining the meaning of words, and there is fascinating analysis of the economic world of the 19th century. I am refering to the first volume, the only one Marx truly wrote.</p>
-
-<p>I hardly understand why Piketty is so popular in the US. I remember how much fun it was to read Adam Smith &ldquo;The Wealth of Nations&rdquo;, and again how different perpectives it tries to bring, and it&rsquo;s no small book either. Piketty is boring, extremely boring to read (except the intro). Maybe the Americans just stopped at the introduction. Likely it has more to do with Piketty being the intellectual defending the same ideas as the very popular Occupy movement (which we somehow don&rsquo;t hear about so much anymore). Bourdieu was very talented in mixing the right amount of statistics with extremely original views along with a philosophical stance. I expected more from Piketty, an admirer of the likes of Bourdieu.</p>
-
-<p>A much more interesting book would be something like a spiced up introduction to this book. One main leitmotiv is the fact that the 21st century will not look like the 20th century, but maybe more like the 19th century. Why wouldn&rsquo;t the 21st century look like the 21st century, that is different from the 20th and the 19th century? Still, where Picketty is interesting is in the fact that there is something to learn from the 19th century economics, and something to unlearn from the 20th century economics which might be too prevalent today.</p>
 
       
     </div>

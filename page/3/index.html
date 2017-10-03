@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.27" />
+	<meta name="generator" content="Hugo 0.29" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,31 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://chasethedevil.github.io/post/piketty_capital/">A review of Thomas Piketty - Le capital au XXI siecle</a>
+      </h1>
+      <span class="post-date">Aug 2, 2016 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/piketty_capital/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>I found back some old notes I had written about the book &ldquo;Le capital au XXI siecle&rdquo; from Thomas Piketty. It took me a while to finish that book last summer.</p>
+
+<p>So many journalists have written around Piketty, that I had to buy the book and read it. It turns out that some of the criticism I have read is not really founded once one reads the book, but here are other real obvious criticisms that I suprisingly did not hear.</p>
+
+<p>The best part of the book is probably the introduction. It&rsquo;s actually not so short and gives a good overall view of the main subjects of the book. But it&rsquo;s a bit too concise to truely understand the point. Unfortunately as the book progresses, it feels more like someone trying to fill up empty pages than real content. The first half of the first chapter is still interesting, and then we are overwhelmed with too many graphs and even more words to just state the obvious in the graph, or to repeat over and over the same idea. His economic &ldquo;laws&rdquo; should really be summarized on one (or two) simple page, there is no need for hundreds of pages to understand them. Banks could learn a bit of basic statistics: Piketty makes the point of not considering only one measure of inequality like the Gini index, very much like banks should not consider only one measure of risk like the VaR.</p>
+
+<p>The title is clever, as it is a direct reference to Marx &ldquo;The Capital&rdquo;, but it&rsquo;s very far from the quality of Marx book. Marx can be wrong about many things, but in each chapter, he presents new ideas, a different way of looking at the problem. There is a real philosophical effort of defining the meaning of words, and there is fascinating analysis of the economic world of the 19th century. I am refering to the first volume, the only one Marx truly wrote.</p>
+
+<p>I hardly understand why Piketty is so popular in the US. I remember how much fun it was to read Adam Smith &ldquo;The Wealth of Nations&rdquo;, and again how different perpectives it tries to bring, and it&rsquo;s no small book either. Piketty is boring, extremely boring to read (except the intro). Maybe the Americans just stopped at the introduction. Likely it has more to do with Piketty being the intellectual defending the same ideas as the very popular Occupy movement (which we somehow don&rsquo;t hear about so much anymore). Bourdieu was very talented in mixing the right amount of statistics with extremely original views along with a philosophical stance. I expected more from Piketty, an admirer of the likes of Bourdieu.</p>
+
+<p>A much more interesting book would be something like a spiced up introduction to this book. One main leitmotiv is the fact that the 21st century will not look like the 20th century, but maybe more like the 19th century. Why wouldn&rsquo;t the 21st century look like the 21st century, that is different from the 20th and the 19th century? Still, where Picketty is interesting is in the fact that there is something to learn from the 19th century economics, and something to unlearn from the 20th century economics which might be too prevalent today.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -790,121 +815,6 @@ The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happen
 <p>I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to <strong>five times faster</strong> than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).</p>
 
 <p>If you are interested, you will find much more details in <a href="/lefloch_heston_filon.pdf">this document</a>.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
-      </h1>
-      <span class="post-date">Apr 21, 2016 &middot; 4 minute read &middot; <a href="http://chasethedevil.github.io/post/rational_fit/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>In my paper <a href="http://ssrn.com/abstract=2420757">&ldquo;Fast and Accurate Analytic Basis Point Volatility&rdquo;</a>,
-I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
-an idea I first saw in the <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package">Faddeeva package</a> to
-represent the cumulative normal distribution with high accuracy, and high performance. It is also
-simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
-makes this technique quite appealing.</p>
-
-<p>Still, it would have been nice to have also a more visually appealing rational function representation, as <a href="http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf">W. Shaw</a>
-did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
-seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
-interesting implementation in <a href="http://www.chebfun.org">chebfun</a> but this depends on Matlab.</p>
-
-<p>The Numerical recipe book provides a simple algorithm in <a href="http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf">chapter 5.13</a>, not looking for the best possible rational function, but just for one
-that would be &ldquo;good enough&rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
-on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
-for a higher order numerator or denominator. Then I tried some <a href="http://www.scientificpython.net/pyblog/rational-least-squares-approximation">least squares python code</a> which ended up being just buggy:
-I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&rsquo;t fully understand why one would propose such a code.</p>
-
-<p>It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on <a href="http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions">this matrix representation</a>.
-I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).</p>
-
-<p>The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
-much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.</p>
-
-<p>Interestingly, I thought, that, maybe, a <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> could allow to regain the lost accuracy with SVD, using
-as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.</p>
-
-<p>Another interesting point, is that the using QR decomposition (instead of SVD)
-in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
-which looked robust, but was actually not so much.</p>
-
-<p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
-(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
-
-
-<figure >
-    
-        <img src="/post/rational_fit_value.png" />
-    
-    
-    <figcaption>
-        <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
-
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>RMSE</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>Polynomial Naive</td>
-<td>0.234</td>
-</tr>
-
-<tr>
-<td>Polynomial NRI</td>
-<td>0.039</td>
-</tr>
-
-<tr>
-<td>Rational   NRI</td>
-<td>0.001</td>
-</tr>
-</tbody>
-</table>
-
-<p>A <sup>10</sup>&frasl;<sub>10</sub> rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
-visually to understand how large is the difference:</p>
-
-
-<figure >
-    
-        <img src="/post/rational_fit_error.png" />
-    
-    
-    <figcaption>
-        <h4>Least squares polynomial fit error of degree 20.</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the
-change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
- away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
-all that appealing compared to the table of Chebyshev polynomials.</p>
-
-<p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
-
-<p><strong>Update</strong> - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.</p>
 
       
     </div>
