@@ -10,20 +10,20 @@
   <title>Cracking the Double Precision Gaussian Puzzle &middot; </title>
 
   
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia:400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -33,6 +33,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,10 +44,6 @@
     ga('send', 'pageview');
   </script>
   
-<script type="text/javascript"
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 </head>
 <body class="theme-base-00">
 <div class="sidebar">
@@ -58,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -77,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -91,12 +88,12 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Cracking the Double Precision Gaussian Puzzle</h1>
-    <span class="post-date">Mar 22, 2013 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 22, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/#disqus_thread">Comments</a>
     </span>
     <p><br />In my <a href="http://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">previous post</a>, I stated that some library (SPECFUN by W.D. Cody) computes $$e^{-\frac{x^2}{2}}$$ the following way:<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">xsq = fint(x * 1.6) / 1.6;<br />del = (x - xsq) * (x + xsq);<br />result = exp(-xsq * xsq * 0.<span style="font-size: x-small;">5</span>) * exp(-del <em>&nbsp;<span style="font-size: x-small;">0.5</span>);</span></span><br /><br />where fint(z) computes the floor of z.<br /><br /><b>1. Why 1.6?</b><br /><br />An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.6 is equivalent to multiplying by 10 and dividing by 16 which is an exact operation). It also allows to have something very close to a rounding function: x=2.6 will make xsq=2.5, x=2.4 will make xsq=1.875, x=2.5 will make xsq=2.5. The maximum difference between x and xsq will be 0.625.<br /><br /><div><b>2. (a-b)</em>(a+b) decomposition</b></div><div><br /></div><div>del is of the order of 2<em>x</em>(x-xsq). When (x-xsq) is very small, del will, most of the cases be small as well: when x is too high (beyond 39), the result will always be 0, because there is no small enough number to represent exp(-0.5*39*39) in double precision, while (x-xsq) can be as small as machine epsilon (around 2E-16). By splitting x*x into xsq*xsq and del, one allow exp to work on a more refined value of the remainder del, which in turn should lead to an increase of accuracy.</div><div><br /></div><div><b>3. Real world effect</b></div><div><br /></div><div>Let&rsquo;s make x move by machine epsilon and see how the result varies using the naive implementation exp(-0.5*x*x) and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac).&nbsp;</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s1600/snapshot1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s400/snapshot1.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what&rsquo;s interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.</div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: left;">This is the relative error between the Naive implementation and Cody. The difference is higher than one could expect: a factor of 20. But it has one big drawbacks: it requires 2 exponential evaluations, which are relatively costly.&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"><b>Update March 22, 2013</b></div><div class="separator" style="clear: both; text-align: left;">I looked for a higher precision exp implementation, that can go beyond double precision. I found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library.</div><div class="separator" style="clear: both; text-align: left;">I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.7000000000000028421709430404007434844970703125.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s1600/snapshot5.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="291" src="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s400/snapshot5.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7</div><div class="separator" style="clear: both; text-align: center;">&nbsp;<a href="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s1600/snapshot7.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="265" src="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s400/snapshot7.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</div><div><br /></div></p>
 
   </div>
-   <div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 </div>
 
 
@@ -133,15 +130,6 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<script>
-  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
 
 </body>
 </html>

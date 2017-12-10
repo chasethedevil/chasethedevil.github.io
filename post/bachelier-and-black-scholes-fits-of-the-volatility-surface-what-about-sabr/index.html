@@ -10,20 +10,20 @@
   <title>Bachelier and Black-Scholes Fits of the Volatility Surface, what about SABR? &middot; </title>
 
   
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia:400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -33,6 +33,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,10 +44,6 @@
     ga('send', 'pageview');
   </script>
   
-<script type="text/javascript"
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 </head>
 <body class="theme-base-00">
 <div class="sidebar">
@@ -58,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -77,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -91,12 +88,12 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Bachelier and Black-Scholes Fits of the Volatility Surface, what about SABR?</h1>
-    <span class="post-date">Mar 7, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/bachelier-and-black-scholes-fits-of-the-volatility-surface-what-about-sabr/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 7, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/bachelier-and-black-scholes-fits-of-the-volatility-surface-what-about-sabr/#disqus_thread">Comments</a>
     </span>
     <p>I always wondered if Bachelier was really worse than Black-Scholes in practice. As an experiment I fit various implied volatility surfaces with Bachelier and Black-Scholes and look at the average error in implied volatility by slice.<br /><br />In theory Bachelier is appealing because slightly simpler: log returns are a bit more challenging to think about than returns. And it also takes indirectly into account the fact that OTM calls are less likely than OTM puts because of default risk, if you assume absorbing probability at strike 0.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-FtWwKMYTItY/Uxn4UIURgnI/AAAAAAAAHDk/qJDWTdPl6gw/s1600/bachelier.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-FtWwKMYTItY/Uxn4UIURgnI/AAAAAAAAHDk/qJDWTdPl6gw/s1600/bachelier.png" height="336" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Bachelier</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-XGjl9Pcs5aY/Uxn4aNFFB8I/AAAAAAAAHDs/-v8zOpNFu24/s1600/black.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-XGjl9Pcs5aY/Uxn4aNFFB8I/AAAAAAAAHDs/-v8zOpNFu24/s1600/black.png" height="336" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Black-Scholes</td></tr></tbody></table>The error is in general smaller for Black-Scholes for short expiries, and higher for long expiries when compared to Bachelier. Interestingly, in theory, the difference of the models is more pronounced for longer expiries. One would have imagined that for very short expiries Bachelier would be equivalent to Black, it is not the case in term of fitting the smile.<br /><br />Displaced diffusion (mixing both Bachelier and Black linearly) allows to gain x2 accuracy.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-zCvfSvMtsmc/Uxn5HHk0gBI/AAAAAAAAHD0/FrFzvnmnd08/s1600/dd.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-zCvfSvMtsmc/Uxn5HHk0gBI/AAAAAAAAHD0/FrFzvnmnd08/s1600/dd.png" height="336" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Displaced Diffusion</td></tr></tbody></table>What about SABR? Let&rsquo;s look at lognormal SABR, usually used for equities.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-lvB1kTAXh7U/Uxn5VHjEWvI/AAAAAAAAHD8/XMGwCisCiKg/s1600/sabr.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-lvB1kTAXh7U/Uxn5VHjEWvI/AAAAAAAAHD8/XMGwCisCiKg/s1600/sabr.png" height="336" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Lognormal SABR (beta=1)</td></tr></tbody></table>The fit is much better for long expiries, but not so great for a few outliers for long maturities, it can be actually worse than the simple displaced diffusion. A normal SABR might fix that.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-QcGK_40mOHQ/Uxn5qLeI45I/AAAAAAAAHEE/tMWUPEtaxvs/s1600/sabr0.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-QcGK_40mOHQ/Uxn5qLeI45I/AAAAAAAAHEE/tMWUPEtaxvs/s1600/sabr0.png" height="336" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Normal SABR (beta=0) using Hagan lognormal formula</td></tr></tbody></table>If one relies on the standard lognormal formula, the beta=0 SABR behaves very badly.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-kpi0HJKc25o/Uxn57qj8QpI/AAAAAAAAHEM/TLBa6dseWzI/s1600/Screenshot+from+2014-03-07+17:35:49.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-kpi0HJKc25o/Uxn57qj8QpI/AAAAAAAAHEM/TLBa6dseWzI/s1600/Screenshot+from+2014-03-07+17:35:49.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Normal SABR using Hagan normal formula</td></tr></tbody></table>This is fixed using the normal (bpvol) Hagan formula directly. The fit is then better overall for long maturities as expected from Black-Scholes vs Bachelier behavior.<br /><br />If one look in log scale, the conclusion is not so obvious: beta=1 produces a better fit for a majority even for long expiries, but worse for a few (30% in my case) outliers.<br /><br />What&rsquo;s clear however, is that one should never use the Black implied volatility Hagan formula with beta=0. This leaves a question on displaced SABR. Is displaced SABR is better suited than SABR with varying beta?</p>
 
   </div>
-   <div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 </div>
 
 
@@ -133,15 +130,6 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<script>
-  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
 
 </body>
 </html>

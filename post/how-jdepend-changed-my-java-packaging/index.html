@@ -10,20 +10,20 @@
   <title>How JDepend Changed My Java Packaging &middot; </title>
 
   
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia:400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -33,6 +33,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,10 +44,6 @@
     ga('send', 'pageview');
   </script>
   
-<script type="text/javascript"
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 </head>
 <body class="theme-base-00">
 <div class="sidebar">
@@ -58,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -77,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -91,12 +88,12 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">How JDepend Changed My Java Packaging</h1>
-    <span class="post-date">Oct 13, 2006 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/how-jdepend-changed-my-java-packaging/#disqus_thread">Comments</a>
+    <span class="post-date">Oct 13, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/how-jdepend-changed-my-java-packaging/#disqus_thread">Comments</a>
     </span>
     <p>One important feature of Java language is the package keyword. It helps a lot in modularizing your code. But how exactly one should use it is not that clear.<br /><br />I have been on projects where 100s of classes are in a same package and more often where you have packages for every 2 classes. Often, packages are chosen so as to split functionalities. But often as well, people are packages maniacs and create way too many of them, because they want to sort things out, not necessarily applying a consistent logic. For example, I am sure many of you have seen the &ldquo;blahblah.exceptions&rdquo; packages where you dump exceptions classes.<br /><br />Without any precise intention for packages, you encounter quickly cyclic dependencies in your project, and your build system becomes overly complicated. Then you try to remove cyclic dependencies, not by using the package keyword better, but by building jars differently (=ugly jars) and &ldquo;refactoring&rdquo; a bit.<br /><br />I fell myself in many of those traps. Fortunately I stumbled on my way on <a href="http://clarkware.com/software/JDepend.html">JDepend</a> package analysis program. At first I wondered why JDepend calculated dependencies between Java packages and not between Jars, as in your project what matters is jar interdependencies. After using it regularly, first for the fun of trying not to have cyclic dependencies in my Java packages - the green light effect (I wanted my green light on my project), I understood much better its interest. I now make Java packages that are much more meaningful. They not only separate functionalities, but also create excellent modularity. Building a project is very easy, reusing parts of it is very clear. If one needs to split a jar in a project, it&rsquo;s very clear how to split it (by Java packages). And I find that in the end my packages make much more sense.<br /><br />Placing a class in the right package is most of the time not difficult, especially for experienced programmers. But now and then, with JDepend, I find mistakes. Correcting those mistakes regularly, when it&rsquo;s just about one or two classes is quick and easy. Correcting them on a project where dependency analysis was never done is a nightmare.<br /><br />Now I don&rsquo;t really care about JDepend metrics about abstractness and instability so much, I did not find any good use of them. But <a href="http://clarkware.com/software/JDepend.html">JDepend</a> (or a package dependencies checker) really is an essential program for good Java development.</p>
 
   </div>
-   <div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 </div>
 
 
@@ -133,15 +130,6 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<script>
-  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
 
 </body>
 </html>

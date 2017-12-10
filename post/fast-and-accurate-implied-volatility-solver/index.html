@@ -10,20 +10,20 @@
   <title>Fast and Accurate Implied Volatility Solver &middot; </title>
 
   
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia:400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -33,6 +33,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,10 +44,6 @@
     ga('send', 'pageview');
   </script>
   
-<script type="text/javascript"
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 </head>
 <body class="theme-base-00">
 <div class="sidebar">
@@ -58,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -77,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -91,12 +88,12 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Fast and Accurate Implied Volatility Solver</h1>
-    <span class="post-date">Mar 19, 2014 &middot; 3 minute read &middot; <a href="http://chasethedevil.github.io/post/fast-and-accurate-implied-volatility-solver/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 19, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/fast-and-accurate-implied-volatility-solver/#disqus_thread">Comments</a>
     </span>
     <p>The calibration of a stochastic volatility model or a volatility surface parameterization (like SVI) involves minimizing the model options volatilities against market options volatilities. Often, the model computes an option price, not an implied volatility. It is therefore useful to have a fast way to invert that option price to get back the implied volatility that corresponds to it. Furthermore during the calibration procedure, the model option price can vary widely: it is convenient to have a robust implied volatility solver.<br /><br />Another more basic use of implied volatility solvers, is for the computation of Black-Scholes greeks for a given market option price.<br /><br />A few years ago, P. Jaeckel produced a much better algorithm than a simple Newton or Brent solver, in his paper &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=7&amp;cad=rja&amp;uact=8&amp;ved=0CHgQFjAG&amp;url=http%3A%2F%2Fwww.pjaeckel.webspace.virginmedia.com%2FByImplication.pdf&amp;ei=fcApU5zICumd0QXhwoGACg&amp;usg=AFQjCNF1RnfynBrckd79E9RVbhVhuXQrQg&amp;sig2=aQs-BabiCAO2Gt4tvP439g&amp;bvm=bv.62922401,d.d2k">By Implication</a>&rdquo;. There is also a much <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CDcQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1027282&amp;ei=_cApU5rFJunN0QWL84DQCw&amp;usg=AFQjCNGqV-aWNuy4K35Z6xkl9aaYPZ1WHg&amp;sig2=rXhXZbu3YWvVvBxwrlTtxg&amp;bvm=bv.62922401,d.d2k">simpler algorithm from Li</a>, based on SOR and a good initial guess for SOR, which I found to be actually quite robust and fast. Now P. Jaeckel has <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CC8QFjAB&amp;url=http%3A%2F%2Fwww.pjaeckel.webspace.virginmedia.com%2FLetsBeRational.pdf&amp;ei=S88pU7jfI8rJ0QWbv4D4AQ&amp;usg=AFQjCNHv9QC9I_jV-d4VC4JCYganedrhsA&amp;sig2=ivH2tEG0rgUvrBx9mR-QZw&amp;bvm=bv.62922401,d.d2k">a newer algorithm</a>, faster and more accurate, close to double accuracy.<br /><br />I have tested those on 1 million options of random volatility (between 0.001 and 3), random strikes (N deviations with a cap at 1M) for a few expiries.<br /><br />In terms of performance, the results are independent of expiries, but in terms of accuracy, the new Jaeckel algorithm is particularly more accurate for the long-term options (5y and 15y).<br /><span style="font-size: x-small;"><br /></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Algorithm&nbsp;&nbsp; Expiry&nbsp; Vol RMSE&nbsp; Price RMSE&nbsp; Time</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2014 5y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.8E-16&nbsp;&nbsp; 2.1E-16&nbsp;&nbsp;&nbsp;&nbsp; 1.8s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2006 5y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.3E-10&nbsp;&nbsp; 1.1E-10&nbsp;&nbsp;&nbsp;&nbsp; 3.0s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2014 15y&nbsp;&nbsp;&nbsp;&nbsp; 2.0E-12&nbsp;&nbsp; 2.4E-16&nbsp;&nbsp;&nbsp;&nbsp; 1.8s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2006 15y&nbsp;&nbsp;&nbsp;&nbsp; 1.5E-7&nbsp;&nbsp;&nbsp;&nbsp;8.0E-11&nbsp;&nbsp;&nbsp;&nbsp; 2.7s</span></span><br /><br />The maximum error from Jaeckel2006 is around 1e-8, while the one from Jaeckel2014 is 2e-15 (for very large unrealistic strike)<br /><br />As a comparison, the simpler Li SOR-TS algorithm follows the given price accuracy independently of the expiry; I have tested with 1E-12. The error in implied volatility will be slightly higher: different close vols can give the same price due to the maximum achievable accuracy of the Black-Scholes formula with double numbers, even with <a href="http://chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/">a good cumulative normal distribution implementation</a>. Its performance is however dependent on the number of deviations considered: closer to ATM means faster for Li algorithm.<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Algorithm&nbsp;&nbsp; Expiry&nbsp; Deviation&nbsp; Vol RMSE&nbsp; Price RMSE&nbsp; Time</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2014 1y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4.2E-16&nbsp;&nbsp; 2.0E-17 &nbsp;&nbsp;&nbsp; 1.8s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">LiSORTS &nbsp; &nbsp; 1y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8.5E-9 &nbsp;&nbsp; 1.9E-13 &nbsp;&nbsp;&nbsp; 2.1s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Jaeckel2014 1y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.1E-16 &nbsp; 5.9E-17 &nbsp;&nbsp;&nbsp; 1.7s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">LiSORTS &nbsp; &nbsp; 1y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 4.3E-12 &nbsp; 1.6E-13 &nbsp;&nbsp;&nbsp; 1.3s</span></span><br /><br />Actually, I have cheated in my Li SOR-TS implementation: I have reused the idea from P. Jaeckel to compute the Black-Scholes price with <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">erfc_x</span> (unscaled erfc) instead of <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">erfc</span>. This simple change divides the number of <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">exp</span> calls by 2. Without this trick, for 5 deviations, SOR-TS took 3.6s (almost twice the time).<br /><br />I would not be surprised if this was the main performance improvement between the two Jaeckels.</p>
 
   </div>
-   <div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 </div>
 
 
@@ -133,15 +130,6 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<script>
-  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
 
 </body>
 </html>

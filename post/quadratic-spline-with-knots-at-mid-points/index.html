@@ -10,20 +10,20 @@
   <title>Quadratic Spline with Knots at Mid-Points &middot; </title>
 
   
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="http://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia:400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="http://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -33,6 +33,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,10 +44,6 @@
     ga('send', 'pageview');
   </script>
   
-<script type="text/javascript"
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<link href=' http://fonts.googleapis.com/css?family=UnifrakturMaguntia' rel='stylesheet' type='text/css'>
 </head>
 <body class="theme-base-00">
 <div class="sidebar">
@@ -58,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="http://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -77,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="http://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -91,12 +88,12 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Quadratic Spline with Knots at Mid-Points</h1>
-    <span class="post-date">May 14, 2014 &middot; 2 minute read &middot; <a href="http://chasethedevil.github.io/post/quadratic-spline-with-knots-at-mid-points/#disqus_thread">Comments</a>
+    <span class="post-date">May 14, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quadratic-spline-with-knots-at-mid-points/#disqus_thread">Comments</a>
     </span>
     <p>Two months ago, I looked at <a href="http://chasethedevil.github.io/post/arbitrage-free-interpolation-of-option-prices-using-piecewise-constant-density/" target="_blank">arbitrage free interpolation using piecewise-constant density</a>. This is equivalent to a piecewise quadratic polynomial in call prices where each piece is centered around each call strike.<br /><br />I wondered at the time what a quadratic spline would look like on this problem, as it should be very close in theory, except that we can ensure that it is C1, a condition for a good looking implied volatility.<br /><br />For a while, I did not find any references around splines where knots are in between two interpolation points and derived my own formula. And then I lost the paper, but out of curiosity, I looked at the excellent De Boor book &ldquo;<a href="http://www.amazon.com/Practical-Splines-Applied-Mathematical-Sciences/dp/0387953663" target="_blank">A Practical Guide to Splines</a>&rdquo; and found that there was actually a chapter around this: quadratic splines with knots at mid-points. Interestingly, it turns out that a quadratic spline on standard knots is not always well defined, which is why, if one does quadratic splines, the knots need to be moved.<br /><br />The papers from this era are quite rudimentary in their presentation (the book is much better). I found the paper from Demko 1977 &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.sciencedirect.com%2Fscience%2Farticle%2Fpii%2F0021904578900904&amp;ei=oldzU8i0EsTY0QX3xIH4Bg&amp;usg=AFQjCNH8gbNKzPTyFH3xI-FDPJZIAFJAbg&amp;sig2=5fGbnp0Kaf3fx-KZDf5AiA&amp;bvm=bv.66699033,d.d2k" target="_blank">Interpolation by Quadratic Splines</a>&rdquo; quite usable for coding. I adjusted the boundaries to make the first and last quadratic fit the first two/last two strikes (adding a first strike at 0 and a large last strike if necessary) and spend countless time worrying about indices. The result on a simple classic example is interesting.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-gFaieqqfxOY/U3NZabgplZI/AAAAAAAAHLc/Ilu6Of0U18k/s1600/Screenshot+from+2014-05-14+13:52:54.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-gFaieqqfxOY/U3NZabgplZI/AAAAAAAAHLc/Ilu6Of0U18k/s1600/Screenshot+from+2014-05-14+13:52:54.png" height="332" width="400" /></a></div>On the non monotonic discrete density data of my earlier blog entry, this gives:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-5vz9Gfle_4s/U3Na_BXCrsI/AAAAAAAAHLo/-5nrMhsLwKY/s1600/Screenshot+from+2014-05-14+14:00:08.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-5vz9Gfle_4s/U3Na_BXCrsI/AAAAAAAAHLo/-5nrMhsLwKY/s1600/Screenshot+from+2014-05-14+14:00:08.png" height="332" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">QSpline is the quadratic spline</td></tr></tbody></table>Unfortunately, interpolating small prices with such a spline results in a highly oscillating interpolation: this is the <a href="http://www.sciencedirect.com/science/article/pii/0021904591900348" target="_blank">Gibbs phenomenon for splines</a>. We need to loose strict C1 continuity for practical applications, and use a first derivative approximation instead, very much like the Harmonic cubic spline.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-vREiCCtH0Ko/U3Nb3ofEfLI/AAAAAAAAHLw/Im482o1J5QY/s1600/Screenshot+from+2014-05-14+14:04:33.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-vREiCCtH0Ko/U3Nb3ofEfLI/AAAAAAAAHLw/Im482o1J5QY/s1600/Screenshot+from+2014-05-14+14:04:33.png" height="332" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">On Jaeckel data, the quadratic spline on prices is highly oscillating</td></tr></tbody></table><br /><br /></p>
 
   </div>
-   <div id="disqus_thread"></div>
+  <div id="disqus_thread"></div>
 </div>
 
 
@@ -133,15 +130,6 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-<script src="http://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<script>
-  var _gaq=[['_setAccount','UA-365717-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
 
 </body>
 </html>
