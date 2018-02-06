@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/">Controlling the SABR wings with Hagan PDE </a>
+      </h1>
+      <span class="post-date">Dec 15, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/broken-internet/">Broken Internet?</a>
       </h1>
       <span class="post-date">Nov 9, 2015 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/broken-internet/#disqus_thread">Comments</a>
@@ -215,18 +227,6 @@ I find it interesting that some smiles can not be extrapolated by displaced diff
       </span>
       
       <p>I seem to <a href="http://chasethedevil.github.io/post/kde-xfce-gnome-shell-in-2014/">never be entirely happy with any of the linux desktops</a> these days. I have used XFCE on Ubuntu quite a bit in the past year, it mostly works, but I still had minor annoyances:<br />- sometimes (rarely) my laptop would not wake up from sleep.<br />- notifications sometimes keep popping up too much.<br />- on my desktop, experienced strong tearing issues with the Radeon graphic card, except with some very specific combination of video player settings and desktop settings (and then I had annoying redraw issue when pushing volume up/down in movies).<br /><br />I am satisfied with two different approaches since:<br />- OpenSuse 13.2 with KDE 4. I use that on my desktop, all issues are gone, and the integration of KDE in OpenSuse is clearly the best I have experienced. In contrast, KDE 5 on Ubuntu was a disaster for me. I also managed to fuck up the apt dependencies so much that I thought it would be simpler to reinstall a new distribution.<br />- Mate on Ubuntu 15.04. Very impressed so far. It&rsquo;s probably what Gnome should have been instead of going to 3.0. Even if there are nice aspects of the Gnome shell, Mate is fast, pretty, user friendly, much better than Cinnamon. There are even a few layouts to choose (most of them are good), here is &ldquo;Eleven with Mate menu&rdquo; (it installed and setup the Plank dock automatically for that layout, more traditional layouts without dock are available):<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s1600/Mate-Eleven.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="358" src="http://1.bp.blogspot.com/-aCnzz5ujbA4/VYrfl3lhz1I/AAAAAAAAIDw/5qV5NrGn7a8/s640/Mate-Eleven.png" width="640" /></a></div><br /></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/square-root-crank-nicolson/">Square Root Crank-Nicolson</a>
-      </h1>
-      <span class="post-date">Jun 19, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/square-root-crank-nicolson/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>C. Reisinger kindly pointed out to me <a href="http://arxiv.org/abs/1210.5487">this paper around square root Crank-Nicolson</a>. The idea is to apply a square root of time transformation to the PDE, and discretize the resulting PDE with Crank-Nicolson. Two reasons come to mind to try this: <br /><ul><li>the square root transform will result in small steps initially, where the solution is potentially not so smooth, making Crank-Nicolson behave better.</li><li>&nbsp;it is the natural time of the Brownian motion.</li></ul>Interestingly, it has nicer properties than what those reasons may suggest. On the Fokker-Planck density PDE, it does not oscillate under some very mild conditions and <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2605160">preserves density positivity at the peak</a>.<br /><br />Out of curiosity I tried it to price a one touch barrier option. Of course there is an analytical solution in my test case (Black-Scholes assumptions), but as soon as rates are assumed not constant or local volatility is used, there is no other solution than a numerical method. In the later case, finite difference methods are quite good in terms of performance vs accuracy.<br /><br />The classic Crank-Nicolson gives a reasonable price, but the strong oscillations near the barrier, at every time step are not very comforting.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="337" src="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />Moving to square root of time removes nearly all oscillations on this problem, even with a relatively low number of time steps compared to the number of space steps.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Square Root Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />We can see that the second step prices are a bit higher than the third step (the lines cross), which looks like a small numerical oscillation in time, even if there is no oscillation is space.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">TR-BDF2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />As a comparison, the TR-BDF2 scheme does relatively well: oscillations are removed after the second step, even with the extreme ratio of time steps vs space steps used on this example so that illustrations are clearer - Crank-Nicolson would still oscillate a lot with 10 times less space steps but we would not see oscillation on the square root Crank-Nicolson and a very mild one on TR-BDF2.<br /><br />The LMG2 scheme (a local richardson extrapolation) does not oscillate at all on this problem but is the slowest:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">LMG2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />The square root Crank-Nicolson is quite elegant. It can however not be applied to that many problems in practice, as often some grid times are imposed by the payoff to evaluate, for example in a case of a discrete weekly barrier. But for continuous time problems (density PDE, Vanilla, American, continuous barriers) it&rsquo;s quite good.<br /><br />In reality, with a continuous barrier, the payoff is not discontinuous at every step, but it is only discontinuous at the first step. So Rannacher smoothing would work very well on that problem:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s1600/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s640/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher Prices near the Barrier. Each line is a different time.</td></tr></tbody></table>The somewhat interesting payoff left for the square root Crank-Nicolson is the American.<br /></p>
 
       
     </div>
@@ -597,8 +597,17 @@ I find it interesting that some smiles can not be extrapolated by displaced diff
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -607,7 +616,7 @@ I find it interesting that some smiles can not be extrapolated by displaced diff
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

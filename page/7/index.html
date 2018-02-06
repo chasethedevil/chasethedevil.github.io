@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/monte-carlo--inverse-cumulative-normal-distribution/">Monte Carlo &amp; Inverse Cumulative Normal Distribution</a>
+      </h1>
+      <span class="post-date">Feb 3, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/monte-carlo--inverse-cumulative-normal-distribution/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In most financial Monte-Carlo simulations, there is the need of generating normally distributed random numbers. One technique is to use the inverse cumulative normal distribution function on uniform random numbers. There are several different popular numerical implementations:<br /><ul><li>Wichura AS241 (1988)</li><li>Moro &ldquo;The full Monte&rdquo; (1995)</li><li><a href="http://home.online.no/~pjacklam/notes/invnorm/">Acklam</a> (2004)</li><li><a href="http://arxiv.org/abs/0901.0638">Shaw breakless formula</a> optimized for GPUs (2011) </li></ul>W. Shaw has an excellent overview of the accuracy of the various methods in his paper <i><a href="http://www.mth.kcl.ac.uk/~shaww/web_page/papers/NormalQuantile1.pdf">Refinement of the normal quantile</a></i>.<br /><br />But what about performance? In Monte-Carlo, we could accept a slighly lower accuracy for an increase in performance.<br /><br />I tested the various methods on the Euler full truncation scheme for Heston using a small timestep (0.01). Here are the results with Sobol quasi-rng:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.9186256922511046 0.42s<br />MORO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922459066 0.38s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM &nbsp; &nbsp; &nbsp; &nbsp; 0.9186256922549364 0.40s</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ACKLAM REFINED 0.9186256922511045 2.57s<br />SHAW-HYBRID &nbsp;&nbsp; 0.9186256922511048 0.68s</span></span><br /><br />In practice, the most accurate algorithm, AS241, is of comparable speed as the newer but less accurate algorithms of MORO and ACKLAM. Acklam refinement to go to double precision (which AS241 is) kills its performance.<br /><br />What about the Ziggurat on pseudo rng only? Here are the results with Mersenne-Twister-64, and using the Doornik implementation of the Ziggurat algorithm:<br /><br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">AS241&nbsp; 0.9231388565879476&nbsp; 0.49s<br />ZIGNOR 0.9321405648313437&nbsp; 0.44s</span></span><br /><br />There is a more optimized algorithm, VIZIGNOR, also from Doornik which should be a bit faster. As expected, the accuracy is quite lower than with Sobol, and the Ziggurat looks worse. This is easily visible if one plots the implied volatilities as a function of the spot for AS241 and for ZIGNOR.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-lITlDFhF-cE/VNDQfqtNbTI/AAAAAAAAHzU/zki5VJADyv4/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A43%3A10.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">AS241 implied volatility on Mersenne-Twister</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-QxKOGzNMSXE/VNDQp7dL0EI/AAAAAAAAHzc/wm1c-ymLYww/s1600/Screenshot%2Bfrom%2B2015-02-03%2B14%3A18%3A51.png" height="321" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">ZIGNOR implied volatility on Mersenne-Twister</td></tr></tbody></table><br />Zignor is much noisier.<br /><br />Note the slight bump in the scheme EULER-FT-BK that appears because the scheme, that approximates the Broadie-Kaya integrals with a trapeze (as in Andersen QE paper), does not respect martingality that well compared to the standard full truncated Euler scheme EULER-FT, and the slightly improved EULER-FT-MID where the variance integrals are approximated by a trapeze as in Van Haastrecht paper on Schobel-Zhu:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-pIO5C8vN1Es/VNDSPriO-OI/AAAAAAAAHzo/d0DUYBjiG8Q/s1600/Screenshot%2B-%2B030215%2B-%2B14%3A49%3A29.png" height="76" width="640" /></a></div>This allows to leak less correlation than the standard full truncated Euler.<br /><br /><br /></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/local-stochastic-volatility---particles-and-bins/">Local Stochastic Volatility - Particles and Bins</a>
       </h1>
       <span class="post-date">Jan 30, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/local-stochastic-volatility---particles-and-bins/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p>The variance under SVI becomes linear when the log-moneyness is very large in absolute terms. The lognormal SABR formula with beta=0 or beta=1 has a very different behavior. Of course, the theoretical SABR model has actually a different asymptotic behavior.<br /><br />As an illustration, we calibrate SABR (with two different values of beta) and SVI against the same implied volatility slice and look at the wings behavior. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" height="497" width="640" /></a></div><br />While the Lee moments formula implies that the variance should be at most linear, something that the SABR formula does not respect. It is in practice not the problem with SABR as the actual Lee boundary: V(x) &lt; 2|x|/T (where V is the square of the implied volatility and x the log-moneyness) is attained for extremely low strikes only with SABR, except maybe for very long maturities.<br /><br />A related behavior is the fact that the lognormal SABR formula can actually match steeper curvatures at the money than SVI for given asymptotes.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/svi-and-long-maturities-issues/">SVI and long maturities issues</a>
-      </h1>
-      <span class="post-date">Aug 1, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/svi-and-long-maturities-issues/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>On long maturities equity options, the smile is usually very much like a skew:&nbsp; very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).<br /><br />In terms of initial guess, <a href="http://chasethedevil.blogspot.com/2014/07/another-svi-initial-guess.html" target="_blank">we looked</a> at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings. We will see here that we can do also something a bit better than just a flat slice at-the-money in the case where rho is close to -1.<br /><br />In general when the asymptotes lead to rho &lt; -1, it means that we can&rsquo;t compute b from the asymptotes as there is in reality only one usable asymptote, the other one having a slope of 0 (rho=-1). The right way is to just recompute b by matching the ATM slope (which can be estimated by fitting a parabola at the money). Then we can try to match the ATM curvature, there are two possibilities to simplify the problem: s &gt;&gt; m or m &gt;&gt; s.<br /><br /><br />Interestingly, there is some kind of discontinuity at m = 0:<br /><ul><li>when m = 0, the at-the-money slope is just b<em>rho.&nbsp;</li></ul><ul><li>when m != 0 and m &gt;&gt; s, the at-the-money slope is b</em>(rho-1).&nbsp;</li></ul>In general it is therefore a bad idea to use m=0 in the initial guess. It appears then that assuming m &gt;&gt; s is better. However, in practice, with this choice, the curvature at the money is matched for a tiny m, even though actually the curvature explodes (sigma=5e-4) at m (so very close to the money). This produces this kind of graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" height="640" width="608" /></a></div>This apparently simple issue is actually a core problem with SVI. Looking back at our slopes but this time in the moneyness coordinate, the slope at m is b<em>rho while the slope at the money is b</em>(rho-1) if m != 0. If s is small, as the curvature at m is just b/s this means that our there will always be this funny shape if s is small. It seems then that the best we can do is hide it: let m&gt;max(moneyness) and compute the sigma to match the ATM curvature. This leads to the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" height="640" width="608" /></a></div>This is all good so far. Unfortunately running a minimizer on it will lead to a solution with a small s. And the bigger picture looks like this (QE is Zeliade Quasi-Explicit, Levenberg-Marquardt would give the same result):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" height="454" width="640" /></a></div>Of course a simple fix is to not let s to be too small, but how do we defined what is too small? I have found that a simple rule is too always ensure that s is increasing with the maturity supposing that we have to fit a surface. This rule has also a very nice side effect that spurious arbitrages will tend to disappear as well. On the figure above, I can bet that there is a big arbitrage at k=m for the QE result.<br /><br /><br /><br /><br /></p>
 
       
     </div>
@@ -578,8 +578,17 @@
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -588,7 +597,7 @@
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

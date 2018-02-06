@@ -92,6 +92,39 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/vix-starts-smiling/">The VIX starts smiling</a>
+      </h1>
+      <span class="post-date">Mar 21, 2017 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/vix-starts-smiling/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The VIX implied volatilities used to look like a logarithmic function of the strikes. I don&rsquo;t look at them often, but today, I noticed that the VIX had the start of a smile shape.</p>
+
+
+<figure >
+    
+        <img src="/post/vix_smile.png" />
+    
+    
+    <figcaption>
+        <h4>1m VIX implied volatilities on March 21, 2017 with strictly positive volume.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
+
+<p><strong>Update March 22:</strong> Actually the smile in VIX is not particularly new, it is visible in Jim Gatheral 2013 presentation <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiF2LP9turSAhUJVBQKHUVFCIoQFggoMAA&amp;url=http%3A%2F%2Fmfe.baruch.cuny.edu%2Fwp-content%2Fuploads%2F2012%2F09%2FBeijingSPXVIX2013.pdf&amp;usg=AFQjCNHCx2b2AXNXPHixUAYQC2nWH9ULHQ">Joint modeling of SPX and VIX</a> for the short maturities. Interestingly, <a href="/post/when-svi-breaks-down/">the issue with SVI</a> is also visible in those slides in the shortest maturity.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/">When SVI Breaks Down</a>
       </h1>
       <span class="post-date">Mar 16, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/#disqus_thread">Comments</a>
@@ -637,61 +670,6 @@ the minimization with the linear model requires about 40\% less iterations.</p>
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/">Put-Call parity and the log-transformed Black-Scholes PDE</a>
-      </h1>
-      <span class="post-date">Dec 5, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>We will assume zero interest rates and no dividends on the asset \(S\) for clarity.
-The results can be easily generalized to the case with non-zero interest rates and dividends.
-Under those assumptions, the Black-Scholes PDE is:
-$$  \frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = 0.$$</p>
-
-<p>An implicit Euler discretisation on a uniform grid in \(S\) of width \(h\) with linear boundary conditions (zero Gamma) leads to:</p>
-
-<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t S_i^2 \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}.$$
-for \(i=1,&hellip;,m-1\) with boundaries
-$$ V^{k+1}_i - V^{k}_i = 0.$$
-for \(i=0,m\).</p>
-
-<p>This forms a linear system \( M \cdot V^k = V^{k+1} \) with \(M\) is a tridiagonal matrix where each of its rows sums to 1 exactly.
-Furthermore, the payoff corresponding to the forward price \(V_i = S_i\) is exactly preserved as well by such a system as the discretized second derivative will be exactly zero.
-The scheme can be seen as preserving the zero-th and first moments.</p>
-
-<p>As a consequence, by linearity, the put-call parity relationship will hold exactly (note that in between nodes, any interpolation used should also be consistent with the put-call parity for the result to be more general).</p>
-
-<p>This result stays true for a non-uniform discretisation, and with other finite difference schemes as shown <a href="https://papers.ssrn.com/abstract=2362969">in this paper</a>.</p>
-
-<p>It is common to consider the log-transformed problem in \(X = \ln(S)\) as the diffusion is constant then, and a uniform grid much more adapted to the process.
-$$  \frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 V}{\partial X^2}-\frac{1}{2}\sigma^2 \frac{\partial V}{\partial X} = 0.$$</p>
-
-<p>An implicit Euler discretisation on a uniform grid in \(X\) of width \(h\) with linear boundary conditions (zero Gamma in \(S\) ) leads to:</p>
-
-<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}-\frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-V^{k}_{i-1}}{2h}.$$
-for \(i=1,&hellip;,m-1\) with boundaries
-$$ V^{k+1}_i - V^{k}_i = 0.$$
-for \(i=0,m\).</p>
-
-<p>Such a scheme will not preserve the forward price anymore. This is  because now, the forward price is \(V_i = e^{X_i}\). In particular, it is not linear in \(X\).</p>
-
-<p>It is possible to preserve the forward by changing slightly the diffusion coefficient, very much as in the <a href="https://papers.ssrn.com/abstract=2711720">exponential fitting idea</a>. The difference is that, here, we are not interested
-in handling a large drift (when compared to the diffusion) without oscillations, but merely to preserve the forward exactly.
-We want the adjusted volatility \(\bar{\sigma}\) to solve
-$$\frac{1}{2}\bar{\sigma}^2 \frac{e^{h}-2+e^{-h}}{h^2}-\frac{1}{2}\sigma^2 \frac{e^{h}-e^{-h}}{2h}=0.$$
-Note that the discretised drift does not change, only the discretised diffusion term. The solution is:
-$$\bar{\sigma}^2 = \frac{\sigma^2 h}{2} \coth\left(\frac{h}{2} \right) .$$
-This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
-
-<p>This is actually the same adjustment as the exponential fitting technique with a drift of zero. For a non-zero drift, the two adjustments would differ, as the exact forward adjustment will stay the same, along with an adjusted discrete drift.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -1049,8 +1027,17 @@ This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -1059,7 +1046,7 @@ This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

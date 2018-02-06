@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/java-enum-is-evil/">Java enum Is Evil</a>
+      </h1>
+      <span class="post-date">Aug 12, 2010 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/java-enum-is-evil/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Before Java 1.5, I never really complained about the lack of <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> keyword. Sure the <a href="http://java.sun.com/developer/Books/shiftintojava/page1.html">old enum via class pattern</a> was a bit verbose at first (N.B.: Java 1.5 enums can also be verbose once you start adding methods to them). But more importantly, you would often use the table lookup pattern in combination.<br /><br />The problem with Java 1.5 <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> is that it is not Object-Oriented. You <u>can&rsquo;t extend</u> an <b><span class="Apple-style-span" style="color: purple;"><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">enum</span></span></b>, you can&rsquo;t add an element in an existing enum. Many will say &ldquo;but that&rsquo;s what enum is for, a static list of things&rdquo;. In my experience, &nbsp;the list of things often changes with time, or needs to be extended at one point. Furthermore, most people (including me when I am very lazy) end up writing switch statements on enum values. Enum promotes bad programming practices.<br /><br />Think twice about using enum, this is often not what you want.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/">A Very Interesting Feature of Scala</a>
       </h1>
       <span class="post-date">Aug 7, 2010 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s1600-h/implicit_method_barrier_option_html_m531cf9ea.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;width: 320px; height: 74px;" src="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s320/implicit_method_barrier_option_html_m531cf9ea.jpg" border="0" alt=""id="BLOGGER_PHOTO_ID_5370871824730605074" /></a><br />While trying to price a simple knock down and out barrier option, I encountered several difficulties I did not expect with the implicit finite differences method. The explicit method has less issues with barrier options pricing. I will show here what the tricky parts are and why explicit seems simpler in this case.<br /><br />The full article is <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.pdf">here (pdf)</a> or <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.html">here (html)</a> (the later is not very well formatted).<br /><br />Algorithms used in this article can be found at <a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
-      </h1>
-      <span class="post-date">Jun 27, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting&hellip; Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm &ldquo;hw:0,1&rdquo;<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         &ldquo;amix&rdquo;      #redirect the output to dmix (instead of &ldquo;hw:0,0&rdquo;)<br />    }<br />    control {<br />        name        &ldquo;PCM&rdquo;       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       &ldquo;softvol&rdquo;   #make use of softvol<br />}<br /></pre></p>
 
       
     </div>
@@ -578,8 +578,17 @@
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -588,7 +597,7 @@
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

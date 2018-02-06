@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Categories &middot; Chase the Devil</title>
+  <title>Where is the S&amp;P 500 going to end? &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -28,10 +28,10 @@
   
   
   
-  <link href="https://chasethedevil.github.io/categories/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -86,30 +86,85 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="https://chasethedevil.github.io/categories/hardware/">Hardware</a>
+  <div class="post">
+    <h1 class="post-title">Where is the S&amp;P 500 going to end?</h1>
+    <span class="post-date">Feb 6, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Oct 2, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/linux/">Linux</a>
-    </span>
-    &middot; <time>Jan 26, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/math/">Math</a>
-    </span>
-    &middot; <time>Feb 5, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/programming/">Programming</a>
-    </span>
-    &middot; <time>Sep 26, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/quant/">Quant</a>
-    </span>
-    &middot; <time>Feb 6, 2018</time></li>
-  
-  </ul>
+    <p>Yesterday the American stocks went a bit crazy along with the VIX that jumped from 17.50 to 38. It&rsquo;s not exactly clear why, the news mention that the Fed might raise its interest rates, the bonds yield have been recently increasing substantially, and the market self-correcting
+after stocks grew steadily for months in a low VIX environment.</p>
+
+<p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
+It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
+
+
+<figure >
+    
+        <img src="/post/spw_density.png" />
+    
+    
+    <figcaption>
+        <h4>probability density of the SPX implied from 1-month SPW options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
+Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
+
+<p>Option traders like to look at the implied volatilities (below).</p>
+
+
+<figure >
+    
+        <img src="/post/spw_vol.png" />
+    
+    
+    <figcaption>
+        <h4>implied volatilities of 1-month SPW options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
+a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
+
+<p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
+
+  </div>
+  <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 

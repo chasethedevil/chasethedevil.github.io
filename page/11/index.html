@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/">Adjoint Algorithmic Differentiation for Black-Scholes</a>
+      </h1>
+      <span class="post-date">Jan 21, 2014 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/#disqus_thread">Comments</a>
+      </span>
+      
+      <p><a href="http://en.wikipedia.org/wiki/Automatic_differentiation">Adjoint algorithmic differentiation</a> is particularly interesting in finance as we often encounter the case of a function that takes many input (the market data) and returns one output (the price) and we would like to also compute sensitivities (greeks) to each input.<br /><br />As I am just starting around it, to get a better grasp, I first tried to apply the idea to the analytic knock out barrier option formula, by hand, only to find out I was making way too many errors by hand to verify anything. So I tried the simpler vanilla Black-Scholes formula. I also made various errors, but managed to fix all of them relatively easily.<br /><br />I decided to compare how much time it took to compute price, delta, vega, theta, rho, rho2 between single sided finite difference and the adjoint approach. Here are the results for 1 million options:<br /><br /><blockquote class="tr_bq">FD time=2.13s<br />Adjoint time=0.63s</blockquote><br /><b>It works well</b>, but doing it by hand is crazy and too error prone. It might be simpler for Monte-Carlo payoffs however.<br /><br />There are not many Java tools that can do reverse automatic differentiation, I found <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=5&amp;cad=rja&amp;ved=0CFAQFjAE&amp;url=http%3A%2F%2Fcluster.grid.pub.ro%2Fwiki%2Findex.php%2FADiJaC_-_Automatic_Differentiation_of_Java_Classfiles&amp;ei=SmDeUtDLCYrG0QWrlIHQDw&amp;usg=AFQjCNHLMwobO6u5jSoUifCdHvE2yPZ6oQ&amp;sig2=wFbGRYjgLenCNGRbrQ1gKQ&amp;bvm=bv.59568121,d.d2k">some thesis</a> on it, with an interesting byte code oriented approach (one difficulty is that you need to reverse loops, while statements).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/placing-the-strike-on-the-grid-and-payoff-smoothing-in-finite-difference-methods-for-vanilla-options/">Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options</a>
       </h1>
       <span class="post-date">Jan 12, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/placing-the-strike-on-the-grid-and-payoff-smoothing-in-finite-difference-methods-for-vanilla-options/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p><div class="separator" style="clear: both; text-align: center;"></div>I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a real world equity index implied volatility surface. I used a global optimizer (differential evolution).<br /><br />To my surprise, the Heston fit is quite good: the implied volatility error is less than 0.42% on average. Schobel-Zhu fit is also good (0.47% RMSE), but a bit worse than Heston. Bates improves quite a bit on Heston although it has 3 more parameters, we can see the fit is better for short maturities (0.33% RMSE). Double-Heston has the best fit overall but it is not that much better than simple Heston while it has twice the number of parameters, that is 10 (0.24 RMSE). Going beyond, for example Triple-Heston, does not improve anything, and the optimization becomes very challenging. With Double-Heston, I already noticed that kappa is very low (and theta high) for one of the processes, and kappa is very high (and theta low) for the other process: so much that I had to add a penalty to enforce constraints in my local optimizer. The best fit is at the boundary for kappa and theta. So double Heston already feels over-parameterized.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s1600/heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s640/heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s1600/schobelzhu_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s640/schobelzhu_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu  volatility error</td></tr></tbody></table><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s1600/bates_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s640/bates_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Bates  volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s1600/double_heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s640/double_heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Double Heston  volatility error</td></tr></tbody></table><br /><br />Another advantage of Heston is that one can find tricks to find a good initial guess for a local optimizer.<br /><br /><b>Update October 7: </b>My initial fit relied only on differential evolution and was not the most stable as a result. Adding Levenberg-Marquardt at the end stabilizes the fit, and improves the fit a lot, especially for Bates and Double Heston. I updated the graphs and conclusions accordingly. Bates fit is not so bad at all.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/second-cumulant-of-heston/">Second Cumulant of Heston</a>
-      </h1>
-      <span class="post-date">Oct 3, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/second-cumulant-of-heston/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I recently stumbled upon an error in the various papers related to the Heston <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;ved=0CEEQFjAC&amp;url=http%3A%2F%2Fta.twi.tudelft.nl%2Fmf%2Fusers%2Foosterle%2Foosterlee%2FCOS.pdf&amp;ei=qYxNUqryFqXJ0QW5u4HYDA&amp;usg=AFQjCNGaMK8Lotud1DP5qReeLWgpoCA0aA&amp;sig2=fljLmTq0WhG8SCgzaOxXxA&amp;bvm=bv.53537100,d.d2k">Cos method</a> regarding the second cumulant. It is used to define the boundaries of the Cos method.<br /><br />Letting phi be Heston characteristic function, the cumulant generating function is:<br />$$g(u) = \log(\phi(-iu))$$<br /><br />And the second cumulant is defined a: <br />$$c_2 = g&rdquo;(0)$$<br /><br />Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.<br /><br />This is where <a href="http://chasethedevil.github.io/post/maxima-for-symbolic-calculus/">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:<br />$$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right)&nbsp;&nbsp; + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\<br />+&nbsp; \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \<br />+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$<br /><br />In contrast, the paper formula was:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-5S5BchVIYE8/Uk2MBOl0e_I/AAAAAAAAG0U/_0VLpFRL5HY/s1600/Screenshot+from+2013-10-03+17:23:28.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-5S5BchVIYE8/Uk2MBOl0e_I/AAAAAAAAG0U/_0VLpFRL5HY/s320/Screenshot+from+2013-10-03+17:23:28.png" height="115" width="320" /></a></div><br />I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.<br /><br />Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0.377836$$ using 200 points:<br /><br />New formula: 0.1640581405<br />Paper formula: 0.1743425406<br />N=30 with 10000 points: 0.1640581423 <br /><br /><b>Update March 2014</b> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>. <br /><br /></p>
 
       
     </div>
@@ -578,8 +578,17 @@
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -588,7 +597,7 @@
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

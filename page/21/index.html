@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
+      </h1>
+      <span class="post-date">Jun 27, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting&hellip; Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm &ldquo;hw:0,1&rdquo;<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         &ldquo;amix&rdquo;      #redirect the output to dmix (instead of &ldquo;hw:0,0&rdquo;)<br />    }<br />    control {<br />        name        &ldquo;PCM&rdquo;       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       &ldquo;softvol&rdquo;   #make use of softvol<br />}<br /></pre></p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/">Java int Overflow Behavior</a>
       </h1>
       <span class="post-date">Jun 15, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p>There are lots of programs for playing MP3 under linux, a few dealing decently with big libraries. But when you start looking for a program that does crossfade well and manage big libraries easily - there is nothing.<br />Rhythmbox does some crossfade, but crashes when you move manually in the song. Audacious does some crossfade but regularly crashes with crossfade plugin.<br /><br />The real alternative are AIMP2 or Foobar2000 in Wine. It is quite incredible that you can have good solid crossfade in wine and not natively in Linux.<br /><br />Maybe people spent too much time on useless Pulseaudio (I have much less issues using only ALSA).</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/senior-developers-team-productivity-x4-from-ms-research-paper/">Senior Developers Team Productivity X4 (from MS Research Paper)</a>
-      </h1>
-      <span class="post-date">Feb 10, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/senior-developers-team-productivity-x4-from-ms-research-paper/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>There is a very interesting <a href="http://research.microsoft.com/en-us/projects/esm/nagappan_tdd.pdf">MS Research paper about test driven development</a> (TDD). It is one of the only real study about it that I know of. The paper conclusions from experiments over 4 TDD teams vs 4 traditional teams is:<br /><blockquote><span style="font-style: italic;">&ldquo;TDD seems to be applicable in various domains and can significantly reduce the defect density of developed software without significant productivity reduction of the development team&rdquo;</span></blockquote>Their data gives also other interesting results:<br /><ul><li>An experienced team (5 people over 10 years + 2 people under 5 years) : 155KLOC C# code (+60 test).<br /></li></ul><ul><li>A junior team (3 people under 10 years + 6 people under 5 years): 41 KLOC Java code (+28 test).<br /></li></ul>If you do the ratio of KLOC/man month, you have the following graph:<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/SZFVEkXM8JI/AAAAAAAACts/_pwwDhnKTt0/s1600-h/MSPaperKLOCMonth.png"><img style="margin: 0px auto 10px; display: block; text-align: center; cursor: pointer; width: 400px; height: 252px;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/SZFVEkXM8JI/AAAAAAAACts/_pwwDhnKTt0/s400/MSPaperKLOCMonth.png" alt="" id="BLOGGER_PHOTO_ID_5301111773360615570" border="0" /></a><br />I know this is very far from scientific evidence and more like astrology, but still, the most conservative ratio for senior/junior is <span style="font-weight: bold;">4.23</span>!</p>
 
       
     </div>
@@ -578,8 +578,17 @@
         
     
     
+    
+    
+    
+    
+    
+        
+        
+    
+    
     <li
-    ><a href="/page/37/">37</a></li>
+    ><a href="/page/38/">38</a></li>
     
     
     <li
@@ -588,7 +597,7 @@
     </li>
     
     <li>
-        <a href="/page/37/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>
