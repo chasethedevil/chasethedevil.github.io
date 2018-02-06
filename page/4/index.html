@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.31.1" />
+	<meta name="generator" content="Hugo 0.35" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Chase the Devil &middot; </title>
+  <title>Chase the Devil &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -29,7 +29,7 @@
   
   
   
-  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; " />
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
 
   <meta name="description" content="">
   <meta name="keywords" content="">
@@ -89,6 +89,39 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+      </h1>
+      <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
+
+<p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
+
+
+<figure >
+    
+        <img src="/post/svi_sabr_parabola.png" />
+    
+    
+    <figcaption>
+        <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -439,18 +472,6 @@ Another work-around would be to model this via proportional dividends instead of
       </span>
       
       <p>On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/broken-internet/">Broken Internet?</a>
-      </h1>
-      <span class="post-date">Nov 9, 2015 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/broken-internet/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>There is something funny going on with upcoming generic top level domains (gTLDs), they seem to be looked up in a strange manner (at least on latest Linux). For example:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping chrome&nbsp;</span><br /><br />or<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping nexus&nbsp;</span><br /><br />returns 127.0.53.53.<br /><br />While existing <a href="https://www.name.com/new-gtld">official gTLD</a>s don&rsquo;t (<span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping dental</span> returns &ldquo;unknown host&rdquo; as expected). I first thought it was a network misconfiguration, but as <a href="https://groups.google.com/forum/#!msg/public-dns-discuss/bzhTQnFqE6I/E9F46xhka98J">I am not the only one to notice this</a>, it&rsquo;s likely a genuine internet issue.<br /><br />Strange times.</p>
 
       
     </div>
