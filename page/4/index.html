@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.35" />
+	<meta name="generator" content="Hugo 0.36" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,148 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
+      </h1>
+      <span class="post-date">May 29, 2016 &middot; 5 minute read &middot; <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I had a look at how to price under Local Volatility with Cash dividends in <a href="/post/dupire_cash_dividend/">my previous post</a>. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).</p>
+
+<p>I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends <a href="http://www.lorenzobergomi.com/#!blank/cnec">in the book of Lorenzo Bergomi</a>, one can rely on the
+classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:
+<div>$$\sigma^{\star 2}\left(y, T\right) = \frac{ \frac{\partial w}{\partial T}}{1 - \frac{y}{w}\frac{\partial w}{\partial y}   + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}} \text{.}$$</div></p>
+
+<p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
+
+<p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
+
+<p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3_modelvolraw.png" />
+    
+    
+    <figcaption>
+        <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3_modelvol.png" />
+    
+    
+    <figcaption>
+        <h4>Pure process model volatility.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>The equivalent pure process Black vols looks like this:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3_blackvol.png" />
+    
+    
+    <figcaption>
+        <h4>Pure process Black volatility</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3_localvol.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>While the one of the pure process is:
+
+<figure >
+    
+        <img src="/post/dupire_labordere_ll3_purelv.png" />
+    
+    
+    <figcaption>
+        <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
+
+<p>So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as</p>
+
+<p>\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
+\(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.</p>
+
+<p>Not applying any particular policy would mean that the stock price can become negative:
+\(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
+
+<p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
+
+<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. 
+<figure >
+    
+        <img src="/post/dupire_labordere_liquidator_modelvol.png" />
+    
+    
+    <figcaption>
+        <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
+
+<figure >
+    
+        <img src="/post/dupire_labordere_liquidator_localvol.png" />
+    
+    
+    <figcaption>
+        <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
+
+<p>Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -572,25 +714,6 @@ In the case of the Black-Scholes drift, the drift rate is defined so that the fo
 In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:
 <div>$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$</div>
 Another work-around would be to model this via proportional dividends instead of a &ldquo;continuous&rdquo; yield curve.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/moved-to-hugo/">Moved to hugo</a>
-      </h1>
-      <span class="post-date">Dec 20, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/moved-to-hugo/#disqus_thread">Comments</a>
-      
-      <br/>
-      
-      </span>
-      
-      <p>I moved my blog from blogger to <a href="https://gohugo.io/">Hugo</a>. Blogger really did not evolve since Google take-over in 2003. Wordpress is today much nicer and prettier. It&rsquo;s clear that Google did not invest at all, possibly because blogs are passé. Compared to mid 2000, there are very few blogs today. Even programming blogs are scarce. It could be interesting to quantify this. My theory is that it is the direct consequence of the popularity of social networks, and especially facebook (possibly also stackoverflow for programmers): people don&rsquo;t have time anymore to write as their extra-time is used on social networks. Similarly I noticed that almost nobody comments anymore to the point that even Disqus is very rarely used, and again I attribute that to the popularity of sites like reddit. This is why I did not bother with a comment section on my blog, just email me or tweet about it instead.</p>
-
-<p>I was always attracted by the static web sites concept, because there is actually very little things that ought to be truely dynamic from a individual point of view. Dynamic hosting also tends to be problematic in the long-run, for example I never found the time to upgrade my chord search engine to the newer Google appengine and now it&rsquo;s just off. I used to freeze my personal website (created with a dynamic templating tool Velocity, django, etc.) with a python script. So a static blog was the next logical step, and these days, it&rsquo;s quite popular. Static blogs put the author fully in control of the content and its presentation. <a href="http://jekyllrb.com">Jekyll</a> started the trend along with github allowing good old personal websites. It offers a modern looking blog, with very little configuration steps. I tried Hugo instead because it&rsquo;s written in <a href="http://golang.com">the Go language</a>. It&rsquo;s much faster, but I don&rsquo;t really care about that for something of the size of my blog. I was curious however how good was the Go language on real world projects, and I knew I could always customize it if I ever needed to. Interestingly, I did stumble on a few panics (core dump equivalent where the program just crashes, in this case the hugo local server), something that does not happen with Java based tools or even with Ruby or Python based tools. Even though I like the Go language more and more (I am doing some pet project with it - I believe in the focus on fast compilation and simple language), I found this a bit alarming. This is clearly a result of the errors versus exceptions choice, as it&rsquo;s up to the programmer to handle the errors properly and not panic unnecessarily (I even wonder if it makes any sense to panic for a server).</p>
-
-<p>Anyway I think it looks better now, maybe a bit too minimalist. I&rsquo;ll add details when I have more time.</p>
 
       
     </div>
