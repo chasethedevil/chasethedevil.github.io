@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36" />
+	<meta name="generator" content="Hugo 0.36.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/firefox-4-is-great/">Firefox 4 Is Great</a>
+      </h1>
+      <span class="post-date">Dec 22, 2010 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/firefox-4-is-great/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I temporarily <a href="http://chasethedevil.blogspot.com/2010/07/bye-bye-firefox.html">abandonned Firefox</a> for Chrome/Chromium. I am now back at using Firefox as Firefox 4 is as fast or faster than Chrome and seems more stable, especially under linux. Also it does not send anything to Google and there is bookmark sync independently of Google.<br /><br />I am impressed that Mozilla managed to improve Firefox that much.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>Looking for a good Java Matrix (and actually also math) library, I was a bit surprised to find out there does not seem to be any really serious one still maintained.<br /><br />Sure, there is <a href="http://commons.apache.org/math/">Apache Commons Math</a>, but it is still changing a lot, and it is not very performance optimized yet, while it has been active for several years already. There is also Java3D, it does Matrix through GMatrix, but not much linear algebra and if you look at their implementation, it is very basic, not performance oriented.<br /><br />The other candidates seem to be 1-man projects that can disappear any other day (some of them look quite good like ojalgo, most of them are not interesting). Then you also have the serious but not maintained anymore <a href="http://dsd.lbl.gov/~hoschek/colt/">Cern Colt</a> library.<br /><br />Compared to C/C++, the Java world is worrying if you want to do maths.<br /><br />In those libraries, a dense matrix of double can be implemented two ways:<br /><div><ol><li>by maintaining internally a double[][]. Usually those libraries allow for not copying the array, so it can be neat if your interfaces have this kind of arrays.</li><li>by maintaining internally a double[]. The reason is for performance, but then each time you build a matrix from a double[][], an expensive copy will happen. So you need to use the Matrix object in your interfaces instead of double[][].</li></ol><div>This is a pain because you can be very quickly stuck in one or the other Matrix library. A &ldquo;solution&rdquo; is to have your own interface, but that is a pain to write. There is <a href="http://www.ujmp.org/">UJMP</a>, but it can hide some important methods (like transpose &amp; multiply in one go from Colt or the ability to reuse an existing matrix in various operations to avoid allocating new memory), it is a students project (like parallel colt), but if it was a standard, it could be much more interesting.</div><div><br /></div><div>In summary it does really look like scientific people, universities don&rsquo;t use Java for computation otherwise Colt surely would have been maintained.</div></div></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/">Java Calendar Is Broken On JVM Upgrade</a>
-      </h1>
-      <span class="post-date">Aug 19, 2009 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<br /><br />The reason behind this is the daylight saving time conventions. An old JVM won&rsquo;t necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<br /><br />Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<br /><br />JVM 1.5.0_12<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/17/09 11:59 PM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />JVM 1.5.0_20<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/18/09 12:59 AM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />The source code:<pre><br />public class DateBug {       <br />   <br />    private static String FILE_NAME = &ldquo;datebug.txt&rdquo;;<br />   <br />    public static void load() throws IOException {<br />        FileReader fr = new FileReader(FILE_NAME);<br />        BufferedReader br = new BufferedReader(fr);<br />        String l = br.readLine();<br />        br.close();<br />        long time = new Long(l);<br />        Date d = new Date(time);<br />        System.out.println(&ldquo;loading date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />    }<br />   <br />    public static void saveNew() throws IOException {<br />        Calendar c = Calendar.getInstance(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        c.set(2009, 06, 17, 23, 59);<br />        Date d = c.getTime();<br />        System.out.println(&ldquo;saving date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />       <br />        FileWriter fw = new FileWriter(FILE_NAME);<br />        PrintWriter pw = new PrintWriter(fw);<br />        pw.println(d.getTime());<br />        pw.close();<br />    }<br />   <br />    public static void main(String[] args) throws IOException {<br />        System.out.println(&ldquo;JVM &ldquo;+System.getProperty(&ldquo;java.version&rdquo;));<br />        if (args.length == 1) {<br />            if (args[0].equals(&ldquo;save&rdquo;)) {<br />                saveNew();<br />            }<br />        } else {<br />            load();<br />        }<br />    }<br /></pre>What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<br />This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.</p>
 
       
     </div>

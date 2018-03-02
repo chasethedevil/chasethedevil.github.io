@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36" />
+	<meta name="generator" content="Hugo 0.36.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,55 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
+      </h1>
+      <span class="post-date">Jan 6, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
+
+<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
+not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
+Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
+
+<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
+The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
+in the algorithm.</p>
+
+<p>In between step 3 and step 4, we should have
+$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
+$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
+
+<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
+
+<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
+very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
+to actually try it.
+
+<figure >
+    
+        <img src="/post/heston_case3.png" />
+    
+    
+    <figcaption>
+        <h4>Error on Leif Andersen Case III.</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p><em>Update January 23rd</em>
+The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -677,127 +726,6 @@ There would be no loop over the minimization needed. Does this produce any good 
 </p>
 
 <p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
-      </h1>
-      <span class="post-date">Jun 14, 2016 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
-that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
-they vary wildly between the first and the second expiry.</p>
-
-<table>
-<thead>
-<tr>
-<th align="center">T</th>
-<th align="center">a</th>
-<th align="center">b</th>
-<th align="center">rho</th>
-<th align="center">m</th>
-<th align="center">s</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">0.082</td>
-<td align="center">0.027</td>
-<td align="center">0.234</td>
-<td align="center">0.068</td>
-<td align="center">0.100</td>
-<td align="center">0.028</td>
-</tr>
-
-<tr>
-<td align="center">0.16</td>
-<td align="center">0.030</td>
-<td align="center">0.125</td>
-<td align="center">-1.0</td>
-<td align="center">0.074</td>
-<td align="center">0.050</td>
-</tr>
-
-<tr>
-<td align="center">0.26</td>
-<td align="center">0.032</td>
-<td align="center">0.094</td>
-<td align="center">-1.0</td>
-<td align="center">0.093</td>
-<td align="center">0.041</td>
-</tr>
-</tbody>
-</table>
-
-<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
-in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
-
-<figure >
-    
-        <img src="/post/svi_zeliade_arb.png" />
-    
-    
-    <figcaption>
-        <h4>Arbitrage in Zeliade&#39;s example</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
-
-<p>Why does this happen?</p>
-
-<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
-SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
-
-<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
-It is interesting to look at what happens to the implied volatility if we decide either to:</p>
-
-<ul>
-<li>set the undefined local volatility to zero</li>
-<li>take the absolute value of the local variance</li>
-<li>search for the closest defined local volatility on the log-moneyness axis</li>
-<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
-</ul>
-
-
-<figure >
-    
-        <img src="/post/svi_zeliade_arb_zero.png" />
-    
-    
-    <figcaption>
-        <h4>Total variance after flooring the local variance at zero.</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
-that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
-
-<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
-is not going to improve anything.</p>
-
-<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
-
-<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
-Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
-More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
-So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
-
-<p>There is yet another solution to produce a similar effect while still working at the local volatility level: if there is an arbitrage with the previous expiry at a given moneyness,
-we compute the local volatility ignoring the previous expiry (eventually extrapolating in constant manner) and we override the previous expiry local volatility for this moneyness.
-In terms of implied variance, this would correspond to removing the arbitrageable part of a given expiry, and replacing it with a linear interpolation between encompassing expiries, working backwards in time.</p>
 
       
     </div>

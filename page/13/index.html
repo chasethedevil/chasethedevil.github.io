@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36" />
+	<meta name="generator" content="Hugo 0.36.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/julia-and-the-cumulative-normal-distribution/">Julia and the Cumulative Normal Distribution</a>
+      </h1>
+      <span class="post-date">Aug 13, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/julia-and-the-cumulative-normal-distribution/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I just stumbled upon <a href="http://julialang.org/">Julia</a>, a new programming language aimed at numerical computation. It&rsquo;s quite new but it looks very interesting, with the promise of C like performance (thanks to LLVM compilation) with a much nicer syntax and parallelization features.<br /><br />Out of curiosity, I looked at their cumulative normal distribution implementation. I found that the (complimentary) error function (directly related to the cumulative normal distribution) algorithm relies on an algorithm that can be found in the Faddeeva library. I had not heard of this algorithm or this library before, but the author, <a href="http://math.mit.edu/~stevenj">Steven G. Johnson</a>, claims it is faster and as precise as Cody &amp; SLATEC implementations. As <a href="http://chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/">I previously had a look at those algorithms</a> and was quite impressed by Cody&rsquo;s implementation.<br /><br />The <a href="http://ab-initio.mit.edu/Faddeeva.cc">source of Faddeeva</a> shows a big list (100) of Chebychev expansions for various ranges of a normalized error function. I slightly modified the Faddeva code to compute directly the cumulative normal distribution, avoiding some exp(-x*x)*exp(x*x) calls on the way.<br /><br />Is it as accurate? I compared against a high precision implementation as in my previous test of cumulative normal distribution algorithms. And after replacing the exp(-x*x) with <a href="http://chasethedevil.blogspot.fr/2013/03/cracking-double-precision-gaussian.html">Cody&rsquo;s trick</a> to compute it with higher accuracy, here is how it looks (referenced as &ldquo;Johnson&rdquo;).<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-v3ZZs43eSpI/Ugo3ILYFIYI/AAAAAAAAGoE/zAIS-WFsrnk/s1600/snapshot37.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="241" src="http://1.bp.blogspot.com/-v3ZZs43eSpI/Ugo3ILYFIYI/AAAAAAAAGoE/zAIS-WFsrnk/s640/snapshot37.png" width="640" /></a></div><br />I also measured performance on various ranges, and found out that this Johnson algorithm is around 2x faster than Cody (in Scala) and 30% faster than my optimization of Cody (using a table of exponentials for Cody&rsquo;s trick).<br /><br /></p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,40 +206,6 @@
       </span>
       
       <p>The theta finite difference scheme is a common generalization of Crank-Nicolson. In finance, the <a href="http://www.amazon.com/Wilmott-Quantitative-Finance-Volume-Edition/dp/0470018704/ref=sr_1_1?ie=UTF8&amp;qid=1371557569&amp;sr=8-1&amp;keywords=paul+wilmott+on+quantitative+finance">book from Wilmott</a>, a <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.javaquant.net%2Fpapers%2Ffdpaper.pdf&amp;ei=DE7AUf-XHo24hAfkvICwBg&amp;usg=AFQjCNHD0qmjyMZtzbLfao3YHCFwySYixg&amp;sig2=9DdLJ9FoVCXoeaus5JykQg&amp;bvm=bv.47883778,d.ZG4">paper from A. Sepp</a>, <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;sqi=2&amp;ved=0CDcQFjAB&amp;url=http%3A%2F%2Fwww.risk.net%2Fdigital_assets%2F4451%2Fv1n2a1b.pdf&amp;ei=6k7AUZXXFYXLhAeF3YDYDA&amp;usg=AFQjCNFq4dBzQ54M34qd0DMQ4pgSCcjfQg&amp;sig2=AR3zjeDQ3WIvWOvt-1tNeg&amp;bvm=bv.47883778,d.ZG4">one from Andersen-Ratcliffe</a> present it. Most of the time, it&rsquo;s just a convenient way to handle implicit (\theta=1), explicit (\theta=0) and Crank-Nicolson (\theta=0.5) with the same algorithm.<br /><br />Wilmott makes an interesting remark: one can choose a theta that will cancel out higher order terms in the local truncation error and therefore should lead to increased accuracy.<br />$$\theta = \frac{1}{2}- \frac{(\Delta x)^2}{12 b \Delta t} $$<br /><br />where (b) is the diffusion coefficient.<br /><br />This leads to (\theta &lt; \frac{1}{2}), which means the scheme is not unconditionally stable anymore but needs to obey (see Morton &amp; Mayers p 30):<br />$$b \frac{\Delta t}{(\Delta x)^2} \leq \frac{5}{6}$$.<br /><br />and to ensure that (\theta \geq 0 ):<br /><br />$$b \frac{\Delta t}{(\Delta x)^2} \geq \frac{1}{6}$$<br /><br />Crank-Nicolson has a similar requirement to ensure the absence of oscillations given non smooth initial value, but because it is unconditionality stable, the condition is actually much weaker if (b) depends on (x). Crank-Nicolson will be oscillation free if (b(x<em>{j0}) \frac{\Delta t}{(\Delta x)^2} &lt; 1) where (j0) is the index of the discontinuity, while the theta scheme needs to be stable, that is (\max(b) \frac{\Delta t}{(\Delta x)^2} \leq \frac{5}{6})<br />This is a much stricter condition if (b) varies a lot, as it is the case for the <a href="http://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/">arbitrage free SABR PDE</a>. where (\max(b) &gt; 200 b</em>{j0})<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-lY1Fh-KWn_E/UcBY-ewMcsI/AAAAAAAAGgQ/5cgSBNOQVgk/s1600/snapshot23.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="278" src="http://1.bp.blogspot.com/-lY1Fh-KWn_E/UcBY-ewMcsI/AAAAAAAAGgQ/5cgSBNOQVgk/s320/snapshot23.png" width="320" /></a></div><br /><br />The advantages of such a scheme are then not clear compared to a simpler explicit scheme (eventually predictor corrector), that will have a similar constraint on the ratio ( \frac{\Delta t}{(\Delta x)^2} ).</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/simple-can-scala-do-this-questions/">Simple &#39;Can Scala Do This?&#39; Questions</a>
-      </h1>
-      <span class="post-date">Jun 11, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/simple-can-scala-do-this-questions/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Today, a friend asked me if Scala could pass primitives (such as Double) by reference. It can be useful sometimes instead of creating a full blown object. In Java there is commons lang MutableDouble. It could be interesting if there was some optimized way to do that.</p>
-
-<p>One answer could be: it&rsquo;s not functional programming oriented and therefore not too surprising this is not encouraged in Scala.</p>
-
-<p>Then he wondered if we could use it for C#.</p>
-
-<p>I know this used to be possible in Scala 1.0, I believe it&rsquo;s not anymore since 2.x. This was a cool feature, especially if they had managed to develop strong libraries around it. I think it was abandoned to focus on other things, because of lack of resources, but it&rsquo;s sad.</p>
-
-<p>Later today, I tried to use the nice syntax to return multiple values from a method:
-var (a,b) = mymethod(1)</p>
-
-<p>I noticed you then could not do:
-(a,b) = mymethod(2)</p>
-
-<p>So declaring a var seems pointless in this case.</p>
-
-<p>One way to achieve this is to:</p>
-
-<p>var tuple = mymethod(1)
-var a = tuple._1
-var b = tuple._2</p>
-
-<p>This does not look so nice.</p>
 
       
     </div>

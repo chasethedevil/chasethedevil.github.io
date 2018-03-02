@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36" />
+	<meta name="generator" content="Hugo 0.36.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/">Java Calendar Is Broken On JVM Upgrade</a>
+      </h1>
+      <span class="post-date">Aug 19, 2009 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<br /><br />The reason behind this is the daylight saving time conventions. An old JVM won&rsquo;t necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<br /><br />Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<br /><br />JVM 1.5.0_12<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/17/09 11:59 PM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />JVM 1.5.0_20<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/18/09 12:59 AM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />The source code:<pre><br />public class DateBug {       <br />   <br />    private static String FILE_NAME = &ldquo;datebug.txt&rdquo;;<br />   <br />    public static void load() throws IOException {<br />        FileReader fr = new FileReader(FILE_NAME);<br />        BufferedReader br = new BufferedReader(fr);<br />        String l = br.readLine();<br />        br.close();<br />        long time = new Long(l);<br />        Date d = new Date(time);<br />        System.out.println(&ldquo;loading date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />    }<br />   <br />    public static void saveNew() throws IOException {<br />        Calendar c = Calendar.getInstance(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        c.set(2009, 06, 17, 23, 59);<br />        Date d = c.getTime();<br />        System.out.println(&ldquo;saving date=&rdquo;+d+&ldquo;, number=&rdquo;+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<br />        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<br />        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<br />       <br />        FileWriter fw = new FileWriter(FILE_NAME);<br />        PrintWriter pw = new PrintWriter(fw);<br />        pw.println(d.getTime());<br />        pw.close();<br />    }<br />   <br />    public static void main(String[] args) throws IOException {<br />        System.out.println(&ldquo;JVM &ldquo;+System.getProperty(&ldquo;java.version&rdquo;));<br />        if (args.length == 1) {<br />            if (args[0].equals(&ldquo;save&rdquo;)) {<br />                saveNew();<br />            }<br />        } else {<br />            load();<br />        }<br />    }<br /></pre>What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<br />This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>When java logging API was first introduced in JDK 1.4 in 2002, it caused quite a lot a fuss around, with everybody asking &ldquo;Why did not they just include Log4j instead of creating their own bastard child?&rdquo;.<br /><br />I remember having looked at it very shortly before continuing using Log4j on all projects I have been involved with.<br /><br />Today, while doing a very small project, I tried once more to use <a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html">java logging</a>. The main reason is that I was lazy to add a dependency to one more jar for this small project. While trying I found out that:<br /><ol><li> you still need to use a damned JVM parameter to point to your configuration file</li><li>you can not change the formatting without writing a formatter class!<br /></li></ol>It&rsquo;s 2009! What has Sun done? I am amazed the most elementary things you expect from a Logger are still not included by default in the JDK.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/bachelier-vs.-black/">Bachelier vs. Black</a>
-      </h1>
-      <span class="post-date">Mar 23, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/bachelier-vs.-black/#disqus_thread">Comments</a>
-      </span>
-      
-      <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s1600-h/bachelier_vs_black_normal.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 400px; height: 300px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s400/bachelier_vs_black_normal.png" alt="" id="BLOGGER_PHOTO_ID_5316431495761732034" border="0" /></a><br />Black and Scholes gives a strange result for the price of a binary option under high volatility.  You will learn here how to simulate a stock price evolution using Java, and how to show it using JFreeChart library. It starts with more complex concepts (don&rsquo;t be afraid) and goes done towards simpler things.<br /><br />I could not write all that in a blog format, so I created a old HTML page about it <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.html">here</a> and a <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.pdf">PDF version</a>.<br /><span style="text-decoration: underline;"></span></p>
 
       
     </div>
