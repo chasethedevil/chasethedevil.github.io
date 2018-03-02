@@ -92,44 +92,6 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/on-the-quality-of-research-publications/">On the Quality of Research Publications</a>
-      </h1>
-      <span class="post-date">Feb 28, 2018 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/on-the-quality-of-research-publications/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>I spent the last week-end to review a paper for the journal <a href="https://www.journals.elsevier.com/expert-systems-with-applications">Expert Systems with Applications</a>. It was a paper on a variant of Spider Monkey Optimization, which is in the same spirit as differential evolution or particle swarm optimization. Yes, it could be added to the list of esoteric optimizers at the end of this <a href="https://quantsrus.github.io/post/particle_swarm_optimization_heston_calibration/">Quants R Us post</a>. I was asked to be referee, likely because of my first paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2097904">Issues of Nelder-Mead Simplex Optimisation with Constraints</a>.</p>
-
-<p>While the manuscript was relatively interesting in itself, and there was definitely some non-trivial amount of work behind it, it was riddled with errors: in the equations, in the algorithms, in the text, in the examples. Some were easy to spot, others not so much. One of the examples is the &ldquo;Design of Coil Springs&rdquo; originally presented in J. Arora book <a href="https://www.amazon.com/Introduction-Optimum-Design-Fourth-Jasbir/dp/0128008067/ref=sr_1_fkmr1_1?s=books&amp;ie=UTF8&amp;qid=1519982488&amp;sr=1-1-fkmr1&amp;keywords=introduction+to+optimum+design+aurora">Introduction to Optimum Design</a> (nice book, which can also have applications in finance: optimum design and optimum collateral allocation are not very different). In various papers (<a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiy7u_sqc3ZAhUBPBQKHUHBAogQFgg2MAE&amp;url=http%3A%2F%2Fciteseerx.ist.psu.edu%2Fviewdoc%2Fdownload%3Fdoi%3D10.1.1.324.3199%26rep%3Drep1%26type%3Dpdf&amp;usg=AOvVaw2zY-0YnxhRwvHtQUcxAfME">Mezura-Montes &amp; Coello</a>, <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiqgum9qM3ZAhUBnxQKHdwRB0sQFgg2MAE&amp;url=https%3A%2F%2Fwww.cs.cinvestav.mx%2F~constraint%2Fpapers%2Fcagnina08a.pdf&amp;usg=AOvVaw280HGdnm4_OpF-aDb19AY2">Cagnina</a>, <a href="https://dl.acm.org/citation.cfm?id=1660493">Liu et al.</a>) the problem is referred as &ldquo;Minimization of the Weight of a Tension/Compression String&rdquo;. I did not know it was some some sort of standard example, used in many papers on optimization. The equations are relatively simple. The problem is to minimize
-$$ f(x_1,x_2,x_3) = (x_3+2)x_2 x_1^2 $$
-subject to
-$$ g_1(x_1,x_2,x_3) = 1 - \frac{x_2^3 x_3}{71785 x_1^4} \leq 0 $$
-$$ g_2(x_1,x_2,x_3) = \frac{4 x_2^2 - x_1 x_2}{12566 (x_2 x_1^3 - x_1^4)}+\frac{1}{5108 x_1^2} -1 \leq 0 $$
-$$ g_3(x_1,x_2,x_3) = 1 - \frac{140.45 x_1}{x_2^2 x_3} \leq 0 $$
-$$ g_4(x_1,x_2,x_3) = \frac{x_1+x_2}{1.5}-1 \leq 0$$
-with \( 0.05 \leq x_1 \leq 2, 0.25 \leq x_2 \leq 1.3, 2 \leq x_3 \leq 15 \)</p>
-
-<p>One of the errors was to use the constant 7178 instead of 71785 in \( g_1 \). Another error is that they don&rsquo;t have the factor 12566 in front of \(x_1^4\) in \(g_2\). More worryingly, the same errors are actually present in Cagnina&rsquo;s paper. It is not clear then which problem they solve: did those papers implement a different objective function than the standard problem from other papers or not? If they do, their solutions can obviously not be compared.</p>
-
-<p>The manuscript mentions the solution of at least 10 other papers (each a different optimization) to this problem, and make it look that their solution is best (they removed the better solutions from Cagnina or Liu from their table). Worse, a very simple differential evolution optimizer I coded led to the optimal solution (very close to Cagnina&rsquo;s solution - it can not be a coincidence, he must have used the correct problem in the code and translated it wrong on paper).</p>
-
-<p>f=1.26652328e-02 at (0.051689, 0.356718, 11.288961).</p>
-
-<p>If I use the problem as stated in their manuscript or Cagnina, the solution I find is then much better. So it suggests, that, in reality, the person who wrote the problem in the paper copied all the mistakes from Cagnina&rsquo;s paper, but not the person who actually coded the algorithm, which is a bit strange. Also while it is good that they find the correct minimum, the authors don&rsquo;t specify the number of iterations used, so it is very difficult to assess the efficiency of the proposed algorithm.</p>
-
-<p>On another very similar problem coming from the same book, the &ldquo;Pressure Vessel Problem&rdquo;, Cagnina is the only one to provide the correct bounds \(0.0625 \leq x_1\) but mispecifies \(g_3\) compared to the other paper (an additional square in \(x_4\)). Other papers provide bounds such as \(1 \leq x_1 \), while their optimal solution lies below 1. The confusion in the bounds stems from the use of the unit (inches) which is not understood correctly by many papers - still it does not seem to shock anybody that their optimal solution is not in the quoted solution space.</p>
-
-<p>I thought quantitative finance was not always strict on quality, but it looks much stricter than the various journals on optimization.</p>
-
-<p>In other related news, I am happy that my own paper <a href="http://www.mdpi.com/1911-8074/11/1/11">Variance Swap Replication: Discrete or Continuous?</a> has been published in the Special Issue Advances on Volatility Modeling and Forecasting of the Journal of Risk and Financial Management.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices/">Implying the Probability Density from Market Option Prices</a>
       </h1>
       <span class="post-date">Feb 13, 2018 &middot; 7 minute read &middot; <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices/#disqus_thread">Comments</a>
@@ -742,6 +704,36 @@ function startStop() {
 </ul>
 
 <p>Another way to find out what&rsquo;s going on in the quantitative finance world is to scan regularly recent papers on <a href="https://arxiv.org/list/q-fin/recent">arxiv</a>, <a href="http://www.ssrn.com">SSRN</a> or the suggestions of <a href="http://scholar.google.com">Google scholar</a>.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/">Typo in Hyman non-negative constraint - 28 years later</a>
+      </h1>
+      <span class="post-date">May 23, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \( \Delta x_{i-<sup>1</sup>&frasl;<sub>2</sub>} \)  is interverted with  \( \Delta x_{i+<sup>1</sup>&frasl;<sub>2</sub>} \).</p>
+
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions</p>
+
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span> x <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #666666">-</span><span style="color: #40a070">2.427680355823974</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.3481443181227126</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.268608280421452</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.189072242720191</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.1095362050189297</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.0300001673176684</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.9504641296164076</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.8709280919151465</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7913920542138855</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7118560165126244</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6323199788113634</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.5527839411101023</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.4732479034088413</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3937118657075802</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3141758280063192</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.234639790305058</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.155103752603797</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.075567714902536</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.996031677201275</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.9164956395000139</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.8369596017987528</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.7574235640974918</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.6778875263962307</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5983514886949697</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5188154509937086</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.4392794132924476</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.3597433755911865</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.28020733788992525</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.20067130018866441</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.12113526248740358</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.04159922478614231</span>, <span style="color: #40a070">0.03793681291511897</span>, <span style="color: #40a070">0.1174728506163798</span>, <span style="color: #40a070">0.19700888831764063</span>, <span style="color: #40a070">0.2765449260189019</span>, <span style="color: #40a070">0.3560809637201632</span>, <span style="color: #40a070">0.435617001421424</span>, <span style="color: #40a070">0.5151530391226848</span>, <span style="color: #40a070">0.5946890768239461</span>, <span style="color: #40a070">0.6742251145252074</span>, <span style="color: #40a070">0.7537611522264682</span>}
+y <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #40a070">0.22303659708933243</span>, <span style="color: #40a070">0.22655584607177778</span>, <span style="color: #40a070">0.16305913092318047</span>, <span style="color: #40a070">0.10448859033589929</span>, <span style="color: #40a070">0.16002349837315494</span>, <span style="color: #40a070">0.15632461201014838</span>, <span style="color: #40a070">0.20216975718723287</span>, <span style="color: #40a070">0.15780097999496998</span>, <span style="color: #40a070">0.1293436080647528</span>, <span style="color: #40a070">0.13101037880853464</span>, <span style="color: #40a070">0.13496819587884762</span>, <span style="color: #40a070">0.1241082758487616</span>, <span style="color: #40a070">0.13677319399415233</span>, <span style="color: #40a070">0.11493379360854317</span>, <span style="color: #40a070">0.10181073092072719</span>, <span style="color: #40a070">0.10390553149978735</span>, <span style="color: #40a070">0.09705141597989163</span>, <span style="color: #40a070">0.09469310717587004</span>, <span style="color: #40a070">0.09397968424452849</span>, <span style="color: #40a070">0.08115526370674754</span>, <span style="color: #40a070">0.07021707117654993</span>, <span style="color: #40a070">0.07896827656600293</span>, <span style="color: #40a070">0.0733165278111029</span>, <span style="color: #40a070">0.06626131630031683</span>, <span style="color: #40a070">0.06036157053511007</span>, <span style="color: #40a070">0.05598416466538939</span>, <span style="color: #40a070">0.049613807117723785</span>, <span style="color: #40a070">0.04821691404672292</span>, <span style="color: #40a070">0.04274830629369516</span>, <span style="color: #40a070">0.04053002586588819</span>, <span style="color: #40a070">0.03690680495068648</span>, <span style="color: #40a070">0.03232925805830648</span>, <span style="color: #40a070">0.02686034599416645</span>, <span style="color: #40a070">0.02152456554605186</span>, <span style="color: #40a070">0.01281016667726421</span>, <span style="color: #40a070">0.005672278716525797</span>, <span style="color: #40a070">0.0021938540693167367</span>, <span style="color: #40a070">0.0015582304062002356</span>, <span style="color: #40a070">0.0002050615897307207</span>, <span style="color: #40a070">3.232807285235909e-07</span>, <span style="color: #40a070">4.059553937573009e-06</span>}
+z <span style="color: #666666">:=</span> <span style="color: #40a070">0.7410184269884271</span>
+</pre></div>
+
+<p>In the above example, even though the step size \Delta x is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
 
       
     </div>
