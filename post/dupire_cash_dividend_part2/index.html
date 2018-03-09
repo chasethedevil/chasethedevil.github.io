@@ -105,7 +105,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_modelvolraw.png" />
     
@@ -120,7 +120,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_modelvol.png" />
     
@@ -135,7 +135,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>The equivalent pure process Black vols looks like this:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_blackvol.png" />
     
@@ -150,7 +150,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_localvol.png" />
     
@@ -165,7 +165,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>While the one of the pure process is:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_purelv.png" />
     
@@ -191,7 +191,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 <p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
 
 <p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_liquidator_modelvol.png" />
     
@@ -205,7 +205,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_liquidator_localvol.png" />
     

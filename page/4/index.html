@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36.1" />
+	<meta name="generator" content="Hugo 0.37" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,127 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
+      </h1>
+      <span class="post-date">Jun 14, 2016 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
+that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
+they vary wildly between the first and the second expiry.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">T</th>
+<th align="center">a</th>
+<th align="center">b</th>
+<th align="center">rho</th>
+<th align="center">m</th>
+<th align="center">s</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">0.082</td>
+<td align="center">0.027</td>
+<td align="center">0.234</td>
+<td align="center">0.068</td>
+<td align="center">0.100</td>
+<td align="center">0.028</td>
+</tr>
+
+<tr>
+<td align="center">0.16</td>
+<td align="center">0.030</td>
+<td align="center">0.125</td>
+<td align="center">-1.0</td>
+<td align="center">0.074</td>
+<td align="center">0.050</td>
+</tr>
+
+<tr>
+<td align="center">0.26</td>
+<td align="center">0.032</td>
+<td align="center">0.094</td>
+<td align="center">-1.0</td>
+<td align="center">0.093</td>
+<td align="center">0.041</td>
+</tr>
+</tbody>
+</table>
+
+<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
+in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
+
+<figure>
+    
+        <img src="/post/svi_zeliade_arb.png" />
+    
+    
+    <figcaption>
+        <h4>Arbitrage in Zeliade&#39;s example</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>Why does this happen?</p>
+
+<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
+SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
+
+<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
+It is interesting to look at what happens to the implied volatility if we decide either to:</p>
+
+<ul>
+<li>set the undefined local volatility to zero</li>
+<li>take the absolute value of the local variance</li>
+<li>search for the closest defined local volatility on the log-moneyness axis</li>
+<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
+</ul>
+
+
+<figure>
+    
+        <img src="/post/svi_zeliade_arb_zero.png" />
+    
+    
+    <figcaption>
+        <h4>Total variance after flooring the local variance at zero.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
+that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
+
+<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
+is not going to improve anything.</p>
+
+<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
+
+<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
+Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
+More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
+So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
+
+<p>There is yet another solution to produce a similar effect while still working at the local volatility level: if there is an arbitrage with the previous expiry at a given moneyness,
+we compute the local volatility ignoring the previous expiry (eventually extrapolating in constant manner) and we override the previous expiry local volatility for this moneyness.
+In terms of implied variance, this would correspond to removing the arbitrageable part of a given expiry, and replacing it with a linear interpolation between encompassing expiries, working backwards in time.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
       </h1>
       <span class="post-date">May 29, 2016 &middot; 5 minute read &middot; <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/#disqus_thread">Comments</a>
@@ -112,7 +233,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_modelvolraw.png" />
     
@@ -127,7 +248,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_modelvol.png" />
     
@@ -142,7 +263,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>The equivalent pure process Black vols looks like this:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_blackvol.png" />
     
@@ -157,7 +278,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_localvol.png" />
     
@@ -172,7 +293,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 <p>While the one of the pure process is:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3_purelv.png" />
     
@@ -198,7 +319,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 <p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
 
 <p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_liquidator_modelvol.png" />
     
@@ -212,7 +333,7 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 
 It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_liquidator_localvol.png" />
     
@@ -260,7 +381,7 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 <p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll1.png" />
     
@@ -279,7 +400,7 @@ As the spot model with constant vol obeys this relationship, this implies that t
 quite larger than the regular local volatility, even with a somewhat discontinuous yield.</p>
 
 <p>
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3.png" />
     
@@ -292,7 +413,7 @@ quite larger than the regular local volatility, even with a somewhat discontinuo
 </figure>
 
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_ll3shift.png" />
     
@@ -309,7 +430,7 @@ quite larger than the regular local volatility, even with a somewhat discontinuo
 
 <p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_policy.png" />
     
@@ -327,7 +448,7 @@ Those differences  however don&rsquo;t impact the prices very much as the prices
 
 <p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_yield3.png" />
     
@@ -341,7 +462,7 @@ Those differences  however don&rsquo;t impact the prices very much as the prices
 
 The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
 
-<figure >
+<figure>
     
         <img src="/post/dupire_labordere_yield3e.png" />
     
@@ -378,7 +499,7 @@ The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happen
 <p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/svi_sabr_parabola.png" />
     
@@ -462,7 +583,7 @@ which looked robust, but was actually not so much.</p>
 (NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/rational_fit_value.png" />
     
@@ -507,7 +628,7 @@ which looked robust, but was actually not so much.</p>
 visually to understand how large is the difference:</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/rational_fit_error.png" />
     
@@ -552,7 +673,7 @@ In theory, the number of parameters is N+2 where N is the number of interpolatio
 I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/least_squares_spline.png" />
     
@@ -595,7 +716,7 @@ I also relied on a simple implied volatility algorithm that can be summarized in
 <p>Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:</p>
 
 
-<figure >
+<figure>
     
         <img src="/post/mystic_parabola.png" />
     
@@ -667,53 +788,6 @@ something the good old desktop publishing software allow you to do quite well.</
 <p>I was also wondering a bit on what design to use for a book. And I realised that the best layout to consider is simply the layout
 of a book I enjoyed to read. For example, I like the recent SIAM book design, I find that it gives enough space to read the text
 and the maths without having the impression of deciphering some codex, and without headache. It turns out there is even a <a href="http://www.siam.org/books/authors/p_handbook8.php">latex template</a> available.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/linear_flat_forward_interpolation/">Linear and Flat forward interpolation with cash dividends</a>
-      </h1>
-      <span class="post-date">Jan 19, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/linear_flat_forward_interpolation/#disqus_thread">Comments</a>
-      
-      <br/>
-      
-      </span>
-      
-      <p>When the dividend curve is built from discrete cash dividends, the dividend yield is discontinuous at the dividend time as the asset price jumps from the dividend amount.
-This can be particularly problematic for numerical schemes like finite difference methods. In deed, a finite difference grid
-will make use of the forward yield (eventually adjusted to the discretisation scheme), which explodes then.
-Typically, if one is not careful about this, then increasing the number of time steps does not increase accuracy anymore, as
-the spike just becomes bigger on a smaller time interval. A simple work-around is to limit the resolution to one day.
-This means that intraday, we interpolate the dividend yield.</p>
-
-<p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
-But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
-
-<figure >
-    
-        <img src="/post/linear_flat_forward.png" />
-    
-    
-    <figcaption>
-        <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
-        
-    </figcaption>
-    
-</figure>
-
-On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
-
-<p>In reality, one should use flat forward interpolation instead, where the forward yield is maintained constant during the day. The forward rate is defined as
-<div>$$f(t_0,t_1)= \frac{r(t_1) t_1 -r(t_0) t_0}{t_1-t_0}$$</div>
-where the continuously compounded rate \(r\) is defined so that \(Z(0,t)= e^{-r(t)t}\).
-In the case of the Black-Scholes drift, the drift rate is defined so that the forward price (not to confuse with the forward rate) \(F(0,t)= e^{-q(t)t}\).</p>
-
-<p>The flat forward interpolation is equivalent to a linear interpolation on the logarithm of discount factors.
-In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:
-<div>$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$</div>
-Another work-around would be to model this via proportional dividends instead of a &ldquo;continuous&rdquo; yield curve.</p>
 
       
     </div>

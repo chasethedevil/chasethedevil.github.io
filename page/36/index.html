@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.36.1" />
+	<meta name="generator" content="Hugo 0.37" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/currying---a-very-interesting-use-of-generics/">Currying - A Very Interesting Use Of Generics</a>
+      </h1>
+      <span class="post-date">Sep 16, 2005 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/currying---a-very-interesting-use-of-generics/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In <a href="http://bamboo-dht.org/">bamboo-dht</a>, a distributed java hashtable project, the main developer, Sean C. Rhea, advocates the use of Curries and Thunks (of LISP and ML). He wrote an interesting and valuable document, <a href="http://bamboo-dht.org/async-tutorial/async-tutorial.pdf">Async Tutorial</a>, presenting a use of it. I will present the concept here shortly:<br /><br /><tt>public interface Thunk1&lt;T&gt; { void run (T t ) ; }<br /><br />Thunk1&lt;Integer&gt; intThunk = new Thunk1&lt;Integer&gt;() {<br />void run (Integer i ) { System.out.println( i ) ; }<br />}<br /><br />public static &lt;T&gt; Runnable curry(final Thunk1&lt;T&gt; f ,final T t ) {<br />return new Runnable () { public void run ( ) { f.run ( t ) ; } } ;<br />}<br /><br />Runnable print42  = curry( intThunk , new Integer ( 42 ) ) ;<br />print42.run ( ) ;  //prints 42 to standard output</tt><br /><br />So it is a very clever way to have a callback in java. Very clever because you can declare your code to take only a run(), and pass any parameter in it by using a curry. It is very simple to use, even if the small framework around it can scare some people.<br /><br />However neat the idea is, I am not sure it is practically useful. Sean C. Rhea used that because he did not want to use &ldquo;unnecessary&rdquo; instance variables. Ok, but the curry is still creating another instance (actually 2 but one could be static), is the overhead of a class instance without variables that much more than one with variables? And there is another way, without the Curry framework:<br /><tt><br />Runnable print42 = new Runnable({ public void run() {intThunk.run(new Integer(42));}});</tt><br /><tt>print42.run();</tt><br /><br />This is actually exactly what the Curry framework would do behind the scenes. The Curry framework makes it a bit more elegant, but I am not sure if that&rsquo;s really more readable for most programmers. I would personally advise the traditional way, use instance variables.<br /><br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/java" rel="tag">java</a>, <a href="http://del.icio.us/tag/programming" rel="tag">programming</a></span></p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>I am currently facing a problem that neither <a  href="http://www.hibernate.org">Hibernate</a> nor <a  href="http://ibatis.apache.org/">iBatis</a> solves nicely. I also looked at other ORM or just DB framework, without success. <br> <br> What I would need is a framework that generates PreparedStatements with a query by Criteria like API. I have many queries that are similar but varying according to different input parameters. iBatis can handle this, but for complex queries and scenarios, the XML becomes completely unreadable, and you therefore loose any advantage that iBatis was bringing with the externalization of SQL statements in XML. The other issue I have with using iBatis is that for another part of my project, the automatic generation of SQL statements a-la Hibernate is useful.<br> <br> Hibernate has a very nice <a  href="http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html">Query by Criteria</a> API, but it lacks just a tiny bit of flexibility in customizing queries. For example, I could not find a way to specify a &ldquo;USE INDEX(index_name)&rdquo; in the generated SQL, after the SELECT FROM xxx and before the rest of the query. I did not find either a way to specify the use of a &ldquo;STRAIGHT_JOIN&rdquo; instead of an INNER JOIN. These are all MySQL specific issues, but those little things are extremely useful at improving some of my queries performances. Writing N sql queries hard coded is not a good option, since this N can be quite big, which is why I am using Query by Criteria in the first place.<br> <br> So is there a need for yet another DB framework?<br></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/del.icio.us-toolbar-customized/">del.icio.us toolbar customized</a>
-      </h1>
-      <span class="post-date">Aug 21, 2005 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/del.icio.us-toolbar-customized/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>When I bookmark articles with <a href="http://del.icio.us">delicious</a>, I like to keep the content on my hard drive, because pages sometimes change, or are removed, or I want to do local searches. I believe this is one reason some people like furl (furl keeps a copy on their server that only yourself can read, but does not allow search).<br><br>A combination of slogger and delicious could solve partially the problem. But it is not integrated, I can&rsquo;t get my local version from delicious, so I loose the tagging, listing and all other plus from delicious.<br><br>I added my own feature to the delicious toolbar, which I like very much. This new toolbar saves automatically the file you bookmark (on the + button), and will add a link in your delicious home to the local version (if it exists).<br><br>I have it publicly accessible at <a href="http://perso.wanadoo.fr/logos01/deltoolbar.html">http://perso.wanadoo.fr/logos0</a><a href="http://perso.wanadoo.fr/logos01/deltoolbar.html">1/deltoolbar.html</a> <br><br>It is not meant to be used by everybody as it is not official. But the page will give you an idea of what it does. If you think it is useful, I will improve it, otherwise it will stay the way it is because it fits my use.<br><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/delicious" rel="tag">delicious</a>, <a href="http://del.icio.us/tag/firefox" rel="tag">firefox</a>, <a href="http://del.icio.us/tag/toolbar" rel="tag">toolbar</a></span></p>
 
       
     </div>

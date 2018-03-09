@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Shooting arbitrage - part II &middot; Chase the Devil</title>
+  <title>Senior Developers Don&#39;t Know OO Anymore &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -31,7 +31,7 @@
   
 
   <meta name="description" content="">
-  <meta name="keywords" content="quant">
+  <meta name="keywords" content="programming,java">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -87,57 +87,31 @@
 
 <div class="content container">
   <div class="post">
-    <h1 class="post-title">Shooting arbitrage - part II</h1>
-    <span class="post-date">Jul 5, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/#disqus_thread">Comments</a>
+    <h1 class="post-title">Senior Developers Don&#39;t Know OO Anymore</h1>
+    <span class="post-date">Mar 8, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a><a class="label" href="https://chasethedevil.github.io/categories/java">java</a>
     </span>
-    <p>In my <a href="(/post/shooting_arbitrage/), I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
-In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won't be so at the times \( t lt T \">previous post</a>
-because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
-it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
- where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
- Plugging this into the local variance formula leads to
-<div>$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}  + \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2
-    + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$</div>
-for \(t\leq T\). In particular, for \(t=0\), we have
-<div>$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
-{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}   + \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$</div>
-But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
+    <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend for a while officially, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
 
+<p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
 
-<figure>
-    
-        <img src="/post/svi_dearbitraging_lv_rk.png" />
-    
-    
-    <figcaption>
-        <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
-        
-    </figcaption>
-    
-</figure>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
 
+<p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
 
-<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
-is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
 
-<figure>
-    
-        <img src="/post/svi_dearbitraging_vol_rk_cap.png" />
-    
-    
-    <figcaption>
-        <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
-        
-    </figcaption>
-    
-</figure>
-</p>
+<p>This is really breaking OO and moving back to procedural programming.</p>
 
-<p>The discontinuity renders the shooting technique useless.
-The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
+<p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
+
+<p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
 
   </div>
   <div id="disqus_thread"></div>
