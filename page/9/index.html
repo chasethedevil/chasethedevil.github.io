@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.37" />
+	<meta name="generator" content="Hugo 0.40.3" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/one-interview-question-for-job-seekers-in-finance/">One Interview Question for Job Seekers in Finance</a>
+      </h1>
+      <span class="post-date">Jun 19, 2014 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/one-interview-question-for-job-seekers-in-finance/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I presented in an <a href="http://chasethedevil.github.io/post/good-software-books/" target="_blank">earlier post</a> that I was mostly disillusioned with interview questions, it&rsquo;s better to find out if you can learn something out of a candidate.<br /><br />Well there is maybe one very simple question that could be revealing, for people who pretend to be vaguely familiar with Black-Scholes:<br /><br /><blockquote class="tr_bq"><span style="font-size: large;"><i>What is the price of an at-the-money  binary option under very high volatility? </i></span></blockquote>Alternatively it can be asked with just an at-the-money european option under very high volatility.<br /><br />What makes think of it is that some &ldquo;product manager&rdquo; recently tested risk with volatilities at 300% and was wondering why they did not see any vega (based on a 1% additive shift), and opened bugs, generated noise&hellip;</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>There is a relatively new JVM based language, <a href="https://www.eclipse.org/xtend" target="_blank">Xtend</a>. Their homepage says &ldquo;<b>JAVA 10, TODAY!</b>&rdquo;, so I thought I would give it a try, I was especially interested in operator overloading support, and the fact that it compiles to Java code, not Java byte code.<br /><br />Unfortunately, after 5 minutes with it, and pasting some non Java code in an xtend file, Eclipse hangs forever, even on restart. After creating another workspace, just to trash the new workspace a similar way. This is quite incredible for a nearly 2 years old project, on eclipse.org.<br /><br /></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/">Building a more accurate basis point volatility formula</a>
-      </h1>
-      <span class="post-date">Apr 5, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>P. Jaeckel has defied the limits of accuracy with his<a href="http://www.pjaeckel.webspace.virginmedia.com/LetsBeRational.7z" target="_blank"> latest Black-Scholes volatility solver</a>, managing to also improve performance compared to his earlier solver &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CC8QFjAA&amp;url=http%3A%2F%2Fwww.pjaeckel.webspace.virginmedia.com%2FByImplication.pdf&amp;ei=dwNAU5zkO4aI7AaFy4H4BQ&amp;usg=AFQjCNF1RnfynBrckd79E9RVbhVhuXQrQg&amp;sig2=kOxFO9jmD3wL1E94GjYhRQ&amp;bvm=bv.64125504,d.ZGU" target="_blank">By Implication</a>&rdquo;. Out of a silly exercise, I decided to try my hand for a more accurate <a href="http://www.clarusft.com/analytic-implied-basis-point-volatility/" target="_blank">Normal (or basis point) volatility solver</a>.<br /><br />In reality, the problem is much simpler in the Bachelier/Normal model. A very basic analysis of Bachelier formula shows that the problem can be reduced to a single variable, as Choi et al explain in <a href="http://www.tandfonline.com/doi/abs/10.1080/13504860802583436" target="_blank">their paper</a>. So the problem is not really one of solving, but one of approximating (the inverse of) a function.<br /><br />The first step to build that function is to actually have a highly accurate slow solver as reference. This is quite easy, I just started with Choi formula and used <a href="http://en.wikipedia.org/wiki/Halley%27s_method" target="_blank">Halley&rsquo;s method</a> to refine. In reality, <a href="http://en.wikipedia.org/wiki/Halley%27s_method" target="_blank">Halley&rsquo;s method</a> is already a bit overkill on this problem: it works impressively well, 1 iteration is enough to have an insane level of accuracy, only noticeable when one works in high precision arithmetic (for example 50 digits). For double precision, <a href="http://en.wikipedia.org/wiki/Newton%27s_method" target="_blank">Newton&rsquo;s method</a> would actually be enough - I initially thought that my Halley&rsquo;s implementation did not work as it produced the exact same output as Newton in double precision. <a href="http://www.tandfonline.com/doi/abs/10.1080/14697680902849361" target="_blank">Li proposes</a> the use of the SOR method, which for this exercise, behaves very much like Newton&rsquo;s method.<br /><br />I then followed the logic from Choi et al, but working directly with in-the-money call options instead of <a href="http://en.wikipedia.org/wiki/Straddle" target="_blank">straddles</a>. Straddles sound neat at first (hides that we work in-the-money), but it&rsquo;s actually useless for the algorithm. Choi et al. ignore half of the straddle range when they use their eta transform in the paper. One other change is the mapping itself, I found a better mapping for the call options (but not that far of Choi initial idea). Finally, because I am lazy, I did not go to the pain of finding a good rational fraction approximation along with the square root problem they describe, I just tried a Chebyshev polynomial.<br /><br />Unfortunately, a single Chebyshev polynomial does not work well: even with a very large (1000) degree it&rsquo;s not very precise, so much that I thought that my transform was garbage. I had noticed by mistake, that on another part (negative) of the interval, the Chebyshev polynomial worked actually very well to approximate something related to the volatility of another option. Suddendly came to me the idea of, like Johnson does in <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package" target="_blank">his Faddeeva package</a>, using N Chebyshev polynomials on N small intervals. This is like the big heavy hammer for which everything looks like nails, but it&rsquo;s actually very fast to evaluate as the degree of each polynomial can then be low (7), plus a table lookup (could be coded as switch statements if one really cares about such details). The slowest part is actually the call to the log function.<br /><br />The final bit is the use of a Taylor approximation for my -u/log(1-u) transform as it is not all that accurate in double precision when u is near 0. And that produces the following graph<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-r3FCXrjN13k/U0AHWIg7MRI/AAAAAAAAHGU/yDE6BEPtmIs/s1600/Screenshot+from+2014-04-05+15%253A37%253A03.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-r3FCXrjN13k/U0AHWIg7MRI/AAAAAAAAHGU/yDE6BEPtmIs/s1600/Screenshot+from+2014-04-05+15%253A37%253A03.png" height="342" width="400" /></a></div><br />It is interesting to note that &ldquo;solving&rdquo; the b.p. vol is <b>10x faster</b> than solving the Black vol.<br /><br />I wrote <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757" target="_blank">a small paper around all this</a> where you&rsquo;ll find the details as well as Matlab code.</p>
 
       
     </div>
