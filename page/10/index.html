@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.3" />
+	<meta name="generator" content="Hugo 0.41" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/5-minutes-of-xtend/">5 Minutes of Xtend</a>
+      </h1>
+      <span class="post-date">Apr 8, 2014 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/5-minutes-of-xtend/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>There is a relatively new JVM based language, <a href="https://www.eclipse.org/xtend" target="_blank">Xtend</a>. Their homepage says &ldquo;<b>JAVA 10, TODAY!</b>&rdquo;, so I thought I would give it a try, I was especially interested in operator overloading support, and the fact that it compiles to Java code, not Java byte code.<br /><br />Unfortunately, after 5 minutes with it, and pasting some non Java code in an xtend file, Eclipse hangs forever, even on restart. After creating another workspace, just to trash the new workspace a similar way. This is quite incredible for a nearly 2 years old project, on eclipse.org.<br /><br /></p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>With a <a href="http://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">small time expansion</a>, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.<br /><br />Like <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">Forde &amp; al did for Heston</a>, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).<br /><br />We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points. In practice, I have noticed that using a more refined expansion with more terms resulted not only in more complex formulas to lookup the original stochastic volatility parameters, but also in an increased error, because of the redundancy of parameters in the polynomial expansion. My previous Schobel-Zhu expansion becomes just:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uBWPjGvFZtU/UwTk03igscI/AAAAAAAAHAo/u4unVlkOFG0/s1600/Screenshot+from+2014-02-19+18:07:07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-uBWPjGvFZtU/UwTk03igscI/AAAAAAAAHAo/u4unVlkOFG0/s1600/Screenshot+from+2014-02-19+18:07:07.png" height="137" width="320" /></a></div><br />In practice, I have found that the procedure works rather well.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-SAv0EczOlvA/UwTkNixNOfI/AAAAAAAAHAg/LE4yfQZfC3s/s1600/Screenshot+from+2014-02-19+18:04:33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-SAv0EczOlvA/UwTkNixNOfI/AAAAAAAAHAg/LE4yfQZfC3s/s1600/Screenshot+from+2014-02-19+18:04:33.png" height="116" width="400" /></a></div>On some more extreme surfaces, where theta=0, the error in kappa and theta is higher. Interestingly, I received a few real world surfaces like this, where theta=0, which I found a bit puzzling. I wondered if it was because those surfaces were preprocessed with SABR, that has no mean reversion, but I could not fit those exactly with SABR.<br /><br /><b>Update March 2014</b> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.&nbsp;</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/">A Look at Small Time Expansions for Heston</a>
-      </h1>
-      <span class="post-date">Feb 12, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.<br /><br />In 2011, Forde et al. proposed <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">a second order small time expansion</a> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <a href="http://arxiv.org/abs/1306.5447">different expansions up to order-3</a> around the money. I already looked at the later in my <a href="http://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">previous post</a>, applying the idea to Schobel-Zhu.<br /><br />I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.<br /><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-86ukJOiiEq8/UvtkhCljuKI/AAAAAAAAHAI/J7349pkWjsU/s1600/heston_expansions_order3a.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-86ukJOiiEq8/UvtkhCljuKI/AAAAAAAAHAI/J7349pkWjsU/s1600/heston_expansions_order3a.png" height="378" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">T=0.5, Feller condition largely violated</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-fO0cCblLkFk/UvtkjiYK1PI/AAAAAAAAHAQ/8jwHVPg0Tp8/s1600/heston_expansions_order3b.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-fO0cCblLkFk/UvtkjiYK1PI/AAAAAAAAHAQ/8jwHVPg0Tp8/s1600/heston_expansions_order3b.png" height="378" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">T=0.5, Feller condition slightly violated</td></tr></tbody></table><br /><br />Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.<br />The order-3 formula, even though it is more precise at the money, was actually more problematic for calibration: it failed to find a good enough initial guess in some cases, maybe because the reference data should be truncated, to possibly keep the few shortest expiries, and close to ATM strikes.<br /><br /></p>
 
       
     </div>

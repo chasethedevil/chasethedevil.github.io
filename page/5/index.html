@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.3" />
+	<meta name="generator" content="Hugo 0.41" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,30 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/">Yahoo Finance Implied Volatility</a>
+      </h1>
+      <span class="post-date">Feb 3, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>The <a href="https://finance.yahoo.com/q/op?s=GOOG&amp;date=1457049600">option chain</a> on Yahoo finance shows an implied volatility number for each call or put option in the last column.
+I was wondering a bit how they computed that number. I did not exactly find out their methodology, especially since we don&rsquo;t even know the daycount convention used, but
+I did find that it was likely just garbage.</p>
+
+<p>A red-herring is for example the large discrepancy between put vols and call vols. For example strike 670, call vol=50%, put vol=32%.
+This suggests that the two are completely decoupled, and they use some wrong forward (spot price?) to obtain those numbers. If I compute
+the implied volatilities using put-call parity close to the money to find out the implied forward price, I end up with ask vols of 37% and 34% or call and put mid vols of 33%.
+By considering the put-call parity, I assume European option prices, which is not correct in this case. It turns out however, that with the low interest rates we live in, there is nearly zero additional value due to the American early exercise.</p>
+
+<p>I am not sure what use people can have of Yahoo implied volatilities.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -257,18 +281,6 @@ Another work-around would be to model this via proportional dividends instead of
       </span>
       
       <p>I have <a href="http://chasethedevil.github.io/post/modern-programming-language-for-monte-carlo/">looked</a> a few months ago already at Julia, Dart, Rust and Scala programming languages to see how practical they could be for a simple Monte-Carlo option pricing.<br /><br />I forgot <a href="https://golang.org/">the Go language</a>. I had tried it 1 or 2 years ago, and at that time, did not enjoy it too much. Looking at Go 1.5 benchmarks on the<a href="http://benchmarksgame.alioth.debian.org/"> computer language shootout</a>, I was surprised that it seemed so close to Java performance now, while having a GC that guarantees pauses of less 10ms and consuming much less memory.<br /><br />I am in general a bit skeptical about those benchmarks, some can be rigged. A few years ago, I <a href="http://chasethedevil.blogspot.fr/2009/01/end-of-rings-around-plain-java-better.html">tried my hand at the thread ring</a> test, and found that it actually performed fastest on a single thread while it is supposed to measure the language threading performance. I looked yesterday at one Go source code (I think it was for pidigits) and saw that it just called a C library (gmp) to compute with big integers. It&rsquo;s no surprise then that Go would be faster than Java on this test.<br /><br />So what about my small Monte-Carlo test?<br />Well it turns out that Go is quite fast on it:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Multipl. Rust&nbsp;&nbsp;&nbsp; Go<br />1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005&nbsp; 0.007<br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.03&nbsp;&nbsp; 0.03<br />100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.21&nbsp;&nbsp; 0.29</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">1000&nbsp;&nbsp;&nbsp;&nbsp; 2.01&nbsp;&nbsp; 2.88</span><br /><br /><br />It is faster than Java/Scala and not too far off Rust, except if one uses FastMath in Scala, then the longest test is slighly faster with Java (not the other ones).<br /><br />There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.<br /><br />Still it was extremely quick to grasp and write code, because it&rsquo;s so simple, especially when compared to Rust. But then, contrary to Rust, there is not as much safety provided by the language. Rust is quite impressive on this side (but unfortunately that implies less readable code). I&rsquo;d say that Go could become a serious alternative to Java.<br /><br />I also found an interesting minor performance issue with the default Go <a href="https://golang.org/src/math/rand/rand.go">Rand.Float64</a>, the library convert an Int63 to a double precision number this way:<br /><br /><pre>func (r *Rand) Float64() float64 {</pre><pre>  f := float64(r.Int63()) / (1 &lt;&lt; 63)<br />  if f == 1 {<br /><span class="ln" id="L128">    </span>f = 0<br /><span class="ln" id="L129">  }</span><br /><span class="ln" id="L130">  </span>return f<br /> }</pre><br />I was interested in having a number in (0,1) and not [0,1), so I just used the conversion pattern from MersenneTwister 64 code:<br /><br /><pre>f := (float64(r.Int63() &gt;&gt; 11) + 0.5) * (1.0/4503599627370496.0)</pre><pre>&nbsp;</pre>The reasoning behind this later code is that the mantissa is 52 bits, and this is the most accuracy we can have between 0 and 1. There is no need to go further, this also avoids the issue around 1. It&rsquo;s also straightforward that is will preserve the uniform property, while it&rsquo;s not so clear to me that r.Int63()/2^63 is going to preserve uniformity as double accuracy is higher around 0 (as the exponent part can be used there) and lesser around 1: there is going to be much more multiple identical results near 1 than near 0.<br /><br />It turns out that the if check adds 5% performance penalty on this test, likely because of processor caching issues. I was surprised by that since there are many other ifs afterwards in the code, for the inverse cumulative function, and for the payoff.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/bumping-correlations/">Bumping Correlations</a>
-      </h1>
-      <span class="post-date">Jul 25, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/bumping-correlations/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>In his book &ldquo;<i>Monte Carlo Methods in Finance</i>&rdquo;, P. Jäckel explains a simple way to clean up a correlation matrix. When a given correlation matrix is not positive semi-definite, the idea is to do a <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> (SVD), replace the negative eigenvalues by 0, and renormalize the corresponding eigenvector accordingly.<br /><br />One of the cited applications is &ldquo;<i>stress testing and scenario analysis for market risk</i>&rdquo; or &ldquo;<i>comparative pricing in order to ascertain the extent of correlation exposure for multi-asset derivatives</i>&rdquo;, saying that &ldquo;<i>In many of these cases we end up with a matrix that is no longer positive semi-definite</i>&rdquo;.<br /><br />It turns out that if one bumps an invalid correlation matrix (the input), that is then cleaned up automatically, the effect can be a very different bump. Depending on how familiar you are with SVD, this could be more or less obvious from the procedure,<br /><br />As a simple illustration I take the matrix representing 3 assets A, B, C with rho_ab = -0.6, rho_ac = rho_bc = -0.5.<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.60000&nbsp; -0.50000<br />&nbsp; -0.60000&nbsp;&nbsp; 1.00000&nbsp; -0.50000<br />&nbsp; -0.50000&nbsp; -0.50000&nbsp;&nbsp; 1.00000<br /><br />For those rho_ac and rho_bc, the correlation matrix is not positive definite unless rho_ab in in the range (-0.5, 1). One way to verify this is to use the fact that positive definiteness is equivalent to a positive determinant. The determinant will be 1 - 2*0.25 - rho_ab^2 + 2*0.25*rho_ab.<br /><br />After using P. Jaeckel procedure, we end up with: <br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56299&nbsp; -0.46745<br />&nbsp; -0.56299&nbsp;&nbsp; 1.00000&nbsp; -0.46745<br />&nbsp; -0.46745&nbsp; -0.46745&nbsp;&nbsp; 1.00000<br /><br />If we bump now rho_bc by 1% (absolute), we end up after cleanup with:<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56637&nbsp; -0.47045<br />&nbsp; -0.56637&nbsp;&nbsp; 1.00000&nbsp; -0.46081<br />&nbsp; -0.47045&nbsp; -0.46081 &nbsp; 1.00000<br /><br />It turns out that rho_bc has changed by only 0.66% and rho_ac by -0.30%, rho_ab by -0.34%. So our initial bump (0,0,1) has been translated to a bump (-0.34, -0.30, 0.66). In other words, it does not work to compute sensitivities.<br /><br />One can optimize to obtain the nearest correlation matrix in some norm. Jaeckel proposes a hypersphere decomposition based optimization, using as initial guess the SVD solution. <a href="https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/">Higham proposed a specific algorithm</a> just for that purpose. It turns out that on this example, they will converge to the same solution (if we use the same norm). I tried out of curiosity to see if that would lead to some improvement. The first matrix becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56435&nbsp; -0.46672<br />&nbsp; -0.56435&nbsp;&nbsp; 1.00000&nbsp; -0.46672<br />&nbsp; -0.46672&nbsp; -0.46672&nbsp;&nbsp; 1.00000<br /><br />And the bumped one becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56766&nbsp; -0.46984<br />&nbsp; -0.56766&nbsp;&nbsp; 1.00000&nbsp; -0.46002<br />&nbsp; -0.46984&nbsp; -0.46002&nbsp;&nbsp; 1.00000<br /><br />We find back the same issue, rho_bc has changed by only 0.67%, rho_ac by -0.31% and rho_ab by -0.33%. We also see that the SVD correlation or the real near correlation matrix are quite close, as noticed by P. Jaeckel.<br /><br />Of course, one should apply the bump directly to the cleaned up matrix, in which case it will actually work as expected, unless our bump produces another non positive definite matrix, and then we would have correlation leaking a bit everywhere. It&rsquo;s not entirely clear what kind of meaning the risk figures would have then.</p>
 
       
     </div>

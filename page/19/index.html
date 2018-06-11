@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.3" />
+	<meta name="generator" content="Hugo 0.41" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/list-of-companies-where-i-have-been-an-employee/">List of companies where I have been an employee</a>
+      </h1>
+      <span class="post-date">Jan 11, 2012 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/list-of-companies-where-i-have-been-an-employee/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Intern:<br />Siemens (Berlin)<br />IBM (Boeblingen)<br />Osram Sylvania (Beverly, MA)<br /><br />Employee:<br />Cap Gemini (Paris) working for Alcatel<br />Silicomp (Paris) working for Alcatel Nextenso<br />C2labs / one 0 development (San Francisco, CA) working for Whenmobile, Sony Pictures, GoPix, Technorati.<br />Credit Agricole alternative (Paris)<br />Prima solutions (Paris)<br />Esearchvision (Paris)<br />Ulink (Paris)<br />Edifixio (Paris)<br />Horizon (Paris)<br />Darty (Paris)<br />Calypso (Paris)</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -194,18 +206,6 @@
       </span>
       
       <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <a href="http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/SFMT/">SFMT</a>. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.<br /><br />I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.<br /><br />This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/xorwow-lecuyer-testu01-results/">XORWOW L&#39;ecuyer TestU01 Results</a>
-      </h1>
-      <span class="post-date">Jan 12, 2011 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/xorwow-lecuyer-testu01-results/#disqus_thread">Comments</a>
-      </span>
-      
-      <p><div style="font-family: &quot;Courier New&quot;,Courier,monospace;"><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">Nvidia uses XorWow random number generator in its CURAND library. It is a simple and fast random number generator with a reasonably long period. It can also be parallelized relatively easily. Nvidia suggests it passes L&rsquo;Ecuyer TestU01, but is not very explicit about it. So I&rsquo;ve decided to see how it performed on TestU01.</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">I found very simple to test a new random number generator on TestU01, the documentation is great and the examples helpful. Basically there is just a simple C file to create &amp; compile &amp; run.</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;">XORWOW passes the SmallCrush battery, and according to Marsaglia, it also passes DieHard. But it fails on 1 test in Crush and 3 in BigCrush. By comparison, Mersenne-Twister fails on 2 tests in Crush and 2 in BigCrush. Here are the results of the failures:</div><div style="font-family: Georgia,&quot;Times New Roman&quot;,serif;"><br /></div><span style="font-family: inherit;"><br /></span></div><div style="font-family: &quot;Courier New&quot;,Courier,monospace;">========= Summary results of Crush =========<br /><br />&nbsp;Version:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TestU01 1.2.3<br />&nbsp;Generator:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Xorwow<br />&nbsp;Number of statistics:&nbsp; 144<br />&nbsp;Total CPU time:&nbsp;&nbsp; 00:50:15.92<br />&nbsp;The following tests gave p-values outside [0.001, 0.9990]:<br />&nbsp;(eps&nbsp; means a value &lt; 1.0e-300):<br />&nbsp;(eps1 means a value &lt; 1.0e-15):<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p-value<br />&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-<br />&nbsp;72&nbsp; LinearComp, r = 29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 - eps1<br />&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-<br />&nbsp;All other tests were passed</div><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">========= Summary results of BigCrush =========</span><br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Version:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TestU01 1.2.3</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Generator:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Xorwow</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Number of statistics:&nbsp; 160</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;Total CPU time:&nbsp;&nbsp; 06:12:38.79</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;The following tests gave p-values outside [0.001, 0.9990]:</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;(eps&nbsp; means a value &lt; 1.0e-300):</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;(eps1 means a value &lt; 1.0e-15):</span><br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p-value</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp; 7&nbsp; CollisionOver, t = 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.6e-6</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;27&nbsp; SimpPoker, r = 27&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eps&nbsp; </span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;81&nbsp; LinearComp, r = 29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 - eps1</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;All other tests were passed</span></p>
 
       
     </div>

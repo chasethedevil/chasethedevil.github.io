@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Categories &middot; Chase the Devil</title>
+  <title>The Fourth Moment of the Normal SABR Model &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -28,10 +28,10 @@
   
   
   
-  <link href="https://chasethedevil.github.io/categories/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -86,34 +86,67 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="https://chasethedevil.github.io/categories/hardware/">Hardware</a>
+  <div class="post">
+    <h1 class="post-title">The Fourth Moment of the Normal SABR Model</h1>
+    <span class="post-date">Jun 11, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Oct 2, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/java/">Java</a>
-    </span>
-    &middot; <time>Mar 8, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/linux/">Linux</a>
-    </span>
-    &middot; <time>Jan 26, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/math/">Math</a>
-    </span>
-    &middot; <time>Feb 5, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/programming/">Programming</a>
-    </span>
-    &middot; <time>Mar 8, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/quant/">Quant</a>
-    </span>
-    &middot; <time>Jun 11, 2018</time></li>
-  
-  </ul>
+    <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
+simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
+For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
+
+<p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
+I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi1udCFtszbAhWJzRQKHbvPAQ8QFggoMAA&amp;url=https%3A%2F%2Ffile.scirp.org%2Fpdf%2FOJAppS_2013101611190436.pdf&amp;usg=AOvVaw2Xkr24Bzd9alH291VUPdfi">Closed Form Moment Formulae for the Lognormal SABR Model and Applications to Calibration Problems</a>
+with simple formulae for the third and fourth moments. I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
+consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
+
+<p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
+is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
+the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
+initial forward price.</p>
+
+<p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
+with
+$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2}\,,$$
+$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2}\,,$$
+$$ C = - A - B \,.$$</p>
+
+<p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
+no error in their third moment.</p>
+
+<p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
+
+  </div>
+  <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.3" />
+	<meta name="generator" content="Hugo 0.41" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,45 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/">The Fourth Moment of the Normal SABR Model</a>
+      </h1>
+      <span class="post-date">Jun 11, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
+simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
+For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
+
+<p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
+I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi1udCFtszbAhWJzRQKHbvPAQ8QFggoMAA&amp;url=https%3A%2F%2Ffile.scirp.org%2Fpdf%2FOJAppS_2013101611190436.pdf&amp;usg=AOvVaw2Xkr24Bzd9alH291VUPdfi">Closed Form Moment Formulae for the Lognormal SABR Model and Applications to Calibration Problems</a>
+with simple formulae for the third and fourth moments. I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
+consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
+
+<p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
+is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
+the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
+initial forward price.</p>
+
+<p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
+with
+$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2}\,,$$
+$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2}\,,$$
+$$ C = - A - B \,.$$</p>
+
+<p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
+no error in their third moment.</p>
+
+<p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -641,172 +680,6 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
 </ul>
 
 <p>The perceptron used for branch prediction is quite different from the deep learning neural networks fad, which have many more layers, with some feedback loop. The challenge of those is the training: when many layers are added to the perceptron, the gradients of each layer activation function multiply in the backpropagation algorithm. This makes the &ldquo;effective&rdquo; gradient at the first layers to be very small, which translates to tiny changes in the weights, making training not only very slow but also likely stuck in a sub-optimal local minimum. Beside the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient</a> problem, there is also the <a href="https://en.wikipedia.org/wiki/Catastrophic_interference">catastrophic interference</a> problem to pay attention to. Those issues are today dealt with the use of <a href="http://neuralnetworksanddeeplearning.com/chap6.html">specific strategies to train / structure the network</a> combined with raw computational power that was unavailable in the 90s.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/benham_disc_in_web_canvas/">Benham disc in web canvas</a>
-      </h1>
-      <span class="post-date">Jul 10, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/benham_disc_in_web_canvas/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>Around 15 years ago, I wrote a small Java applet to try and show the <a href="https://en.wikipedia.org/wiki/Benham%27s_top">Benham disk</a> effect. Even back then applets were already passé and Flash would have been more appropriate. These days, no browser support Java applets anymore, and very few web users have Java installed. Flash also mostly disappeared. The <a href="https://www.w3schools.com/html/html5_canvas.asp">web canvas</a> is today&rsquo;s standard allowing to embbed animations in a web page.</p>
-
-<p>This effect shows color perception from a succession of black and white pictures. It is a computer reproduction from the Benham disc with ideas borrowed from &ldquo;Pour La Science Avril/Juin 2003&rdquo;.
-Using a delay between 40 and 60ms, the inner circle should appear <font color="#770000">red</font>, the one in the middle
-<font color="#000077">blue</font> and the outer one <font color="#007700">green</font>. When you reverse the rotation direction,
-blue and red circles should be inverted.</p>
-
-<form>
-  Delay: <input type="number" name="delay" value="60" id="delayInput"> Reverse <input type="checkbox" value="false" id="reverseInput" onclick="javascript:reverse()"> <input type="button" value="Start" onclick="javascript:startStop()" id="startButton">
-</form>
-
-<canvas id="myCanvas" width="480" height="480" style="border:1px solid #000000;">
-</canvas> 
-
-<script type="text/javascript">
-var c = document.getElementById("myCanvas");
-  c.style.width ='100%';
-  c.style.height='100%';
-  // ...then set the internal size to match
-  c.width  = c.offsetWidth;
-  c.height = c.offsetWidth;
-var x=c.width/2;
-var y=x;
-linewidth = c.width / 100;
-var g = c.getContext("2d");
-
-function paintImage(g, x,y,startArcAngle) {
-var radius = 0.9;
-var r = radius*x; endAngle = 2*Math.PI/3+startArcAngle;
-g.beginPath();
-g.arc(x, y, r, Math.PI/3+startArcAngle, endAngle, false);
-g.lineWidth = linewidth;
-g.strokeStyle = "black";
-g.stroke();
-
-radius = 0.8; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
-g.stroke();
-
-radius = 0.7; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
-g.stroke();
-
-radius = 0.6; r = radius*x; endAngle = Math.PI/3+startArcAngle;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
-g.stroke();
-
-radius = 0.5; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
-g.stroke();
-
-radius = 0.4; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false);
-g.stroke();
-
-//  paintImage(g, startArcAngle, 60, 0.3); //red -180 to -60
-radius = 0.3; r = radius*x; endAngle = Math.PI+startArcAngle;// if (endAngle > Math.PI*2) endAngle = endAngle - 2*Math.PI 
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-        
-radius = 0.2; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-
-radius = 0.1; r = radius*x;
-g.beginPath();
-g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
-g.stroke();
-
-g.beginPath();
-g.arc(x, y, x,  Math.PI+startArcAngle, Math.PI*2+startArcAngle, false); 
-g.fill();
-}
-
-var delay = 40;
-var currentAnimate = 0;
-var animationStartTime = window.performance.now();
-var currentIndex = 3;
-var angles = [0.0, 2*Math.PI/3, 4*Math.PI/3];
-
-var offscreenCanvas = [document.createElement('canvas'),document.createElement('canvas'),document.createElement('canvas')];
-for (var i in offscreenCanvas) {
-  offscreenCanvas[i].width = c.offsetWidth;
-  offscreenCanvas[i].height = c.offsetWidth;
-  g = offscreenCanvas[i].getContext("2d");
-  paintImage(g, x, y, angles[i]);
-}
-g = c.getContext("2d");
-
-//function animate0() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y,  0.0);
-//  currentAnimate = setTimeout(animate1, delay);
-//}
-//function animate1() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y,  2*Math.PI/3);
-//  currentAnimate = setTimeout(animate2, delay);
-//}
-//function animate2() {
-//  g.clearRect(0,0,c.width, c.height);
-//  paintImage(g,x, y, 4*Math.PI/3);
-//  currentAnimate= setTimeout(animate0, delay);
-//}
-
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
-
-function animateContinuous(time) {
-  var index = Math.floor(((time - animationStartTime) % (3*delay))/delay);
-  if (index < 0) index = 0
-  if (index != currentIndex) {
-    //g.clearRect(0,0,c.width, c.height);
-    //paintImage(g, x, y, angles[index]);
-    var offscreenContext = offscreenCanvas[index].getContext('2d');
-    var image = offscreenContext.getImageData(0,0,c.width,c.height); 
-    g.putImageData(image, 0, 0);       
-    currentIndex = index;
-  }
-  currentAnimate = requestAnimationFrame(animateContinuous);
-}
-
-function reverse() {
-  //tmp = angles[2]; angles[2] = angles[0]; angles[0] = tmp;
-  tmp = offscreenCanvas[2]; offscreenCanvas[2] = offscreenCanvas[0]; offscreenCanvas[0] = tmp;
-}
-
-function startStop() {
-  var elem = document.getElementById("startButton");
-  var delayElem = document.getElementById("delayInput");
- if (elem.value=="Stop") {
-    elem.value = "Start";
-    //clearTimeout(currentAnimate);
-    window.cancelAnimationFrame(currentAnimate);
-    currentAnimate = 0;
-  } else {
-    elem.value = "Stop";
-    delay = delayElem.value;
-    animationStartTime = window.performance.now();
-    //animate0();
-    currentAnimate = requestAnimationFrame(animateContinuous);
-  }
-}
-</script>
 
       
     </div>
