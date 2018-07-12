@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>On the Probability of a TSLA Stock Crash &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="quant">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">Technical blog for Fabien.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1 class="post-title">On the Probability of a TSLA Stock Crash</h1>
+    <span class="post-date">Jul 11, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    </span>
+    <p>Timothy Klassen had an <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">interesting post</a> on linkedin recently, with the title &ldquo;the options market thinks there is a 16% chance that Tesla will not exist in January 2020&rdquo;.
+As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
+and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
+This results in the following graph</p>
+
+
+<figure>
+    
+        <img src="/post/tsla2020_vol.png" />
+    
+    
+    <figcaption>
+        <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration. Note that I
+removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
+
+<p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
+
+
+<figure>
+    
+        <img src="/post/tsla2020_cum.png" />
+    
+    
+    <figcaption>
+        <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>More explicitely, we obtain</p>
+
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
+</table>
+
+<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii.md">earlier posts on a similar subject</a>.</p>
+
+
+<figure>
+    
+        <img src="/post/tsla2020_rnd.png" />
+    
+    
+    <figcaption>
+        <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
+modes, its fit in terms of volatilities is not better than the lognormal mixture model. We could reduce the number of modes by increasing
+the constant of the Tikhonov regularization, at the cost of a slightly worse fit.</p>
+
+<p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
+and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
+
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
+</table>
+
+<p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
+It is expected that the probability of going under $100 will be larger when the stock price moves down,
+which is what happen around March 27, 2018. But it is not so expected that when it comes back up higher
+(above $350 in mid June), the probability of going under $100 stays higher than it was before March 27, 2018,
+ where the stock price was actually lower.
+ In fact, there seems to be a signal in his time-serie, where the probability of going under $100 increases
+ significantly, one week before March 27, that is one week before the actual drop,
+ suggesting that the drop was priced in the options.</p>
+
+  </div>
+  <div id="disqus_thread"></div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+</body>
+</html>
+
