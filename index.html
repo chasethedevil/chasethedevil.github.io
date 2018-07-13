@@ -92,6 +92,128 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
+      </h1>
+      <span class="post-date">Jul 12, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>This is a follow up to my <a href="/post/tsla-stock-crash-probability">previous post</a> where I explore the probability
+of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">results of Timothy Klassen</a>.</p>
+
+<p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
+high compared to other stocks? or is it the interpretation of the data erroneous?</p>
+
+<p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
+
+
+<figure>
+    
+        <img src="/post/nflx2020_vol.png" />
+    
+    
+    <figcaption>
+        <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration.</p>
+
+<p>The corresponding implied cumulative density is</p>
+
+
+<figure>
+    
+        <img src="/post/nflx2020_cum.png" />
+    
+    
+    <figcaption>
+        <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>More explicitely, we obtain</p>
+
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
+</table>
+
+<p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same <sup>1</sup>&frasl;<sub>3</sub> of the spot price).</p>
+
+<p>For completeness, the implied probability density is</p>
+
+
+<figure>
+    
+        <img src="/post/nflx2020_rnd.png" />
+    
+    
+    <figcaption>
+        <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
+too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
+
+<p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
+much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
+
+
+<figure>
+    
+        <img src="/post/snap2020_cum.png" />
+    
+    
+    <figcaption>
+        <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<p>We find a probability of moving below <sup>1</sup>&frasl;<sub>3</sub> of the current price similar to TSLA, around 15%.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
       </h1>
       <span class="post-date">Jul 11, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/#disqus_thread">Comments</a>
@@ -171,7 +293,7 @@ removed the quote for strike 30, as the bid-ask spread was, unusually extremely 
 </tbody>
 </table>
 
-<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii.md">earlier posts on a similar subject</a>.</p>
+<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
 
 
 <figure>
@@ -753,36 +875,6 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
     
 </figure>
 
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/svn_is_dead/">SVN is dead</a>
-      </h1>
-      <span class="post-date">Sep 26, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/svn_is_dead/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
-      </span>
-      
-      <p>A few years ago, when <a href="https://git-scm.com/">Git</a> was rising fast and <a href="https://subversion.apache.org/">SVN</a> was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:</p>
-
-<ol>
-<li>Who needs decentralization for a small team or a small company working together?</li>
-<li>‎SVN is proven, works well and is simple to use and put in place.</li>
-</ol>
-
-<p>Each argument is in reality not so strong. It becomes clear now that Git is much more established.</p>
-
-<p>Regarding the first argument, a long time ago some people had trouble with CVS as it introduced the idea of merging instead of locking files. Git represents a similar paradigm shift between the centralized and the decentralized. It can scare people in not so rational ways. You could lock files with CVS as you did with visual sourcesafe or any other crappy old source control system. It&rsquo;s just that people favored merges as it was effectively more convenient and more productive. You can also use Git with a centralized workflow. Another more scary paradigm shift with Git is to move away from the idea that branches are separate folders. With Git you just switch branches as it is instantaneous even though, again, you could use it in the old fashioned SVN way.</p>
-
-<p>Now onto the second argument, SVN is proven to work well. But so is Cobol. Today it should be clear that SVN is essentially dead. Most big projects move or have moved to git. Tools work better with Git, even <a href="https://www.eclipse.org/">Eclipse</a> works natively with Git but requires buggy plugins for SVN. New developers don&rsquo;t know SVN.</p>
-
-<p>I heard other much worse arguments against Git since. For example, some people believed that, with Git, they could lose some of their code changes. This was partially due to sensational news article such as the <a href="https://www.theregister.co.uk/2017/02/01/gitlab_data_loss/">Gitlab.com data loss</a>, where in reality some administrator deleted some directory and had non-working backups. As a result, some Git repositories were deleted, but in reality it&rsquo;s a common data loss situation, unrelated to the use of Git as version control system. This Stackoverflow question gives a nice overview of <a href="https://stackoverflow.com/questions/21048765/what-can-cause-data-loss-in-git">data loss risks with Git</a>.</p>
-
-<p>What I feel is true however is that Git is more complex than SVN, because it is more powerful and more flexible. But if you adopt a simple workflow, it&rsquo;s not necessarily more complicated.</p>
 
       
     </div>
