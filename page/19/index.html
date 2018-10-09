@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/why-primitive-arrays-matter-in-java/">Why primitive arrays matter in Java</a>
+      </h1>
+      <span class="post-date">Feb 29, 2012 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/why-primitive-arrays-matter-in-java/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In the past, I have seen that one could greatly improve performance of some Monte-Carlo simulation by using as much as possible <span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">double[][]</span></span> instead of arrays of objects.<br /><br />It was interesting to read <a href="http://flavor8.com/index.php/2012/02/25/java-performance-autoboxing-and-data-structure-choice-obviously-matter-but-by-how-much/">this blog post explaining why that happens</a>: it is all about memory access.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/scala-again/">Scala Again</a>
       </h1>
       <span class="post-date">Feb 6, 2012 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/scala-again/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p>Finally someone who shares the same opinion on the current state of GPGPU programming. <br /><br />John Carmack: On the other hand, we have converted all of our offline processing stuff to ray tracing. For years, the back-end MegaTexture generation for Rage was done with&hellip; we had a GPGPU cluster with NVIDIA cards and it was such a huge pain to keep. It was an amazing pain where one system would be having heat problems and would be behaving weird even though we thought they had identical drivers. Something would always be wrong with render farm 12, and whenever we wanted to put in new features it was like “Okay, writing new fragment programs to go into this.” Now, granted I did this just when CUDA was in its infancy. If I did re-implement it with OpenCL or CUDA we wouldn’t have some of these problems, but when I converted all these over to ray tracing there was a number of things that got a lot better. Things that we deal with, [for example] shadows and reflections that have to be approximated, and were so used to doing with rasterization&hellip; we sometimes forget how big of hacks these are. To be able to say I really just want that ray, and tell me what it hit; not do a projection with feathering shadowed edges and whatever the heck else we’re doing there, so much of the code got so much easier. If it’s a choice of&hellip; now that we have these awesome multi-core x86 CPUs where we can get 24 threads in commodity boxes&hellip; it’s true that one GPU card can do more ray tracing than one 24 thread x86 box, but it’s not multiples more and if it’s just a matter of buying more $2000 boxes, it makes the development, maintenance, and upkeep much better. While everyone in high performance computing is all “rah-rah” GPUs right now, I’ve come full circle back around to saying the fact that we can get massive amounts of x86 cores and threads&hellip; it wont win on FLOPS/watt or FLOPS/volume, but in terms of results per developer hour it is much, much better.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/">exp(y*log(x)) Much Faster than Math.pow(x,y)</a>
-      </h1>
-      <span class="post-date">Apr 8, 2011 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>Today I found out that replacing <b>Math.pow(x,y) </b>by <b>Math.exp(y*Math.log(x)) </b>made me gain 50% performance in my program. Of course, both x and y are double in my case. I find this quite surprising, I expected better from Math.pow.</p>
 
       
     </div>

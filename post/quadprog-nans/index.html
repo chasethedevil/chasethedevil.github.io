@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Programming &middot; Chase the Devil</title>
+  <title>Fixing NaNs in Quadprog &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -28,10 +28,10 @@
   
   
   
-  <link href="https://chasethedevil.github.io/categories/programming/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant,programming">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -86,38 +86,83 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="https://chasethedevil.github.io/post/quadprog-nans/">Fixing NaNs in Quadprog</a>
+  <div class="post">
+    <h1 class="post-title">Fixing NaNs in Quadprog</h1>
+    <span class="post-date">Oct 7, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quadprog-nans/#disqus_thread">Comments</a>
     
-    &middot;
+    <br/>
     <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
     </span>
-    &middot; <time>Oct 7, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/">Senior Developers Don&#39;t Know OO Anymore</a>
+    <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
+
+<p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
+
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#007020;font-weight:bold">library</span>(quadprog)
+
+    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+
+    <span style="color:#007020">set.seed</span>(<span style="color:#40a070">6860</span>)
+    X <span style="color:#666">&lt;-</span> <span style="color:#902000">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+    <span style="color:#007020">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+    Dmat <span style="color:#666">&lt;-</span> <span style="color:#007020">crossprod</span>(X)
+    y <span style="color:#666">&lt;-</span> <span style="color:#007020">seq_len</span>(n)
+    dvec <span style="color:#666">&lt;-</span> <span style="color:#007020">crossprod</span>(X, y)
+
+    Amat <span style="color:#666">&lt;-</span> <span style="color:#007020">diag</span>(n)
+    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> runif(n)
+
+    sol <span style="color:#666">&lt;-</span> solve.QP(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+
+    <span style="color:#007020">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></code></pre></div>
+
+<p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
+
+<p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
+
+<p>
+<figure>
     
-    &middot;
-    <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a><a class="label" href="https://chasethedevil.github.io/categories/java">java</a>
-    </span>
-    &middot; <time>Mar 8, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/post/svn_is_dead/">SVN is dead</a>
+        <img src="/post/quadprog_nan_fix.png" />
     
-    &middot;
-    <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
-    </span>
-    &middot; <time>Sep 26, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/post/the_neural_network_in_your_cpu/">The Neural Network in Your CPU</a>
     
-    &middot;
-    <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
-    </span>
-    &middot; <time>Aug 6, 2017</time></li>
-  
-  </ul>
+    <figcaption>
+        <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
+
+  </div>
+  <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
