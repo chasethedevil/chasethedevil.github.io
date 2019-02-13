@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.1" />
+	<meta name="generator" content="Hugo 0.47.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/matching-hagan-pde-sabr-with-the-one-step-andreasen-huge-sabr/">Matching Hagan PDE SABR with the one-step Andreasen-Huge SABR</a>
+      </h1>
+      <span class="post-date">Apr 30, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/matching-hagan-pde-sabr-with-the-one-step-andreasen-huge-sabr/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I looked nearly two years ago already at <a href="http://chasethedevil.blogspot.co.uk/2013/05/sabr-with-new-hagan-pde-approach.html">the arbitrage free SABR of Andreasen-Huge in comparison to the arbitrage free PDE of Hagan</a> and showed how close the <a href="http://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">ideas were</a>: Andreasen-Huge relies on the normal Dupire forward PDE using a slightly simpler local vol (no time dependent exponential term) while Hagan works directly on the Fokker-Planck PDE (you can think of it as the Dupire Forward PDE for the density) and uses an expansion of same order as the original SABR formula (which leads to an additional exponential term in the local volatility).<br /><br />One clever idea from Andreasen-Huge is the use of a single step. It turns out that their idea is not completely new. Daniel Duffy sent me some old papers from Shishkin around fitted schemes (<a href="http://oai.cwi.nl/oai/asset/10209/10209A.pdf">here is one</a>). This is very much the same thing, except Shishkin concern is about a good handling of discontinuity in the initial condition, and therefore makes the association step function =&gt; cumulative density to fit the diffusion parameter. Andreasen-Huge work directly with the call prices as this is what they solve.<br /><br />One drawback of Andreasen-Huge one step method is the inability to match the standard SABR smile: the parameters don&rsquo;t have exactly the same meaning. It turns out that by just shifting proportionally the local volatility by a constant factor, Andreasen Huge matches Hagan PDE vols quite closely.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-BNmlkwTWu7Y/VUJGeLtiKII/AAAAAAAAH88/5ZeorrS4WRg/s1600/Screenshot_2015-04-30_17-12-43.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-BNmlkwTWu7Y/VUJGeLtiKII/AAAAAAAAH88/5ZeorrS4WRg/s1600/Screenshot_2015-04-30_17-12-43.png" height="395" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Black volatilities</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rIUYFj3y7ro/VUJF6HOwyHI/AAAAAAAAH80/aOJrEeI1p9U/s1600/Screenshot_2015-04-30_17-09-53.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-rIUYFj3y7ro/VUJF6HOwyHI/AAAAAAAAH80/aOJrEeI1p9U/s1600/Screenshot_2015-04-30_17-09-53.png" height="395" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Probability density</td></tr></tbody></table><br />While this is interesting in itself, it&rsquo;s still not so simple to backup this factor without solving for it (and then the method looses appeal).</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -200,29 +212,16 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/flat-volatility-surfaces--discrete-dividends/">Flat Volatility Surfaces &amp; Discrete Dividends</a>
-      </h1>
-      <span class="post-date">Nov 25, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/flat-volatility-surfaces--discrete-dividends/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the <a href="http://www.opengamma.com/sites/default/files/equity-variance-swaps-dividends-opengamma.pdf">OpenGamma paper</a> presents this graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" height="167" width="400" /></a></div><br />It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.<br /><br />This can be traced to the fact that the Black formula does not respect C(S,K,Td-) = C(S,K-d,Td) as the forward drops from F(Td-) to F(Td-)-d where d is dividend amount at td, the dividend ex date.<br /><br />Unfortunately, those examples are not very helpful. In practice, the market observables are just Black volatility points, which can be interpolated to volatility slices for each expiry without regards to dividends, not a full volatility surface. Discrete dividends will mostly happen between two slices: the Black volatility jump will happen on some time-interpolated data.<br /><br />While the jump size is known (it must obey to the call price continuity), the question of how one should interpolate that data until the jump is far from trivial even using two flat Black volatility slices.<br /><br />The most logical is to consider a model that includes discrete dividends consistently. For example, one can fully lookup the Black volatility corresponding the price of an option assuming a piecewise lognormal process with jumps at the dividend dates. It can be priced by applying a finite difference method on the PDE. Alternatively, <a href="http://www.risk.net/risk-magazine/technical-paper/1530307/finessing-fixed-dividends">Bos &amp; Vandermark</a> propose a simple spot and strike adjusted Black formula that obey the continuity requirement (the Lehman model), which, in practice, stays quite close to the piecewise lognormal model price. Another possibility is to rely on a forward modelling of the dividends, as in <a href="http://www.quantitative-research.de/dl/Dividends_And_Volatility.pdf">Buehler</a> (if one is comfortable with the idea that the option price will then depend ultimately on dividends past the option expiry).<br /><br />Recently, a <a href="http://onlinelibrary.wiley.com/doi/10.1002/wilm.10112/abstract">Wilmott article</a> suggested to only rely on the jump adjustment, but did not really mention how to find the volatility just before or just after the dividend. Here is an illustration of how those assumptions can change the volatility in between slices using two dividends at T=0.9 and T=1.1.<br /><br />In the first graph, we just interpolate linearly in forward moneyness the pure vol from the Bos &amp; Vandermark formula, as it should be continuous with the forward (the PDE would give nearly the same result) and compute the equivalent Black volatility (and thus the jump at the dividend dates).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" height="300" width="400" /></a></div><br />In the second graph, we interpolate linearly the two Black slices, until we find a dividend, at which point we impose the jump condition and repeat the process until the next slice. We process forward (while the Wilmott article processes backward) as it seemed a bit more natural to make the interpolation not depend on future dividends. Processing backward would just make the last part flat and first part down-slopping. On this example backward would be closer to the Bos Black volatility, but when the dividends are near the first slice, the opposite becomes true.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" height="300" width="400" /></a></div>While the scale of those changes is not that large on the example considered, the choice can make quite a difference in the price of structures that depend on the volatility in between slices. A recent example I encountered is the variance swap when one includes adjustment for discrete dividends (then the prices just after the dividend date are used).<br /><br />To conclude, if one wants to use the classic Black formula everywhere, the volatility must jump at the dividend dates. Interpolation in time is then not straightforward and one will need to rely on a consistent model to interpolate. It is not exactly clear then why would anyone stay with the Black formula except familiarity.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
     
-    <li>
-        <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
     </li>
     
-    <li
-    >
-    <a href="/page/6/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <li class="page-item">
+    <a href="/page/6/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
     
     
@@ -234,8 +233,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/">1</a></li>
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
     
     
     
@@ -246,8 +244,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/page/2/">2</a></li>
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
     
     
     
@@ -258,8 +255,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/page/3/">3</a></li>
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
     
     
     
@@ -270,7 +266,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -290,8 +286,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/page/6/">6</a></li>
+    <li class="page-item"><a class="page-link" href="/page/6/">6</a></li>
     
     
     
@@ -302,8 +297,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    class="active"><a href="/page/7/">7</a></li>
+    <li class="page-item active"><a class="page-link" href="/page/7/">7</a></li>
     
     
     
@@ -314,8 +308,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/page/8/">8</a></li>
+    <li class="page-item"><a class="page-link" href="/page/8/">8</a></li>
     
     
     
@@ -326,7 +319,7 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -589,17 +582,15 @@ with \( v_t \) being the standard lognormal volatility process of SABR.<br /><br
         
     
     
-    <li
-    ><a href="/page/38/">38</a></li>
+    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
     
     
-    <li
-    >
-    <a href="/page/8/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    <li class="page-item">
+    <a href="/page/8/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
-    <li>
-        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    <li class="page-item">
+        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

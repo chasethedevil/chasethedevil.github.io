@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.1" />
+	<meta name="generator" content="Hugo 0.47.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/flat-volatility-surfaces--discrete-dividends/">Flat Volatility Surfaces &amp; Discrete Dividends</a>
+      </h1>
+      <span class="post-date">Nov 25, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/flat-volatility-surfaces--discrete-dividends/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the <a href="http://www.opengamma.com/sites/default/files/equity-variance-swaps-dividends-opengamma.pdf">OpenGamma paper</a> presents this graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" height="167" width="400" /></a></div><br />It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.<br /><br />This can be traced to the fact that the Black formula does not respect C(S,K,Td-) = C(S,K-d,Td) as the forward drops from F(Td-) to F(Td-)-d where d is dividend amount at td, the dividend ex date.<br /><br />Unfortunately, those examples are not very helpful. In practice, the market observables are just Black volatility points, which can be interpolated to volatility slices for each expiry without regards to dividends, not a full volatility surface. Discrete dividends will mostly happen between two slices: the Black volatility jump will happen on some time-interpolated data.<br /><br />While the jump size is known (it must obey to the call price continuity), the question of how one should interpolate that data until the jump is far from trivial even using two flat Black volatility slices.<br /><br />The most logical is to consider a model that includes discrete dividends consistently. For example, one can fully lookup the Black volatility corresponding the price of an option assuming a piecewise lognormal process with jumps at the dividend dates. It can be priced by applying a finite difference method on the PDE. Alternatively, <a href="http://www.risk.net/risk-magazine/technical-paper/1530307/finessing-fixed-dividends">Bos &amp; Vandermark</a> propose a simple spot and strike adjusted Black formula that obey the continuity requirement (the Lehman model), which, in practice, stays quite close to the piecewise lognormal model price. Another possibility is to rely on a forward modelling of the dividends, as in <a href="http://www.quantitative-research.de/dl/Dividends_And_Volatility.pdf">Buehler</a> (if one is comfortable with the idea that the option price will then depend ultimately on dividends past the option expiry).<br /><br />Recently, a <a href="http://onlinelibrary.wiley.com/doi/10.1002/wilm.10112/abstract">Wilmott article</a> suggested to only rely on the jump adjustment, but did not really mention how to find the volatility just before or just after the dividend. Here is an illustration of how those assumptions can change the volatility in between slices using two dividends at T=0.9 and T=1.1.<br /><br />In the first graph, we just interpolate linearly in forward moneyness the pure vol from the Bos &amp; Vandermark formula, as it should be continuous with the forward (the PDE would give nearly the same result) and compute the equivalent Black volatility (and thus the jump at the dividend dates).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" height="300" width="400" /></a></div><br />In the second graph, we interpolate linearly the two Black slices, until we find a dividend, at which point we impose the jump condition and repeat the process until the next slice. We process forward (while the Wilmott article processes backward) as it seemed a bit more natural to make the interpolation not depend on future dividends. Processing backward would just make the last part flat and first part down-slopping. On this example backward would be closer to the Bos Black volatility, but when the dividends are near the first slice, the opposite becomes true.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" height="300" width="400" /></a></div>While the scale of those changes is not that large on the example considered, the choice can make quite a difference in the price of structures that depend on the volatility in between slices. A recent example I encountered is the variance swap when one includes adjustment for discrete dividends (then the prices just after the dividend date are used).<br /><br />To conclude, if one wants to use the classic Black formula everywhere, the volatility must jump at the dividend dates. Interpolation in time is then not straightforward and one will need to rely on a consistent model to interpolate. It is not exactly clear then why would anyone stay with the Black formula except familiarity.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -198,29 +210,16 @@
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/another-svi-initial-guess/">Another SVI Initial Guess</a>
-      </h1>
-      <span class="post-date">Jul 29, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/another-svi-initial-guess/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$$<br />where k is the log-moneyness, w(k) the implied variance at a given moneyness and a,b,rho,m,sigma the 5 SVI parameters.<br /><br />A. Vogt described a particularly simple way to find an initial guess to fit SVI to an implied volatility slice <a href="http://www.nuclearphynance.com/User%20Files/66/GatheralSmile_estimation_for_one_expiry_NP.pdf" target="_blank">a while ago</a>. The idea to compute rho and sigma from the left and right asymptotic slopes. a,m are recovered from the crossing point of the asymptotes and sigma using the minimum variance.<br /><br />Later, <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CB4QFjAA&amp;url=http%3A%2F%2Fwww.zeliade.com%2Fwhitepapers%2Fzwp-0005.pdf&amp;ei=xI3XU9T3OYme7AbzwoHQDw&amp;usg=AFQjCNGsvbseObGCDAZ1QbYtvOL9J2-aRw&amp;sig2=rz4SilY2q1RSuD9XgWKFig&amp;bvm=bv.71778758,d.ZGU" target="_blank">Zeliade has shown</a> a very nice reduction of the problem to 2 variables, while the remaining 3 can be deduced explicitly. The practical side is that constraints are automatically included, the less practical side is the choice of minimizer for the two variables (Nelder-Mead) and of initial guess (a few random points).<br /><br />Instead, a simple alternative is the following: given b and rho from the asymptotic slopes, one could also just fit a parabola at-the-money, in a similar spirit as the <a href="http://papers.ssrn.com/abstract=2467231" target="_blank">explicit SABR calibration</a>, and recover explicitly a, m and sigma.<br /><br />To illustrate I take the data from Zeliade, where the input is already some SVI fit to market data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" height="385" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">3M expiry - Zeliade data</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" height="391" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry, Zeliade data</td></tr></tbody></table>We clearly see that ATM the fit is better for the parabolic initial guess than for Vogt, but as one goes further away from ATM, Vogt guess seems better.<br /><br />Compared to SABR, the parabola itself fits decently only very close to ATM. If one computes the higher order Taylor expansion of SVI around k=0, powers of (k/sigma) appear, while sigma is often relatively small especially for short expiries: the fourth derivative will quickly make a difference.<br /><br />On implied volatilities stemming from a SABR fit of the SP500, here is how the various methods behave:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">1M expiry on SABR data</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry on SABR data</td></tr></tbody></table>As expected, because SABR (and thus the input implied vol) is much closer to a parabola, the parabolic initial guess is much better than Vogt. The initial guess of Vogt is particularly bad on long expiries, although it will still converge quite quickly to the true minimum with Levenberg-Marquardt.<br /><br />In practice, I have found the method of Zeliade to be very robust, even if a bit slower than Vogt, while Vogt can sometimes (rarely) be too sensitive to the estimate of the asymptotes.<br /><br />The parabolic guess method could also be applied to always fit exactly ATM vol, slope and curvature, and calibrate rho, b to gives the best overall fit. It might be an idea for the next blog post.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
     
-    <li>
-        <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
     </li>
     
-    <li
-    >
-    <a href="/page/7/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <li class="page-item">
+    <a href="/page/7/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
     
     
@@ -232,8 +231,7 @@
         
     
     
-    <li
-    ><a href="/">1</a></li>
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
     
     
     
@@ -244,8 +242,7 @@
         
     
     
-    <li
-    ><a href="/page/2/">2</a></li>
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
     
     
     
@@ -256,8 +253,7 @@
         
     
     
-    <li
-    ><a href="/page/3/">3</a></li>
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
     
     
     
@@ -268,7 +264,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -297,8 +293,7 @@
         
     
     
-    <li
-    ><a href="/page/7/">7</a></li>
+    <li class="page-item"><a class="page-link" href="/page/7/">7</a></li>
     
     
     
@@ -309,8 +304,7 @@
         
     
     
-    <li
-    class="active"><a href="/page/8/">8</a></li>
+    <li class="page-item active"><a class="page-link" href="/page/8/">8</a></li>
     
     
     
@@ -321,8 +315,7 @@
         
     
     
-    <li
-    ><a href="/page/9/">9</a></li>
+    <li class="page-item"><a class="page-link" href="/page/9/">9</a></li>
     
     
     
@@ -333,7 +326,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -587,17 +580,15 @@
         
     
     
-    <li
-    ><a href="/page/38/">38</a></li>
+    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
     
     
-    <li
-    >
-    <a href="/page/9/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    <li class="page-item">
+    <a href="/page/9/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
-    <li>
-        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    <li class="page-item">
+        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

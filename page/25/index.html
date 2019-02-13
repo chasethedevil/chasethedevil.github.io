@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.1" />
+	<meta name="generator" content="Hugo 0.47.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/fedora-linux--apple-bluetooth-keyboard/">Fedora Linux &amp; Apple Bluetooth Keyboard</a>
+      </h1>
+      <span class="post-date">Jun 5, 2008 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/fedora-linux--apple-bluetooth-keyboard/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd &ndash;search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS=&ldquo;&ndash;timeout 8 &ndash;connect 00:1D:4F:A7:15:CC &ndash;server&rdquo;</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name &ldquo;Apple Wireless Keyboard&rdquo;;</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are &ldquo;lm master&rdquo; (makes it connect automatically), and &ldquo;&ndash;timeout 8&rdquo; that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -198,29 +210,16 @@
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/kde4-still-not-ready/">KDE4 Still Not Ready</a>
-      </h1>
-      <span class="post-date">Jan 18, 2008 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/kde4-still-not-ready/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I tried KDE4.0 last week, when it was everywhere in the news. I was very disappointed.<br><br>I have a long experience of trying beta software, not well known software. I have used Linux since 1998 (partly). I have even used windows beta at one point. And I have seen nothing as crappy as  KDE4.0 release. <br><br>It is not usable at all. <br><br>Now I can understand what are KDE motivations to do such a bad release. It is to gain momentum in their project. KDE4.0 is in development at least <a href="http://www.advogato.org/person/tjansen/diary.html?start=13"> since 2002</a> - 6 years! By creating a .0 release now even if it is an alpha, they have at least something officially out and hope to have developers starting to improve it. It is especially important for them because Gnome has, in the mean time, made regularly lots of improvements. <br><br>I admire the initiative, KDE 3.5 needed lots of improvements, and KDE4 goals are the right ones. But it just feel like the release was more political than everything else. Hell, <a href="https://lists.linux-foundation.org/pipermail/desktop_architects/2007-February/001129.html"> even Linus seems to use Gnome</a> nowadays.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
     
-    <li>
-        <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
     </li>
     
-    <li
-    >
-    <a href="/page/24/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <li class="page-item">
+    <a href="/page/24/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
     
     
@@ -232,8 +231,7 @@
         
     
     
-    <li
-    ><a href="/">1</a></li>
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
     
     
     
@@ -244,8 +242,7 @@
         
     
     
-    <li
-    ><a href="/page/2/">2</a></li>
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
     
     
     
@@ -256,8 +253,7 @@
         
     
     
-    <li
-    ><a href="/page/3/">3</a></li>
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
     
     
     
@@ -268,7 +264,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -450,8 +446,7 @@
         
     
     
-    <li
-    ><a href="/page/24/">24</a></li>
+    <li class="page-item"><a class="page-link" href="/page/24/">24</a></li>
     
     
     
@@ -462,8 +457,7 @@
         
     
     
-    <li
-    class="active"><a href="/page/25/">25</a></li>
+    <li class="page-item active"><a class="page-link" href="/page/25/">25</a></li>
     
     
     
@@ -474,8 +468,7 @@
         
     
     
-    <li
-    ><a href="/page/26/">26</a></li>
+    <li class="page-item"><a class="page-link" href="/page/26/">26</a></li>
     
     
     
@@ -486,7 +479,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -587,17 +580,15 @@
         
     
     
-    <li
-    ><a href="/page/38/">38</a></li>
+    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
     
     
-    <li
-    >
-    <a href="/page/26/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    <li class="page-item">
+    <a href="/page/26/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
-    <li>
-        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    <li class="page-item">
+        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

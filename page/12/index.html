@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.1" />
+	<meta name="generator" content="Hugo 0.47.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/">Coordinate Transform of the Andreasen Huge SABR PDE &amp; Spline Interpolation</a>
+      </h1>
+      <span class="post-date">Jan 8, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>Recently, I noticed <a href="http://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">how close</a> are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.<br /><br />Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy. The transform itself can be found in the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.andersen-piterbarg-book.com%2F&amp;ei=dYzNUrG6Eo7n7Aamp4GwAQ&amp;usg=AFQjCNE3sdrH2B8EDg40Gocp8FB-QEtnew&amp;sig2=aoDaRX5-zTolem9mUrEumw&amp;bvm=bv.58187178,d.ZGU">Andersen-Piterbarg book</a> &ldquo;Interest Rate Modeling&rdquo;, and is similar to the famous log transform, but for a general local volatility function (phi in the book notation).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-7-b4VC2HYRM/Us57Fo7GZII/AAAAAAAAG80/GfE-IoMhstg/s1600/piterbarg_lv_transform1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-7-b4VC2HYRM/Us57Fo7GZII/AAAAAAAAG80/GfE-IoMhstg/s1600/piterbarg_lv_transform1.png" /></a></div><br /><br />There are two ways to transform Andreasen Huge PDE:<br /><ul><li>through a non-uniform grid: the input strikes are directly transformed based on a uniform grid in the inverse transformed grid (paying attention to still put the strike in the middle of two points). This is detailed in the Andersen-Piterbarg book.</li></ul><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-YMhf3KlpAsU/Us57KVQxxnI/AAAAAAAAG9A/2LUUoS8wK94/s1600/piterbarg_lv_transform2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-YMhf3KlpAsU/Us57KVQxxnI/AAAAAAAAG9A/2LUUoS8wK94/s1600/piterbarg_lv_transform2.png" height="66" width="320" /></a></div><br /><ul><li>through a variable transform in the PDE: this gives a slightly different PDE to solve. One still needs to convert then a given strike, to the new PDE variable. This kind of transform is detailed in the <a href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471197602.html">Tavella-Randall book</a> &ldquo;Pricing Financial Instruments: the Finite Difference Method&rdquo;, for example.</li></ul><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-nF2JZ13ITig/Us57x_lQ_BI/AAAAAAAAG9E/V37fO67-X6I/s1600/tavella_lv_transform3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-nF2JZ13ITig/Us57x_lQ_BI/AAAAAAAAG9E/V37fO67-X6I/s1600/tavella_lv_transform3.png" height="157" width="320" /></a></div><br /><ul></ul>Both are more or less equivalent. I would expect the later to be slightly more precise but I tried the former as it is simpler to test if you have non uniform parabolic PDE solvers.<br /><br />It works very well, but I found an interesting issue when computing the density (second derivative of the call price): if one relies on a Hermite kind of spline (Bessel/Parabolic or Harmonic), the density wiggles around. The C2 cubic spline solves this problem as it is C2. Initially I thought those wiggles could be produced because the interpolation did not respect monotonicity and I tried a Hyman monotonic cubic spline out of curiosity, it did not change anything (in an earlier version of this post I had a bug in my Hyman filter) as it preserves monotonicity but not convexity. The wiggles are only an effect of the approximation of the derivatives value.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-bV004iraP1Y/Us6ur0FR3eI/AAAAAAAAG94/rcYDqrQpH28/s1600/ah_dens3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-bV004iraP1Y/Us6ur0FR3eI/AAAAAAAAG94/rcYDqrQpH28/s1600/ah_dens3.png" height="449" width="640" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div>Initially, I did not notice this on the uniform discretization mostly because I used a large number of strikes in the PDE (here I use only 50 strikes) but also because the effect is somewhat less pronounced in this case.<br /><br />I also discovered a bug in my non uniform implementation of Hagan Density PDE, I forgot to take into account an additional dF/dz factor when the density is integrated. As a result, the density was garbage when computed by a numerical difference.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-J6HOoAs43qE/Us6tIN6FeqI/AAAAAAAAG9c/K4DndmXBtRs/s1600/hagan_lv_spline_density2.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-J6HOoAs43qE/Us6tIN6FeqI/AAAAAAAAG9c/K4DndmXBtRs/s1600/hagan_lv_spline_density2.png" height="217" width="320" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">HaganDensity denotes the transformed PDE on density approach. Notice the non-sensical spikes</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-HzGDaqZ596I/Us6tIEX3KLI/AAAAAAAAG9Y/npyaXX52KRY/s1600/density_transform_bad.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-HzGDaqZ596I/Us6tIEX3KLI/AAAAAAAAG9Y/npyaXX52KRY/s1600/density_transform_bad.png" height="280" width="320" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">&ldquo;Bad&rdquo; Call prices around the forward with Hagan Density PDE. Notice the jumps.</td></tr></tbody></table>&nbsp;<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-C8kixBPkBU8/Us6tIJXHA9I/AAAAAAAAG9U/ilSafRrVrOY/s1600/density_transform_good.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-C8kixBPkBU8/Us6tIJXHA9I/AAAAAAAAG9U/ilSafRrVrOY/s1600/density_transform_good.png" height="280" width="320" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;"><div style="text-align: left;">No jumps anymore after the dF/dZ fit </div></td></tr></tbody></table><br /><div style="text-align: left;"><b>Update March 2014</b> - I have now a paper with Matlab code &ldquo;<a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a>&ldquo;<br />&nbsp;<table cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: 0px; margin-right: auto; text-align: left;"><tbody></tbody></table></div></p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -206,29 +218,16 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/">Martin Odersky teaches Scala to the Masses</a>
-      </h1>
-      <span class="post-date">Sep 17, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a>&nbsp;by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What&rsquo;s nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.<br /><br />I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).<br /><br />I believe it will make my code more functional programming oriented in the future, especially at the high level.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
     
-    <li>
-        <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
     </li>
     
-    <li
-    >
-    <a href="/page/11/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <li class="page-item">
+    <a href="/page/11/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
     
     
@@ -240,8 +239,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/">1</a></li>
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
     
     
     
@@ -252,8 +250,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/page/2/">2</a></li>
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
     
     
     
@@ -264,8 +261,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/page/3/">3</a></li>
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
     
     
     
@@ -276,7 +272,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -341,8 +337,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/page/11/">11</a></li>
+    <li class="page-item"><a class="page-link" href="/page/11/">11</a></li>
     
     
     
@@ -353,8 +348,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    class="active"><a href="/page/12/">12</a></li>
+    <li class="page-item active"><a class="page-link" href="/page/12/">12</a></li>
     
     
     
@@ -365,8 +359,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/page/13/">13</a></li>
+    <li class="page-item"><a class="page-link" href="/page/13/">13</a></li>
     
     
     
@@ -377,7 +370,7 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -595,17 +588,15 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
         
     
     
-    <li
-    ><a href="/page/38/">38</a></li>
+    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
     
     
-    <li
-    >
-    <a href="/page/13/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    <li class="page-item">
+    <a href="/page/13/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
-    <li>
-        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    <li class="page-item">
+        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

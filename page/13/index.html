@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.40.1" />
+	<meta name="generator" content="Hugo 0.47.1" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,18 @@
 <div class="content container">
   <div class="posts">
     
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/">Martin Odersky teaches Scala to the Masses</a>
+      </h1>
+      <span class="post-date">Sep 17, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a>&nbsp;by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What&rsquo;s nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.<br /><br />I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).<br /><br />I believe it will make my code more functional programming oriented in the future, especially at the high level.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
@@ -198,29 +210,16 @@
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/">The CUDA Performance Myth II</a>
-      </h1>
-      <span class="post-date">Jul 12, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>This is a kind of following to the <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/">CUDA performance myth</a>. There is a recent news on the java concurrent mailing list about <a href="http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/SplittableRandom.java?revision=1.7&amp;view=markup">SplittableRandom class</a> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.<br /><br />It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <a href="http://www.iro.umontreal.ca/~simardr/rng/MRG32k3a.c">MRG32k3a</a> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MTGP/">MTGP</a>, and even the less rigourous XorWow popularized by NVidia CUDA.<br /><br />The book <a href="http://my.safaribooksonline.com/book/-/9780123849885/chapter-16dot-parallelization-techniques-for-random-number-generators/232#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDEyMzg0OTg4NS8yNDQ=">GPU Computing Gems</a> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister) <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-lETLXaEkXn8/UeABqgvJndI/AAAAAAAAGiU/MzLslJR0R_c/s1600/snapshot32.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://4.bp.blogspot.com/-lETLXaEkXn8/UeABqgvJndI/AAAAAAAAGiU/MzLslJR0R_c/s640/snapshot32.png" width="572" /></a></div>A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.<br /><br /></p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
     
-    <li>
-        <a href="/" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
     </li>
     
-    <li
-    >
-    <a href="/page/12/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <li class="page-item">
+    <a href="/page/12/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
     
     
@@ -232,8 +231,7 @@
         
     
     
-    <li
-    ><a href="/">1</a></li>
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
     
     
     
@@ -244,8 +242,7 @@
         
     
     
-    <li
-    ><a href="/page/2/">2</a></li>
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
     
     
     
@@ -256,8 +253,7 @@
         
     
     
-    <li
-    ><a href="/page/3/">3</a></li>
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
     
     
     
@@ -268,7 +264,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -342,8 +338,7 @@
         
     
     
-    <li
-    ><a href="/page/12/">12</a></li>
+    <li class="page-item"><a class="page-link" href="/page/12/">12</a></li>
     
     
     
@@ -354,8 +349,7 @@
         
     
     
-    <li
-    class="active"><a href="/page/13/">13</a></li>
+    <li class="page-item active"><a class="page-link" href="/page/13/">13</a></li>
     
     
     
@@ -366,8 +360,7 @@
         
     
     
-    <li
-    ><a href="/page/14/">14</a></li>
+    <li class="page-item"><a class="page-link" href="/page/14/">14</a></li>
     
     
     
@@ -378,7 +371,7 @@
         
     
     
-    <li class="disabled"><span aria-hidden="true">&hellip;</span></li>
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
     
     
     
@@ -587,17 +580,15 @@
         
     
     
-    <li
-    ><a href="/page/38/">38</a></li>
+    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
     
     
-    <li
-    >
-    <a href="/page/14/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    <li class="page-item">
+    <a href="/page/14/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
-    <li>
-        <a href="/page/38/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    <li class="page-item">
+        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>
