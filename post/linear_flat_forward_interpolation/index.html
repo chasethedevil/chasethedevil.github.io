@@ -102,17 +102,10 @@ This means that intraday, we interpolate the dividend yield.</p>
 
 <p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
 But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
-
 <figure>
-    
-        <img src="/post/linear_flat_forward.png" />
-    
-    
-    <figcaption>
-        <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
-        
-    </figcaption>
-    
+    <img src="/post/linear_flat_forward.png"/> <figcaption>
+            <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
+        </figcaption>
 </figure>
 
 On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>

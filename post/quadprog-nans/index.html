@@ -119,17 +119,10 @@
 
 <p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
 
-
 <figure>
-    
-        <img src="/post/quadprog_nan_fix.png" />
-    
-    
-    <figcaption>
-        <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
-        
-    </figcaption>
-    
+    <img src="/post/quadprog_nan_fix.png"/> <figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
 </figure>
 
 

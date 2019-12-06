@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Unintuitive behavior of the Black-Scholes formula - negative volatilities in displaced diffusion extrapolation &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1 class="post-title">Unintuitive behavior of the Black-Scholes formula - negative volatilities in displaced diffusion extrapolation</h1>
+    <span class="post-date">Jul 7, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/unintuitive-behavior-of-the-black-scholes-formula-negative-volatilities-in-displaced-diffusion-extrapolation/#disqus_thread">Comments</a>
+    </span>
+    <p>I am looking at various extrapolation schemes of the implied volatilities. An interesting one I stumbled upon is due to Kahale. Even if <a href="http://nkahale.free.fr/papers/Interpolation.pdf">his paper</a> is on interpolation, there is actually a small paragraph on using the same kind of function for extrapolation. His idea is to simply lookup the standard deviation \( \Sigma \) and the forward \(f\) corresponding to a given market volatility and slope:
+$$ c_{f,\Sigma} = f N(d_1) - k N(d_2)$$
+with
+$$ d_1 = \frac{\log(f/k)+\Sigma^2 /2}{\Sigma} $$</p>
+
+<p>We have simply:
+$$ c&rsquo;(k) = - N(d_2)$$</p>
+
+<p>He also proves that we can always find those two parameters for any \( k_0 &gt; c_0 &gt; 0,  -1 &lt; c_0&rsquo; &lt; 0 \)</p>
+
+<p>Then I had the silly idea of trying to match with a put&nbsp; instead of a call for the left wing (as those are out-of-the-money, and therefore easier to invert numerically). It turns out that it works in most cases in practice and produces relatively nice looking extrapolations, but it does not always work. This is because contrary to the call, the put value is bounded with \(f\).
+$$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$</p>
+
+<p>Inverting \( p_0&rsquo; \) is going to lead to a specific \( d_2 \), and you are not guaranteed that you can push \( f \) high and have \( p_{f, \Sigma} \) large enough to match \( p_0 \). As example we can just take \(p_0 \geq k N(-d_2)\) which will only be matched if \( f \leq 0 \).</p>
+
+<p>This is slightly unintuitive as put-call parity would suggest some kind of equivalence. The problem here is that we would need to consider the function of \(k\) instead of \(f\) for it to work, so we can&rsquo;t really work with a put directly.</p>
+
+<p>Here are the two different extrapolations on Kahale own example:
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s1600/Screenshot-Untitled%2BWindow.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s400/Screenshot-Untitled%2BWindow.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing with calls (blue doted line)</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s1600/Screenshot-Untitled%2BWindow-1.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s400/Screenshot-Untitled%2BWindow-1.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing with puts (blue doted line)</td></tr></tbody></table>
+Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
+I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s1600/Screenshot-Untitled%2BWindow-2.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s400/Screenshot-Untitled%2BWindow-2.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)</td></tr></tbody></table></p>
+
+  </div>
+  <div id="disqus_thread"></div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+</body>
+</html>
+

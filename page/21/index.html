@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.47.1" />
+	<meta name="generator" content="Hugo 0.57.2" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/">A Very Interesting Feature of Scala</a>
+      </h1>
+      <span class="post-date">Aug 7, 2010 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I tried Scala <a href="http://chasethedevil.blogspot.com/2007/09/fast-web-development-with-scala.html">a few years ago</a>. There are several good ideas in it, but I found the language to be a bit too complicated to master. But I recently stubbled upon <a href="http://lamp.epfl.ch/~dragos/files/scala-spec.pdf">a paper on Scala generics</a>&nbsp;that might change my mind about using Scala.<br /><br />Scala Generics used to work in a similar way as Java Generics: via type erasure. One main reason is compatibility with Java, another is that C++ like templates make the code base blow up. Scala Generics offered some additional behavior (the variance/covariance notion).&nbsp;C++ templates, however, have some very interesting aspects: one is that everything is done at compile time, the other is &nbsp;performance. If the generics are involved in any kind of computation intensive task, all the Java type conversion will create a significant overhead.<br /><br />Now Scala has <b><a href="http://www.scala-lang.org/api/current/scala/specialized.html">@specialized</a></b>&nbsp;(since Scala 2.8). Annotating a generic type with @specialized will generate code. One has the choice to accept the performance penalty or to get all the performance but accept the code blow up. I think this is very useful.<br /><br />If you read the paper you will see that the performance implications of this are not always small.<br /><br />UPDATE: I thank the readers for pointing that this work only with primitive types to avoid autoboxing. It is still valuable but less than I first thought.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/street-fighting-mathematics-book/">Street Fighting Mathematics Book</a>
       </h1>
       <span class="post-date">Jul 28, 2010 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/street-fighting-mathematics-book/#disqus_thread">Comments</a>
@@ -128,9 +140,9 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
+        <a href="https://chasethedevil.github.io/post/java-3d-surface/">Java &amp; 3D Surface</a>
       </h1>
-      <span class="post-date">Dec 18, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/java--3d-surface/#disqus_thread">Comments</a>
+      <span class="post-date">Dec 18, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/java-3d-surface/#disqus_thread">Comments</a>
       </span>
       
       <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts. <br /><br />I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
@@ -188,24 +200,12 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
+        <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares-pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
       </h1>
-      <span class="post-date">Jun 27, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/#disqus_thread">Comments</a>
+      <span class="post-date">Jun 27, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares-pure-alsa-to-the-rescue/#disqus_thread">Comments</a>
       </span>
       
       <p>In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting&hellip; Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm &ldquo;hw:0,1&rdquo;<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         &ldquo;amix&rdquo;      #redirect the output to dmix (instead of &ldquo;hw:0,0&rdquo;)<br />    }<br />    control {<br />        name        &ldquo;PCM&rdquo;       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       &ldquo;softvol&rdquo;   #make use of softvol<br />}<br /></pre></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/">Java int Overflow Behavior</a>
-      </h1>
-      <span class="post-date">Jun 15, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>A coworker recently asked me if there was a guaranteed behavior in the case of int overflow. He gave the specific example on:<br />can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?<br /><br />I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.<br /><br />I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if<br />long l = Integer.MAX_VALUE;<br />l = l +1;<br />x = (int)l;<br />x has a guaranteed value.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a><br />paragraph 5.1.3</p>
 
       
     </div>
@@ -221,6 +221,7 @@
     <li class="page-item">
     <a href="/page/20/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
+    
     
     
     
@@ -592,6 +593,7 @@
     </li>
     
 </ul>
+
 
   </div>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.47.1" />
+	<meta name="generator" content="Hugo 0.57.2" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,32 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+      </h1>
+      <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
+
+<p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
+
+<figure>
+    <img src="/post/svi_sabr_parabola.png"/> <figcaption>
+            <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
+        </figcaption>
+</figure>
+
+
+<p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
       </h1>
       <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/filon_for_heston/#disqus_thread">Comments</a>
@@ -155,17 +181,10 @@ which looked robust, but was actually not so much.</p>
 <p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
 (NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
 
-
 <figure>
-    
-        <img src="/post/rational_fit_value.png" />
-    
-    
-    <figcaption>
-        <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/rational_fit_value.png"/> <figcaption>
+            <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+        </figcaption>
 </figure>
 
 
@@ -200,17 +219,10 @@ which looked robust, but was actually not so much.</p>
 <p>A <sup>10</sup>&frasl;<sub>10</sub> rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
 visually to understand how large is the difference:</p>
 
-
 <figure>
-    
-        <img src="/post/rational_fit_error.png" />
-    
-    
-    <figcaption>
-        <h4>Least squares polynomial fit error of degree 20.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/rational_fit_error.png"/> <figcaption>
+            <h4>Least squares polynomial fit error of degree 20.</h4>
+        </figcaption>
 </figure>
 
 
@@ -245,17 +257,10 @@ pseudo code on that paper has errors.</p>
 In theory, the number of parameters is N+2 where N is the number of interpolation points.
 I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
 
-
 <figure>
-    
-        <img src="/post/least_squares_spline.png" />
-    
-    
-    <figcaption>
-        <h4>least squares spline on 1m AAPL options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/least_squares_spline.png"/> <figcaption>
+            <h4>least squares spline on 1m AAPL options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -288,17 +293,10 @@ I also relied on a simple implied volatility algorithm that can be summarized in
 
 <p>Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:</p>
 
-
 <figure>
-    
-        <img src="/post/mystic_parabola.png" />
-    
-    
-    <figcaption>
-        <h4>least squares parabola on 2y AAPL options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/mystic_parabola.png"/> <figcaption>
+            <h4>least squares parabola on 2y AAPL options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -384,17 +382,10 @@ This means that intraday, we interpolate the dividend yield.</p>
 
 <p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
 But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
-
 <figure>
-    
-        <img src="/post/linear_flat_forward.png" />
-    
-    
-    <figcaption>
-        <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
-        
-    </figcaption>
-    
+    <img src="/post/linear_flat_forward.png"/> <figcaption>
+            <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
+        </figcaption>
 </figure>
 
 On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
@@ -443,18 +434,6 @@ Another work-around would be to model this via proportional dividends instead of
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/broken-internet/">Broken Internet?</a>
-      </h1>
-      <span class="post-date">Nov 9, 2015 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/broken-internet/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>There is something funny going on with upcoming generic top level domains (gTLDs), they seem to be looked up in a strange manner (at least on latest Linux). For example:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping chrome&nbsp;</span><br /><br />or<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping nexus&nbsp;</span><br /><br />returns 127.0.53.53.<br /><br />While existing <a href="https://www.name.com/new-gtld">official gTLD</a>s don&rsquo;t (<span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping dental</span> returns &ldquo;unknown host&rdquo; as expected). I first thought it was a network misconfiguration, but as <a href="https://groups.google.com/forum/#!msg/public-dns-discuss/bzhTQnFqE6I/E9F46xhka98J">I am not the only one to notice this</a>, it&rsquo;s likely a genuine internet issue.<br /><br />Strange times.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -466,6 +445,7 @@ Another work-around would be to model this via proportional dividends instead of
     <li class="page-item">
     <a href="/page/4/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
+    
     
     
     
@@ -835,6 +815,7 @@ Another work-around would be to model this via proportional dividends instead of
     </li>
     
 </ul>
+
 
   </div>
 </div>

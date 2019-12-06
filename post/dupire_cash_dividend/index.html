@@ -110,17 +110,10 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 
 <p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
 
-
 <figure>
-    
-        <img src="/post/dupire_labordere_ll1.png" />
-    
-    
-    <figcaption>
-        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/dupire_labordere_ll1.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
 </figure>
 
 
@@ -129,47 +122,26 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
 quite larger than the regular local volatility, even with a somewhat discontinuous yield.</p>
 
-<p>
-<figure>
-    
-        <img src="/post/dupire_labordere_ll3.png" />
-    
-    
-    <figcaption>
-        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
-        
-    </figcaption>
-    
+<p><figure>
+    <img src="/post/dupire_labordere_ll3.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
+        </figcaption>
 </figure>
 
-
 <figure>
-    
-        <img src="/post/dupire_labordere_ll3shift.png" />
-    
-    
-    <figcaption>
-        <h4>Look, when we shift by the dividend!</h4>
-        
-    </figcaption>
-    
+    <img src="/post/dupire_labordere_ll3shift.png"/> <figcaption>
+            <h4>Look, when we shift by the dividend!</h4>
+        </figcaption>
 </figure>
 </p>
 
 <p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
 
 <p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
-
 <figure>
-    
-        <img src="/post/dupire_labordere_policy.png" />
-    
-    
-    <figcaption>
-        <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/dupire_labordere_policy.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
 </figure>
 </p>
 
@@ -177,31 +149,17 @@ quite larger than the regular local volatility, even with a somewhat discontinuo
 Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
 
 <p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
-
 <figure>
-    
-        <img src="/post/dupire_labordere_yield3.png" />
-    
-    
-    <figcaption>
-        <h4>Dupire Local Volatility under the forward model.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/dupire_labordere_yield3.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
 </figure>
 
 The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
-
 <figure>
-    
-        <img src="/post/dupire_labordere_yield3e.png" />
-    
-    
-    <figcaption>
-        <h4>Dupire Local Volatility under the forward model.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/dupire_labordere_yield3e.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
 </figure>
 </p>
 

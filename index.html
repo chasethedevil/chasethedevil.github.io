@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.47.1" />
+	<meta name="generator" content="Hugo 0.57.2" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,33 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/42/">42</a>
+      </h1>
+      <span class="post-date">Dec 5, 2019 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/42/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/math">math</a>
+      </span>
+      
+      <p>Today my 6-years old son came with a math homework. The stated goal was to learn the different ways to make 10 out of smaller numbers. I was impressed. Immediately, I wondered</p>
+
+<blockquote>
+<p>how many ways are there to make 10 out of smaller numbers?</p>
+</blockquote>
+
+<p>This is one of the beauty of maths: a very simple problem, which a 6-years old can understand, may actually be quite fundamental. If you want to solve this in the general case, for any number instead of 10, you end up with the <a href="https://en.wikipedia.org/wiki/Partition_(number_theory)#Restricted_part_size_or_number_of_parts">partition function</a>. And in order to find this, you will probably learn recurrence relations. So what is the answer for 10?</p>
+
+<blockquote>
+<p>42</p>
+</blockquote>
+
+<p>Then I looked at one exercise they did in class, which was simply to find different ways to pay 10 euros with bills of 10, 5 and coins of 2 and 1 euro(s).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/python-numba-overrated/">Numba, Pypy Overrated?</a>
       </h1>
       <span class="post-date">Feb 12, 2019 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/python-numba-overrated/#disqus_thread">Comments</a>
@@ -158,17 +185,10 @@ was not all that encouraging, but it may be much better at building PDE solvers 
 
 <p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
 
-
 <figure>
-    
-        <img src="/post/quadprog_nan_fix.png" />
-    
-    
-    <figcaption>
-        <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
-        
-    </figcaption>
-    
+    <img src="/post/quadprog_nan_fix.png"/> <figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
 </figure>
 
 
@@ -195,17 +215,10 @@ high compared to other stocks? or is it the interpretation of the data erroneous
 
 <p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
 
-
 <figure>
-    
-        <img src="/post/nflx2020_vol.png" />
-    
-    
-    <figcaption>
-        <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/nflx2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -214,17 +227,10 @@ include an inverse relative bid-ask spread weighting in the calibration.</p>
 
 <p>The corresponding implied cumulative density is</p>
 
-
 <figure>
-    
-        <img src="/post/nflx2020_cum.png" />
-    
-    
-    <figcaption>
-        <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/nflx2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -260,17 +266,10 @@ include an inverse relative bid-ask spread weighting in the calibration.</p>
 
 <p>For completeness, the implied probability density is</p>
 
-
 <figure>
-    
-        <img src="/post/nflx2020_rnd.png" />
-    
-    
-    <figcaption>
-        <h4>Probability density implied from Jan 2020 NFLX options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/nflx2020_rnd.png"/> <figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -280,31 +279,17 @@ too large bumps in the density at specific strikes, suggesting that it could als
 <p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
 much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
 
-
 <figure>
-    
-        <img src="/post/snap2020_vol.png" />
-    
-    
-    <figcaption>
-        <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/snap2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
 </figure>
 
 
-
 <figure>
-    
-        <img src="/post/snap2020_cum.png" />
-    
-    
-    <figcaption>
-        <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/snap2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -328,17 +313,10 @@ As I was also recently looking at the TSLA options, I was a bit intrigued. I loo
 and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
 This results in the following graph</p>
 
-
 <figure>
-    
-        <img src="/post/tsla2020_vol.png" />
-    
-    
-    <figcaption>
-        <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/tsla2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -348,17 +326,10 @@ removed the quote for strike 30, as the bid-ask spread was, unusually extremely 
 
 <p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
 
-
 <figure>
-    
-        <img src="/post/tsla2020_cum.png" />
-    
-    
-    <figcaption>
-        <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/tsla2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -396,17 +367,10 @@ removed the quote for strike 30, as the bid-ask spread was, unusually extremely 
 
 <p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
 
-
 <figure>
-    
-        <img src="/post/tsla2020_rnd.png" />
-    
-    
-    <figcaption>
-        <h4>Probability density implied from Jan 2020 TSLA options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/tsla2020_rnd.png"/> <figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -513,33 +477,19 @@ for example by optimizing the nodes locations and the standard deviation of each
 
 <p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
 
-
 <figure>
-    
-        <img src="/post/rnd_nonic_collocation.png" />
-    
-    
-    <figcaption>
-        <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/rnd_nonic_collocation.png"/> <figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 
 <p>There is now just one mode, and the fit in implied volatilities is much better.</p>
 
-
 <figure>
-    
-        <img src="/post/nonic_collocation_vol.png" />
-    
-    
-    <figcaption>
-        <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/nonic_collocation_vol.png"/> <figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 
@@ -551,34 +501,20 @@ His Tikhonov regularization consists here in applying a roughness penalty consis
 in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
 This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
 
-
 <figure>
-    
-        <img src="/post/rnd_ah_tikhonov.png" />
-    
-    
-    <figcaption>
-        <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/rnd_ah_tikhonov.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
 </figure>
 
 
 <p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
 the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
 
-
 <figure>
-    
-        <img src="/post/rnd_ah_tikhonov_lcurve.png" />
-    
-    
-    <figcaption>
-        <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/rnd_ah_tikhonov_lcurve.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 
@@ -605,15 +541,15 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
 
 <p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
 
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">class</span> Dog
+    <span style="color:#06287e">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>() { ... }
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">void</span> setHappy(<span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>) { ... }</code></pre></div>
 
 <p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
 
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">class</span> DogUtil
+    <span style="color:#06287e">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#06287e">boolean</span> isHappy(Dog <span style="color:#06287e">dog</span>) { ... }
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span>(Dog <span style="color:#06287e">dog</span>, <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>) { ... }</code></pre></div>
 
 <p>This is really breaking OO and moving back to procedural programming.</p>
 
@@ -640,17 +576,10 @@ technique is not very robust. It is particularly sensitive to the number of opti
 
 <p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
 
-
 <figure>
-    
-        <img src="/post/spw_density_spline_nodes.png" />
-    
-    
-    <figcaption>
-        <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_density_spline_nodes.png"/> <figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+        </figcaption>
 </figure>
 
 
@@ -713,17 +642,10 @@ optimized the kernel bandwidth (here the standard deviation of each Gaussian den
 in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
 narrower peaks.</p>
 
-
 <figure>
-    
-        <img src="/post/spw_density_kernel_nodes.png" />
-    
-    
-    <figcaption>
-        <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_density_kernel_nodes.png"/> <figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+        </figcaption>
 </figure>
 
 
@@ -732,33 +654,19 @@ The fit can be much better by adding nodes at
 f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
 will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
 
-
 <figure>
-    
-        <img src="/post/spw_vol_kernel2.png" />
-    
-    
-    <figcaption>
-        <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_vol_kernel2.png"/> <figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 
 <p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
 
-
 <figure>
-    
-        <img src="/post/spw_density_kernel2.png" />
-    
-    
-    <figcaption>
-        <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_density_kernel2.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 
@@ -767,17 +675,10 @@ then we impose where the peaks will be located eventually.</p>
 
 <p>It is interesting to compare the graph with the one before the volatility jump:</p>
 
-
 <figure>
-    
-        <img src="/post/spw_density_janfeb_kernel2.png" />
-    
-    
-    <figcaption>
-        <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_density_janfeb_kernel2.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 
@@ -805,17 +706,10 @@ after stocks grew steadily for months in a low VIX environment.</p>
 <p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
 It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
 
-
 <figure>
-    
-        <img src="/post/spw_density.png" />
-    
-    
-    <figcaption>
-        <h4>probability density of the SPX implied from 1-month SPW options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_density.png"/> <figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -824,17 +718,10 @@ Some market participants are more cautious and believe it could hover around 266
 
 <p>Option traders like to look at the implied volatilities (below).</p>
 
-
 <figure>
-    
-        <img src="/post/spw_vol.png" />
-    
-    
-    <figcaption>
-        <h4>implied volatilities of 1-month SPW options.</h4>
-        
-    </figcaption>
-    
+    <img src="/post/spw_vol.png"/> <figcaption>
+            <h4>implied volatilities of 1-month SPW options.</h4>
+        </figcaption>
 </figure>
 
 
@@ -842,74 +729,6 @@ Some market participants are more cautious and believe it could hover around 266
 a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
 
 <p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/">Discrete Sine Transform via the FFT</a>
-      </h1>
-      <span class="post-date">Feb 5, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/math">math</a>
-      </span>
-      
-      <p>Several months ago, I had a quick look at <a href="https://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2585529">a recent paper</a> describing how to use
-Wavelets to price options under stochastic volatility models with a known characteristic function.
-The more classic method is to use some numerical quadrature directly on the Fourier integral as described <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2362968">in this paper</a> for example.
-When I read the paper, I was skeptical about the Wavelet approach, since it looked complicated, and with many additional parameters.</p>
-
-<p>I recently took a closer look and it turns out my judgment was bad. The additional parameters can be easily automatically and reliably set
-by very simple rules that work well (<a href="https://ssrn.com/abstract=2705699">a subsequent paper</a> by the same author, which applies the method to Bermudan options, clarifies this).
-The method is also not as complex as I first imagined. And more importantly, the FFT makes it fast. It is quite amazing to see
-the power of the FFT in action. It really is because of the FFT that the Shannon Wavelet method is practical.</p>
-
-<p>Anyway one of the things that need to be computed are the payoff coefficients, and one expression is just the sum of a <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">discrete Cosine transform</a> (DCT) and a discrete Sine transform (DST).
-I was wondering then
-about a simple way to use the FFT for the Sine transform. There are many papers around how to use the FFT to compute the Cosine transform. A technique
-that is efficient and simple is the one of <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwirtpu5upHZAhUFOBQKHZnHBFoQFgg2MAA&amp;url=http%3A%2F%2Feelinux.ee.usm.maine.edu%2Fcourses%2Fele486%2Fdocs%2Fmakhoul.fastDCT.pdf&amp;usg=AOvVaw0b3sdSzaT-A9fRAGWZbUcP">Makhoul</a>.</p>
-
-<p>The coefficients that need to be computed for all k can be represented by the following equation
-$$  V_{k} = \sum_{j=0}^{N-1} a_j \cos\left(\pi k\frac{j+\frac{1}{2}}{N}\right) + b_j \sin\left(\pi k\frac{j+\frac{1}{2}}{N}\right) $$
-with \( N= 2^{\bar{J}-1} \) for some positive integer \( \bar{J} \).
-Makhoul algorithm to compute the DCT of size N with one FFT of size N consists in</p>
-
-<ul>
-<li>initialize the FFT coefficients \(c_j\) with:
-$$  c_j = a_{2j} \quad\,,\quad    c_{N-1-j} = a_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
-<li>and then from the result of the FFT \( hat{c} \), the DCT coefficients \( \hat{a} \) are
-$$ \hat{a}_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
-</ul>
-
-<p>Makhoul does not specify the equivalent formula for the DST, but we can do something similar.</p>
-
-<ul>
-<li>We first initialize the FFT coefficients \( c_j \) with:
-$$ c_j = b_{2j} \quad\,,\quad c_{N-1-j} = -b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
-<li>and then from the result of the FFT \(\hat{c}\), the DST coefficients \(\hat{b}\) are
-$$\hat{b}_k = -\Im\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
-</ul>
-
-<p>For maximum performance, the two FFTs can reuse the same sine and cosine tables. And the last step of the DCT and DST can be combined together.</p>
-
-<p>Another approach would be to compute a single FFT of size 2N as we can rewrite the coefficients as
-$$  V_{k} = \Re\left[e^{-i \pi \frac{k}{2N}} \sum_{j=0}^{2N-1} (a_j + i b_j) e^{-2i\pi k\frac{j}{2N}} \right] $$
-with \(a_j = b_j =0 \) for \( j \geq N \)</p>
-
-<p>In fact the two are almost equivalent, since a FFT of size 2N is <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">decomposed</a> internally into two FFTs of size N.</p>
-
-<p>With this in mind we can improve a bit the above to merge the two transforms together:</p>
-
-<ul>
-<li>We first initialize the FFT coefficients \( c_j \) with:
-$$ c_j = a_{2j} + i b_{2j} \quad\,,\quad c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
-<li>and then from the result of the FFT \(\hat{c}\), the coefficients are
-$$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
-</ul>
-
-<p>And we have computed the coefficients with a single FFT of size N.</p>
 
       
     </div>
@@ -923,8 +742,9 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
     </li>
     
     <li class="page-item disabled">
-    <a href="" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    <a  class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
+    
     
     
     
@@ -1288,6 +1108,7 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
     </li>
     
 </ul>
+
 
   </div>
 </div>

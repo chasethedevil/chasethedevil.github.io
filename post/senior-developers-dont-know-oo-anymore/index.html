@@ -97,15 +97,15 @@
 
 <p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
 
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">class</span> Dog
+    <span style="color:#06287e">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>() { ... }
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">void</span> setHappy(<span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>) { ... }</code></pre></div>
 
 <p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
 
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">class</span> DogUtil
+    <span style="color:#06287e">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#06287e">boolean</span> isHappy(Dog <span style="color:#06287e">dog</span>) { ... }
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#06287e">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span>(Dog <span style="color:#06287e">dog</span>, <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span>) { ... }</code></pre></div>
 
 <p>This is really breaking OO and moving back to procedural programming.</p>
 

@@ -118,31 +118,31 @@ The relative slowness could be explained by the type of processor used, but it i
 	block   cipher.Block
 }
 
-<span style="color:#007020;font-weight:bold">func</span> New2() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
 	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
 	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
 	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
-</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.NewCipher(key)
+</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
 	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
 		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
 	}
 	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
 }
 
-<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) Uint64() <span style="color:#902000">uint64</span> {
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
 	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
-		binary.LittleEndian.PutUint64(u.bs, u.counter)
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
 		u.counter<span style="color:#666">++</span>
-		binary.LittleEndian.PutUint64(u.bs[<span style="color:#40a070">8</span>:], u.counter)
-		u.block.Encrypt(u.bs, u.bs)
-		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.Uint64(u.bs)
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
+		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
+		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
 	}
 	u.counter<span style="color:#666">++</span>
-	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.Uint64(u.bs[<span style="color:#40a070">8</span>:])
+	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
 }
 
-<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) Float64OO() <span style="color:#902000">float64</span> {
-	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.Uint64()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
+	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
 }</code></pre></div></p>
 
 <p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10\%.</p>

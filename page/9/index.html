@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.47.1" />
+	<meta name="generator" content="Hugo 0.57.2" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/more-svi-initial-guesses/">More SVI Initial Guesses</a>
+      </h1>
+      <span class="post-date">Jul 31, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/more-svi-initial-guesses/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>In the previous post, I showed one could extract the SVI parameters from a best fit parabola at-the-money. It seemed to work reasonably well, but I found some real market data where it can be much less satisfying.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-NBr8TEcIAXQ/U9o1x6oA6AI/AAAAAAAAHc8/g6-auObo244/s1600/Screenshot+from+2014-07-31+14:24:59.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-NBr8TEcIAXQ/U9o1x6oA6AI/AAAAAAAAHc8/g6-auObo244/s1600/Screenshot+from+2014-07-31+14:24:59.png" height="588" width="640" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"></div>Sometimes (actually not so rarely) the ATM slope and curvatures can&rsquo;t be matched given rho and b found through the asymptotes. As a result if I force to just match the curvature and set m=0 (when the slope can&rsquo;t be matched), the simple ATM parabolic guess looks shifted. It can be much worse than this specific example.<br /><br />It is then a bit clearer why Vogt looked to match the lowest variance instead of ATM. We can actually also fit a parabola at the lowest variance (MV suffix in the graph) instead of ATM. It seems to fit generally better.<br /><br />I also tried to estimate the asymptotic slopes more precisely (using the slope of the 5-points parabola at each end), but it seems to not always be an improvement.<br /><br />However this does not work when rho is close to -1 or 1 as there is then no minimum. Often, matching ATM also does not work when rho is -1 or 1. This specific case, but quite common as well for longer expiries in equities need more thoughts, usually a constant slice is ok, but this is clearly where Zeliade&rsquo;s quasi explicit method shines.<br /><br />So far it still all looks good, but then looking at medium maturities (1 year), sometimes all initial guesses don&rsquo;t look comforting (although Levenberg-Marquardt minimization still works on those - but one can easily imagine that it can break as well, for example by tweaking slightly the rho/b and look at what happens then).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-ft_Sj8P5LuU/U9pLLDlt1nI/AAAAAAAAHdY/vMsuRvqonHs/s1600/Screenshot+from+2014-07-31+15:56:06.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-ft_Sj8P5LuU/U9pLLDlt1nI/AAAAAAAAHdY/vMsuRvqonHs/s1600/Screenshot+from+2014-07-31+15:56:06.png" height="640" width="640" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"></div>There is lots of data on this 1 year example. One can clearly see the problem when the slope can not be fitted ATM (SimpleParabolicATM-guess), and even if by chance when it can (TripleParabolicATM-guess), it&rsquo;s not so great.<br />Similarly fitting the lowest variance leads only to a good fit of the right wing and a bad fit everywhere else.<br /><br />Still, as if by miracle, everything converges to the best fit on this example (again one can find cases where some guesses don&rsquo;t converge to the best fit). I have added some weights +-20% around the money, to ensure that we capture the ATM behavior accurately (otherwise the best fit is funny).<br /><br />It is interesting to see that if one minimizes the min square sum of variances (what I do in Vogt-LM, it&rsquo;s in theory slightly faster as there is no sqrt function cost) it results in an ugly looking steeper curvature, while if we just minimize the min square sum of volatilities (what I do in SimpleParabolicMV_LM), it looks better.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/another-svi-initial-guess/">Another SVI Initial Guess</a>
       </h1>
       <span class="post-date">Jul 29, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/another-svi-initial-guess/#disqus_thread">Comments</a>
@@ -140,9 +152,9 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/moore-penrose-inverse--gauss-newton-sabr-minimization/">Moore-Penrose Inverse &amp; Gauss-Newton SABR Minimization</a>
+        <a href="https://chasethedevil.github.io/post/moore-penrose-inverse-gauss-newton-sabr-minimization/">Moore-Penrose Inverse &amp; Gauss-Newton SABR Minimization</a>
       </h1>
-      <span class="post-date">Jun 24, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/moore-penrose-inverse--gauss-newton-sabr-minimization/#disqus_thread">Comments</a>
+      <span class="post-date">Jun 24, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/moore-penrose-inverse-gauss-newton-sabr-minimization/#disqus_thread">Comments</a>
       </span>
       
       <p>I have found a particularly nice initial guess to calibrate SABR. As it is quite close to the true best fit, it is tempting to use a very simple minimizer to go to the best fit. Levenberg-Marquardt works well on this problem, but can we shave off a few iterations?<br /><br />I firstly considered the basic <a href="http://en.wikipedia.org/wiki/Newton%27s_method_in_optimization" target="_blank">Newton&rsquo;s method</a>, but for least squares minimization, the Hessian (second derivatives) is needed. It&rsquo;s possible to obtain it, even analytically with SABR, but it&rsquo;s quite annoying to derive it and code it without some automatic differentiation tool. It turns out that as I experimented with the numerical Hessian, I noticed that it actually did not help convergence in our problem. <a href="http://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm" target="_blank">Gauss-Newton</a> converges similarly (likely because the initial guess is good), and what&rsquo;s great about it is that you just need the Jacobian (first derivatives). <a href="https://www.math.lsu.edu/system/files/MunozGroup1%20-%20Paper.pdf" target="_blank">Here</a> is a good overview of Newton, Gauss-Newton and Levenberg-Marquardt methods.<br /><br />While Gauss-Newton worked on many input data, I noticed it failed also on some long maturities equity smiles. The full Newton&rsquo;s method did not fare&nbsp; better. I had to take a close look at the matrices involved to understand what was going on. It turns out that sometimes, mostly when the SABR rho parameter is close to -1, the Jacobian would be nearly rank deficient (a row close to 0), but not exactly rank deficient. So everything would appear to work, but it actually misbehaves badly.<br /><br />My first idea was to solve the reduced problem if a row of the Jacobian is too small, by just removing that row, and keep the previous value for the guess corresponding to that row. And this simplistic approach made the process work on all my input data. Here is the difference in RMSE compared to a highly accurate Levenberg-Marquardt minimization for 10 iterations:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-A37UNSIHtzQ/U6l53-sbMTI/AAAAAAAAHVA/s5g9safiiaw/s1600/Screenshot+-+06242014+-+10:01:39+AM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-A37UNSIHtzQ/U6l53-sbMTI/AAAAAAAAHVA/s5g9safiiaw/s1600/Screenshot+-+06242014+-+10:01:39+AM.png" height="260" width="320" /></a></div><br /><br />Later, while reading some more material related to least square optimization, I noticed the use of the <a href="http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse" target="_blank">Moore-Penrose inverse</a> in cases where a matrix is rank deficient. The Moore-Penrose inverse is defined as:<br />$$ M^\star = V S^\star U^T$$<br />where ( S^\star ) is the diagonal matrix with inverted eigenvalues and 0 if those are deemed numerically close to 0, and (U, V) the eigenvectors of the SVD decomposition:<br />$$M=U S V^T$$<br />It turns out to work very well, beside being simpler to code, I expected it to be more or less equivalent to the previous approach (a tiny bit slower but we don&rsquo;t care as we deal with small matrices, and the real slow part is the computation of the objective function and the Hessian, which is why looking at iterations is more important).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-pDJ-3L1PARQ/U6l63hQQcvI/AAAAAAAAHVI/8Y9fg-TEcf8/s1600/Screenshot+-+06242014+-+02:50:44+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-pDJ-3L1PARQ/U6l63hQQcvI/AAAAAAAAHVI/8Y9fg-TEcf8/s1600/Screenshot+-+06242014+-+02:50:44+PM.png" height="267" width="320" /></a></div><br />It seems to converge a little bit less quickly, likely due to the threshold criteria that I picked (1E-15).<br />Three iterations is actually most of the time (90%) more than enough to achieve a good accuracy (the absolute RMSE is between 1E-4 and 5E-2) as the following graph shows. The few spikes near 1E-3 represent too large errors, the rest is accurate enough compared to the absolute RMSE.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uRD-sBYpw_E/U6l7YOQg-NI/AAAAAAAAHVQ/aGBd1twGu5U/s1600/Screenshot+-+06242014+-+03:20:34+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-uRD-sBYpw_E/U6l7YOQg-NI/AAAAAAAAHVQ/aGBd1twGu5U/s1600/Screenshot+-+06242014+-+03:20:34+PM.png" height="242" width="320" /></a></div><br />To conclude, we have seen that using the Moore-Penrose inverse in a Gauss-Newton iteration allowed the Gauss-Newton method to work on rank-deficient systems.<br />I am not sure how general that is, in my example, the true minimum either lies inside the region of interest, or on the border, where the system becomes deficient. Of course, this is related to a &ldquo;physical&rdquo; constraint, here namely rho &gt; -1.<br /><br /><br /><br /></p>
@@ -198,18 +210,6 @@
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/two-sabr-for-the-same-smile/">Two SABR for the same smile</a>
-      </h1>
-      <span class="post-date">May 20, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/two-sabr-for-the-same-smile/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>While playing around with <a href="http://chasethedevil.github.io/post/good--popular-algorithms-are-simple/" target="_blank">differential evolution</a> &amp; SABR calibration, I noticed that sometimes, several set of parameters can lead to a very similar smile, usually the good one is for relatively low vol of vol and the bad one is for relatively high vol of vol. I first looked for errors in my implementation, but it&rsquo;s a real phenomenon.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-W8y6ZCg2RC8/U3snVBI5I8I/AAAAAAAAHNI/JTCgBE4ZR3I/s1600/Screenshot+from+2014-05-19+17:55:50.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-W8y6ZCg2RC8/U3snVBI5I8I/AAAAAAAAHNI/JTCgBE4ZR3I/s1600/Screenshot+from+2014-05-19+17:55:50.png" height="332" width="400" /></a></div><br />I used the normal implied volatility formula with beta=1, then converted it to lognormal (Black) volatility. While it might not be a great idea to rely on the normal formula with beta=1, I noticed the same phenomenon with the <a href="http://chasethedevil.blogspot.fr/2013/05/sabr-with-new-hagan-pde-approach.html" target="_blank">arbitrage free PDE density approach</a>, especially for long maturities. Interestingly, I did not notice such behavior before with other stochastic volatility models like Heston or Schobel-Zhu: I suspect it has to do with the approximations rather than with the true behavior of SABR.<br /><br />Differential evolution is surprisingly good at finding the global minimum without much initial knowledge, however when there are close fits like this it can be more problematic, usually this requires pushing the population size up. I find that differential evolution is a neat way to test the robustness (as well as performance) of different SABR algorithms as it will try many crazy sets.<br /><br />In practice, for real world calibration, there is not much use of differential evolution to calibrate SABR as it is relatively simple to find a good initial guess.<br /><br /><br /><br /></p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -221,6 +221,7 @@
     <li class="page-item">
     <a href="/page/8/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
     </li>
+    
     
     
     
@@ -592,6 +593,7 @@
     </li>
     
 </ul>
+
 
   </div>
 </div>
