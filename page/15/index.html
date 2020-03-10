@@ -92,6 +92,18 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/2-ways-for-an-accurate-barrier-with-finite-difference/">2 Ways for an Accurate Barrier with Finite Difference </a>
+      </h1>
+      <span class="post-date">Jun 2, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/2-ways-for-an-accurate-barrier-with-finite-difference/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I had explored the issue of pricing a barrier using finite difference discretization of the Black-Scholes PDE a few years ago. Briefly, for explicit schemes, one just need to place the barrier on the grid and not worry about much else, but for implicit schemes, either the barrier should be placed on the grid and the grid&nbsp; <b>truncated </b>at the barrier, or a <b>fictitious point</b> should be introduced to force the correct price at the barrier level (0, typically).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s1600/barrier_grid.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="135" src="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s400/barrier_grid.png" width="400" /></a></div><br />The fictitious point approach is interesting for the case of varying rebates, or when the barrier moves around. I first saw this idea in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo;.<br /><br />Recently, I noticed that Hagan made use of the ficitious point approach in its &ldquo;Arbitrage free SABR&rdquo; paper, specifically he places the barrier in the middle of 2 grid points. There is very little difference between truncating the grid and the fictitious point for a constant barrier.<br /><br />In this specific case there is a difference because there are 2 additional ODE solved on the same grid, at the boundaries. I was especially curious if one could place the barrier exactly at 0 with the fictitious point, because then one would potentially need to evaluate coefficients for negative values. It turns out you can, as values at the fictitious point are actually not used: the mirror point inside is used because of the mirror boundary conditions.<br /><br />So the only difference is the evaluation of the first derivative at the barrier (used only for the ODE): the fictitious point uses the value at barrier+h/2 where h is the space between two points at the same timestep, while the truncated barrier uses a value at barrier+h (which can be seen as standard forward/backward first order finite difference discretization at the boundaries). For this specific case, the fictitious point will be a little bit more precise for the ODE.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/">SABR with the new Hagan PDE Approach</a>
       </h1>
       <span class="post-date">May 28, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/#disqus_thread">Comments</a>
@@ -194,18 +206,6 @@
       </span>
       
       <p>Dropbox worked well, but the company decided to blacklist it. I suppose some people abused it. While looking for an alternative, I found <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDMQFjAA&amp;url=https%3A%2F%2Fone.ubuntu.com%2F&amp;ei=QtZ2UY3NO83GPePRgOgF&amp;usg=AFQjCNFS8gIGpHCkBTGRPbT7qLVFzb584g&amp;sig2=z3LX3TTwx8lLoS41AJCgaA&amp;bvm=bv.45580626,d.ZWU">Ubuntu One</a>. It&rsquo;s funny I never tried it before even though I use Ubuntu. I did not think it was a dropbox replacement, but it is. And you get 5GB instead of Dropbox 2GB limit, which is enough for me (I was a bit above the 2GB limit). It works well under Linux but as well on Android and there is an iOS app I have not yet tried. It also works on Windows and Mac.<br /><br /><br /></p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-longstaff-schwartz-american-option-price/">Quasi Monte-Carlo &amp; Longstaff-Schwartz American Option price</a>
-      </h1>
-      <span class="post-date">Apr 22, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-longstaff-schwartz-american-option-price/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>In the book <i><a href="http://books.google.fr/books?id=e9GWUsQkPNMC&amp;lpg=PA461&amp;vq=longstaff&amp;hl=fr&amp;pg=PA459#v=snippet&amp;q=longstaff&amp;f=false">Monte Carlo Methods in Financial Engineering</a></i>, Glasserman explains that if one reuses the paths used in the optimization procedure for the parameters of the exercise boundary (in this case the result of the regression in Longstaff-Schwartz method) to compute the Monte-Carlo mean value, we will introduce a bias: the estimate will be biased high because it will include knowledge about future paths.<br /><br />However Longstaff and Schwartz seem to just reuse the paths in <a href="http://rfs.oxfordjournals.org/content/14/1/113.short">their paper</a>, and Glasserman himself, when presenting Longstaff-Schwartz method later in the book just use the same paths for the regression and to compute the Monte-Carlo mean value.<br /><br />How large is this bias? What is the correct methodology?<br /><br />I have tried with Sobol quasi random numbers to evaluate that bias on a simple Bermudan put option of maturity 180 days, exercisable at 30 days, 60 days, 120 days and 180 days using a Black Scholes volatility of 20% and a dividend yield of 6%. As a reference I use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDcQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1648878&amp;ei=9151UZ3pM4LZPZ-ugeAF&amp;usg=AFQjCNFS9fdRJt9RoerSnb87YDIZmLcCtw&amp;sig2=k8lHjhUe14ep4giVM5Mr5Q&amp;bvm=bv.45512109,d.ZWU">a finite difference solver based on TR-BDF2</a>.<br /><br />I found it particularly difficult to evaluate it: should we use the same number of paths for the 2 methods or should we use the same number of paths for the monte carlo mean computation only? Should we use the same number of paths for regression and for monte carlo mean computation or should the monte carlo mean computation use much more paths?<br /><br />I have tried those combinations and was able to clearly see the bias only in one case: a large number of paths for the Monte-Carlo mean computation compared to the number of paths used for the regression using a fixed total number of paths of 256*1024+1, and 32*1024+1 paths for the regression.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">FDM price=2.83858387194312</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff discarded paths price=2.8385854695510426&nbsp;</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff reused paths price=2.8386108892756847</span><br /><br />Those numbers are too good to be a real. If one reduces too much the total number of paths or the number of paths for the regression, the result is not precise enough to see the bias. For example, using 4K paths for the regression leads to 2.83770 vs 2.83767. Using 4K paths for regression and only 16K paths in total leads to 2.8383 vs 2.8387. Using 32K paths for regressions and increasing to 1M paths in total leads to 2.838539 vs 2.838546.<br /><br />For this example the Longstaff-Schwartz price is biased low, the slight increase due to path reuse is not very visible and most of the time does not deteriorate the overall accuracy. But as a result of reusing the paths, the Longstaff-Schwartz price might be higher than the real value.</p>
 
       
     </div>
@@ -581,7 +581,16 @@
         
     
     
-    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
     
     
     <li class="page-item">
@@ -589,7 +598,7 @@
     </li>
     
     <li class="page-item">
-        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

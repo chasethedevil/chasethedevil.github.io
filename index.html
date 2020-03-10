@@ -92,6 +92,58 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/">March 9, 2020 crash - where will CAC40 go?</a>
+      </h1>
+      <span class="post-date">Mar 9, 2020 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The stock market crashed by more than 7% on March 9, 2020. It is one of the most important drop since September 2001.
+I looked at BNP warrant prices on the CAC40 French index, with a maturity of March 20, 2020 , to see what they would tell about the market direction on the day of the crash. This is really a not-so-scientific experiment.</p>
+
+<p>The quotes I got were quite noisy. I applied a few different techniques to imply the probability density from the option prices:</p>
+
+<ul>
+<li>The one-step Andreasen-Huge with some regularization. The regularization is a bit too mild, although, in terms of implied vol, this was the worst fit  among the techniques.</li>
+<li>The stochastic collocation towards a septic polynomial, no regularization needed here. The error in implied volatilities is similar to Andreasen-Huge, even though the implied density is much smoother. I however discovered a small issue with the default optimal monotonic fit, and had to tweak a little bit the optimal polynomial, more on this later in this post.</li>
+<li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
+<li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
+</ul>
+
+<figure>
+    <img src="/post/cac40_mar9_dens.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+        </figcaption>
+</figure>
+
+
+<p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
+is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
+
+<p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
+<figure>
+    <img src="/post/cac40_mar9_dens_0.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+        </figcaption>
+</figure>
+</p>
+
+<p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
+
+<figure>
+    <img src="/post/cac40_mar9_collo.png"/> <figcaption>
+            <h4>Collocation polynomials for March 20, CAC40 warrants .</h4>
+        </figcaption>
+</figure>
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/42/">42</a>
       </h1>
       <span class="post-date">Dec 5, 2019 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/42/#disqus_thread">Comments</a>
@@ -690,49 +742,6 @@ of another kernel, except, possibly, speed to solve the linear system in O(n) op
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/">Where is the S&amp;P 500 going to end?</a>
-      </h1>
-      <span class="post-date">Feb 6, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>Yesterday the American stocks went a bit crazy along with the VIX that jumped from 17.50 to 38. It&rsquo;s not exactly clear why, the news mention that the Fed might raise its interest rates, the bonds yield have been recently increasing substantially, and the market self-correcting
-after stocks grew steadily for months in a low VIX environment.</p>
-
-<p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
-It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
-
-<figure>
-    <img src="/post/spw_density.png"/> <figcaption>
-            <h4>probability density of the SPX implied from 1-month SPW options.</h4>
-        </figcaption>
-</figure>
-
-
-<p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
-Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
-
-<p>Option traders like to look at the implied volatilities (below).</p>
-
-<figure>
-    <img src="/post/spw_vol.png"/> <figcaption>
-            <h4>implied volatilities of 1-month SPW options.</h4>
-        </figcaption>
-</figure>
-
-
-<p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
-a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
-
-<p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
-
-      
-    </div>
-    
     
 
 <ul class="pagination">
@@ -1096,7 +1105,16 @@ a cubic spline above, not with a least-squares spline, in order to show the edge
         
     
     
-    <li class="page-item"><a class="page-link" href="/page/38/">38</a></li>
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
     
     
     <li class="page-item">
@@ -1104,7 +1122,7 @@ a cubic spline above, not with a least-squares spline, in order to show the edge
     </li>
     
     <li class="page-item">
-        <a href="/page/38/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>

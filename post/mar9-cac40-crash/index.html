@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Categories &middot; Chase the Devil</title>
+  <title>March 9, 2020 crash - where will CAC40 go? &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -28,10 +28,10 @@
   
   
   
-  <link href="https://chasethedevil.github.io/categories/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  
 
   <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="quant">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -86,34 +86,80 @@
 
 
 <div class="content container">
-  <ul class="posts">
-  
-    <li><a href="https://chasethedevil.github.io/categories/quant/">quant</a>
+  <div class="post">
+    <h1 class="post-title">March 9, 2020 crash - where will CAC40 go?</h1>
+    <span class="post-date">Mar 9, 2020 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/#disqus_thread">Comments</a>
+    
+    <br/>
+    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
     </span>
-    &middot; <time>Mar 9, 2020</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/math/">math</a>
-    </span>
-    &middot; <time>Dec 5, 2019</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/programming/">programming</a>
-    </span>
-    &middot; <time>Feb 12, 2019</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/java/">java</a>
-    </span>
-    &middot; <time>Mar 8, 2018</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/hardware/">hardware</a>
-    </span>
-    &middot; <time>Oct 2, 2017</time></li>
-  
-    <li><a href="https://chasethedevil.github.io/categories/linux/">linux</a>
-    </span>
-    &middot; <time>Jan 26, 2017</time></li>
-  
-  </ul>
+    <p>The stock market crashed by more than 7% on March 9, 2020. It is one of the most important drop since September 2001.
+I looked at BNP warrant prices on the CAC40 French index, with a maturity of March 20, 2020 , to see what they would tell about the market direction on the day of the crash. This is really a not-so-scientific experiment.</p>
+
+<p>The quotes I got were quite noisy. I applied a few different techniques to imply the probability density from the option prices:</p>
+
+<ul>
+<li>The one-step Andreasen-Huge with some regularization. The regularization is a bit too mild, although, in terms of implied vol, this was the worst fit  among the techniques.</li>
+<li>The stochastic collocation towards a septic polynomial, no regularization needed here. The error in implied volatilities is similar to Andreasen-Huge, even though the implied density is much smoother. I however discovered a small issue with the default optimal monotonic fit, and had to tweak a little bit the optimal polynomial, more on this later in this post.</li>
+<li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
+<li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
+</ul>
+
+<figure>
+    <img src="/post/cac40_mar9_dens.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+        </figcaption>
+</figure>
+
+
+<p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
+is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
+
+<p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
+<figure>
+    <img src="/post/cac40_mar9_dens_0.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+        </figcaption>
+</figure>
+</p>
+
+<p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
+
+<figure>
+    <img src="/post/cac40_mar9_collo.png"/> <figcaption>
+            <h4>Collocation polynomials for March 20, CAC40 warrants .</h4>
+        </figcaption>
+</figure>
+
+
+  </div>
+  <div id="disqus_thread"></div>
 </div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+
+
+<script type="text/javascript">
+    var disqus_shortname = "chasethedevil";
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 <div class="content container" style="padding-top: 0rem;"-->
  <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
  <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
