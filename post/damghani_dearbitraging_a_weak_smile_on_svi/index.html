@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,30 +88,21 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Dearbitraging a weak smile on SVI with Damghani&#39;s method</h1>
-    <span class="post-date">Jun 15, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 15, 2016 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
-    <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
-<div>$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$</div>
-The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
-Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
-
+    <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.</p>
+<!-- raw HTML omitted -->
 <p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
-The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):
-<div>$$g(y)=1 - \frac{y}{w}\frac{\partial w}{\partial y}    + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$</div>
-where \(w\) is the total implied variance in log-moneyness \(y\) coming from the SVI formula.</p>
-
+The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
+<!-- raw HTML omitted -->
 <p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
 While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
-
 <p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
-on the first derivative:
-<div>$$|\frac{\partial w}{\partial y}|<4 e $$</div>
-and iteratively search for \(e \in [0,1]\) so that no arbitrage remains in \(w\). The standard weak no-arbitrage constraint stands for \(e=1\). Dhamgani thus proposes to enforce a stronger &ldquo;weak&rdquo; constraint during the minimization, in order to de-arbitrage.
-Note, the equations in the paper have a typo (everywhere), the \(b\) parameter should be a factor in front of the parenthesis.</p>
-
+on the first derivative:</p>
+<!-- raw HTML omitted -->
 <p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
 There would be no loop over the minimization needed. Does this produce any good result?
 <figure>
@@ -120,7 +111,6 @@ There would be no loop over the minimization needed. Does this produce any good 
         </figcaption>
 </figure>
 </p>
-
 <p>The graph is clear, the technique produces crap. This is the local variance denominator:
 <figure>
     <img src="/post/svi_dearbitraging_g.png"/> <figcaption>
@@ -128,7 +118,6 @@ There would be no loop over the minimization needed. Does this produce any good 
         </figcaption>
 </figure>
 </p>
-
 <p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
 
   </div>

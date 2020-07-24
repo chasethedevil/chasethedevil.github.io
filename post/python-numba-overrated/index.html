@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,10 +88,10 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Numba, Pypy Overrated?</h1>
-    <span class="post-date">Feb 12, 2019 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/python-numba-overrated/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 12, 2019 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/python-numba-overrated/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
+    <a class="label" href="https:///categories/quant">quant</a><a class="label" href="https:///categories/programming">programming</a>
     </span>
     <p>Many benchmarks show impressive performance gains with the use
 of <a href="https://numba.pydata.org/">Numba</a> or <a href="https://www.pypy.org/">Pypy</a>. Numba allows to compile just-in-time some specific methods, while Pypy takes
@@ -103,12 +103,10 @@ not work on 2D numpy arrays manipulations that are vectorized). I surmise it doe
 with scipy sparse matrices.
 Pypy did not behave better, the solver became actually slower than with the standard python
 interpreter, up to twice as slow, for example, in the case of the main solver loop which only does matrix multiplications and LU solves sparse systems. I did not necessarily expect any performance improvement in this specific loop, since it only consists in a few calls to expensive scipy calculations. But I did not expect a 2x performance drop either.</p>
-
 <p>While I am sure that there are good use cases, especially for numba, I was a bit disappointed
 that it likely would require to significantly change my code to have any effect (possibly to not do the initialization with scipy sparse matrices, but then, it is not so clear how). Also, I
 find <a href="https://www.ibm.com/developerworks/community/blogs/jfp/entry/A_Comparison_Of_C_Julia_Python_Numba_Cython_Scipy_and_BLAS_on_LU_Factorization?lang=en">most</a> <a href="https://modelingguru.nasa.gov/docs/DOC-2676">benchmarks</a> dumb. For example, the 2D ODE solver of the latter uses a simple dense 2D numpy array. On real code,
 things are not as simple.</p>
-
 <p>Next I should try Julia again out of curiosity. I tried it <a href="/post/modern-programming-language-for-monte-carlo/">several years ago</a> in the context of a simple Monte-Carlo simulation and my experiment at the time
 was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
 

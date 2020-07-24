@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,64 +88,53 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Implying the Probability Density from Market Option Prices (Part 2)</h1>
-    <span class="post-date">May 27, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/#disqus_thread">Comments</a>
+    <span class="post-date">May 27, 2018 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>This is a follow-up to my posts on the implied risk-neutral density (RND) of the SPW options before and after the big volatility change that happened in early February with two different techniques:
 <a href="/post/spx500_bets_after_rates_hike/">a smoothing spline on the implied volatilities</a> and a <a href="/post/implying-the-probability-density-from-market-option-prices/">Gaussian kernel approach</a>.</p>
-
 <p>The Gaussian kernel (as well as to some extent the smoothing spline) let us believe that there are multiple modes in the distribution (multiple peaks in the density). In reality,
 Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
 for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
-
 <p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
-
 <figure>
     <img src="/post/rnd_nonic_collocation.png"/> <figcaption>
             <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
         </figcaption>
 </figure>
 
-
 <p>There is now just one mode, and the fit in implied volatilities is much better.</p>
-
 <figure>
     <img src="/post/nonic_collocation_vol.png"/> <figcaption>
             <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
         </figcaption>
 </figure>
 
-
 <p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
- that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a noisy RND.
+that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a noisy RND.
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3150689">Sebastian Schlenkrich uses</a> a simple regularization to calibrate his own piecewise-linear local volatility approximation
 (a Lamperti-transform based approximation instead of the single step PDE approach of Andreasen-Huge).
 His Tikhonov regularization consists here in applying a roughness penalty consisting
 in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
 This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
-
 <figure>
     <img src="/post/rnd_ah_tikhonov.png"/> <figcaption>
             <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
         </figcaption>
 </figure>
 
-
 <p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
 the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
-
 <figure>
     <img src="/post/rnd_ah_tikhonov_lcurve.png"/> <figcaption>
             <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
         </figcaption>
 </figure>
 
-
 <p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
- Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
-
+Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
 <p>The error of model versus market implied volatilies is similar to the nonic collocation (not better) even though the shape is less smooth and, a priori, less constrained as,
 on this example, the Andreasen-Huge method has 75 free-parameters while the nonic collocation has 9.</p>
 

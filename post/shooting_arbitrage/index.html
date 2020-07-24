@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,21 +88,19 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Shooting arbitrage - part I</h1>
-    <span class="post-date">Jun 22, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/shooting_arbitrage/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 22, 2016 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/shooting_arbitrage/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>In my [previous post]((/post/damghani_dearbitraging_a_weak_smile_on_svi/), I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
 The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
 and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
-
 <figure>
     <img src="/post/svi_dearbitraging_variance_spline.png"/> <figcaption>
             <h4>implied variance with Axel Vogt SVI parameters</h4>
         </figcaption>
 </figure>
-
 
 <p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
 <figure>
@@ -111,29 +109,19 @@ and the negative local variance denominator penalty on 51 equidistant points. Th
         </figcaption>
 </figure>
 </p>
-
 <p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
-
-<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.
-<div>$$10^{-4}=1 - \frac{y}{w}\frac{\partial w}{\partial y} + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}$$</div>
-The equation can be easily solved with the <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge Kutta method</a> by
-<a href="http://www.engr.colostate.edu/~thompson/hPage/CourseMat/Tutorials/CompMethods/Rungekutta.pdf">reducing it</a> to a system of first order ordinary differential equations.
-As the following figure will show, as the initial conditions are the variance and the slope at the glueing point, the volatility is not continuous anymore at the next point where the denominator goes back to 1E-4. So this is only good
-if we replace the whole right wing: not so nice.</p>
-
+<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.</p>
+<!-- raw HTML omitted -->
 <p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
 this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
-
 <figure>
     <img src="/post/svi_dearbitraging_variance_rk.png"/> <figcaption>
             <h4>implied variance with Axel Vogt SVI parameters</h4>
         </figcaption>
 </figure>
 
-
 <p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
 is even smaller.</p>
-
 <figure>
     <img src="/post/svi_dearbitraging_g_rk.png"/> <figcaption>
             <h4>local variance denominator g with Axel Vogt SVI parameters</h4>

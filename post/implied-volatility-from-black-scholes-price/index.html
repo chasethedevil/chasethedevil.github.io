@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,19 +88,15 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Implied Volatility from Black-Scholes price</h1>
-    <span class="post-date">Apr 2, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 2, 2017 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
-
 <p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
-
 <p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
-
 <p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
-
 <table>
 <thead>
 <tr>
@@ -110,7 +106,6 @@
 <th align="right">Time</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td align="center">64%</td>
@@ -118,98 +113,84 @@
 <td align="left">0.6400000000000002</td>
 <td align="right">1005 ns</td>
 </tr>
-
 <tr>
 <td align="center">64%</td>
 <td align="center">Rational</td>
 <td align="left">0.6495154924570236</td>
 <td align="right">72 ns</td>
 </tr>
-
 <tr>
 <td align="center">64%</td>
 <td align="center">SR</td>
 <td align="left">0.6338265040549524</td>
 <td align="right">200 ns</td>
 </tr>
-
 <tr>
 <td align="center">64%</td>
 <td align="center">Rational-Li</td>
 <td align="left">0.6400000010047917</td>
 <td align="right">436 ns</td>
 </tr>
-
 <tr>
 <td align="center">64%</td>
 <td align="center">SR-Li</td>
 <td align="left">0.6400000001905617</td>
 <td align="right">568 ns</td>
 </tr>
-
 <tr>
 <td align="center">16%</td>
 <td align="center">Rational</td>
 <td align="left">0.1575005551326285</td>
 <td align="right">72 ns</td>
 </tr>
-
 <tr>
 <td align="center">16%</td>
 <td align="center">SR</td>
 <td align="left">0.15117970813645165</td>
 <td align="right">200 ns</td>
 </tr>
-
 <tr>
 <td align="center">16%</td>
 <td align="center">Jäckel</td>
 <td align="left">0.16000000000000025</td>
 <td align="right">1323 ns</td>
 </tr>
-
 <tr>
 <td align="center">16%</td>
 <td align="center">Rational-Li</td>
 <td align="left">0.16000000000219483</td>
 <td align="right">714 ns</td>
 </tr>
-
 <tr>
 <td align="center">16%</td>
 <td align="center">SR-Li</td>
 <td align="left">0.16000000000018844</td>
 <td align="right">1030 ns</td>
 </tr>
-
 <tr>
 <td align="center">4%</td>
 <td align="center">Rational</td>
 <td align="left">0.1528010258201771</td>
 <td align="right">72 ns</td>
 </tr>
-
 <tr>
 <td align="center">4%</td>
 <td align="center">SR</td>
 <td align="left">0.043006234681405076</td>
 <td align="right">190 ns</td>
 </tr>
-
 <tr>
 <td align="center">4%</td>
 <td align="center">Jäckel</td>
 <td align="left">0.03999999999999886</td>
 <td align="right">1519 ns</td>
 </tr>
-
 <tr>
 <td align="center">4%</td>
 <td align="center">Rational-Li</td>
 <td align="left">0.040000000056277685</td>
 <td align="right">10235 ns</td>
 </tr>
-
 <tr>
 <td align="center">4%</td>
 <td align="center">SR-Li</td>
@@ -218,7 +199,6 @@
 </tr>
 </tbody>
 </table>
-
 <p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
 
   </div>

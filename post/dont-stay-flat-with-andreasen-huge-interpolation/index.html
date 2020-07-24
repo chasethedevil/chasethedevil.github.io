@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,16 +88,15 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Andreasen-Huge interpolation - Don&#39;t stay flat</h1>
-    <span class="post-date">Dec 13, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/#disqus_thread">Comments</a>
+    <span class="post-date">Dec 13, 2016 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>Jesper Andreasen and Brian Huge propose an arbitrage-free interpolation method
 based on a single-step forward Dupire PDE solution in their paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1694972">Volatility interpolation</a>.
 To do so, they consider a piecewise constant representation of the local volatility in maturity time and strike
 where the number of constants matches the number of market option prices.</p>
-
 <p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
 Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
 <figure>
@@ -106,7 +105,6 @@ Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale
         </figcaption>
 </figure>
 </p>
-
 <p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
 The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
 the market vols are exactly reproduced by the following piecewise constant vols:
@@ -116,7 +114,6 @@ the market vols are exactly reproduced by the following piecewise constant vols:
         </figcaption>
 </figure>
 </p>
-
 <p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
 some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
 <figure>
@@ -125,29 +122,24 @@ some of the piecewise constant vols explode (for the first two maturities), even
         </figcaption>
 </figure>
 </p>
-
 <p>The single step continuous model can not represent the market implied volatilities, while for some reason,
 the discrete model with 200 points can. Note that the model vols were capped, otherwise they would explode even higher.</p>
-
 <p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
 (a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
- becomes stable regardless of the number of grid points.
+becomes stable regardless of the number of grid points.
 <figure>
     <img src="/post/kahale_ah_linear.png"/> <figcaption>
             <h4>piecewise linear model on a grid of 400 points.</h4>
         </figcaption>
 </figure>
 </p>
-
 <p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
 likely because the objective function derivatives are smoother.
 In the most favorable case for the piecewise constant model,
-the minimization with the linear model requires about 40\% less iterations.</p>
-
+the minimization with the linear model requires about 40% less iterations.</p>
 <p>We could also interpolate with a cubic spline, as long as we make sure that the volatility does not go below zero, for example by imposing a limit on the derivative values.</p>
-
 <p>Overall, this raises questions on the interest of the numerically much more complex continuous time version of the piecewise-constant model
- as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
+as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
 
   </div>
   <div id="disqus_thread"></div>

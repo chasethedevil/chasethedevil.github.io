@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">On EJB Restrictions - Can You Open a Socket?</h1>
-    <span class="post-date">Jun 19, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/on-ejb-restrictions-can-you-open-a-socket/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 19, 2006 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/on-ejb-restrictions-can-you-open-a-socket/#disqus_thread">Comments</a>
     </span>
-    <p>During job interviews, one of the frequent questions is &ldquo;What restrictions are imposed on EJBs?&rdquo;. I had a chat recently with someone about it, and we still don&rsquo;t agree on the answer.<br> <br> He believes we can&rsquo;t open sockets, while I believe it is perfectly allowed, if you don&rsquo;t retain the socket connection between method calls.<br> <br> His arguments are based on an analogy with files. After all in Linux, files are sockets. Here are his interpretations on <a  href="http://java.sun.com/blueprints/qanda/ejb_tier/restrictions.html">a document about EJB restrictions on java.sun.com</a>:<br> <ol>   <li><i><span>Passivation affects server sockets. Why client sockets are not affected by passivation is not mentioned. I suspect that given that the socket mechanism is the same in both cases (IP packets), there should be no difference.</span></i></li>   <li><i><span>EJBs are not allowed to access files because files are not transactional. Well, it is my understanding that sockets are neither.</span></i></li>   <li><i><span>Deployability. The file open in one JVM will not necessarily be open in another JVM. It is my understanding that the same will happen on sockets.</span></i></li> </ol> <span>Now here is my reply:<br> </span><i><span><br> The reference I mentioned says you can not open server sockets, because to use them, you would have to let them open between methods calls, otherwise you can&rsquo;t do anything with your server socket.<br> </span></i> <ol>   <li><i><span>Passivation will only happen after or before a method call, not in the middle.</span></i></li>   <li><i><span>Good point, rollback seems hard with sockets.</span></i></li>   <li><i><span>The real problem with files and deployability is about clustering. I quote the same source: </span>&ldquo;if an enterprise bean running in a JVM on a particular machine is using or holding an open file descriptor to a file in the filesystem, that enterprise bean cannot easily be moved from one JVM or machine to another, without losing its reference to the file.&rdquo; Basically it says what&rsquo;s bad with files is if you use them to store some kind of state, because then this state will be different on different servers. This issue does not exist with sockets. What you mention is simply a configuration issue. Your datasources will vary as well from one JVM to another (on different servers).</i><br>   </li> </ol> <i><span></span></i>I have the advantage that my interpretation is more <a  href="http://www.javaworld.com/javaworld/jw-08-2000/jw-0825-ejbrestrict.html">common</a>. But his arguments are still clever and EJBs specs could have been a bit more explicit about the use of java.io.Socket. Here is the line about it in the specs:<br> <blockquote><i>&ldquo;The EJB architecture allows an enterprise bean instance to be a network socket client, but it does not allow it to be a network server. Allowing the instance to become a network server would conflict with the basic function of the enterprise bean&ndash; to serve the EJB clients&rdquo;</i><br> </blockquote> <br> Our disagreement shows how such a simple subject, what you can and can&rsquo;t do in EJBs, is most of the time badly understood.<br> <br> <br></p>
+    <p>During job interviews, one of the frequent questions is &ldquo;What restrictions are imposed on EJBs?&quot;. I had a chat recently with someone about it, and we still don&rsquo;t agree on the answer.<!-- raw HTML omitted --> <!-- raw HTML omitted --> He believes we can&rsquo;t open sockets, while I believe it is perfectly allowed, if you don&rsquo;t retain the socket connection between method calls.<!-- raw HTML omitted --> <!-- raw HTML omitted --> His arguments are based on an analogy with files. After all in Linux, files are sockets. Here are his interpretations on <!-- raw HTML omitted -->a document about EJB restrictions on java.sun.com<!-- raw HTML omitted -->:<!-- raw HTML omitted --> <!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Passivation affects server sockets. Why client sockets are not affected by passivation is not mentioned. I suspect that given that the socket mechanism is the same in both cases (IP packets), there should be no difference.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->EJBs are not allowed to access files because files are not transactional. Well, it is my understanding that sockets are neither.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Deployability. The file open in one JVM will not necessarily be open in another JVM. It is my understanding that the same will happen on sockets.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> <!-- raw HTML omitted -->Now here is my reply:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> The reference I mentioned says you can not open server sockets, because to use them, you would have to let them open between methods calls, otherwise you can&rsquo;t do anything with your server socket.<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Passivation will only happen after or before a method call, not in the middle.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Good point, rollback seems hard with sockets.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The real problem with files and deployability is about clustering. I quote the same source: <!-- raw HTML omitted -->&quot;if an enterprise bean running in a JVM on a particular machine is using or holding an open file descriptor to a file in the filesystem, that enterprise bean cannot easily be moved from one JVM or machine to another, without losing its reference to the file.&rdquo; Basically it says what&rsquo;s bad with files is if you use them to store some kind of state, because then this state will be different on different servers. This issue does not exist with sockets. What you mention is simply a configuration issue. Your datasources will vary as well from one JVM to another (on different servers).<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted --> <!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I have the advantage that my interpretation is more <!-- raw HTML omitted -->common<!-- raw HTML omitted -->. But his arguments are still clever and EJBs specs could have been a bit more explicit about the use of java.io.Socket. Here is the line about it in the specs:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->&quot;The EJB architecture allows an enterprise bean instance to be a network socket client, but it does not allow it to be a network server. Allowing the instance to become a network server would conflict with the basic function of the enterprise bean&ndash; to serve the EJB clients&quot;<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> <!-- raw HTML omitted --> Our disagreement shows how such a simple subject, what you can and can&rsquo;t do in EJBs, is most of the time badly understood.<!-- raw HTML omitted --> <!-- raw HTML omitted --> <!-- raw HTML omitted --></p>
 
   </div>
   <div id="disqus_thread"></div>

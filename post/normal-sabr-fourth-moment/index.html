@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,35 +88,30 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">The Fourth Moment of the Normal SABR Model</h1>
-    <span class="post-date">Jun 11, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 11, 2018 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/normal-sabr-fourth-moment/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
 simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
 For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
-
 <p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
 I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.degruyter.com/view/j/jip.2013.21.issue-1/jip-2012-0093/jip-2012-0093.xml">The use of statistical tests to calibrate the normal SABR model</a>
 with simple formulae for the third and fourth moments (sci-hub.nu is your friend to read this). I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
 consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
-
 <p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
 is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
 the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
 initial forward price.</p>
-
 <p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
 with
-$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2}\,,$$
-$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2}\,,$$
-$$ C = - A - B \,.$$</p>
-
+$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2},,$$
+$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2},,$$
+$$ C = - A - B ,.$$</p>
 <p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
 no error in their third moment.</p>
-
 <p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
 
   </div>

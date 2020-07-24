@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,33 +88,28 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">March 9, 2020 crash - where will CAC40 go?</h1>
-    <span class="post-date">Mar 9, 2020 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 9, 2020 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/mar9-cac40-crash/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>The stock market crashed by more than 7% on March 9, 2020. It is one of the most important drop since September 2001.
 I looked at BNP warrant prices on the CAC40 French index, with a maturity of March 20, 2020 , to see what they would tell about the market direction on the day of the crash. This is really a not-so-scientific experiment.</p>
-
 <p>The quotes I got were quite noisy. I applied a few different techniques to imply the probability density from the option prices:</p>
-
 <ul>
 <li>The one-step Andreasen-Huge with some regularization. The regularization is a bit too mild, although, in terms of implied vol, this was the worst fit  among the techniques.</li>
 <li>The stochastic collocation towards a septic polynomial, no regularization needed here. The error in implied volatilities is similar to Andreasen-Huge, even though the implied density is much smoother. I however discovered a small issue with the default optimal monotonic fit, and had to tweak a little bit the optimal polynomial, more on this later in this post.</li>
 <li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
 <li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
 </ul>
-
 <figure>
     <img src="/post/cac40_mar9_dens.png"/> <figcaption>
             <h4>Implied probability density for March 20, CAC40 warrants.</h4>
         </figcaption>
 </figure>
 
-
 <p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
 is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
-
 <p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
 <figure>
     <img src="/post/cac40_mar9_dens_0.png"/> <figcaption>
@@ -122,18 +117,14 @@ is located a little beyond 5000, which could mean that the market believes that 
         </figcaption>
 </figure>
 </p>
-
 <p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
-
 <figure>
     <img src="/post/cac40_mar9_collo.png"/> <figcaption>
             <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
         </figcaption>
 </figure>
 
-
 <p>And for the curious, here are the implied vol plots:</p>
-
 <figure>
     <img src="/post/cac40_mar9_vol.png"/> <figcaption>
             <h4>Implied vol fits for March 20, CAC40 warrants.</h4>

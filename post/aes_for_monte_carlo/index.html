@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,29 +88,25 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">AES for Monte-Carlo</h1>
-    <span class="post-date">Aug 17, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/#disqus_thread">Comments</a>
+    <span class="post-date">Aug 17, 2016 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/aes_for_monte_carlo/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>In finance, and also in science, the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> is the de-factor pseudo-random number generator (PRNG) for Monte-Carlo simulations.
 By the way, there is a <a href="http://arxiv.org/abs/1301.5435">recent 64-bit maximally equidistributed version</a> called MEMT19937 with 53-bit double precision floating point numbers in mind.</p>
-
 <p>D.E. Shaw paper <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiyl5Lg8cjOAhVMahoKHVhPCPQQFggmMAA&amp;url=http%3A%2F%2Fwww.thesalmons.org%2Fjohn%2Frandom123%2Fpapers%2Frandom123sc11.pdf&amp;usg=AFQjCNEZ5I7JeeDSELDJBDjLU84tXKmI3w&amp;sig2=UqLBNOlLjkHsMMncABKkIg&amp;bvm=bv.129759880,d.d2s">Parallel Random Numbers: As easy as 1, 2, 3</a>
 makes a bold remark: since <a href="https://en.wikipedia.org/wiki/AES_instruction_set">specific AES instructions</a> have
 been available since 2010 in most x86 processors, why not use them?</p>
-
 <p>Historicaly, counter-based PRNGs based on cryptographic standards such as <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
 were historically slow, which motivated the development of sequential PRNGs with good statistical properties,
 yet not cryptographically strong like the Mersenne Twister for Monte-Carlo simulations.</p>
-
 <p>The randomness of AES is of vital importance to its security making the use of the AES128 encryption algorithm as PRNG sound (see <a href="http://dl.acm.org/citation.cfm?id=945515">Hellekalek &amp; Wegenkittl paper</a>).
 Furthermore, D.E. Shaw study shows that AES can be faster than Mersenne-Twister.
 In my own simple implementation using the standard library of the Go language,
 it was around twice slower than Mersenne-Twister to generate random double precision floats,
-which can result in a 5\% performance loss for a local volatility simulation.
+which can result in a 5% performance loss for a local volatility simulation.
 The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
-
 <p>The code is extremely simple, with many possible variations around the same idea. Here is mine
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
 	counter <span style="color:#902000">uint64</span>
@@ -144,9 +140,7 @@ The relative slowness could be explained by the type of processor used, but it i
 <span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
 	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
 }</code></pre></div></p>
-
-<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10\%.</p>
-
+<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
 <p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
 The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,
 whose goal is to identify new stream ciphers suitable for widespread adoption.
@@ -154,13 +148,12 @@ It is faster than AES in the absence of specific AES CPU instructions.
 Our tests run with a straightforward implementation that does not make use of specific AMD64 instructions
 and show the resulting PRNG to be faster than MRG63k3a and only 5% slower than MEMT19937 for local volatility Monte-Carlo simulations, that is the same speed as the above Go AES PRNG.
 While it led to sensible results, there does not seem any study yet of its equidistribution properties.</p>
-
 <p>Counter-based PRNGs are parallelizable by nature: if a counter is used as plaintext,
- we can generate any point in the sequence at no additional cost by just setting
- the counter to the point position in the sequence, the generator is not sequential.
- Furthermore, alternate keys can be used to create independent substreams:
- the strong cryptographic property will guarantee the statistical independence.
-  A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
+we can generate any point in the sequence at no additional cost by just setting
+the counter to the point position in the sequence, the generator is not sequential.
+Furthermore, alternate keys can be used to create independent substreams:
+the strong cryptographic property will guarantee the statistical independence.
+A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
 
   </div>
   <div id="disqus_thread"></div>

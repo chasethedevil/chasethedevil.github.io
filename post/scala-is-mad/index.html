@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Scala is Mad</h1>
-    <span class="post-date">Dec 12, 2012 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/scala-is-mad/#disqus_thread">Comments</a>
+    <span class="post-date">Dec 12, 2012 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/scala-is-mad/#disqus_thread">Comments</a>
     </span>
-    <p>I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<br /><br />For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<br /><br />And then the quickSort method somehow does not work if invoked on a generic&hellip; like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<br /><br />In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<br /><br /><b>Update Dec 12 2012</b>: here is the actual code (this is kept close to the Java equivalent on purpose):<br /><pre>object Point {<br />  def sortAndRemoveIdenticalPoints<a href="points : Array[T]">T &lt;: Point : ClassManifest</a> : Array[T] = {<br />      Sorting.quickSort(points.asInstanceOf[Array[Point]])<br />      val l = new ArrayBuffer<a href="points.length">T</a><br />      var previous = points(0)<br />      l += points(0)<br />      for (i &lt;- 1 until points.length) {<br />        if(math.abs(points(i).value - previous.value)&lt; Epsilon.MACHINE_EPSILON_SQRT) {<br />          l += points(i)<br />        }<br />      }<br />      return l.toArray<br />    }<br />    return points<br />  }<br />}<br /><br />class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<br />  def compare(that: Point): Int = {<br />    return math.signum(this.value - that.value).toInt<br />  }<br />}<br /><!-----><!--:-->&lt;/-&gt;&lt;/:&gt;</pre>In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point.</p>
+    <p>I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<!-- raw HTML omitted --><!-- raw HTML omitted -->For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<!-- raw HTML omitted --><!-- raw HTML omitted -->And then the quickSort method somehow does not work if invoked on a generic&hellip; like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<!-- raw HTML omitted --><!-- raw HTML omitted -->In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update Dec 12 2012<!-- raw HTML omitted -->: here is the actual code (this is kept close to the Java equivalent on purpose):<!-- raw HTML omitted --><!-- raw HTML omitted -->object Point {<!-- raw HTML omitted -->  def sortAndRemoveIdenticalPoints[T &lt;: Point : ClassManifest](points : Array[T]) : Array[T] = {<!-- raw HTML omitted -->      Sorting.quickSort(points.asInstanceOf[Array[Point]])<!-- raw HTML omitted -->      val l = new ArrayBuffer<a href="points.length">T</a><!-- raw HTML omitted -->      var previous = points(0)<!-- raw HTML omitted -->      l += points(0)<!-- raw HTML omitted -->      for (i &lt;- 1 until points.length) {<!-- raw HTML omitted -->        if(math.abs(points(i).value - previous.value)&lt; Epsilon.MACHINE_EPSILON_SQRT) {<!-- raw HTML omitted -->          l += points(i)<!-- raw HTML omitted -->        }<!-- raw HTML omitted -->      }<!-- raw HTML omitted -->      return l.toArray<!-- raw HTML omitted -->    }<!-- raw HTML omitted -->    return points<!-- raw HTML omitted -->  }<!-- raw HTML omitted -->}<!-- raw HTML omitted --><!-- raw HTML omitted -->class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<!-- raw HTML omitted -->  def compare(that: Point): Int = {<!-- raw HTML omitted -->    return math.signum(this.value - that.value).toInt<!-- raw HTML omitted -->  }<!-- raw HTML omitted -->}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&lt;/-&gt;&lt;/:&gt;<!-- raw HTML omitted -->In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point.</p>
 
   </div>
   <div id="disqus_thread"></div>

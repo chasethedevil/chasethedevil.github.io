@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">On the importance of accuracy for bpvol solvers</h1>
-    <span class="post-date">Jun 12, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/on-the-importance-of-accuracy-for-bpvol-solvers/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 12, 2014 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/on-the-importance-of-accuracy-for-bpvol-solvers/#disqus_thread">Comments</a>
     </span>
-    <p>While I was playing around calibrating the arbitrage free SABR model from Hagan (using the PDE on probability density approach), I noticed a misbehavior for some short maturity smiles. I thought it was due to the PDE implementation. Actually some of it was, but the remaining large error was due to the bpvol solver.<br /><br />I initially took the same approach as Choi et al. in <a href="http://chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/" target="_blank">my solver</a>, that is to work with in-the-money prices (they work with straddles) because it&rsquo;s nice and convenient. I thought it was no big deal if prices lower than 1E-16 were not solved. It turns out I was wrong. Choi et al. solver has the same issue.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-OhKc0_EA0oI/U5nGPTB2ybI/AAAAAAAAHUM/DrRvgORONZo/s1600/Screenshot+-+06122014+-+05:24:27+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-OhKc0_EA0oI/U5nGPTB2ybI/AAAAAAAAHUM/DrRvgORONZo/s1600/Screenshot+-+06122014+-+05:24:27+PM.png" height="302" width="400" /></a></div>In the above figure, CKK denotes the Choi et al algorithm (similar with my old algorithm) and Chebyshev is my updated algorithm that is accurate with far out-of-the-money option. What happens is that even though the market price at the lowest strike is not very low, the price at the lowest strike stemming from the best fit smile is extremely low, and when we want to invert it, CKK produces a large error due to lack of representation of numbers near 1.0 as it uses indirectly the in-the-money price. That&rsquo;s where it introduces a particularly big error in this case.<br /><br /><br />I have updated my solver since, to work with out-of-the-money option prices as well, and have near machine accuracy on the whole range. I also reduced the number of Chebyshev polynomials used in the process. All the details are in my updated paper at <a href="http://papers.ssrn.com/abstract=2420757">http://papers.ssrn.com/abstract=2420757</a><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-VpIX_Pxw3k8/U5nHvLaORvI/AAAAAAAAHUY/hqzbAvsPO9w/s1600/Screenshot+-+06122014+-+05:24:13+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-VpIX_Pxw3k8/U5nHvLaORvI/AAAAAAAAHUY/hqzbAvsPO9w/s1600/Screenshot+-+06122014+-+05:24:13+PM.png" height="356" width="400" /></a></div><br /><br /><br /></p>
+    <p>While I was playing around calibrating the arbitrage free SABR model from Hagan (using the PDE on probability density approach), I noticed a misbehavior for some short maturity smiles. I thought it was due to the PDE implementation. Actually some of it was, but the remaining large error was due to the bpvol solver.<!-- raw HTML omitted --><!-- raw HTML omitted -->I initially took the same approach as Choi et al. in <!-- raw HTML omitted -->my solver<!-- raw HTML omitted -->, that is to work with in-the-money prices (they work with straddles) because it&rsquo;s nice and convenient. I thought it was no big deal if prices lower than 1E-16 were not solved. It turns out I was wrong. Choi et al. solver has the same issue.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In the above figure, CKK denotes the Choi et al algorithm (similar with my old algorithm) and Chebyshev is my updated algorithm that is accurate with far out-of-the-money option. What happens is that even though the market price at the lowest strike is not very low, the price at the lowest strike stemming from the best fit smile is extremely low, and when we want to invert it, CKK produces a large error due to lack of representation of numbers near 1.0 as it uses indirectly the in-the-money price. That&rsquo;s where it introduces a particularly big error in this case.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I have updated my solver since, to work with out-of-the-money option prices as well, and have near machine accuracy on the whole range. I also reduced the number of Chebyshev polynomials used in the process. All the details are in my updated paper at <!-- raw HTML omitted --><a href="http://papers.ssrn.com/abstract=2420757">http://papers.ssrn.com/abstract=2420757</a><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 
   </div>
   <div id="disqus_thread"></div>

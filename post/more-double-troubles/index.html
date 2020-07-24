@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">More Double Troubles</h1>
-    <span class="post-date">Jan 6, 2009 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/more-double-troubles/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 6, 2009 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/more-double-troubles/#disqus_thread">Comments</a>
     </span>
-    <p>We saw in a previous entry how one has to be careful with <a href="http://chasethedevil.blogspot.com/2008/12/doublenan-is-evil.html">Double.NaN</a>. Today we will see how regular double can cause problems. By the way the NaN issue was not Java specific and this issue is also general in different programming languages.<br /><br />A coworker was shocked that in Java (I was a bit surprised he saw that only today, but it is true it can be surprising that such a simple thing does not work as expected):<br /><pre  wrap="" style="font-family:courier new;"><span style="font-size:85%;">408.16 - 40.82 = <span style="font-weight: bold;">367.34000000000003</span></span></pre>In C, this would lead to the same result. This is all due to the <a href="http://en.wikipedia.org/wiki/Double_precision">binary represention of double numbers</a>. Using the formula 2^(exponent)*1.mantissa where mantissa is on 52 bits, we have<br /><br />408.16 decomposition:<br /><ul><li>exponent = 256. Then 408.<sup>16</sup>&frasl;<sub>256</sub> = 1.594375 = 1 + 0x9828F5C28F5C28F5C28F5C&hellip; * 2^-52<br /></li><li>We round to 52 bits, the mantissa is 0x9828F5C28F5C3 = 2676827028518339.</li><li>As a decimal, the internal value is (<sup>2676827028518339</sup>&frasl;<sub>2</sub>^52+1) * 256 = 408.1600000000000250111042987555265426635742</li></ul>40.82 decomposition:<br /><ul><li>exponent = 32. Then 40.<sup>82</sup>&frasl;<sub>32</sub>= 1.275625 = 1 + 0x468F5C28F5C28F5C&hellip;*2^-52</li><li>Rounded to 52 bits, the mantissa is 0x468F5C28F5C29 = 1241304647293993<br /></li><li>As a decimal, the internal value is (<sup>1241304647293993</sup>&frasl;<sub>2</sub>^52 + 1)*32 = 40.8200000000000002842170943040400743484497</li></ul>The difference in decimal becomes 367.34000000000002472&hellip; which becomes <span style="font-weight: bold;">367.34000000000003</span> when represented in binary (to convince yourself you can apply the same technique).<br /><br /><span style="font-weight: bold;font-family:arial;" >The Solution</span><br /><br />One solution to this problem is to use <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/math/BigDecimal.html">java.math.BigDecimal</a> which stores a number as 2 integers, one for the digits, one for the exponent power of 10 (and not 2).<br />The correct code would become:<br /><span style=";font-family:courier new;font-size:85%;"  ><br />BigDecimal value = BigDecimal.valueOf(408.16).subtract(BigDecimal.valueOf(40.82));</span><br /><br />value would then be 367.34.<br /><br />But BigDecimal has also many potential for bugs. For example, you should <span style="font-weight: bold;">never use the constructor taking a double but always the one taking a String</span>.<br /><br /><span style="font-size:85%;"><span style="font-family:courier new;">new BigDecimal(408.16) = 408.16000000000002501110429875552654266357421875</span><br /></span><br />This is because of the binary representation of 408.16 as a double. 408.16 is only an approximation of 408.16!<br /><br />Another trick with BigDecimal is<span style="font-weight: bold;"> not to use equals(Object) but compareTo(Object)</span> because 408.160 is not equal to 408.16 using equals.<br /><br /><span style="font-weight: bold;font-family:arial;" >Why Could not They Make it Work With Double?</span><br /><br />If you were too lazy to follow the steps of the explanation. There is a simpler explanation. Imagine the representation of a number in base 3 with 2 &ldquo;digits&rdquo;. Let&rsquo;s imagine <sup>1</sup>&frasl;<sub>3</sub> is represented as 0.1 (this is a very simple number representation) <sup>1</sup>&frasl;<sub>3</sub>+<sup>1</sup>&frasl;<sub>3</sub>+<sup>1</sup>&frasl;<sub>3</sub> becomes 0.1+0.1+0.1 = 1.0 (in base 3) = 1.0 if we convert to base 10. Now in base 10, <sup>1</sup>&frasl;<sub>3</sub> can only be represented as 0.3, so <sup>1</sup>&frasl;<sub>3</sub>+<sup>1</sup>&frasl;<sub>3</sub>+<sup>1</sup>&frasl;<sub>3</sub> = 0.3+0.3+0.3 = 0.9 &lt;&gt; 1.0.<br />So BigDecimal is only interesting to handle &hellip; decimals! In the enterprise world, this should be most apps. It is a bit sad it appeared so late in the JDK. It should really be a primitive type.</p>
+    <p>We saw in a previous entry how one has to be careful with <!-- raw HTML omitted -->Double.NaN<!-- raw HTML omitted -->. Today we will see how regular double can cause problems. By the way the NaN issue was not Java specific and this issue is also general in different programming languages.<!-- raw HTML omitted --><!-- raw HTML omitted -->A coworker was shocked that in Java (I was a bit surprised he saw that only today, but it is true it can be surprising that such a simple thing does not work as expected):<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->408.16 - 40.82 = <!-- raw HTML omitted -->367.34000000000003<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In C, this would lead to the same result. This is all due to the <!-- raw HTML omitted -->binary represention of double numbers<!-- raw HTML omitted -->. Using the formula 2^(exponent)*1.mantissa where mantissa is on 52 bits, we have<!-- raw HTML omitted --><!-- raw HTML omitted -->408.16 decomposition:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->exponent = 256. Then 408.16/256 = 1.594375 = 1 + 0x9828F5C28F5C28F5C28F5C&hellip; * 2^-52<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We round to 52 bits, the mantissa is 0x9828F5C28F5C3 = 2676827028518339.<!-- raw HTML omitted --><!-- raw HTML omitted -->As a decimal, the internal value is (2676827028518339/2^52+1) * 256 = 408.1600000000000250111042987555265426635742<!-- raw HTML omitted --><!-- raw HTML omitted -->40.82 decomposition:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->exponent = 32. Then 40.82/32= 1.275625 = 1 + 0x468F5C28F5C28F5C&hellip;*2^-52<!-- raw HTML omitted --><!-- raw HTML omitted -->Rounded to 52 bits, the mantissa is 0x468F5C28F5C29 = 1241304647293993<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->As a decimal, the internal value is (1241304647293993/2^52 + 1)*32 = 40.8200000000000002842170943040400743484497<!-- raw HTML omitted --><!-- raw HTML omitted -->The difference in decimal becomes 367.34000000000002472&hellip; which becomes <!-- raw HTML omitted -->367.34000000000003<!-- raw HTML omitted --> when represented in binary (to convince yourself you can apply the same technique).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The Solution<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->One solution to this problem is to use <!-- raw HTML omitted -->java.math.BigDecimal<!-- raw HTML omitted --> which stores a number as 2 integers, one for the digits, one for the exponent power of 10 (and not 2).<!-- raw HTML omitted -->The correct code would become:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->BigDecimal value = BigDecimal.valueOf(408.16).subtract(BigDecimal.valueOf(40.82));<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->value would then be 367.34.<!-- raw HTML omitted --><!-- raw HTML omitted -->But BigDecimal has also many potential for bugs. For example, you should <!-- raw HTML omitted -->never use the constructor taking a double but always the one taking a String<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->new BigDecimal(408.16) = 408.16000000000002501110429875552654266357421875<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->This is because of the binary representation of 408.16 as a double. 408.16 is only an approximation of 408.16!<!-- raw HTML omitted --><!-- raw HTML omitted -->Another trick with BigDecimal is<!-- raw HTML omitted --> not to use equals(Object) but compareTo(Object)<!-- raw HTML omitted --> because 408.160 is not equal to 408.16 using equals.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Why Could not They Make it Work With Double?<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->If you were too lazy to follow the steps of the explanation. There is a simpler explanation. Imagine the representation of a number in base 3 with 2 &ldquo;digits&rdquo;. Let&rsquo;s imagine 1/3 is represented as 0.1 (this is a very simple number representation) 1/3+1/3+1/3 becomes 0.1+0.1+0.1 = 1.0 (in base 3) = 1.0 if we convert to base 10. Now in base 10, 1/3 can only be represented as 0.3, so 1/3+1/3+1/3 = 0.3+0.3+0.3 = 0.9 &lt;&gt; 1.0.<!-- raw HTML omitted -->So BigDecimal is only interesting to handle &hellip; decimals! In the enterprise world, this should be most apps. It is a bit sad it appeared so late in the JDK. It should really be a primitive type.</p>
 
   </div>
   <div id="disqus_thread"></div>

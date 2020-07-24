@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,51 +88,41 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">A new scheme for Heston - Part 2</h1>
-    <span class="post-date">Jan 23, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 23, 2017 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/a-new-scheme-for-heston_part2/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
-    
-
-<p>A couple weeks ago, I wrote about <a href="/post/a-new-scheme-for-heston">a new Heston discretisation scheme</a> which was at least as accurate as Andersen QE scheme and faster, called DVSS2.</p>
-
+    <p>A couple weeks ago, I wrote about <a href="/post/a-new-scheme-for-heston">a new Heston discretisation scheme</a> which was at least as accurate as Andersen QE scheme and faster, called DVSS2.</p>
 <p>It turns out that it does not behave very well on the following Vanilla forward start option example (which is quite benign).
 The Heston parameters comes from a calibration to the market and are</p>
-
 <p>$$v_0= 0.0718, \kappa= 1.542, \theta= 0.0762, \sigma= 0.582, \rho= -0.352$$</p>
-
 <p>with a maturity of one year.</p>
-
 <p>On a standard vanilla option, DVSS2 behaves as advertised in the paper but not on a forward-start option
 with forward start date at \(T_1=\frac{7}{8}\) (relatively close to the maturity).
 A forward start call option will pay \(\max(S(T)-k S(T_1),0)\).
 This is particularly visible on the following graph of the price against
- the time-step size (1,<sup>1</sup>&frasl;<sub>2</sub>,<sup>1</sup>&frasl;<sub>4</sub>,<sup>1</sup>&frasl;<sub>8</sub>,<sup>1</sup>&frasl;<sub>16</sub>,<sup>1</sup>&frasl;<sub>32</sub>), for strikes 100% and 140% (it works well for strike=70%)
- where 32 time-steps are necessary.
+the time-step size (1,1/2,1/4,1/8,1/16,1/32), for strikes 100% and 140% (it works well for strike=70%)
+where 32 time-steps are necessary.
 <figure>
     <img src="/post/heston_dvss2.png"/> <figcaption>
             <h4>Forward start Call price with different discretization schemes.</h4>
         </figcaption>
 </figure>
 </p>
-
 <p>It would appear that the forward dynamic is sometimes poorly captured by the DVSS2 scheme.
 This makes DVSS2 not competitive in practice compared to Andersen&rsquo;s QE or even Alfonsi as it can not be trusted
-for a time step larger than <sup>1</sup>&frasl;<sub>32</sub>.
-Note that I insert an extra step at <sup>7</sup>&frasl;<sub>8</sub> for time step sizes greater or equal than <sup>1</sup>&frasl;<sub>4</sub>: a time-step size of 1 corresponds in reality
-to two time-steps respectively of size <sup>7</sup>&frasl;<sub>8</sub> and <sup>1</sup>&frasl;<sub>8</sub>.</p>
-
+for a time step larger than 1/32.
+Note that I insert an extra step at 7/8 for time step sizes greater or equal than 1/4: a time-step size of 1 corresponds in reality
+to two time-steps respectively of size 7/8 and 1/8.</p>
 <p>The error is actually because the log-asset process is sampled using a discrete random variables that matches
 the first 5 moments of the normal distribution. The so-called step 5 of the algorithm specifies:
 $$\hat{X} := \bar{x} + \xi \sqrt{\frac{1}{2}(\bar{y}+\hat{Y})h}$$
 The notation is quite specific to the paper, what you need to know is that \(\hat{X}\) corresponds to the log-asset process
 while \(\hat{Y}\) corresponds to the stochastic volatility process and \(\xi\) is the infamous discrete random variable.</p>
-
 <p>In reality, there is no good reason to use a discrete random variable beside lowering the computational cost.
 And it is obviously detrimental in the limit case where the volatility is deterministic (Black-Scholes case) as then
 the log-process will only match the first 5 moments of the normal distribution, while it should be exactly normal.</p>
-
 <p>Replacing \(\xi\) by a standard normally distributed random variable is enough to fix DVSS2. Note
 that it could also be discretized like the QE scheme, using a Broadie-Kaya interpolation scheme.
 <figure>
@@ -141,11 +131,8 @@ that it could also be discretized like the QE scheme, using a Broadie-Kaya inter
         </figcaption>
 </figure>
 </p>
-
 <p>The problem is that then, it is not faster than QE anymore. So it is not clear why it would be preferable.</p>
-
 <h3 id="a-discrete-distribution-matching-the-first-9-moments-of-the-normal-distribution">A discrete distribution matching the first 9 moments of the normal distribution</h3>
-
 <p>I then tried to see if matching more moments with a discrete distribution would help. More than 8 bits
 are available when generating a uniform random double precision number (as it is represented by 53 bits).
 The game is then to find nodes so that the distribution with discrete probabilities in i/256 with some interger i
@@ -156,7 +143,6 @@ The nodes are:
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#666">-</span><span style="color:#40a070">3.1348958252117543</span>, <span style="color:#666">-</span><span style="color:#40a070">2.6510063991157273</span>, <span style="color:#666">-</span><span style="color:#40a070">1.6397086267587215</span>, <span style="color:#666">-</span><span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">1.6397086267587215</span>, <span style="color:#40a070">2.6510063991157273</span>, <span style="color:#40a070">3.1348958252117543</span></code></pre></div>
 The probabilities approximate those given by the ideal solution on 8 nodes,
 that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
-
 <p>While this helps a bit for small steps as shown on the following graph, it is far from good:
 <figure>
     <img src="/post/heston_dvss2xd.png"/> <figcaption>

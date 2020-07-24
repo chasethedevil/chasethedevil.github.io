@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Non Central Chi Squared Distribution in Java or Scala</h1>
-    <span class="post-date">Jan 3, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/non-central-chi-squared-distribution-in-java-or-scala/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 3, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/non-central-chi-squared-distribution-in-java-or-scala/#disqus_thread">Comments</a>
     </span>
-    <p>I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<br /><br />OpenGamma has a not too bad <a href="http://docs-static.opengamma.com/1.2.0/java/javadocs/com/opengamma/analytics/math/statistics/distribution/NonCentralChiSquaredDistribution.html">implementation</a>. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <a href="http://www.boost.org/doc/libs/1_36_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">implementation in the Boost library</a>. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<br /><br />The Boost implementation seems much more robust in general thanks to:<br /><ul><li>The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding&rsquo;s method.</li><li>Reverts to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.ucs.louisiana.edu%2F~kxk4695%2FCSDA-03.pdf&amp;ei=LKzlUKWvL_K00QX_t4CYBA&amp;usg=AFQjCNFgkeariqMPXVH4LLrO5RRi3nIc0Q">Benton and Krishnamoorthy</a> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;ved=0CEIQFjAC&amp;url=http%3A%2F%2Fdspace.uevora.pt%2Frdpc%2Fbitstream%2F10174%2F4635%2F1%2FSpeedAccuracyCEV_FFM%255B1%255D.pdf&amp;ei=Ea3lULLsBaPL0QXKuoHYAw&amp;usg=AFQjCNGkqkA5e_-0n_DATE9BTQVoL9NTkg&amp;cad=rja">not very precise in general</a>.</li></ul>It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<br /><br />If only it was simple to commit to open-source projects while working for a software company&hellip;</p>
+    <p>I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<!-- raw HTML omitted --><!-- raw HTML omitted -->OpenGamma has a not too bad <!-- raw HTML omitted -->implementation<!-- raw HTML omitted -->. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <!-- raw HTML omitted -->implementation in the Boost library<!-- raw HTML omitted -->. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<!-- raw HTML omitted --><!-- raw HTML omitted -->The Boost implementation seems much more robust in general thanks to:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding&rsquo;s method.<!-- raw HTML omitted --><!-- raw HTML omitted -->Reverts to <!-- raw HTML omitted -->Benton and Krishnamoorthy<!-- raw HTML omitted --> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <!-- raw HTML omitted -->not very precise in general<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<!-- raw HTML omitted --><!-- raw HTML omitted -->If only it was simple to commit to open-source projects while working for a software company&hellip;</p>
 
   </div>
   <div id="disqus_thread"></div>

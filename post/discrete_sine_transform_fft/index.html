@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,64 +88,52 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Discrete Sine Transform via the FFT</h1>
-    <span class="post-date">Feb 5, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 5, 2018 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/discrete_sine_transform_fft/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/math">math</a>
+    <a class="label" href="https:///categories/quant">quant</a><a class="label" href="https:///categories/math">math</a>
     </span>
     <p>Several months ago, I had a quick look at <a href="https://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2585529">a recent paper</a> describing how to use
 Wavelets to price options under stochastic volatility models with a known characteristic function.
 The more classic method is to use some numerical quadrature directly on the Fourier integral as described <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2362968">in this paper</a> for example.
 When I read the paper, I was skeptical about the Wavelet approach, since it looked complicated, and with many additional parameters.</p>
-
 <p>I recently took a closer look and it turns out my judgment was bad. The additional parameters can be easily automatically and reliably set
 by very simple rules that work well (<a href="https://ssrn.com/abstract=2705699">a subsequent paper</a> by the same author, which applies the method to Bermudan options, clarifies this).
 The method is also not as complex as I first imagined. And more importantly, the FFT makes it fast. It is quite amazing to see
 the power of the FFT in action. It really is because of the FFT that the Shannon Wavelet method is practical.</p>
-
 <p>Anyway one of the things that need to be computed are the payoff coefficients, and one expression is just the sum of a <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">discrete Cosine transform</a> (DCT) and a discrete Sine transform (DST).
 I was wondering then
 about a simple way to use the FFT for the Sine transform. There are many papers around how to use the FFT to compute the Cosine transform. A technique
 that is efficient and simple is the one of <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwirtpu5upHZAhUFOBQKHZnHBFoQFgg2MAA&amp;url=http%3A%2F%2Feelinux.ee.usm.maine.edu%2Fcourses%2Fele486%2Fdocs%2Fmakhoul.fastDCT.pdf&amp;usg=AOvVaw0b3sdSzaT-A9fRAGWZbUcP">Makhoul</a>.</p>
-
 <p>The coefficients that need to be computed for all k can be represented by the following equation
-$$  V_{k} = \sum_{j=0}^{N-1} a_j \cos\left(\pi k\frac{j+\frac{1}{2}}{N}\right) + b_j \sin\left(\pi k\frac{j+\frac{1}{2}}{N}\right) $$
+$$	V_{k} = \sum_{j=0}^{N-1} a_j \cos\left(\pi k\frac{j+\frac{1}{2}}{N}\right) + b_j \sin\left(\pi k\frac{j+\frac{1}{2}}{N}\right) $$
 with \( N= 2^{\bar{J}-1} \) for some positive integer \( \bar{J} \).
 Makhoul algorithm to compute the DCT of size N with one FFT of size N consists in</p>
-
 <ul>
 <li>initialize the FFT coefficients \(c_j\) with:
-$$  c_j = a_{2j} \quad\,,\quad    c_{N-1-j} = a_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+$$	c_j = a_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
 <li>and then from the result of the FFT \( hat{c} \), the DCT coefficients \( \hat{a} \) are
-$$ \hat{a}_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
+$$ \hat{a}_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
-
 <p>Makhoul does not specify the equivalent formula for the DST, but we can do something similar.</p>
-
 <ul>
 <li>We first initialize the FFT coefficients \( c_j \) with:
-$$ c_j = b_{2j} \quad\,,\quad c_{N-1-j} = -b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+$$ c_j = b_{2j} \quad,,\quad	c_{N-1-j} = -b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
 <li>and then from the result of the FFT \(\hat{c}\), the DST coefficients \(\hat{b}\) are
-$$\hat{b}_k = -\Im\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
+$$\hat{b}_k = -\Im\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
-
 <p>For maximum performance, the two FFTs can reuse the same sine and cosine tables. And the last step of the DCT and DST can be combined together.</p>
-
 <p>Another approach would be to compute a single FFT of size 2N as we can rewrite the coefficients as
-$$  V_{k} = \Re\left[e^{-i \pi \frac{k}{2N}} \sum_{j=0}^{2N-1} (a_j + i b_j) e^{-2i\pi k\frac{j}{2N}} \right] $$
+$$	V_{k} = \Re\left[e^{-i \pi \frac{k}{2N}} \sum_{j=0}^{2N-1} (a_j + i b_j) e^{-2i\pi k\frac{j}{2N}} \right] $$
 with \(a_j = b_j =0 \) for \( j \geq N \)</p>
-
 <p>In fact the two are almost equivalent, since a FFT of size 2N is <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">decomposed</a> internally into two FFTs of size N.</p>
-
 <p>With this in mind we can improve a bit the above to merge the two transforms together:</p>
-
 <ul>
 <li>We first initialize the FFT coefficients \( c_j \) with:
-$$ c_j = a_{2j} + i b_{2j} \quad\,,\quad c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+$$ c_j = a_{2j} + i b_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
 <li>and then from the result of the FFT \(\hat{c}\), the coefficients are
-$$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right]\,. $$</li>
+$$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
-
 <p>And we have computed the coefficients with a single FFT of size N.</p>
 
   </div>

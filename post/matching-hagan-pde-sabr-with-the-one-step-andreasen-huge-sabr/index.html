@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Matching Hagan PDE SABR with the one-step Andreasen-Huge SABR</h1>
-    <span class="post-date">Apr 30, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/matching-hagan-pde-sabr-with-the-one-step-andreasen-huge-sabr/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 30, 2015 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/matching-hagan-pde-sabr-with-the-one-step-andreasen-huge-sabr/#disqus_thread">Comments</a>
     </span>
-    <p>I looked nearly two years ago already at <a href="http://chasethedevil.blogspot.co.uk/2013/05/sabr-with-new-hagan-pde-approach.html">the arbitrage free SABR of Andreasen-Huge in comparison to the arbitrage free PDE of Hagan</a> and showed how close the <a href="http://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">ideas were</a>: Andreasen-Huge relies on the normal Dupire forward PDE using a slightly simpler local vol (no time dependent exponential term) while Hagan works directly on the Fokker-Planck PDE (you can think of it as the Dupire Forward PDE for the density) and uses an expansion of same order as the original SABR formula (which leads to an additional exponential term in the local volatility).<br /><br />One clever idea from Andreasen-Huge is the use of a single step. It turns out that their idea is not completely new. Daniel Duffy sent me some old papers from Shishkin around fitted schemes (<a href="http://oai.cwi.nl/oai/asset/10209/10209A.pdf">here is one</a>). This is very much the same thing, except Shishkin concern is about a good handling of discontinuity in the initial condition, and therefore makes the association step function =&gt; cumulative density to fit the diffusion parameter. Andreasen-Huge work directly with the call prices as this is what they solve.<br /><br />One drawback of Andreasen-Huge one step method is the inability to match the standard SABR smile: the parameters don&rsquo;t have exactly the same meaning. It turns out that by just shifting proportionally the local volatility by a constant factor, Andreasen Huge matches Hagan PDE vols quite closely.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-BNmlkwTWu7Y/VUJGeLtiKII/AAAAAAAAH88/5ZeorrS4WRg/s1600/Screenshot_2015-04-30_17-12-43.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-BNmlkwTWu7Y/VUJGeLtiKII/AAAAAAAAH88/5ZeorrS4WRg/s1600/Screenshot_2015-04-30_17-12-43.png" height="395" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Black volatilities</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rIUYFj3y7ro/VUJF6HOwyHI/AAAAAAAAH80/aOJrEeI1p9U/s1600/Screenshot_2015-04-30_17-09-53.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-rIUYFj3y7ro/VUJF6HOwyHI/AAAAAAAAH80/aOJrEeI1p9U/s1600/Screenshot_2015-04-30_17-09-53.png" height="395" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Probability density</td></tr></tbody></table><br />While this is interesting in itself, it&rsquo;s still not so simple to backup this factor without solving for it (and then the method looses appeal).</p>
+    <p>I looked nearly two years ago already at <!-- raw HTML omitted -->the arbitrage free SABR of Andreasen-Huge in comparison to the arbitrage free PDE of Hagan<!-- raw HTML omitted --> and showed how close the <!-- raw HTML omitted -->ideas were<!-- raw HTML omitted -->: Andreasen-Huge relies on the normal Dupire forward PDE using a slightly simpler local vol (no time dependent exponential term) while Hagan works directly on the Fokker-Planck PDE (you can think of it as the Dupire Forward PDE for the density) and uses an expansion of same order as the original SABR formula (which leads to an additional exponential term in the local volatility).<!-- raw HTML omitted --><!-- raw HTML omitted -->One clever idea from Andreasen-Huge is the use of a single step. It turns out that their idea is not completely new. Daniel Duffy sent me some old papers from Shishkin around fitted schemes (<!-- raw HTML omitted -->here is one<!-- raw HTML omitted -->). This is very much the same thing, except Shishkin concern is about a good handling of discontinuity in the initial condition, and therefore makes the association step function =&gt; cumulative density to fit the diffusion parameter. Andreasen-Huge work directly with the call prices as this is what they solve.<!-- raw HTML omitted --><!-- raw HTML omitted -->One drawback of Andreasen-Huge one step method is the inability to match the standard SABR smile: the parameters don&rsquo;t have exactly the same meaning. It turns out that by just shifting proportionally the local volatility by a constant factor, Andreasen Huge matches Hagan PDE vols quite closely.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Implied Black volatilities<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Probability density<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->While this is interesting in itself, it&rsquo;s still not so simple to backup this factor without solving for it (and then the method looses appeal).</p>
 
   </div>
   <div id="disqus_thread"></div>

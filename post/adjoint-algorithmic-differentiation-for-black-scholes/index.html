@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Adjoint Algorithmic Differentiation for Black-Scholes</h1>
-    <span class="post-date">Jan 21, 2014 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 21, 2014 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/#disqus_thread">Comments</a>
     </span>
-    <p><a href="http://en.wikipedia.org/wiki/Automatic_differentiation">Adjoint algorithmic differentiation</a> is particularly interesting in finance as we often encounter the case of a function that takes many input (the market data) and returns one output (the price) and we would like to also compute sensitivities (greeks) to each input.<br /><br />As I am just starting around it, to get a better grasp, I first tried to apply the idea to the analytic knock out barrier option formula, by hand, only to find out I was making way too many errors by hand to verify anything. So I tried the simpler vanilla Black-Scholes formula. I also made various errors, but managed to fix all of them relatively easily.<br /><br />I decided to compare how much time it took to compute price, delta, vega, theta, rho, rho2 between single sided finite difference and the adjoint approach. Here are the results for 1 million options:<br /><br /><blockquote class="tr_bq">FD time=2.13s<br />Adjoint time=0.63s</blockquote><br /><b>It works well</b>, but doing it by hand is crazy and too error prone. It might be simpler for Monte-Carlo payoffs however.<br /><br />There are not many Java tools that can do reverse automatic differentiation, I found <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=5&amp;cad=rja&amp;ved=0CFAQFjAE&amp;url=http%3A%2F%2Fcluster.grid.pub.ro%2Fwiki%2Findex.php%2FADiJaC_-_Automatic_Differentiation_of_Java_Classfiles&amp;ei=SmDeUtDLCYrG0QWrlIHQDw&amp;usg=AFQjCNHLMwobO6u5jSoUifCdHvE2yPZ6oQ&amp;sig2=wFbGRYjgLenCNGRbrQ1gKQ&amp;bvm=bv.59568121,d.d2k">some thesis</a> on it, with an interesting byte code oriented approach (one difficulty is that you need to reverse loops, while statements).</p>
+    <p><!-- raw HTML omitted -->Adjoint algorithmic differentiation<!-- raw HTML omitted --> is particularly interesting in finance as we often encounter the case of a function that takes many input (the market data) and returns one output (the price) and we would like to also compute sensitivities (greeks) to each input.<!-- raw HTML omitted --><!-- raw HTML omitted -->As I am just starting around it, to get a better grasp, I first tried to apply the idea to the analytic knock out barrier option formula, by hand, only to find out I was making way too many errors by hand to verify anything. So I tried the simpler vanilla Black-Scholes formula. I also made various errors, but managed to fix all of them relatively easily.<!-- raw HTML omitted --><!-- raw HTML omitted -->I decided to compare how much time it took to compute price, delta, vega, theta, rho, rho2 between single sided finite difference and the adjoint approach. Here are the results for 1 million options:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->FD time=2.13s<!-- raw HTML omitted -->Adjoint time=0.63s<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It works well<!-- raw HTML omitted -->, but doing it by hand is crazy and too error prone. It might be simpler for Monte-Carlo payoffs however.<!-- raw HTML omitted --><!-- raw HTML omitted -->There are not many Java tools that can do reverse automatic differentiation, I found <!-- raw HTML omitted -->some thesis<!-- raw HTML omitted --> on it, with an interesting byte code oriented approach (one difficulty is that you need to reverse loops, while statements).</p>
 
   </div>
   <div id="disqus_thread"></div>

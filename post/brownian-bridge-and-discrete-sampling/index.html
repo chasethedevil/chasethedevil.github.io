@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,54 +88,46 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Brownian Bridge and Discrete Random Variables</h1>
-    <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>The <a href="/post/a-new-scheme-for-heston">new Heston discretisation scheme</a> I wrote about a few weeks ago makes use
 a discrete random variable matching the first five moments of the normal distribution instead of the usual
 normally distributed random variable, computed via the inverse cumulative distribution function. Their discrete random
 variable is:
-$$\xi = \sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3\,,$$
-$$  \xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4\,,$$
-$$\xi = \sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3\,,$$
-$$\xi = -\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4\,,$$
+$$\xi =	\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3,,$$
+$$	\xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4,,$$
+$$\xi =	\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3,,$$
+$$\xi =	-\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4,,$$
 with \(U_1 \in \{0,1,&hellip;,7\}\)</p>
-
 <p>The advantage of the discrete variable is that it is much faster to generate. But there are some interesting
 side-effects. The first clue I found is a loss of accuracy on forward-start vanilla options.</p>
-
 <p>By accident, I found a much more interesting side-effect: you can not use the Brownian-Bridge variance reduction
 on the discrete random variable. This is very well illustrated by the case
 of a digital option in the Black model, for example with volatility 10% and a 3 months maturity, zero interest rate and dividends. For the following graph,
 I use 16000 Sobol paths composed of 100 time-steps.</p>
-
 <figure>
     <img src="/post/black_discrete_sampling.png"/> <figcaption>
             <h4>Digital Call price with different random variables.</h4>
         </figcaption>
 </figure>
 
-
 <p>The &ldquo;-BB&rdquo; suffix stands for the Brownian-Bridge path construction, &ldquo;Five&rdquo; for five moments discrete variable
 and &ldquo;AS241&rdquo; for the inverse cumulative distribution function (continuous approach). As you can see,
 the price is discrete, and follows directly from the discrete distribution.
 The use of any random number generator with a large enough number of paths would lead to the same conclusion.</p>
-
 <p>This is because with the Brownian-Bridge technique, the last point in the path, corresponding to the maturity,
 is sampled first, and the other path points are then completed inside from the first and last points.
 But the digital option depends only on the value of the path at maturity, that is, on this last point.
 As this point corresponds follows our discrete distribution, the price of the digital option is a step function.</p>
-
 <p>In contrast, for the incremental path construction, each point is computed from the previous point.
 The last point will thus include the variation of all points in the path, which will be very close to normal, even with a discrete distribution per point.</p>
-
 <p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
 and the incremental path construction, is that several intermediate time-steps (between payoff observations)
 are a must-have with discrete random variables, however small is the original time-step size.</p>
-
-<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of <sup>1</sup>&frasl;<sub>32</sub> (meaning 8 intermediate time-steps in
+<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of 1/32 (meaning 8 intermediate time-steps in
 our digital option example). I suppose this is a direct consequence of the digital payoff discontinuity. In Talay
 <a href="http://link.springer.com/chapter/10.1007/BFb0006577">&ldquo;Efficient numerical schemes for the approximation of expectations of functionals of the solution of a SDE, and applications&rdquo;</a> (which you can
 read by adding .sci-hub.cc to the URL host name), second order convergence

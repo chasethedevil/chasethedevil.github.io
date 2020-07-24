@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,21 +88,17 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Dupire Local Volatility with Cash Dividends Part 2</h1>
-    <span class="post-date">May 29, 2016 &middot; 5 minute read &middot; <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/#disqus_thread">Comments</a>
+    <span class="post-date">May 29, 2016 &middot; 5 minute read &middot; <a href="https:///chasethedevil.github.io/post/dupire_cash_dividend_part2/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https:///categories/quant">quant</a>
     </span>
     <p>I had a look at how to price under Local Volatility with Cash dividends in <a href="/post/dupire_cash_dividend/">my previous post</a>. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).</p>
-
 <p>I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends <a href="http://www.lorenzobergomi.com/#!blank/cnec">in the book of Lorenzo Bergomi</a>, one can rely on the
-classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:
-<div>$$\sigma^{\star 2}\left(y, T\right) = \frac{ \frac{\partial w}{\partial T}}{1 - \frac{y}{w}\frac{\partial w}{\partial y}   + \frac{1}{4}\left(-\frac{1}{4}-\frac{1}{w}+\frac{y^2}{w^2}\right)\left(\frac{\partial w}{\partial y}\right)^2  + \frac{1}{2}\frac{\partial^{2} w}{\partial y^2}} \text{.}$$</div></p>
-
+classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:</p>
+<!-- raw HTML omitted -->
 <p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
-
 <p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
-
 <p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
 <figure>
     <img src="/post/dupire_labordere_ll3_modelvolraw.png"/> <figcaption>
@@ -110,7 +106,6 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
         </figcaption>
 </figure>
 </p>
-
 <p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
 <figure>
     <img src="/post/dupire_labordere_ll3_modelvol.png"/> <figcaption>
@@ -118,7 +113,6 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
         </figcaption>
 </figure>
 </p>
-
 <p>The equivalent pure process Black vols looks like this:
 <figure>
     <img src="/post/dupire_labordere_ll3_blackvol.png"/> <figcaption>
@@ -126,7 +120,6 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
         </figcaption>
 </figure>
 </p>
-
 <p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
 <figure>
     <img src="/post/dupire_labordere_ll3_localvol.png"/> <figcaption>
@@ -134,7 +127,6 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
         </figcaption>
 </figure>
 </p>
-
 <p>While the one of the pure process is:
 <figure>
     <img src="/post/dupire_labordere_ll3_purelv.png"/> <figcaption>
@@ -142,19 +134,13 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
         </figcaption>
 </figure>
 </p>
-
 <p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
-
 <p>So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as</p>
-
 <p>\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
 \(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.</p>
-
 <p>Not applying any particular policy would mean that the stock price can become negative:
 \(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
-
 <p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
-
 <p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure>
     <img src="/post/dupire_labordere_liquidator_modelvol.png"/> <figcaption>
             <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
@@ -168,9 +154,7 @@ It turns out, that then, using the same policy in the FDM scheme at the dividend
         </figcaption>
 </figure>
 </p>
-
 <p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
-
 <p>Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.</p>
 
   </div>

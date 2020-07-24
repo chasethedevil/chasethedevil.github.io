@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https:///css/poole.css">
+  <link rel="stylesheet" href="https:///css/hyde.css">
+  <link rel="stylesheet" href="https:///css/poole-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
+  <link rel="stylesheet" href="https:///css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
+  <link href="https:///favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,9 +88,9 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Upper Bounds in American Monte-Carlo</h1>
-    <span class="post-date">Apr 30, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/upper-bounds-in-american-monte-carlo/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 30, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/upper-bounds-in-american-monte-carlo/#disqus_thread">Comments</a>
     </span>
-    <p><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.159.2367&amp;rep=rep1&amp;type=pdf">Glasserman and Yu</a> (GY) give a relatively simple algorithm to compute lower and upper bounds of a the price of a Bermudan Option through Monte-Carlo.<br /><br />I always thought it was very computer intensive to produce an upper bound, and that the standard <a href="http://escholarship.org/uc/item/43n1k4jb.pdf">Longstaff Schwartz algorithm</a> was quite precise already. GY algorithm is not much slower than the Longstaff-Schwartz algorithm, but what&rsquo;s a bit tricky is the choice of basis functions: they have to be Martingales. This is the detail I overlooked at first and I, then, could not understand why my results were so bad. I looked for a coding mistake for several hours before I figured out that my basis functions were not Martingales. Still it is possible to find good Martingales for the simple Bermudan Put option case and GY actually propose some <a href="http://arxiv.org/pdf/math.PR/0503556">in another paper</a>.<br /><br />Here are some preliminary results where I compare the random number generator influence and the different methods. I include results for GY using In-the-money paths only for the regression (-In suffix) or all (no suffix). <br /><br /><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s1600/gy_train16k_sim_value.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="238" src="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s400/gy_train16k_sim_value.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">value using 16k training path and Sobol - GY-Low-In is very close to LS.</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s1600/gy_tr16k_sim.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="300" src="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s640/gy_tr16k_sim.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 16k training path - a high number of simulations not that useful</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s1600/gy_sim1m_training.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="282" src="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s640/gy_sim1m_training.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 1m simulation paths - GY basis functions require less training than LS</td></tr></tbody></table><br />One can see the the upper bound is not that precise compared to the lower bound estimate, and that using only in the money paths makes a big difference. GY regression is good with only 1k paths, LS requires 10x more.<br /><br />Surprisingly, I noticed that the Brownian bridge variance reduction applied to Sobol was&nbsp; increasing the GY low estimate, so as to make it sometimes slightly higher than Longstaff-Schwartz price.</p>
+    <p><!-- raw HTML omitted -->Glasserman and Yu<!-- raw HTML omitted --> (GY) give a relatively simple algorithm to compute lower and upper bounds of a the price of a Bermudan Option through Monte-Carlo.<!-- raw HTML omitted --><!-- raw HTML omitted -->I always thought it was very computer intensive to produce an upper bound, and that the standard <!-- raw HTML omitted -->Longstaff Schwartz algorithm<!-- raw HTML omitted --> was quite precise already. GY algorithm is not much slower than the Longstaff-Schwartz algorithm, but what&rsquo;s a bit tricky is the choice of basis functions: they have to be Martingales. This is the detail I overlooked at first and I, then, could not understand why my results were so bad. I looked for a coding mistake for several hours before I figured out that my basis functions were not Martingales. Still it is possible to find good Martingales for the simple Bermudan Put option case and GY actually propose some <!-- raw HTML omitted -->in another paper<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here are some preliminary results where I compare the random number generator influence and the different methods. I include results for GY using In-the-money paths only for the regression (-In suffix) or all (no suffix). <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->value using 16k training path and Sobol - GY-Low-In is very close to LS.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->error using 16k training path - a high number of simulations not that useful<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->error using 1m simulation paths - GY basis functions require less training than LS<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->One can see the the upper bound is not that precise compared to the lower bound estimate, and that using only in the money paths makes a big difference. GY regression is good with only 1k paths, LS requires 10x more.<!-- raw HTML omitted --><!-- raw HTML omitted -->Surprisingly, I noticed that the Brownian bridge variance reduction applied to Sobol was  increasing the GY low estimate, so as to make it sometimes slightly higher than Longstaff-Schwartz price.</p>
 
   </div>
   <div id="disqus_thread"></div>
