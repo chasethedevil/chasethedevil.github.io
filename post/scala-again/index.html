@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Scala Again</h1>
-    <span class="post-date">Feb 6, 2012 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/scala-again/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 6, 2012 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/scala-again/#disqus_thread">Comments</a>
     </span>
     <p>I am trying <!-- raw HTML omitted -->Scala<!-- raw HTML omitted --> again. Last time, several years ago, I played around with it as a web tool, combining it with a Servlet Runner like Tomcat. This time, I play around with it for some quantitative finance experiments.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Why Scala?<!-- raw HTML omitted --> It still seem the most advanced alternative to Java on the JVM, and the mix of functional programming and OO programming is interesting. Furthermore it goes quite far as it ships with its own library. I was curious to see if I could express some things better with Scala.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here are my first impressions after a week:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I like the <!-- raw HTML omitted -->object<!-- raw HTML omitted --> keyword. It avoids the messy singleton pattern, or the classes with many static methods. I think it makes things much cleaner to not use static at all but distinguish between <!-- raw HTML omitted -->object<!-- raw HTML omitted --> &amp; <!-- raw HTML omitted -->class<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->I like the <!-- raw HTML omitted -->Array[Double]<!-- raw HTML omitted -->, and especially <!-- raw HTML omitted -->ArrayBuffer[Double]<!-- raw HTML omitted -->. Finally we don&rsquo;t have to worry between the <!-- raw HTML omitted -->Double<!-- raw HTML omitted --> and <!-- raw HTML omitted -->double<!-- raw HTML omitted --> performance issues.<!-- raw HTML omitted --><!-- raw HTML omitted -->I was a bit annoyed by <!-- raw HTML omitted -->a(i)<!-- raw HTML omitted --> instead of <!-- raw HTML omitted -->a[i]<!-- raw HTML omitted --> but it makes sense. I wonder if there is a performance implication for arrays, hopefully not.<!-- raw HTML omitted --><!-- raw HTML omitted -->I like the real properties, automatic getter/setter: less boilerplate code, less getThis(), setThat(toto).<!-- raw HTML omitted --><!-- raw HTML omitted -->Very natural interaction with Java libraries. <!-- raw HTML omitted --><!-- raw HTML omitted -->I found a good use of <!-- raw HTML omitted -->case classes<!-- raw HTML omitted --> (to my surprise): typically an enum that can have some well defined parameters, and that you don&rsquo;t want to make a class (because it&rsquo;s not). My use case was to define boundaries of a spline.<!-- raw HTML omitted --><!-- raw HTML omitted -->I love the formatter in the scala (eclipse) IDE. Finally a formatter in eclipse that does not produce crap.<!-- raw HTML omitted --><!-- raw HTML omitted -->Now things I still need time to get used to:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> member variable declared implicitly in the constructor. I first made the mistake (still?) to declare some variables twice.<!-- raw HTML omitted --><!-- raw HTML omitted -->I got hit by starting a line with a <!-- raw HTML omitted -->+<!-- raw HTML omitted --> instead of ending with a <!-- raw HTML omitted -->+<!-- raw HTML omitted -->. It is dangerous, but it certainly makes the code more consistent.<!-- raw HTML omitted --><!-- raw HTML omitted -->Performance impacts: I will need to take a look at the bytecode for some scala constructs to really understand the performance impact of some uses. For example I tend to use while loops instead of for comprehension after some scary post of the Twitter guys about for comprehension. But at first, it looks as fast as Java.<!-- raw HTML omitted --><!-- raw HTML omitted -->I wrote my code a bit fast. I am sure I could make use of more Scala features.<!-- raw HTML omitted --><!-- raw HTML omitted -->The scala IDE in eclipse 3.7.1 has known issues. I wish it was a bit more functional, but it&rsquo;s quite ok (search for references works, renaming works to some extent).<!-- raw HTML omitted --><!-- raw HTML omitted -->Scala unit tests: I used scala tests, but it seems a bit funny at first. Also I am not convinced by the syntax that avoid method names and prefer test(&ldquo;test name&rdquo;). It makes it more difficult to browse the source code.<!-- raw HTML omitted --><!-- raw HTML omitted -->Some things they should consider:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Integrate directly a Log API. I just use SLF4J without any scala wrapper, but it feels like it should be part of the standard API (even if that did not work out so well for Sun).<!-- raw HTML omitted --><!-- raw HTML omitted -->Double.Epsilon is not the machine epsilon: very strange. I found out somewhere else there was the machine epsilon, don&rsquo;t remember where because I ended up just making a small <!-- raw HTML omitted -->object<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->Unit tests should be part of the standard API.<!-- raw HTML omitted --><!-- raw HTML omitted -->Overall I found it quite exciting as there are definitely new ways to solve problems. It was a while since I had been excited with actual coding.</p>
 

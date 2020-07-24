@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">throws Exception</h1>
-    <span class="post-date">May 27, 2014 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/throws-exception/#disqus_thread">Comments</a>
+    <span class="post-date">May 27, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/throws-exception/#disqus_thread">Comments</a>
     </span>
     <p>There was a big debate at work around Exception declaration in a Java API. I was quite surprised that such an apparently simple subject could end up being so controversial. The controversy was around the choice of declaring in the interfaces:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->void myMethod() throws Exception<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->instead of<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->void myMethod() throws MyAPIException<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->void myMethod() throws MyAPIRuntimeException<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->void myMethod() <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->where MyAPI represents either a generic API related exception or a specific exception related to the method in question.<!-- raw HTML omitted --><!-- raw HTML omitted -->The choice of &ldquo;throws Exception&rdquo; did not even occur to me as a possibility, but after some digging, I found that some relatively famous libraries actually followed that principle at one point, for example Apache Struts 1.x or Spring MVC. <!-- raw HTML omitted --><!-- raw HTML omitted -->More modern libraries, like Google Guava, commons-math 3.x, Struts 2.x generally favor MyAPIRuntimeException where MyAPI is actually context-specific. Some old popular libraries declare a checked Exception, for example the HibernateException in Hibernate.<!-- raw HTML omitted --><!-- raw HTML omitted -->This seems to be a recurring subject on Stackoverflow:<!-- raw HTML omitted --><!-- raw HTML omitted -->Stackoverflow - Java interface throws Exception best practice<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Stackoverflow - What to put in the throws clause of an interface method<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->But those are quite poor in terms of explanations. The best comments on this subjects are from:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Anders         Hejlsberg (C#, Delphi, Turbo Pascal creator) - The Trouble with         Checked Exceptions<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->    <!-- raw HTML omitted --><!-- raw HTML omitted -->James         Gosling (Java creator) - Failure and Exceptions<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->    <!-- raw HTML omitted -->This comment from Anders is particularly acute:<!-- raw HTML omitted -->    &ldquo;<!-- raw HTML omitted -->To work around this requirement, people do ridiculous things.       For example, they decorate every method with, &ldquo;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->throws         Exception<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->.&rdquo; That just completely defeats the       feature, and you just made the programmer write more gobbledy       gunk. That doesn&rsquo;t help anybody.<!-- raw HTML omitted -->    &ldquo;<!-- raw HTML omitted -->    <!-- raw HTML omitted --><!-- raw HTML omitted -->         <!-- raw HTML omitted -->Today I believe the API in question declares &ldquo;throws Exception&rdquo;&hellip; <!-- raw HTML omitted -->         <!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

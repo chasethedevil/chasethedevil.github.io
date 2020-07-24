@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Getting Started With DOM, XOM, DOM4J by Parsing an RSS Feed - An Experience Review</h1>
-    <span class="post-date">Mar 17, 2006 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/getting-started-with-dom-xom-dom4j-by-parsing-an-rss-feed-an-experience-review/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 17, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/getting-started-with-dom-xom-dom4j-by-parsing-an-rss-feed-an-experience-review/#disqus_thread">Comments</a>
     </span>
     <p>Recently, I looked for a way to get info from some particular blog entries of mine on <!-- raw HTML omitted -->blogger.com<!-- raw HTML omitted -->. Blogger used to offer an  <!-- raw HTML omitted -->XML-RPC API <!-- raw HTML omitted -->. They even designed a <!-- raw HTML omitted -->version 2<!-- raw HTML omitted -->  of the XML-RPC API that does not seem to have ever been put in production. Or maybe I did not manage to make it work. I had no problem to make v1 work, however. I used apache XMLRPC v2, it was very simple to use. Unfortunately information accessible through XML-RPC Blogger API was incomplete for me. Furthermore, it is very likely that this API will disappear soon as it is deprecated since 2002.<!-- raw HTML omitted --><!-- raw HTML omitted -->Blogger wants you to use their <!-- raw HTML omitted -->Atom API<!-- raw HTML omitted -->. It is not XML RPC anymore, you have to do the parsing by hand.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The DOM Experience <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I thought &ldquo;no big deal, I will use DOM for it&rdquo;. I don&rsquo;t need performance and wanted a quick way to solve my problem, plus DOM does not require X number of libraries. It was easy to use regular DOM until I was frustrated by not being able to get the  <!-- raw HTML omitted -->&lt;content&gt;<!-- raw HTML omitted --> element full text easily as it is sometimes XML. I did not want to hand code a method to do that as I thought it should be done by the XML library.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The XOM Experience<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I heard previously of a simple XML parser, efficient, with an API that had been well designed, XOM. I looked at the API, there was a toXML<!-- raw HTML omitted --> ()<!-- raw HTML omitted --> method to return the node content as XML (children included), sounded good. I saw there was even XPath support, and thought, great, it will simplify my code a bit. I will get the blog entries by just querying for &quot; <!-- raw HTML omitted -->/feed/entry<!-- raw HTML omitted -->&rdquo;. No luck, it did not work, it returned 0 results. So I looked for mistakes in my code, did not find obvious ones. I tried other queries like &quot; <!-- raw HTML omitted -->//feed/entry<!-- raw HTML omitted -->&rdquo; or &ldquo;<!-- raw HTML omitted -->//entry<!-- raw HTML omitted -->&rdquo;, same thing, not the right results. There must have been something wrong in my code, or maybe the XPath engine in XOM has particular settings to deal with RSS feeds (they contain various xmlns declarations). The point is that I got frustrated, it was supposed to be very simple, and in reality, not so!<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The DOM4J Experience<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I had experience with Dom4j before, just once, to build XML, not to parse it. I had relatively good memories of my Dom4j experience for that so I decided to try it out on my problem. At first I found Dom4j API a bit confusing as there are so many methods on most used classes. This is because Dom4j is DOM compatible. But I quickly understand the logic of it and found some very useful methods, namely  <!-- raw HTML omitted -->Element.elements(name)<!-- raw HTML omitted --> to get all children elements by name. Of course, they have an asXML<!-- raw HTML omitted -->()<!-- raw HTML omitted --> method like XOM. There is also XPath support.<!-- raw HTML omitted -->I tried the XPath on Blogger RSS without success again. There really must be a trick to get it to recognize RSS. But with the <!-- raw HTML omitted -->elements(&ldquo;entry&rdquo;)<!-- raw HTML omitted --> method, I very quickly got the same with not much more code, and it worked.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->so DOM vs. XOM vs. DOM4J = 0 - 0 - 1<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Example Code:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->SAXReader<!-- raw HTML omitted --> <!-- raw HTML omitted -->reader<!-- raw HTML omitted --> = <!-- raw HTML omitted -->new<!-- raw HTML omitted --> <!-- raw HTML omitted -->SAXReader<!-- raw HTML omitted -->();<!-- raw HTML omitted --><!-- raw HTML omitted -->Document<!-- raw HTML omitted --> <!-- raw HTML omitted -->doc<!-- raw HTML omitted --> = reader.read(response);<!-- raw HTML omitted --><!-- raw HTML omitted -->Collection<!-- raw HTML omitted --> <!-- raw HTML omitted -->posts<!-- raw HTML omitted --> = <!-- raw HTML omitted -->new<!-- raw HTML omitted --> <!-- raw HTML omitted -->ArrayList<!-- raw HTML omitted -->();<!-- raw HTML omitted --><!-- raw HTML omitted -->List<!-- raw HTML omitted --> <!-- raw HTML omitted -->entries<!-- raw HTML omitted --> = doc.getRootElement().elements(&ldquo;<!-- raw HTML omitted -->entry<!-- raw HTML omitted -->&rdquo;);<!-- raw HTML omitted --><!-- raw HTML omitted -->if<!-- raw HTML omitted --> (LOG.isDebugEnabled()) <!-- raw HTML omitted -->{<!-- raw HTML omitted -->        LOG.debug(&ldquo;<!-- raw HTML omitted -->found <!-- raw HTML omitted -->&quot;+entries.size()+&quot;<!-- raw HTML omitted --> entries<!-- raw HTML omitted -->&rdquo;);<!-- raw HTML omitted -->}<!-- raw HTML omitted --><!-- raw HTML omitted -->for<!-- raw HTML omitted --> (<!-- raw HTML omitted -->int<!-- raw HTML omitted --> <!-- raw HTML omitted -->i<!-- raw HTML omitted --> = 0; i &lt;entries.size();i++)<!-- raw HTML omitted -->{<!-- raw HTML omitted -->        <!-- raw HTML omitted -->Element<!-- raw HTML omitted --> <!-- raw HTML omitted -->entry<!-- raw HTML omitted --> = (<!-- raw HTML omitted -->Element<!-- raw HTML omitted -->) entries.get(i); <!-- raw HTML omitted -->        <!-- raw HTML omitted -->Map<!-- raw HTML omitted --> <!-- raw HTML omitted -->m<!-- raw HTML omitted --> = <!-- raw HTML omitted -->new<!-- raw HTML omitted --> <!-- raw HTML omitted -->HashMap<!-- raw HTML omitted -->();<!-- raw HTML omitted -->        <!-- raw HTML omitted -->for<!-- raw HTML omitted --> (<!-- raw HTML omitted -->Iterator<!-- raw HTML omitted --> <!-- raw HTML omitted -->it<!-- raw HTML omitted --> = entry.elementIterator();it.hasNext();)<!-- raw HTML omitted -->        {<!-- raw HTML omitted -->                <!-- raw HTML omitted -->Element<!-- raw HTML omitted --> <!-- raw HTML omitted -->detail<!-- raw HTML omitted --> = (<!-- raw HTML omitted -->Element<!-- raw HTML omitted -->) it.next();<!-- raw HTML omitted -->                <!-- raw HTML omitted -->String<!-- raw HTML omitted --> <!-- raw HTML omitted -->name<!-- raw HTML omitted --> = detail.getName();<!-- raw HTML omitted -->                <!-- raw HTML omitted -->if<!-- raw HTML omitted --> (name.equals(&ldquo;<!-- raw HTML omitted -->link<!-- raw HTML omitted -->&rdquo;))<!-- raw HTML omitted -->                {<!-- raw HTML omitted -->                        m.put(&ldquo;<!-- raw HTML omitted -->link<!-- raw HTML omitted -->&rdquo;,detail.attribute(&ldquo;<!-- raw HTML omitted -->href<!-- raw HTML omitted -->&rdquo;).getValue());<!-- raw HTML omitted -->                }<!-- raw HTML omitted -->                <!-- raw HTML omitted -->else<!-- raw HTML omitted --> <!-- raw HTML omitted -->if<!-- raw HTML omitted --> (name.equals(&ldquo;<!-- raw HTML omitted -->content<!-- raw HTML omitted -->&rdquo;))<!-- raw HTML omitted -->                {<!-- raw HTML omitted -->                        m.put(&ldquo;<!-- raw HTML omitted -->content<!-- raw HTML omitted -->&rdquo;,detail.asXML());<!-- raw HTML omitted -->                }<!-- raw HTML omitted -->                <!-- raw HTML omitted -->else<!-- raw HTML omitted --><!-- raw HTML omitted -->                {<!-- raw HTML omitted -->                        m.put(name,detail.getTextTrim());<!-- raw HTML omitted -->                }<!-- raw HTML omitted -->        }<!-- raw HTML omitted -->        <!-- raw HTML omitted -->        posts.add(m);                   <!-- raw HTML omitted -->        <!-- raw HTML omitted -->if<!-- raw HTML omitted --> (LOG.isDebugEnabled())<!-- raw HTML omitted -->        {<!-- raw HTML omitted -->                LOG.debug(&ldquo;<!-- raw HTML omitted -->found=<!-- raw HTML omitted -->&quot;+m.get(&ldquo;<!-- raw HTML omitted -->title<!-- raw HTML omitted -->&rdquo;)+&quot;<!-- raw HTML omitted -->, url=<!-- raw HTML omitted -->&quot;+m.get(&ldquo;<!-- raw HTML omitted -->link<!-- raw HTML omitted -->&rdquo;));<!-- raw HTML omitted -->        }<!-- raw HTML omitted -->}<!-- raw HTML omitted --></p>
 

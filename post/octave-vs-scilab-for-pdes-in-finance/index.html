@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Octave vs Scilab for PDEs in Finance</h1>
-    <span class="post-date">Jul 30, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/#disqus_thread">Comments</a>
+    <span class="post-date">Jul 30, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/#disqus_thread">Comments</a>
     </span>
     <p>I was used to <!-- raw HTML omitted -->Scilab<!-- raw HTML omitted --> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<!-- raw HTML omitted --><!-- raw HTML omitted -->Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <!-- raw HTML omitted -->Arbitrage Free SABR problem<!-- raw HTML omitted -->. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I heard about <!-- raw HTML omitted -->Octave<!-- raw HTML omitted -->, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 4.3s<!-- raw HTML omitted -->Octave 4.1s<!-- raw HTML omitted --><!-- raw HTML omitted -->I then added the keyword sparse when I build the tridiagonal matrix and end up with:<!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 0.04s<!-- raw HTML omitted -->Octave 0.02s<!-- raw HTML omitted -->Scala 0.034s (first run)<!-- raw HTML omitted -->Scala 0.004s (once Hotpot has kicked in)<!-- raw HTML omitted --><!-- raw HTML omitted -->So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<!-- raw HTML omitted --><!-- raw HTML omitted -->In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
 

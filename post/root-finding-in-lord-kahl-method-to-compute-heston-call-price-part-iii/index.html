@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</h1>
-    <span class="post-date">Apr 12, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 12, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/#disqus_thread">Comments</a>
     </span>
     <p>I forgot two important points in my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted --> about <!-- raw HTML omitted -->Lord-Kahl method<!-- raw HTML omitted --> to compute the Heston call price:<!-- raw HTML omitted --><!-- raw HTML omitted -->- Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <!-- raw HTML omitted -->Carr-Madan<!-- raw HTML omitted --> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <!-- raw HTML omitted -->Lord-Kahl<!-- raw HTML omitted -->, <!-- raw HTML omitted -->Kahl-Jaeckel<!-- raw HTML omitted --> (the more usual way limited to machine epsilon accuracy), <!-- raw HTML omitted -->Forde-Jacquier-Lee<!-- raw HTML omitted --> ATM implied volatility without scaling for a maturity of 1 day:<!-- raw HTML omitted --><!-- raw HTML omitted -->strike 62.5=2.919316809400033E-34 8.405720564041985E-12 0.0<!-- raw HTML omitted -->strike 68.75=-8.923683388191852E-28 1.000266536266281E-11 0.0<!-- raw HTML omitted -->strike 75.0=-3.2319611910032E-22 2.454925152051146E-12 0.0<!-- raw HTML omitted -->strike 81.25=1.9401743410877718E-16 2.104982854689297E-12 0.0 <!-- raw HTML omitted -->strike 87.5=-Infinity -1.6480150577535824E-11 0.0<!-- raw HTML omitted -->strike 93.75=Infinity 1.8277663826893331E-9 1.948392142070432E-9<!-- raw HTML omitted -->strike 100.0=0.4174318393886519 0.41743183938679845 0.4174314959743768<!-- raw HTML omitted -->strike 106.25=1.326968012594355E-11 7.575717830832218E-11 1.1186618909114702E-11<!-- raw HTML omitted -->strike 112.5=-5.205783145942609E-21 2.5307755890935368E-11 6.719872683111381E-45<!-- raw HTML omitted -->strike 118.75=4.537094156599318E-25 1.8911094912255066E-11 3.615356241778357E-114<!-- raw HTML omitted -->strike 125.0=1.006555799739525E-27 3.2365221613872563E-12 2.3126009701775733E-240<!-- raw HTML omitted -->strike  131.25=4.4339539263484925E-31 2.4794388764348696E-11 0.0<!-- raw HTML omitted --><!-- raw HTML omitted -->One can see negative prices and meaningless prices outside ATM. With scaling it changes to: <!-- raw HTML omitted -->strike 62.5=2.6668642552659466E-182 8.405720564041985E-12 0.0<!-- raw HTML omitted -->strike 68.75=7.156278101597845E-132 1.000266536266281E-11 0.0<!-- raw HTML omitted -->strike 81.25=7.863105641534119E-55 2.104982854689297E-12 0.0<!-- raw HTML omitted -->strike 87.5=7.073641308465115E-28 -1.6480150577535824E-11 0.0<!-- raw HTML omitted -->strike 93.75=1.8375145950924849E-9 1.8277663826893331E-9 1.948392142070432E-9<!-- raw HTML omitted -->strike 100.0=0.41743183938755385 0.41743183938679845 0.4174314959743768<!-- raw HTML omitted -->strike 106.25=1.3269785342953315E-11 7.575717830832218E-11 1.1186618909114702E-11<!-- raw HTML omitted -->strike 112.5=8.803247187972696E-42 2.5307755890935368E-11 6.719872683111381E-45<!-- raw HTML omitted -->strike 118.75=5.594342441346233E-90 1.8911094912255066E-11 3.615356241778357E-114<!-- raw HTML omitted -->strike 125.0=7.6539757567179276E-149 3.2365221613872563E-12 2.3126009701775733E-240<!-- raw HTML omitted -->strike 131.25=0.0 2.4794388764348696E-11 0.0<!-- raw HTML omitted --><!-- raw HTML omitted -->One can now now see that the Jacquier-Lee approximation is quickly not very good.<!-- raw HTML omitted --><!-- raw HTML omitted -->- Put: the put option price can be computed using the exact same <!-- raw HTML omitted -->Carr-Madan <!-- raw HTML omitted -->formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.</p>
 

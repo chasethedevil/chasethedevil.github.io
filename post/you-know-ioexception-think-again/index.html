@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">You Know IOException? Think Again!</h1>
-    <span class="post-date">Sep 14, 2006 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/you-know-ioexception-think-again/#disqus_thread">Comments</a>
+    <span class="post-date">Sep 14, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/you-know-ioexception-think-again/#disqus_thread">Comments</a>
     </span>
     <p>I was amazed today to find out that there was no constructor <!-- raw HTML omitted -->IOException(String, Throwable)<!-- raw HTML omitted --> or<!-- raw HTML omitted --> IOException(Throwable)<!-- raw HTML omitted --> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.<!-- raw HTML omitted --> <!-- raw HTML omitted --> So the workaround is:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->IOException ioe = new IOException(&ldquo;message&rdquo;);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->ioe.initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->throw ioe;<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It can also be written as:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->throw (IOException) new IOException(&ldquo;message&rdquo;).initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It is not a major problem, but still. We can all thank the guy who <!-- raw HTML omitted -->reported that as a bug<!-- raw HTML omitted --> to Sun in 2004.<!-- raw HTML omitted --></p>
 

@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">A Look at Small Time Expansions for Heston</h1>
-    <span class="post-date">Feb 12, 2014 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 12, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/#disqus_thread">Comments</a>
     </span>
     <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.<!-- raw HTML omitted --><!-- raw HTML omitted -->In 2011, Forde et al. proposed <!-- raw HTML omitted -->a second order small time expansion<!-- raw HTML omitted --> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <!-- raw HTML omitted -->different expansions up to order-3<!-- raw HTML omitted --> around the money. I already looked at the later in my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted -->, applying the idea to Schobel-Zhu.<!-- raw HTML omitted --><!-- raw HTML omitted -->I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->T=0.5, Feller condition largely violated<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->T=0.5, Feller condition slightly violated<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.<!-- raw HTML omitted -->The order-3 formula, even though it is more precise at the money, was actually more problematic for calibration: it failed to find a good enough initial guess in some cases, maybe because the reference data should be truncated, to possibly keep the few shortest expiries, and close to ATM strikes.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

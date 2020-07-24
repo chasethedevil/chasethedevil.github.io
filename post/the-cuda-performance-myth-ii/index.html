@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">The CUDA Performance Myth II</h1>
-    <span class="post-date">Jul 12, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/the-cuda-performance-myth-ii/#disqus_thread">Comments</a>
+    <span class="post-date">Jul 12, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/#disqus_thread">Comments</a>
     </span>
     <p>This is a kind of following to the <!-- raw HTML omitted -->CUDA performance myth<!-- raw HTML omitted -->. There is a recent news on the java concurrent mailing list about <!-- raw HTML omitted -->SplittableRandom class<!-- raw HTML omitted --> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.<!-- raw HTML omitted --><!-- raw HTML omitted -->It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <!-- raw HTML omitted -->MRG32k3a<!-- raw HTML omitted --> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <!-- raw HTML omitted -->MTGP<!-- raw HTML omitted -->, and even the less rigourous XorWow popularized by NVidia CUDA.<!-- raw HTML omitted --><!-- raw HTML omitted -->The book <!-- raw HTML omitted -->GPU Computing Gems<!-- raw HTML omitted --> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister) <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

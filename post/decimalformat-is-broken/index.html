@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">DecimalFormat Is Broken</h1>
-    <span class="post-date">May 14, 2008 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/decimalformat-is-broken/#disqus_thread">Comments</a>
+    <span class="post-date">May 14, 2008 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/#disqus_thread">Comments</a>
     </span>
     <p>A friend of mine recently noticed that the good old DecimalFormat class is &ldquo;broken&rdquo;. If you try to parse a string that is not a number but is starting with a number, the DecimalFormat.parse will return what it managed to parse.<!-- raw HTML omitted --><!-- raw HTML omitted -->The correct behavior should be to throw a parse exception IMHO. Judging from an old post in the Sun bug tracker, The folks at Sun don&rsquo;t think it really is, they call the default mode of parsing the &ldquo;lenient&rdquo; mode. It accepts bad inputs. Then why throwing ParseException at all and why not return 0/NaN when the first character is not a number? Why accepting <!-- raw HTML omitted -->1toto2<!-- raw HTML omitted --> as a number and not <!-- raw HTML omitted -->toto2<!-- raw HTML omitted -->?<!-- raw HTML omitted --><!-- raw HTML omitted -->In reality it can really create unexpected problems. For example, in France,<!-- raw HTML omitted --> 0.1<!-- raw HTML omitted --> is <!-- raw HTML omitted -->0,1<!-- raw HTML omitted --> because of the Locale conventions. If a user enters<!-- raw HTML omitted --> 0.1<!-- raw HTML omitted --> in a French Locale, a method using DecimalFormat.parse will interpret it as <!-- raw HTML omitted -->0<!-- raw HTML omitted --> without throwing any exception.<!-- raw HTML omitted --><!-- raw HTML omitted -->Note that DateFormat does not have that problem, at one point Sun added setLenient flag to be able to be in non Lenient mode. It would be very simple to do it with DecimalFormat, I did it myself as an exercise. In DecimalFormat.subparse, the 2 last break statements should stop processing in lenient mode. Lines 1528 to 1531:<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted -->                        sawExponent = true;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    break; // Whether we fail or succeed, we exit this loop<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                else {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    break;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> become:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                         sawExponent = true;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    } else {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                        if (isLenient()) {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                            parsePosition.index = oldStart;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                            parsePosition.index = oldStart;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                            return false;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                        }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    break; // we succeed, we exit this loop<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                else {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    if (isLenient()) {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                        parsePosition.index = oldStart;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                        parsePosition.errorIndex = oldStart;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                        return false;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                    break;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->                }<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

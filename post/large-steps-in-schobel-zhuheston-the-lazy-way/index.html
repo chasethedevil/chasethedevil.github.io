@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Large Steps in Schobel-Zhu/Heston the Lazy Way</h1>
-    <span class="post-date">May 17, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/large-steps-in-schobel-zhuheston-the-lazy-way/#disqus_thread">Comments</a>
+    <span class="post-date">May 17, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/large-steps-in-schobel-zhuheston-the-lazy-way/#disqus_thread">Comments</a>
     </span>
     <p><!-- raw HTML omitted -->Van Haastrecht, Lord and Pelsser<!-- raw HTML omitted --> present an effective way to price derivatives by Monte-Carlo under the Schobel-Zhu model (as well as under the Schobel-Zhu-Hull-White model). It&rsquo;s quite similar to Andersen QE scheme for Heston in spirit.<!-- raw HTML omitted --><!-- raw HTML omitted -->In their paper they evolve the (log) asset process together with the volatility process, using the same discretization times. A while ago, when looking at  <!-- raw HTML omitted -->Joshi and Chan<!-- raw HTML omitted --> large steps for Heston, I noticed that, inspired by Broadie-Kaya exact Heston scheme, they present the idea to evolve the variance process using small steps and the asset process using large steps (depending on the payoff) using the integrated variance value computed by small steps. The asset steps correspond to payoff evaluation dates  At that time I had applied this idea to Andersen QE scheme and it worked reasonably well.<!-- raw HTML omitted --><!-- raw HTML omitted -->So I tried to apply the same logic to Schobel Zhu, and my first tests show that it works too. Interestingly, the speed gain is about 2x. Here are the results for a vanilla call option of different strikes.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Similar Error between long and short asset steps<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Long steps take around 1/2 the time to compute<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I would have expected the difference in performance to increase when the step size is decreasing, but it&rsquo;s not the case on my computer.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s not truly large steps like <!-- raw HTML omitted -->Joshi and Chan<!-- raw HTML omitted --> do in their integrated double gamma scheme as the variance is still discretized in relatively small steps in my case, but it seems like a good, relatively simple optimization. A while ago, I did also implement the full Joshi and Chan scheme, but it&rsquo;s really interesting if one is always looking for long steps: it is horribly slow when the step size is small, which might occur for many exotic payoffs, while Andersen QE scheme perform almost as well as log-Euler in terms of computational cost.</p>
 

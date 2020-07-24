@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Quasi Monte Carlo in Finance</h1>
-    <span class="post-date">May 13, 2013 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/quasi-monte-carlo-in-finance/#disqus_thread">Comments</a>
+    <span class="post-date">May 13, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/#disqus_thread">Comments</a>
     </span>
     <p>I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is what I found:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed. This is all very well described in <!-- raw HTML omitted -->Owen Quasi Monte Carlo document<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->Lattice rules. It is another form of quasi random sequences, which so far was not very well adapted to finance problems. A <!-- raw HTML omitted -->presentation from Giles &amp; Kuo<!-- raw HTML omitted --> look like it&rsquo;s changing.<!-- raw HTML omitted --><!-- raw HTML omitted -->Fast PCA. An alternative to Brownian Bridge is the standard PCA. The problem with PCA is the performance in O(n^2). A possible speedup is possible in the case of a equidistant time steps. <!-- raw HTML omitted -->This paper<!-- raw HTML omitted --> shows it can be generalized. But the data in it shows it is only advantageous for more than 1024 steps - not so interesting in Finance.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

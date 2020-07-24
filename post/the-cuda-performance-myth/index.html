@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">The CUDA Performance Myth</h1>
-    <span class="post-date">Jan 3, 2011 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/the-cuda-performance-myth/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 3, 2011 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth/#disqus_thread">Comments</a>
     </span>
     <p>There is an <!-- raw HTML omitted -->interesting<!-- raw HTML omitted --> article on how to generate efficiently the inverse of the normal cumulative distribution on the GPU. This is useful for Monte-Carlo simulations based on normally distributed variables.<!-- raw HTML omitted --><!-- raw HTML omitted -->Another result of the paper is a method (breakless algorithm) to compute it apparently faster than the very good <!-- raw HTML omitted -->Wichura&rsquo;s AS241<!-- raw HTML omitted --> algorithm on the CPU as well keeping a similar precision. The key is to avoid branches (if-then) at the cost of not avoiding log() calls. As the algorithm is very simple, I decided to give it a try in Java.<!-- raw HTML omitted --><!-- raw HTML omitted -->Unfortunately I found out that in Java, on 64 bit machines, the breakless algorithm is actually around twice slower. Intrigued, I tried in Visual C++ the same, and found this time it was 1.5x slower. Then I tried in gcc and found that it was 10% faster&hellip; But the total time was significant, because I had not applied any optimization in the gcc compilation. With -O3 flag AS241 became much faster and we were back at the Java result: the breakless algorithm was twice slower. The first result is that the JITed java code is as fast as optimized C++ compiled code. The second result is that the authors did not think of compiling with optimization flag.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I decided to benchmark the CUDA float performance of similar algorithms. The CUDA program was 7x faster than the double precision multithreaded CPU program. This is comparing Nvidia GT330m vs Core i5 520m and float precision vs double precision on a naturally parallel problem. This is very far from the usually announced x80 speedup. Of course if one compares the algorithms with GCC single threaded no optimization, we might attain x50, but this is not a realistic comparison at all. I have heard that double precision is 8x slower on the GPU when compared to float precision: the difference then becomes quite small. Apparently Fermi cards are much faster, unfortunately I don&rsquo;t have any. And still I would not expect much better than 10x speedup. This is good but very far from the usually advertised speedup.</p>
 

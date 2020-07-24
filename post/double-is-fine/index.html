@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">double[][] Is Fine</h1>
-    <span class="post-date">Nov 26, 2009 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/double-is-fine/#disqus_thread">Comments</a>
+    <span class="post-date">Nov 26, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/double-is-fine/#disqus_thread">Comments</a>
     </span>
     <p>In my previous post, I suggest that keeping a double[] performs better than keeping a double[][] if you do matrix multiplications and other operations.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->This is actually not true. I benchmarked 3 libraries, Colt (uses double[]), Apache Commons Math (uses double[][]) and Jama (uses double[][] cleverly). At first it looks like Jama has a similar performance as Colt (they avoid [][] slow access by a clever algorithm). But once hotspot hits, the difference is crazy and Jama becomes the fastest (Far ahead).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->JDK 1.6.0 Linux 1000x1000 matrix multiplication on Intel Q6600<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->loop index<!-- raw HTML omitted --><!-- raw HTML omitted -->Colt<!-- raw HTML omitted --><!-- raw HTML omitted -->Commons Math<!-- raw HTML omitted --><!-- raw HTML omitted -->Jama<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->1<!-- raw HTML omitted --><!-- raw HTML omitted -->11.880748<!-- raw HTML omitted --><!-- raw HTML omitted -->24.455125<!-- raw HTML omitted --><!-- raw HTML omitted -->9.828977<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->2<!-- raw HTML omitted --><!-- raw HTML omitted -->11.874975<!-- raw HTML omitted --><!-- raw HTML omitted -->24.265102<!-- raw HTML omitted --><!-- raw HTML omitted -->9.848916<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->9.772616<!-- raw HTML omitted --><!-- raw HTML omitted -->14.374153<!-- raw HTML omitted --><!-- raw HTML omitted -->9.826572<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->4<!-- raw HTML omitted --><!-- raw HTML omitted -->9.759679<!-- raw HTML omitted --><!-- raw HTML omitted -->14.368105<!-- raw HTML omitted --><!-- raw HTML omitted -->2.655915<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->5<!-- raw HTML omitted --><!-- raw HTML omitted -->9.799622<!-- raw HTML omitted --><!-- raw HTML omitted -->15.238928<!-- raw HTML omitted --><!-- raw HTML omitted -->2.649129<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->6<!-- raw HTML omitted --><!-- raw HTML omitted -->9.780556<!-- raw HTML omitted --><!-- raw HTML omitted -->14.741863<!-- raw HTML omitted --><!-- raw HTML omitted -->2.668104<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->7<!-- raw HTML omitted --><!-- raw HTML omitted -->9.72831<!-- raw HTML omitted --><!-- raw HTML omitted -->15.509909<!-- raw HTML omitted --><!-- raw HTML omitted -->2.646811<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->8<!-- raw HTML omitted --><!-- raw HTML omitted -->9.79838<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->15.724348<!-- raw HTML omitted --><!-- raw HTML omitted -->2.646069<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->9<!-- raw HTML omitted --><!-- raw HTML omitted -->9.726143<!-- raw HTML omitted --><!-- raw HTML omitted -->15.988762<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->2.646052<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->9.784505<!-- raw HTML omitted --><!-- raw HTML omitted -->15.121782<!-- raw HTML omitted --><!-- raw HTML omitted -->2.644572<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We don&rsquo;t include matrix construction time, and fetching the result. Only the multiplication is taken into account.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The difference is less pronounced on smaller matrices, but still there. Jama looks very good in this simple test case. In more real scenarios, the difference is not so obvious. For example Commons Math SVD is faster than Jama one.</p>
 

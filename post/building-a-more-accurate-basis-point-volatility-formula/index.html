@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Building a more accurate basis point volatility formula</h1>
-    <span class="post-date">Apr 5, 2014 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 5, 2014 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/#disqus_thread">Comments</a>
     </span>
     <p>P. Jaeckel has defied the limits of accuracy with his<!-- raw HTML omitted --> latest Black-Scholes volatility solver<!-- raw HTML omitted -->, managing to also improve performance compared to his earlier solver &ldquo;<!-- raw HTML omitted -->By Implication<!-- raw HTML omitted -->&rdquo;. Out of a silly exercise, I decided to try my hand for a more accurate <!-- raw HTML omitted -->Normal (or basis point) volatility solver<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->In reality, the problem is much simpler in the Bachelier/Normal model. A very basic analysis of Bachelier formula shows that the problem can be reduced to a single variable, as Choi et al explain in <!-- raw HTML omitted -->their paper<!-- raw HTML omitted -->. So the problem is not really one of solving, but one of approximating (the inverse of) a function.<!-- raw HTML omitted --><!-- raw HTML omitted -->The first step to build that function is to actually have a highly accurate slow solver as reference. This is quite easy, I just started with Choi formula and used <!-- raw HTML omitted -->Halley&rsquo;s method<!-- raw HTML omitted --> to refine. In reality, <!-- raw HTML omitted -->Halley&rsquo;s method<!-- raw HTML omitted --> is already a bit overkill on this problem: it works impressively well, 1 iteration is enough to have an insane level of accuracy, only noticeable when one works in high precision arithmetic (for example 50 digits). For double precision, <!-- raw HTML omitted -->Newton&rsquo;s method<!-- raw HTML omitted --> would actually be enough - I initially thought that my Halley&rsquo;s implementation did not work as it produced the exact same output as Newton in double precision. <!-- raw HTML omitted -->Li proposes<!-- raw HTML omitted --> the use of the SOR method, which for this exercise, behaves very much like Newton&rsquo;s method.<!-- raw HTML omitted --><!-- raw HTML omitted -->I then followed the logic from Choi et al, but working directly with in-the-money call options instead of <!-- raw HTML omitted -->straddles<!-- raw HTML omitted -->. Straddles sound neat at first (hides that we work in-the-money), but it&rsquo;s actually useless for the algorithm. Choi et al. ignore half of the straddle range when they use their eta transform in the paper. One other change is the mapping itself, I found a better mapping for the call options (but not that far of Choi initial idea). Finally, because I am lazy, I did not go to the pain of finding a good rational fraction approximation along with the square root problem they describe, I just tried a Chebyshev polynomial.<!-- raw HTML omitted --><!-- raw HTML omitted -->Unfortunately, a single Chebyshev polynomial does not work well: even with a very large (1000) degree it&rsquo;s not very precise, so much that I thought that my transform was garbage. I had noticed by mistake, that on another part (negative) of the interval, the Chebyshev polynomial worked actually very well to approximate something related to the volatility of another option. Suddendly came to me the idea of, like Johnson does in <!-- raw HTML omitted -->his Faddeeva package<!-- raw HTML omitted -->, using N Chebyshev polynomials on N small intervals. This is like the big heavy hammer for which everything looks like nails, but it&rsquo;s actually very fast to evaluate as the degree of each polynomial can then be low (7), plus a table lookup (could be coded as switch statements if one really cares about such details). The slowest part is actually the call to the log function.<!-- raw HTML omitted --><!-- raw HTML omitted -->The final bit is the use of a Taylor approximation for my -u/log(1-u) transform as it is not all that accurate in double precision when u is near 0. And that produces the following graph<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It is interesting to note that &ldquo;solving&rdquo; the b.p. vol is <!-- raw HTML omitted -->10x faster<!-- raw HTML omitted --> than solving the Black vol.<!-- raw HTML omitted --><!-- raw HTML omitted -->I wrote <!-- raw HTML omitted -->a small paper around all this<!-- raw HTML omitted --> where you&rsquo;ll find the details as well as Matlab code.</p>
 

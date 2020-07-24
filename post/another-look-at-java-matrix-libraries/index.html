@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Another Look at Java Matrix Libraries</h1>
-    <span class="post-date">Nov 29, 2010 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/another-look-at-java-matrix-libraries/#disqus_thread">Comments</a>
+    <span class="post-date">Nov 29, 2010 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/another-look-at-java-matrix-libraries/#disqus_thread">Comments</a>
     </span>
     <p>A while ago, <!-- raw HTML omitted -->I was already looking<!-- raw HTML omitted --> for a good Java Matrix library, complaining that there does not seem any real good one where development is still active: the 2 best ones are in my opinion <!-- raw HTML omitted -->Jama<!-- raw HTML omitted --> and <!-- raw HTML omitted -->Colt<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->Recently I tried to <!-- raw HTML omitted -->price options via RBF<!-- raw HTML omitted --> (radial basis functions) based on <!-- raw HTML omitted -->TR-BDF2<!-- raw HTML omitted --> time stepping. This is a problem where one needs to do a few matrix multiplications and inverses (or better, LU solve) in a loop. The size of the matrix is typically 50x50 to 100x100, and one can loop between 10 and 1000 times.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity I decided to give <!-- raw HTML omitted -->ojalgo<!-- raw HTML omitted --> and <!-- raw HTML omitted -->MTJ<!-- raw HTML omitted --> a chance. I had read benchmarks (<!-- raw HTML omitted -->here about jblas<!-- raw HTML omitted --> and <!-- raw HTML omitted -->here the java matrix benchmark<!-- raw HTML omitted -->) where those libraries performed really well.<!-- raw HTML omitted --><!-- raw HTML omitted -->On my core i5 laptop under the latest 64bit JVM (Windows 7), I found out that for the 100x100 case, <!-- raw HTML omitted -->Jama was actually 30% faster than MTJ<!-- raw HTML omitted -->, and ojalgo was more than 50% slower. I also found out that I did not like ojalgo API at all. I was quite disappointed by those results.<!-- raw HTML omitted --><!-- raw HTML omitted -->So I tried the same test on a 6-core Phenom II (ubuntu 64bit), Jama was faster than MTJ by 0-10%. Ojalgo and ParallelColt were slower than Jama by more than 50% and 30%.<!-- raw HTML omitted --><!-- raw HTML omitted -->This does not mean that ojalgo and ParallelColt are so bad, maybe they behave much better than the simple Jama on large matrices. They also have more features, including sparse matrices. But Jama is quite a good choice for a default library, MTJ can also be a good choice, it can be faster and use less memory because most methods take the output matrix/vector as a parameter. Furthermore MTJ can use the native lapack and blas libraries for improved performance. The bigger the matrices, the most difference it will make.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Run<!-- raw HTML omitted --><!-- raw HTML omitted -->Jama<!-- raw HTML omitted --><!-- raw HTML omitted -->MTJ<!-- raw HTML omitted --><!-- raw HTML omitted -->MTJ native<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->1<!-- raw HTML omitted --><!-- raw HTML omitted -->0.160<!-- raw HTML omitted --><!-- raw HTML omitted -->0.240<!-- raw HTML omitted --><!-- raw HTML omitted -->0.140<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->2<!-- raw HTML omitted --><!-- raw HTML omitted -->0.086<!-- raw HTML omitted --><!-- raw HTML omitted -->0.200<!-- raw HTML omitted --><!-- raw HTML omitted -->0.220<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->0.083<!-- raw HTML omitted --><!-- raw HTML omitted -->0.089<!-- raw HTML omitted --><!-- raw HTML omitted -->0.056<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->(On a Phenom II under Ubuntu 10.10 64-bit)</p>
 

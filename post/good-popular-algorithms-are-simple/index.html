@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Good &amp; Popular Algorithms are Simple</h1>
-    <span class="post-date">Nov 17, 2011 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/good-popular-algorithms-are-simple/#disqus_thread">Comments</a>
+    <span class="post-date">Nov 17, 2011 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/good-popular-algorithms-are-simple/#disqus_thread">Comments</a>
     </span>
     <p>I recently tried to minimise a function according to some constraints. One popular method to minimise a function in several dimensions is <!-- raw HTML omitted -->Nelder-Mead Simplex<!-- raw HTML omitted -->. It is quite simple, so simple that I programmed it in Java in 1h30, including a small design and a test. It helped that the original paper from Nelder-Mead is very clear:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->However the main issue is that it works only for unconstrained problems. Nelder and Mead suggested to add a penalty, but in practice this does not work so well. For constrained problems, there is an adaptation of the original idea by Box (incredible name for a constrained method) that he called <!-- raw HTML omitted -->the Complex method<!-- raw HTML omitted -->, a deliberate pun to the Nelder-Mead Simplex method. The basic idea is to reset the trial point near the fixed boundary if it goes outside. Now this took me much longer to program, as the paper is not as clear, even if the method is still relatively simple. But worst, after a day of deciphering the paper and programming the complex method, I find out that it does not works so well: it does not manage to minimise a simple multidimensional quadratic with a simple bound constraint: f(X)=sum(X)^2 with X &gt;= 0 where X is an N-dimensional vector. In the end, I don&rsquo;t want to work with such a simple function, but it is a good simple test to see if the method is really working or not. Here is how the function looks with N=2:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->And if we restrict to x,y &gt;= 0 it becomes:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I suspected an error in my program, so I decided to try with scilab, that has also the Box method as part of their <!-- raw HTML omitted -->neldermead_search<!-- raw HTML omitted --> functionality. Scilab also failed to compute the minimum in 8 dimensions of my simple quadratic. <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I tried various settings, without ever obtaining a decent result (I expect to find a value near 0).<!-- raw HTML omitted --><!-- raw HTML omitted -->There is another algorithm that can find a global minimum, also very popular: the <!-- raw HTML omitted -->Differential Evolution<!-- raw HTML omitted -->. At first, being a genetic algorithm, you would think it would be complicated to write. But no, the main loop is around 20 lines.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Those 20 lines are a bit more difficult than Nelder-Mead, but still, when I saw that, I understood that &ldquo;this is a classic algorithm&rdquo;. And it does work with constraints easily. How to do this is explained well in K. Price book &ldquo;Differential Evolution&rdquo;, and takes only a few lines of code. Here is the result I got in dimension 29:<!-- raw HTML omitted --><!-- raw HTML omitted -->dim=29 min=1.2601854176573729E-12 genMax=412 x=[3.340096901536317E-8, 8.889252404343621E-8, 7.163904251807348E-10, 9.71847877381699E-9, 2.7423324674150668E-8, 2.4022269439114537E-9, 1.7336434478718816E-11, 7.244238163901778E-9, 1.0013136274729337E-8, 7.412154679865083E-9, 5.4694460144807974E-9, 2.3682413086417524E-9, 4.241739250073559E-7, 4.821920889534676E-10, 2.115396281722523E-9, 8.750883007882899E-8, 2.512011485133975E-9, 4.811507109129279E-9, 1.0752997894113096E-7, 5.120475258343548E-9, 8.404448964497456E-9, 4.1062290228305595E-9, 1.7030766521603753E-8, 5.589430643552073E-9, 8.237098544820173E-10, 3.5796523161196554E-9, 5.186299547466997E-9, 2.430326342762937E-7, 5.493850433494286E-9]<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It works well, although there is quite a bit of parameters. I noticed that the strategy was especially important.</p>
 

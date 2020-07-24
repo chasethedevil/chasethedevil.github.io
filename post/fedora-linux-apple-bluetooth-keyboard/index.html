@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Fedora Linux &amp; Apple Bluetooth Keyboard</h1>
-    <span class="post-date">Jun 5, 2008 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/fedora-linux-apple-bluetooth-keyboard/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 5, 2008 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/fedora-linux-apple-bluetooth-keyboard/#disqus_thread">Comments</a>
     </span>
     <p>It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<!-- raw HTML omitted --><!-- raw HTML omitted -->The following configuration should work with any other distro and probably other bluetooth keyboards as well.<!-- raw HTML omitted --><!-- raw HTML omitted -->2 configurations files need to be updated to make it work:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd &ndash;search to see it).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->BLUETOOTH_ENABLED=1<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->HIDD_ENABLED=1<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->HIDD_OPTIONS=&rdquo;&ndash;timeout 8 &ndash;connect 00:1D:4F:A7:15:CC &ndash;server&quot;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/bluetooth/hcid.conf should be appended with<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->device 00:1D:4F:A7:15:CC {<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->        name &ldquo;Apple Wireless Keyboard&rdquo;;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->        auth enable;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->        encrypt enable;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->        lm master;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The 2 tricky parameters are &ldquo;lm master&rdquo; (makes it connect automatically), and &ldquo;&ndash;timeout 8&rdquo; that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Jun 16th update<!-- raw HTML omitted -->: I still had disconnections, the only way I found to get rid of them was to <!-- raw HTML omitted -->patch the kernel<!-- raw HTML omitted -->. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.</p>
 

@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Use ORM For Better Performance</h1>
-    <span class="post-date">Jun 12, 2007 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/use-orm-for-better-performance/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 12, 2007 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/use-orm-for-better-performance/#disqus_thread">Comments</a>
     </span>
     <p>This is not something I would have though a few years ago. It is something I learnt after working on many different projects, some using an ORM layer like Hibernate, Entity EJBs, or JDO, some using JDBC approach via Spring Templates or custom frameworks. Many projects that use ORM have performance problems, that don't seem that common with projects using JDBC. But the size of the database model of ORM projects is often much bigger than the one of JDBC projects (which actually makes sense). If you have only a few queries to do, why bother with ORM? This would be complexity for nothing.  <!-- raw HTML omitted --><!-- raw HTML omitted -->But for most enterprise projects, the size of the database model is quite big, and the model itself can be complex (many relations between many tables). With this kind of model, ORM is more efficient. It is faster to develop with, creates less bugs due to string misspelled, or types badly read. It is also better performing. Doing 1 giant query to retrieve everything in 1 step is not faster, especially if you don't always need all the information retrieved. In a complex model, many cases are specifics, only useful in 10% of the cases. The temptation is high with a JDBC approach to do one giant query, because it is substantially longer (and more work) to do N queries.  With ORM, it is a bit the opposite, by default N queries is easier to do. The problem is that N(ORM) tends to be very high if one is not careful with the mapping to  <!-- raw HTML omitted -->avoid the N+1 problem<!-- raw HTML omitted -->. However it is simpler to reduce the number of queries by joining tables, rather than splitting queries, ORM performance optimization feels more natural. <!-- raw HTML omitted --><!-- raw HTML omitted -->Martin Fowler tends to be also pro ORM in its <!-- raw HTML omitted -->&quot;Domain Logic and SQL&quot; article<!-- raw HTML omitted -->. He also mentions something interesting about SQL query optimization: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It's also worth pointing out that this example is one that plays to a database's strengths. Many queries don't have the strong elements of selection and aggregation that this one does, and won't show such a performance change. In addition multi-user scenarios often cause surprising changes to the way queries behave, so real profiling has to be done under a realistic multi-user load. You may find that locking issues outweigh anything you can get by faster individual queries.<!-- raw HTML omitted -->      <!-- raw HTML omitted --><!-- raw HTML omitted -->     <!-- raw HTML omitted --><!-- raw HTML omitted -->In the end it is up to us to make ORM or JDBC approach perform. JDBC provides much more direct access to database, and in benchmarks (always simple database models) or in theory it should be faster. But in the real world, I argue that ORM optimization is simpler and therefore, often ORM projects will perform better. <!-- raw HTML omitted --></p>
 

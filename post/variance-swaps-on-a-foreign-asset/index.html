@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Variance swaps on a foreign asset</h1>
-    <span class="post-date">Feb 24, 2015 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/variance-swaps-on-a-foreign-asset/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 24, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/variance-swaps-on-a-foreign-asset/#disqus_thread">Comments</a>
     </span>
     <p>There is very little information on variance swaps on a foreign asset. There can be two kinds of contracts:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->one that pays the foreign variance in a domestic currency, this is a quanto contract as the exchange rate is implicitly fixed.<!-- raw HTML omitted --><!-- raw HTML omitted -->one that pays the foreign variance, multiplied by the fx rate at maturity. This is a flexo contract, and is just about buying a variance swap from a foreign bank. The price of such a contract today is very simple, just the standard variance swap price multiplied by the fx rate today (change of measure).<!-- raw HTML omitted --><!-- raw HTML omitted -->For quanto contracts, it&rsquo;s not so obvious a priori. If we consider a stochastic volatility model for the asset, the replication formula will not be applicable directly as the stochastic volatility will appear in the quanto drift correction. Furthermore, vanilla quanto option prices can not be computed simply as under Black-Scholes, a knowledge of the underlying model is necessary.<!-- raw HTML omitted --><!-- raw HTML omitted -->Interestingly, under the Schobel-Zhu model, it is simple to fit an analytic formula for the quanto variance swap. The standard variance swap price is:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The quanto variance swap can be priced with the same formula using a slightly different theta:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We can use it to assess the accuracy of a naive quanto option replication where we use the ATM quanto forward instead of the forward in the variance swap replication formula.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Interestingly, the  quanto forward approximation turns out to be very accurate and the correction is important. The price without correction is the price with zero correlation, and we see it can be +/-5% off in this case.<!-- raw HTML omitted --><!-- raw HTML omitted -->The local vol price seems a bit off, I am not sure exactly why. It could be due the discretization, the theoretical variance should be divided by (N-1) but here we divide by N where N is the number of observations. That would still lead to a skewed price but better centered around correlation 0.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s also a bit surprising that local vol is worse than the simpler ATM quanto forward approximation: it seems that it&rsquo;s extracting the wrong information to do a more precise quanto correction, likely related to the shift of stochastic volatility under the domestic measure.</p>
 

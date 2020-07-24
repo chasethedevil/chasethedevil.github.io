@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Joda LocalDateTime vs DateTime</h1>
-    <span class="post-date">Jul 17, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/joda-localdatetime-vs-datetime/#disqus_thread">Comments</a>
+    <span class="post-date">Jul 17, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/joda-localdatetime-vs-datetime/#disqus_thread">Comments</a>
     </span>
     <p>Joda has the concept of LocalDate/<!-- raw HTML omitted -->LocalDateTime<!-- raw HTML omitted --> and <!-- raw HTML omitted -->DateTime<!-- raw HTML omitted -->. The LocalDate is just a simple date, while DateTime is a date and a time zone.<!-- raw HTML omitted --><!-- raw HTML omitted -->Where I work we have a similar distinction, although not the same: a simple &ldquo;absolute&rdquo; date object without time vs a relative date (a timestamp) like the JDK Date.<!-- raw HTML omitted --><!-- raw HTML omitted -->The standard JDK Date class is a date without a time zone, but Sun deprecated in JDK 1.1 all methods allowing to use it like a LocalDate, forcing to use it through a Calendar (i.e. like a DateTime), that is, with a TimeZone.<!-- raw HTML omitted --><!-- raw HTML omitted -->I have found one explanation for a potential use case of LocalDateTime vs DateTime: when you take an appointment to the doctor for July 22nd at 10am, the future date is a fixed event. Some people say you just don&rsquo;t care about the TimeZone in this case, and therefore use LocalDateTime. I think it is a bit more subtle than that. One could think of using fixed arbitrary TimeZone, it could just easily be set to UTC or to the default Java time zone or even the correct one. While it&rsquo;s not typically what the user want to worry about, it could be a default setting (like in Google Calendar or in your OS). And that is exactly what the LocalDateTime does internally, it uses a fixed, non modifiable TimeZone.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->If the future event is in a few years and you want to store it in a database, it can become more problematic because daylight saving might not be well determined yet. The number stored today might not mean the same thing in a few years. I am not sure if it can be a real issue, but I am <!-- raw HTML omitted -->not the only one<!-- raw HTML omitted --> to worry about that. As the LocalDateTime internally relies on UTC, it is not affected by this.<!-- raw HTML omitted --><!-- raw HTML omitted -->There is another more technical use case for LocalDateTime, if you have a list of dates in a contract, they are all according to the contract TimeZone, you then probably don&rsquo;t want to specify the TimeZone for each date. The question is then more is the DateTime concept a good idea?</p>
 

@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Crank-Nicolson and Rannacher Issues with Touch options</h1>
-    <span class="post-date">Sep 30, 2015 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/#disqus_thread">Comments</a>
+    <span class="post-date">Sep 30, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/#disqus_thread">Comments</a>
     </span>
     <p>I just stumbled upon this particularly illustrative case where the Crank-Nicolson finite difference scheme behaves badly, and the Rannacher smoothing (2-steps backward Euler) is less than ideal: <!-- raw HTML omitted -->double one touch<!-- raw HTML omitted --> and <!-- raw HTML omitted -->double no touch<!-- raw HTML omitted --> options.<!-- raw HTML omitted --><!-- raw HTML omitted -->It is particularly evident when the option is sure to be hit, for example when the barriers are narrow, that is our delta should be around zero as well as our gamma. Let&rsquo;s consider a double one touch option with spot=100, upBarrier=101, downBarrier=99.9, vol=20%, T=1 month and a payout of 50K.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Crank-Nicolson shows big spikes in the delta near the boundary<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Rannacher shows spikes in the delta as well<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Crank-Nicolson spikes are so high that the price is actually a off itself.<!-- raw HTML omitted --><!-- raw HTML omitted -->The Rannacher smoothing reduces the spikes by 100x but it&rsquo;s still quite high, and would be higher had we placed the spot closer to the boundary. The gamma is worse. Note that we applied the smoothing only at maturity. In reality as the barrier is continuous, the smoothing should really be applied at each step, but then the scheme would be not so different from a simple Backward Euler.<!-- raw HTML omitted --><!-- raw HTML omitted -->In contrast, with a proper second order finite difference scheme, there is no spike.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Delta with the TR-BDF2 finite difference method - the scale goes from -0.00008 to 0.00008.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Delta with the Lawson-Morris finite difference scheme - the scale goes from -0.00005 to 0.00005<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Both <!-- raw HTML omitted -->TR-BDF2<!-- raw HTML omitted --> and Lawson-Morris (based on a local Richardson extrapolation of backward Euler) have a very low delta error, similarly, their gamma is very clean. This is reminiscent of the behavior on American options, but the effect is magnified here.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

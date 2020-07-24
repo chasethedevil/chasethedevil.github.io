@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">SwiXml Review</h1>
-    <span class="post-date">Apr 24, 2008 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/swixml-review/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 24, 2008 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/swixml-review/#disqus_thread">Comments</a>
     </span>
     <p>Externalizing the screen layout is a natural step for many applications. It can be because a customer might want a slightly different presentation, or just for the sake of clearly separating layout code, or for using a kind of screen generator. Back in 2003, I wrote <!-- raw HTML omitted -->a small utility to help with GridBagLayout<!-- raw HTML omitted -->, nothing fantastic,  but there was the feature of saving a generated layout in XML (or Beanshell) and using it in an application.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->SwiXml<!-- raw HTML omitted --> saves a bit more than a layout as it instantiates the components as well, allowing to represent a hierarchy of components in XML. But it does not more than that. The &ldquo;no generation&rdquo; approach is interesting, I bet the author thinks the XML should be kept concise enough to be used easily without using a kind of generator. the XML is almost a mirror of Java code, but fortunately makes layouts more compact and easier to read. I tried version 1.51, and while it is quite well done, its documentation is a bit lacking and to me an important functionality is missing:<!-- raw HTML omitted --><!-- raw HTML omitted -->There is no &ldquo;component&rdquo; tag by default. One needs to explicitely name the class of component we want to add. I think there could be a component tag that instantiate an 0 parameter constructor by default, using reflection for example. The class of component to instantiate would be found through the field name.<!-- raw HTML omitted --><!-- raw HTML omitted -->Fortunately SwiXml is quite well done and this is not that big of an issue since you can just interpret new tags with 1 line of code:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->engine.getTaglib().registerTag(&ldquo;datecombobox&rdquo;, DateComboBox.class);<!-- raw HTML omitted --><!-- raw HTML omitted -->for a Jide DateComboBox.<!-- raw HTML omitted --><!-- raw HTML omitted -->I said documentation was lacking, because in my first non Hello World trial, I wanted to use the standard constant names for GridBagConstraints (RELATIVE,REMAINDER, FIRST_LINE, LAST_LINE, &hellip;). Putting <!-- raw HTML omitted -->&lt;gridbagconstraint anchor=&quot;FIRST_LINE&rdquo;&gt;<!-- raw HTML omitted -->did not work. By reading the code, I found out you could achieve it but you have to do <!-- raw HTML omitted -->&lt;gridbagconstraint anchor=&quot;GridBagConstraint.FIRST_LINE&rdquo;&gt;<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->In the end SwiXml left me with a good impression. It is non intrusive, and handle well enough what it is done for. One major drawback, you can only use either BorderLayout or GridBagLayout or FormLayout (from JGoodies).</p>
 

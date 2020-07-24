@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Better Finite Difference Boundaries with a Tridiagonal Solver</h1>
-    <span class="post-date">Jan 10, 2013 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 10, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/#disqus_thread">Comments</a>
     </span>
     <p>In <!-- raw HTML omitted --><!-- raw HTML omitted -->Pricing Financial Instruments - The Finite Difference Method<!-- raw HTML omitted --><!-- raw HTML omitted -->, Tavella and Randall explain that boundary conditions using a higher order discretization (for example their &ldquo;BC2&rdquo; boundary condition) can not be solved in one pass with a simple tridiagonal solver, and suggest the use of SOR or some conjugate gradient based solver.<!-- raw HTML omitted --><!-- raw HTML omitted -->It is actually very simple to reduce the system to a tridiagonal system. The more advanced boundary conditions only use 3 adjacent values, just 1 value makes it non tridiagonal, the one in <!-- raw HTML omitted -->bold<!-- raw HTML omitted --> is the following matrix representation<!-- raw HTML omitted -->x x <!-- raw HTML omitted -->x<!-- raw HTML omitted --><!-- raw HTML omitted -->x x x<!-- raw HTML omitted -->   x x x <!-- raw HTML omitted -->       &hellip;&hellip;<!-- raw HTML omitted -->         x x x<!-- raw HTML omitted -->            x x x<!-- raw HTML omitted -->            <!-- raw HTML omitted -->x<!-- raw HTML omitted --> x x<!-- raw HTML omitted -->One just needs to replace the first line by a simple linear combination of the first 2 lines to remove the extra <!-- raw HTML omitted -->x<!-- raw HTML omitted --> and similarly for the last 2 lines. This amounts to ver little computational work. Then one can use a standard tridiagonal solver. This is how I implemented it in a past post about <!-- raw HTML omitted -->boundary conditions of a bond in the CIR model<!-- raw HTML omitted -->. It is very surprising that they did not propose that simple solution in an otherwise very good book.</p>
 

@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Quadratic Spline with Knots at Mid-Points</h1>
-    <span class="post-date">May 14, 2014 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/quadratic-spline-with-knots-at-mid-points/#disqus_thread">Comments</a>
+    <span class="post-date">May 14, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quadratic-spline-with-knots-at-mid-points/#disqus_thread">Comments</a>
     </span>
     <p>Two months ago, I looked at <!-- raw HTML omitted -->arbitrage free interpolation using piecewise-constant density<!-- raw HTML omitted -->. This is equivalent to a piecewise quadratic polynomial in call prices where each piece is centered around each call strike.<!-- raw HTML omitted --><!-- raw HTML omitted -->I wondered at the time what a quadratic spline would look like on this problem, as it should be very close in theory, except that we can ensure that it is C1, a condition for a good looking implied volatility.<!-- raw HTML omitted --><!-- raw HTML omitted -->For a while, I did not find any references around splines where knots are in between two interpolation points and derived my own formula. And then I lost the paper, but out of curiosity, I looked at the excellent De Boor book &ldquo;<!-- raw HTML omitted -->A Practical Guide to Splines<!-- raw HTML omitted -->&rdquo; and found that there was actually a chapter around this: quadratic splines with knots at mid-points. Interestingly, it turns out that a quadratic spline on standard knots is not always well defined, which is why, if one does quadratic splines, the knots need to be moved.<!-- raw HTML omitted --><!-- raw HTML omitted -->The papers from this era are quite rudimentary in their presentation (the book is much better). I found the paper from Demko 1977 &ldquo;<!-- raw HTML omitted -->Interpolation by Quadratic Splines<!-- raw HTML omitted -->&rdquo; quite usable for coding. I adjusted the boundaries to make the first and last quadratic fit the first two/last two strikes (adding a first strike at 0 and a large last strike if necessary) and spend countless time worrying about indices. The result on a simple classic example is interesting.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->On the non monotonic discrete density data of my earlier blog entry, this gives:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->QSpline is the quadratic spline<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Unfortunately, interpolating small prices with such a spline results in a highly oscillating interpolation: this is the <!-- raw HTML omitted -->Gibbs phenomenon for splines<!-- raw HTML omitted -->. We need to loose strict C1 continuity for practical applications, and use a first derivative approximation instead, very much like the Harmonic cubic spline.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->On Jaeckel data, the quadratic spline on prices is highly oscillating<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

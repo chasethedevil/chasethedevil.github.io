@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Java Calendar Is Broken On JVM Upgrade</h1>
-    <span class="post-date">Aug 19, 2009 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/#disqus_thread">Comments</a>
+    <span class="post-date">Aug 19, 2009 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/#disqus_thread">Comments</a>
     </span>
     <p>We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<!-- raw HTML omitted --><!-- raw HTML omitted -->The reason behind this is the daylight saving time conventions. An old JVM won&rsquo;t necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<!-- raw HTML omitted --><!-- raw HTML omitted -->JVM 1.5.0_12<!-- raw HTML omitted -->loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<!-- raw HTML omitted -->using formatter in EST: <!-- raw HTML omitted -->7/17/09 11:59 PM<!-- raw HTML omitted --><!-- raw HTML omitted -->using formatter in Asia/Singapore: 7/18/09 12:59 PM<!-- raw HTML omitted --><!-- raw HTML omitted -->JVM 1.5.0_20<!-- raw HTML omitted -->loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<!-- raw HTML omitted -->using formatter in EST: <!-- raw HTML omitted -->7/18/09 12:59 AM<!-- raw HTML omitted --><!-- raw HTML omitted -->using formatter in Asia/Singapore: 7/18/09 12:59 PM<!-- raw HTML omitted --><!-- raw HTML omitted -->The source code:<!-- raw HTML omitted --><!-- raw HTML omitted -->public class DateBug {       <!-- raw HTML omitted -->   <!-- raw HTML omitted -->    private static String FILE_NAME = &ldquo;datebug.txt&rdquo;;<!-- raw HTML omitted -->   <!-- raw HTML omitted -->    public static void load() throws IOException {<!-- raw HTML omitted -->        FileReader fr = new FileReader(FILE_NAME);<!-- raw HTML omitted -->        BufferedReader br = new BufferedReader(fr);<!-- raw HTML omitted -->        String l = br.readLine();<!-- raw HTML omitted -->        br.close();<!-- raw HTML omitted -->        long time = new Long(l);<!-- raw HTML omitted -->        Date d = new Date(time);<!-- raw HTML omitted -->        System.out.println(&ldquo;loading date=&quot;+d+&rdquo;, number=&quot;+d.getTime());<!-- raw HTML omitted -->        SimpleDateFormat formatter = new SimpleDateFormat();<!-- raw HTML omitted -->        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<!-- raw HTML omitted -->        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<!-- raw HTML omitted -->        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<!-- raw HTML omitted -->        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<!-- raw HTML omitted -->    }<!-- raw HTML omitted -->   <!-- raw HTML omitted -->    public static void saveNew() throws IOException {<!-- raw HTML omitted -->        Calendar c = Calendar.getInstance(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<!-- raw HTML omitted -->        c.set(2009, 06, 17, 23, 59);<!-- raw HTML omitted -->        Date d = c.getTime();<!-- raw HTML omitted -->        System.out.println(&ldquo;saving date=&quot;+d+&rdquo;, number=&quot;+d.getTime());<!-- raw HTML omitted -->        SimpleDateFormat formatter = new SimpleDateFormat();<!-- raw HTML omitted -->        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;EST&rdquo;));<!-- raw HTML omitted -->        System.out.println(&ldquo;using formatter in EST: &ldquo;+formatter.format(d));<!-- raw HTML omitted -->        formatter.setTimeZone(TimeZone.getTimeZone(&ldquo;Asia/Singapore&rdquo;));<!-- raw HTML omitted -->        System.out.println(&ldquo;using formatter in Asia/Singapore: &ldquo;+formatter.format(d));<!-- raw HTML omitted -->       <!-- raw HTML omitted -->        FileWriter fw = new FileWriter(FILE_NAME);<!-- raw HTML omitted -->        PrintWriter pw = new PrintWriter(fw);<!-- raw HTML omitted -->        pw.println(d.getTime());<!-- raw HTML omitted -->        pw.close();<!-- raw HTML omitted -->    }<!-- raw HTML omitted -->   <!-- raw HTML omitted -->    public static void main(String[] args) throws IOException {<!-- raw HTML omitted -->        System.out.println(&ldquo;JVM &ldquo;+System.getProperty(&ldquo;java.version&rdquo;));<!-- raw HTML omitted -->        if (args.length == 1) {<!-- raw HTML omitted -->            if (args[0].equals(&ldquo;save&rdquo;)) {<!-- raw HTML omitted -->                saveNew();<!-- raw HTML omitted -->            }<!-- raw HTML omitted -->        } else {<!-- raw HTML omitted -->            load();<!-- raw HTML omitted -->        }<!-- raw HTML omitted -->    }<!-- raw HTML omitted --><!-- raw HTML omitted -->What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<!-- raw HTML omitted -->This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.</p>
 

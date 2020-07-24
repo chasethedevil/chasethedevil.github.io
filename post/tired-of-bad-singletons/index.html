@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Tired Of Bad Singletons</h1>
-    <span class="post-date">Jan 4, 2007 &middot; 1 minute read &middot; <a href="https:///chasethedevil.github.io/post/tired-of-bad-singletons/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 4, 2007 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/tired-of-bad-singletons/#disqus_thread">Comments</a>
     </span>
     <p>While looking through some code for a project, I saw that:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->  public static final ProductYP instance = new ProductYP(); <!-- raw HTML omitted -->  <!-- raw HTML omitted -->  public ProductYP()<!-- raw HTML omitted -->  {<!-- raw HTML omitted -->    if (instance != null)<!-- raw HTML omitted -->      throw new RuntimeException(&quot;Only one instance allowed&quot;);<!-- raw HTML omitted --><!-- raw HTML omitted -->    prods = new HashMap();<!-- raw HTML omitted -->  }<!-- raw HTML omitted --><!-- raw HTML omitted -->  public static ProductYP getInstance() <!-- raw HTML omitted -->  {<!-- raw HTML omitted -->    return instance;<!-- raw HTML omitted -->  }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->And I don't think it was done by a newbie&hellip; It's actually not far from being correct, it's just that the guy obviously does not know about private constructors. I have seen several broken singleton implementations in previous projects and had several debates on the  <!-- raw HTML omitted -->double-checked locking pattern<!-- raw HTML omitted --> (<!-- raw HTML omitted -->it works since JDK1.5<!-- raw HTML omitted --> with volatiles but is useless). I am upset to see another half broken implementation. Everybody should have read at least  <!-- raw HTML omitted -->this<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->What have you seen as broken singletons?<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 

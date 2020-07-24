@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">From Double Precision Normal Density to Double Precision Cumulative Normal Distribution</h1>
-    <span class="post-date">Apr 2, 2013 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 2, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/#disqus_thread">Comments</a>
     </span>
     <p>Marsaglia in <!-- raw HTML omitted -->his paper on Normal Distribution<!-- raw HTML omitted --> made the same mistake I initially did while trying to verify <!-- raw HTML omitted -->the accuracy of the normal density<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->In his table of values comparing the true value computed by Maple for some values of x to the values computed by Sun or Ooura erfc, he actually does not really use the same input for the comparison. One example is the last number: 16.6. 16.6 does not have an exact representation in double precision, even though it is displayed as 16.6 because of the truncation at machine epsilon precision. Using Python mpmath, one can see that:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; mpf(-16.6)<!-- raw HTML omitted -->mpf('-16.6000000000000014210854715202004&rsquo;)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->This is the more accurate representation if one goes beyond double precision (here 30 digits). And the value of the cumulative normal distribution is:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; ncdf(-16.6)<!-- raw HTML omitted -->mpf(&lsquo;3.4845465199503256054808152068743e-62&rsquo;)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It is different from:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; ncdf(mpf(&quot;-16.6&rdquo;))<!-- raw HTML omitted -->mpf(&lsquo;3.48454651995040810217553910503186e-62&rsquo;)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->where in this case it is really evaluated around -16.6 (up to 30 digits precision). Marsaglia gives this second number as reference. But all the other algorithms will actually take as input the first input. It is more meaningful to compare results using the exact same input. Using human readable but computer truncated numbers is not the best.  The cumulative normal distribution will often be computed using some output of some calculation where one does not have an exact human readable input.<!-- raw HTML omitted --><!-- raw HTML omitted -->The standard code for Ooura and Schonfelder (as well as Marsaglia) algorithms for the cumulative normal distribution don&rsquo;t use Cody&rsquo;s trick to evaluate the exp(-x<em>x). This function appears in all those implementations because it is part of the dominant term in the usual expansions. Out of curiosity, I replaced this part with Cody trick. For Ooura I also made minor changes to make it work directly on the CND instead of going through the error function erfc indirection. Here are the results without the Cody trick (except for Cody):<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->and with it:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->All 3 algorithms are now of similiar accuracy (note the difference of scale compared to the previous graph), with Schonfelder being a bit worse, especially for x &gt;= -20. If one uses only easily representable numbers (for example -37, -36,75, -36,5, &hellip;) in double precision then, of course, Cody trick importance won&rsquo;t be visible and here is how the 3 algorithms would fare with or without Cody trick:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Schonfelder looks now worse than it actually is compared to Cody and Ooura.<!-- raw HTML omitted --><!-- raw HTML omitted -->To conclude, if someone claims that a cumulative normal distribution is up to double precision accuracy and it does not use any tricks to compute exp(-x</em>x), then beware, it probably is quite a bit less than double precision.</p>
 

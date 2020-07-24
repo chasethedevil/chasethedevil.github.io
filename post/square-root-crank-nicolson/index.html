@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Square Root Crank-Nicolson</h1>
-    <span class="post-date">Jun 19, 2015 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/square-root-crank-nicolson/#disqus_thread">Comments</a>
+    <span class="post-date">Jun 19, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/square-root-crank-nicolson/#disqus_thread">Comments</a>
     </span>
     <p>C. Reisinger kindly pointed out to me <!-- raw HTML omitted -->this paper around square root Crank-Nicolson<!-- raw HTML omitted -->. The idea is to apply a square root of time transformation to the PDE, and discretize the resulting PDE with Crank-Nicolson. Two reasons come to mind to try this: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->the square root transform will result in small steps initially, where the solution is potentially not so smooth, making Crank-Nicolson behave better.<!-- raw HTML omitted --><!-- raw HTML omitted --> it is the natural time of the Brownian motion.<!-- raw HTML omitted --><!-- raw HTML omitted -->Interestingly, it has nicer properties than what those reasons may suggest. On the Fokker-Planck density PDE, it does not oscillate under some very mild conditions and <!-- raw HTML omitted -->preserves density positivity at the peak<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity I tried it to price a one touch barrier option. Of course there is an analytical solution in my test case (Black-Scholes assumptions), but as soon as rates are assumed not constant or local volatility is used, there is no other solution than a numerical method. In the later case, finite difference methods are quite good in terms of performance vs accuracy.<!-- raw HTML omitted --><!-- raw HTML omitted -->The classic Crank-Nicolson gives a reasonable price, but the strong oscillations near the barrier, at every time step are not very comforting.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Crank-Nicolson Prices near the Barrier. Each line is a different time.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Moving to square root of time removes nearly all oscillations on this problem, even with a relatively low number of time steps compared to the number of space steps.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Square Root Crank-Nicolson Prices near the Barrier. Each line is a different time.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We can see that the second step prices are a bit higher than the third step (the lines cross), which looks like a small numerical oscillation in time, even if there is no oscillation is space.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->TR-BDF2 Prices near the Barrier. Each line is a different time.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->As a comparison, the TR-BDF2 scheme does relatively well: oscillations are removed after the second step, even with the extreme ratio of time steps vs space steps used on this example so that illustrations are clearer - Crank-Nicolson would still oscillate a lot with 10 times less space steps but we would not see oscillation on the square root Crank-Nicolson and a very mild one on TR-BDF2.<!-- raw HTML omitted --><!-- raw HTML omitted -->The LMG2 scheme (a local richardson extrapolation) does not oscillate at all on this problem but is the slowest:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->LMG2 Prices near the Barrier. Each line is a different time.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The square root Crank-Nicolson is quite elegant. It can however not be applied to that many problems in practice, as often some grid times are imposed by the payoff to evaluate, for example in a case of a discrete weekly barrier. But for continuous time problems (density PDE, Vanilla, American, continuous barriers) it&rsquo;s quite good.<!-- raw HTML omitted --><!-- raw HTML omitted -->In reality, with a continuous barrier, the payoff is not discontinuous at every step, but it is only discontinuous at the first step. So Rannacher smoothing would work very well on that problem:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Rannacher Prices near the Barrier. Each line is a different time.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The somewhat interesting payoff left for the square root Crank-Nicolson is the American.<!-- raw HTML omitted --></p>
 

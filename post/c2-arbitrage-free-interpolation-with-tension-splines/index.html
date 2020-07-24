@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">C2 Arbitrage Free Interpolation with Tension Splines</h1>
-    <span class="post-date">Mar 11, 2014 &middot; 2 minute read &middot; <a href="https:///chasethedevil.github.io/post/c2-arbitrage-free-interpolation-with-tension-splines/#disqus_thread">Comments</a>
+    <span class="post-date">Mar 11, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/c2-arbitrage-free-interpolation-with-tension-splines/#disqus_thread">Comments</a>
     </span>
     <p>In a previous post, I have explored the <!-- raw HTML omitted -->arbitrage free wiggles<!-- raw HTML omitted --> in the volatility surface that P. Jaeckel found in <!-- raw HTML omitted -->his paper<!-- raw HTML omitted -->. I showed that interpolating in log prices instead of prices was enough to remove the wiggles, but then, it appears that the interpolation is not guaranteed to be arbitrage free, even though it often is. On another example from P. Jaeckel paper, that I reproduced inaccurately but well enough, it is not.<!-- raw HTML omitted --><!-- raw HTML omitted -->Using a Harmonic spline instead of a regular cubic spline seems to be enough to make the interpolation arbitrage free in practice (although not in theory as log-prices are not convex), but it is only C1.<!-- raw HTML omitted --><!-- raw HTML omitted -->One can use a tension spline instead. There is an algorithm from Pruess that updates the tension parameters so as to make the interpolation monotone and convex. It can be tweaked to ensure that the interpolation follows:<!-- raw HTML omitted -->$$f'^2 + f&rsquo;&rsquo; \geq 0$$<!-- raw HTML omitted --><!-- raw HTML omitted -->This condition makes the interpolation on the log prices arbitrage free. As a first draft experiment, I just ensured numerically that the condition was valid, the resulting algorithm was fast enough and worked reasonably well.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is how the normalized density looks like with a simple harmonic spline on the call prices, a cubic spline in the logarithm of call prices, and an optimized tension spline in the logarithm of call prices.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->logarithm of the curvature<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The blank spot for the Log curve (spline) corresponds to negative curvature, that is, arbitrage. Notice how the tension spline is fully continuous, with no real spikes.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The implied volatility curve is very close to a more classic cubic spline interpolation on the implied variance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Of course, the same kind of algorithm can be applied directly to the variance with a slightly different numerical test to ensure it is arbitrage-free, it might however be easier to find a more robust and more clever algorithm in the log prices.</p>
 

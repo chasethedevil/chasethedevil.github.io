@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Local Stochastic Volatility - Particles and Bins</h1>
-    <span class="post-date">Jan 30, 2015 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/local-stochastic-volatility-particles-and-bins/#disqus_thread">Comments</a>
+    <span class="post-date">Jan 30, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/local-stochastic-volatility-particles-and-bins/#disqus_thread">Comments</a>
     </span>
     <p>In an <!-- raw HTML omitted -->earlier post<!-- raw HTML omitted -->, I mentioned the similarities between the Guyon-Labordere <!-- raw HTML omitted -->particle method<!-- raw HTML omitted --> and the Vanderstoep-Grzelak-Oosterlee <!-- raw HTML omitted -->&quot;bin&rdquo; method<!-- raw HTML omitted --> to calibrate and price under Local Stochastic volatility. I will be a bit more precise here.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The same thing, really<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The particle method can be seen as a generalization of the &ldquo;bin&rdquo; method. In deed, the bin method consists in doing the particle method using a histogram estimation of the conditional variance. The histogram estimation can be more or less seen as a very basic rectangle kernel with the appropriate bandwidth. The &ldquo;bin&rdquo; method is then just the particle method with another kernel (wiki link) (in the particle method, the kernel is a quartic with bandwidth defined by some slightly elaborate formula). A very good paper on this is Silverman <!-- raw HTML omitted --><!-- raw HTML omitted -->Density estimation for statistics and data analysis<!-- raw HTML omitted --><!-- raw HTML omitted -->, referenced by Guyon-Labordere.<!-- raw HTML omitted --><!-- raw HTML omitted -->In theory, the original particle method has the advantage of using a narrower bandwidth, resulting in a theoretical increase in performance as one does not have to sum over all particles, while providing a more local therefore precise estimate. In practice, the performance advantage is not so clear on my non optimized code.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Two-pass<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->There is an additional twist in the particle method: one can compute the expectation and the payoff evaluation in the same Monte-Carlo simulation, or in two sequential Monte-Carlo simulations.<!-- raw HTML omitted --><!-- raw HTML omitted -->Why would we do two? Mainly because the expectation is computed across all paths, at each time step, while, usually, payoff evaluation requires a full path as it will need to store some state at each observation time for path-dependent payoffs.<!-- raw HTML omitted --><!-- raw HTML omitted -->We can avoid recomputing the paths by just caching them at each observation time. The problem is that the size of this cache can quickly become extremely large and blow up the memory. For example a 10y daily knock-out will require 10 * 252 * 8 * 2 * MB = 40 GB for 1 million paths.<!-- raw HTML omitted --><!-- raw HTML omitted -->A side effect of the second simulation is that one can use a Quasi-Random number generator there, while for the first simulation, this is not easy as we compute all paths, dimension by dimension.<!-- raw HTML omitted --><!-- raw HTML omitted -->In practice, both methods work well, particle or bins, single-pass or two-pass. Here is a graph of the error in volatility, SV is a not so well calibrated Heston to market data. LVSV are the local stochastic volatility simulations, using as Vanderstoep 100 steps per year and 500K simulations with 30 bins.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The advantages of the particle do not show up in terms of accuracy on this example.<!-- raw HTML omitted -->I have also noticed that short expiries seem trickier, the error being larger. This might just be due to the time-step size, but interestingly the papers only show graphs of medium (min=6m) to large expiries.</p>
 

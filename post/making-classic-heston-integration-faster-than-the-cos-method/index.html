@@ -11,19 +11,19 @@
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https:///css/poole.css">
-  <link rel="stylesheet" href="https:///css/hyde.css">
-  <link rel="stylesheet" href="https:///css/poole-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-overrides.css">
-  <link rel="stylesheet" href="https:///css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https:///touch-icon-144-precomposed.png">
-  <link href="https:///favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
 
   
   
@@ -55,11 +55,11 @@
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https:///">Blog</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
       
-      <li class="sidebar-nav-item"><a href="https:///chasethedevil.github.io/post/">Posts</a></li>
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
       
     </ul>
 
@@ -74,7 +74,7 @@
       
       <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
       
-      <a href="https:///index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
 
@@ -88,7 +88,7 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Making Classic Heston Integration Faster than the Cos Method</h1>
-    <span class="post-date">Sep 5, 2013 &middot; 3 minute read &middot; <a href="https:///chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/#disqus_thread">Comments</a>
+    <span class="post-date">Sep 5, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/#disqus_thread">Comments</a>
     </span>
     <p>A coworker pointed to me that Andersen and Piterbarg book &ldquo;Interest Rate Modeling&rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Lewis formula<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->More importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method. So I was a bit sceptical. I decided to add the control variate to <!-- raw HTML omitted -->my Attari code<!-- raw HTML omitted -->. The results were very encouraging. So I pursued on implementing the Lewis formula and their basic integration scheme (no change of variable).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Attari formula<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Carr-Madan formula (used by Lord-Kahl)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Heston formula<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Cos formula<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->My impression is that the Lewis formula is not so different from the Attari formula in practice: both have a quadratic denominator, and are of similar complexity. The Lewis formula makes the Black-Scholes control variate real (the imaginary part of the characteristic function is null). The Cos formula looks quite different, but it actually is not that much different as the Vk are quadratic in the denominator as well. I still have this idea of showing how close it is to Attari in spirit.<!-- raw HTML omitted --><!-- raw HTML omitted -->My initial implementation of Attari relied on the log transform described by Kahl-Jaeckel to move from an infinite integration domain to a finite domain. As a result adaptive quadratures (for example based on Simpson) provide better performance/accuracy ratio than a very basic trapezoidal rule as used by Andersen and Piterbarg. If I remove the log transform and truncate the integration according by Andersen and Piterbarg criteria, pricing is faster by a factor of x2 to x3.<!-- raw HTML omitted --><!-- raw HTML omitted -->This is one of the slightly surprising aspect of Andersen-Piterbarg method: using a very basic integration like the Trapezoidal rule is enough. A more sophisticated integration, be it a Simpson 3/8 rule or some fancy adaptive Newton-Cotes rule does not lead to any better accuracy. The Simpson 3/8 rule won&rsquo;t increase accuracy at all (although it does not cost more to compute) while the adaptive quadratures will often lead to a higher number of function evaluations or a lower overall accuracy.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is the accuracy on put options with a maturity of 2 years:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I had to push to 512 points for the Cos method and L=24 (truncation) in order to have a similar accuracy as Attari and Andersen-Piterbarg with 200 points and a control variate. For 1000 options here are the computation times (the difference is smaller for 10 options, around 30%):<!-- raw HTML omitted --><!-- raw HTML omitted -->Attari 0.023s<!-- raw HTML omitted -->Andersen-Piterbarg 0.024s<!-- raw HTML omitted -->Cos 0.05s<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is the accuracy on put options with a maturity of 2 days:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->All methods used 200 points. The error is nearly the same for all. And the Cos method takes now only 0.02s. The results are similar with a maturity of 2 weeks.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Conclusion<!-- raw HTML omitted --><!-- raw HTML omitted -->The Cos method performs less well on longer maturities. Attari or Lewis formula with control variate and caching of the characteristic function are particularly attractive, especially with the simple Andersen-Piterbarg integration.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 
