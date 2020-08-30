@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">The Evil Port 80</h1>
     <span class="post-date">Sep 1, 2005 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/the-evil-port-80/#disqus_thread">Comments</a>
     </span>
-    <p>I was writing an Atom feed generator for my current project. I chosed to support <!-- raw HTML omitted -->Atom 1.0<!-- raw HTML omitted --> since it looks like it has the capabilities to establish as the next standard. Unfortunately I quickly saw that it was quite hard to test it in the real world (out of the good feedvalidator), as almost nobody seems to accept Atom 1.0 feeds yet, even if it is rapidely changing (there is support for it in Firefox CVS version).<!-- raw HTML omitted --><!-- raw HTML omitted -->So I decided to support RSS as well, the big question was: which RSS version? After grabbing lots of info on the subject, I opted for 1.0 again (more flexible, more different than Atom). It was actually quick to support RSS, but then when in real world, neither <!-- raw HTML omitted -->Google Desktop<!-- raw HTML omitted --> nor <!-- raw HTML omitted -->My Yahoo<!-- raw HTML omitted --> was willing to accept my feed. I looked at every bit of my xml, fiddled with Tomcat configuration in any possible way when I saw that no request was coming to my server from Yahoo or Google. And finally I thought, hmm maybe it&rsquo;s the port. I restarted my server on port 80, and yup, it worked!<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I wonder why Google Desktop and My Yahoo don&rsquo;t support another port than port 80 for RSS feeds.<!-- raw HTML omitted --><!-- raw HTML omitted -->tags: <!-- raw HTML omitted -->Categories: <!-- raw HTML omitted -->atom<!-- raw HTML omitted -->, <!-- raw HTML omitted -->rss<!-- raw HTML omitted -->, <!-- raw HTML omitted -->gdesktop<!-- raw HTML omitted -->, <!-- raw HTML omitted -->syndication<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+    
+
+I was writing an Atom feed generator for my current project. I chosed to support <a href="http://www.atomenabled.org/developers/syndication/">Atom 1.0</a> since it looks like it has the capabilities to establish as the next standard. Unfortunately I quickly saw that it was quite hard to test it in the real world (out of the good feedvalidator), as almost nobody seems to accept Atom 1.0 feeds yet, even if it is rapidely changing (there is support for it in Firefox CVS version).<br /><br />So I decided to support RSS as well, the big question was: which RSS version? After grabbing lots of info on the subject, I opted for 1.0 again (more flexible, more different than Atom). It was actually quick to support RSS, but then when in real world, neither <a href="http://desktop.google.com/en/">Google Desktop</a> nor <a href="http://my.yahoo.com/">My Yahoo</a> was willing to accept my feed. I looked at every bit of my xml, fiddled with Tomcat configuration in any possible way when I saw that no request was coming to my server from Yahoo or Google. And finally I thought, hmm maybe it's the port. I restarted my server on port 80, and yup, it worked!<br /><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/mubot_local.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/320/mubot_local.jpg" alt="" border="0" /></a><br /><br />I wonder why Google Desktop and My Yahoo don't support another port than port 80 for RSS feeds.<br /><br />tags: <span class="technoratitag">Categories: <a href="http://del.icio.us/tag/atom" rel="tag">atom</a>, <a href="http://del.icio.us/tag/rss" rel="tag">rss</a>, <a href="http://del.icio.us/tag/gdesktop" rel="tag">gdesktop</a>, <a href="http://del.icio.us/tag/syndication" rel="tag">syndication</a></span>
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.68.3" />
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the Devil &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
+      </h1>
+      <span class="post-date">Jan 6, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
+<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
+not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
+Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
+<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
+The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
+in the algorithm.</p>
+<p>In between step 3 and step 4, we should have
+$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
+$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
+<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
+<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
+very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
+to actually try it.
+<figure>
+    <img src="/post/heston_case3.png"/> <figcaption>
+            <h4>Error on Leif Andersen Case III.</h4>
+        </figcaption>
+</figure>
+</p>
+<p><em>Update January 23rd</em>
+The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/">Andreasen-Huge interpolation - Don&#39;t stay flat</a>
+      </h1>
+      <span class="post-date">Dec 13, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Jesper Andreasen and Brian Huge propose an arbitrage-free interpolation method
+based on a single-step forward Dupire PDE solution in their paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1694972">Volatility interpolation</a>.
+To do so, they consider a piecewise constant representation of the local volatility in maturity time and strike
+where the number of constants matches the number of market option prices.</p>
+<p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
+Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
+<figure>
+    <img src="/post/kahale_spx500_1995.png"/> <figcaption>
+            <h4>option volatilities for the SPX500 in October 1995.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
+The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
+the market vols are exactly reproduced by the following piecewise constant vols:
+<figure>
+    <img src="/post/kahale_ah_constant200.png"/> <figcaption>
+            <h4>piecewise constant model on a grid of 200 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
+some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
+<figure>
+    <img src="/post/kahale_ah_constant400.png"/> <figcaption>
+            <h4>piecewise constant model on a grid of 400 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The single step continuous model can not represent the market implied volatilities, while for some reason,
+the discrete model with 200 points can. Note that the model vols were capped, otherwise they would explode even higher.</p>
+<p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
+(a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
+becomes stable regardless of the number of grid points.
+<figure>
+    <img src="/post/kahale_ah_linear.png"/> <figcaption>
+            <h4>piecewise linear model on a grid of 400 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
+likely because the objective function derivatives are smoother.
+In the most favorable case for the piecewise constant model,
+the minimization with the linear model requires about 40% less iterations.</p>
+<p>We could also interpolate with a cubic spline, as long as we make sure that the volatility does not go below zero, for example by imposing a limit on the derivative values.</p>
+<p>Overall, this raises questions on the interest of the numerically much more complex continuous time version of the piecewise-constant model
+as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/">Put-Call parity and the log-transformed Black-Scholes PDE</a>
+      </h1>
+      <span class="post-date">Dec 5, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>We will assume zero interest rates and no dividends on the asset \(S\) for clarity.
+The results can be easily generalized to the case with non-zero interest rates and dividends.
+Under those assumptions, the Black-Scholes PDE is:
+$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = 0.$$</p>
+<p>An implicit Euler discretisation on a uniform grid in \(S\) of width \(h\) with linear boundary conditions (zero Gamma) leads to:</p>
+<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t S_i^2 \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}.$$
+for \(i=1,&hellip;,m-1\) with boundaries
+$$ V^{k+1}_i - V^{k}_i = 0.$$
+for \(i=0,m\).</p>
+<p>This forms a linear system \( M \cdot V^k = V^{k+1} \) with \(M\) is a tridiagonal matrix where each of its rows sums to 1 exactly.
+Furthermore, the payoff corresponding to the forward price \(V_i = S_i\) is exactly preserved as well by such a system as the discretized second derivative will be exactly zero.
+The scheme can be seen as preserving the zero-th and first moments.</p>
+<p>As a consequence, by linearity, the put-call parity relationship will hold exactly (note that in between nodes, any interpolation used should also be consistent with the put-call parity for the result to be more general).</p>
+<p>This result stays true for a non-uniform discretisation, and with other finite difference schemes as shown <a href="https://papers.ssrn.com/abstract=2362969">in this paper</a>.</p>
+<p>It is common to consider the log-transformed problem in \(X = \ln(S)\) as the diffusion is constant then, and a uniform grid much more adapted to the process.
+$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 V}{\partial X^2}-\frac{1}{2}\sigma^2 \frac{\partial V}{\partial X} = 0.$$</p>
+<p>An implicit Euler discretisation on a uniform grid in \(X\) of width \(h\) with linear boundary conditions (zero Gamma in \(S\) ) leads to:</p>
+<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}-\frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-V^{k}_{i-1}}{2h}.$$
+for \(i=1,&hellip;,m-1\) with boundaries
+$$ V^{k+1}_i - V^{k}_i = 0.$$
+for \(i=0,m\).</p>
+<p>Such a scheme will not preserve the forward price anymore. This is  because now, the forward price is \(V_i = e^{X_i}\). In particular, it is not linear in \(X\).</p>
+<p>It is possible to preserve the forward by changing slightly the diffusion coefficient, very much as in the <a href="https://papers.ssrn.com/abstract=2711720">exponential fitting idea</a>. The difference is that, here, we are not interested
+in handling a large drift (when compared to the diffusion) without oscillations, but merely to preserve the forward exactly.
+We want the adjusted volatility \(\bar{\sigma}\) to solve
+$$\frac{1}{2}\bar{\sigma}^2 \frac{e^{h}-2+e^{-h}}{h^2}-\frac{1}{2}\sigma^2 \frac{e^{h}-e^{-h}}{2h}=0.$$
+Note that the discretised drift does not change, only the discretised diffusion term. The solution is:
+$$\bar{\sigma}^2 = \frac{\sigma^2 h}{2} \coth\left(\frac{h}{2} \right) .$$
+This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
+<p>This is actually the same adjustment as the exponential fitting technique with a drift of zero. For a non-zero drift, the two adjustments would differ, as the exact forward adjustment will stay the same, along with an adjusted discrete drift.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/issues_with_bdk_extrapolation/">Benaim et al. extrapolation does not work on equities</a>
+      </h1>
+      <span class="post-date">Oct 4, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/issues_with_bdk_extrapolation/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>We have seen <a href="/mystic_parabola.md">earlier</a> that a simple parabola allows to capture the smile of AAPL 1m options surprisingly well. For very high and very low strikes,
+the parabola does not obey Lee&rsquo;s moments formula (the behavior in the wings needs to be at most linear in variance/log-moneyness).</p>
+<p>Extrapolating the volatility smile in the low or high strikes in a smooth \(C^2\) fashion is however not easy.
+A surprisingly popular so called &ldquo;arbitrage-free&rdquo;
+method is the <a href="http://www.quarchome.org/RiskTailsPaper_v5.pdf">extrapolation of Benaim, Dodgson and Kainth</a> developed to remedy the negative density of SABR in interest rates as
+well as to give more control over the wings.</p>
+<p>The call options prices (right wing) are extrapolated as:
+$$
+C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
+$$
+\(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
+$$
+c_R =\frac{{C&rsquo;}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C&rsquo;}_{R}^{2}}{C_{R}^2}+ \frac{{C&rsquo;'}_R}{C_R}\right) + \nu \right)\text{,} \<br>
+$$
+$$
+b_R =  - \frac{{C&rsquo;}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\<br>
+$$
+$$
+a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
+$$
+The \( \ nu \) parameters allow to adjust the shape of the extrapolation.</p>
+<p>Unfortunately it does not really work for equities.
+Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
+our best fit parabola of the AAPL 1m options:
+<figure>
+    <img src="/post/bdk-explodes.png"/> <figcaption>
+            <h4>BDK explodes on AAPL 1m options.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The \( \nu\) parameter does not help either.</p>
+<p><strong>Update Dec 5 2016</strong>
+Here are details about call option price, slope, curvature:
+The strike cutoff is \(K_R=115.00001307390328\). For the parabola,</p>
+<p>$$\begin{align}
+C(K_R)&amp;=0.014516747104643029,\\<br>
+C&rsquo;(K_R)&amp;=-0.002899391065224203,\\<br>
+C&rsquo;'(K_R)&amp;=0.000750774042345718.
+\end{align}$$</p>
+<p>And the BDK parameters for the right wing:</p>
+<p>$$a_R=34.279812, b_R=-10292.881677, c_R=737108.461636.$$</p>
+<p>For the least squares spline,
+$$\begin{align}
+C(K_R)&amp;=0.03892674300426042,\\<br>
+C&rsquo;(K_R)&amp;=-0.00171386452499034,\\<br>
+C&rsquo;'(K_R)&amp;=0.0007835686926501496.
+\end{align}$$
+which results in
+$$a_R=131.894286, b_R=-26839.217814, c_R=1550285.706087.$$</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/">AES for Monte-Carlo</a>
+      </h1>
+      <span class="post-date">Aug 17, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In finance, and also in science, the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> is the de-factor pseudo-random number generator (PRNG) for Monte-Carlo simulations.
+By the way, there is a <a href="http://arxiv.org/abs/1301.5435">recent 64-bit maximally equidistributed version</a> called MEMT19937 with 53-bit double precision floating point numbers in mind.</p>
+<p>D.E. Shaw paper <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiyl5Lg8cjOAhVMahoKHVhPCPQQFggmMAA&amp;url=http%3A%2F%2Fwww.thesalmons.org%2Fjohn%2Frandom123%2Fpapers%2Frandom123sc11.pdf&amp;usg=AFQjCNEZ5I7JeeDSELDJBDjLU84tXKmI3w&amp;sig2=UqLBNOlLjkHsMMncABKkIg&amp;bvm=bv.129759880,d.d2s">Parallel Random Numbers: As easy as 1, 2, 3</a>
+makes a bold remark: since <a href="https://en.wikipedia.org/wiki/AES_instruction_set">specific AES instructions</a> have
+been available since 2010 in most x86 processors, why not use them?</p>
+<p>Historicaly, counter-based PRNGs based on cryptographic standards such as <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+were historically slow, which motivated the development of sequential PRNGs with good statistical properties,
+yet not cryptographically strong like the Mersenne Twister for Monte-Carlo simulations.</p>
+<p>The randomness of AES is of vital importance to its security making the use of the AES128 encryption algorithm as PRNG sound (see <a href="http://dl.acm.org/citation.cfm?id=945515">Hellekalek &amp; Wegenkittl paper</a>).
+Furthermore, D.E. Shaw study shows that AES can be faster than Mersenne-Twister.
+In my own simple implementation using the standard library of the Go language,
+it was around twice slower than Mersenne-Twister to generate random double precision floats,
+which can result in a 5% performance loss for a local volatility simulation.
+The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
+<p>The code is extremely simple, with many possible variations around the same idea. Here is mine
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
+	counter <span style="color:#902000">uint64</span>
+	bs      []<span style="color:#902000">byte</span>
+	block   cipher.Block
+}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
+	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
+	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
+	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
+</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
+	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
+		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
+	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
+		u.counter<span style="color:#666">++</span>
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
+		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
+		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
+	}
+	u.counter<span style="color:#666">++</span>
+	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
+	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
+}</code></pre></div></p>
+<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
+<p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
+The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,
+whose goal is to identify new stream ciphers suitable for widespread adoption.
+It is faster than AES in the absence of specific AES CPU instructions.
+Our tests run with a straightforward implementation that does not make use of specific AMD64 instructions
+and show the resulting PRNG to be faster than MRG63k3a and only 5% slower than MEMT19937 for local volatility Monte-Carlo simulations, that is the same speed as the above Go AES PRNG.
+While it led to sensible results, there does not seem any study yet of its equidistribution properties.</p>
+<p>Counter-based PRNGs are parallelizable by nature: if a counter is used as plaintext,
+we can generate any point in the sequence at no additional cost by just setting
+the counter to the point position in the sequence, the generator is not sequential.
+Furthermore, alternate keys can be used to create independent substreams:
+the strong cryptographic property will guarantee the statistical independence.
+A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/piketty_capital/">A review of Thomas Piketty - Le capital au XXI siecle</a>
+      </h1>
+      <span class="post-date">Aug 2, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/piketty_capital/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>I found back some old notes I had written about the book &ldquo;Le capital au XXI siecle&rdquo; from Thomas Piketty. It took me a while to finish that book last summer.</p>
+<p>So many journalists have written around Piketty, that I had to buy the book and read it. It turns out that some of the criticism I have read is not really founded once one reads the book, but here are other real obvious criticisms that I suprisingly did not hear.</p>
+<p>The best part of the book is probably the introduction. It&rsquo;s actually not so short and gives a good overall view of the main subjects of the book. But it&rsquo;s a bit too concise to truely understand the point. Unfortunately as the book progresses, it feels more like someone trying to fill up empty pages than real content. The first half of the first chapter is still interesting, and then we are overwhelmed with too many graphs and even more words to just state the obvious in the graph, or to repeat over and over the same idea. His economic &ldquo;laws&rdquo; should really be summarized on one (or two) simple page, there is no need for hundreds of pages to understand them. Banks could learn a bit of basic statistics: Piketty makes the point of not considering only one measure of inequality like the Gini index, very much like banks should not consider only one measure of risk like the VaR.</p>
+<p>The title is clever, as it is a direct reference to Marx &ldquo;The Capital&rdquo;, but it&rsquo;s very far from the quality of Marx book. Marx can be wrong about many things, but in each chapter, he presents new ideas, a different way of looking at the problem. There is a real philosophical effort of defining the meaning of words, and there is fascinating analysis of the economic world of the 19th century. I am refering to the first volume, the only one Marx truly wrote.</p>
+<p>I hardly understand why Piketty is so popular in the US. I remember how much fun it was to read Adam Smith &ldquo;The Wealth of Nations&rdquo;, and again how different perpectives it tries to bring, and it&rsquo;s no small book either. Piketty is boring, extremely boring to read (except the intro). Maybe the Americans just stopped at the introduction. Likely it has more to do with Piketty being the intellectual defending the same ideas as the very popular Occupy movement (which we somehow don&rsquo;t hear about so much anymore). Bourdieu was very talented in mixing the right amount of statistics with extremely original views along with a philosophical stance. I expected more from Piketty, an admirer of the likes of Bourdieu.</p>
+<p>A much more interesting book would be something like a spiced up introduction to this book. One main leitmotiv is the fact that the 21st century will not look like the 20th century, but maybe more like the 19th century. Why wouldn&rsquo;t the 21st century look like the 21st century, that is different from the 20th and the 19th century? Still, where Picketty is interesting is in the fact that there is something to learn from the 19th century economics, and something to unlearn from the 20th century economics which might be too prevalent today.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
+      </h1>
+      <span class="post-date">Jul 26, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/number_of_regressors_in_bdse/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.</p>
+<p>It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables.
+Solving a BSDE on 10 variables for EDF was given as an illustration at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^{10}\) regression factors. The answer of the speaker was more or less that it was what they do, with no particular trick but with a large computing power, as if \(10^{10}\) was not so big.</p>
+<p>At this point I was really wondering why \(10^{10}\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).</p>
+<p>We can count then how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
+This number is simply \( C^{N+D-1}_{N-1} = C^{N+D-1}_D \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>.</p>
+<p>If this number is not so obvious, we can proceed step by step as well: for degree 1, there is just \( N \) factors (we assign 1 to one of the variables).
+For degree 2, there is \(N\) factors to place the number 2 on each variable, plus \( C^N_2 \) to place (1,1) on the variables. From Pascal triangle, we have \( C^{N+1}_{2} = C^N_2 + C^N_1\).
+For degree 3, there is \(N\) factors to place the number 3 on each variable, plus \( C^N_3 \) to place the numbers (1,1,1) on the variables plus \(2C^N_2\) to place (1,2) and (2,1). Applying the Pascal identity twice, we have \( C^{N+2}_{3} = (C^N_1+ C^N_2) + (C^N_2 + C^N_3)\). etc.</p>
+<p>Thus the total number of factors for \(N\) variables is</p>
+<!-- raw HTML omitted -->
+<p>For \(N=10\), the total number of factors is 184756.
+Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
+      </h1>
+      <span class="post-date">Jul 5, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In my [previous post]((/post/shooting_arbitrage/), I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+Plugging this into the local variance formula leads to</p>
+<!-- raw HTML omitted -->
+<figure>
+    <img src="/post/svi_dearbitraging_lv_rk.png"/> <figcaption>
+            <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
+        </figcaption>
+</figure>
+
+<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+<figure>
+    <img src="/post/svi_dearbitraging_vol_rk_cap.png"/> <figcaption>
+            <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage - part I</a>
+      </h1>
+      <span class="post-date">Jun 22, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/shooting_arbitrage/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In my [previous post]((/post/damghani_dearbitraging_a_weak_smile_on_svi/), I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
+The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
+and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
+<figure>
+    <img src="/post/svi_dearbitraging_variance_spline.png"/> <figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+<p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
+<figure>
+    <img src="/post/svi_dearbitraging_g_spline.png"/> <figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
+<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.</p>
+<!-- raw HTML omitted -->
+<p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
+this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
+<figure>
+    <img src="/post/svi_dearbitraging_variance_rk.png"/> <figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+<p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
+is even smaller.</p>
+<figure>
+    <img src="/post/svi_dearbitraging_g_rk.png"/> <figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
+      </h1>
+      <span class="post-date">Jun 15, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.</p>
+<!-- raw HTML omitted -->
+<p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
+The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
+<!-- raw HTML omitted -->
+<p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
+While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
+<p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
+on the first derivative:</p>
+<!-- raw HTML omitted -->
+<p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
+There would be no loop over the minimization needed. Does this produce any good result?
+<figure>
+    <img src="/post/svi_dearbitraging_variance.png"/> <figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The graph is clear, the technique produces crap. This is the local variance denominator:
+<figure>
+    <img src="/post/svi_dearbitraging_g.png"/> <figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
+
+      
+    </div>
+    
+    
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/page/3/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/page/4/">4</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/5/">5</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/5/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+

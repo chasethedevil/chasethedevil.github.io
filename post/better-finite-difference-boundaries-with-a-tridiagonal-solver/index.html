@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Better Finite Difference Boundaries with a Tridiagonal Solver</h1>
     <span class="post-date">Jan 10, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/#disqus_thread">Comments</a>
     </span>
-    <p>In <!-- raw HTML omitted --><!-- raw HTML omitted -->Pricing Financial Instruments - The Finite Difference Method<!-- raw HTML omitted --><!-- raw HTML omitted -->, Tavella and Randall explain that boundary conditions using a higher order discretization (for example their &ldquo;BC2&rdquo; boundary condition) can not be solved in one pass with a simple tridiagonal solver, and suggest the use of SOR or some conjugate gradient based solver.<!-- raw HTML omitted --><!-- raw HTML omitted -->It is actually very simple to reduce the system to a tridiagonal system. The more advanced boundary conditions only use 3 adjacent values, just 1 value makes it non tridiagonal, the one in <!-- raw HTML omitted -->bold<!-- raw HTML omitted --> is the following matrix representation<!-- raw HTML omitted -->x x <!-- raw HTML omitted -->x<!-- raw HTML omitted --><!-- raw HTML omitted -->x x x<!-- raw HTML omitted -->   x x x <!-- raw HTML omitted -->       &hellip;&hellip;<!-- raw HTML omitted -->         x x x<!-- raw HTML omitted -->            x x x<!-- raw HTML omitted -->            <!-- raw HTML omitted -->x<!-- raw HTML omitted --> x x<!-- raw HTML omitted -->One just needs to replace the first line by a simple linear combination of the first 2 lines to remove the extra <!-- raw HTML omitted -->x<!-- raw HTML omitted --> and similarly for the last 2 lines. This amounts to ver little computational work. Then one can use a standard tridiagonal solver. This is how I implemented it in a past post about <!-- raw HTML omitted -->boundary conditions of a bond in the CIR model<!-- raw HTML omitted -->. It is very surprising that they did not propose that simple solution in an otherwise very good book.</p>
+    
+
+In <i><a href="http://www.amazon.com/Pricing-Financial-Instruments-Finite-Difference/dp/0471197602/ref=sr_1_1?ie=UTF8&amp;qid=1357840985&amp;sr=8-1&amp;keywords=tavella+randall">Pricing Financial Instruments - The Finite Difference Method</a></i>, Tavella and Randall explain that boundary conditions using a higher order discretization (for example their "BC2" boundary condition) can not be solved in one pass with a simple tridiagonal solver, and suggest the use of SOR or some conjugate gradient based solver.<br /><br />It is actually very simple to reduce the system to a tridiagonal system. The more advanced boundary conditions only use 3 adjacent values, just 1 value makes it non tridiagonal, the one in <b>bold</b> is the following matrix representation<br />x x <b>x</b><br />x x x<br />&nbsp;&nbsp; x x x <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ......<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x x x<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x x x<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>x</b> x x<br />One just needs to replace the first line by a simple linear combination of the first 2 lines to remove the extra <b>x</b> and similarly for the last 2 lines. This amounts to ver little computational work. Then one can use a standard tridiagonal solver. This is how I implemented it in a past post about <a href="http://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/">boundary conditions of a bond in the CIR model</a>. It is very surprising that they did not propose that simple solution in an otherwise very good book.
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

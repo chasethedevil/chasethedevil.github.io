@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -88,9 +88,14 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Web Services No Better Than CORBA?</h1>
-    <span class="post-date">Apr 10, 2006 &middot; 0 minute read &middot; <a href="https://chasethedevil.github.io/post/web-services-no-better-than-corba/#disqus_thread">Comments</a>
+    <span class="post-date">Apr 10, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/web-services-no-better-than-corba/#disqus_thread">Comments</a>
     </span>
-    <!-- raw HTML omitted -->
+    
+
+<div>Richard Monson-Haefel (RMH), author of the famous Enterprise Java Beans (O'Reilly) and of a Web Services book is making an alarming claim about JAX-WS, the new Java web services standard: </div> <div> <blockquote class="gmail_quote" style="PADDING-LEFT: 1ex; MARGIN: 0px 0px 0px 0.8ex; BORDER-LEFT: #ccc 1px solid"><strong>JAX-WS still sucks!</strong></blockquote></div> <div>&nbsp;</div> <div>In an effort to write a client to real world web services (for Google, Amazon, Ebay), <a href="http://rmh.blogs.com/weblog/2006/04/redeemed_jaxws_.html">he mostly&nbsp;failed</a>. Errors seem to be largely related to WSDL to Java conversion. Jason Green, a JBoss developer, managed to get quickly a web service working for Ebay, but analysis by RMH suggest that hundreds of classes were generated for this simple one method web service. </div> <div>&nbsp;</div> <div>Recently I had to try to do CORBA client classes by hand in Java since the rmic tool was not working that well to generate classes that could be run on a client JVM of different version than the server JVM. It proved to be a no-go in the end, because of the complexity involved not only in coding, but more on maintaining those modified generated classes. This would have required coding a tool dedicated for that purpose. We chose to pass simpler objects, differently,&nbsp;which looks just like a hack&nbsp;to avoid having CORBA issues. I am amazed that after that many years of CORBA, there are still simple cases where it does not work properly automatically.  </div> <div>&nbsp;</div> <div>Seeing that there is the same kind of problem with Web Services (IDL to Java translation) makes me wonder about Web Services &quot;improvement&quot; over CORBA. And WSDL is definitely less readable than CORBA IDL.</div>  <div>&nbsp;</div>
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

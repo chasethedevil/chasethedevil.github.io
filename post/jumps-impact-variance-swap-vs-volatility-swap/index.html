@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -88,9 +88,18 @@
 <div class="content container">
   <div class="post">
     <h1 class="post-title">Jumps impact: Variance swap vs volatility swap</h1>
-    <span class="post-date">Feb 20, 2015 &middot; 0 minute read &middot; <a href="https://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/#disqus_thread">Comments</a>
+    <span class="post-date">Feb 20, 2015 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/#disqus_thread">Comments</a>
     </span>
-    <!-- raw HTML omitted -->
+    
+
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-9BEKyX_gWc0/VOclAJRe19I/AAAAAAAAH0g/AxbdgL48GaA/s1600/Screenshot%2B-%2B200215%2B-%2B13%3A13%3A38.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-9BEKyX_gWc0/VOclAJRe19I/AAAAAAAAH0g/AxbdgL48GaA/s1600/Screenshot%2B-%2B200215%2B-%2B13%3A13%3A38.png" height="388" width="640" /></a></div>
+
+
+<p>Beside <a href="/post/variance-swap-replication-discrete-or-continuous/">the problem with the discreteness</a> of the replication, variance swaps are sensitive to jumps. This is an often mentioned reason for the collapse of the single name variance swap market in 2008 as jumps are more likely on single name equities.</p>
+<p>Those graphs are the result of Monte-Carlo simulations with various jump sizes using the Bates model, and using Local Volatility implied from the Bates vanilla prices. The local volatility price will be the same price as per static replication for the variance swap, and we can see it they converge when there is no jump.</p>
+<p>The presence of jumps lead to a theoretically higher variance swap price, again, which we miss completely with the static replication. As jumps go higher, the difference is more pronounced.</p>
+<p>Volatility swaps are a bit better behaved in this regard. Interestingly, local volatility overestimate the value in this case (which for variance swaps it underestimates the value). I also noticed that the relatively <a href="/post/a-volatility-swap-and-a-straddle/">recent formula from Carr-Lee</a> will underestimate jumps even more so than local volatility: it is more precise in the absence of jumps, very close to Heston, but less precise than local volatility when jumps increase in size.</p>
+<p>I have added a small section around this in <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2567398">my paper on SSRN</a>.</p>
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +139,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

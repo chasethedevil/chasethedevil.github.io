@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Adjoint Delta for Monte-Carlo</h1>
     <span class="post-date">Feb 25, 2014 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/adjoint-delta-for-monte-carlo/#disqus_thread">Comments</a>
     </span>
-    <p>In an earlier post, I have been quickly exploring <!-- raw HTML omitted -->adjoint differentiation<!-- raw HTML omitted --> in the context of analytical Black-Scholes. Today, I tried to mix it in a simple Black-Scholes Monte-Carlo as described in <!-- raw HTML omitted -->L. Capriotti paper<!-- raw HTML omitted -->, and measured the performance to compute delta compared to a numerical single sided finite difference delta.<!-- raw HTML omitted --><!-- raw HTML omitted -->I was a bit surprised that even on a single underlying, without any real optimization, adjoint delta was faster by a factor of nearly 40%. I suspect this is mostly due to exp evaluations being /2.<!-- raw HTML omitted --><!-- raw HTML omitted -->On a basket of 4 assets, the adjoint method was 3.25x faster.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s quick to have such results on basic payoffs: it took me a few hours and worked on the first run, even though my Monte-Carlo is slightly different from the Capriotti paper. It is much more challenging to have it working across a wide variety of payoffs, and to automatize some of it.</p>
+    
+
+In an earlier post, I have been quickly exploring <a href="http://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/">adjoint differentiation</a> in the context of analytical Black-Scholes. Today, I tried to mix it in a simple Black-Scholes Monte-Carlo as described in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCsQFjAA&amp;url=http%3A%2F%2Fwww.luca-capriotti.net%2Fpdfs%2FFinance%2Fjcf_capriotti_press_web.pdf&amp;ei=rNMMU4_wGKjt0gWQpYGIAQ&amp;usg=AFQjCNFovkw47-Y1WrIKkt-m5FQ1lhmqYA&amp;sig2=vmiqHzd6SJuq5Fp2TlPjdA&amp;bvm=bv.61725948,d.d2k">L. Capriotti paper</a>, and measured the performance to compute delta compared to a numerical single sided finite difference delta.<br /><br />I was a bit surprised that even on a single underlying, without any real optimization, adjoint delta was faster by a factor of nearly 40%. I suspect this is mostly due to exp evaluations being /2.<br /><br />On a basket of 4 assets, the adjoint method was 3.25x faster.<br /><br />It's quick to have such results on basic payoffs: it took me a few hours and worked on the first run, even though my Monte-Carlo is slightly different from the Capriotti paper. It is much more challenging to have it working across a wide variety of payoffs, and to automatize some of it.
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

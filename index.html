@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -29,7 +29,7 @@
   
   
   
-  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
 
   <meta name="description" content="">
   <meta name="keywords" content="">
@@ -88,20 +88,853 @@
 
 <div class="content container">
   <div class="posts">
-    
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/intel-failures-and-the-future/">Intel failure and the future of computing</a>
+      </h1>
+      <span class="post-date">Jul 24, 2020 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/intel-failures-and-the-future/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
+      </span>
+      
+      <p>What has been happening to the INTC stock today may be revealing of the future. The stock dropped more than 16%, mainly because they announced that their 7nm process does not work (well) and they may rely on an external foundry for their processors. Initially, in 2015, they thought they would have 8nm process by 2017, and 7nm by 2018. They are more than 3 years late.</p>
+<p>Intel used to be a leader in the manufacturing process for microprocessor. While the company has its share of internal problems, it may also be that we are starting to hit the barrier, where it becomes very difficult to improve on the existing. The end of Moore&rsquo;s law has been announced many times, it was already a subject 20 years ago. Today, it may be real, if there is only a single company capable of manufacturing processor using a 5nm process (TSMC).</p>
+<p>It will be interesting to see what this means for software in general. I suppose clever optimizations and good parallelization may start playing a much more important role. Perhaps we will see also more enthusiasm towards specialized processors, somewhat similar to GPUs and neural network processors.</p>
+
+      
+    </div>
     
     <div class="post">
       <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/">Posts</a>
+        <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/">March 9, 2020 crash - where will CAC40 go?</a>
       </h1>
-      <span class="post-date">Jul 24, 2020 &middot; 0 minute read &middot; <a href="https://chasethedevil.github.io/post/#disqus_thread">Comments</a>
+      <span class="post-date">Mar 9, 2020 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
       </span>
       
+      <p>The stock market crashed by more than 7% on March 9, 2020. It is one of the most important drop since September 2001.
+I looked at BNP warrant prices on the CAC40 French index, with a maturity of March 20, 2020 , to see what they would tell about the market direction on the day of the crash. This is really a not-so-scientific experiment.</p>
+<p>The quotes I got were quite noisy. I applied a few different techniques to imply the probability density from the option prices:</p>
+<ul>
+<li>The one-step Andreasen-Huge with some regularization. The regularization is a bit too mild, although, in terms of implied vol, this was the worst fit  among the techniques.</li>
+<li>The stochastic collocation towards a septic polynomial, no regularization needed here. The error in implied volatilities is similar to Andreasen-Huge, even though the implied density is much smoother. I however discovered a small issue with the default optimal monotonic fit, and had to tweak a little bit the optimal polynomial, more on this later in this post.</li>
+<li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
+<li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
+</ul>
+<figure>
+    <img src="/post/cac40_mar9_dens.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+        </figcaption>
+</figure>
+
+<p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
+is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
+<p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
+<figure>
+    <img src="/post/cac40_mar9_dens_0.png"/> <figcaption>
+            <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
+<figure>
+    <img src="/post/cac40_mar9_collo.png"/> <figcaption>
+            <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
+        </figcaption>
+</figure>
+
+<p>And for the curious, here are the implied vol plots:</p>
+<figure>
+    <img src="/post/cac40_mar9_vol.png"/> <figcaption>
+            <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
+        </figcaption>
+</figure>
+
+
       
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/42/">42</a>
+      </h1>
+      <span class="post-date">Dec 5, 2019 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/42/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/math">math</a>
+      </span>
+      
+      <p>Today my 6-years old son came with a math homework. The stated goal was to learn the different ways to make 10 out of smaller numbers. I was impressed. Immediately, I wondered</p>
+<blockquote>
+<p>how many ways are there to make 10 out of smaller numbers?</p>
+</blockquote>
+<p>This is one of the beauties of maths: a very simple problem, which a 6-years old can understand, may actually be quite fundamental. If you want to solve this in the general case, for any number instead of 10, you end up with the <a href="https://en.wikipedia.org/wiki/Partition_(number_theory)#Restricted_part_size_or_number_of_parts">partition function</a>. And in order to find this, you will probably learn recurrence relations. So what is the answer for 10?</p>
+<blockquote>
+<p>42</p>
+</blockquote>
+<p>Then I looked at one exercise they did in class, which was simply to find different ways to pay 10 euros with bills of 10, 5 and coins of 2 and 1 euro(s).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/python-numba-overrated/">Numba, Pypy Overrated?</a>
+      </h1>
+      <span class="post-date">Feb 12, 2019 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/python-numba-overrated/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
+      </span>
+      
+      <p>Many benchmarks show impressive performance gains with the use
+of <a href="https://numba.pydata.org/">Numba</a> or <a href="https://www.pypy.org/">Pypy</a>. Numba allows to compile just-in-time some specific methods, while Pypy takes
+the approach of compiling/optimizing the full python program: you use it just like the standard
+python runtime. From those benchmarks, I imagined that those  tools would improve my 2D Heston PDE solver
+performance easily. The initialization part of my program contains embedded for loops over several 10Ks elements.
+To my surprise, numba did not improve anything (and I had to isolate the code, as it would
+not work on 2D numpy arrays manipulations that are vectorized). I surmise it does not play well
+with scipy sparse matrices.
+Pypy did not behave better, the solver became actually slower than with the standard python
+interpreter, up to twice as slow, for example, in the case of the main solver loop which only does matrix multiplications and LU solves sparse systems. I did not necessarily expect any performance improvement in this specific loop, since it only consists in a few calls to expensive scipy calculations. But I did not expect a 2x performance drop either.</p>
+<p>While I am sure that there are good use cases, especially for numba, I was a bit disappointed
+that it likely would require to significantly change my code to have any effect (possibly to not do the initialization with scipy sparse matrices, but then, it is not so clear how). Also, I
+find <a href="https://www.ibm.com/developerworks/community/blogs/jfp/entry/A_Comparison_Of_C_Julia_Python_Numba_Cython_Scipy_and_BLAS_on_LU_Factorization?lang=en">most</a> <a href="https://modelingguru.nasa.gov/docs/DOC-2676">benchmarks</a> dumb. For example, the 2D ODE solver of the latter uses a simple dense 2D numpy array. On real code,
+things are not as simple.</p>
+<p>Next I should try Julia again out of curiosity. I tried it <a href="/post/modern-programming-language-for-monte-carlo/">several years ago</a> in the context of a simple Monte-Carlo simulation and my experiment at the time
+was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/about/">About</a>
+      </h1>
+      <span class="post-date">Dec 17, 2018 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/about/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I just moved my blog to a static website, created with <a href="https://gohugo.io/">Hugo</a>, I explain the reasons why <a href="/post/moved-to-hugo/">here</a>.
+You can find more about me on my <a href="https://fr.linkedin.com/in/fabien-le-floc-h-8aa306">linkedin profile</a>.
+In addition you might find the following interesting:</p>
+<ul>
+<li><a href="http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">List of quantitative finance papers</a> I have freely available on SSRN</li>
+<li><a href="/lefloch_trbdf2_draft.pdf">TR-BDF2 for Stable American Option Pricing</a>. This is the first draft, not the final version that was published in the Journal of Computational Finance.</li>
+<li><a href="/lefloch_sabr_slides.pdf">Presentation on finite difference techniques for arbitrage-free SABR</a> I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.</li>
+<li><a href="/lefloch_exact_log.pdf">Exact Forward for Finite-Difference Schemes on the Log-transformed Black-Scholes PDE</a>.</li>
+<li><a href="/lefloch_volatility_asymptotics.pdf">Asymptotic bounds of the normal volatility</a>.</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/quadprog-nans/">Fixing NaNs in Quadprog</a>
+      </h1>
+      <span class="post-date">Oct 7, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quadprog-nans/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
+      </span>
+      
+      <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
+<p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
+
+    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+
+    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
+    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
+    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
+    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
+
+    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
+    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
+
+    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+
+    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></code></pre></div>
+<p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
+<p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
+<figure>
+    <img src="/post/quadprog_nan_fix.png"/> <figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
+</figure>
+
+<p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
+      </h1>
+      <span class="post-date">Jul 12, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>This is a follow up to my <a href="/post/tsla-stock-crash-probability">previous post</a> where I explore the probability
+of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">results of Timothy Klassen</a>.</p>
+<p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
+high compared to other stocks? or is it the interpretation of the data erroneous?</p>
+<p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
+<figure>
+    <img src="/post/nflx2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration.</p>
+<p>The corresponding implied cumulative density is</p>
+<figure>
+    <img src="/post/nflx2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
+<p>For completeness, the implied probability density is</p>
+<figure>
+    <img src="/post/nflx2020_rnd.png"/> <figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
+too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
+<p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
+much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
+<figure>
+    <img src="/post/snap2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="/post/snap2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<p>We find a probability of moving below 1/3 of the current price lower than with TSLA: around 12% SNAP vs 15% for TSLA.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
+      </h1>
+      <span class="post-date">Jul 11, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Timothy Klassen had an <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">interesting post</a> on linkedin recently, with the title &ldquo;the options market thinks there is a 16% chance that Tesla will not exist in January 2020&rdquo;.
+As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
+and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
+This results in the following graph</p>
+<figure>
+    <img src="/post/tsla2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration. Note that I
+removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
+<p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
+<figure>
+    <img src="/post/tsla2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
+</table>
+<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
+<figure>
+    <img src="/post/tsla2020_rnd.png"/> <figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
+modes, its fit in terms of volatilities is not better than the lognormal mixture model. We could reduce the number of modes by increasing
+the constant of the Tikhonov regularization, at the cost of a slightly worse fit.</p>
+<p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
+and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
+</table>
+<p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
+It is expected that the probability of going under $100 will be larger when the stock price moves down,
+which is what happen around March 27, 2018. But it is not so expected that when it comes back up higher
+(above $350 in mid June), the probability of going under $100 stays higher than it was before March 27, 2018,
+where the stock price was actually lower.
+In fact, there seems to be a signal in his time-serie, where the probability of going under $100 increases
+significantly, one week before March 27, that is one week before the actual drop,
+suggesting that the drop was priced in the options.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/">The Fourth Moment of the Normal SABR Model</a>
+      </h1>
+      <span class="post-date">Jun 11, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
+simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
+For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
+<p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
+I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.degruyter.com/view/j/jip.2013.21.issue-1/jip-2012-0093/jip-2012-0093.xml">The use of statistical tests to calibrate the normal SABR model</a>
+with simple formulae for the third and fourth moments (sci-hub.nu is your friend to read this). I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
+consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
+<p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
+is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
+the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
+initial forward price.</p>
+<p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
+with
+$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2},,$$
+$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2},,$$
+$$ C = - A - B ,.$$</p>
+<p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
+no error in their third moment.</p>
+<p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/">Implying the Probability Density from Market Option Prices (Part 2)</a>
+      </h1>
+      <span class="post-date">May 27, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>This is a follow-up to my posts on the implied risk-neutral density (RND) of the SPW options before and after the big volatility change that happened in early February with two different techniques:
+<a href="/post/spx500_bets_after_rates_hike/">a smoothing spline on the implied volatilities</a> and a <a href="/post/implying-the-probability-density-from-market-option-prices/">Gaussian kernel approach</a>.</p>
+<p>The Gaussian kernel (as well as to some extent the smoothing spline) let us believe that there are multiple modes in the distribution (multiple peaks in the density). In reality,
+Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
+for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
+<p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
+<figure>
+    <img src="/post/rnd_nonic_collocation.png"/> <figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>There is now just one mode, and the fit in implied volatilities is much better.</p>
+<figure>
+    <img src="/post/nonic_collocation_vol.png"/> <figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
+that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a noisy RND.
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3150689">Sebastian Schlenkrich uses</a> a simple regularization to calibrate his own piecewise-linear local volatility approximation
+(a Lamperti-transform based approximation instead of the single step PDE approach of Andreasen-Huge).
+His Tikhonov regularization consists here in applying a roughness penalty consisting
+in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
+This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
+<figure>
+    <img src="/post/rnd_ah_tikhonov.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
+</figure>
+
+<p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
+the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
+<figure>
+    <img src="/post/rnd_ah_tikhonov_lcurve.png"/> <figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
+Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
+<p>The error of model versus market implied volatilies is similar to the nonic collocation (not better) even though the shape is less smooth and, a priori, less constrained as,
+on this example, the Andreasen-Huge method has 75 free-parameters while the nonic collocation has 9.</p>
+
       
     </div>
     
     
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item disabled">
+    <a  class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
 
 
   </div>
@@ -128,7 +961,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

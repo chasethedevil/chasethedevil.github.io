@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.68.3" />
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the Devil &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/caching-http-responses-in-java/">Caching HTTP Responses in Java</a>
+      </h1>
+      <span class="post-date">Apr 19, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/caching-http-responses-in-java/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<div>Caching HTTP response can dramatically improve performance of your app if what you generate is in reality not very dynamic. There are many free caching frameworks in Java. Most popular seem to be <a href="http://ehcache.sourceforge.net/"> ehcache</a>, <a href="http://www.opensymphony.com/oscache/">oscache</a>, jcs and JBoss Cache.</div> <div>&nbsp;</div> <div>ehcache is quite simple to use and its code is clean. They have a CachingFilter that you can put in your webapp server to cache transparently HTTP responses. However as the framework only allows you to store Objects (which makes sense for most uses), I was wondering how they cached the HttpResponse which is a stream. I was a bit disappointed by the answer, they just create a copy ByteArrayOutputStream and call toBytes() to store it in the cache. While this is optimal for a memory cache store (the whole response will anyway be in the cache, although I am not sure if they check for particularly big responses to avoid caching those or try to cache those) I don't think it is that good for a disk cache store. </div> <div>&nbsp;</div> <div>Ideally one would like the response to be stored using a buffer, to avoid having the whole response in memory. This would enable a much higher concurrent use. I think it is doable&nbsp;by writing your own CachingFilter and by using the concurrent utils Queue to block writing&nbsp;when the buffer is full. </div> <div>&nbsp;</div> <div>I googled for this kind of stuff without success. I only found solutions similar to ehcache one (for example sun <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingResponseWrapper.java?r=1.4"> CachingResponseWrapper</a> and <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingFilter.java?r=1.4">CachingFilter</a>&nbsp;or oscache <a href="https://xwork.dev.java.net/source/browse/oscache/src/java/com/opensymphony/oscache/web/filter/CacheFilter.java?rev=1.12&amp;view=markup"> CacheFilter</a> (a bit more careful, but still a toBytes()))&nbsp;I wonder why it is not already done and public.</div> <div>&nbsp;</div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/javablogs.com-2005-top-20/">Javablogs.com 2005 Top 20</a>
+      </h1>
+      <span class="post-date">Apr 18, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/javablogs.com-2005-top-20/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<span style="font-weight: bold;">Most read in 2005</span><br /><ol><br /><li> <a href="http://javablogs.com/Jump.action?id=198498" title="Read full entry on author's blog">New in Hibernate 3: Criteria API enhancements</a>  (816): Projection, aggregation, subselects, detatched criterias - its all there in the Hibernate 3 Criteria API. Let me show you some examples, starting with the new projection API.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=198498" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=209718" title="Read full entry on author's blog">Hello, IDEA!</a>  (555): From the recent Java IDE discussions, it seems like there's a good portion of Java programmers who don't know <a class='inentry' href="http://www.jetbrains.com/idea">IntelliJ IDEA</a>, or simply haven't tried it yet. In this short screencast,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=209718" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=247056" title="Read full entry on author's blog">Hey Gosling: This is why we don’t use Java 5.0 yet!</a>  (461): Whenever there is a major JDK update everyone on the Sun Microsystems side seems to love to beat the drum of upgrading.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=247056" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=230569" title="Read full entry on author's blog">MSN7.5??</a>  (450): ?????Google Talk????????????????????????????????????Google Talk???????? Google Talk???????????????????????????????????? &nbsp; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=230569" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=234371" title="Read full entry on author's blog">The worst code I've ever seen. Yes, that's true.</a>  (422): I've been in this business for 25 years and have been programming since the mid seventies. Even when I was a young pup, full of bright ideas and hubris and those around me were at least as bad,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=234371" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=231040" title="Read full entry on author's blog">JSP is officially dead</a>  (407): Well, it looks like with the Final Draft of Java EE 5, the final nail has been placed in JSP's coffin.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=231040" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=209182" title="Read full entry on author's blog">My wife is hot and she can code, too</a>  (400): My wife Keri loves puzzle games--tetris, scrabble, crosswords, text twist--any game where you have to figure something out, she's on it. She has a degree in <a class='inentry' href="http://cs.ua.edu">CS</a>, and is employed as a UI specialist,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=209182" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=195889" title="Read full entry on author's blog">IBM announced SOMA - Service-Oriented Modelling and Architecture</a>  (396): [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=195889" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=228119" title="Read full entry on author's blog">G-mail runs on Tomcat???!!!!!</a>  (390): Well, hello guys and gals...haven't been in the Java blog scene recently, but am glad to know Java is going strong as ever (not that I ever doubted it,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=228119" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=195923" title="Read full entry on author's blog">Web Services articles</a>  (374): [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=195923" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=214638" title="Read full entry on author's blog">Bill Gates tries Firefox</a>  (362): Tim Weber of the BBC reporter rustles up Bill Gates quote of 2005: Bill Gates is one of the people with Firefox on his computer, so I asked him for his opinion. I played around with it a bit,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=214638" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=208070" title="Read full entry on author's blog">Language Oriented Programming: Everything is a Language</a>  (361): Some people don't 'get' <a class='inentry' href="http://www.onboard.jetbrains.com/is1/articles/04/10/lop/">Language Oriented Programming</a>. It's a different perspective. Once you make the mental shift, everything starts to fall into place. Over the past few months,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=208070" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=240898" title="Read full entry on author's blog">The killer app for Web 2.0 has arrived</a>  (356): Time to throw in the towel, 37 Signals. The future has arrived: iClock (via flocksucks) [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=240898" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=227734" title="Read full entry on author's blog">New Search Engine Blows Google Away</a>  (356): After months of incredibly secret development, PreviewSeek Limited has launched the PreviewSeek search engine. My initial impression? It blows google away with its far more powerful searches. [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=227734" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=211632" title="Read full entry on author's blog">Death to Apache</a>  (356): So our Apache heros have now decided that it isn't quite enough to prove to the world that they are abysmal failures at producing a J2EE container,&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=211632" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=195922" title="Read full entry on author's blog">WebSphere 6.0 System Management Enhancements</a>  (356): [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=195922" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=195710" title="Read full entry on author's blog">It's Official, Struts is History!</a>  (352): [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=195710" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=215445" title="Read full entry on author's blog">What Steve isn't telling us</a>  (348): So the rumors were true, Apple is really switching to Intel.&#160; There are a lot of interesting things in Steve Jobs' keynote, as usual, but the most interesting part is,... [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=215445" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=210191" title="Read full entry on author's blog">RE: Why I Ditched Hibernate</a>  (346): I saw <a class='inentry' href="http://www.thepostmodern.net/blog/BlogEntry.jsp?id=115">this post</a> and couldn't help but respond. The post's author, Bruce, is ditching Hibernate and Spring b/c he wants to use a connection pool (configured in Tomcat) instead.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=210191" class="smallgrey">read</a>] </li><br /></ol>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/how-to-use-java-with-blogger-a-tutorial/">How To Use Java With Blogger: A Tutorial</a>
+      </h1>
+      <span class="post-date">Apr 18, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/how-to-use-java-with-blogger-a-tutorial/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Blogger has a <a href="http://code.blogger.com/archives/atom-docs.html">REST API</a>. I use it to retrieve particular posts or to post transformed data. There is no Java API that I know of, but you will see here it is not very difficult to interface with Blogger API in Java using plain old XML. <br><br>Using libraries <a href="http://jakarta.apache.org/commons/httpclient/">commons-httpclient</a> and <a href="http://www.dom4j.org/">DOM4J</a> it would be quite easy to implement your own Java Blogger API as the following code will suggest. <br><br><span style="font-weight: bold;">Authenticate</span><br>All requests need to be authenticated and are done in HTTPS. I use common-httpclient to perform requests. Here is how to setup the client:<br><PRE><FONT COLOR="#006699"><STRONG>private</STRONG></FONT>  HttpClient <FONT COLOR="#9966ff">initHttpClient</FONT>()<br /><FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />  HttpClient client  <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">HttpClient</FONT>();<br />  List authPrefs <FONT COLOR="#000000"><STRONG>=</STRONG></FONT>  <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">ArrayList</FONT>(<FONT COLOR="#ff0000">2</FONT>);<br />  authPrefs.<FONT COLOR="#9966ff">add</FONT>(AuthPolicy.DIGEST );<br />  authPrefs.<FONT COLOR="#9966ff">add</FONT>(AuthPolicy.BASIC);<br />  client.<FONT COLOR="#9966ff">getParams</FONT>().setParameter (AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);<br />  client.<FONT COLOR="#9966ff">getParams</FONT>().<FONT COLOR="#9966ff">setAuthenticationPreemptive</FONT>(<FONT COLOR="#cc00cc">true</FONT>);<br />  Credentials defaultcreds <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">UsernamePasswordCredentials</FONT>(user, password); <br />  client.<FONT COLOR="#9966ff">getState</FONT>().<FONT COLOR="#9966ff">setCredentials</FONT>(<FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">AuthScope</FONT>( <FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">www.blogger.com</FONT><FONT COLOR="#ff00cc">&quot;</FONT>, <FONT COLOR="#ff0000">443</FONT>, AuthScope.ANY_REALM), defaultcreds);<br />  <FONT COLOR="#006699"><STRONG>return</STRONG></FONT> client;          <br /><FONT COLOR="#000000"><STRONG>}</STRONG></FONT></pre><br /><br><span style="font-weight: bold;">Get Your Posts</span> <br>To retrieve the posts, you just have to query the right url, and parse the XML response. I prefer to use DOM4J, because of its handy asXML() method to print a node as XML. For simplicity I use a Map to store an XML entry. <br><br><pre><FONT COLOR="#006699"><STRONG>public</STRONG></FONT> Collection <FONT COLOR="#9966ff">getPosts</FONT>() <FONT COLOR="#006699"><STRONG>throws</STRONG></FONT>  HttpException, IOException, ParserConfigurationException, SAXException, DocumentException <br /><FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />  GetMethod get <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT>  <FONT COLOR="#9966ff">GetMethod</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">https://www.blogger.com/atom</FONT><FONT COLOR="#ff00cc">&quot;</FONT> <FONT COLOR="#000000"><STRONG>+</STRONG></FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">/</FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#000000"><STRONG>+</STRONG></FONT>blogId);<br />  <FONT COLOR="#0099ff"><STRONG>int</STRONG></FONT>  statusCode <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> client.<FONT COLOR="#9966ff">executeMethod</FONT>(get);<br />  <FONT COLOR="#006699"><STRONG>if</STRONG></FONT>   (statusCode <FONT COLOR="#000000"><STRONG>!</STRONG></FONT><FONT COLOR="#000000"><STRONG>=</STRONG></FONT>  HttpStatus.SC_OK)<br />  <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />    <FONT COLOR="#006699"><STRONG>throw</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">RuntimeException</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">Could</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">not</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">make</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">HTTP</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">request</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">properly:</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT> <FONT COLOR="#000000"><STRONG>+</STRONG></FONT>get.<FONT COLOR="#9966ff">getStatusLine</FONT>());<br />  <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />  InputStream response  <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> get.<FONT COLOR="#9966ff">getResponseBodyAsStream</FONT>();<br />  SAXReader reader <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT>  <FONT COLOR="#9966ff">SAXReader</FONT>();<br />  Document doc <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> reader.<FONT COLOR="#9966ff">read</FONT>(response);<br />  Collection posts <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">ArrayList</FONT>();<br />  List entries  <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> doc.<FONT COLOR="#9966ff">getRootElement</FONT>().<FONT COLOR="#9966ff">elements</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">entry</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  <FONT COLOR="#006699"><STRONG>if</STRONG></FONT> (LOG.<FONT COLOR="#9966ff">isDebugEnabled</FONT>()) <br />  <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />    LOG.<FONT COLOR="#9966ff">debug</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">found</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#000000"><STRONG>+</STRONG></FONT>entries.<FONT COLOR="#9966ff">size</FONT>()<FONT COLOR="#000000"><STRONG>+</STRONG></FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">entries</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />  <FONT COLOR="#006699"><STRONG>for</STRONG></FONT> (<FONT COLOR="#0099ff"><STRONG>int</STRONG></FONT>  i <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#ff0000">0</FONT>; i <FONT COLOR="#000000"><STRONG>&lt;</STRONG></FONT>entries.<FONT COLOR="#9966ff">size</FONT>();i <FONT COLOR="#000000"><STRONG>+</STRONG></FONT><FONT COLOR="#000000"><STRONG>+</STRONG></FONT>)<br />  <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />    Element entry  <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> (Element) entries.<FONT COLOR="#9966ff">get</FONT>(i); <br />    Map m <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT>  <FONT COLOR="#9966ff">HashMap</FONT>();<br />    <FONT COLOR="#006699"><STRONG>for</STRONG></FONT> (Iterator it <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> entry.<FONT COLOR="#9966ff">elementIterator</FONT>();it. <FONT COLOR="#9966ff">hasNext</FONT>();)<br />    <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />      Element detail <FONT COLOR="#000000"><STRONG>=</STRONG></FONT>  (Element) it.<FONT COLOR="#9966ff">next</FONT>();<br />      String name <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> detail.<FONT COLOR="#9966ff">getName</FONT>();<br />      <FONT COLOR="#006699"><STRONG>if</STRONG></FONT> (name.<FONT COLOR="#9966ff">equals</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">link</FONT><FONT COLOR="#ff00cc">&quot;</FONT>))<br />      <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />        m.<FONT COLOR="#9966ff">put</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">link</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>,detail.<FONT COLOR="#9966ff">attribute</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">href</FONT><FONT COLOR="#ff00cc">&quot;</FONT>).<FONT COLOR="#9966ff">getValue</FONT>());<br />      <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />      <FONT COLOR="#006699"><STRONG>else</STRONG></FONT> <FONT COLOR="#006699"><STRONG>if</STRONG></FONT> (name. <FONT COLOR="#9966ff">equals</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">content</FONT><FONT COLOR="#ff00cc">&quot;</FONT>))<br />      <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />        m.<FONT COLOR="#9966ff">put</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">content</FONT><FONT COLOR="#ff00cc">&quot;</FONT>,detail.<FONT COLOR="#9966ff">asXML</FONT>());<br />      <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />      <FONT COLOR="#006699"><STRONG>else</STRONG></FONT><br />      <FONT COLOR="#000000"><STRONG>{</STRONG></FONT> <br />        m.<FONT COLOR="#9966ff">put</FONT>(name,detail.<FONT COLOR="#9966ff">getTextTrim</FONT>());<br />      <FONT COLOR="#000000"><STRONG>}</STRONG></FONT> <br />    <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />    posts.<FONT COLOR="#9966ff">add</FONT>(m);                   <br />    <FONT COLOR="#006699"><STRONG>if</STRONG></FONT>  (LOG.<FONT COLOR="#9966ff">isDebugEnabled</FONT>())<br />    <FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />      LOG.<FONT COLOR="#9966ff">debug</FONT>( <FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">found=</FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#000000"><STRONG>+</STRONG></FONT>m.<FONT COLOR="#9966ff">get</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">title</FONT><FONT COLOR="#ff00cc">&quot;</FONT>)<FONT COLOR="#000000"><STRONG>+</STRONG></FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">,</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">url=</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#000000"><STRONG>+</STRONG></FONT>m.<FONT COLOR="#9966ff">get</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">link</FONT><FONT COLOR="#ff00cc">&quot;</FONT>)); <br />    <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />  <FONT COLOR="#000000"><STRONG>}</STRONG></FONT><br />  <FONT COLOR="#006699"><STRONG>return</STRONG></FONT>  posts;<br /><FONT COLOR="#000000"><STRONG>}</STRONG></FONT></pre> <span style="font-weight: bold;"><span style="font-weight: bold;"><br></span>Create XML for a new Post<br></span>Nothing particular here, just XML production. <br><pre><FONT COLOR="#006699"><STRONG>private</STRONG></FONT> String <FONT COLOR="#9966ff">createXmlForCreatePost</FONT>(String postTitle, String postContent) <FONT COLOR="#006699"><STRONG>throws</STRONG></FONT>   IOException, DocumentException<br /><FONT COLOR="#000000"><STRONG>{</STRONG></FONT><br />  SAXReader xmlReader <FONT COLOR="#000000"><STRONG>=</STRONG></FONT>  <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> <FONT COLOR="#9966ff">SAXReader</FONT>();<br />  xmlReader.<FONT COLOR="#9966ff">setValidation</FONT>(<FONT COLOR="#cc00cc">false</FONT> );<br />  Document doc <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> DocumentHelper.<FONT COLOR="#9966ff">createDocument</FONT>();<br />  QName rootName  <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> DocumentHelper.<FONT COLOR="#9966ff">createQName</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">entry</FONT><FONT COLOR="#ff00cc">&quot;</FONT>, <FONT COLOR="#006699"><STRONG>new</STRONG></FONT>  <FONT COLOR="#9966ff">Namespace</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">&quot;</FONT>, <FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">http://purl.org/atom/ns#</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>));<br />  Element root <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> doc.<FONT COLOR="#9966ff">addElement</FONT>(rootName);<br />  Element title <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> root.<FONT COLOR="#9966ff">addElement</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">title</FONT><FONT COLOR="#ff00cc">&quot;</FONT>); <br />  title.<FONT COLOR="#9966ff">addAttribute</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">mode</FONT><FONT COLOR="#ff00cc">&quot;</FONT>,<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">escaped</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  title.<FONT COLOR="#9966ff">addAttribute</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">type</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>,<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">text/plain</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  title.setText (postTitle);<br />  Element generator <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> root.<FONT COLOR="#9966ff">addElement</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">generator</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  generator.<FONT COLOR="#9966ff">addAttribute</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">url</FONT><FONT COLOR="#ff00cc">&quot;</FONT> , <FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">http://31416.org</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  generator. <FONT COLOR="#9966ff">setText</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">31416</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">Java</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">Generator</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  Element content <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> root.<FONT COLOR="#9966ff">addElement</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">content</FONT><FONT COLOR="#ff00cc"> </FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  content.<FONT COLOR="#9966ff">addAttribute</FONT>(<FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">type</FONT><FONT COLOR="#ff00cc">&quot;</FONT> , <FONT COLOR="#ff00cc">&quot;</FONT><FONT COLOR="#ff00cc">application/xhtml+xml</FONT><FONT COLOR="#ff00cc">&quot;</FONT>);<br />  <FONT COLOR="#ff8400">//</FONT><FONT COLOR="#ff8400">Element</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">div</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">=</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">content.addElement(DocumentHelper.createQName(&quot;div&quot;,new</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">Namespace(&quot;&quot;,&quot;http://www.w3.org/1999/xhtml&quot;)));</FONT><br />  <FONT COLOR="#ff8400">//</FONT><FONT COLOR="#ff8400">div.add(...);</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">//YOUR</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">XHTML</FONT><FONT COLOR="#ff8400"> </FONT><FONT COLOR="#ff8400">HERE</FONT><br />  StringWriter result <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT>  <FONT COLOR="#9966ff">StringWriter</FONT>();<br />  XMLWriter writer <FONT COLOR="#000000"><STRONG>=</STRONG></FONT> <FONT COLOR="#006699"><STRONG>new</STRONG></FONT> XMLWriter (result);<br />  writer.<FONT COLOR="#9966ff">write</FONT>(doc);<br />  writer.<FONT COLOR="#9966ff">close</FONT>();<br />  <FONT COLOR="#006699"><STRONG>return</STRONG></FONT> result.<FONT COLOR="#9966ff">toString</FONT>();<br /><FONT COLOR="#000000"><STRONG>}</STRONG></FONT></pre><span style="font-weight: bold;"><span style="font-weight: bold;"> <br></span>That's it</span><br><br>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/last-week-javablogs.com-top-10/">Last week Javablogs.com top 10</a>
+      </h1>
+      <span class="post-date">Apr 18, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/last-week-javablogs.com-top-10/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><br /><span style="font-weight: bold;">Most read last week</span><br /><ol><br /><li> <a href="http://javablogs.com/Jump.action?id=264596" title="Read full entry on author's blog">Stupid Command Prompt Tricks</a>  (289): These Stupid (Windows) Command Prompt Tricks actually look rather useful. [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264596" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264331" title="Read full entry on author's blog">The truth about Tudu Lists!!</a>  (260): I've now been working on <a class='inentry' href="http://tudu.sf.net">Tudu Lists</a> for more than one year, and I'm releasing today version 1.1. With this latest release, it is now time for me to tell the truth about Tudu Lists.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264331" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264413" title="Read full entry on author's blog">Toplink vs hibernate</a>  (258): I still remember the excitement I felt when I started working on Toplink. It was early 2000. Before that, I was working mainly in visual c++.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264413" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264450" title="Read full entry on author's blog">Why RedHat bought JBoss</a>  (249): RedHat has a market cap of roughly 20x revenues, which quite frankly is unheard of; most companies would kill to have a P/E ratio that high, let alone a price-to-sales ratio!&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264450" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264269" title="Read full entry on author's blog">Red Hat Acquires JBoss</a>  (214): <a class='inentry' href="http://www.redhat.com/about/news/prarchive/2006/jboss.html">It is official</a>. Now the corp office is in my back yard!&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264269" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264717" title="Read full entry on author's blog">Google Calendar is now live</a>  (212): The subject says it all... Go ahead: log in, play around and post your suggestions and impressions as long as it's not "It doesn't work on Safari" (usually the... [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264717" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264659" title="Read full entry on author's blog">Why is Tomcat called Tomcat</a>  (208): Every now and again the topic of why Tomcat is called Tomcat pops up and I don't know anyone who actually knew Anyway I thought I would look it up so if anyone else asked me I could tell them the&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264659" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=264747" title="Read full entry on author's blog">RANT: Eclipse Sucks</a>  (186): Eclipse has an AI engine that realizes when I haven't used it often enough for it to have burned me recently to kick in and do something really painful to me.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=264747" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265140" title="Read full entry on author's blog">Top ten use case mistakes</a>  (170): Top ten use case mistakes -Tyner Blain: We’re reiterating the top five use case mistakes from Top five use case blunders and adding five more. For details on the first five, go back to that post.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265140" class="smallgrey">read</a>] </li><br /></ol><br /><span style="font-weight: bold;">Most read last week-end</span><br /><ol><br /><li> <a href="http://javablogs.com/Jump.action?id=265140" title="Read full entry on author's blog">Top ten use case mistakes</a>  (170): Top ten use case mistakes -Tyner Blain: We’re reiterating the top five use case mistakes from Top five use case blunders and adding five more. For details on the first five, go back to that post.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265140" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265194" title="Read full entry on author's blog">Netbeans versus Eclipse</a>  (155): Eclipse has been the leader of the pack for the last five years but with Netbeans becoming free, is Eclipse's title of most popular IDE coming to an end.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265194" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265152" title="Read full entry on author's blog">MacBook vs. Athlon XP Java benchmark</a>  (150): So i finally made a first mini benchmark regarding my new hardware. Of course i was curious how the macBook performs against my old (somewhat outdated) PC platform.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265152" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265035" title="Read full entry on author's blog">Eclipse 3.2 RC1 Released</a>  (143): Eclipse 3.2 RC1 is out and is available for download. Other Callisto release projects are releasing over the next two weeks. 39 words.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265035" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265052" title="Read full entry on author's blog">7 Hour Daily Commute</a>  (139): This person does an astonishing 7 hour commute to get to work. Everyday. And he's been doing it since 1989. I'm too astonished to criticize. Also, it's just too easy..... [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265052" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265159" title="Read full entry on author's blog">Google Calendar - Oh so close!</a>  (135): It took me a few years to switch from Yahoo!&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265159" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265040" title="Read full entry on author's blog">MacBook Pro Update</a>  (121): I&#8217;m loving my new MacBook Pro, but&#8230; it&#8217;s definitely far from perfect.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265040" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265044" title="Read full entry on author's blog">Next Generation Frameworks are only superficially competitors</a>  (117): There's an interesting thread over on the Grails mailing list.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265044" class="smallgrey">read</a>] </li><br /><li> <a href="http://javablogs.com/Jump.action?id=265047" title="Read full entry on author's blog">Is Memory Management in Java Garbage?</a>  (117): A friend of mine who was learning C# commented he felt C# was a more powerful because you had to memory manage yourself and it took more effort to create and destroy objects.&hellip; [<a title="Read the post without leaving Javablogs" href="http://javablogs.com/ViewEntry.action?id=265047" class="smallgrey">read</a>] </li><br /></ol><br /></div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/web-services-no-better-than-corba/">Web Services No Better Than CORBA?</a>
+      </h1>
+      <span class="post-date">Apr 10, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/web-services-no-better-than-corba/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<div>Richard Monson-Haefel (RMH), author of the famous Enterprise Java Beans (O'Reilly) and of a Web Services book is making an alarming claim about JAX-WS, the new Java web services standard: </div> <div> <blockquote class="gmail_quote" style="PADDING-LEFT: 1ex; MARGIN: 0px 0px 0px 0.8ex; BORDER-LEFT: #ccc 1px solid"><strong>JAX-WS still sucks!</strong></blockquote></div> <div>&nbsp;</div> <div>In an effort to write a client to real world web services (for Google, Amazon, Ebay), <a href="http://rmh.blogs.com/weblog/2006/04/redeemed_jaxws_.html">he mostly&nbsp;failed</a>. Errors seem to be largely related to WSDL to Java conversion. Jason Green, a JBoss developer, managed to get quickly a web service working for Ebay, but analysis by RMH suggest that hundreds of classes were generated for this simple one method web service. </div> <div>&nbsp;</div> <div>Recently I had to try to do CORBA client classes by hand in Java since the rmic tool was not working that well to generate classes that could be run on a client JVM of different version than the server JVM. It proved to be a no-go in the end, because of the complexity involved not only in coding, but more on maintaining those modified generated classes. This would have required coding a tool dedicated for that purpose. We chose to pass simpler objects, differently,&nbsp;which looks just like a hack&nbsp;to avoid having CORBA issues. I am amazed that after that many years of CORBA, there are still simple cases where it does not work properly automatically.  </div> <div>&nbsp;</div> <div>Seeing that there is the same kind of problem with Web Services (IDL to Java translation) makes me wonder about Web Services &quot;improvement&quot; over CORBA. And WSDL is definitely less readable than CORBA IDL.</div>  <div>&nbsp;</div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/is-your-uml-composition-french-or-american/">Is your UML Composition French or American?</a>
+      </h1>
+      <span class="post-date">Apr 7, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/is-your-uml-composition-french-or-american/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<span style="font-size:130%;">The French Way</span><br />In many French books/lessons (<a href="http://uml.free.fr/cours/p15.html">a lesson here</a>, <a href="http://www.iutc3.unicaen.fr/%7Emoranb/cours/acsi/static2/stat13.htm">another from caen university </a>, <a href="http://trempet.uqam.ca/Enseignement/Cours/MGL7260/Hiver2006/NotesdeCours/PP-TypeAgregatCompisitionUML.ppt">one from UQAM</a>), UML composition does not seem to mean the same as their English counterparts. They write:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">Si l'agrégat est détruit (ou copié), ses composants le sont      aussi.</blockquote><div>or<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> les composants (en tant qu'ils sont composants) ont une durée de vie incluse dans celle de leur composé.</blockquote><br />translated to English:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> If the aggregate is destroyed (or copied), its components are destroyed (or copied) as well.<br /></blockquote>or<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> components (while they are components) lifetime is included in the one of their aggregate<br /></blockquote><br /></div>But then what does it mean to have a cardinality of 0 on the aggregate side?<br />Few French lessons give an answer (UQAM does, maybe because it's half French only). The component can be created before the aggregate but must be destroyed when the aggregate is.  <span style="font-size:130%;"><br /><br />The American Way</span><br />Most English books/lessons describe composition more accurately. <a href="http://ootips.org/uml-hasa.html">Ootips</a> definition is simple and clear:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> Composition [...] is exactly like Aggregation except that the lifetime of the 'part' is controlled by the 'whole'.  This control may be direct or transitive.  That is, the 'whole' may take direct responsibility for creating or destroying the 'part', or it may accept an already created part, and later pass it on to some other whole that assumes responsibility for it.</blockquote><div><br />However Martin Fowler in <span style="font-style: italic;">UML distilled</span>  explicitly writes:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> The "no sharing" rule is the key to composition . Another assumption is that if you delete the polygon, it should automatically ensure that any owned Points also are deleted .</blockquote><div><br />By using the word "assumption" he is avoiding a clear meaning. So I looked up in the  <a href="http://www.omg.org/cgi-bin/doc?formal/05-07-04">UML specifications from uml.org</a>. The specs are actually very near ootips definition and even more explicit:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> An association may represent a composite aggregation (i.e., a whole/part relationship). Only binary associations can be aggregations. Composite aggregation is a strong form of aggregation that requires a part instance be included in at most one composite at a time. If a composite is deleted, all of its parts are normally deleted with it.  <span style="font-weight: bold;"><span style="background-color: rgb(255, 255, 153);">Note that a part can (where allowed) be removed from a composite before the composite is deleted, and thus not be deleted as part of the composite. </span> </span>Compositions define transitive asymmetric relationships—their links form a directed, acyclic graph.<br /></blockquote></div></div><br />So it turns out that some French definitions were not wrong, but imprecise. Their true meaning becomes only clear after reading the English UML specs.<br /><br /><div> <a href="http://ootips.org/uml-hasa.html">Ootips</a> has also a good example of difference between aggregation and association. If you have an aggregation relation between two Node entities, it means you represent a tree of Nodes, not a graph of Nodes. See the link for more details. </div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/are-uml-aggregation-and-composition-good-concepts/">Are UML Aggregation and Composition Good Concepts?</a>
+      </h1>
+      <span class="post-date">Apr 4, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/are-uml-aggregation-and-composition-good-concepts/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Yesterday a work collegue made the remark that the notions of aggregation and composition were not very clear. I was a bit surprised at first. But I actually almost always use just associations relations, sometimes composition, I was not sure anymore about the difference between aggregation and association and the one between composition and aggregation. I had to look up in a book to remember what it was all about.<br /><br />The French book we looked at was really bad. In the end we did not understand fully the differences except a notion of "stronger coupling", some kind of "asymetry"!?!  The difference between aggregation and composition was more explicit since in a composition, the "child" can only have one parent.<br /><br />The <span style="font-style: italic;">UML Distilled</span> book is much more explicit and I recommend that book to anybody doing UML:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <ul><li><span style="font-weight: bold;">Aggregation is strictly meaningless</span> ; as a result, I recommend that you ignore it in your own diagrams .If you see it in other people's diagrams, you'll need to dig deeper to find out what they mean by it . Different authors and teams use it for very different purposes. </li><li>Composition is a good way of showing properties that own by value, properties to value objects (page 73), or properties that have a strong and somewhat exclusive ownership of particular other components.</li></ul> </blockquote><br />Bertrand Meyer prefers to describe relationships using only two concepts, client and heir, basically UML association and specialization and therefore avoids the distinction between aggregation and composition and association: <blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><ul><li>B is a client of A if every object of type B may contain information about one or more objects of type A. </li><li>B is an heir of A if B denotes a specialized version of A.</li></ul></blockquote><div>He then uses "class invariants" to specify the nature of the client relationship.<br /></div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/soa-and-b.-meyer/">SOA and B. Meyer</a>
+      </h1>
+      <span class="post-date">Mar 31, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/soa-and-b.-meyer/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+While rereading parts of &quot;Object Oriented Software Construction&quot; from B. Meyer, I still find valuable information I overlooked. In the part about functional decomposition where he argues pro and cons of top-down / bottom-up approaches, he has the intuition of the current SOA hype. By showing that <br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><font size="4"><span style="font-weight: bold;">Real systems have no top.</span></font> <br></blockquote><br>He suggests that the only way to build complex software is through a service oriented architecture. Of course SOA is a very old concept. Meyer example of Operating Systems is a fine one.<br><br>Another interesting remark is his object motto to design an object oriented system: <br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><font size="4"><span style="font-weight: bold;">Ask not first what the system does:</span> <br style="font-weight: bold;"><span style="font-weight: bold;">Ask what it does it to!</span></font><br></blockquote><br><br>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/tired-of-my-10-best-xxx-blog-posts/">Tired Of &#39;My 10 Best XXX&#39; Blog Posts</a>
+      </h1>
+      <span class="post-date">Mar 30, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/tired-of-my-10-best-xxx-blog-posts/#disqus_thread">Comments</a>
+      </span>
+      
+      
+It's incredible how many posts on popular aggregators are just about a list of stuff, and how except one word they sound the same.<br>Only today on Javaworld, I can read:<br>&quot;<span class="blogentrytitle"><a href="http://javablogs.com/Jump.action?id=262700" title="Read full entry on author's blog"> Ten Things Every Java Developer Should Know About Unix</a>&quot;<br></span><span class="blogentrytitle"><a href="http://javablogs.com/Jump.action?id=262710" title="Read full entry on author's blog">&quot;My 10 Favorite Scripting Languages </a>&quot; <br>&quot;</span><span class="blogentrytitle"><a href="http://javablogs.com/Jump.action?id=262519" title="Read full entry on author's blog">7 Must-Have Programs for Windows&quot;</a><br><br>They all seem to have read the <br>&quot;10 best ways to have your post popular on delicious&quot;<br><br>It's a bit boring.<br> </span>
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/bilinear-gaussian-lanczos-downsampling/">Bilinear Gaussian Lanczos? Downsampling!</a>
+      </h1>
+      <span class="post-date">Mar 17, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/bilinear-gaussian-lanczos-downsampling/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Not easy to choose a downsampling algorithm. Some links:<br><ul><li><a href="http://www.mplayerhq.hu/DOCS/tech/swscaler_methods.txt" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">mplayer</a>: advises bilinear for quality and describes artifacts for each algo </li><li><a href="http://www.lassekolb.info/gim35_downsampling.htm" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)"> a blogger</a>: advises lanczos. This links shows pictures produced by each algo.<br></li><li><a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">digital image interpolation</a>: seems to have a preference for bicubic, what photoshop uses. </li><li><a href="http://forum.videohelp.com/viewtopic.php?t=295115">videohelp</a>: tested various algorithms and think <span class="postbody">Bicubic spline is the best.</span></li></ul>People don't seem to agree. If you want to check the theory: <br><ul><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia lanczos<br>   </a></li><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia bilinear</a></li></ul><br><br>  
+
+
+
+
+      
+    </div>
+    
+    
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/page/32/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/32/">32</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/page/33/">33</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/34/">34</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/34/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+

@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Commons-Beanutils Is Slow</h1>
     <span class="post-date">Sep 7, 2005 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/commons-beanutils-is-slow/#disqus_thread">Comments</a>
     </span>
-    <p>The <!-- raw HTML omitted -->BeanUtil.popupate(bean,map)<!-- raw HTML omitted --> can be very handy, but if you care about performance, it is quite slow. I ran a micro benchmark on my machine (centrino 1.8ghz, JDK1.5) and found out that BeanUtils is up to 40x slower than a hand coded solution (where I assign each bean field manually). I was a bit surprised to find such a difference. I suppose there is a big penalty for using reflection and another big one for the BeanUtils abstraction (automatic casting, etc.). I did another test without BeanUtils, using if/else statements vs HashMap.get and found out that the if/else string.equals(&hellip;) statements can degrade performance by about 10x. The HashMap appears to be very performant, even with just a few elements in.<!-- raw HTML omitted --><!-- raw HTML omitted -->In conclusion, if you need more performance, consider hand coding or code generation (using aspectj, or annotations for example) rather than BeanUtils. Actually nowadays, using annotations where you used beanutils probably makes much more sense .</p>
+    
+
+The <a href="http://jakarta.apache.org/commons/beanutils/commons-beanutils-1.7.0/docs/api/">BeanUtil.popupate(bean,map)</a> can be very handy, but if you care about performance, it is quite slow. I ran a micro benchmark on my machine (centrino 1.8ghz, JDK1.5) and found out that BeanUtils is up to 40x slower than a hand coded solution (where I assign each bean field manually). I was a bit surprised to find such a difference. I suppose there is a big penalty for using reflection and another big one for the BeanUtils abstraction (automatic casting, etc.). I did another test without BeanUtils, using if/else statements vs HashMap.get and found out that the if/else string.equals(...) statements can degrade performance by about 10x. The HashMap appears to be very performant, even with just a few elements in.<br /><br />In conclusion, if you need more performance, consider hand coding or code generation (using aspectj, or annotations for example) rather than BeanUtils. Actually nowadays, using annotations where you used beanutils probably makes much more sense .
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

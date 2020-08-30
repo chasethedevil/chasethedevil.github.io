@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Parallel Can Be Slower</h1>
     <span class="post-date">Feb 13, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/parallel-can-be-slower/#disqus_thread">Comments</a>
     </span>
-    <p>I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step.<!-- raw HTML omitted --><!-- raw HTML omitted -->I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.<!-- raw HTML omitted --><!-- raw HTML omitted -->I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+    
+
+I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step.<br /><br />I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.<br /><br />I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).<br /><br /><br />
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

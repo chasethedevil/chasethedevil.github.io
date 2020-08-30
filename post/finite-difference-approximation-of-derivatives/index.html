@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,12 +90,21 @@
     <h1 class="post-title">Finite Difference Approximation of Derivatives</h1>
     <span class="post-date">Dec 21, 2012 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/#disqus_thread">Comments</a>
     </span>
-    <p>A while ago, someone asked me to reference him in a paper of mine because I used formulas of a finite difference approximation of a derivative on a non uniform grid. I was shocked as those formula are very widespread (in countless papers, courses and books) and not far off elementary mathematics.</p>
-<p>There are however some interesting old papers on the technique. Usually people approximate the first derivative by the central approximation of second order:</p>
-<p>$$ f&rsquo;(x) = \frac{f(x_{i+1})-f(x_{i-1})}{x_{i+1} - x_{i-1}} $$</p>
-<p>However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \(f(x(i+1)) and f(x(i-1))\). <!-- raw HTML omitted -->This paper<!-- raw HTML omitted --> and <!-- raw HTML omitted -->that one<!-- raw HTML omitted --> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).<!-- raw HTML omitted --><!-- raw HTML omitted -->This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0,0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:<!-- raw HTML omitted -->
-$$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \left(\frac{1}{h_{i-1}}+\frac{1}{h_i}\right) f(x_{i-1})+ \left(\frac{1}{h_{i-1}} - \frac{1}{h_i+h_{i-1}} \right) f(x_{i-2}) + &hellip;$$</p>
-<!-- raw HTML omitted -->
+    
+
+A while ago, someone asked me to reference him in a paper of mine because I used formulas of a finite difference approximation of a derivative on a non uniform grid. I was shocked as those formula are very widespread (in countless papers, courses and books) and not far off elementary mathematics.
+
+There are however some interesting old papers on the technique. Usually people approximate the first derivative by the central approximation of second order:
+
+$$ f'(x) = \frac{f(x\_{i+1})-f(x\_{i-1})}{x\_{i+1} - x\_{i-1}} $$  
+
+However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \\(f(x(i+1)) and f(x(i-1))\\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).<br /><br />This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0,0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-mUrKdRztE-c/UNSPUoRdPdI/AAAAAAAAGLM/SEViiYfAhRs/s1600/cir_bond_euler_discretizations.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="288" src="http://2.bp.blogspot.com/-mUrKdRztE-c/UNSPUoRdPdI/AAAAAAAAGLM/SEViiYfAhRs/s400/cir_bond_euler_discretizations.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:</div>
+$$ f'(x\_i) = \left(\frac{1}{h\_i}+\frac{1}{h\_i+h\_{i-1}}\right) f(x\_i)- \left(\frac{1}{h\_{i-1}}+\frac{1}{h\_i}\right) f(x\_{i-1})+ \left(\frac{1}{h\_{i-1}} - \frac{1}{h\_i+h\_{i-1}} \right) f(x\_{i-2}) + ...$$ 
+
+<div class="separator" style="clear: both; text-align: left;">Incidently while writing this post I found out it was a pain to write Math in HTML (I initially used a picture). MathML seems a bit crazy, I wonder why they couldn't just use the LaTeX standard. Update January 3rd 2013 - I now use <a href="http://mathjax.org">Mathjax</a>. It's not very good solution as I think this should typically be handled by the browser directly instead of huge javascript library, but it looks a bit better</div><br />
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -135,7 +144,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

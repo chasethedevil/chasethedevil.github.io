@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.68.3" />
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the Devil &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
+      </h1>
+      <span class="post-date">Jun 14, 2016 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
+that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
+they vary wildly between the first and the second expiry.</p>
+<table>
+<thead>
+<tr>
+<th align="center">T</th>
+<th align="center">a</th>
+<th align="center">b</th>
+<th align="center">rho</th>
+<th align="center">m</th>
+<th align="center">s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0.082</td>
+<td align="center">0.027</td>
+<td align="center">0.234</td>
+<td align="center">0.068</td>
+<td align="center">0.100</td>
+<td align="center">0.028</td>
+</tr>
+<tr>
+<td align="center">0.16</td>
+<td align="center">0.030</td>
+<td align="center">0.125</td>
+<td align="center">-1.0</td>
+<td align="center">0.074</td>
+<td align="center">0.050</td>
+</tr>
+<tr>
+<td align="center">0.26</td>
+<td align="center">0.032</td>
+<td align="center">0.094</td>
+<td align="center">-1.0</td>
+<td align="center">0.093</td>
+<td align="center">0.041</td>
+</tr>
+</tbody>
+</table>
+<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
+in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
+<figure>
+    <img src="/post/svi_zeliade_arb.png"/> <figcaption>
+            <h4>Arbitrage in Zeliade&#39;s example</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Why does this happen?</p>
+<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
+SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
+<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
+It is interesting to look at what happens to the implied volatility if we decide either to:</p>
+<ul>
+<li>set the undefined local volatility to zero</li>
+<li>take the absolute value of the local variance</li>
+<li>search for the closest defined local volatility on the log-moneyness axis</li>
+<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
+</ul>
+<figure>
+    <img src="/post/svi_zeliade_arb_zero.png"/> <figcaption>
+            <h4>Total variance after flooring the local variance at zero.</h4>
+        </figcaption>
+</figure>
+
+<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
+that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
+<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
+is not going to improve anything.</p>
+<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
+<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
+Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
+More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
+So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
+<p>There is yet another solution to produce a similar effect while still working at the local volatility level: if there is an arbitrage with the previous expiry at a given moneyness,
+we compute the local volatility ignoring the previous expiry (eventually extrapolating in constant manner) and we override the previous expiry local volatility for this moneyness.
+In terms of implied variance, this would correspond to removing the arbitrageable part of a given expiry, and replacing it with a linear interpolation between encompassing expiries, working backwards in time.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
+      </h1>
+      <span class="post-date">May 29, 2016 &middot; 5 minute read &middot; <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I had a look at how to price under Local Volatility with Cash dividends in <a href="/post/dupire_cash_dividend/">my previous post</a>. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).</p>
+<p>I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends <a href="http://www.lorenzobergomi.com/#!blank/cnec">in the book of Lorenzo Bergomi</a>, one can rely on the
+classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:</p>
+<!-- raw HTML omitted -->
+<p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
+<p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
+<p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
+<figure>
+    <img src="/post/dupire_labordere_ll3_modelvolraw.png"/> <figcaption>
+            <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
+<figure>
+    <img src="/post/dupire_labordere_ll3_modelvol.png"/> <figcaption>
+            <h4>Pure process model volatility.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The equivalent pure process Black vols looks like this:
+<figure>
+    <img src="/post/dupire_labordere_ll3_blackvol.png"/> <figcaption>
+            <h4>Pure process Black volatility</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
+<figure>
+    <img src="/post/dupire_labordere_ll3_localvol.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>While the one of the pure process is:
+<figure>
+    <img src="/post/dupire_labordere_ll3_purelv.png"/> <figcaption>
+            <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
+<p>So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as</p>
+<p>\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
+\(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.</p>
+<p>Not applying any particular policy would mean that the stock price can become negative:
+\(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
+<p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
+<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure>
+    <img src="/post/dupire_labordere_liquidator_modelvol.png"/> <figcaption>
+            <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
+        </figcaption>
+</figure>
+
+It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
+<figure>
+    <img src="/post/dupire_labordere_liquidator_localvol.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
+<p>Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
+      </h1>
+      <span class="post-date">May 19, 2016 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/dupire_cash_dividend/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
+The extension to continuous dividend yield is described in many papers or books:</p>
+<!-- raw HTML omitted -->
+<p>With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
+approximations available to price an option supposing a constant (spot) volatility and jumps, for example, <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">this one</a>.</p>
+<p>Labordère, in his paper <a href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306">Calibration of local stochastic volatility models to market smiles</a>, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:</p>
+<!-- raw HTML omitted -->
+<p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
+we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
+<p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
+<figure>
+    <img src="/post/dupire_labordere_ll1.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
+</figure>
+
+<p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have</p>
+<!-- raw HTML omitted -->
+<p><figure>
+    <img src="/post/dupire_labordere_ll3.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="/post/dupire_labordere_ll3shift.png"/> <figcaption>
+            <h4>Look, when we shift by the dividend!</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
+<p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
+<figure>
+    <img src="/post/dupire_labordere_policy.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The analytical approximations lead to another different local volatility from both policies, but don&rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
+Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
+<p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
+<figure>
+    <img src="/post/dupire_labordere_yield3.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
+</figure>
+
+The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
+<figure>
+    <img src="/post/dupire_labordere_yield3e.png"/> <figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
+<p>I would have expected a much better accuracy from Labordère&rsquo;s approach, it&rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.</p>
+<p><strong>Update</strong>: A <a href="/post/dupire_cash_dividend_part2">follow-up</a> to this post where I resolve the mysterious remaining error.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+      </h1>
+      <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
+<p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
+<figure>
+    <img src="/post/svi_sabr_parabola.png"/> <figcaption>
+            <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
+        </figcaption>
+</figure>
+
+<p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
+      </h1>
+      <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/filon_for_heston/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>A while ago, I have applied a relatively simple adaptive Filon quadrature to the problem of <a href="http://papers.ssrn.com/abstract=2620166">volatility swap pricing</a>. The <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi18brlh9XMAhWIVhoKHdnGA2UQFggdMAA&amp;url=http%3A%2F%2Fwww.ams.org%2Fmcom%2F1968-22-101%2FS0025-5718-1968-0225485-5%2FS0025-5718-1968-0225485-5.pdf&amp;usg=AFQjCNEQvSMm6vOaXIX2MqAJ-GQt79QRiA&amp;sig2=HLHd-rc74qnCuo5yp1Q13A">Filon quadrature</a> is an old quadrature from 1928 that allows to integrate oscillatory integrand like \(f(x)\cos(k x) \) or \(f(x)\sin(k x) \). It turns out that combined with an adaptive Simpson like method, it has many advantages over more generic adaptive quadrature methods like Gauss-Lobatto, which is often used on similar problems.</p>
+<p><a href="http://dl.acm.org/citation.cfm?id=321029">Flinn</a> derived a similar quadrature, but taking into account the derivative values, which are likely to be easily available on those problems. This produces a even more robust quadrature and of higher convergence order.</p>
+<p>I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to <strong>five times faster</strong> than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).</p>
+<p>If you are interested, you will find much more details in <a href="/lefloch_heston_filon.pdf">this document</a>.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
+      </h1>
+      <span class="post-date">Apr 21, 2016 &middot; 4 minute read &middot; <a href="https://chasethedevil.github.io/post/rational_fit/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In my paper <a href="http://ssrn.com/abstract=2420757">&ldquo;Fast and Accurate Analytic Basis Point Volatility&rdquo;</a>,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package">Faddeeva package</a> to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.</p>
+<p>Still, it would have been nice to have also a more visually appealing rational function representation, as <a href="http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf">W. Shaw</a>
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in <a href="http://www.chebfun.org">chebfun</a> but this depends on Matlab.</p>
+<p>The Numerical recipe book provides a simple algorithm in <a href="http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf">chapter 5.13</a>, not looking for the best possible rational function, but just for one
+that would be &ldquo;good enough&rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some <a href="http://www.scientificpython.net/pyblog/rational-least-squares-approximation">least squares python code</a> which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&rsquo;t fully understand why one would propose such a code.</p>
+<p>It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on <a href="http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions">this matrix representation</a>.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).</p>
+<p>The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.</p>
+<p>Interestingly, I thought, that, maybe, a <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.</p>
+<p>Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.</p>
+<p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
+<figure>
+    <img src="/post/rational_fit_value.png"/> <figcaption>
+            <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+        </figcaption>
+</figure>
+
+<p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Polynomial Naive</td>
+<td>0.234</td>
+</tr>
+<tr>
+<td>Polynomial NRI</td>
+<td>0.039</td>
+</tr>
+<tr>
+<td>Rational   NRI</td>
+<td>0.001</td>
+</tr>
+</tbody>
+</table>
+<p>A 10/10 rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:</p>
+<figure>
+    <img src="/post/rational_fit_error.png"/> <figcaption>
+            <h4>Least squares polynomial fit error of degree 20.</h4>
+        </figcaption>
+</figure>
+
+<p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.</p>
+<p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
+<p><strong>Update</strong> - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
+      </h1>
+      <span class="post-date">Feb 19, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/least_squares_spline/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
+with B-splines, a relatively simple explanation of how it works is given in <a href="http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf">this paper</a> (I think this is how De Boor coded it in the NSWC library).
+Interestingly there is <a href="http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf">an equivalent formulation in terms of standard cubic splines</a>, although it seems that the
+pseudo code on that paper has errors.</p>
+<p>Least squares splines give a very good fit for option implied volatilities with only a few parameters.
+In theory, the number of parameters is N+2 where N is the number of interpolation points.
+I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
+<figure>
+    <img src="/post/least_squares_spline.png"/> <figcaption>
+            <h4>least squares spline on 1m AAPL options.</h4>
+        </figcaption>
+</figure>
+
+<p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/mystic_parabola/">The Mystic Parabola</a>
+      </h1>
+      <span class="post-date">Feb 16, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/mystic_parabola/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I recently had some fun trying to work directly with the option chain from the <a href="http://www.nasdaq.com/symbol/aapl/option-chain">Nasdaq website</a>.
+The data there is quite noisy, but a simple parabola can still give an amazing fit. I will consider the options of maturity two years as illustration.
+I also relied on a simple implied volatility algorithm that can be summarized in the following steps:</p>
+<ul>
+<li>Compute a rough guess for the forward price by using interest, borrow curves and by extrapolating the dividends.</li>
+<li>Imply the forward from the European Put-Call parity relationship on the mid prices of the two strikes closes to the rough forward guess. A simple linear interpolation between the two strikes can be used to compute the forward.</li>
+<li>Compute the Black implied volatilities as if the option were European using P. Jaeckel algorithm.</li>
+<li>Calibrate the proportional dividend amount or the growth rate by minimizing, for example with a Levenberg-Marquardt minimizer, the difference between model and mid-option prices corresponding to the three strikes closest to the forward. The parameters in this case are effectively the dividend amount and the volatilities for Put and Call options (the same volatility is used for both options). The initial guess stems directly from the two previous steps. American option prices are computed by the finite difference method.</li>
+<li>Solve numerically the volatilities one by one with the TOMS748 algorithm so that the model prices match the market mid out-of-the-money option prices.</li>
+</ul>
+<p>Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:</p>
+<figure>
+    <img src="/post/mystic_parabola.png"/> <figcaption>
+            <h4>least squares parabola on 2y AAPL options.</h4>
+        </figcaption>
+</figure>
+
+<p>Isn&rsquo;t the fit just amazing?
+Even if I found it surprising, it&rsquo;s probably not so surprising. The curve has to be smooth, somewhat monotone, and will be therefore like a parabola near the money. While there is no guarantee it will fit that well far away, it&rsquo;s actually a matter of scale. Short maturities will lead to not so great fit in the wings, while long maturities will correspond to a narrower range of scaled strikes and match better a parabola.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/">Yahoo Finance Implied Volatility</a>
+      </h1>
+      <span class="post-date">Feb 3, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>The <a href="https://finance.yahoo.com/q/op?s=GOOG&amp;date=1457049600">option chain</a> on Yahoo finance shows an implied volatility number for each call or put option in the last column.
+I was wondering a bit how they computed that number. I did not exactly find out their methodology, especially since we don&rsquo;t even know the daycount convention used, but
+I did find that it was likely just garbage.</p>
+<p>A red-herring is for example the large discrepancy between put vols and call vols. For example strike 670, call vol=50%, put vol=32%.
+This suggests that the two are completely decoupled, and they use some wrong forward (spot price?) to obtain those numbers. If I compute
+the implied volatilities using put-call parity close to the money to find out the implied forward price, I end up with ask vols of 37% and 34% or call and put mid vols of 33%.
+By considering the put-call parity, I assume European option prices, which is not correct in this case. It turns out however, that with the low interest rates we live in, there is nearly zero additional value due to the American early exercise.</p>
+<p>I am not sure what use people can have of Yahoo implied volatilities.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/is_tufte_overrated/">Is Tufte overrated?</a>
+      </h1>
+      <span class="post-date">Feb 3, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/is_tufte_overrated/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p><a href="http://www.edwardtufte.com/tufte/">Tufte</a> proposes interesting guidelines to present data, or even to design written semi-scientific papers or books. Some advices
+are particularly relevant like the careful use of colors (don&rsquo;t use all the colors of the rainbow just because you can), and
+in general don&rsquo;t add lines in a graph or designs that are not directly relevant to the message that needs to be conveyed. There is also a parallel
+with Feynman message against (Nasa) <a href="http://www.zdnet.com/article/death-by-powerpoint/">Powerpoint presentations</a>. But other inspirations, are somewhat doubtful.
+He seems to have a fetish for <a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB">old texts</a>. They might be considered pretty, or interesting in some ways, but
+I don&rsquo;t find them particularly easy to read. They look more like esoteric books rather than practical books. If you want to write
+the new Bible for your new cult, it&rsquo;s probably great, not so sure it&rsquo;s so great for a more simple subject.
+Also somewhat surprisingly, his own website is not very well designed, it looks like a maze and very end of 90s.</p>
+<p>I experimented a bit with the <a href="https://tufte-latex.github.io/tufte-latex/">Tufte latex template</a>. It produced <a href="http://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID2712316_code1514784.pdf?abstractid=2711720&amp;mirid=1">that document</a> for example. But someone rightfully pointed out to me
+that the reference style was not really elegant, that it did not look like your typical nice science paper references. Furthermore,
+using superscript so much could be annoying for someone used to read math and consider superscript numbers as math symbols.
+In general, there seems to be a conflict between the use of Latex and many Tufte guidelines:
+Latex does not encourage you to lay out one by one each piece,
+something the good old desktop publishing software allow you to do quite well.</p>
+<p>I was also wondering a bit on what design to use for a book. And I realised that the best layout to consider is simply the layout
+of a book I enjoyed to read. For example, I like the recent SIAM book design, I find that it gives enough space to read the text
+and the maths without having the impression of deciphering some codex, and without headache. It turns out there is even a <a href="http://www.siam.org/books/authors/p_handbook8.php">latex template</a> available.</p>
+
+      
+    </div>
+    
+    
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/page/4/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/4/">4</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/page/5/">5</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/6/">6</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/6/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+

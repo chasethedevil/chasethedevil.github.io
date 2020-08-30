@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">A Volatility Swap and a Straddle</h1>
     <span class="post-date">Mar 12, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/#disqus_thread">Comments</a>
     </span>
-    <p>A <!-- raw HTML omitted -->Volatility swap<!-- raw HTML omitted --> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<!-- raw HTML omitted -->robust replication of volatility derivatives<!-- raw HTML omitted -->&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Those are very close payoffs!<!-- raw HTML omitted --><!-- raw HTML omitted -->I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<!-- raw HTML omitted --><!-- raw HTML omitted -->The real payoff (very easy to obtain through Carr-Lee Bessel formula):<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> </p>
+    
+
+A <a href="http://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper "<i>robust replication of volatility derivatives</i>". Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s1600/Screenshot+from+2013-03-12+18:14:34.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="312" src="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s400/Screenshot+from+2013-03-12+18:14:34.png" width="400" /></a></div>Those are very close payoffs!<br /><br />I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<br /><br />The real payoff (very easy to obtain through Carr-Lee Bessel formula):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s1600/Screenshot+from+2013-03-14+19:46:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s320/Screenshot+from+2013-03-14+19:46:16.png" width="320" /></a></div>&nbsp; 
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

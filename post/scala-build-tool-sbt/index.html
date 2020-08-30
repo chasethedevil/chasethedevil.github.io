@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Scala Build Tool : SBT</h1>
     <span class="post-date">Jun 19, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/scala-build-tool-sbt/#disqus_thread">Comments</a>
     </span>
-    <p>It&rsquo;s been a while since I do a pet project in Scala, and today, after many trials before, I decided to give another go at Jetbrain Idea for Scala development, as Eclipse with the Scala plugin tended to crash a little bit too often for my taste (resulting sometimes in loss of a few lines of code). I could have just probably updated eclipse and the scala plugin, mine were not very old, but not the latest.<!-- raw HTML omitted --><!-- raw HTML omitted -->But it was just an opportunity to try Idea. I somehow always failed before to setup properly the scala support in Idea while it seemed to just work in Eclipse. I had difficulties making it find my scala compiler. After some google searches, I found that <!-- raw HTML omitted -->SBT, the scala build tool<!-- raw HTML omitted --> could create automatically a scala project for Idea (a hint to make it work with a project under Scala 2.10 is to put the plugins.sbt file in ~/.sbt/plugins).<!-- raw HTML omitted --><!-- raw HTML omitted -->It was reasonably easy to create a simple build.sbt file for my project. I added some dependencies (it handles them like Ivy, from Maven repositories), and was pleased to find you could also just put your jars in lib directory if you did not want/could not find some maven repository.<!-- raw HTML omitted --><!-- raw HTML omitted -->The tool is quick to launch, does not get in the way. So far the experience has been much much nicer than Gradle that we use now at work, which I find painfully slow to start, check dependencies, and extremely complicated to customize to your needs. It&rsquo;s also nicer than Maven, which I always found painful as soon as one wanted a small specific behaviour.</p>
+    
+
+It's been a while since I do a pet project in Scala, and today, after many trials before, I decided to give another go at Jetbrain Idea for Scala development, as Eclipse with the Scala plugin tended to crash a little bit too often for my taste (resulting sometimes in loss of a few lines of code). I could have just probably updated eclipse and the scala plugin, mine were not very old, but not the latest.<br /><br />But it was just an opportunity to try Idea. I somehow always failed before to setup properly the scala support in Idea while it seemed to just work in Eclipse. I had difficulties making it find my scala compiler. After some google searches, I found that <a href="http://www.scala-sbt.org/">SBT, the scala build tool</a> could create automatically a scala project for Idea (a hint to make it work with a project under Scala 2.10 is to put the plugins.sbt file in ~/.sbt/plugins).<br /><br />It was reasonably easy to create a simple build.sbt file for my project. I added some dependencies (it handles them like Ivy, from Maven repositories), and was pleased to find you could also just put your jars in lib directory if you did not want/could not find some maven repository.<br /><br />The tool is quick to launch, does not get in the way. So far the experience has been much much nicer than Gradle that we use now at work, which I find painfully slow to start, check dependencies, and extremely complicated to customize to your needs. It's also nicer than Maven, which I always found painful as soon as one wanted a small specific behaviour.
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

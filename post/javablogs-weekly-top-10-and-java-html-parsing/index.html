@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,11 @@
     <h1 class="post-title">JavaBlogs Weekly Top 10 and Java HTML parsing</h1>
     <span class="post-date">Sep 12, 2005 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/javablogs-weekly-top-10-and-java-html-parsing/#disqus_thread">Comments</a>
     </span>
-    <p>I took some time to continue my little JavaBlogs analysis, I now have a page summarizing the <!-- raw HTML omitted -->top 10<!-- raw HTML omitted --> most read blog entries in the last week. The page is generated every 24h (this is why there is no &lsquo;best progression&rsquo; as of today).<!-- raw HTML omitted --><!-- raw HTML omitted --> I also fixed some bugs related to HTML in RSS2. I understand a bit better why a RSS 1.0 co-author decided to remove the possibility of HTML descriptions for <!-- raw HTML omitted -->RSS 3.0<!-- raw HTML omitted -->. It often does not make sense to keep all that information about styles, fonts, etc. from different sources. What I do is rewrite the HTML, allowing only b,i,a,p,br tags, with the style information stripped. I found the open-source <!-- raw HTML omitted -->htmlparser <!-- raw HTML omitted -->java library quite helpful to achieve that.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Mai 2006 Update<!-- raw HTML omitted --><!-- raw HTML omitted -->I now post the top10 every week to my blog, I wrote a little piece on <!-- raw HTML omitted -->how to interact with Blogger API in Java<!-- raw HTML omitted -->. This avoids me having to maintain an extra site.<!-- raw HTML omitted -->HTTP requests handling is done using commons-httpclient library to have more control  over how http requests to javablogs.com are performed. commons-httpclient is also useful to post to blogger. About the parsing with htmlparser, I changed the way to do it, I used to only use a simple Lexer, but now I changed to using NodeVisitor as it allows me to parse with finer granularity more easily, even though it is probably slower. I needed that to update  href elements to that they are XHTML compliant.<!-- raw HTML omitted --><!-- raw HTML omitted -->You will find <!-- raw HTML omitted -->concrete code using htmlparser<!-- raw HTML omitted --> in a more recent post,  just follow the link.<!-- raw HTML omitted --> <!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted -->Categories: <!-- raw HTML omitted -->javablogs<!-- raw HTML omitted -->, <!-- raw HTML omitted -->rss3<!-- raw HTML omitted -->, <!-- raw HTML omitted -->java<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+    <p>I took some time to continue my little JavaBlogs analysis, I now have a page summarizing the <a href="http://gopix.net:8081/javabuzz/buzzweek.html">top 10</a> most read blog entries in the last week. The page is generated every 24h (this is why there is no &lsquo;best progression&rsquo; as of today).<!-- raw HTML omitted --><!-- raw HTML omitted --> I also fixed some bugs related to HTML in RSS2. I understand a bit better why a RSS 1.0 co-author decided to remove the possibility of HTML descriptions for <a href="http://www.aaronsw.com/2002/rss30">RSS 3.0</a>. It often does not make sense to keep all that information about styles, fonts, etc. from different sources. What I do is rewrite the HTML, allowing only b,i,a,p,br tags, with the style information stripped. I found the open-source <a href="http://htmlparser.sourceforge.net">htmlparser</a> java library quite helpful to achieve that.</p>
+<p><em>Mai 2006 Update</em></p>
+<p>I now post the top10 every week to my blog, I wrote a little piece on <a href="/post/how-to-use-java-with-blogger-a-tutorial/">how to interact with Blogger API in Java</a>. This avoids me having to maintain an extra site.</p>
+<p>HTTP requests handling is done using commons-httpclient library to have more control  over how http requests to javablogs.com are performed. commons-httpclient is also useful to post to blogger. About the parsing with htmlparser, I changed the way to do it, I used to only use a simple Lexer, but now I changed to using NodeVisitor as it allows me to parse with finer granularity more easily, even though it is probably slower. I needed that to update  href elements to that they are XHTML compliant.</p>
+<p>You will find <a href="/post/java-html-parsing-example-with-htmlparser/">concrete code using htmlparser</a> in a more recent post,  just follow <a href="/post/java-html-parsing-example-with-htmlparser/">the link</a></p>
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +134,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Setting Values in Java Enum - A Bad Idea</h1>
     <span class="post-date">Sep 12, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/setting-values-in-java-enum-a-bad-idea/#disqus_thread">Comments</a>
     </span>
-    <p>My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <!-- raw HTML omitted -->case classes<!-- raw HTML omitted --> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<!-- raw HTML omitted --><!-- raw HTML omitted -->I wrote an enum with a setter like:<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->   public static enum BlackVariateType {<!-- raw HTML omitted -->        V0,<!-- raw HTML omitted -->        ZERO_DERIVATIVE;<!-- raw HTML omitted --><!-- raw HTML omitted -->        private double volSquare;<!-- raw HTML omitted -->        public double getBlackVolatilitySquare() {<!-- raw HTML omitted -->            return volSquare;<!-- raw HTML omitted -->        }<!-- raw HTML omitted --><!-- raw HTML omitted -->        public void setBlackVolatilitySquare(double volSquare) {<!-- raw HTML omitted -->            this.volSquare = volSquare;<!-- raw HTML omitted -->        }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->   }<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<!-- raw HTML omitted --><!-- raw HTML omitted -->I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+    
+
+My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <a href="http://www.scala-lang.org/old/node/107">case classes</a> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<br /><br />I wrote an enum with a setter like:<br /><br />&nbsp;<span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; public static enum BlackVariateType {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V0,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZERO_DERIVATIVE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private double volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public double getBlackVolatilitySquare() {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void setBlackVolatilitySquare(double volSquare) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.volSquare = volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; }</span></span><br /><br />Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<br /><br />I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <br /><br />
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

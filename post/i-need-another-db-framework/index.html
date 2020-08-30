@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">I Need Another DB Framework!</h1>
     <span class="post-date">Aug 23, 2005 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/i-need-another-db-framework/#disqus_thread">Comments</a>
     </span>
-    <p>I am currently facing a problem that neither <!-- raw HTML omitted -->Hibernate<!-- raw HTML omitted --> nor <!-- raw HTML omitted -->iBatis<!-- raw HTML omitted --> solves nicely. I also looked at other ORM or just DB framework, without success. <!-- raw HTML omitted --> <!-- raw HTML omitted --> What I would need is a framework that generates PreparedStatements with a query by Criteria like API. I have many queries that are similar but varying according to different input parameters. iBatis can handle this, but for complex queries and scenarios, the XML becomes completely unreadable, and you therefore loose any advantage that iBatis was bringing with the externalization of SQL statements in XML. The other issue I have with using iBatis is that for another part of my project, the automatic generation of SQL statements a-la Hibernate is useful.<!-- raw HTML omitted --> <!-- raw HTML omitted --> Hibernate has a very nice <!-- raw HTML omitted -->Query by Criteria<!-- raw HTML omitted --> API, but it lacks just a tiny bit of flexibility in customizing queries. For example, I could not find a way to specify a &ldquo;USE INDEX(index_name)&rdquo; in the generated SQL, after the SELECT FROM xxx and before the rest of the query. I did not find either a way to specify the use of a &ldquo;STRAIGHT_JOIN&rdquo; instead of an INNER JOIN. These are all MySQL specific issues, but those little things are extremely useful at improving some of my queries performances. Writing N sql queries hard coded is not a good option, since this N can be quite big, which is why I am using Query by Criteria in the first place.<!-- raw HTML omitted --> <!-- raw HTML omitted --> So is there a need for yet another DB framework?<!-- raw HTML omitted --></p>
+    
+
+I am currently facing a problem that neither <a  href="http://www.hibernate.org">Hibernate</a> nor <a  href="http://ibatis.apache.org/">iBatis</a> solves nicely. I also looked at other ORM or just DB framework, without success. <br> <br> What I would need is a framework that generates PreparedStatements with a query by Criteria like API. I have many queries that are similar but varying according to different input parameters. iBatis can handle this, but for complex queries and scenarios, the XML becomes completely unreadable, and you therefore loose any advantage that iBatis was bringing with the externalization of SQL statements in XML. The other issue I have with using iBatis is that for another part of my project, the automatic generation of SQL statements a-la Hibernate is useful.<br> <br> Hibernate has a very nice <a  href="http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html">Query by Criteria</a> API, but it lacks just a tiny bit of flexibility in customizing queries. For example, I could not find a way to specify a "USE INDEX(index_name)" in the generated SQL, after the SELECT FROM xxx and before the rest of the query. I did not find either a way to specify the use of a "STRAIGHT_JOIN" instead of an INNER JOIN. These are all MySQL specific issues, but those little things are extremely useful at improving some of my queries performances. Writing N sql queries hard coded is not a good option, since this N can be quite big, which is why I am using Query by Criteria in the first place.<br> <br> So is there a need for yet another DB framework?<br>
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

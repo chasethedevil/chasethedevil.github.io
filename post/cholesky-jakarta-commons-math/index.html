@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Cholesky &amp; Jakarta Commons Math</h1>
     <span class="post-date">May 15, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/cholesky-jakarta-commons-math/#disqus_thread">Comments</a>
     </span>
-    <p>In Finance, <!-- raw HTML omitted -->Cholesky<!-- raw HTML omitted --> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <!-- raw HTML omitted -->this one<!-- raw HTML omitted -->). There is <!-- raw HTML omitted -->one<!-- raw HTML omitted --> in <!-- raw HTML omitted -->Apache Commons Maths<!-- raw HTML omitted --> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<!-- raw HTML omitted --><!-- raw HTML omitted -->Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<!-- raw HTML omitted -->cholesky GPL= 5.4ms<!-- raw HTML omitted -->cholesky BSD=37.1ms<!-- raw HTML omitted --><!-- raw HTML omitted -->So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>
+    
+
+In Finance, <a href="http://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky</a> is a useful way to decompose Matrix. It is not so simple to find a BSD licensed code using cholesky (most of them are GPL like <a href="http://www.google.com/codesearch/p?hl=en#W_wVDN7F3h4/tetrad-4.3.2-0/src/edu/cmu/tetrad/util/MatrixUtils.java&amp;q=cholesky%20SEMEditor&amp;l=1332">this one</a>). There is <a href="http://svn.apache.org/viewvc/commons/proper/math/trunk/src/java/org/apache/commons/math/linear/decomposition/CholeskyDecompositionImpl.java?view=co">one</a> in <a href="http://commons.apache.org/math/">Apache Commons Maths</a> library, which is a very interesting library. However for performance, it is still not very practical for some things like Cholesky.<br /><br />Looking at the source one can easily understand why. I did a small (many people will say not representative 1 million loop test) and finds out:<br />cholesky GPL= 5.4ms<br />cholesky BSD=37.1ms<br /><br />So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won't but will like the other "features".
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

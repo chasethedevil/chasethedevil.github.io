@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,14 +90,20 @@
     <h1 class="post-title">Maxima for Symbolic Calculus</h1>
     <span class="post-date">Oct 2, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/#disqus_thread">Comments</a>
     </span>
-    <p>A few years ago, I found an interesting open source symbolic calculus software called <!-- raw HTML omitted -->Xcas<!-- raw HTML omitted -->. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.<!-- raw HTML omitted -->Google pointed me to another popular open source package, <!-- raw HTML omitted -->Maxima<!-- raw HTML omitted -->. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</p>
-<p>(%i14) D(x):=sqrt((lambda-rho<em>eta</em>x)^2+(-x^2+x)<em>eta^2);
-(%o14)       D(x) := sqrt((lambda - rho eta x)  + (- x  + x) eta )
-(%i15) G(x) := (lambda - rho</em>eta<em>x - D(x))/(lambda - rho</em>eta<em>x +D(x));
-(%o15)                 G(x) := &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-                              lambda - rho eta x + D(x)
-(%i16) tex(taylor((1-exp(-t</em>D(x)))/(1-G(x)<em>exp(-t</em>D(x)))<em>(lambda - rho</em>eta*x - D(x)),x,0,3));
-$$-{{\left(e^{t,\lambda}-1\right),\eta^2,x}\over{2,e^{t,\lambda},\lambda}}+{{\left(\left(4,e^{t,\lambda},t,\eta^3,\rho+\left(4,\left(e^{t,\lambda}\right)^2-4,e^{t,\lambda}\right),\eta^2\right),\lambda^2+\left(\left(-4,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),\eta^3,\rho-2,e^{t,\lambda},t,\eta^4\right),\lambda+\left(\left(e^{t,\lambda}\right)^2-1\right),\eta^4\right),x^2}\over{8,\left(e^{t,\lambda}\right)^2,\lambda^3}}+{{\left(\left(8,\left(e^{t,\lambda}\right)^2,t^2,\eta^4,\rho^2-16,\left(e^{t,\lambda}\right)^2,t,\eta^3,\rho\right),\lambda^4+\left(16,\left(e^{t,\lambda}\right)^2,t,\eta^4,\rho^2+\left(-8,\left(e^{t,\lambda}\right)^2,t^2,\eta^5+\left(16,\left(e^{t,\lambda}\right)^3-16,\left(e^{t,\lambda}\right)^2\right),\eta^3\right),\rho+16,\left(e^{t,\lambda}\right)^2,t,\eta^4\right),\lambda^3+\left(\left(-16,\left(e^{t,\lambda}\right)^3+16,\left(e^{t,\lambda}\right)^2\right),\eta^4,\rho^2+\left(-16,\left(e^{t,\lambda}\right)^2-8,e^{t,\lambda}\right),t,\eta^5,\rho+2,\left(e^{t,\lambda}\right)^2,t^2,\eta^6+\left(-8,\left(e^{t,\lambda}\right)^3+8,e^{t,\lambda}\right),\eta^4\right),\lambda^2+\left(\left(12,\left(e^{t,\lambda}\right)^3-12,e^{t,\lambda}\right),\eta^5,\rho+\left(2,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),t,\eta^6\right),\lambda+\left(-2,\left(e^{t,\lambda}\right)^3-\left(e^{t,\lambda}\right)^2+2,e^{t,\lambda}+1\right),\eta^6\right),x^3}\over{32,\left(e^{t,\lambda}\right)^3,\lambda^5}}+\cdots $$
-Regarding Taylor expansion, there seems to be quite a few options possible, but I found that the default expansion was already relatively easy to read. XCas produced less readable expansions, or just failed.</p>
+    
+
+A few years ago, I found an interesting open source symbolic calculus software called <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html%E2%80%8E">Xcas</a>. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.<br />Google pointed me to another popular open source package, <a href="http://maxima.sourceforge.net/">Maxima</a>. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:
+
+(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
+(%o14)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D(x) := sqrt((lambda - rho eta x)&nbsp; + (- x&nbsp; + x) eta )
+(%i15) G(x) := (lambda - rho*eta*x - D(x))/(lambda - rho*eta*x +D(x));
+(%o15)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; G(x) := -------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lambda - rho eta x + D(x)
+(%i16) tex(taylor((1-exp(-t*D(x)))/(1-G(x)*exp(-t*D(x)))*(lambda - rho*eta*x - D(x)),x,0,3));
+$$-{{\left(e^{t\,\lambda}-1\right)\,\eta^2\,x}\over{2\,e^{t\,\lambda}\,\lambda}}+{{\left(\left(4\,e^{t\,\lambda}\,t\,\eta^3\,\rho+\left(4\,\left(e^{t\,\lambda}\right)^2-4\,e^{t\,\lambda}\right)\,\eta^2\right)\,\lambda^2+\left(\left(-4\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,\eta^3\,\rho-2\,e^{t\,\lambda}\,t\,\eta^4\right)\,\lambda+\left(\left(e^{t\,\lambda}\right)^2-1\right)\,\eta^4\right)\,x^2}\over{8\,\left(e^{t\,\lambda}\right)^2\,\lambda^3}}+{{\left(\left(8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^4\,\rho^2-16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^3\,\rho\right)\,\lambda^4+\left(16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\,\rho^2+\left(-8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^5+\left(16\,\left(e^{t\,\lambda}\right)^3-16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^3\right)\,\rho+16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\right)\,\lambda^3+\left(\left(-16\,\left(e^{t\,\lambda}\right)^3+16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^4\,\rho^2+\left(-16\,\left(e^{t\,\lambda}\right)^2-8\,e^{t\,\lambda}\right)\,t\,\eta^5\,\rho+2\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^6+\left(-8\,\left(e^{t\,\lambda}\right)^3+8\,e^{t\,\lambda}\right)\,\eta^4\right)\,\lambda^2+\left(\left(12\,\left(e^{t\,\lambda}\right)^3-12\,e^{t\,\lambda}\right)\,\eta^5\,\rho+\left(2\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,t\,\eta^6\right)\,\lambda+\left(-2\,\left(e^{t\,\lambda}\right)^3-\left(e^{t\,\lambda}\right)^2+2\,e^{t\,\lambda}+1\right)\,\eta^6\right)\,x^3}\over{32\,\left(e^{t\,\lambda}\right)^3\,\lambda^5}}+\cdots $$
+Regarding Taylor expansion, there seems to be quite a few options possible, but I found that the default expansion was already relatively easy to read. XCas produced less readable expansions, or just failed. 
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -137,7 +143,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

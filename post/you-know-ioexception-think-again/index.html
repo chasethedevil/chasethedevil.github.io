@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">You Know IOException? Think Again!</h1>
     <span class="post-date">Sep 14, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/you-know-ioexception-think-again/#disqus_thread">Comments</a>
     </span>
-    <p>I was amazed today to find out that there was no constructor <!-- raw HTML omitted -->IOException(String, Throwable)<!-- raw HTML omitted --> or<!-- raw HTML omitted --> IOException(Throwable)<!-- raw HTML omitted --> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.<!-- raw HTML omitted --> <!-- raw HTML omitted --> So the workaround is:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->IOException ioe = new IOException(&ldquo;message&rdquo;);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->ioe.initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->throw ioe;<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It can also be written as:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->throw (IOException) new IOException(&ldquo;message&rdquo;).initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It is not a major problem, but still. We can all thank the guy who <!-- raw HTML omitted -->reported that as a bug<!-- raw HTML omitted --> to Sun in 2004.<!-- raw HTML omitted --></p>
+    
+
+I was amazed today to find out that there was no constructor <tt>IOException(String, Throwable)</tt> or<tt> IOException(Throwable)</tt> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can't believe it took Sun that much time to change that.<br> <br> So the workaround is:<br> <blockquote><tt>IOException ioe = new IOException("message");</tt><br>   <tt>ioe.initCause(e);</tt><br>   <tt>throw ioe;</tt><br> </blockquote> It can also be written as:<br> <blockquote><tt>throw (IOException) new IOException("message").initCause(e);</tt><br> </blockquote> It is not a major problem, but still. We can all thank the guy who <a  href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5070673">reported that as a bug</a> to Sun in 2004.<br>
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

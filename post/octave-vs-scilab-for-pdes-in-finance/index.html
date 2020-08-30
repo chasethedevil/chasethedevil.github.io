@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,12 @@
     <h1 class="post-title">Octave vs Scilab for PDEs in Finance</h1>
     <span class="post-date">Jul 30, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/#disqus_thread">Comments</a>
     </span>
-    <p>I was used to <!-- raw HTML omitted -->Scilab<!-- raw HTML omitted --> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<!-- raw HTML omitted --><!-- raw HTML omitted -->Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <!-- raw HTML omitted -->Arbitrage Free SABR problem<!-- raw HTML omitted -->. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I heard about <!-- raw HTML omitted -->Octave<!-- raw HTML omitted -->, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 4.3s<!-- raw HTML omitted -->Octave 4.1s<!-- raw HTML omitted --><!-- raw HTML omitted -->I then added the keyword sparse when I build the tridiagonal matrix and end up with:<!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 0.04s<!-- raw HTML omitted -->Octave 0.02s<!-- raw HTML omitted -->Scala 0.034s (first run)<!-- raw HTML omitted -->Scala 0.004s (once Hotpot has kicked in)<!-- raw HTML omitted --><!-- raw HTML omitted -->So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<!-- raw HTML omitted --><!-- raw HTML omitted -->In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
+    
+
+I was used to <a href="http://www.scilab.org/">Scilab</a> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<br /><br />Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <a href="http://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/">Arbitrage Free SABR problem</a>. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<br /><br />Then I heard about <a href="http://www.gnu.org/software/octave/">Octave</a>, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <br /><br />Scilab 4.3s<br />Octave 4.1s<br /><br />I then added the keyword sparse when I build the tridiagonal matrix and end up with:<br /><br />Scilab 0.04s<br />Octave 0.02s<br />Scala 0.034s (first run)<br />Scala 0.004s (once Hotpot has kicked in)<br /><br />So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<br /><br />In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.
+
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +135,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

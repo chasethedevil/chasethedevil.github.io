@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
   <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
@@ -90,7 +90,14 @@
     <h1 class="post-title">Julia and the Cumulative Normal Distribution</h1>
     <span class="post-date">Aug 13, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/julia-and-the-cumulative-normal-distribution/#disqus_thread">Comments</a>
     </span>
-    <p>I just stumbled upon <!-- raw HTML omitted -->Julia<!-- raw HTML omitted -->, a new programming language aimed at numerical computation. It&rsquo;s quite new but it looks very interesting, with the promise of C like performance (thanks to LLVM compilation) with a much nicer syntax and parallelization features.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity, I looked at their cumulative normal distribution implementation. I found that the (complimentary) error function (directly related to the cumulative normal distribution) algorithm relies on an algorithm that can be found in the Faddeeva library. I had not heard of this algorithm or this library before, but the author, <!-- raw HTML omitted -->Steven G. Johnson<!-- raw HTML omitted -->, claims it is faster and as precise as Cody &amp; SLATEC implementations. As <!-- raw HTML omitted -->I previously had a look at those algorithms<!-- raw HTML omitted --> and was quite impressed by Cody&rsquo;s implementation.<!-- raw HTML omitted --><!-- raw HTML omitted -->The <!-- raw HTML omitted -->source of Faddeeva<!-- raw HTML omitted --> shows a big list (100) of Chebychev expansions for various ranges of a normalized error function. I slightly modified the Faddeva code to compute directly the cumulative normal distribution, avoiding some exp(-x<em>x)<em>exp(x</em>x) calls on the way.<!-- raw HTML omitted --><!-- raw HTML omitted -->Is it as accurate? I compared against a high precision implementation as in my previous test of cumulative normal distribution algorithms. And after replacing the exp(-x</em>x) with <!-- raw HTML omitted -->Cody&rsquo;s trick<!-- raw HTML omitted --> to compute it with higher accuracy, here is how it looks (referenced as &ldquo;Johnson&rdquo;).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I also measured performance on various ranges, and found out that this Johnson algorithm is around 2x faster than Cody (in Scala) and 30% faster than my optimization of Cody (using a table of exponentials for Cody&rsquo;s trick).<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+    <p>I just stumbled upon <a href="http://julialang.org/">Julia</a>, a new programming language aimed at numerical computation. It&rsquo;s quite new but it looks very interesting, with the promise of C like performance (thanks to LLVM compilation) with a much nicer syntax and parallelization features.</p>
+<p>Out of curiosity, I looked at their cumulative normal distribution implementation. I found that the (complimentary) error function (directly related to the cumulative normal distribution) algorithm relies on an algorithm that can be found in the Faddeeva library. I had not heard of this algorithm or this library before, but the author, <a href="http://math.mit.edu/~stevenj">Steven G. Johnson</a>, claims it is faster and as precise as Cody &amp; SLATEC implementations. As <a href="/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/">I previously had a look at those algorithms</a> and was quite impressed by Cody&rsquo;s implementation.</p>
+<p>The <a href="http://ab-initio.mit.edu/Faddeeva.cc">source of Faddeeva</a> shows a big list (100) of Chebychev expansions for various ranges of a normalized error function. I slightly modified the Faddeva code to compute directly the cumulative normal distribution, avoiding some exp(-x*x)<em>exp(x</em>x) calls on the way.</p>
+<p>Is it as accurate? I compared against a high precision implementation as in my previous test of cumulative normal distribution algorithms. And after replacing the exp(-x*x) with <a href="/post/cracking-the-double-precision-gaussian-puzzle/">Cody&rsquo;s trick</a> to compute it with higher accuracy, here is how it looks (referenced as &ldquo;Johnson&rdquo;).</p>
+
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-v3ZZs43eSpI/Ugo3ILYFIYI/AAAAAAAAGoE/zAIS-WFsrnk/s1600/snapshot37.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="241" src="http://1.bp.blogspot.com/-v3ZZs43eSpI/Ugo3ILYFIYI/AAAAAAAAGoE/zAIS-WFsrnk/s640/snapshot37.png" width="640" /></a></div><br />I also measured performance on various ranges, and found out that this Johnson algorithm is around 2x faster than Cody (in Scala) and 30% faster than my optimization of Cody (using a table of exponentials for Cody's trick).
+
+
 
   </div>
   <div id="disqus_thread"></div>
@@ -130,7 +137,8 @@ var disqus_shortname = "chasethedevil";
      <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
-
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 

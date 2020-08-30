@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.68.3" />
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the Devil &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/">Typo in Hyman non-negative constraint - 28 years later</a>
+      </h1>
+      <span class="post-date">May 23, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \( \Delta x_{i-1/2} \)  is interverted with  \( \Delta x_{i+1/2} \).</p>
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions</p>
+
+<div class="highlight" style="background: #f0f0f0"--><pre style="line-height: 125%"><span></span>    x <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #666666">-</span><span style="color: #40a070">2.427680355823974</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.3481443181227126</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.268608280421452</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.189072242720191</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.1095362050189297</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.0300001673176684</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.9504641296164076</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.8709280919151465</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7913920542138855</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7118560165126244</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6323199788113634</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.5527839411101023</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.4732479034088413</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3937118657075802</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3141758280063192</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.234639790305058</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.155103752603797</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.075567714902536</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.996031677201275</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.9164956395000139</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.8369596017987528</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.7574235640974918</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.6778875263962307</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5983514886949697</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5188154509937086</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.4392794132924476</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.3597433755911865</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.28020733788992525</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.20067130018866441</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.12113526248740358</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.04159922478614231</span>, <span style="color: #40a070">0.03793681291511897</span>, <span style="color: #40a070">0.1174728506163798</span>, <span style="color: #40a070">0.19700888831764063</span>, <span style="color: #40a070">0.2765449260189019</span>, <span style="color: #40a070">0.3560809637201632</span>, <span style="color: #40a070">0.435617001421424</span>, <span style="color: #40a070">0.5151530391226848</span>, <span style="color: #40a070">0.5946890768239461</span>, <span style="color: #40a070">0.6742251145252074</span>, <span style="color: #40a070">0.7537611522264682</span>}
+    y <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #40a070">0.22303659708933243</span>, <span style="color: #40a070">0.22655584607177778</span>, <span style="color: #40a070">0.16305913092318047</span>, <span style="color: #40a070">0.10448859033589929</span>, <span style="color: #40a070">0.16002349837315494</span>, <span style="color: #40a070">0.15632461201014838</span>, <span style="color: #40a070">0.20216975718723287</span>, <span style="color: #40a070">0.15780097999496998</span>, <span style="color: #40a070">0.1293436080647528</span>, <span style="color: #40a070">0.13101037880853464</span>, <span style="color: #40a070">0.13496819587884762</span>, <span style="color: #40a070">0.1241082758487616</span>, <span style="color: #40a070">0.13677319399415233</span>, <span style="color: #40a070">0.11493379360854317</span>, <span style="color: #40a070">0.10181073092072719</span>, <span style="color: #40a070">0.10390553149978735</span>, <span style="color: #40a070">0.09705141597989163</span>, <span style="color: #40a070">0.09469310717587004</span>, <span style="color: #40a070">0.09397968424452849</span>, <span style="color: #40a070">0.08115526370674754</span>, <span style="color: #40a070">0.07021707117654993</span>, <span style="color: #40a070">0.07896827656600293</span>, <span style="color: #40a070">0.0733165278111029</span>, <span style="color: #40a070">0.06626131630031683</span>, <span style="color: #40a070">0.06036157053511007</span>, <span style="color: #40a070">0.05598416466538939</span>, <span style="color: #40a070">0.049613807117723785</span>, <span style="color: #40a070">0.04821691404672292</span>, <span style="color: #40a070">0.04274830629369516</span>, <span style="color: #40a070">0.04053002586588819</span>, <span style="color: #40a070">0.03690680495068648</span>, <span style="color: #40a070">0.03232925805830648</span>, <span style="color: #40a070">0.02686034599416645</span>, <span style="color: #40a070">0.02152456554605186</span>, <span style="color: #40a070">0.01281016667726421</span>, <span style="color: #40a070">0.005672278716525797</span>, <span style="color: #40a070">0.0021938540693167367</span>, <span style="color: #40a070">0.0015582304062002356</span>, <span style="color: #40a070">0.0002050615897307207</span>, <span style="color: #40a070">3.232807285235909e-07</span>, <span style="color: #40a070">4.059553937573009e-06</span>}
+    z <span style="color: #666666">:=</span> <span style="color: #40a070">0.7410184269884271</span>
+</pre></div>
+
+
+<p>In the above example, even though the step size \(\Delta x\) is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
+      </h1>
+      <span class="post-date">Apr 2, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
+<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
+<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
+<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original volatility</th>
+<th align="center">Method</th>
+<th align="left">Implied Volatility</th>
+<th align="right">Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">64%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.6400000000000002</td>
+<td align="right">1005 ns</td>
+</tr>
+<tr>
+<td align="center">64%</td>
+<td align="center">Rational</td>
+<td align="left">0.6495154924570236</td>
+<td align="right">72 ns</td>
+</tr>
+<tr>
+<td align="center">64%</td>
+<td align="center">SR</td>
+<td align="left">0.6338265040549524</td>
+<td align="right">200 ns</td>
+</tr>
+<tr>
+<td align="center">64%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.6400000010047917</td>
+<td align="right">436 ns</td>
+</tr>
+<tr>
+<td align="center">64%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.6400000001905617</td>
+<td align="right">568 ns</td>
+</tr>
+<tr>
+<td align="center">16%</td>
+<td align="center">Rational</td>
+<td align="left">0.1575005551326285</td>
+<td align="right">72 ns</td>
+</tr>
+<tr>
+<td align="center">16%</td>
+<td align="center">SR</td>
+<td align="left">0.15117970813645165</td>
+<td align="right">200 ns</td>
+</tr>
+<tr>
+<td align="center">16%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.16000000000000025</td>
+<td align="right">1323 ns</td>
+</tr>
+<tr>
+<td align="center">16%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.16000000000219483</td>
+<td align="right">714 ns</td>
+</tr>
+<tr>
+<td align="center">16%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.16000000000018844</td>
+<td align="right">1030 ns</td>
+</tr>
+<tr>
+<td align="center">4%</td>
+<td align="center">Rational</td>
+<td align="left">0.1528010258201771</td>
+<td align="right">72 ns</td>
+</tr>
+<tr>
+<td align="center">4%</td>
+<td align="center">SR</td>
+<td align="left">0.043006234681405076</td>
+<td align="right">190 ns</td>
+</tr>
+<tr>
+<td align="center">4%</td>
+<td align="center">Jäckel</td>
+<td align="left">0.03999999999999886</td>
+<td align="right">1519 ns</td>
+</tr>
+<tr>
+<td align="center">4%</td>
+<td align="center">Rational-Li</td>
+<td align="left">0.040000000056277685</td>
+<td align="right">10235 ns</td>
+</tr>
+<tr>
+<td align="center">4%</td>
+<td align="center">SR-Li</td>
+<td align="left">0.040000000000453895</td>
+<td align="right">2405 ns</td>
+</tr>
+</tbody>
+</table>
+<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/vix-starts-smiling/">The VIX starts smiling</a>
+      </h1>
+      <span class="post-date">Mar 21, 2017 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/vix-starts-smiling/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The VIX implied volatilities used to look like a logarithmic function of the strikes. I don&rsquo;t look at them often, but today, I noticed that the VIX had the start of a smile shape.</p>
+<figure>
+    <img src="/post/vix_smile.png"/> <figcaption>
+            <h4>1m VIX implied volatilities on March 21, 2017 with strictly positive volume.</h4>
+        </figcaption>
+</figure>
+
+<p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
+<p><strong>Update March 22:</strong> Actually the smile in VIX is not particularly new, it is visible in Jim Gatheral 2013 presentation <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiF2LP9turSAhUJVBQKHUVFCIoQFggoMAA&amp;url=http%3A%2F%2Fmfe.baruch.cuny.edu%2Fwp-content%2Fuploads%2F2012%2F09%2FBeijingSPXVIX2013.pdf&amp;usg=AFQjCNHCx2b2AXNXPHixUAYQC2nWH9ULHQ">Joint modeling of SPX and VIX</a> for the short maturities. Interestingly, <a href="/post/when-svi-breaks-down/">the issue with SVI</a> is also visible in those slides in the shortest maturity.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/">When SVI Breaks Down</a>
+      </h1>
+      <span class="post-date">Mar 16, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In order to fit the implied volatility smile of equity options, one of the most popular parameterization is Jim Gatheral&rsquo;s SVI, which I have written about before <a href="/post/another-svi-initial-guess/">here</a>.</p>
+<p>It turns out that in the current market conditions, SVI does not work well for short maturities. <a href="http://www.optionistics.com/quotes/stock-option-chains/SPX">SPX options</a> expiring on March 24, 2017 (one week) offer a good example. I paid attention to include only options with non zero volume, that is options that are actually traded.</p>
+<figure>
+    <img src="/post/spxw_03242017.png"/> <figcaption>
+            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive volume.</h4>
+        </figcaption>
+</figure>
+
+<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, even though it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
+<p>If we include all options with non zero open interest and use ask/(bid-ask) weights, SVI is even worse:
+<figure>
+    <img src="/post/spxw_03242017f.png"/> <figcaption>
+            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>We can do a bit better with SVI by squaring the weights and it shows the problem of SVI more clearly:
+<figure>
+    <img src="/post/spxw_03242017f2.png"/> <figcaption>
+            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest and SVI weights squared.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/">Brownian Bridge and Discrete Random Variables</a>
+      </h1>
+      <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>The <a href="/post/a-new-scheme-for-heston">new Heston discretisation scheme</a> I wrote about a few weeks ago makes use
+a discrete random variable matching the first five moments of the normal distribution instead of the usual
+normally distributed random variable, computed via the inverse cumulative distribution function. Their discrete random
+variable is:
+$$\xi =	\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3,,$$
+$$	\xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4,,$$
+$$\xi =	\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3,,$$
+$$\xi =	-\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4,,$$
+with \(U_1 \in \{0,1,&hellip;,7\}\)</p>
+<p>The advantage of the discrete variable is that it is much faster to generate. But there are some interesting
+side-effects. The first clue I found is a loss of accuracy on forward-start vanilla options.</p>
+<p>By accident, I found a much more interesting side-effect: you can not use the Brownian-Bridge variance reduction
+on the discrete random variable. This is very well illustrated by the case
+of a digital option in the Black model, for example with volatility 10% and a 3 months maturity, zero interest rate and dividends. For the following graph,
+I use 16000 Sobol paths composed of 100 time-steps.</p>
+<figure>
+    <img src="/post/black_discrete_sampling.png"/> <figcaption>
+            <h4>Digital Call price with different random variables.</h4>
+        </figcaption>
+</figure>
+
+<p>The &ldquo;-BB&rdquo; suffix stands for the Brownian-Bridge path construction, &ldquo;Five&rdquo; for five moments discrete variable
+and &ldquo;AS241&rdquo; for the inverse cumulative distribution function (continuous approach). As you can see,
+the price is discrete, and follows directly from the discrete distribution.
+The use of any random number generator with a large enough number of paths would lead to the same conclusion.</p>
+<p>This is because with the Brownian-Bridge technique, the last point in the path, corresponding to the maturity,
+is sampled first, and the other path points are then completed inside from the first and last points.
+But the digital option depends only on the value of the path at maturity, that is, on this last point.
+As this point corresponds follows our discrete distribution, the price of the digital option is a step function.</p>
+<p>In contrast, for the incremental path construction, each point is computed from the previous point.
+The last point will thus include the variation of all points in the path, which will be very close to normal, even with a discrete distribution per point.</p>
+<p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
+and the incremental path construction, is that several intermediate time-steps (between payoff observations)
+are a must-have with discrete random variables, however small is the original time-step size.</p>
+<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of 1/32 (meaning 8 intermediate time-steps in
+our digital option example). I suppose this is a direct consequence of the digital payoff discontinuity. In Talay
+<a href="http://link.springer.com/chapter/10.1007/BFb0006577">&ldquo;Efficient numerical schemes for the approximation of expectations of functionals of the solution of a SDE, and applications&rdquo;</a> (which you can
+read by adding .sci-hub.cc to the URL host name), second order convergence
+is proven only if the payoff function and its derivatives up to order 6 are continuous. There is something natural
+that a discrete random variable imposes continuity conditions on the payoff, not necessary with a continuous,
+smooth random variable: either the payoff or the distribution needs to be smooth.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/">Samsung Wireless Printer under Fedora 25</a>
+      </h1>
+      <span class="post-date">Jan 26, 2017 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/linux">linux</a>
+      </span>
+      
+      <p>This is a note for those who want to setup a Samsung wireless printer under Linux. It is quite simple,
+<a href="https://ubuntuforums.org/showthread.php?t=2263245">this forum post</a> helped me, the actual useful steps on Fedora 25 are:</p>
+<ul>
+<li>download tar.gz linux driver from <a href="http://www.samsungsetup.com/">Samsung website</a>. As root, unpack &amp; install:</li>
+</ul>
+<pre><code>tar xvzf SamsungPrinterInstaller.tar.gz 
+cd uld
+./install.sh
+</code></pre><ul>
+<li>in the printer menu, lookup for the wireless key (8 digits),</li>
+<li>connect to the printer Wifi network with a computer using the wireless key,</li>
+<li>enter the network gateway IP, this is typically <a href="http://192.168.3.1">http://192.168.3.1</a>,</li>
+<li>click on Login with user &ldquo;admin&rdquo; and password &ldquo;sec00000&rdquo;,</li>
+<li>open the network wifi settings and select &ldquo;Easy Wi-Fi Settings&rdquo;,</li>
+<li>connect back to your wireless network,</li>
+<li>add the network printer via the printer settings wizard, or alternatively through CUPS interface <a href="http://localhost:631">http://localhost:631</a>.</li>
+</ul>
+<p>That&rsquo;s it. Printer and scanner will then work on your local Wi-Fi network.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/">A new scheme for Heston - Part 2</a>
+      </h1>
+      <span class="post-date">Jan 23, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston_part2/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>A couple weeks ago, I wrote about <a href="/post/a-new-scheme-for-heston">a new Heston discretisation scheme</a> which was at least as accurate as Andersen QE scheme and faster, called DVSS2.</p>
+<p>It turns out that it does not behave very well on the following Vanilla forward start option example (which is quite benign).
+The Heston parameters comes from a calibration to the market and are</p>
+<p>$$v_0= 0.0718, \kappa= 1.542, \theta= 0.0762, \sigma= 0.582, \rho= -0.352$$</p>
+<p>with a maturity of one year.</p>
+<p>On a standard vanilla option, DVSS2 behaves as advertised in the paper but not on a forward-start option
+with forward start date at \(T_1=\frac{7}{8}\) (relatively close to the maturity).
+A forward start call option will pay \(\max(S(T)-k S(T_1),0)\).
+This is particularly visible on the following graph of the price against
+the time-step size (1,1/2,1/4,1/8,1/16,1/32), for strikes 100% and 140% (it works well for strike=70%)
+where 32 time-steps are necessary.
+<figure>
+    <img src="/post/heston_dvss2.png"/> <figcaption>
+            <h4>Forward start Call price with different discretization schemes.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>It would appear that the forward dynamic is sometimes poorly captured by the DVSS2 scheme.
+This makes DVSS2 not competitive in practice compared to Andersen&rsquo;s QE or even Alfonsi as it can not be trusted
+for a time step larger than 1/32.
+Note that I insert an extra step at 7/8 for time step sizes greater or equal than 1/4: a time-step size of 1 corresponds in reality
+to two time-steps respectively of size 7/8 and 1/8.</p>
+<p>The error is actually because the log-asset process is sampled using a discrete random variables that matches
+the first 5 moments of the normal distribution. The so-called step 5 of the algorithm specifies:
+$$\hat{X} := \bar{x} + \xi \sqrt{\frac{1}{2}(\bar{y}+\hat{Y})h}$$
+The notation is quite specific to the paper, what you need to know is that \(\hat{X}\) corresponds to the log-asset process
+while \(\hat{Y}\) corresponds to the stochastic volatility process and \(\xi\) is the infamous discrete random variable.</p>
+<p>In reality, there is no good reason to use a discrete random variable beside lowering the computational cost.
+And it is obviously detrimental in the limit case where the volatility is deterministic (Black-Scholes case) as then
+the log-process will only match the first 5 moments of the normal distribution, while it should be exactly normal.</p>
+<p>Replacing \(\xi\) by a standard normally distributed random variable is enough to fix DVSS2. Note
+that it could also be discretized like the QE scheme, using a Broadie-Kaya interpolation scheme.
+<figure>
+    <img src="/post/heston_dvss2x.png"/> <figcaption>
+            <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with continuous normal random variable.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The problem is that then, it is not faster than QE anymore. So it is not clear why it would be preferable.</p>
+<h3 id="a-discrete-distribution-matching-the-first-9-moments-of-the-normal-distribution">A discrete distribution matching the first 9 moments of the normal distribution</h3>
+<p>I then tried to see if matching more moments with a discrete distribution would help. More than 8 bits
+are available when generating a uniform random double precision number (as it is represented by 53 bits).
+The game is then to find nodes so that the distribution with discrete probabilities in i/256 with some interger i
+match the moments of the normal distribution. It is a non linear problem unfortunately, but I found a solution
+for the probabilities
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span></code></pre></div>
+The nodes are:
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#666">-</span><span style="color:#40a070">3.1348958252117543</span>, <span style="color:#666">-</span><span style="color:#40a070">2.6510063991157273</span>, <span style="color:#666">-</span><span style="color:#40a070">1.6397086267587215</span>, <span style="color:#666">-</span><span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">1.6397086267587215</span>, <span style="color:#40a070">2.6510063991157273</span>, <span style="color:#40a070">3.1348958252117543</span></code></pre></div>
+The probabilities approximate those given by the ideal solution on 8 nodes,
+that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
+<p>While this helps a bit for small steps as shown on the following graph, it is far from good:
+<figure>
+    <img src="/post/heston_dvss2xd.png"/> <figcaption>
+            <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with discrete random variable matching the first 9 moments of the normal distribution.</h4>
+        </figcaption>
+</figure>
+</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
+      </h1>
+      <span class="post-date">Jan 19, 2017 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/xfce_fedora25/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/linux">linux</a>
+      </span>
+      
+      <p>The gnome shell has been crashing on me more regularly lately.
+XFCE is a good and fast more tradional desktop, but, from past experiences,
+it does not play well with power management if you only install it via</p>
+<pre><code>dnf install @xfce-desktop-environment
+</code></pre><p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
+most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
+to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
+<pre><code>systemctl disable gdm
+systemctl enable lightdm
+systemctl stop gdm
+systemctl start lightdm
+</code></pre>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/">Equivalence between floating-strike and fixed-strike Asian options</a>
+      </h1>
+      <span class="post-date">Jan 18, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>Many papers present formulae to price Asian options in the Black-Scholes world only for the fixed strike Asian case, that is
+a contract that pays \( \max(A-K,0)\) at maturity \(T\) where \(A = \sum_{i=0}^{n-1} w_i S(t_i) \) is the Asian average.</p>
+<p>More generally, this can be seen as the payoff of a Basket option where the underlyings are just the same asset but at different times.
+And any Basket option formula can actually be used to price fixed-strike Asian options by letting the correlation correspond to the correlation between the asset at the averaging times
+and the variances correspond to the variance at each averaging time. The basket approach allows then naturally for a term-structure of rates, dividends and volatilities.</p>
+<p>In order to price floating-strike Asian options paying  \( \max(S-kA,0)\) at maturity \(T\) where \(k\) is a percent strike,
+we can use a change of measure to express it as the price of a fixed-strike Asian. This equivalence is presented in several paperS: it is somewhat hidden in
+Andreasen <a href="https://www.researchgate.net/profile/Jesper_Andreasen2/publication/247953507_The_Pricing_of_Discretely_Sampled_Asian_and_Lookback_Options_A_Change_of_Numeraire_Approach/links/5445184a0cf2091108a4d9b5.pdf">&ldquo;The pricing of discretely sampled Asian and lookback options: a change of numeraire approach&rdquo;</a>, more explicit in Eberlein and Papapantoleon
+<a href="http://www.sciencedirect.com/science/article/pii/S0304414904001061">&ldquo;Equivalence of floating and fixed strike Asian and lookback options&rdquo;</a>
+or Henderson et al. <a href="https://pdfs.semanticscholar.org/7aca/df634e96744a5ff58a6a29f619b8438aabae.pdf">&ldquo;Bounds for in-progress floating-strike Asian options using symmetry&rdquo;</a>.
+None of those really consider the simple case of Black-Scholes with a term-structure of rates, dividends and volatilities.</p>
+<p>We have:
+$$
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\<br>
+\quad k V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
+$$
+where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are the Vanilla options implied volatilities at the averaging times \(t_i\), \(C(0,t_i)\) are the capitalization factors, and \(B(0,T)\) is the discount factor.</p>
+<p><strong>Proof:</strong>
+We assume that \(S\) follows \(dS = \mu_t S dt + \sigma_t S dW_t\). The discount factor \(B\) is defined as \(B(0,T)=e^{-\int_{0}^T r_s ds}\). Let \(C(0,t) = e^{\int_{0}^t \mu_s ds}\). The process associated to the forward to time \(t\) is \(F_t=S_0 C(0,t)M_t\) with \(M_t = e^{\int_0^t \sigma_s dW_s - \frac{1}{2}\int_0^t \sigma_s^2 ds}\) being a martingale.
+We have:
+$$
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\<br>
+= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\<br>
+= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\<br>
+=k B(0,T)C(0,T)\mathbb{E}\left[ M_T \max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)M_{t_i}}{C(0,T) M_T },0\right)\right]
+$$
+We now proceed to a change of measure defined by \(M_T\). Under the new measure \(\mathbb{Q}^T\), \(\bar{W}_t = W_t - \int_0^t \sigma_s ds\) is a Brownian motion. \(\frac{M_t}{M_T}\) under \(\mathbb{Q}\) has the same law as \(\frac{M_t}{M_T} e^{-\int_t^T \sigma_s^2 ds}\) under \(\mathbb{Q}^T\) or equivalently as
+\(\bar{M}_t = e^{\int_t^T \sigma_s d\bar{W}_s - \frac{1}{2}\int_t^T \sigma_s^2 ds}\)  under \(\mathbb{Q}^T\).
+Defining \(\mathbb{E}^T\) to be the expectation under \(\mathbb{Q}^T\), we thus have
+$$
+V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\<br>
+=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\<br>
+=k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
+$$
+This concludes the proof.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/">Bachelier Normal Volatility Asymptotics</a>
+      </h1>
+      <span class="post-date">Jan 17, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>It is relatively well known that the Black-Scholes volatility can not grow faster than \(\sqrt{\ln(K)}\).
+The rule is also sometimes simply stated as &ldquo;the implied variance can not grow faster than linear&rdquo; (in log-moneyness).
+The proof comes from Roger Lee <a href="http://math.uchicago.edu/~rogerlee/moment.pdf">&ldquo;The moment formula for implied volatility at extreme strikes&rdquo;</a> but the rule was suggested
+earlier, for example in Hodge&rsquo;s paper from 1996 <a href="http://www.iijournals.com/doi/pdfplus/10.3905/jod.1996.407950">&ldquo;Arbitrage bounds of the implied volatility strike and term structures of European-style options&rdquo;</a>.</p>
+<p>With the increasing use of the b.p. (a.k.a Normal, a.k.a Bachelier) vols, a natural question (that Gary asked) is:</p>
+<h4 id="is-there-a-similar-rule-for-the-normal-volatility">Is there a similar rule for the Normal volatility?</h4>
+<p>It turns out that the answer is not as simple. It can easily be shown that the normal volatility can not grow faster than linear
+in strike (not the variance this time). But it does not mean that linear is acceptable, in fact, it is not.
+The upper bound can be refined to
+$$ \frac{K-F}{\sqrt{2T \ln \frac{K}{F}}} $$</p>
+<p>It is still an asymptotic upper bound only.
+It can be shown that any number larger than the factor 2 in the denominator will not lead to asymptotic arbitrage.
+The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
+simple exact formula for the limit as in the Black-Scholes world.</p>
+<p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
+
+      
+    </div>
+    
+    
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/page/2/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/4/">4</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/4/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+

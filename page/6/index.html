@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.68.3" />
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Chase the Devil &middot; Chase the Devil</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
+  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
+  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://chasethedevil.github.io/index.xml%7d" rel="alternate" type="application/rss+xml" title="Chase the Devil &middot; Chase the Devil" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-365717-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+<body class="theme-base-00">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Chase the Devil</h1>
+      <p class="lead">out of tech&hellip;</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
+      
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    
+
+    
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+     
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/linear_flat_forward_interpolation/">Linear and Flat forward interpolation with cash dividends</a>
+      </h1>
+      <span class="post-date">Jan 19, 2016 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/linear_flat_forward_interpolation/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>When the dividend curve is built from discrete cash dividends, the dividend yield is discontinuous at the dividend time as the asset price jumps from the dividend amount.
+This can be particularly problematic for numerical schemes like finite difference methods. In deed, a finite difference grid
+will make use of the forward yield (eventually adjusted to the discretisation scheme), which explodes then.
+Typically, if one is not careful about this, then increasing the number of time steps does not increase accuracy anymore, as
+the spike just becomes bigger on a smaller time interval. A simple work-around is to limit the resolution to one day.
+This means that intraday, we interpolate the dividend yield.</p>
+<p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
+But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
+<figure>
+    <img src="/post/linear_flat_forward.png"/> <figcaption>
+            <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
+        </figcaption>
+</figure>
+
+On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
+<p>In reality, one should use flat forward interpolation instead, where the forward yield is maintained constant during the day. The forward rate is defined as</p>
+<!-- raw HTML omitted -->
+<p>The flat forward interpolation is equivalent to a linear interpolation on the logarithm of discount factors.
+In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:</p>
+<!-- raw HTML omitted -->
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/moved-to-hugo/">Moved to hugo</a>
+      </h1>
+      <span class="post-date">Dec 20, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/moved-to-hugo/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>I moved my blog from blogger to <a href="https://gohugo.io/">Hugo</a>. Blogger really did not evolve since Google take-over in 2003. Wordpress is today much nicer and prettier. It&rsquo;s clear that Google did not invest at all, possibly because blogs are passé. Compared to mid 2000, there are very few blogs today. Even programming blogs are scarce. It could be interesting to quantify this. My theory is that it is the direct consequence of the popularity of social networks, and especially facebook (possibly also stackoverflow for programmers): people don&rsquo;t have time anymore to write as their extra-time is used on social networks. Similarly I noticed that almost nobody comments anymore to the point that even Disqus is very rarely used, and again I attribute that to the popularity of sites like reddit. This is why I did not bother with a comment section on my blog, just email me or tweet about it instead.</p>
+<p>I was always attracted by the static web sites concept, because there is actually very little things that ought to be truely dynamic from a individual point of view. Dynamic hosting also tends to be problematic in the long-run, for example I never found the time to upgrade my chord search engine to the newer Google appengine and now it&rsquo;s just off. I used to freeze my personal website (created with a dynamic templating tool Velocity, django, etc.) with a python script. So a static blog was the next logical step, and these days, it&rsquo;s quite popular. Static blogs put the author fully in control of the content and its presentation. <a href="http://jekyllrb.com">Jekyll</a> started the trend along with github allowing good old personal websites. It offers a modern looking blog, with very little configuration steps. I tried Hugo instead because it&rsquo;s written in <a href="http://golang.com">the Go language</a>. It&rsquo;s much faster, but I don&rsquo;t really care about that for something of the size of my blog. I was curious however how good was the Go language on real world projects, and I knew I could always customize it if I ever needed to. Interestingly, I did stumble on a few panics (core dump equivalent where the program just crashes, in this case the hugo local server), something that does not happen with Java based tools or even with Ruby or Python based tools. Even though I like the Go language more and more (I am doing some pet project with it - I believe in the focus on fast compilation and simple language), I found this a bit alarming. This is clearly a result of the errors versus exceptions choice, as it&rsquo;s up to the programmer to handle the errors properly and not panic unnecessarily (I even wonder if it makes any sense to panic for a server).</p>
+<p>Anyway I think it looks better now, maybe a bit too minimalist. I&rsquo;ll add details when I have more time.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/">Controlling the SABR wings with Hagan PDE </a>
+      </h1>
+      <span class="post-date">Dec 15, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/broken-internet/">Broken Internet?</a>
+      </h1>
+      <span class="post-date">Nov 9, 2015 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/broken-internet/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+There is something funny going on with upcoming generic top level domains (gTLDs), they seem to be looked up in a strange manner (at least on latest Linux). For example:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping chrome&nbsp;</span><br /><br />or<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping nexus&nbsp;</span><br /><br />returns 127.0.53.53.<br /><br />While existing <a href="https://www.name.com/new-gtld">official gTLD</a>s don't (<span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ping dental</span> returns "unknown host" as expected). I first thought it was a network misconfiguration, but as <a href="https://groups.google.com/forum/#!msg/public-dns-discuss/bzhTQnFqE6I/E9F46xhka98J">I am not the only one to notice this</a>, it's likely a genuine internet issue.<br /><br />Strange times.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/holidays-read-dfw-everything-and-more/">Holiday&#39;s read - DFW - Everything and more</a>
+      </h1>
+      <span class="post-date">Nov 1, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/holidays-read-dfw-everything-and-more/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I am ambivalent towards David Foster Wallace. He can write the most creative sentences and make innocuous subjects very interesting. At the same time, i never finished his book <a href="https://en.wikipedia.org/wiki/Infinite_Jest">Infinite Jest</a>, partly because the characters names are too awkward for me so that i never exactly remember who is who, but also because the story itself is a bit too crazy.<br />I knew however that <a href="http://www.amazon.com/Everything-More-Compact-History-Infinity/dp/0393339289">a non fiction book on the subject of infinity</a> written by him would make for a very interesting read. And I have not been disappointed. It's in between maths and philosophy going back to the Greeks up to Gödel through a lot of Cantor following more or less the historical chronology.<br />Most of it is easy to read and follow, except the last part around sets and transfinite numbers. This last part is actually quite significant as it tries to explain why we still have no satisfying theory around the problems raised by infinity especially in the context of a Sets theory.&nbsp;I did not expect to learn much around the subject, I was disappointed. The book showed me how naive I was and how tricky the concept of infinity can be.<br />While I found the different explanations around <a href="https://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno's paradox of the arrow</a> very clever, there is one other view possible: the arrow really does not move at each instant (you could think of those as a snapshot) but an interval of time is just not a simple succession of instants. This is not so far of Aristotle attack, but the key here is around what is an interval really. DFW suggests slightly this interpretation as well p144 but it's not very explicit.<br />I had not heard about Kronecker's conception that only integers were mathematically real (against decimals, irrationals, infinite sets). I find it very appropriate in the frame of computer science. Everything ends up as finite integers (a binary representation) and we are always confronted to the process of transforming the continuous, that despite all its conceptual issues is often simpler to reason in to solve concrete problems, to the finite discrete.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/">Crank-Nicolson and Rannacher Issues with Touch options</a>
+      </h1>
+      <span class="post-date">Sep 30, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I just stumbled upon this particularly illustrative case where the Crank-Nicolson finite difference scheme behaves badly, and the Rannacher smoothing (2-steps backward Euler) is less than ideal: <a href="http://www.investopedia.com/terms/d/doubleonetouch.asp">double one touch</a> and <a href="http://www.investopedia.com/terms/d/doublenotouch.asp">double no touch</a> options.<br /><br />It is particularly evident when the option is sure to be hit, for example when the barriers are narrow, that is our delta should be around zero as well as our gamma. Let's consider a double one touch option with spot=100, upBarrier=101, downBarrier=99.9, vol=20%, T=1 month and a payout of 50K.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="326" src="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson shows big spikes in the delta near the boundary</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher shows spikes in the delta as well</td></tr></tbody></table>Crank-Nicolson spikes are so high that the price is actually a off itself.<br /><br />The Rannacher smoothing reduces the spikes by 100x but it's still quite high, and would be higher had we placed the spot closer to the boundary. The gamma is worse. Note that we applied the smoothing only at maturity. In reality as the barrier is continuous, the smoothing should really be applied at each step, but then the scheme would be not so different from a simple Backward Euler.<br /><br />In contrast, with a proper second order finite difference scheme, there is no spike.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the TR-BDF2 finite difference method - the scale goes from -0.00008 to 0.00008.</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the Lawson-Morris finite difference scheme - the scale goes from -0.00005 to 0.00005</td></tr></tbody></table>Both <a href="http://www.risk.net/journal-of-computational-finance/technical-paper/2330321/tr-bdf2-for-fast-stable-american-option-pricing">TR-BDF2</a> and Lawson-Morris (based on a local Richardson extrapolation of backward Euler) have a very low delta error, similarly, their gamma is very clean. This is reminiscent of the behavior on American options, but the effect is magnified here.<br /><br /><br />
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/clouds/">Clouds</a>
+      </h1>
+      <span class="post-date">Sep 2, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/clouds/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I was wondering how to generate some nice cloudy like texture with a simple program. I first thought about using the Brownian motion, but of course if one uses it raw, with one pixel representing one movement in time, it's just going to look like a very noisy and grainy picture like this:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-QfeLi5F03oQ/Vebs3C-XWyI/AAAAAAAAIG4/5q1kKip0PlA/s1600/normal_rng.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="200" src="http://4.bp.blogspot.com/-QfeLi5F03oQ/Vebs3C-XWyI/AAAAAAAAIG4/5q1kKip0PlA/s200/normal_rng.png" width="200" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Normal noise</td></tr></tbody></table><br />There is however a nice continuous representation of the Brownian motion : the Paley-Wiener representation<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-fkDLapfROaY/Vebtgtm2BCI/AAAAAAAAIHA/-EgKgEF_rEM/s1600/Screenshot%2Bfrom%2B2015-09-02%2B14-37-02.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="31" src="http://1.bp.blogspot.com/-fkDLapfROaY/Vebtgtm2BCI/AAAAAAAAIHA/-EgKgEF_rEM/s400/Screenshot%2Bfrom%2B2015-09-02%2B14-37-02.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-JdA4jtT3J-A/VebtgjUKcfI/AAAAAAAAIHE/4HCx4BaAPDY/s1600/Screenshot%2Bfrom%2B2015-09-02%2B14-36-42.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="60" src="http://1.bp.blogspot.com/-JdA4jtT3J-A/VebtgjUKcfI/AAAAAAAAIHE/4HCx4BaAPDY/s400/Screenshot%2Bfrom%2B2015-09-02%2B14-36-42.png" width="400" /></a></div><br />This can produce an interesting smooth pattern, but it is just 1D. In the following picture, I apply it to each row (the column index being time), and then for each column (the row index being time). Of course this produces a symmetric picture, especially as I reused the same random numbers<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-CzAUnTU3V7w/VebuSjnBuLI/AAAAAAAAIHQ/t6a1FGCsIMA/s1600/constructive.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://4.bp.blogspot.com/-CzAUnTU3V7w/VebuSjnBuLI/AAAAAAAAIHQ/t6a1FGCsIMA/s200/constructive.png" width="200" /></a></div>If I use new random numbers for the columns, it is still symmetric, but destructive rather than constructive.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-zb3pUtY1ZMo/VebvK0C1xdI/AAAAAAAAIHY/A0-vaxGMwdI/s1600/destructive.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://3.bp.blogspot.com/-zb3pUtY1ZMo/VebvK0C1xdI/AAAAAAAAIHY/A0-vaxGMwdI/s200/destructive.png" width="200" /></a></div><br />It turns out that spatial processes are something more complex than I first imagined. It is not a simple as using a N-dimensional Brownian motion, as it would produce a very similar picture as the 1-dimensional one. But <a href="http://www.maths.uq.edu.au/~kroese/ps/MCSpatial.pdf">this paper has a nice overview of spatial processes</a>. Interestingly they even suggest to generate a Gaussian process using a <a href="https://en.wikipedia.org/wiki/Precision_%28statistics%29">Precision matrix</a> (inverse of covariance matrix). I never thought about doing such a thing and I am not sure what is the advantage of such a scheme.<br /><br />There is a standard graphic technique to generate nice textures, originating from Ken Perlin for Disney, it is called simply <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin Noise</a>. It turns out that several web pages in the top Google results <a href="https://en.wikipedia.org/wiki/Talk%3APerlin_noise">confuse</a> simple Perlin noise with fractal sum of noise that Ken Perlin also helped popularize (see his slides: <a href="http://www.noisemachine.com/talk1/20.html">standard Perlin noise</a>, <a href="http://www.noisemachine.com/talk1/21.html">fractal noise</a>). Those pages also believe that the later is simpler/faster. But there are two issues with fractal sum of noise: the first one is that it relies on an existing noise function - you need to first build one (it can be done with a random number generator and an interpolator), and the second one is that it ends up being more complex to program and likely to evaluate as well, see for example the code needed <a href="http://devmag.org.za/2009/04/25/perlin-noise/">here</a>. The fractal sum of noise is really a complementary technique.<br /><br />The insight of Perlin noise is to not generate random color values that would be assigned to shades of grey as in my examples, but to generate random gradients, and interpolate on those gradient in a smooth manner. In computer graphics they like the cosine function to give a little bit of non-linearity in the colors. A good approximation, usually used as a replacement in this context is <a href="http://codeplea.com/simple-interpolation">3x^2 - 2x^3</a>.  It's not much more complicated than that, <a href="http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/perlin-noise-math-faq.html">this web page</a> explains it in great details. It can be programmed in a few lines of code.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-Yo5dgKoD5P8/Veb6rAQ9jAI/AAAAAAAAIHo/uISQjpVzLfI/s1600/perlin_bw.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://3.bp.blogspot.com/-Yo5dgKoD5P8/Veb6rAQ9jAI/AAAAAAAAIHo/uISQjpVzLfI/s200/perlin_bw.png" width="200" /></a><a href="http://4.bp.blogspot.com/-MovHUFAGbnI/Veb6rsjhkBI/AAAAAAAAIHs/4raZRohDySs/s1600/perlin_color.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="200" src="http://4.bp.blogspot.com/-MovHUFAGbnI/Veb6rsjhkBI/AAAAAAAAIHs/4raZRohDySs/s200/perlin_color.png" width="200" /></a></div><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-__3z1MEB92o/Veb65IEgVZI/AAAAAAAAIH4/1B9npSW9XKo/s1600/Screenshot%2Bfrom%2B2015-09-02%2B15-33-11.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="512" src="http://3.bp.blogspot.com/-__3z1MEB92o/Veb65IEgVZI/AAAAAAAAIH4/1B9npSW9XKo/s640/Screenshot%2Bfrom%2B2015-09-02%2B15-33-11.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">very procedural and non-optimized Go code for Perlin noise</td></tr></tbody></table><br />
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/go-for-monte-carlo/">Go for Monte-Carlo</a>
+      </h1>
+      <span class="post-date">Aug 22, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/go-for-monte-carlo/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I have <a href="/post/modern-programming-language-for-monte-carlo/">looked</a> a few months ago already at Julia, Dart, Rust and Scala programming languages to see how practical they could be for a simple Monte-Carlo option pricing.</p>
+<p>I forgot <a href="https://golang.org/">the Go language</a>. I had tried it 1 or 2 years ago, and at that time, did not enjoy it too much. Looking at Go 1.5 benchmarks on the <a href="http://benchmarksgame.alioth.debian.org/">computer language shootout</a>, I was surprised that it seemed so close to Java performance now, while having a GC that guarantees pauses of less 10ms and consuming much less memory.</p>
+<p>I am in general a bit skeptical about those benchmarks, some can be rigged. A few years ago, I <a href="/post/the-end-of-rings-around-plain-java-a-better-concurrency-test/">tried my hand at the thread ring</a> test, and found that it actually performed fastest on a single thread while it is supposed to measure the language threading performance. I looked yesterday at one Go source code (I think it was for pidigits) and saw that it just called a C library (gmp) to compute with big integers. It&rsquo;s no surprise then that Go would be faster than Java on this test.</p>
+<p>So what about my small Monte-Carlo test?</p>
+<p>Well it turns out that Go is quite fast on it:</p>
+<p><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Multipl. Rust&nbsp;&nbsp;&nbsp; Go<br />1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005&nbsp; 0.007<br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.03&nbsp;&nbsp; 0.03<br />100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.21&nbsp;&nbsp; 0.29</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">1000&nbsp;&nbsp;&nbsp;&nbsp; 2.01&nbsp;&nbsp; 2.88</span><br />
+<!-- raw HTML omitted --><!-- raw HTML omitted -->It is faster than Java/Scala and not too far off Rust, except if one uses FastMath in Scala, then the longest test is slighly faster with Java (not the other ones).<!-- raw HTML omitted --><!-- raw HTML omitted -->There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.<!-- raw HTML omitted --><!-- raw HTML omitted -->Still it was extremely quick to grasp and write code, because it&rsquo;s so simple, especially when compared to Rust. But then, contrary to Rust, there is not as much safety provided by the language. Rust is quite impressive on this side (but unfortunately that implies less readable code). I&rsquo;d say that Go could become a serious alternative to Java.<!-- raw HTML omitted --><!-- raw HTML omitted -->I also found an interesting minor performance issue with the default Go <!-- raw HTML omitted -->Rand.Float64<!-- raw HTML omitted -->, the library convert an Int63 to a double precision number this way:<!-- raw HTML omitted --><!-- raw HTML omitted --><pre>func (r *Rand) Float64() float64 {</pre><pre>  f := float64(r.Int63()) / (1 &lt;&lt; 63)<br />  if f == 1 {<br /><span class="ln" id="L128">    </span>f = 0<br /><span class="ln" id="L129">  }</span><br /><span class="ln" id="L130">  </span>return f<br /> }</pre>
+<!-- raw HTML omitted -->I was interested in having a number in (0,1) and not [0,1), so I just used the conversion pattern from MersenneTwister 64 code:<!-- raw HTML omitted --><!-- raw HTML omitted --><pre>f := (float64(r.Int63() &gt;&gt; 11) + 0.5) * (1.0/4503599627370496.0)</pre>
+The reasoning behind this later code is that the mantissa is 52 bits, and this is the most accuracy we can have between 0 and 1. There is no need to go further, this also avoids the issue around 1. It&rsquo;s also straightforward that is will preserve the uniform property, while it&rsquo;s not so clear to me that r.Int63()/2^63 is going to preserve uniformity as double accuracy is higher around 0 (as the exponent part can be used there) and lesser around 1: there is going to be much more multiple identical results near 1 than near 0.<!-- raw HTML omitted --><!-- raw HTML omitted -->It turns out that the if check adds 5% performance penalty on this test, likely because of processor caching issues. I was surprised by that since there are many other ifs afterwards in the code, for the inverse cumulative function, and for the payoff.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/bumping-correlations/">Bumping Correlations</a>
+      </h1>
+      <span class="post-date">Jul 25, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/bumping-correlations/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+In his book "<i>Monte Carlo Methods in Finance</i>", P. Jäckel explains a simple way to clean up a correlation matrix. When a given correlation matrix is not positive semi-definite, the idea is to do a <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> (SVD), replace the negative eigenvalues by 0, and renormalize the corresponding eigenvector accordingly.<br /><br />One of the cited applications is "<i>stress testing and scenario analysis for market risk</i>" or "<i>comparative pricing in order to ascertain the extent of correlation exposure for multi-asset derivatives</i>", saying that "<i>In many of these cases we end up with a matrix that is no longer positive semi-definite</i>".<br /><br />It turns out that if one bumps an invalid correlation matrix (the input), that is then cleaned up automatically, the effect can be a very different bump. Depending on how familiar you are with SVD, this could be more or less obvious from the procedure,<br /><br />As a simple illustration I take the matrix representing 3 assets A, B, C with rho_ab = -0.6, rho_ac = rho_bc = -0.5.<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.60000&nbsp; -0.50000<br />&nbsp; -0.60000&nbsp;&nbsp; 1.00000&nbsp; -0.50000<br />&nbsp; -0.50000&nbsp; -0.50000&nbsp;&nbsp; 1.00000<br /><br />For those rho_ac and rho_bc, the correlation matrix is not positive definite unless rho_ab in in the range (-0.5, 1). One way to verify this is to use the fact that positive definiteness is equivalent to a positive determinant. The determinant will be 1 - 2*0.25 - rho_ab^2 + 2*0.25*rho_ab.<br /><br />After using P. Jaeckel procedure, we end up with: <br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56299&nbsp; -0.46745<br />&nbsp; -0.56299&nbsp;&nbsp; 1.00000&nbsp; -0.46745<br />&nbsp; -0.46745&nbsp; -0.46745&nbsp;&nbsp; 1.00000<br /><br />If we bump now rho_bc by 1% (absolute), we end up after cleanup with:<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56637&nbsp; -0.47045<br />&nbsp; -0.56637&nbsp;&nbsp; 1.00000&nbsp; -0.46081<br />&nbsp; -0.47045&nbsp; -0.46081 &nbsp; 1.00000<br /><br />It turns out that rho_bc has changed by only 0.66% and rho_ac by -0.30%, rho_ab by -0.34%. So our initial bump (0,0,1) has been translated to a bump (-0.34, -0.30, 0.66). In other words, it does not work to compute sensitivities.<br /><br />One can optimize to obtain the nearest correlation matrix in some norm. Jaeckel proposes a hypersphere decomposition based optimization, using as initial guess the SVD solution. <a href="https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/">Higham proposed a specific algorithm</a> just for that purpose. It turns out that on this example, they will converge to the same solution (if we use the same norm). I tried out of curiosity to see if that would lead to some improvement. The first matrix becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56435&nbsp; -0.46672<br />&nbsp; -0.56435&nbsp;&nbsp; 1.00000&nbsp; -0.46672<br />&nbsp; -0.46672&nbsp; -0.46672&nbsp;&nbsp; 1.00000<br /><br />And the bumped one becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56766&nbsp; -0.46984<br />&nbsp; -0.56766&nbsp;&nbsp; 1.00000&nbsp; -0.46002<br />&nbsp; -0.46984&nbsp; -0.46002&nbsp;&nbsp; 1.00000<br /><br />We find back the same issue, rho_bc has changed by only 0.67%, rho_ac by -0.31% and rho_ab by -0.33%. We also see that the SVD correlation or the real near correlation matrix are quite close, as noticed by P. Jaeckel.<br /><br />Of course, one should apply the bump directly to the cleaned up matrix, in which case it will actually work as expected, unless our bump produces another non positive definite matrix, and then we would have correlation leaking a bit everywhere. It's not entirely clear what kind of meaning the risk figures would have then.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/andreasen-huge-extrapolation/">Andreasen Huge extrapolation</a>
+      </h1>
+      <span class="post-date">Jul 13, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/andreasen-huge-extrapolation/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper's title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don't obey Lee's moments condition.<br /><br />On a Wilmott forum, <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=95309">P. Caspers proposed</a> the following counter-example based on extrapolating SABR: \\( \alpha=15\%, \beta=80\%, \nu=50\%, \rho=-48\%, f=3\%, T=20.0 \\). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.<br /><br />A truly arbitrage free extrapolation can be obtained through <a href="http://ssrn.com/abstract=1694972">Andreasen Huge volatility interpolation</a>, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s1600/Screenshot-Untitled%2BWindow-5.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://3.bp.blogspot.com/-Cp1keeZvJjY/VaPaq-_ttVI/AAAAAAAAIFU/3M-0n5N4eqw/s400/Screenshot-Untitled%2BWindow-5.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Smile</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s1600/Screenshot-Untitled%2BWindow-4.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://2.bp.blogspot.com/-mG5xhhikk5Y/VaPWmDv875I/AAAAAAAAIFA/X8SU8NUmEAE/s400/Screenshot-Untitled%2BWindow-4.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Density with piecewise linear local volatility</td></tr></tbody></table>There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.<br />Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.<br /><br />It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then: <br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s1600/Screenshot-Untitled%2BWindow-3.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="283" src="http://2.bp.blogspot.com/-UytrsK6ficA/VaPWr-BEHmI/AAAAAAAAIFI/BtzCxV0MCSI/s400/Screenshot-Untitled%2BWindow-3.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Density with cubic spline local volatility</td></tr></tbody></table>Interestingly, the right side of the density is much better captured.<br />The wiggle persists, although it is smaller. This is likely due to the fact that I am using a cubic spline on top of the finite difference prices (in order to have a C2 density). Using a better C2 convexity preserving interpolation would likely remove this artefact.<br /><br />Those figures also show why relying just on extrapolation to fix SABR is not necessarily a good idea: even a real arbitrage free extrapolation will make a not so meaningful density. The proper solution is to really use <a href="http://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">Hagan's arbitrage free SABR PDE</a>, which would be as nearly fast in this case.
+
+
+
+
+      
+    </div>
+    
+    
+
+<ul class="pagination">
+    
+    <li class="page-item">
+        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+    <a href="/page/5/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/5/">5</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/page/6/">6</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/7/">7</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/page/7/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var disqus_shortname = "chasethedevil";
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
+<div class="content container" style="padding-top: 0rem;"-->
+ <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
+ <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
+<table style="border-collapse: collapse;">
+     <tr style="padding: 0px; margin: 0px; border: none;">
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
+     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+
