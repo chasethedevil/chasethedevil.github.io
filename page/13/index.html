@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/">Spikes in Heston/Schobel-Zhu Local Volatility</a>
+      </h1>
+      <span class="post-date">Nov 20, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s1600/Screenshot+from+2013-11-20+12:53:32.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="203" src="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s400/Screenshot+from+2013-11-20+12:53:32.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Local Volatility</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s1600/Screenshot+from+2013-11-20+12:54:39.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="213" src="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s400/Screenshot+from+2013-11-20+12:54:39.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Volatility</td></tr></tbody></table><br /><br />The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.<br /><br />After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.<br /><br /><br />
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/">Local Stochastic Volatility with Monte-Carlo</a>
       </h1>
       <span class="post-date">Oct 16, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/#disqus_thread">Comments</a>
@@ -256,23 +273,6 @@ Attari 0.086s
 Reference 0.682s</p>
 <p>The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.</p>
 <p>It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/giving-fedora-another-chance/">Giving Fedora Another Chance</a>
-      </h1>
-      <span class="post-date">Aug 14, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/giving-fedora-another-chance/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-I have had some stability issues with the Ubuntu 13.04 on my home computer, not on my laptop. It might be related to hard disk encryption (out of curiosity I encrypted my main hard drive in the installer option, resulting in a usable but quite slow system - it's incredible how much the hard drive is still important for performance). I did not have any particular issue on my work laptop with it.<br /><br />Anyway I gave Fedora 19 a try, with Gnome Shell, even if I am no particular fan of it. So far so good, it seems more stable than my previous Fedora 17 trial, and I get used to Gnome Shell. It's quite different, so it takes a while to get used to, but it is as productive as any other env (maybe more so even).<br /><br />It made me notice that Ubuntu One cloud storage is much less open that it seems: it's extremely difficult to make it work under Fedora. Some people manage this, I did not. I moved to owncloud, which fits my needs. 
-
-
-
 
       
     </div>

@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/bilinear-gaussian-lanczos-downsampling/">Bilinear Gaussian Lanczos? Downsampling!</a>
+      </h1>
+      <span class="post-date">Mar 17, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/bilinear-gaussian-lanczos-downsampling/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Not easy to choose a downsampling algorithm. Some links:<br><ul><li><a href="http://www.mplayerhq.hu/DOCS/tech/swscaler_methods.txt" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">mplayer</a>: advises bilinear for quality and describes artifacts for each algo </li><li><a href="http://www.lassekolb.info/gim35_downsampling.htm" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)"> a blogger</a>: advises lanczos. This links shows pictures produced by each algo.<br></li><li><a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">digital image interpolation</a>: seems to have a preference for bicubic, what photoshop uses. </li><li><a href="http://forum.videohelp.com/viewtopic.php?t=295115">videohelp</a>: tested various algorithms and think <span class="postbody">Bicubic spline is the best.</span></li></ul>People don't seem to agree. If you want to check the theory: <br><ul><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia lanczos<br>   </a></li><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia bilinear</a></li></ul><br><br>  
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/getting-started-with-dom-xom-dom4j-by-parsing-an-rss-feed-an-experience-review/">Getting Started With DOM, XOM, DOM4J by Parsing an RSS Feed - An Experience Review</a>
       </h1>
       <span class="post-date">Mar 17, 2006 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/getting-started-with-dom-xom-dom4j-by-parsing-an-rss-feed-an-experience-review/#disqus_thread">Comments</a>
@@ -235,23 +252,6 @@ Last year, I have helped building an AJAX web application, where the web client 
       
 
 Bertrand Meyer describes in his book <a href="http://www.amazon.com/exec/obidos/redirect?link_code=as2&amp;path=ASIN/0136291554&amp;tag=michelin-20&amp;camp=1789&amp;creative=9325%22">&quot;<span style="font-style: italic;"> Object Oriented Software Construction (2nd Ed)</span>&quot;</a> qualities that a good object oriented language should have. Java has almost all the features. Ruby is much farther off, which does not mean it is not a good language, I think it's very good to write some types of programs quickly (should I call them scripts?), syntax is quite nice, but it does lack the following useful features: <br><ul><li>Assertions:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">The language should make it possible to equip a class and its features with assertions (preconditions, postconditions and invariants), relying on tools to produce documentation out of these assertions and, optionally, monitor them at run time.&nbsp; </blockquote></li><li>Information Hiding (Java is not good either on that one, the protected keyword is of dubious value):<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  It should be possible for the author of a class to specify that a feature is available to all clients, to no client, or to specified clients<br></blockquote></li><li>Static Typing:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  A well-defined type system should, by enforcing a number of type declaration and compatibility rules, guarantee the run-time type safety of the systems it accepts.</blockquote></li></ul><ul><li>Genericity:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  It should be possible to write classes with formal generic parameters representing arbitrary types.&nbsp;</blockquote></li></ul>More pragmatically, library choice and performance difference between Java and Ruby might be the most decisive. <br><br /><span class="technoratitag">Tags: <a target=_top href="http://del.icio.us/tag/book" rel="tag">book</a> <a target=_top href="http://del.icio.us/tag/review" rel="tag">review</a>
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/what-is-modern-java-compilation/">What Is &#39;Modern&#39; Java Compilation?</a>
-      </h1>
-      <span class="post-date">Feb 7, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/what-is-modern-java-compilation/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-<span class="gmail_quote"></span>Occasionally in <a href="http://ant.apache.org" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">Ant</a> you can see messages like this:<br><span style="background-color: rgb(255, 204, 0);"> &quot;</span><font size="-1"><span style="background-color: rgb(255, 204, 0);">[javac] </span><b style="background-color: rgb(255, 204, 0);">Using modern compiler</b><span style="background-color: rgb(255, 204, 0);">&quot; </span><br><br>What does this mean? <br><br></font><div style="text-align: left;"><font size="-1">In Ant you have the property &quot; <span style="font-weight: bold;">build.compiler</span>&quot; to specify if you want to use a classic or modern compiler. Now what do they mean by modern or classic. Well, they call classic compiler the compilers of JDK 1.1   and 1.2 and they call modern compiler the ones of JDK 1.3+. They made that distinction because a classic compiler does not support the same options as modern compilers: the semantics of javac tool changed in JDK 1.3.</font> <br></div><font size="-1"> <br>This terminology can easily be confused with java class file compatibility. Java class file compatibility is changed using the &quot;<span style="font-weight: bold;">-target</span>&quot; option of javac tool. One can specify in ant to compile with modern compilers and a target  1.4, the result is likely to not run on JVM 1.3. One can specify modern and a target 1.1, the resulting classes will run on JVM 1.1, but ant build.xml file will not be usable with JDK 1.1 without changing modern to classic. <br><br>I find Ant choice of word a bit confusing as using a &quot;modern&quot; compiler has little to do with the resulting class files.<br></font>  
 
 
 
