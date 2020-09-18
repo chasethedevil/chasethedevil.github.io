@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.68.3" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,28 @@
 <div class="content container">
   <div class="posts">
      
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/">Yahoo Finance Implied Volatility</a>
+      </h1>
+      <span class="post-date">Feb 3, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/yahoo_finance_implied_volatility/#disqus_thread">Comments</a>
+      
+      <br/>
+      
+      </span>
+      
+      <p>The <a href="https://finance.yahoo.com/q/op?s=GOOG&amp;date=1457049600">option chain</a> on Yahoo finance shows an implied volatility number for each call or put option in the last column.
+I was wondering a bit how they computed that number. I did not exactly find out their methodology, especially since we don&rsquo;t even know the daycount convention used, but
+I did find that it was likely just garbage.</p>
+<p>A red-herring is for example the large discrepancy between put vols and call vols. For example strike 670, call vol=50%, put vol=32%.
+This suggests that the two are completely decoupled, and they use some wrong forward (spot price?) to obtain those numbers. If I compute
+the implied volatilities using put-call parity close to the money to find out the implied forward price, I end up with ask vols of 37% and 34% or call and put mid vols of 33%.
+By considering the put-call parity, I assume European option prices, which is not correct in this case. It turns out however, that with the low interest rates we live in, there is nearly zero additional value due to the American early exercise.</p>
+<p>I am not sure what use people can have of Yahoo implied volatilities.</p>
+
+      
+    </div>
+    
     <div class="post">
       <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/is_tufte_overrated/">Is Tufte overrated?</a>
@@ -276,414 +298,47 @@ The reasoning behind this later code is that the mantissa is 52 bits, and this i
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/bumping-correlations/">Bumping Correlations</a>
-      </h1>
-      <span class="post-date">Jul 25, 2015 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/bumping-correlations/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-In his book "<i>Monte Carlo Methods in Finance</i>", P. Jäckel explains a simple way to clean up a correlation matrix. When a given correlation matrix is not positive semi-definite, the idea is to do a <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> (SVD), replace the negative eigenvalues by 0, and renormalize the corresponding eigenvector accordingly.<br /><br />One of the cited applications is "<i>stress testing and scenario analysis for market risk</i>" or "<i>comparative pricing in order to ascertain the extent of correlation exposure for multi-asset derivatives</i>", saying that "<i>In many of these cases we end up with a matrix that is no longer positive semi-definite</i>".<br /><br />It turns out that if one bumps an invalid correlation matrix (the input), that is then cleaned up automatically, the effect can be a very different bump. Depending on how familiar you are with SVD, this could be more or less obvious from the procedure,<br /><br />As a simple illustration I take the matrix representing 3 assets A, B, C with rho_ab = -0.6, rho_ac = rho_bc = -0.5.<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.60000&nbsp; -0.50000<br />&nbsp; -0.60000&nbsp;&nbsp; 1.00000&nbsp; -0.50000<br />&nbsp; -0.50000&nbsp; -0.50000&nbsp;&nbsp; 1.00000<br /><br />For those rho_ac and rho_bc, the correlation matrix is not positive definite unless rho_ab in in the range (-0.5, 1). One way to verify this is to use the fact that positive definiteness is equivalent to a positive determinant. The determinant will be 1 - 2*0.25 - rho_ab^2 + 2*0.25*rho_ab.<br /><br />After using P. Jaeckel procedure, we end up with: <br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56299&nbsp; -0.46745<br />&nbsp; -0.56299&nbsp;&nbsp; 1.00000&nbsp; -0.46745<br />&nbsp; -0.46745&nbsp; -0.46745&nbsp;&nbsp; 1.00000<br /><br />If we bump now rho_bc by 1% (absolute), we end up after cleanup with:<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56637&nbsp; -0.47045<br />&nbsp; -0.56637&nbsp;&nbsp; 1.00000&nbsp; -0.46081<br />&nbsp; -0.47045&nbsp; -0.46081 &nbsp; 1.00000<br /><br />It turns out that rho_bc has changed by only 0.66% and rho_ac by -0.30%, rho_ab by -0.34%. So our initial bump (0,0,1) has been translated to a bump (-0.34, -0.30, 0.66). In other words, it does not work to compute sensitivities.<br /><br />One can optimize to obtain the nearest correlation matrix in some norm. Jaeckel proposes a hypersphere decomposition based optimization, using as initial guess the SVD solution. <a href="https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/">Higham proposed a specific algorithm</a> just for that purpose. It turns out that on this example, they will converge to the same solution (if we use the same norm). I tried out of curiosity to see if that would lead to some improvement. The first matrix becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56435&nbsp; -0.46672<br />&nbsp; -0.56435&nbsp;&nbsp; 1.00000&nbsp; -0.46672<br />&nbsp; -0.46672&nbsp; -0.46672&nbsp;&nbsp; 1.00000<br /><br />And the bumped one becomes<br /><br />&nbsp;&nbsp; 1.00000&nbsp; -0.56766&nbsp; -0.46984<br />&nbsp; -0.56766&nbsp;&nbsp; 1.00000&nbsp; -0.46002<br />&nbsp; -0.46984&nbsp; -0.46002&nbsp;&nbsp; 1.00000<br /><br />We find back the same issue, rho_bc has changed by only 0.67%, rho_ac by -0.31% and rho_ab by -0.33%. We also see that the SVD correlation or the real near correlation matrix are quite close, as noticed by P. Jaeckel.<br /><br />Of course, one should apply the bump directly to the cleaned up matrix, in which case it will actually work as expected, unless our bump produces another non positive definite matrix, and then we would have correlation leaking a bit everywhere. It's not entirely clear what kind of meaning the risk figures would have then.
-
-
-
-
-      
-    </div>
     
-    
-
 <ul class="pagination">
-    
-    <li class="page-item">
-        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-    </li>
-    
-    <li class="page-item">
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+  </li>
+  <li class="page-item">
     <a href="/page/5/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-    </li>
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/">1</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/5/">5</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item active"><a class="page-link" href="/page/6/">6</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/7/">7</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
-    
-    
-    <li class="page-item">
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/">1</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/2/">2</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/3/">3</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/5/">5</a>
+  </li>
+  <li class="page-item active">
+    <a class="page-link" href="/page/6/">6</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/7/">7</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/39/">39</a>
+  </li>
+  <li class="page-item">
     <a href="/page/7/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-    </li>
-    
-    <li class="page-item">
-        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-    </li>
-    
+  </li>
+  <li class="page-item">
+    <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+  </li>
 </ul>
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.68.3" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,23 @@
 <div class="content container">
   <div class="posts">
      
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/">Cracking the Double Precision Gaussian Puzzle</a>
+      </h1>
+      <span class="post-date">Mar 22, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<br />In my <a href="http://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">previous post</a>, I stated that some library (SPECFUN by W.D. Cody) computes $$e^{-\frac{x^2}{2}}$$ the following way:<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">xsq = fint(x * 1.6) / 1.6;<br />del = (x - xsq) * (x + xsq);<br />result = exp(-xsq * xsq * 0.<span style="font-size: x-small;">5</span>) * exp(-del *&nbsp;<span style="font-size: x-small;">0.5</span>);</span></span><br /><br />where fint(z) computes the floor of z.<br /><br /><b>1. Why 1.6?</b><br /><br />An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.6 is equivalent to multiplying by 10 and dividing by 16 which is an exact operation). It also allows to have something very close to a rounding function: x=2.6 will make xsq=2.5, x=2.4 will make xsq=1.875, x=2.5 will make xsq=2.5. The maximum difference between x and xsq will be 0.625.<br /><br /><div><b>2. (a-b)*(a+b) decomposition</b></div><div><br /></div><div>del is of the order of 2*x*(x-xsq). When (x-xsq) is very small, del will, most of the cases be small as well: when x is too high (beyond 39), the result will always be 0, because there is no small enough number to represent exp(-0.5*39*39) in double precision, while (x-xsq) can be as small as machine epsilon (around 2E-16). By splitting x*x into xsq*xsq and del, one allow exp to work on a more refined value of the remainder del, which in turn should lead to an increase of accuracy.</div><div><br /></div><div><b>3. Real world effect</b></div><div><br /></div><div>Let's make x move by machine epsilon and see how the result varies using the naive implementation exp(-0.5*x*x) and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac).&nbsp;</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s1600/snapshot1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://3.bp.blogspot.com/-ViyG79syS2w/UUrmdbNcuQI/AAAAAAAAGSY/AIjw6PEgvMw/s400/snapshot1.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what's interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.</div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: left;">This is the relative error between the Naive implementation and Cody. The difference is higher than one could expect: a factor of 20. But it has one big drawbacks: it requires 2 exponential evaluations, which are relatively costly.&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"><b>Update March 22, 2013</b></div><div class="separator" style="clear: both; text-align: left;">I looked for a higher precision exp implementation, that can go beyond double precision. I found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library.</div><div class="separator" style="clear: both; text-align: left;">I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.7000000000000028421709430404007434844970703125.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s1600/snapshot5.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="291" src="http://1.bp.blogspot.com/-uZLpckLIIkM/UUxdN2B04dI/AAAAAAAAGT4/1preYocfLt0/s400/snapshot5.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7</div><div class="separator" style="clear: both; text-align: center;">&nbsp;<a href="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s1600/snapshot7.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="265" src="http://4.bp.blogspot.com/-G1H1YTQCvtY/UUxjYNOP1eI/AAAAAAAAGUA/2YaXO1NscmU/s400/snapshot7.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</div><div><br /></div>
+
+
+
+
+      
+    </div>
+    
     <div class="post">
       <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
@@ -242,423 +259,47 @@ I was looking for an implementation of the non central chi squared distribution 
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/">Finite Difference Approximation of Derivatives</a>
-      </h1>
-      <span class="post-date">Dec 21, 2012 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-A while ago, someone asked me to reference him in a paper of mine because I used formulas of a finite difference approximation of a derivative on a non uniform grid. I was shocked as those formula are very widespread (in countless papers, courses and books) and not far off elementary mathematics.
-
-There are however some interesting old papers on the technique. Usually people approximate the first derivative by the central approximation of second order:
-
-$$ f'(x) = \frac{f(x\_{i+1})-f(x\_{i-1})}{x\_{i+1} - x\_{i-1}} $$  
-
-However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \\(f(x(i+1)) and f(x(i-1))\\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).<br /><br />This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0,0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-mUrKdRztE-c/UNSPUoRdPdI/AAAAAAAAGLM/SEViiYfAhRs/s1600/cir_bond_euler_discretizations.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="288" src="http://2.bp.blogspot.com/-mUrKdRztE-c/UNSPUoRdPdI/AAAAAAAAGLM/SEViiYfAhRs/s400/cir_bond_euler_discretizations.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:</div>
-$$ f'(x\_i) = \left(\frac{1}{h\_i}+\frac{1}{h\_i+h\_{i-1}}\right) f(x\_i)- \left(\frac{1}{h\_{i-1}}+\frac{1}{h\_i}\right) f(x\_{i-1})+ \left(\frac{1}{h\_{i-1}} - \frac{1}{h\_i+h\_{i-1}} \right) f(x\_{i-2}) + ...$$ 
-
-<div class="separator" style="clear: both; text-align: left;">Incidently while writing this post I found out it was a pain to write Math in HTML (I initially used a picture). MathML seems a bit crazy, I wonder why they couldn't just use the LaTeX standard. Update January 3rd 2013 - I now use <a href="http://mathjax.org">Mathjax</a>. It's not very good solution as I think this should typically be handled by the browser directly instead of huge javascript library, but it looks a bit better</div><br />
-
-
-
-
-      
-    </div>
     
-    
-
 <ul class="pagination">
-    
-    <li class="page-item">
-        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-    </li>
-    
-    <li class="page-item">
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+  </li>
+  <li class="page-item">
     <a href="/page/16/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-    </li>
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/">1</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/16/">16</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item active"><a class="page-link" href="/page/17/">17</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/18/">18</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
-    
-    
-    <li class="page-item">
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/">1</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/2/">2</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/3/">3</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/16/">16</a>
+  </li>
+  <li class="page-item active">
+    <a class="page-link" href="/page/17/">17</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/18/">18</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/39/">39</a>
+  </li>
+  <li class="page-item">
     <a href="/page/18/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-    </li>
-    
-    <li class="page-item">
-        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-    </li>
-    
+  </li>
+  <li class="page-item">
+    <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+  </li>
 </ul>
 
 

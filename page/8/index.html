@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.68.3" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,23 @@
 <div class="content container">
   <div class="posts">
      
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/variance-swaps-on-a-foreign-asset/">Variance swaps on a foreign asset</a>
+      </h1>
+      <span class="post-date">Feb 24, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/variance-swaps-on-a-foreign-asset/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+There is very little information on variance swaps on a foreign asset. There can be two kinds of contracts:<br /><ul><li>one that pays the foreign variance in a domestic currency, this is a quanto contract as the exchange rate is implicitly fixed.</li><li>one that pays the foreign variance, multiplied by the fx rate at maturity. This is a flexo contract, and is just about buying a variance swap from a foreign bank. The price of such a contract today is very simple, just the standard variance swap price multiplied by the fx rate today (change of measure).</li></ul>For quanto contracts, it's not so obvious a priori. If we consider a stochastic volatility model for the asset, the replication formula will not be applicable directly as the stochastic volatility will appear in the quanto drift correction. Furthermore, vanilla quanto option prices can not be computed simply as under Black-Scholes, a knowledge of the underlying model is necessary.<br /><br />Interestingly, under the Schobel-Zhu model, it is simple to fit an analytic formula for the quanto variance swap. The standard variance swap price is:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-gfq9trxBHhg/VOxxHi0khTI/AAAAAAAAH00/xD8NbXUSJls/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A33%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-gfq9trxBHhg/VOxxHi0khTI/AAAAAAAAH00/xD8NbXUSJls/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A33%3A17.png" height="50" width="400" /></a></div>The quanto variance swap can be priced with the same formula using a slightly different theta:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-OwYg8Hs9qRw/VOxxMe-iifI/AAAAAAAAH08/xBeV56UEGV8/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A06.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-OwYg8Hs9qRw/VOxxMe-iifI/AAAAAAAAH08/xBeV56UEGV8/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A06.png" /></a></div><br />We can use it to assess the accuracy of a naive quanto option replication where we use the ATM quanto forward instead of the forward in the variance swap replication formula.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ate0oZ41eoY/VOxxhwqGI_I/AAAAAAAAH1E/6LRgNiAHCJg/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A52.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ate0oZ41eoY/VOxxhwqGI_I/AAAAAAAAH1E/6LRgNiAHCJg/s1600/Screenshot%2B-%2B230215%2B-%2B19%3A34%3A52.png" height="289" width="640" /></a></div><br />Interestingly, the&nbsp; quanto forward approximation turns out to be very accurate and the correction is important. The price without correction is the price with zero correlation, and we see it can be +/-5% off in this case.<br /><br />The local vol price seems a bit off, I am not sure exactly why. It could be due the discretization, the theoretical variance should be divided by (N-1) but here we divide by N where N is the number of observations. That would still lead to a skewed price but better centered around correlation 0.<br /><br />It's also a bit surprising that local vol is worse than the simpler ATM quanto forward approximation: it seems that it's extracting the wrong information to do a more precise quanto correction, likely related to the shift of stochastic volatility under the domestic measure.
+
+
+
+
+      
+    </div>
+    
     <div class="post">
       <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/">Jumps impact: Variance swap vs volatility swap</a>
@@ -246,414 +263,47 @@ Recently, some instabilities were noticed in the Carr-Lee seasoned volatility sw
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/the-elusive-reference-the-lamperti-transform/">The elusive reference: the Lamperti transform</a>
-      </h1>
-      <span class="post-date">Nov 3, 2014 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-elusive-reference-the-lamperti-transform/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-Without knowing that it was a well known general concept, I first noticed the use of the Lamperti transform in the Andersen-Piterbarg "Interest rate modeling" book p292 "finite difference solutions for general phi". <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-C3IRwT5dCGw/VFdRHf5y7zI/AAAAAAAAHh8/RseNSs25nyc/s400/Screenshot%2Bfrom%2B2014-11-03%2B10%3A55%3A01.png" />&nbsp;</a></div><div class="separator" style="clear: both; text-align: left;">Pat Hagan used that transformation for a better discretization&nbsp; of the <a href="http://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/">arbitrage free SABR PDE model</a>.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">I then started to notice the use of this transformation in many more papers. The first one I saw naming it "Lamperti transform" was the paper from Ait-Sahalia "<a href="http://www.princeton.edu/~yacine/mle.pdf">Maximum likelyhood estimation of discretely sampled diffusions: a closed-form approximation approach</a>". Recently those closed form formulae have been applied to the quadrature method (where one integrates the transition density by a quadrature rule) in "Advancing the universality of quadrature methods to any underlying process for option pricing". There is also a recent interesting application to Monte-Carlo simulation in "<a href="http://www-leland.stanford.edu/~glynn/papers/2013/RheeG13a.pdf">Unbiased Estimation with Square Root Convergence for SDE Models</a>".</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">So the range of practical applications is quite large. But there was still no reference. A google search pointed me to a well written paper that describes the application of the Lamperti transform to various stochastic differential equations, showing its limits "<a href="http://orbit.dtu.dk/en/publications/from-state-dependent-diffusion-to-constant-diffusion-in-stochastic-differential-equations-by-the-lamperti-transform(8c869be7-68e9-4b47-acb1-05529b9a8590).html">From State Dependent Diffusion to Constant Diffusion in Stochastic Differential Equations by the Lamperti Transform</a>".&nbsp;</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-dupZIXtsqsI/VFdVy3WBJUI/AAAAAAAAHiQ/JlbooVG7rJ8/s1600/Screenshot%2Bfrom%2B2014-11-03%2B10%3A50%3A20.png" height="245" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">Gary then <a href="http://www.clarusft.com/lamperti-transform/">blogged about the Lamperti transform</a> and various papers from Lamperti, but does not say which one is the source.</div><div class="separator" style="clear: both; text-align: left;"></div><div class="separator" style="clear: both; text-align: left;">After going through some, I noticed that Lamperti's 1964 "<a href="http://projecteuclid.org/euclid.kjm/1250524711">A simple construction of certain diffusion processes</a>" seemed to be the closest, even though it seems to go beyond stochastic differential equations.</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-5nPGaNwu3b0/VFdVlLiBEvI/AAAAAAAAHiI/o8Fqh2CQmbw/s1600/Screenshot%2Bfrom%2B2014-11-03%2B11%3A14%3A05.png" height="208" width="400" /></a></div><div class="separator" style="clear: both; text-align: left;">Today, I found a paper referencing this paper explicitly when presenting the transformation of a stochastic process to a unit diffusion in "<a href="http://arxiv.org/pdf/1109.5381">Density estimates for solutions to one dimensional Backward SDE's</a>". In addition it also references one exercise of the Karatzas-Schreve book "Brownian motion and Stochastic calculus", which presents again the same idea, without calling it Lamperti transform.</div>
-
-
-
-
-      
-    </div>
     
-    
-
 <ul class="pagination">
-    
-    <li class="page-item">
-        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-    </li>
-    
-    <li class="page-item">
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+  </li>
+  <li class="page-item">
     <a href="/page/7/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-    </li>
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/">1</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/7/">7</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item active"><a class="page-link" href="/page/8/">8</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/9/">9</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
-    
-    
-    <li class="page-item">
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/">1</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/2/">2</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/3/">3</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/7/">7</a>
+  </li>
+  <li class="page-item active">
+    <a class="page-link" href="/page/8/">8</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/9/">9</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/39/">39</a>
+  </li>
+  <li class="page-item">
     <a href="/page/9/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-    </li>
-    
-    <li class="page-item">
-        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-    </li>
-    
+  </li>
+  <li class="page-item">
+    <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+  </li>
 </ul>
 
 

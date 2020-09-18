@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.68.3" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,23 @@
 <div class="content container">
   <div class="posts">
      
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/use-orm-for-better-performance/">Use ORM For Better Performance</a>
+      </h1>
+      <span class="post-date">Jun 12, 2007 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/use-orm-for-better-performance/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+This is not something I would have though a few years ago. It is something I learnt after working on many different projects, some using an ORM layer like Hibernate, Entity EJBs, or JDO, some using JDBC approach via Spring Templates or custom frameworks. Many projects that use ORM have performance problems, that don&#39;t seem that common with projects using JDBC. But the size of the database model of ORM projects is often much bigger than the one of JDBC projects (which actually makes sense). If you have only a few queries to do, why bother with ORM? This would be complexity for nothing.  <br><br>But for most enterprise projects, the size of the database model is quite big, and the model itself can be complex (many relations between many tables). With this kind of model, ORM is more efficient. It is faster to develop with, creates less bugs due to string misspelled, or types badly read. It is also better performing. Doing 1 giant query to retrieve everything in 1 step is not faster, especially if you don&#39;t always need all the information retrieved. In a complex model, many cases are specifics, only useful in 10% of the cases. The temptation is high with a JDBC approach to do one giant query, because it is substantially longer (and more work) to do N queries.&nbsp; With ORM, it is a bit the opposite, by default N queries is easier to do. The problem is that N(ORM) tends to be very high if one is not careful with the mapping to  <a href="http://www.hibernate.org/118.html#A23">avoid the N+1 problem</a>. However it is simpler to reduce the number of queries by joining tables, rather than splitting queries, ORM performance optimization feels more natural. <br><br>Martin Fowler tends to be also pro ORM in its <a href="http://www.martinfowler.com/articles/dblogic.html">&quot;Domain Logic and SQL&quot; article</a>. He also mentions something interesting about SQL query optimization: <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p>It&#39;s also worth pointing out that this example is one that plays to a database&#39;s strengths. Many queries don&#39;t have the strong elements of selection and aggregation that this one does, and won&#39;t show such a performance change. In addition multi-user scenarios often cause surprising changes to the way queries behave, so real profiling has to be done under a realistic multi-user load. You may find that locking issues outweigh anything you can get by faster individual queries.</p>      <a name="id2249937"></a>     </blockquote><br>In the end it is up to us to make ORM or JDBC approach perform. JDBC provides much more direct access to database, and in benchmarks (always simple database models) or in theory it should be faster. But in the real world, I argue that ORM optimization is simpler and therefore, often ORM projects will perform better. <br> 
+
+
+
+
+      
+    </div>
+    
     <div class="post">
       <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/people-using-spring-ejbs-dont-know-basic-jdbc/">People Using Spring, EJBs Don&#39;t Know Basic JDBC</a>
@@ -243,414 +260,47 @@ Important points are: standard code hierarchy, automatic download of dependencie
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/how-to-build-good-software-private-office/">How to Build Good Software? Private Office</a>
-      </h1>
-      <span class="post-date">Apr 11, 2007 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/how-to-build-good-software-private-office/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-In an open space, people keep on coming to discuss various issues with various people, issues that have nothing to do with your work. You end up either being distracted, or annoyed by the increased noise level. <p>Apparently at Microsoft, they have private offices for each programmer. It might be extreme, paradoxally not in the XP (extreme programming) sense, but it is much better than open space for productivity. In XP, it's almost the opposite with 2 developers working often together. </p>
-
-
-
-
-      
-    </div>
     
-    
-
 <ul class="pagination">
-    
-    <li class="page-item">
-        <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-    </li>
-    
-    <li class="page-item">
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+  </li>
+  <li class="page-item">
     <a href="/page/27/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-    </li>
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/">1</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/2/">2</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/3/">3</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/27/">27</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item active"><a class="page-link" href="/page/28/">28</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/29/">29</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item disabled"><span aria-hidden="true">&nbsp;&hellip;&nbsp;</span></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="/page/39/">39</a></li>
-    
-    
-    <li class="page-item">
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/">1</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/2/">2</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/3/">3</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/27/">27</a>
+  </li>
+  <li class="page-item active">
+    <a class="page-link" href="/page/28/">28</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/29/">29</a>
+  </li>
+  <li class="page-item disabled">
+    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/page/39/">39</a>
+  </li>
+  <li class="page-item">
     <a href="/page/29/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-    </li>
-    
-    <li class="page-item">
-        <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-    </li>
-    
+  </li>
+  <li class="page-item">
+    <a href="/page/39/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+  </li>
 </ul>
 
 
