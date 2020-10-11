@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/hull-american-option-price-fallacies/">Hull American Option Price Fallacies</a>
+      </h1>
+      <span class="post-date">May 15, 2009 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/hull-american-option-price-fallacies/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s1600-h/hull_american_r04_v20_q02_p49.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 320px; height: 240px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s320/hull_american_r04_v20_q02_p49.png" alt="" id="BLOGGER_PHOTO_ID_5336052713901330098" border="0" /></a><br />Hull says American put is best exercised immediately and american call is optimal at expiry like a european. Is this really true?<br /><br />At first it seems really clever and model show clearly this. But if we change the market assumptions only a tiny bit, everything falls down.<br /><br />I could not detail everything in a blog post so I created a <a href="http://31416.appspot.com/static/hullamerican/hull_american_price.html">static web page about it</a>. Everything was produced in Java using algorithm found in popular books and graphs through JFreeChart.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/on-quasi-random-numbers-mersennetwister-vs-sobol-precision-in-asian-option-pricing/">On Quasi Random Numbers - MersenneTwister vs Sobol precision in Asian Option Pricing</a>
       </h1>
       <span class="post-date">May 5, 2009 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/on-quasi-random-numbers-mersennetwister-vs-sobol-precision-in-asian-option-pricing/#disqus_thread">Comments</a>
@@ -244,24 +261,6 @@ A while ago, I had a comment from someone implying I knew nothing about OO progr
 <p>spawn 100: 15 ms</p>
 <p>send 100M messages: 270104ms</p>
 <p><strong>UPDATE</strong>: with <a href="/post/running-rings-around-plain-java-the-killer-code/">slight changes</a> plain Java rocks!</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/more-double-troubles/">More Double Troubles</a>
-      </h1>
-      <span class="post-date">Jan 6, 2009 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/more-double-troubles/#disqus_thread">Comments</a>
-      </span>
-      
-      <p>We saw in a previous entry how one has to be careful with <a href="/post/double.nan-is-evil/">Double.NaN</a>. Today we will see how regular double can cause problems. By the way the NaN issue was not Java specific and this issue is also general in different programming languages</p>
-<p>A coworker was shocked that in Java (I was a bit surprised he saw that only today, but it is true it can be surprising that such a simple thing does not work as expected):
-
-<pre  wrap="" style="font-family:courier new;"><span style="font-size:85%;">408.16 - 40.82 = <span style="font-weight: bold;">367.34000000000003</span></span></pre>In C, this would lead to the same result. This is all due to the <a href="http://en.wikipedia.org/wiki/Double_precision">binary represention of double numbers</a>. Using the formula 2^(exponent)*1.mantissa where mantissa is on 52 bits, we have<br /><br />408.16 decomposition:<br /><ul><li>exponent = 256. Then 408.16/256 = 1.594375 = 1 + 0x9828F5C28F5C28F5C28F5C... * 2^-52<br /></li><li>We round to 52 bits, the mantissa is 0x9828F5C28F5C3 = 2676827028518339.</li><li>As a decimal, the internal value is (2676827028518339/2^52+1) * 256 = 408.1600000000000250111042987555265426635742</li></ul>40.82 decomposition:<br /><ul><li>exponent = 32. Then 40.82/32= 1.275625 = 1 + 0x468F5C28F5C28F5C...*2^-52</li><li>Rounded to 52 bits, the mantissa is 0x468F5C28F5C29 = 1241304647293993<br /></li><li>As a decimal, the internal value is (1241304647293993/2^52 + 1)*32 = 40.8200000000000002842170943040400743484497</li></ul>The difference in decimal becomes 367.34000000000002472... which becomes <span style="font-weight: bold;">367.34000000000003</span> when represented in binary (to convince yourself you can apply the same technique).<br /><br /><span style="font-weight: bold;font-family:arial;" >The Solution</span><br /><br />One solution to this problem is to use <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/math/BigDecimal.html">java.math.BigDecimal</a> which stores a number as 2 integers, one for the digits, one for the exponent power of 10 (and not 2).<br />The correct code would become:<br /><span style=";font-family:courier new;font-size:85%;"  ><br />BigDecimal value = BigDecimal.valueOf(408.16).subtract(BigDecimal.valueOf(40.82));</span><br /><br />value would then be 367.34.<br /><br />But BigDecimal has also many potential for bugs. For example, you should <span style="font-weight: bold;">never use the constructor taking a double but always the one taking a String</span>.<br /><br /><span style="font-size:85%;"><span style="font-family:courier new;">new BigDecimal(408.16) = 408.16000000000002501110429875552654266357421875</span><br /></span><br />This is because of the binary representation of 408.16 as a double. 408.16 is only an approximation of 408.16!<br /><br />Another trick with BigDecimal is<span style="font-weight: bold;"> not to use equals(Object) but compareTo(Object)</span> because 408.160 is not equal to 408.16 using equals.<br /><br /><span style="font-weight: bold;font-family:arial;" >Why Could not They Make it Work With Double?</span>
-</p>
-<p>If you were too lazy to follow the steps of the explanation. There is a simpler explanation. Imagine the representation of a number in base 3 with 2 &ldquo;digits&rdquo;. Let&rsquo;s imagine 1/3 is represented as 0.1 (this is a very simple number representation) 1/3+1/3+1/3 becomes 0.1+0.1+0.1 = 1.0 (in base 3) = 1.0 if we convert to base 10. Now in base 10, 1/3 can only be represented as 0.3, so 1/3+1/3+1/3 = 0.3+0.3+0.3 = 0.9 &lt;&gt; 1.0.</p>
-<p>So BigDecimal is only interesting to handle &hellip; decimals! In the enterprise world, this should be most apps. It is a bit sad it appeared so late in the JDK. It should really be a primitive type.</p>
 
       
     </div>
