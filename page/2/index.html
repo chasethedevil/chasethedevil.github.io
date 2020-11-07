@@ -91,6 +91,130 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/quadprog-nans/">Fixing NaNs in Quadprog</a>
+      </h1>
+      <span class="post-date">Oct 7, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quadprog-nans/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a><a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
+      </span>
+      
+      <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
+<p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
+
+    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+
+    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
+    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
+    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
+    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
+
+    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
+    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
+
+    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+
+    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></code></pre></div>
+<p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
+<p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
+<figure>
+    <img src="/post/quadprog_nan_fix.png"/> <figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
+</figure>
+
+<p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
+      </h1>
+      <span class="post-date">Jul 12, 2018 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>This is a follow up to my <a href="/post/tsla-stock-crash-probability">previous post</a> where I explore the probability
+of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">results of Timothy Klassen</a>.</p>
+<p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
+high compared to other stocks? or is it the interpretation of the data erroneous?</p>
+<p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
+<figure>
+    <img src="/post/nflx2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration.</p>
+<p>The corresponding implied cumulative density is</p>
+<figure>
+    <img src="/post/nflx2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
+<p>For completeness, the implied probability density is</p>
+<figure>
+    <img src="/post/nflx2020_rnd.png"/> <figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
+too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
+<p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
+much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
+<figure>
+    <img src="/post/snap2020_vol.png"/> <figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="/post/snap2020_cum.png"/> <figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<p>We find a probability of moving below 1/3 of the current price lower than with TSLA: around 12% SNAP vs 15% for TSLA.</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
       </h1>
       <span class="post-date">Jul 11, 2018 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/#disqus_thread">Comments</a>
@@ -533,55 +657,6 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 <li><a href="https://www.amazon.com/Methods-Computational-Finance-Mathematics-Industry/dp/3319612816/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825785&amp;sr=1-1&amp;keywords=Novel+Methods+in+Computational+Finance">Novel Methods in Computational Finance</a>. Jörg Kienitz refers to my paper on arbitrage free SABR in chapter 4.</li>
 <li><a href="https://www.amazon.com/Innovations-Derivatives-Markets-Adjustments-Proceedings/dp/331933445X/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825510&amp;sr=1-1&amp;keywords=Innovations+in+Derivatives+Markets">Innovations in Derivatives Markets: Fixed Income Modeling, Valuation Adjustments, Risk Management, and Regulation</a>. Christian Fries refers to my paper on curve interpolation in chapter 10.</li>
 </ul>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/google_phones_are_overrated/">Google phones are overrated</a>
-      </h1>
-      <span class="post-date">Oct 2, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/google_phones_are_overrated/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/hardware">hardware</a>
-      </span>
-      
-      <p>It is a relatively common belief that the vanilla Android experience is better, as it runs smoother. The Samsung Touchwiz is often blamed for making things slow and not more practical.</p>
-<p>I have had a Nexus 6 for a couple of years and I noticed the slowdowns after each update, up to a point where it sometimes took a few seconds to open the phone app, or to display the keyboard. I freed up storage, removed some apps but this did not make any difference. This is more or less the same experience that people have with the Samsung devices if <a href="https://www.reddit.com/r/Android/comments/73necm/with_the_note_8_samsung_no_longer_delivers/">reddit comments</a> are to be believed.</p>
-<p>The other myth is that Google phones will be updated for a longer time. Prior to the Nexus 6, I had a Galaxy Nexus, which Google stopped supporting after less than 2 years. The Nexus 6 received security update until this October, that is nearly 2 years for me and 2.5 years for early buyers.</p>
-<p>In comparison Apple updates its phones for much longer and a 4 years old iphone 5s still runs smoothly. Fortunately for Android phones, there are the alternative roms. Being desperate with the state of my Nexus phone, I installed <a href="http://get.aospa.co/">paranoid android</a>. I am surprised at how good it is. My phone feels like new again, and as good as any flagship I would purchase today. To my great surprise I did not find any clear step by step installation process for Paranoid Android. I just followed the <a href="https://wiki.lineageos.org/devices/shamu/install">detailed steps for LineageOS</a> (CyanogenMod descendent), but with the paranoid android zip file instead of the LineageOS one. I have some trouble to understand how some open source ROM can be much nicer than the pure Google Android ROM, but it is. I have had no crash/reboot (which became more common as well with the years), plus it&rsquo;s still updated regularly. Google does not set a good standard by not supporting its own devices better.</p>
-<p>There is however one thing that Google does well, it&rsquo;s the camera app. The HDR+ mode makes my Nexus 6 take great pictures, even compared to new android phones or iphones. I am often amazed at the pictures I manage to take, and others are also amazed at how good they look (especially since they look often better on the Nexus 6 screen than on a computer monitor). Initially I remember the camera to be not so great, but some update that came in 2016 transformed the phone into a fantastic shooter. It allowed me to take very nice pictures in difficult conditions, see for example <a href="https://photos.app.goo.gl/s2IHVtKMzRkxDY1q1">this google photo gallery</a>. Fortunately it&rsquo;s still possible to install the app in the Google Play store on Paranoid Android. They should really make it open-source and easier to adapt it to other android phones.</p>
-<figure><a href="https://photos.google.com/share/AF1QipOGPpDIYCAYJ_636MtjEGWQHj6da0EukBqwoAGMYvuMoWGGJ8EjCx4ADVNffqulPA?key=YjF4VnRGRGlqNlgtbS1Cb0U0WFo3djl5NEdUSk5R&amp;source=ctrlq.org">
-    <img src="https://lh3.googleusercontent.com/JjEGDeF4uiw1FPFVVDotOPNeN-GPr_5s8-n0ud7Ioio8GvegtJqJ_C6AinmV0plNBnEINZEVr6LZvHb7I68HbGaZcTRUlldsxHoXZVGSLJAYZHqEM94JnDINlVVEWSOvP39Qwj4dWw"/> </a><figcaption>
-            <h4>A photo made with the Google camera app on the Nexus 6.</h4>
-        </figcaption>
-</figure>
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/svn_is_dead/">SVN is dead</a>
-      </h1>
-      <span class="post-date">Sep 26, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/svn_is_dead/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/programming">programming</a>
-      </span>
-      
-      <p>A few years ago, when <a href="https://git-scm.com/">Git</a> was rising fast and <a href="https://subversion.apache.org/">SVN</a> was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:</p>
-<ol>
-<li>Who needs decentralization for a small team or a small company working together?</li>
-<li>‎SVN is proven, works well and is simple to use and put in place.</li>
-</ol>
-<p>Each argument is in reality not so strong. It becomes clear now that Git is much more established.</p>
-<p>Regarding the first argument, a long time ago some people had trouble with CVS as it introduced the idea of merging instead of locking files. Git represents a similar paradigm shift between the centralized and the decentralized. It can scare people in not so rational ways. You could lock files with CVS as you did with visual sourcesafe or any other crappy old source control system. It&rsquo;s just that people favored merges as it was effectively more convenient and more productive. You can also use Git with a centralized workflow. Another more scary paradigm shift with Git is to move away from the idea that branches are separate folders. With Git you just switch branches as it is instantaneous even though, again, you could use it in the old fashioned SVN way.</p>
-<p>Now onto the second argument, SVN is proven to work well. But so is Cobol. Today it should be clear that SVN is essentially dead. Most big projects move or have moved to git. Tools work better with Git, even <a href="https://www.eclipse.org/">Eclipse</a> works natively with Git but requires buggy plugins for SVN. New developers don&rsquo;t know SVN.</p>
-<p>I heard other much worse arguments against Git since. For example, some people believed that, with Git, they could lose some of their code changes. This was partially due to sensational news article such as the <a href="https://www.theregister.co.uk/2017/02/01/gitlab_data_loss/">Gitlab.com data loss</a>, where in reality some administrator deleted some directory and had non-working backups. As a result, some Git repositories were deleted, but in reality it&rsquo;s a common data loss situation, unrelated to the use of Git as version control system. This Stackoverflow question gives a nice overview of <a href="https://stackoverflow.com/questions/21048765/what-can-cause-data-loss-in-git">data loss risks with Git</a>.</p>
-<p>What I feel is true however is that Git is more complex than SVN, because it is more powerful and more flexible. But if you adopt a simple workflow, it&rsquo;s not necessarily more complicated.</p>
 
       
     </div>

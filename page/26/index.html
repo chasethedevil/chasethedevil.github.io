@@ -91,6 +91,43 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/">DecimalFormat Is Broken</a>
+      </h1>
+      <span class="post-date">May 14, 2008 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+A friend of mine recently noticed that the good old DecimalFormat class is "broken". If you try to parse a string that is not a number but is starting with a number, the DecimalFormat.parse will return what it managed to parse.<br /><br />The correct behavior should be to throw a parse exception IMHO. Judging from an old post in the Sun bug tracker, The folks at Sun don't think it really is, they call the default mode of parsing the "lenient" mode. It accepts bad inputs. Then why throwing ParseException at all and why not return 0/NaN when the first character is not a number? Why accepting <span style="font-family: courier new;">1toto2</span> as a number and not <span style="font-family: courier new;">toto2</span>?<br /><br />In reality it can really create unexpected problems. For example, in France,<span style="font-family: courier new;"> 0.1</span> is <span style="font-family: courier new;">0,1</span> because of the Locale conventions. If a user enters<span style="font-family: courier new;"> 0.1</span> in a French Locale, a method using DecimalFormat.parse will interpret it as <span style="font-family: courier new;">0</span> without throwing any exception.<br /><br />Note that DateFormat does not have that problem, at one point Sun added setLenient flag to be able to be in non Lenient mode. It would be very simple to do it with DecimalFormat, I did it myself as an exercise. In DecimalFormat.subparse, the 2 last break statements should stop processing in lenient mode. Lines 1528 to 1531:<br /><span style="font-size:85%;"> <span style="font-family: courier new;">                        sawExponent = true;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // Whether we fail or succeed, we exit this loop</span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span><br /> become:<br /><span style="font-size:85%;"><br /><span style="font-family: courier new;">                         sawExponent = true;</span><br /><span style="font-family: courier new;">                    } else {</span><br /><span style="font-family: courier new;">                        if (isLenient()) {</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            return false;</span><br /><span style="font-family: courier new;">                        }</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // we succeed, we exit this loop</span><br /><span style="font-family: courier new;">                    </span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    if (isLenient()) {</span><br /><span style="font-family: courier new;">                        parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                        parsePosition.errorIndex = oldStart;</span><br /><span style="font-family: courier new;">                        return false;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/">Using MiG Layout For Better Swing Development</a>
+      </h1>
+      <span class="post-date">Apr 29, 2008 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/#disqus_thread">Comments</a>
+      </span>
+      
+      <p>I have forgotten a few libraries in my <a href="/post/better-java-swing-development/">Better Swing Development</a> article, and notably <a href="http://www.miglayout.com">MiGLayout</a>.</p>
+<p>GridBagLayout is too verbose, and still feels too clumsy. This is why a while back I wrote <a href="http://easygridbag.sourceforge.net">a small tool</a> to help visualize various GridBagLayouts for people who are not used to it. But it would have been much simpler to use a better layout instead.</p>
+<p>MiGLayout is good, I managed to have good results without almost any practices on not so simple layouts. It also makes the code more concise.</p>
+<p>Related to my <a href="/post/swixml-review/">previous post about SwiXml</a>, and as SwiXml does not yet support MiGLayout, I was thinking how easy it would be to achieve something relatively similar. With proper code conventions it is quite easy to describe the GUI outside a Java file, for example, for an easy start in a Beanshell file.</p>
+<p>The beanshell file would contain components construction, and MiGLayout of them afterwards, that&rsquo;s it. All listeners and component behaviours would be kept in java classes. With this kind of code split. The beanshell file is then extremely simple, as simple as the SwiXml.</p>
+<p>MiGLayout also has plenty of extra functionalities like <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">hidemode 1</code></pre></div> that can help automatically redoing the layout if a component becomes visible/invisible.</p>
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/_the_-google-1998-paper/">_the_ Google 1998 paper</a>
       </h1>
       <span class="post-date">Apr 25, 2008 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/_the_-google-1998-paper/#disqus_thread">Comments</a>
@@ -218,40 +255,6 @@ One of my first web framework was a custom one, based on the book Web Developmen
       
 
 I tried KDE4.0 last week, when it was everywhere in the news. I was very disappointed.<br><br>I have a long experience of trying beta software, not well known software. I have used Linux since 1998 (partly). I have even used windows beta at one point. And I have seen nothing as crappy as  KDE4.0 release. <br><br>It is not usable at all. <br><br>Now I can understand what are KDE motivations to do such a bad release. It is to gain momentum in their project. KDE4.0 is in development at least <a href="http://www.advogato.org/person/tjansen/diary.html?start=13"> since 2002</a> - 6 years! By creating a .0 release now even if it is an alpha, they have at least something officially out and hope to have developers starting to improve it. It is especially important for them because Gnome has, in the mean time, made regularly lots of improvements. <br><br>I admire the initiative, KDE 3.5 needed lots of improvements, and KDE4 goals are the right ones. But it just feel like the release was more political than everything else. Hell, <a href="https://lists.linux-foundation.org/pipermail/desktop_architects/2007-February/001129.html"> even Linus seems to use Gnome</a> nowadays. 
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/fedora-8-the-comeback/">Fedora 8 - The Comeback</a>
-      </h1>
-      <span class="post-date">Dec 23, 2007 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/fedora-8-the-comeback/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-My previous post about <a href="http://chasethedevil.blogspot.com/2007/11/ubuntu-710-vs-fedora-core-8-gutsy-vs.html">Ubuntu Gutsy vs Fedora 8</a> was weak. It is difficult to find a very good distro. Depending on the computer, I have had different experiences. On some computers, Ubuntu really shines and work with minimal tweaking. On some others, Ubuntu is unstable/does not handle wireless correctly and Fedora is much more stable.<br /><br />The main issues I can see with Fedora 8 are:<br />- LVM by default. I don't think it is a good idea to go LVM by default since lots of basic tools are still not handling it properly. And if you want to read your disk by something else than a distro with LVM you are screwed. Ext3 straight is imho a much wiser choice. Plus it is rarely a problem to resize partitions as it is not something one does often.<br />- Fewer programs in the repositories available. Under ubuntu, I was using gtkguitune to tune my guitar, it was in the default repositories. It does not exist for Fedora and I did not manage to compile it due to too old dependencies (GTK 1.2). I found accordeur on sourceforge which is a better program and is available as RPM, so in the end I found something. But while searching I saw the choice was not as wide as with Ubuntu.<br />- Packages too small: it is not exactly clear what packages you need to start compiling programs with Fedora. If you look in the default categorization, way too many things are silly to enable by default. Also generally package management seems less stable/less easy to use than with Ubuntu.<br /><br />What I like:<br />- newer Linux kernel, with better scheduler. Fedora seems more responsive.<br />- bluetooth relatively well handled by default. The standard method of editing /etc/bluetooth/default works well to plug keyboard.<br />- wifi well handled by default. I had lots of problems with Ubuntu on my computer and the wifi card, I don't have them with Fedora.<br /><br />Next step:<br />- maybe try Suse 10.3 as I just found out that Amarok is the best music player on earth today. As music playing is very important for my computer, a KDE based distro makes sense.<br /><br />But that would be a silly typical Linux user reaction.
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/haskell-fibonacci-revisited/">Haskell Fibonacci Revisited</a>
-      </h1>
-      <span class="post-date">Dec 12, 2007 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/haskell-fibonacci-revisited/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29#smoking-4core">interesting post</a> about Haskell performance and Haskell parallelization showing Haskell could outperform C on a simple Fibonacci example.<br /><br />A friend of mine, Peter (that I seem to manage to constantly piss off) thought about it on another level, saying you could achieve a _MILLION_ times better using a direct formula in C or Java, <a href="http://www.mcs.surrey.ac.uk/Personal/R.Knott/Fibonacci/fibFormula.html#formula">the Binet formula</a>.<br /><br />I decided to try as the improvement scale seemed a bit surprising. I first compared a Java recursive fibonacci with a Haskell one. Here are the results for Haskell GHC 6.6.1 vs Java 1.6.0 on Linux for fib(44):<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s1600-h/simple_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AevOMNqtI/AAAAAAAABI4/Ju0-GjX6W14/s320/simple_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144571069115090" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s1600-h/simple_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/R2AeveMNquI/AAAAAAAABJA/DJDx3Vw0LyU/s320/simple_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143144575364082402" /></a><br />Then I decided to check out the time for fib(44) or any fib at all, I was unable to measure precisely enough since it always came out as 0ms, in Haskell, or in Java. Looping out 10 million times, Java gave out 7.3s and Haskell something similar (but my method to loop 10 million times in Haskell is probably very bad).<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s1600-h/binet_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqvI/AAAAAAAABJI/DHpUw2wMiTc/s320/binet_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643058" /></a><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s1600-h/binet_java.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/R2AnZOMNqwI/AAAAAAAABJQ/dkgIlZuXSPE/s320/binet_java.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154088716643074" /></a><br />The original post actually points to a link that describes various algorithms for Fibonacci. They basically say that for large n, the rounding is not precise enough, they also propose algorithms in log(n). I tried and was really impressed by the performance of those algorithms. Again I could not measure the difference for a single calculation between it and the binet formula as elapsed time is always 0. The binet formula becomes inexact already at n=71 in Java with doubles.<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s1600-h/fancy_haskell.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/R2AoLuMNqxI/AAAAAAAABJY/o0Z4pI0ELPY/s320/fancy_haskell.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5143154956300036882" /></a><br /><br />Of course the original post is still quite interesting, it shows how easy it can be to parallelize calculations in Haskell. But the example is silly as another algorithm can lead to 10 millions times the performance. Still Haskell performs well with the shit or good algorithm when compared to Java.
 
 
 

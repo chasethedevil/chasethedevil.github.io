@@ -91,6 +91,40 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/why-primitive-arrays-matter-in-java/">Why primitive arrays matter in Java</a>
+      </h1>
+      <span class="post-date">Feb 29, 2012 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/why-primitive-arrays-matter-in-java/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+In the past, I have seen that one could greatly improve performance of some Monte-Carlo simulation by using as much as possible <span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">double[][]</span></span> instead of arrays of objects.<br /><br />It was interesting to read <a href="http://flavor8.com/index.php/2012/02/25/java-performance-autoboxing-and-data-structure-choice-obviously-matter-but-by-how-much/">this blog post explaining why that happens</a>: it is all about memory access.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/scala-again/">Scala Again</a>
+      </h1>
+      <span class="post-date">Feb 6, 2012 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/scala-again/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I am trying <a href="http://www.scala-lang.org/">Scala</a> again. Last time, several years ago, I played around with it as a web tool, combining it with a Servlet Runner like Tomcat. This time, I play around with it for some quantitative finance experiments.<br /><br /><b>Why Scala?</b> It still seem the most advanced alternative to Java on the JVM, and the mix of functional programming and OO programming is interesting. Furthermore it goes quite far as it ships with its own library. I was curious to see if I could express some things better with Scala.<br /><br />Here are my first impressions after a week:<br /><ul><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> keyword. It avoids the messy singleton pattern, or the classes with many static methods. I think it makes things much cleaner to not use static at all but distinguish between <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> &amp; <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">class</span>.</li><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Array[Double]</span>, and especially <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ArrayBuffer[Double]</span>. Finally we don't have to worry between the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Double</span> and <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">double</span> performance issues.</li><li>I was a bit annoyed by <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a(i)</span> instead of <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a[i]</span> but it makes sense. I wonder if there is a performance implication for arrays, hopefully not.</li><li>I like the real properties, automatic getter/setter: less boilerplate code, less getThis(), setThat(toto).</li><li>Very natural interaction with Java libraries. </li><li>I found a good use of <b>case classes</b> (to my surprise): typically an enum that can have some well defined parameters, and that you don't want to make a class (because it's not). My use case was to define boundaries of a spline.</li><li>I love the formatter in the scala (eclipse) IDE. Finally a formatter in eclipse that does not produce crap.</li></ul>Now things I still need time to get used to:<br /><ul><li> member variable declared implicitly in the constructor. I first made the mistake (still?) to declare some variables twice.</li><li>I got hit by starting a line with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span> instead of ending with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span>. It is dangerous, but it certainly makes the code more consistent.</li><li>Performance impacts: I will need to take a look at the bytecode for some scala constructs to really understand the performance impact of some uses. For example I tend to use while loops instead of for comprehension after some scary post of the Twitter guys about for comprehension. But at first, it looks as fast as Java.</li><li>I wrote my code a bit fast. I am sure I could make use of more Scala features.</li><li>The scala IDE in eclipse 3.7.1 has known issues. I wish it was a bit more functional, but it's quite ok (search for references works, renaming works to some extent).</li><li>Scala unit tests: I used scala tests, but it seems a bit funny at first. Also I am not convinced by the syntax that avoid method names and prefer test("test name"). It makes it more difficult to browse the source code.</li></ul>Some things they should consider:<br /><ul><li>Integrate directly a Log API. I just use SLF4J without any scala wrapper, but it feels like it should be part of the standard API (even if that did not work out so well for Sun).</li><li>Double.Epsilon is not the machine epsilon: very strange. I found out somewhere else there was the machine epsilon, don't remember where because I ended up just making a small <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span>.</li><li>Unit tests should be part of the standard API.</li></ul>Overall I found it quite exciting as there are definitely new ways to solve problems. It was a while since I had been excited with actual coding.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/kde-4.8-finally-has-a-dock/">KDE 4.8 finally has a dock</a>
       </h1>
       <span class="post-date">Jan 27, 2012 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/kde-4.8-finally-has-a-dock/#disqus_thread">Comments</a>
@@ -218,40 +252,6 @@ After the upgrate to Ubuntu 11.04 I was directly on Unity. Having a dock on the 
       
 
 Finally someone who shares the same opinion on the current state of GPGPU programming. <br /><br />John Carmack: On the other hand, we have converted all of our offline processing stuff to ray tracing. For years, the back-end MegaTexture generation for Rage was done with... we had a GPGPU cluster with NVIDIA cards and it was such a huge pain to keep. It was an amazing pain where one system would be having heat problems and would be behaving weird even though we thought they had identical drivers. Something would always be wrong with render farm 12, and whenever we wanted to put in new features it was like “Okay, writing new fragment programs to go into this.” Now, granted I did this just when CUDA was in its infancy. If I did re-implement it with OpenCL or CUDA we wouldn’t have some of these problems, but when I converted all these over to ray tracing there was a number of things that got a lot better. Things that we deal with, [for example] shadows and reflections that have to be approximated, and were so used to doing with rasterization... we sometimes forget how big of hacks these are. To be able to say I really just want that ray, and tell me what it hit; not do a projection with feathering shadowed edges and whatever the heck else we’re doing there, so much of the code got so much easier. If it’s a choice of... now that we have these awesome multi-core x86 CPUs where we can get 24 threads in commodity boxes... it’s true that one GPU card can do more ray tracing than one 24 thread x86 box, but it’s not multiples more and if it’s just a matter of buying more $2000 boxes, it makes the development, maintenance, and upkeep much better. While everyone in high performance computing is all “rah-rah” GPUs right now, I’ve come full circle back around to saying the fact that we can get massive amounts of x86 cores and threads... it wont win on FLOPS/watt or FLOPS/volume, but in terms of results per developer hour it is much, much better.
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/">exp(y*log(x)) Much Faster than Math.pow(x,y)</a>
-      </h1>
-      <span class="post-date">Apr 8, 2011 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-Today I found out that replacing <b>Math.pow(x,y) </b>by <b>Math.exp(y*Math.log(x)) </b>made me gain 50% performance in my program. Of course, both x and y are double in my case. I find this quite surprising, I expected better from Math.pow.
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/best-headphones-ever/">Best Headphones Ever?</a>
-      </h1>
-      <span class="post-date">Apr 6, 2011 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/best-headphones-ever/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-I just miraculously received some AKG Q701 headphones. I never tried really high end headphones before those. I was used to my Sennheiser HD555, which I thought were quite good already.<br /><br />I always thought there was not much difference between let's say a $100 headphone and a $500 one, and that only real audiophiles would be able notice the difference: people like Jake who can distinguish artefacts in 320kbps mp3, but not people like me. I was wrong. Those headphones make a real difference, everything seems very clear, and it doesn't feel like listening music through headphones at all, it is much closer to a good hi-fi stereo sound on the ear.
 
 
 
