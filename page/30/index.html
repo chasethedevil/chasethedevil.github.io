@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/why-are-you-not-using-entity-ejb-1.1/">Why are you not using Entity EJB 1.1?</a>
+      </h1>
+      <span class="post-date">Feb 7, 2007 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/why-are-you-not-using-entity-ejb-1.1/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+<div>I am currently quite busy learning about Websphere Commerce. I was surprised to notice that they still use Entity EJBs 1.1. My experience was that many companies turned away from Entity EJBs, sometimes from the beginning, preferring TopLink or Hibernate (later). </div> <div>&nbsp;</div> <div>I know that Entity EJBs are more heavy to use than Hibernate, but with the proper tooling support, it&#39;s not really a big issue. Are there more fundamental reasons? There are probably some mapping limitations, but IBM implementation is apparently quite good in term of features. </div> <div>&nbsp;</div> <div>I will write a complete post about my own analysis of EJB 1.1 vs IBM EJB 1.1 vs EJB 3.0 vs Hibernate, but I was wondering first what was your feedback on EJB 1.1.</div> 
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/switching-to-windows/">Switching to Windows</a>
       </h1>
       <span class="post-date">Jan 25, 2007 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/switching-to-windows/#disqus_thread">Comments</a>
@@ -232,23 +249,6 @@ I discovered a new baby in the build world. Some open source projects use a comb
       
 
 A friend of mine had a good idea for a Java project named "hibernate proxy". I renamed it "hibernate network proxy" because hibernate proxies are already a well known concept among hibernate users (it allows lazy loading through a Java Proxy class). <br> <br> The hibernate network proxy, is a way to use hibernate remotely, that is to proxy hibernate calls through TCP (or even HTTP) to another machine, that will execute the session.saveOrUpdate or the session.load, etc. calls and return the corresponding objects, serialize them and deserialize them for use on the client.<br> <br> As most projects in my company involves several distributed services, this idea could have been potentially very interesting, allowing hibernate use in several services that would interact with a common service in charge of the db. It made me think about other standard patterns:<br> <br> <ul>   <li>This is not very different from the classical EJB session facade architecture, except we don't expose application functionalities, only hibernate stuff. In fact we don't want to expose application functionalities since they are not shared between services.</li>   <li>This is very similar to Entity EJBs used without facade, remotely, the first kind of design we heard about when EJBs came out. This would actually be a good fit for doing this kind of stuff, amazingly. I never thought remote entity EJBs were of any real use. Unfortunately for our projects, we already have a messaging infrastructure, and I am not sure how feasible it is to change of EJB transport protocol. Seeing the complexity of something like IIOP, it looks like a dead end.</li>   <li>This is a kind of Hibernate Second Level Cache, a cache with remote capabilities. The cache would proxy the request to the db service, and the db service would answer to that. This is a possible implementation that seems very flexible.</li>   <li>Use a regular TCP connection to the DB, and hibernate in a standard way. Ok, it does not use our internal message bus, but it is so simple and standard.&nbsp;</li> </ul> The last solution raises the most important question: <br> <blockquote>Why does it need to be proxied?&nbsp;<br> </blockquote> To go through some particular port? -&gt; use a port forwarder.<br> To go through HTTP? -&gt; use HTTPTunnel.<br> You want Java only? -&gt; use <a  href="http://www.jcraft.com/jhttptunnel/">JHttpTunnel</a>,there is even JSch for ssh<br> <br> <br> 
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/workaround-when-eclipse-fucks-off-with-cvs/">Workaround When Eclipse Fucks Off With CVS</a>
-      </h1>
-      <span class="post-date">Nov 28, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/workaround-when-eclipse-fucks-off-with-cvs/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-Until recently, I always found Eclipse CVS support to be excellent. The synchronize view was really a big plus to do clean commits, without forgetting any file.<br> <br> But I have encountered several problem with Eclipse 3.2+:<br> <br> <blockquote>On one project, it keeps putting the build directory into CVS, and I can't find how to change that setting. Each time I open the project I have to change the CVS/Entries file.<br>   <br> On another, where I have lots of files in, Eclipse delete some of the files (checked in CVS) regularly, although not often. It won't retrieve them back again from CVS. It seems to be the same files each time. I have no clue why.<br>   <br> The diff sometimes tells me the whole file has changed while there is absolutely no change.<br>   <br> I could not make the merge work. It kept on complaining about some parameters.<br>   <br> </blockquote> And now the workaround for all those cases: <br> <blockquote><b>The good old CVS command line.<br>   <br>   </b></blockquote> I never remember how do to a merge with the command line, so I each time go to google and read<a  href="http://www.csc.calpoly.edu/%7Ejdalbey/205/Resources/cvsBranchMerge.html"> this merge example page</a>. Here are the very simple steps if you are in a branch and want to merge:<br> <ol>   <li>     <pre>cvs update -A mypoem.txt (use head as local repository)</pre>   </li>   <li>     <pre class="source">cvs update -j release-1 (merge release-1 changes into local repository)</pre>   </li>   <li>     <pre class="source">cvs update mypoem.txt</pre>   </li>   <li>     <pre class="source">cvs commit mypoem.txt</pre>   </li> </ol> <br> 
 
 
 

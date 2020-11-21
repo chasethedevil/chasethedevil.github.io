@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/">Martin Odersky teaches Scala to the Masses</a>
+      </h1>
+      <span class="post-date">Sep 17, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a>&nbsp;by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What's nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.<br /><br />I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).<br /><br />I believe it will make my code more functional programming oriented in the future, especially at the high level.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/setting-values-in-java-enum-a-bad-idea/">Setting Values in Java Enum - A Bad Idea</a>
       </h1>
       <span class="post-date">Sep 12, 2013 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/setting-values-in-java-enum-a-bad-idea/#disqus_thread">Comments</a>
@@ -247,23 +264,6 @@ I was used to <a href="http://www.scilab.org/">Scilab</a> for small experiments 
       
 
 Joda has the concept of LocalDate/<a href="http://joda-time.sourceforge.net/api-release/org/joda/time/LocalDateTime.html">LocalDateTime</a> and <a href="http://joda-time.sourceforge.net/api-release/org/joda/time/DateTime.html">DateTime</a>. The LocalDate is just a simple date, while DateTime is a date and a time zone.<br /><br />Where I work we have a similar distinction, although not the same: a simple "absolute" date object without time vs a relative date (a timestamp) like the JDK Date.<br /><br />The standard JDK Date class is a date without a time zone, but Sun deprecated in JDK 1.1 all methods allowing to use it like a LocalDate, forcing to use it through a Calendar (i.e. like a DateTime), that is, with a TimeZone.<br /><br />I have found one explanation for a potential use case of LocalDateTime vs DateTime: when you take an appointment to the doctor for July 22nd at 10am, the future date is a fixed event. Some people say you just don't care about the TimeZone in this case, and therefore use LocalDateTime. I think it is a bit more subtle than that. One could think of using fixed arbitrary TimeZone, it could just easily be set to UTC or to the default Java time zone or even the correct one. While it's not typically what the user want to worry about, it could be a default setting (like in Google Calendar or in your OS). And that is exactly what the LocalDateTime does internally, it uses a fixed, non modifiable TimeZone.<br /><br /><br />If the future event is in a few years and you want to store it in a database, it can become more problematic because daylight saving might not be well determined yet. The number stored today might not mean the same thing in a few years. I am not sure if it can be a real issue, but I am <a href="http://stackoverflow.com/questions/9047501/how-do-you-keep-timezone-and-calendar-up-to-date-after-a-time-zone-change">not the only one</a> to worry about that. As the LocalDateTime internally relies on UTC, it is not affected by this.<br /><br />There is another more technical use case for LocalDateTime, if you have a list of dates in a contract, they are all according to the contract TimeZone, you then probably don't want to specify the TimeZone for each date. The question is then more is the DateTime concept a good idea?
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/">The CUDA Performance Myth II</a>
-      </h1>
-      <span class="post-date">Jul 12, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-This is a kind of following to the <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/">CUDA performance myth</a>. There is a recent news on the java concurrent mailing list about <a href="http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/SplittableRandom.java?revision=1.7&amp;view=markup">SplittableRandom class</a> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.<br /><br />It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L'Ecuyer <a href="http://www.iro.umontreal.ca/~simardr/rng/MRG32k3a.c">MRG32k3a</a> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MTGP/">MTGP</a>, and even the less rigourous XorWow popularized by NVidia CUDA.<br /><br />The book <a href="http://my.safaribooksonline.com/book/-/9780123849885/chapter-16dot-parallelization-techniques-for-random-number-generators/232#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDEyMzg0OTg4NS8yNDQ=">GPU Computing Gems</a> provides some interesting stats as to GPU vs CPU performance for various generators (L'Ecuyer, Sobol, and Mersenne Twister) <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-lETLXaEkXn8/UeABqgvJndI/AAAAAAAAGiU/MzLslJR0R_c/s1600/snapshot32.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://4.bp.blogspot.com/-lETLXaEkXn8/UeABqgvJndI/AAAAAAAAGiU/MzLslJR0R_c/s640/snapshot32.png" width="572" /></a></div>A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what's interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.<br /><br />
 
 
 

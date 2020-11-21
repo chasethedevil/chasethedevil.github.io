@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</a>
+      </h1>
+      <span class="post-date">Apr 12, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+I forgot two important points in my <a href="http://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">previous post</a> about <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the Heston call price:<br /><br />- Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is \(S_0*max(S/S_0-K/S0)\). Here are the results for <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl</a>, <a href="http://pjaeckel.webspace.virginmedia.com/NotSoComplexLogarithmsInTheHestonModel.pdf">Kahl-Jaeckel</a> (the more usual way limited to machine epsilon accuracy), <a href="http://epubs.siam.org/doi/abs/10.1137/110830241">Forde-Jacquier-Lee</a> ATM implied volatility without scaling for a maturity of 1 day:<br /><br />strike 62.5=2.919316809400033E-34 8.405720564041985E-12 0.0<br />strike 68.75=-8.923683388191852E-28 1.000266536266281E-11 0.0<br />strike 75.0=-3.2319611910032E-22 2.454925152051146E-12 0.0<br />strike 81.25=1.9401743410877718E-16 2.104982854689297E-12 0.0 <br />strike 87.5=-Infinity -1.6480150577535824E-11 0.0<br />strike 93.75=Infinity 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.4174318393886519 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.326968012594355E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=-5.205783145942609E-21 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=4.537094156599318E-25 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=1.006555799739525E-27 3.2365221613872563E-12 2.3126009701775733E-240<br />strike&nbsp; 131.25=4.4339539263484925E-31 2.4794388764348696E-11 0.0<br /><br />One can see negative prices and meaningless prices outside ATM. With scaling it changes to: <br />strike 62.5=2.6668642552659466E-182 8.405720564041985E-12 0.0<br />strike 68.75=7.156278101597845E-132 1.000266536266281E-11 0.0<br />strike 81.25=7.863105641534119E-55 2.104982854689297E-12 0.0<br />strike 87.5=7.073641308465115E-28 -1.6480150577535824E-11 0.0<br />strike 93.75=1.8375145950924849E-9 1.8277663826893331E-9 1.948392142070432E-9<br />strike 100.0=0.41743183938755385 0.41743183938679845 0.4174314959743768<br />strike 106.25=1.3269785342953315E-11 7.575717830832218E-11 1.1186618909114702E-11<br />strike 112.5=8.803247187972696E-42 2.5307755890935368E-11 6.719872683111381E-45<br />strike 118.75=5.594342441346233E-90 1.8911094912255066E-11 3.615356241778357E-114<br />strike 125.0=7.6539757567179276E-149 3.2365221613872563E-12 2.3126009701775733E-240<br />strike 131.25=0.0 2.4794388764348696E-11 0.0<br /><br />One can now now see that the Jacquier-Lee approximation is quickly not very good.<br /><br />- Put: the put option price can be computed using the exact same <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan </a>formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part II)</a>
       </h1>
       <span class="post-date">Apr 11, 2013 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/#disqus_thread">Comments</a>
@@ -241,23 +258,6 @@ I found a nice finite difference scheme, where the solving part can be paralleli
       
 
 I still did not abandon Scala despite my <a href="http://chasethedevil.github.io/post/scala-is-mad/">previous post</a>, mainly because I have already quite a bit of code, and am too lazy to port it. Furthermore the issues I detailed were not serious enough to motivate a switch. But these days I am more and more fed up with Scala, especially because of the Eclipse plugin. I tried the newer, the beta, and the older, the stable, the conclusion is the same. It's welcome but:<br /><ul><li>code completion is not great compared to Java. For example one does not seem to be able to see the constructor parameters, or the method parameters can not be automatically populated.</li><li>the plugin makes Eclipse *very* slow. Everything seems at least 3-5x slower. On the fly compilation is also much much slower than Java's.</li></ul><br />It's nice to type less, but if overall writing is slower because of the above issues, it does not help. Beside curiosity of a new language features, I don't see any point in Scala today, even if some of the ideas are interesting. I am sure it will be forgotten/abandoned in a couple of years. Today, if I would try a new language, I would give Google Go a try: I don't think another big language can make it/be useful on the JVM (beside a scripting kind of language, like JavaScript or Jython).<br /><br />Google Go focuses on the right problem: concurrency. It also is not constrained to JVM limitation (on the other side one can not use a Java library - but open source stuff is usually not too difficult to port from one language to another). It has one of the fastest compilers. It makes interesting practical choices: no inheritance.
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/from-opensuse-to-ubuntu-13.04/">From OpenSuse to Ubuntu 13.04</a>
-      </h1>
-      <span class="post-date">Feb 1, 2013 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/from-opensuse-to-ubuntu-13.04/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-In my Linux quest, I changed distribution again on my home desktop, from OpenSuse 11.1 with KDE to Ubuntu 13.04 (not yet released - so alpha) with Unity. Why?<br /><br />- KDE was crashing a bit too often for my taste (more than once a week). Although I enjoyed the KDE environment.<br />- Not easy to transfer files to my Android 4.2 phone. Ubuntu 13.04 is not fully there yet, but is on its way.<br />- zypper is a bit too specific for my taste. I would be ok with yum+rpm or apt-get, but another tool just for a single distribution, not really. <br />- Plus I'm just curious what's next for Ubuntu, and Linux makes it very simple to change distributions, and reinstall applications with the same settings. So it's never a big task to change distribution.<br />- I somehow like how Ubuntu feels, not sure what it is exactly, maybe the Debian roots.<br /><br />When people say OpenSuse is rock solid, I don't have that impression, at least on the desktop. It might have been true in the past. But in the past, most distros were very stable. I never remember having big stability issues until, maybe, late 2010. In the early 2000s, a laptop would work very well with Linux, suspend included. I remember that my Dell Inspiron 8200 was working perfectly with Mandrake &amp; WindowMaker. Nowadays, it never seem to work that well, but is just ok: Optimus comes to mind (especially with external screen), suspend problems, wifi (not anymore).<br /><br />So far I can see that Ubuntu 13.04 is prettier than the past versions, the installer is great. I encrypted my two hard disks, it was just a matter of ticking a box - very nice. Unity Launcher, while interesting, is still not the greatest tool to find an installed application (compared to KDE launcher or Gnome Shell). I don't notice any stability issue so far, even though I have some popup messages that sometimes tells me something crashed (typical for an alpha version). If I just ignore the messages, everything seems fine. OpenSuse-KDE was logging me out (session crash), or just stopped completely being responsive (hard reset necessary).
 
 
 

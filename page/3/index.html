@@ -91,6 +91,32 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/quantitative_finance_books/">Quantitative Finance Books Citing My Papers</a>
+      </h1>
+      <span class="post-date">Dec 9, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/quantitative_finance_books/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>I would have never really expected that when I started writing papers, but little by little there is a growing list of books citing <a href="https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">my papers</a>:</p>
+<ul>
+<li><a href="https://www.amazon.com/Applied-Quantitative-Finance-Equity-Derivatives/dp/1977557872/ref=sr_1_1?ie=UTF8&amp;qid=1512751819&amp;sr=8-1&amp;keywords=jherek+healy">Applied Quantitative Finance for Equity Derivatives</a> by <a href="https://jherekhealy.github.io">Jherek Healy</a>: the most recent book on equity derivatives refers to several of my papers. In contrast with many other books, the author goes beyond and provides additional insights on the papers.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Derivatives-Explained-Engineering/dp/1137360186/ref=sr_1_1?ie=UTF8&amp;qid=1512825081&amp;sr=8-1&amp;keywords=Interest+Rate+Derivatives+Explained%3A+Volume+2%3A+Term+Structure+and+Volatility+Modelling">Interest Rate Derivatives Explained: Volume 2: Term Structure and Volatility Modelling</a> by Jörg Kienitz and Peter Casper. It refers to the paper &ldquo;finite difference techniques for arbitrage-free SABR&rdquo;, written in collaboration with Gary Kennedy.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Derivatives-Explained-Engineering/dp/1137360062/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512824387&amp;sr=1-1">Interest Rate Derivatives Explained: Volume 1: Products and Markets</a> by Jörg Kienitz. It refers to my paper on curve interpolation (there is a mistake in the actual reference given inside the book,about arbitrage-free SABR, which unrelated to the text). I like how this book gives real world market data related to the products considered.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Modelling-Multi-Curve-Framework/dp/1137374659/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825258&amp;sr=1-1&amp;keywords=henrard+interest">Interest Rate Modelling in the Multi-Curve Framework: Foundations, Evolution and Implementation</a> by <a href="http://multi-curve-framework.blogspot.fr/">Marc Henrard</a>. It refers to the paper about yield curve interpolation. This is one of the rare books to present curve construction in depth.</li>
+</ul>
+<p>There are also some Springer books which are typically a collection of papers on a specific subject (which I find less interesting).</p>
+<ul>
+<li><a href="https://www.amazon.com/Methods-Computational-Finance-Mathematics-Industry/dp/3319612816/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825785&amp;sr=1-1&amp;keywords=Novel+Methods+in+Computational+Finance">Novel Methods in Computational Finance</a>. Jörg Kienitz refers to my paper on arbitrage free SABR in chapter 4.</li>
+<li><a href="https://www.amazon.com/Innovations-Derivatives-Markets-Adjustments-Proceedings/dp/331933445X/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825510&amp;sr=1-1&amp;keywords=Innovations+in+Derivatives+Markets">Innovations in Derivatives Markets: Fixed Income Modeling, Valuation Adjustments, Risk Management, and Regulation</a>. Christian Fries refers to my paper on curve interpolation in chapter 10.</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/google_phones_are_overrated/">Google phones are overrated</a>
       </h1>
       <span class="post-date">Oct 2, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/google_phones_are_overrated/#disqus_thread">Comments</a>
@@ -420,61 +446,6 @@ blue and red circles should be inverted.</p>
 </figure>
 </p>
 <p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/">Brownian Bridge and Discrete Random Variables</a>
-      </h1>
-      <span class="post-date">Jan 26, 2017 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>The <a href="/post/a-new-scheme-for-heston">new Heston discretisation scheme</a> I wrote about a few weeks ago makes use
-a discrete random variable matching the first five moments of the normal distribution instead of the usual
-normally distributed random variable, computed via the inverse cumulative distribution function. Their discrete random
-variable is:
-$$\xi =	\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3,,$$
-$$	\xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4,,$$
-$$\xi =	\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3,,$$
-$$\xi =	-\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4,,$$
-with \(U_1 \in \{0,1,&hellip;,7\}\)</p>
-<p>The advantage of the discrete variable is that it is much faster to generate. But there are some interesting
-side-effects. The first clue I found is a loss of accuracy on forward-start vanilla options.</p>
-<p>By accident, I found a much more interesting side-effect: you can not use the Brownian-Bridge variance reduction
-on the discrete random variable. This is very well illustrated by the case
-of a digital option in the Black model, for example with volatility 10% and a 3 months maturity, zero interest rate and dividends. For the following graph,
-I use 16000 Sobol paths composed of 100 time-steps.</p>
-<figure>
-    <img src="/post/black_discrete_sampling.png"/> <figcaption>
-            <h4>Digital Call price with different random variables.</h4>
-        </figcaption>
-</figure>
-
-<p>The &ldquo;-BB&rdquo; suffix stands for the Brownian-Bridge path construction, &ldquo;Five&rdquo; for five moments discrete variable
-and &ldquo;AS241&rdquo; for the inverse cumulative distribution function (continuous approach). As you can see,
-the price is discrete, and follows directly from the discrete distribution.
-The use of any random number generator with a large enough number of paths would lead to the same conclusion.</p>
-<p>This is because with the Brownian-Bridge technique, the last point in the path, corresponding to the maturity,
-is sampled first, and the other path points are then completed inside from the first and last points.
-But the digital option depends only on the value of the path at maturity, that is, on this last point.
-As this point corresponds follows our discrete distribution, the price of the digital option is a step function.</p>
-<p>In contrast, for the incremental path construction, each point is computed from the previous point.
-The last point will thus include the variation of all points in the path, which will be very close to normal, even with a discrete distribution per point.</p>
-<p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
-and the incremental path construction, is that several intermediate time-steps (between payoff observations)
-are a must-have with discrete random variables, however small is the original time-step size.</p>
-<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of 1/32 (meaning 8 intermediate time-steps in
-our digital option example). I suppose this is a direct consequence of the digital payoff discontinuity. In Talay
-<a href="http://link.springer.com/chapter/10.1007/BFb0006577">&ldquo;Efficient numerical schemes for the approximation of expectations of functionals of the solution of a SDE, and applications&rdquo;</a> (which you can
-read by adding .sci-hub.cc to the URL host name), second order convergence
-is proven only if the payoff function and its derivatives up to order 6 are continuous. There is something natural
-that a discrete random variable imposes continuity conditions on the payoff, not necessary with a continuous,
-smooth random variable: either the payoff or the distribution needs to be smooth.</p>
 
       
     </div>

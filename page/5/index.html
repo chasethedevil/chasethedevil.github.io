@@ -91,6 +91,81 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/">AES for Monte-Carlo</a>
+      </h1>
+      <span class="post-date">Aug 17, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+      </span>
+      
+      <p>In finance, and also in science, the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> is the de-factor pseudo-random number generator (PRNG) for Monte-Carlo simulations.
+By the way, there is a <a href="http://arxiv.org/abs/1301.5435">recent 64-bit maximally equidistributed version</a> called MEMT19937 with 53-bit double precision floating point numbers in mind.</p>
+<p>D.E. Shaw paper <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiyl5Lg8cjOAhVMahoKHVhPCPQQFggmMAA&amp;url=http%3A%2F%2Fwww.thesalmons.org%2Fjohn%2Frandom123%2Fpapers%2Frandom123sc11.pdf&amp;usg=AFQjCNEZ5I7JeeDSELDJBDjLU84tXKmI3w&amp;sig2=UqLBNOlLjkHsMMncABKkIg&amp;bvm=bv.129759880,d.d2s">Parallel Random Numbers: As easy as 1, 2, 3</a>
+makes a bold remark: since <a href="https://en.wikipedia.org/wiki/AES_instruction_set">specific AES instructions</a> have
+been available since 2010 in most x86 processors, why not use them?</p>
+<p>Historicaly, counter-based PRNGs based on cryptographic standards such as <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+were historically slow, which motivated the development of sequential PRNGs with good statistical properties,
+yet not cryptographically strong like the Mersenne Twister for Monte-Carlo simulations.</p>
+<p>The randomness of AES is of vital importance to its security making the use of the AES128 encryption algorithm as PRNG sound (see <a href="http://dl.acm.org/citation.cfm?id=945515">Hellekalek &amp; Wegenkittl paper</a>).
+Furthermore, D.E. Shaw study shows that AES can be faster than Mersenne-Twister.
+In my own simple implementation using the standard library of the Go language,
+it was around twice slower than Mersenne-Twister to generate random double precision floats,
+which can result in a 5% performance loss for a local volatility simulation.
+The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
+<p>The code is extremely simple, with many possible variations around the same idea. Here is mine
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
+	counter <span style="color:#902000">uint64</span>
+	bs      []<span style="color:#902000">byte</span>
+	block   cipher.Block
+}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
+	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
+	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
+	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
+</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
+	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
+		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
+	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
+		u.counter<span style="color:#666">++</span>
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
+		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
+		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
+	}
+	u.counter<span style="color:#666">++</span>
+	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
+	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
+}</code></pre></div></p>
+<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
+<p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
+The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,
+whose goal is to identify new stream ciphers suitable for widespread adoption.
+It is faster than AES in the absence of specific AES CPU instructions.
+Our tests run with a straightforward implementation that does not make use of specific AMD64 instructions
+and show the resulting PRNG to be faster than MRG63k3a and only 5% slower than MEMT19937 for local volatility Monte-Carlo simulations, that is the same speed as the above Go AES PRNG.
+While it led to sensible results, there does not seem any study yet of its equidistribution properties.</p>
+<p>Counter-based PRNGs are parallelizable by nature: if a counter is used as plaintext,
+we can generate any point in the sequence at no additional cost by just setting
+the counter to the point position in the sequence, the generator is not sequential.
+Furthermore, alternate keys can be used to create independent substreams:
+the strong cryptographic property will guarantee the statistical independence.
+A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/piketty_capital/">A review of Thomas Piketty - Le capital au XXI siecle</a>
       </h1>
       <span class="post-date">Aug 2, 2016 &middot; 3 minute read &middot; <a href="https://chasethedevil.github.io/post/piketty_capital/#disqus_thread">Comments</a>
@@ -527,24 +602,6 @@ The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happen
 </figure>
 
 <p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/filon_for_heston/">Adaptive Filon quadrature for stochastic volatility models</a>
-      </h1>
-      <span class="post-date">May 12, 2016 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/filon_for_heston/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
-      </span>
-      
-      <p>A while ago, I have applied a relatively simple adaptive Filon quadrature to the problem of <a href="http://papers.ssrn.com/abstract=2620166">volatility swap pricing</a>. The <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi18brlh9XMAhWIVhoKHdnGA2UQFggdMAA&amp;url=http%3A%2F%2Fwww.ams.org%2Fmcom%2F1968-22-101%2FS0025-5718-1968-0225485-5%2FS0025-5718-1968-0225485-5.pdf&amp;usg=AFQjCNEQvSMm6vOaXIX2MqAJ-GQt79QRiA&amp;sig2=HLHd-rc74qnCuo5yp1Q13A">Filon quadrature</a> is an old quadrature from 1928 that allows to integrate oscillatory integrand like \(f(x)\cos(k x) \) or \(f(x)\sin(k x) \). It turns out that combined with an adaptive Simpson like method, it has many advantages over more generic adaptive quadrature methods like Gauss-Lobatto, which is often used on similar problems.</p>
-<p><a href="http://dl.acm.org/citation.cfm?id=321029">Flinn</a> derived a similar quadrature, but taking into account the derivative values, which are likely to be easily available on those problems. This produces a even more robust quadrature and of higher convergence order.</p>
-<p>I was curious how practical this would be on Heston or other stochastic volatility models with a known characteristic function. It turns out it produces a very competitive performance-wise and very stable option pricing method: it can be up to <strong>five times faster</strong> than an adaptive Gauss-Lobatto within a calibration. I found it faster and more robust than the Cos method (especially as it is quite tricky to guess properly the truncation of the Cos method).</p>
-<p>If you are interested, you will find much more details in <a href="/lefloch_heston_filon.pdf">this document</a>.</p>
 
       
     </div>

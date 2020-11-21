@@ -91,6 +91,23 @@
      
     <div class="post">
       <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/carmack-gpgpu-programming/">Carmack &amp; GPGPU programming</a>
+      </h1>
+      <span class="post-date">Aug 14, 2011 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/carmack-gpgpu-programming/#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+Finally someone who shares the same opinion on the current state of GPGPU programming. <br /><br />John Carmack: On the other hand, we have converted all of our offline processing stuff to ray tracing. For years, the back-end MegaTexture generation for Rage was done with... we had a GPGPU cluster with NVIDIA cards and it was such a huge pain to keep. It was an amazing pain where one system would be having heat problems and would be behaving weird even though we thought they had identical drivers. Something would always be wrong with render farm 12, and whenever we wanted to put in new features it was like “Okay, writing new fragment programs to go into this.” Now, granted I did this just when CUDA was in its infancy. If I did re-implement it with OpenCL or CUDA we wouldn’t have some of these problems, but when I converted all these over to ray tracing there was a number of things that got a lot better. Things that we deal with, [for example] shadows and reflections that have to be approximated, and were so used to doing with rasterization... we sometimes forget how big of hacks these are. To be able to say I really just want that ray, and tell me what it hit; not do a projection with feathering shadowed edges and whatever the heck else we’re doing there, so much of the code got so much easier. If it’s a choice of... now that we have these awesome multi-core x86 CPUs where we can get 24 threads in commodity boxes... it’s true that one GPU card can do more ray tracing than one 24 thread x86 box, but it’s not multiples more and if it’s just a matter of buying more $2000 boxes, it makes the development, maintenance, and upkeep much better. While everyone in high performance computing is all “rah-rah” GPUs right now, I’ve come full circle back around to saying the fact that we can get massive amounts of x86 cores and threads... it wont win on FLOPS/watt or FLOPS/volume, but in terms of results per developer hour it is much, much better.
+
+
+
+
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/">exp(y*log(x)) Much Faster than Math.pow(x,y)</a>
       </h1>
       <span class="post-date">Apr 8, 2011 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/#disqus_thread">Comments</a>
@@ -236,23 +253,6 @@ Before Java 1.5, I never really complained about the lack of <b><span class="App
 <p>Now Scala has <em><a href="http://www.scala-lang.org/api/current/scala/specialized.html">@specialized</a></em> (since Scala 2.8). Annotating a generic type with @specialized will generate code. One has the choice to accept the performance penalty or to get all the performance but accept the code blow up. I think this is very useful.</p>
 <p>If you read the paper you will see that the performance implications of this are not always small.</p>
 <p>UPDATE: I thank the readers for pointing that this work only with primitive types to avoid autoboxing. It is still valuable but less than I first thought.</p>
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/street-fighting-mathematics-book/">Street Fighting Mathematics Book</a>
-      </h1>
-      <span class="post-date">Jul 28, 2010 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/street-fighting-mathematics-book/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-The&nbsp;MIT has a downloadable book on basic mathematics: <a href="http://mitpress.mit.edu/catalog/item/default.asp?ttype=2&amp;tid=12156">Street Fighting Mathematics</a>. I liked the part focused on the geometrical approach. It reminded me of the early greek mathematics.<div><br /></div><div>Overall it does look like a very American approach to Maths: answering a multiple choices questions test by elimination. But it is still an interesting book.</div>
-
-
-
 
       
     </div>
