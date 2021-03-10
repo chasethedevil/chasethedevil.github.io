@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.74.3" />
+	<meta name="generator" content="Hugo 0.80.0" />
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
@@ -89,6 +89,23 @@
 <div class="content container">
   <div class="posts">
      
+    <div class="post">
+      <h1 class="post-title">
+        <a href="https://chasethedevil.github.io/post/the-hibernate-network-proxy-a-dumb-idea./">The Hibernate Network Proxy, A Dumb Idea.</a>
+      </h1>
+      <span class="post-date">Dec 4, 2006 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/the-hibernate-network-proxy-a-dumb-idea./#disqus_thread">Comments</a>
+      </span>
+      
+      
+
+A friend of mine had a good idea for a Java project named "hibernate proxy". I renamed it "hibernate network proxy" because hibernate proxies are already a well known concept among hibernate users (it allows lazy loading through a Java Proxy class). <br> <br> The hibernate network proxy, is a way to use hibernate remotely, that is to proxy hibernate calls through TCP (or even HTTP) to another machine, that will execute the session.saveOrUpdate or the session.load, etc. calls and return the corresponding objects, serialize them and deserialize them for use on the client.<br> <br> As most projects in my company involves several distributed services, this idea could have been potentially very interesting, allowing hibernate use in several services that would interact with a common service in charge of the db. It made me think about other standard patterns:<br> <br> <ul>   <li>This is not very different from the classical EJB session facade architecture, except we don't expose application functionalities, only hibernate stuff. In fact we don't want to expose application functionalities since they are not shared between services.</li>   <li>This is very similar to Entity EJBs used without facade, remotely, the first kind of design we heard about when EJBs came out. This would actually be a good fit for doing this kind of stuff, amazingly. I never thought remote entity EJBs were of any real use. Unfortunately for our projects, we already have a messaging infrastructure, and I am not sure how feasible it is to change of EJB transport protocol. Seeing the complexity of something like IIOP, it looks like a dead end.</li>   <li>This is a kind of Hibernate Second Level Cache, a cache with remote capabilities. The cache would proxy the request to the db service, and the db service would answer to that. This is a possible implementation that seems very flexible.</li>   <li>Use a regular TCP connection to the DB, and hibernate in a standard way. Ok, it does not use our internal message bus, but it is so simple and standard.&nbsp;</li> </ul> The last solution raises the most important question: <br> <blockquote>Why does it need to be proxied?&nbsp;<br> </blockquote> To go through some particular port? -&gt; use a port forwarder.<br> To go through HTTP? -&gt; use HTTPTunnel.<br> You want Java only? -&gt; use <a  href="http://www.jcraft.com/jhttptunnel/">JHttpTunnel</a>,there is even JSch for ssh<br> <br> <br> 
+
+
+
+
+      
+    </div>
+    
     <div class="post">
       <h1 class="post-title">
         <a href="https://chasethedevil.github.io/post/workaround-when-eclipse-fucks-off-with-cvs/">Workaround When Eclipse Fucks Off With CVS</a>
@@ -231,23 +248,6 @@ Did you know what happens in Java when you serialize a subclass of a non seriali
       
 
 <p class="mobile-post">OO is an old buzzword, that is not required anymore to get an employment. Recruiter seems to prefer SOA, Web Services, and in France, "mutualisation" and "urbanisation". Sometimes I really wonder if OO made it. </p><p class="mobile-post">I am sure many of you are confronted with programmers that love procedural programming in many of your projects. They might use an OO language but in the end will organize everything by "type", split invariably state and logic. Everything will be so much better stateless. And we will create lookup maps to glue everything back together. In a way I feel they remove the OO of the language.</p><p class="mobile-post">It's not necessarily bad programming. Sometimes it is encouraged by standards, after all, that's the way most Javabeans are used. It can be preferable in some places, for example you don't want to mix your XML creating code in the object that has to be transformed to XML, this way of transforming objects to XML has been gone a long time ago in Java.</p><p class="mobile-post">But the excess of it can be quite frustrating.</p>
-
-
-
-
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="https://chasethedevil.github.io/post/back-to-real-java-bye-bye-j2ee/">Back To Real Java, Bye Bye J2EE</a>
-      </h1>
-      <span class="post-date">Jul 26, 2006 &middot; 1 minute read &middot; <a href="https://chasethedevil.github.io/post/back-to-real-java-bye-bye-j2ee/#disqus_thread">Comments</a>
-      </span>
-      
-      
-
-I changed job recently. In this new job, it is refreshing to see Java used like in the old days, without the J2EE layers, and without the extra IBM layers of my previous job. Granted, the fresh Java approach does not apply to many projects, because a lot of apps are just about interfacing a database with a web interface. But Spring success showed that even for many of those projects, fresh Java approach with a small framework is enough.<br> <br> This makes me think about people (on the net) complaining that in some job interviews, candidates were not able to tell how to get a EJB instance, etc.. Those kind of question are really stupid, as what matters much much more are EJBs concepts and concerns, i.e. what it tries to solve and how it tried to solve it, and for example, what is good/bad about it.<br> <br> Java is much nicer to use in the old way. Everything seems fast to do. I am surprised it is more pleasant to work with Java in this kind of environment than in a web/J2EE environment. 
 
 
 

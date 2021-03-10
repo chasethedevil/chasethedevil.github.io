@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <title>Implied Volatility from Black-Scholes price &middot; Chase the Devil</title>
+  <title>Yesterday, Pirates Took Over My Parents Bank Account &middot; Chase the Devil</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
@@ -31,7 +31,7 @@
   
 
   <meta name="description" content="">
-  <meta name="keywords" content="quant">
+  <meta name="keywords" content="misc">
   
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   <script>
@@ -87,119 +87,34 @@
 
 <div class="content container">
   <div class="post">
-    <h1 class="post-title">Implied Volatility from Black-Scholes price</h1>
-    <span class="post-date">Apr 2, 2017 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/#disqus_thread">Comments</a>
+    <h1 class="post-title">Yesterday, Pirates Took Over My Parents Bank Account</h1>
+    <span class="post-date">Mar 10, 2021 &middot; 5 minute read &middot; <a href="https://chasethedevil.github.io/post/yesterday-pirates-took-over-my-parents-bank-account/#disqus_thread">Comments</a>
     
     <br/>
-    <a class="label" href="https://chasethedevil.github.io/categories/quant">quant</a>
+    <a class="label" href="https://chasethedevil.github.io/categories/misc">misc</a>
     </span>
-    <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
-<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
-<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
-<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Original volatility</th>
-<th style="text-align:center">Method</th>
-<th style="text-align:left">Implied Volatility</th>
-<th style="text-align:right">Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.6400000000000002</td>
-<td style="text-align:right">1005 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.6495154924570236</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.6338265040549524</td>
-<td style="text-align:right">200 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.6400000010047917</td>
-<td style="text-align:right">436 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.6400000001905617</td>
-<td style="text-align:right">568 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.1575005551326285</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.15117970813645165</td>
-<td style="text-align:right">200 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.16000000000000025</td>
-<td style="text-align:right">1323 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.16000000000219483</td>
-<td style="text-align:right">714 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.16000000000018844</td>
-<td style="text-align:right">1030 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.1528010258201771</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.043006234681405076</td>
-<td style="text-align:right">190 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.03999999999999886</td>
-<td style="text-align:right">1519 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.040000000056277685</td>
-<td style="text-align:right">10235 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.040000000000453895</td>
-<td style="text-align:right">2405 ns</td>
-</tr>
-</tbody>
-</table>
-<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
+    <p>This is the story of their hack.</p>
+<p>Yesterday evening, I received a call from my mother, frantic over the phone. She says she sees alerts of withdrawals from her bank account on her phone, with new alerts every 5 minutes or so. I try to ask her if she clicked recently on some e-mail related to her bank. She is so panicked that I don&rsquo;t manage to have an answer. While trying to understand if those alerts are real or not, my wife suggests immediately that my mother should call her bank. On the phone, I ask</p>
+<p>— did you call the bank? You should really call the bank right now if you did not.</p>
+<p>— I don&rsquo;t have any number to call them, she replies.</p>
+<p>After a 5 seconds Google search, my wife finds a number to call in case of phishing at this bank. I start spelling the number to my mother. Before I finish my mother replies</p>
+<p>— ah this number does not work.</p>
+<p>— so you had already this number and tried to call it? I ask</p>
+<p>— yes, it does not work.</p>
+<p>She starts shouting and asks me to come over. I hang up and tell her I will call back shortly, when she is calmer. I call her back 1 minute later and tell her I will come over.</p>
+<p>In the meantime, my wife attempts to call the number. She stumbles upon some bot asking for bank credentials or alternatively if she wants to speak to a person. She opts for a person, and indeed, ends up with someone hanging up the phone without having the chance to say a word. She then calls the international number, just below that first number. Bingo, someone helpful is here. She asks the person to call my parents.</p>
+<p>When I arrive at my parents place, the person from the bank had reached to my mother, and closed internet access to her bank account to the great relief of everyone. Then, I search the computer, her phone, her tablet, for any text message or e-mail that was suspicious that day. I could not find any. She did receive some legitimate emails from the bank, but only alerts around what was happening in the evening. It started with a message of a new device being allowed to access the bank account website.</p>
+<p>I then have the idea to look into the browser history. What is the first page of the day being consulted, around noon?</p>
+<p>A phishing website with my mother&rsquo;s bank name as title.</p>
+<p>Then I try to find out how she managed to stumble upon that site. I don&rsquo;t find anything. And when I ask her, it&rsquo;s not entirely clear at first, there may have been another email she received. She may have clicked on that email. And she may have given various personal information on, what she believed to be, the bank website. Ok, the classic phishing story then. I tell my parents that they know they should never click on a link in an e-mail. My father then asks &ldquo;but what do you mean exactly by a link?&rdquo;. I fail to understand the true meaning of the question at the time, and show him what is a link exactly and elaborate further.</p>
+<p>It does not stop there. Out of curiosity, I look at the whois information for this phishing web site. It&rsquo;s on godaddy, there is not much information, except
+some arab name servers, and the country of registration is Saudi Arabia. When I mention this to my father later on, he says:</p>
+<p>— This might be a coincidence, but yesterday, I gave two checks (of the same bank) to the guy in charge of the repairs (or replacement?) of the water softener I had contacted. He has an arabic name.</p>
+<p>I know his tendencies to be &ldquo;racist&rdquo;, and tell him it probably does not have any relation. And then we think a bit more about the situation, and there is indeed a strange coincidence, as the phishing e-mail (which I never saw since my mother may have deleted it on purpose) was &ldquo;from&rdquo; the same bank, only 1 day later. How could the hackers know my parents bank? They did not receive any phishing e-mail for any other bank. The time and place point towards some sort of targeting.</p>
+<p>I go back home, and we further discuss with my wife about all this. And she asks me:</p>
+<p>— If the two are related, how could the water softener guys have the e-mail address of your parents?</p>
+<p>Good question. I call my father and ask him. It turns out he had received an e-mail (a SPAM) from the water softener company and replied to it. This is how he contacted them. And perhaps, this explains why he wanted to know more about what &ldquo;clicking on a link&rdquo; means. I guess he knows now.</p>
+<p>Although I have no real proof, I am quite confident the water softener SPAM and the bank hack are very closely related. I did not think phishing was so &ldquo;targeted&rdquo;, and again it is my wife, who told me that targeting is apparently common in phishing. All this targeting makes me think of another story, involving an 80-years old member of the family, where the special forces broke into his house around 3 a.m. a few months back, shouting &ldquo;TARGET! TARGET!&rdquo;, pointing their big guns, and arresting everybody in the house. But that&rsquo;s a story for another time.</p>
 
   </div>
   <div id="disqus_thread"></div>
