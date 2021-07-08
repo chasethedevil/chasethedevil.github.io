@@ -1,71 +1,56 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
 <head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.83.1" />
 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Controlling the SABR wings with Hagan PDE  &middot; Chase the Devil</title>
+  <meta name="description" content="" />
 
   
-  <link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">  
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/poole-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-overrides.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/hyde-x.css">
-  <link rel="stylesheet" href="https://chasethedevil.github.io/css/highlight/sunburst.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://chasethedevil.github.io/touch-icon-144-precomposed.png">
-  <link href="https://chasethedevil.github.io/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
 
   
-  
-  
-  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-  
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-365717-1', 'auto');
-    ga('send', 'pageview');
-  </script>
-  
 </head>
-<body class="theme-base-00">
-<div class="sidebar">
+
+  <body class=" ">
+  <aside class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Chase the Devil</h1>
-      <p class="lead">out of tech&hellip;</p>
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
     </div>
 
-    <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/">Blog</a></li>
-      
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="https://chasethedevil.github.io/post/">Posts</a></li>
-      
-    </ul>
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
 
-    <ul class="sidebar-nav">
+        <ul class="sidebar-nav">
       <li class="sidebar-nav-item">
-      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>  
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
       
       
       
@@ -77,66 +62,45 @@
       <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
       </li>
     </ul>
+ </nav>
 
-    
-
-    
+    <p>&copy; 2021. All rights reserved. </p>
   </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Controlling the SABR wings with Hagan PDE </h1>
+  <time datetime=2015-12-15T10:56:00Z class="post-date">Tue, Dec 15, 2015</time>
+  <p>On the <!-- raw HTML omitted -->Wilmott forum<!-- raw HTML omitted -->, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<!-- raw HTML omitted --><!-- raw HTML omitted -->$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$<!-- raw HTML omitted --><!-- raw HTML omitted -->is close to 1. <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function. <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The following graphs presents the non capped PDE, the capped PDE with M=4<em>nu (PDEC4) and M=6</em>nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<!-- raw HTML omitted --><!-- raw HTML omitted -->The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.<!-- raw HTML omitted --></p>
+
 </div>
 
-
-<div class="content container">
-  <div class="post">
-    <h1 class="post-title">Controlling the SABR wings with Hagan PDE </h1>
-    <span class="post-date">Dec 15, 2015 &middot; 2 minute read &middot; <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/#disqus_thread">Comments</a>
-    </span>
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
-
-On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div>
-
-
-
-
-  </div>
-  <div id="disqus_thread"></div>
-</div>
-
-
-<script type="text/javascript">
-var disqus_shortname = "chasethedevil";
-(function () {
-    var s = document.createElement('script'); s.async = true;
-    s.type = 'text/javascript';
-    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-}());
-</script>
-
-
-
-<script type="text/javascript">
-    var disqus_shortname = "chasethedevil";
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
 
-<div class="content container" style="padding-top: 0rem;"-->
- <a href="https://twitter.com/share" class="twitter-share-button"{count} data-hashtags="chasethedevil" data-size="large">Tweet</a>
- <a style="font-size:75%;" href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"><i class="fa fa-reddit fa-2x" aria-hidden="true"></i>Submit to reddit</a> 
-<table style="border-collapse: collapse;">
-     <tr style="padding: 0px; margin: 0px; border: none;">
-     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">&copy; 2006-16 <a href="http://chasethedevil.github.io/about/">Fabien</a></td>
-     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 0px;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="padding: 0px; margin: 0px; border: none;" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></td>
-     <td style="vertical-align: middle;padding: 0px; margin: 0px; border: none;font-size: 60%;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</td></tr></table>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</div>
-<script src="https://chasethedevil.github.io/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-</body>
+    
+      
+    
+  </body>
 </html>
-
