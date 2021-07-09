@@ -72,7 +72,10 @@
     <div class="post">
   <h1>Exact Forward in Monte-Carlo</h1>
   <time datetime=2013-05-13T17:58:00Z class="post-date">Mon, May 13, 2013</time>
-  <p>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.<!-- raw HTML omitted --><!-- raw HTML omitted -->In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices.<!-- raw HTML omitted --><!-- raw HTML omitted -->Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <!-- raw HTML omitted -->this paper<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->In short, for log-Euler, one can use the intuitive forward drift rate: r1<em>t1-r0</em>t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>
+  <p>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.</p>
+<p>In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices</p>
+<p>Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <a href="http://ssrn.com/abstract=2264327">this paper</a>.</p>
+<p>In short, for log-Euler, one can use the intuitive forward drift rate: r1<em>t1-r0</em>t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>
 
 </div>
 

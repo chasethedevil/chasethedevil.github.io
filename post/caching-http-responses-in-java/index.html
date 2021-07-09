@@ -72,7 +72,10 @@
     <div class="post">
   <h1>Caching HTTP Responses in Java</h1>
   <time datetime=2006-04-19T18:14:00Z class="post-date">Wed, Apr 19, 2006</time>
-  <!-- raw HTML omitted -->
+  <p>Caching HTTP response can dramatically improve performance of your app if what you generate is in reality not very dynamic. There are many free caching frameworks in Java. Most popular seem to be <a href="http://ehcache.sourceforge.net/">ehcache</a>, <a href="http://www.opensymphony.com/oscache/">oscache</a>, jcs and JBoss Cache.</p>
+<p>ehcache is quite simple to use and its code is clean. They have a CachingFilter that you can put in your webapp server to cache transparently HTTP responses. However as the framework only allows you to store Objects (which makes sense for most uses), I was wondering how they cached the HttpResponse which is a stream. I was a bit disappointed by the answer, they just create a copy ByteArrayOutputStream and call toBytes() to store it in the cache. While this is optimal for a memory cache store (the whole response will anyway be in the cache, although I am not sure if they check for particularly big responses to avoid caching those or try to cache those) I don&rsquo;t think it is that good for a disk cache store.</p>
+<p>Ideally one would like the response to be stored using a buffer, to avoid having the whole response in memory. This would enable a much higher concurrent use. I think it is doable by writing your own CachingFilter and by using the concurrent utils Queue to block writing when the buffer is full.</p>
+<p>I googled for this kind of stuff without success. I only found solutions similar to ehcache one (for example sun <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingResponseWrapper.java?r=1.4">CachingResponseWrapper</a> and <a href="http://fisheye5.cenqua.com/viewrep/glassfish/webtier-extensions/src/java/com/sun/appserv/web/cache/filter/CachingFilter.java?r=1.4">CachingFilter</a> or oscache <a href="https://xwork.dev.java.net/source/browse/oscache/src/java/com/opensymphony/oscache/web/filter/CacheFilter.java?rev=1.12&amp;view=markup">CacheFilter</a> (a bit more careful, but still a toBytes())) I wonder why it is not already done and public.</p>
 
 </div>
 

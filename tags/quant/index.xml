@@ -60,9 +60,7 @@ One of the cited applications is &#34;stress testing and scenario analysis for m
       <pubDate>Fri, 08 May 2015 16:50:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/decoding-hagans-arbitrage-free-sabr-pde-derivation/</guid>
-      <description>Here are the main steps of Hagan derivation. Let&amp;rsquo;s recall his notation for the SABR model where typically, \(C(F) = F^\beta\)
-$$ Q^{(0)}_T = \frac{1}{2}\epsilon^2 \left[C^2(F) \frac{Q^{(2)}}{Q^{(0)}} Q^{(0)}\right]_{FF} $$
-Karlsmark uses that approach directly in his thesis, using the expansions of Doust for \(Q^{(k)}\). Looking a Doust expansions, the fraction reduces straightforwardly to the same expression as Hagan, and the symmetry in the equations appears a bit less coincidental.</description>
+      <description>Here are the main steps of Hagan derivation. Let&#39;s recall his notation for the SABR model where typically, \\(C(F) = F^\beta\\) First, he defines the moments of stochastic volatility: Then he integrates the Fokker-Planck equation over all A, to obtain On the backward Komolgorov equation, he applies a Lamperti transform like change of variable: And then makes another change of variable so that the PDE has the same initial conditions for all moments: &amp;nbsp;This leads to It turns out that there is a magical symmetry for k=0 and k=2.</description>
     </item>
     
     <item>
@@ -80,7 +78,8 @@ Karlsmark uses that approach directly in his thesis, using the expansions of Dou
       <pubDate>Sat, 18 Apr 2015 22:58:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/modern-programming-language-for-monte-carlo/</guid>
-      <description>A few recent programming languages sparked my interest:Julia: because of the wide coverage of mathematical functions, and great attention to quality of the implementations. It has also some interesting web interface.Dart: because it&amp;rsquo;s a language focused purely on building apps for the web, and has a supposedly good VM.Rust: it&amp;rsquo;s the latest fad. It has interesting concepts around concurrency and a focus on being low level all the while being simpler than C.</description>
+      <description>A few recent programming languages sparked my interest:
+Julia: because of the wide coverage of mathematical functions, and great attention to quality of the implementations. It has also some interesting web interface.Dart: because it&#39;s a language focused purely on building apps for the web, and has a supposedly good VM.Rust: it&#39;s the latest fad. It has interesting concepts around concurrency and a focus on being low level all the while being simpler than C.</description>
     </item>
     
     <item>
@@ -135,7 +134,8 @@ Furthermore they derive a clever semi-analytical approximation for this model, b
       <pubDate>Tue, 03 Feb 2015 14:53:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/monte-carlo-inverse-cumulative-normal-distribution/</guid>
-      <description>In most financial Monte-Carlo simulations, there is the need of generating normally distributed random numbers. One technique is to use the inverse cumulative normal distribution function on uniform random numbers. There are several different popular numerical implementations:Wichura AS241 (1988)Moro &amp;ldquo;The full Monte&amp;rdquo; (1995)Acklam(2004)Shaw breakless formulaoptimized for GPUs (2011) W. Shaw has an excellent overview of the accuracy of the various methods in his paper Refinement of the normal quantile.But what about performance?</description>
+      <description>In most financial Monte-Carlo simulations, there is the need of generating normally distributed random numbers. One technique is to use the inverse cumulative normal distribution function on uniform random numbers. There are several different popular numerical implementations:
+Wichura AS241 (1988)Moro &#34;The full Monte&#34; (1995)Acklam (2004)Shaw breakless formula optimized for GPUs (2011) W. Shaw has an excellent overview of the accuracy of the various methods in his paper Refinement of the normal quantile.</description>
     </item>
     
     <item>
@@ -153,7 +153,9 @@ Furthermore they derive a clever semi-analytical approximation for this model, b
       <pubDate>Tue, 25 Nov 2014 13:58:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/flat-volatility-surfaces-discrete-dividends/</guid>
-      <description>In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the OpenGamma paperpresents this graph:It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.</description>
+      <description>In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the OpenGamma paper presents this graph:
+
+It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.</description>
     </item>
     
     <item>
@@ -162,7 +164,9 @@ Furthermore they derive a clever semi-analytical approximation for this model, b
       <pubDate>Tue, 18 Nov 2014 12:34:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/machine-learning-quantitative-finance/</guid>
-      <description>There is an interesting course on Machine Learning on Coursera, it does not require much knowledge and yet manages to teach quite a lot.I was struck by the fact that most techniques and ideas apply also to problems in quantitative finance.Linear regression: used for example in the Longstaff-Schwartz approach to price Bermudan options with Monte-Carlo. Interestingly the teacher insists on feature normalization, something we can forget easily, especially with the polynomial features.</description>
+      <description>There is an interesting course on Machine Learning on Coursera, it does not require much knowledge and yet manages to teach quite a lot.
+I was struck by the fact that most techniques and ideas apply also to problems in quantitative finance.
+ Linear regression: used for example in the Longstaff-Schwartz approach to price Bermudan options with Monte-Carlo. Interestingly the teacher insists on feature normalization, something we can forget easily, especially with the polynomial features.</description>
     </item>
     
     <item>
@@ -171,7 +175,8 @@ Furthermore they derive a clever semi-analytical approximation for this model, b
       <pubDate>Wed, 12 Nov 2014 17:05:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/pseudo-random-vs-quasi-random-numbers/</guid>
-      <description>Quasi-Random numbers (like Sobol) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like Mersenne-Twister). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions).</description>
+      <description>Quasi-Random numbers (like Sobol) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like Mersenne-Twister). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).
+For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions).</description>
     </item>
     
     <item>
@@ -180,7 +185,9 @@ Furthermore they derive a clever semi-analytical approximation for this model, b
       <pubDate>Wed, 05 Nov 2014 16:48:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/integrating-an-oscillatory-function/</guid>
-      <description>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. The Carr-Leeseasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.I first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (the one from Espelid) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp;amp; Gauschi, present in Quantlib).</description>
+      <description>Recently, some instabilities were noticed in the Carr-Lee seasoned volatility swap price in some situations. The Carr-Lee seasoned volatility swap price involve the computation of a double integral. The inner integral is really the problematic one as the integrand can be highly oscillating.
+
+I&amp;nbsp; first found a somewhat stable behavior using a specific adaptive Gauss-Lobatto implementation (the one from Espelid) and a change of variable. But it was not very satisfying to see that the outer integral was stable only with another specific adaptive Gauss-Lobatto (the one from Gander &amp;amp; Gauschi, present in Quantlib).</description>
     </item>
     
     <item>
@@ -237,7 +244,9 @@ While the Lee moments formula implies that the variance should be at most linear
       <pubDate>Thu, 31 Jul 2014 14:54:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/more-svi-initial-guesses/</guid>
-      <description>In the previous post, I showed one could extract the SVI parameters from a best fit parabola at-the-money. It seemed to work reasonably well, but I found some real market data where it can be much less satisfying.Sometimes (actually not so rarely) the ATM slope and curvatures can&amp;rsquo;t be matched given rho and b found through the asymptotes. As a result if I force to just match the curvature and set m=0 (when the slope can&amp;rsquo;t be matched), the simple ATM parabolic guess looks shifted.</description>
+      <description>In the previous post, I showed one could extract the SVI parameters from a best fit parabola at-the-money. It seemed to work reasonably well, but I found some real market data where it can be much less satisfying.
+
+Sometimes (actually not so rarely) the ATM slope and curvatures can&#39;t be matched given rho and b found through the asymptotes. As a result if I force to just match the curvature and set m=0 (when the slope can&#39;t be matched), the simple ATM parabolic guess looks shifted.</description>
     </item>
     
     <item>
@@ -258,7 +267,8 @@ A. Vogt described a particularly simple way to find an initial guess to fit SVI 
       <pubDate>Wed, 16 Jul 2014 22:35:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/new-sabr-formulae/</guid>
-      <description>In a talk at the Global Derivatives conference of Amsterdam (2014), Pat Hagan presented some new SABR formulas, supposedly close to the arbitrage free PDE behavior.I tried to code those from the slides, but somehow that did not work out well on his example, I just had something very close to the good old SABR formulas. I am not 100% sure (only 99%) that it is due to a mistake in my code.</description>
+      <description>In a talk at the Global Derivatives conference of Amsterdam (2014), Pat Hagan presented some new SABR formulas, supposedly close to the arbitrage free PDE behavior.
+I tried to code those from the slides, but somehow that did not work out well on his example, I just had something very close to the good old SABR formulas. I am not 100% sure (only 99%) that it is due to a mistake in my code.</description>
     </item>
     
     <item>
@@ -267,7 +277,8 @@ A. Vogt described a particularly simple way to find an initial guess to fit SVI 
       <pubDate>Thu, 03 Jul 2014 23:28:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/heston-or-schobel-zhu-issues-with-short-expiries/</guid>
-      <description>It&amp;rsquo;s relatively well known that Heston does not fit the market for short expiries. Given that there are just 5 parameters to fit a full surface, it&amp;rsquo;s almost logical that one part of the surface of it is not going to fit well the market.I was more surprised to see how bad Heston or Schobel-Zhu were to fit a single short expiry volatility slice. As an example I looked at SP500 options with 1 week expiry.</description>
+      <description>It&#39;s relatively well known that Heston does not fit the market for short expiries. Given that there are just 5 parameters to fit a full surface, it&#39;s almost logical that one part of the surface of it is not going to fit well the market.
+I was more surprised to see how bad Heston or Schobel-Zhu were to fit a single short expiry volatility slice. As an example I looked at SP500 options with 1 week expiry.</description>
     </item>
     
     <item>
@@ -276,7 +287,8 @@ A. Vogt described a particularly simple way to find an initial guess to fit SVI 
       <pubDate>Tue, 24 Jun 2014 15:29:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/moore-penrose-inverse-gauss-newton-sabr-minimization/</guid>
-      <description>I have found a particularly nice initial guess to calibrate SABR. As it is quite close to the true best fit, it is tempting to use a very simple minimizer to go to the best fit. Levenberg-Marquardt works well on this problem, but can we shave off a few iterations?I firstly considered the basic Newton&amp;rsquo;s method, but for least squares minimization, the Hessian (second derivatives) is needed. It&amp;rsquo;s possible to obtain it, even analytically with SABR, but it&amp;rsquo;s quite annoying to derive it and code it without some automatic differentiation tool.</description>
+      <description>I have found a particularly nice initial guess to calibrate SABR. As it is quite close to the true best fit, it is tempting to use a very simple minimizer to go to the best fit. Levenberg-Marquardt works well on this problem, but can we shave off a few iterations?
+I firstly considered the basic Newton&#39;s method, but for least squares minimization, the Hessian (second derivatives) is needed. It&#39;s possible to obtain it, even analytically with SABR, but it&#39;s quite annoying to derive it and code it without some automatic differentiation tool.</description>
     </item>
     
     <item>
@@ -454,7 +466,10 @@ As I am just starting around it, to get a better grasp, I first tried to apply t
       <pubDate>Sun, 12 Jan 2014 16:27:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/placing-the-strike-on-the-grid-and-payoff-smoothing-in-finite-difference-methods-for-vanilla-options/</guid>
-      <description>Pooley et al., in Convergence Remedies for non-smooth payoffs in option pricingsuggest that placing the strike on the grid for a Vanilla option is good enough:At the same time, Tavella and Randall show in their book that numerically, placing the strike in the middle of two nodes leads to a more accurate result. My own numerical experiments confirm Tavella and Randall suggestion.In reality, what Pooley et al. really mean, is that quadratic convergence is maintained if the strike is on the grid for vanilla payoffs, contrary to the case of discontinuous payoffs (like digital options) where the convergence decreases to order 1.</description>
+      <description>Pooley et al., in Convergence Remedies for non-smooth payoffs in option pricing suggest that placing the strike on the grid for a Vanilla option is good enough:
+
+At the same time, Tavella and Randall show in their book that numerically, placing the strike in the middle of two nodes leads to a more accurate result. My own numerical experiments confirm Tavella and Randall suggestion.
+In reality, what Pooley et al.</description>
     </item>
     
     <item>
@@ -472,7 +487,9 @@ As I am just starting around it, to get a better grasp, I first tried to apply t
       <pubDate>Tue, 17 Dec 2013 15:27:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/levenberg-marquardt-constraints-by-domain-transformation/</guid>
-      <description>The Fortran minpacklibrary has a good Levenberg-Marquardtminimizer, so good, that it has been ported to many programming languages. Unfortunately it does not support contraints, even simple bounds.One way to achieve this is to transform the domain via a bijective function. For example, (a+\frac{b-a}{1+e^{-\alpha t}}) will transform (]-\infty, +\infty[) to ]a,b[. Then how should one choose (\alpha)?A large (\alpha) will make tiny changes in (t) appear large. A simple rule is to ensure that (t) does not create large changes in the original range ]a,b[, for example we can make (\alpha t \leq 1), that is ( \alpha t= \frac{t-a}{b-a} ).</description>
+      <description>The Fortran minpack library has a good Levenberg-Marquardt minimizer, so good, that it has been ported to many programming languages. Unfortunately it does not support contraints, even simple bounds.
+One way to achieve this is to transform the domain via a bijective function. For example, \(a+\frac{b-a}{1+e^{-\alpha t}}\) will transform \(]-\infty, +\infty[\) to ]a,b[. Then how should one choose \(\alpha\)?
+A large \(\alpha\) will make tiny changes in \(t\) appear large.</description>
     </item>
     
     <item>
@@ -510,7 +527,9 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Wed, 16 Oct 2013 16:14:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/</guid>
-      <description>I always imagined local stochastic volatility to be complicated, and thought it would be very slow to calibrate.After reading a bit about it, I noticed that the calibration phase could just consist in calibrating independently a Dupire local volatility model and a stochastic volatility model the usual way.One can then choose to compute on the fly the local volatility component (not equal the Dupire one, but including the stochastic adjustment) in the Monte-Carlo simulation to price a product.</description>
+      <description>I always imagined local stochastic volatility to be complicated, and thought it would be very slow to calibrate.
+After reading a bit about it, I noticed that the calibration phase could just consist in calibrating independently a Dupire local volatility model and a stochastic volatility model the usual way.
+One can then choose to compute on the fly the local volatility component (not equal the Dupire one, but including the stochastic adjustment) in the Monte-Carlo simulation to price a product.</description>
     </item>
     
     <item>
@@ -519,7 +538,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Mon, 07 Oct 2013 19:35:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/heston-schobel-zhu-bates-double-heston-fit/</guid>
-      <description></description>
+      <description>I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a real world equity index implied volatility surface. I used a global optimizer (differential evolution).
+To my surprise, the Heston fit is quite good: the implied volatility error is less than 0.42% on average. Schobel-Zhu fit is also good (0.47% RMSE), but a bit worse than Heston. Bates improves quite a bit on Heston although it has 3 more parameters, we can see the fit is better for short maturities (0.</description>
     </item>
     
     <item>
@@ -537,7 +557,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Wed, 02 Oct 2013 15:06:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/</guid>
-      <description>A few years ago, I found an interesting open source symbolic calculus software called Xcas. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.Google pointed me to another popular open source package, Maxima. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</description>
+      <description>A few years ago, I found an interesting open source symbolic calculus software called Xcas. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.
+Google pointed me to another popular open source package, Maxima. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command.</description>
     </item>
     
     <item>
@@ -636,7 +657,10 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Tue, 28 May 2013 15:56:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/</guid>
-      <description>At a presentation of the Thalesians, Hagan has presented a new PDE based approach to compute arbitrage free prices under SABR. This is similar in spirit as Andreasen-Huge, but the PDE is directly on the density, not on the prices, and there is no one-step procedure: it&amp;rsquo;s just like a regular PDE with proper boundary conditions.I was wondering how it compared to Andreasen Huge results.My first implementation was quite slow. I postulated it was likely the Math.</description>
+      <description>At a presentation of the Thalesians, Hagan has presented a new PDE based approach to compute arbitrage free prices under SABR. This is similar in spirit as Andreasen-Huge, but the PDE is directly on the density, not on the prices, and there is no one-step procedure: it&#39;s just like a regular PDE with proper boundary conditions.
+I was wondering how it compared to Andreasen Huge results.
+
+My first implementation was quite slow.</description>
     </item>
     
     <item>
@@ -645,7 +669,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Fri, 24 May 2013 14:17:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/sabr-with-andreasen-huge/</guid>
-      <description>I am on holiday today. Unfortunately I am still thinking about work-related matters, and out of curiosity, wanted to do a little experiment. I know it is not very good to spend free time on work related stuff: there is no reward for it, and there is so much more to life. Hopefully it will be over after this post.Around 2 years ago, I saw a presentation from Andreasen and Huge about how they were able to price/calibrate SABRby a one-step finite difference technique.</description>
+      <description>I am on holiday today. Unfortunately I am still thinking about work-related matters, and out of curiosity, wanted to do a little experiment. I know it is not very good to spend free time on work related stuff: there is no reward for it, and there is so much more to life. Hopefully it will be over after this post.
+Around 2 years ago, I saw a presentation from Andreasen and Huge about how they were able to price/calibrate SABR by a one-step finite difference technique.</description>
     </item>
     
     <item>
@@ -654,7 +679,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Fri, 17 May 2013 12:46:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/large-steps-in-schobel-zhuheston-the-lazy-way/</guid>
-      <description>Van Haastrecht, Lord and Pelsserpresent an effective way to price derivatives by Monte-Carlo under the Schobel-Zhu model (as well as under the Schobel-Zhu-Hull-White model). It&amp;rsquo;s quite similar to Andersen QE scheme for Heston in spirit.In their paper they evolve the (log) asset process together with the volatility process, using the same discretization times. A while ago, when looking at Joshi and Chanlarge steps for Heston, I noticed that, inspired by Broadie-Kaya exact Heston scheme, they present the idea to evolve the variance process using small steps and the asset process using large steps (depending on the payoff) using the integrated variance value computed by small steps.</description>
+      <description>Van Haastrecht, Lord and Pelsser present an effective way to price derivatives by Monte-Carlo under the Schobel-Zhu model (as well as under the Schobel-Zhu-Hull-White model). It&#39;s quite similar to Andersen QE scheme for Heston in spirit.
+In their paper they evolve the (log) asset process together with the volatility process, using the same discretization times. A while ago, when looking at&amp;nbsp; Joshi and Chan large steps for Heston, I noticed that, inspired by Broadie-Kaya exact Heston scheme, they present the idea to evolve the variance process using small steps and the asset process using large steps (depending on the payoff) using the integrated variance value computed by small steps.</description>
     </item>
     
     <item>
@@ -663,7 +689,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Mon, 13 May 2013 17:58:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/exact-forward-in-monte-carlo/</guid>
-      <description>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &amp;ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&amp;rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices.</description>
+      <description>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.
+In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &amp;ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&amp;rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices</description>
     </item>
     
     <item>
@@ -672,7 +699,9 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Mon, 13 May 2013 13:16:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/</guid>
-      <description>I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.Here is what I found:Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed.</description>
+      <description>I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.
+Here is what I found:
+Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed.</description>
     </item>
     
     <item>
@@ -690,7 +719,8 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       <pubDate>Mon, 22 Apr 2013 18:00:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/quasi-monte-carlo-longstaff-schwartz-american-option-price/</guid>
-      <description>In the book Monte Carlo Methods in Financial Engineering, Glasserman explains that if one reuses the paths used in the optimization procedure for the parameters of the exercise boundary (in this case the result of the regression in Longstaff-Schwartz method) to compute the Monte-Carlo mean value, we will introduce a bias: the estimate will be biased high because it will include knowledge about future paths.However Longstaff and Schwartz seem to just reuse the paths in their paper, and Glasserman himself, when presenting Longstaff-Schwartz method later in the book just use the same paths for the regression and to compute the Monte-Carlo mean value.</description>
+      <description>In the book Monte Carlo Methods in Financial Engineering, Glasserman explains that if one reuses the paths used in the optimization procedure for the parameters of the exercise boundary (in this case the result of the regression in Longstaff-Schwartz method) to compute the Monte-Carlo mean value, we will introduce a bias: the estimate will be biased high because it will include knowledge about future paths.
+However Longstaff and Schwartz seem to just reuse the paths in their paper, and Glasserman himself, when presenting Longstaff-Schwartz method later in the book just use the same paths for the regression and to compute the Monte-Carlo mean value.</description>
     </item>
     
     <item>
@@ -787,7 +817,9 @@ The formulas as written in the paper are not usable as is: they can be simplifie
       <pubDate>Thu, 29 Nov 2012 12:30:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/local-volatility-delta-dynamic/</guid>
-      <description>This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</description>
+      <description>This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.
+
+Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</description>
     </item>
     
     <item>
@@ -796,7 +828,8 @@ The formulas as written in the paper are not usable as is: they can be simplifie
       <pubDate>Mon, 15 Oct 2012 16:14:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/gpu-computing-in-finance/</guid>
-      <description>Very interesting presentation from Murex about their GPU computing. Some points were:- GPU demand for mostly exotics pricing &amp;amp; greeks- Local vol main model for EQD exotics. Local vol calibrated via PDE approach.- Markov functional model becoming main model for IRD.- Use of local regression instead of Longstaff Schwartz (or worse CVA like sim of sim).- philox RNG from DE Shaw. But the presenter does not seem to know RNGs very well (recommended Brownian Bridge for Mersenne Twister!</description>
+      <description>Very interesting presentation from Murex about their GPU computing. Some points were:
+ GPU demand for mostly exotics pricing and greeks Local vol main model for EQD exotics. Local vol calibrated via PDE approach. Markov functional model becoming main model for IRD. Use of local regression instead of Longstaff Schwartz (or worse CVA like sim of sim). philox RNG from DE Shaw. But the presenter does not seem to know RNGs very well (recommended Brownian Bridge for Mersenne Twister!</description>
     </item>
     
     <item>
@@ -843,7 +876,8 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Fri, 27 Jan 2012 13:38:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/kde-4.8-finally-has-a-dock/</guid>
-      <description>KDE 4.8 finally has a dock: you just have to add the plasma icon tasks. Also the flexibility around ALT+TAB is welcome. With Krusader as file manager, Thunderbird and Firefox for email and web, it is becoming a real nice desktop, but it took a while since the very bad KDE 4.0 release.It is easy to install under ubuntu 11.10 through the backports and seems very stable so far.Something quite important is to tweak the fonts: use Déjà Vu Sans instead of Ubuntu fonts, use RGB subpixel rendering, use Crisp desktop effects.</description>
+      <description>KDE 4.8 finally has a dock: you just have to add the plasma icon tasks. Also the flexibility around ALT+TAB is welcome. With Krusader as file manager, Thunderbird and Firefox for email and web, it is becoming a real nice desktop, but it took a while since the very bad KDE 4.0 release.
+It is easy to install under ubuntu 11.10 through the backports and seems very stable so far.</description>
     </item>
     
     <item>
@@ -852,7 +886,7 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Mon, 09 Jan 2012 00:14:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/generating-random-numbers-following-a-given-discrete-probability-distribution/</guid>
-      <description>I have never really thought very much about generating random numbers according to a precise discrete distribution, for example to simulate an unfair dice. In finance, we are generally interested in continuous distributions, where there is typically 2 ways: the inverse transform(usually computed in a numerical way), and the acceptance-rejectionmethod (typically the ziggurat). The inverse transform is often preferred, because it&amp;rsquo;s usable method for Quasi Monte-Carlo simulations while the acceptance rejection is not.</description>
+      <description>I have never really thought very much about generating random numbers according to a precise discrete distribution, for example to simulate an unfair dice. In finance, we are generally interested in continuous distributions, where there is typically 2 ways: the inverse transform (usually computed in a numerical way), and the acceptance-rejection method (typically the ziggurat. The inverse transform is often preferred, because it&amp;rsquo;s usable method for Quasi Monte-Carlo simulations while the acceptance rejection is not.</description>
     </item>
     
     <item>
@@ -861,7 +895,8 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Wed, 21 Dec 2011 17:37:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/quant-interview-education/</guid>
-      <description>Recently, I interviewed someone for a quant position. I was very surprised to find out that someone who did one of the best master in probabilities and finance in France could not solve a very basic probability problem:This is accessible to someone with very little knowledge of probabilities When I asked this problem around to co-workers (who have all at least a master in a scientific subject), very few could actually answer it properly.</description>
+      <description>Recently, I interviewed someone for a quant position. I was very surprised to find out that someone who did one of the best master in probabilities and finance in France could not solve a very basic probability problem:
+This is accessible to someone with very little knowledge of probabilities When I asked this problem around to co-workers (who have all at least a master in a scientific subject), very few could actually answer it properly.</description>
     </item>
     
     <item>
@@ -870,7 +905,8 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Wed, 30 Nov 2011 18:11:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/gnome-3-not-so-crap-after-all/</guid>
-      <description>In a previous post, I was complaining how bad Gnome 3was. Since I have installed a real dock: docky, it is now much more usable. I can easily switch / launch applications without an annoying full screen change.In addition I found out that it had a good desktop search (tracker). The ALT+F2 also does some sort of completion, too bad it can not use tracker here as well.So it looks like Gnome 3 + gnome-tweak-tool + docky makes a reasonably good desktop.</description>
+      <description>In a previous post, I was complaining how bad Gnome 3 was. Since I have installed a real dock: docky, it is now much more usable. I can easily switch / launch applications without an annoying full screen change.
+In addition I found out that it had a good desktop search (tracker). The ALT+F2 also does some sort of completion, too bad it can not use tracker here as well.</description>
     </item>
     
     <item>
@@ -879,7 +915,8 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Thu, 17 Nov 2011 12:28:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/good-popular-algorithms-are-simple/</guid>
-      <description>I recently tried to minimise a function according to some constraints. One popular method to minimise a function in several dimensions is Nelder-Mead Simplex. It is quite simple, so simple that I programmed it in Java in 1h30, including a small design and a test. It helped that the original paper from Nelder-Mead is very clear:However the main issue is that it works only for unconstrained problems. Nelder and Mead suggested to add a penalty, but in practice this does not work so well.</description>
+      <description>I recently tried to minimise a function according to some constraints. One popular method to minimise a function in several dimensions is Nelder-Mead Simplex. It is quite simple, so simple that I programmed it in Java in 1h30, including a small design and a test. It helped that the original paper from Nelder-Mead is very clear:
+However the main issue is that it works only for unconstrained problems. Nelder and Mead suggested to add a penalty, but in practice this does not work so well.</description>
     </item>
     
     <item>
@@ -888,7 +925,7 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Fri, 08 Apr 2011 23:03:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/expylogx-much-faster-than-math.powxy/</guid>
-      <description>Today I found out that replacing Math.pow(x,y) by Math.exp(y*Math.log(x)) made me gain 50% performance in my program. Of course, both x and y are double in my case. I find this quite surprising, I expected better from Math.pow.</description>
+      <description>Today I found out that replacing Math.pow(x,y) by Math.exp(yMath.log(x))* made me gain 50% performance in my program. Of course, both x and y are double in my case. I find this quite surprising, I expected better from Math.pow.</description>
     </item>
     
     <item>
@@ -897,7 +934,8 @@ One coworker used to advocate the same for a similar reason: people reading thos
       <pubDate>Sat, 05 Feb 2011 13:18:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/simd-and-mersenne-twister/</guid>
-      <description>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the SFMT. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.</description>
+      <description>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the SFMT. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.
+I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.</description>
     </item>
     
     <item>
@@ -943,7 +981,8 @@ Recently I tried to price options via RBF (radial basis functions) based on TR-B
       <pubDate>Thu, 26 Nov 2009 14:51:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/double-is-fine/</guid>
-      <description>In my previous post, I suggest that keeping a double[] performs better than keeping a double[][] if you do matrix multiplications and other operations.This is actually not true. I benchmarked 3 libraries, Colt (uses double[]), Apache Commons Math (uses double[][]) and Jama (uses double[][] cleverly). At first it looks like Jama has a similar performance as Colt (they avoid [][] slow access by a clever algorithm). But once hotspot hits, the difference is crazy and Jama becomes the fastest (Far ahead).</description>
+      <description>In my previous post, I suggest that keeping a double[] performs better than keeping a double[][] if you do matrix multiplications and other operations.
+This is actually not true. I benchmarked 3 libraries, Colt (uses double[]), Apache Commons Math (uses double[][]) and Jama (uses double[][] cleverly). At first it looks like Jama has a similar performance as Colt (they avoid [][] slow access by a clever algorithm). But once hotspot hits, the difference is crazy and Jama becomes the fastest (Far ahead).</description>
     </item>
     
     <item>

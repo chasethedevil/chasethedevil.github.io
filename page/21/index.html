@@ -85,7 +85,9 @@
     <a href="https://chasethedevil.github.io/post/simd-and-mersenne-twister/">SIMD and Mersenne-Twister</a>
   </h1>
   <time datetime="2011-02-05T13:18:00Z" class="post-date">Sat, Feb 5, 2011</time>
-  <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <!-- raw HTML omitted -->SFMT<!-- raw HTML omitted -->. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.<!-- raw HTML omitted --><!-- raw HTML omitted -->I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.<!-- raw HTML omitted --><!-- raw HTML omitted -->This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>
+  <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <a href="http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/SFMT/">SFMT</a>. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.</p>
+<p>I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.</p>
+<p>This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>
 
   
 </article><article class="post">
@@ -109,7 +111,8 @@
     <a href="https://chasethedevil.github.io/post/firefox-4-is-great/">Firefox 4 Is Great</a>
   </h1>
   <time datetime="2010-12-22T16:03:00Z" class="post-date">Wed, Dec 22, 2010</time>
-  <p>I temporarily <!-- raw HTML omitted -->abandonned Firefox<!-- raw HTML omitted --> for Chrome/Chromium. I am now back at using Firefox as Firefox 4 is as fast or faster than Chrome and seems more stable, especially under linux. Also it does not send anything to Google and there is bookmark sync independently of Google.<!-- raw HTML omitted --><!-- raw HTML omitted -->I am impressed that Mozilla managed to improve Firefox that much.</p>
+  <p>I temporarily <a href="/posts/bye-bye-firefox">abandonned Firefox</a> for Chrome/Chromium. I am now back at using Firefox as Firefox 4 is as fast or faster than Chrome and seems more stable, especially under linux. Also it does not send anything to Google and there is bookmark sync independently of Google.</p>
+<p>I am impressed that Mozilla managed to improve Firefox that much.</p>
 
   
 </article><article class="post">
@@ -135,7 +138,11 @@ This is a problem where one needs to do a few matrix multiplications and inverse
     <a href="https://chasethedevil.github.io/post/java-enum-is-evil/">Java enum Is Evil</a>
   </h1>
   <time datetime="2010-08-12T17:32:00Z" class="post-date">Thu, Aug 12, 2010</time>
-  <p>Before Java 1.5, I never really complained about the lack of <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->enum<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> keyword. Sure the <!-- raw HTML omitted -->old enum via class pattern<!-- raw HTML omitted --> was a bit verbose at first (N.B.: Java 1.5 enums can also be verbose once you start adding methods to them). But more importantly, you would often use the table lookup pattern in combination.<!-- raw HTML omitted --><!-- raw HTML omitted -->The problem with Java 1.5 <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->enum<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> is that it is not Object-Oriented. You <!-- raw HTML omitted -->can&rsquo;t extend<!-- raw HTML omitted --> an <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->enum<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->, you can&rsquo;t add an element in an existing enum. Many will say &ldquo;but that&rsquo;s what enum is for, a static list of things&rdquo;. In my experience,  the list of things often changes with time, or needs to be extended at one point. Furthermore, most people (including me when I am very lazy) end up writing switch statements on enum values. Enum promotes bad programming practices.<!-- raw HTML omitted --><!-- raw HTML omitted -->Think twice about using enum, this is often not what you want.</p>
+   
+
+Before Java 1.5, I never really complained about the lack of <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> keyword. Sure the <a href="http://java.sun.com/developer/Books/shiftintojava/page1.html">old enum via class pattern</a> was a bit verbose at first (N.B.: Java 1.5 enums can also be verbose once you start adding methods to them). But more importantly, you would often use the table lookup pattern in combination.<br /><br />The problem with Java 1.5 <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> is that it is not Object-Oriented. You <u>can't extend</u> an <b><span class="Apple-style-span" style="color: purple;"><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">enum</span></span></b>, you can't add an element in an existing enum. Many will say "but that's what enum is for, a static list of things". In my experience, &nbsp;the list of things often changes with time, or needs to be extended at one point. Furthermore, most people (including me when I am very lazy) end up writing switch statements on enum values. Enum promotes bad programming practices.<br /><br />Think twice about using enum, this is often not what you want.
+
+
 
   
 </article><article class="post">

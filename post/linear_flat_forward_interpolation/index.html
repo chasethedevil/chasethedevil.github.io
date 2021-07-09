@@ -87,10 +87,13 @@ But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it be
 
 On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
 <p>In reality, one should use flat forward interpolation instead, where the forward yield is maintained constant during the day. The forward rate is defined as</p>
-<!-- raw HTML omitted -->
+<p>$$f(t_0,t_1)= \frac{r(t_1) t_1 -r(t_0) t_0}{t_1-t_0}$$</p>
+<p>where the continuously compounded rate \(r\) is defined so that \(Z(0,t)= e^{-r(t)t}\).
+In the case of the Black-Scholes drift, the drift rate is defined so that the forward price (not to confuse with the forward rate) \(F(0,t)= e^{-q(t)t}\).</p>
 <p>The flat forward interpolation is equivalent to a linear interpolation on the logarithm of discount factors.
 In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:</p>
-<!-- raw HTML omitted -->
+<p>$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$</p>
+<p>Another work-around would be to model this via proportional dividends instead of a &ldquo;continuous&rdquo; yield curve.</p>
 
 </div>
 

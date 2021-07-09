@@ -72,7 +72,30 @@
     <div class="post">
   <h1>Is Prolog Better Suited Than SQL?</h1>
   <time datetime=2005-09-26T15:36:00Z class="post-date">Mon, Sep 26, 2005</time>
-  <p>I am currently reading a Prolog book &ldquo;<!-- raw HTML omitted -->Artificial Intelligence Through Prolog<!-- raw HTML omitted -->&rdquo;, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.<!-- raw HTML omitted --><!-- raw HTML omitted -->It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project. With Prolog, there is no need to think about joins, type of joins, SQL syntax. It is at the level just higher. I wonder very much why Prolog did not become more mainstream as it seems to solve some problems in a much nicer, natural way.<!-- raw HTML omitted -->Here is a short example to get reviews of things by user or by user and tags or &hellip;:<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->let&rsquo;s define some facts:<!-- raw HTML omitted -->  <!-- raw HTML omitted -->   <!-- raw HTML omitted -->     <!-- raw HTML omitted -->is_tag(tag1, user1, thing_id)<!-- raw HTML omitted -->     <!-- raw HTML omitted -->is_tag(tag2, user1, thing_id)<!-- raw HTML omitted -->     <!-- raw HTML omitted -->&hellip;<!-- raw HTML omitted -->    <!-- raw HTML omitted -->     <!-- raw HTML omitted -->review(user1, thing_id, description, extended, date)<!-- raw HTML omitted -->     <!-- raw HTML omitted -->&hellip;<!-- raw HTML omitted -->    <!-- raw HTML omitted -->   <!-- raw HTML omitted -->   <!-- raw HTML omitted -->review for user &ldquo;user_x&rdquo;<!-- raw HTML omitted -->   <!-- raw HTML omitted -->     <!-- raw HTML omitted -->?review(user_x, THING_ID, DESC, EXT, DATE)<!-- raw HTML omitted -->    <!-- raw HTML omitted -->   <!-- raw HTML omitted -->   <!-- raw HTML omitted -->review for user &ldquo;user_x&rdquo; with tag &ldquo;tag_y&rdquo;<!-- raw HTML omitted -->   <!-- raw HTML omitted -->     <!-- raw HTML omitted -->?review(user_x, THING_ID, DESC, EXT, DATE), is_tag(tag_y, user_x, THING_ID)<!-- raw HTML omitted -->   <!-- raw HTML omitted --> <!-- raw HTML omitted --> We could imagine some better ways to lay out information. This is just a first draft.<!-- raw HTML omitted --><!-- raw HTML omitted -->Now of course, Prolog does not necessary makes sense for us because:<!-- raw HTML omitted -->  a) We already have it working in SQL<!-- raw HTML omitted -->  b) SQL is much more used and should therefore be more tunable, stable, etc.<!-- raw HTML omitted --><!-- raw HTML omitted -->Still the Prolog way of things is interesting and powerful. We could have written a code with a logic near Prolog instead of our custom code.<!-- raw HTML omitted --><!-- raw HTML omitted -->Tags: <!-- raw HTML omitted -->book<!-- raw HTML omitted --> <!-- raw HTML omitted -->review<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+  <p>I am currently reading a Prolog book <em>Artificial Intelligence Through Prolog</em>, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.</p>
+<p>It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project. With Prolog, there is no need to think about joins, type of joins, SQL syntax. It is at the level just higher. I wonder very much why Prolog did not become more mainstream as it seems to solve some problems in a much nicer, natural way.</p>
+<p>Here is a short example to get reviews of things by user or by user and tags or &hellip;:</p>
+<p>let&rsquo;s define some facts:</p>
+<ul>
+<li>is_tag(tag1, user1, thing_id)</li>
+<li>is_tag(tag2, user1, thing_id)</li>
+<li>&hellip;</li>
+<li>review(user1, thing_id, description, extended, date)</li>
+<li>&hellip;</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE)</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo; with tag &ldquo;tag_y&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE), is_tag(tag_y, user_x, THING_ID)</li>
+</ul>
+<p>We could imagine some better ways to lay out information. This is just a first draft.</p>
+<p>Now of course, Prolog does not necessary makes sense for us because:</p>
+<p>a) We already have it working in SQL</p>
+<p>b) SQL is much more used and should therefore be more tunable, stable, etc.</p>
+<p>Still the Prolog way of things is interesting and powerful. We could have written a code with a logic near Prolog instead of our custom code.</p>
 
 </div>
 

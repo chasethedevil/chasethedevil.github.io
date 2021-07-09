@@ -72,8 +72,10 @@
     <div class="post">
   <h1>Dearbitraging a weak smile on SVI with Damghani&#39;s method</h1>
   <time datetime=2016-06-15T09:55:32&#43;0100 class="post-date">Wed, Jun 15, 2016</time>
-  <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.</p>
-<!-- raw HTML omitted -->
+  <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
+$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$
+The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
+Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
 <p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
 The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
 <!-- raw HTML omitted -->

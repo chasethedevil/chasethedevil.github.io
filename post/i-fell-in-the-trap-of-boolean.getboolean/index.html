@@ -72,7 +72,11 @@
     <div class="post">
   <h1>I fell in the trap of Boolean.getBoolean()</h1>
   <time datetime=2007-10-12T16:10:00Z class="post-date">Fri, Oct 12, 2007</time>
-  <p>I was struggling to find a bug in a very simple application, it ended up being something as simple as using the damned Boolean.getBoolean(&quot;true&quot;) call instead of Boolean.valueOf(&quot;true&quot;).booleanValue() call. <!-- raw HTML omitted --><!-- raw HTML omitted -->The Boolean.getBoolean method is something you almost never need to use, as it checks if a particular system property is true or false. There is a similar method for Integer.getInteger, and a quick <!-- raw HTML omitted --> google search shows<!-- raw HTML omitted --> I am not the only one to think those method should never have been part of the basic API for Boolean/Integer. It is too easy to confuse with parseBoolean/parseInt, especially as parseBoolean does not exist in JDKs prior to JDK  1.5 (parseInt is older).<!-- raw HTML omitted --><!-- raw HTML omitted -->I can not imagine the improductivity this method has produced given its part of one of the most used class in the world.<!-- raw HTML omitted --></p>
+   
+
+I was struggling to find a bug in a very simple application, it ended up being something as simple as using the damned Boolean.getBoolean(&quot;true&quot;) call instead of Boolean.valueOf(&quot;true&quot;).booleanValue() call. <br><br>The Boolean.getBoolean method is something you almost never need to use, as it checks if a particular system property is true or false. There is a similar method for Integer.getInteger, and a quick <a href="http://toadbalancing.blogspot.com/2005/10/java-api-pitfalls-booleangetbooleanstr.html"> google search shows</a> I am not the only one to think those method should never have been part of the basic API for Boolean/Integer. It is too easy to confuse with parseBoolean/parseInt, especially as parseBoolean does not exist in JDKs prior to JDK  1.5 (parseInt is older).<br><br>I can not imagine the improductivity this method has produced given its part of one of the most used class in the world.<br> 
+
+
 
 </div>
 

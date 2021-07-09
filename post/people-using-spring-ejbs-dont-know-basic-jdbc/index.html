@@ -72,7 +72,9 @@
     <div class="post">
   <h1>People Using Spring, EJBs Don&#39;t Know Basic JDBC</h1>
   <time datetime=2007-05-30T12:03:00Z class="post-date">Wed, May 30, 2007</time>
-  <p>I recently found a bug in software we are developing. I traced it and found the root was improper JDBC handling. The application is written using EJBs, Spring and plenty of other relatively complex technologies. I was surprised that developers who were able to use all those technologies had no understanding of basic JDBC.  <!-- raw HTML omitted --><!-- raw HTML omitted -->They fetched all the data (including double, decimal numbers) from the database as String using rs.getString() !<!-- raw HTML omitted --><!-- raw HTML omitted -->While this is most of the time <!-- raw HTML omitted --> possible<!-- raw HTML omitted -->, it is also most of the time not desirable (in the code they were actually converting it to numbers, etc.). More importantly, this can lead to nasty bugs due to different Locales (the . vs , game for example). And this is what's happening in our application. <!-- raw HTML omitted --></p>
+  <p>I recently found a bug in software we are developing. I traced it and found the root was improper JDBC handling. The application is written using EJBs, Spring and plenty of other relatively complex technologies. I was surprised that developers who were able to use all those technologies had no understanding of basic JDBC.</p>
+<p>They fetched all the data (including double, decimal numbers) from the database as String using rs.getString() !</p>
+<p>While this is most of the time <a href="http://java.sun.com/docs/books/tutorial/jdbc/basics/retrieving.html">possible</a>, it is also most of the time not desirable (in the code they were actually converting it to numbers, etc.). More importantly, this can lead to nasty bugs due to different Locales (the . vs , game for example). And this is what&rsquo;s happening in our application.</p>
 
 </div>
 
