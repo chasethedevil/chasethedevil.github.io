@@ -72,7 +72,16 @@
     <div class="post">
   <h1>You Know IOException? Think Again!</h1>
   <time datetime=2006-09-14T10:59:00Z class="post-date">Thu, Sep 14, 2006</time>
-  <p>I was amazed today to find out that there was no constructor <!-- raw HTML omitted -->IOException(String, Throwable)<!-- raw HTML omitted --> or<!-- raw HTML omitted --> IOException(Throwable)<!-- raw HTML omitted --> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.<!-- raw HTML omitted --> <!-- raw HTML omitted --> So the workaround is:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->IOException ioe = new IOException(&ldquo;message&rdquo;);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->ioe.initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted -->   <!-- raw HTML omitted -->throw ioe;<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It can also be written as:<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted -->throw (IOException) new IOException(&ldquo;message&rdquo;).initCause(e);<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --> It is not a major problem, but still. We can all thank the guy who <!-- raw HTML omitted -->reported that as a bug<!-- raw HTML omitted --> to Sun in 2004.<!-- raw HTML omitted --></p>
+  <p>I was amazed today to find out that there was no constructor <code>IOException(String, Throwable)</code> or <code>IOException(Throwable)</code> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.</p>
+<p>So the workaround is:</p>
+<pre><code>`IOException ioe = new IOException(&quot;message&quot;);`
+`ioe.initCause(e);`
+`throw ioe;`
+</code></pre>
+<p>It can also be written as:</p>
+<pre><code>`throw (IOException) new IOException(&quot;message&quot;).initCause(e);`
+</code></pre>
+<p>It is not a major problem, but still. We can all thank the guy who <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5070673">reported that as a bug</a> to Sun in 2004.</p>
 
 </div>
 
