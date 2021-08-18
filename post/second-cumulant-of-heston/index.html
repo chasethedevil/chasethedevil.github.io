@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Second Cumulant of Heston &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,9 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Second Cumulant of Heston</h1>
+  <time datetime=2013-10-03T17:27:00Z class="post-date">Thu, Oct 3, 2013</time>
+  <p>I recently stumbled upon an error in the various papers related to the Heston <!-- raw HTML omitted -->Cos method<!-- raw HTML omitted --> regarding the second cumulant. It is used to define the boundaries of the Cos method.<!-- raw HTML omitted --><!-- raw HTML omitted -->Letting phi be Heston characteristic function, the cumulant generating function is:<!-- raw HTML omitted -->$$g(u) = \log(\phi(-iu))$$<!-- raw HTML omitted --><!-- raw HTML omitted -->And the second cumulant is defined a: <!-- raw HTML omitted -->$$c_2 = g''(0)$$<!-- raw HTML omitted --><!-- raw HTML omitted -->Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.<!-- raw HTML omitted --><!-- raw HTML omitted -->This is where <!-- raw HTML omitted -->Maxima<!-- raw HTML omitted --> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:<!-- raw HTML omitted -->$$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right)   + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\<!-- raw HTML omitted -->+  \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \<!-- raw HTML omitted -->+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$<!-- raw HTML omitted --><!-- raw HTML omitted -->In contrast, the paper formula was:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.<!-- raw HTML omitted --><!-- raw HTML omitted -->Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0.377836$$ using 200 points:<!-- raw HTML omitted --><!-- raw HTML omitted -->New formula: 0.1640581405<!-- raw HTML omitted -->Paper formula: 0.1743425406<!-- raw HTML omitted -->N=30 with 10000 points: 0.1640581423 <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update March 2014<!-- raw HTML omitted --> - this is now described in my paper <!-- raw HTML omitted -->Fourier Integration and Stochastic Volatility Calibration<!-- raw HTML omitted -->. <!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 
 </div>
 

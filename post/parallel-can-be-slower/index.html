@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Parallel Can Be Slower &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,11 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Parallel Can Be Slower</h1>
+  <time datetime=2013-02-13T17:05:00Z class="post-date">Wed, Feb 13, 2013</time>
+  <p>I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step</p>
+<p>I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.</p>
+<p>I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).</p>
 
 </div>
 

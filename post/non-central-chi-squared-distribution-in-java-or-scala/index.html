@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Non Central Chi Squared Distribution in Java or Scala &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Non Central Chi Squared Distribution in Java or Scala</h1>
+  <time datetime=2013-01-03T17:21:00Z class="post-date">Thu, Jan 3, 2013</time>
+   
+
+I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<br /><br />OpenGamma has a not too bad <a href="http://docs-static.opengamma.com/1.2.0/java/javadocs/com/opengamma/analytics/math/statistics/distribution/NonCentralChiSquaredDistribution.html">implementation</a>. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <a href="http://www.boost.org/doc/libs/1_36_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">implementation in the Boost library</a>. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<br /><br />The Boost implementation seems much more robust in general thanks to:<br /><ul><li>The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding's method.</li><li>Reverts to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.ucs.louisiana.edu%2F~kxk4695%2FCSDA-03.pdf&amp;ei=LKzlUKWvL_K00QX_t4CYBA&amp;usg=AFQjCNFgkeariqMPXVH4LLrO5RRi3nIc0Q">Benton and Krishnamoorthy</a> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;ved=0CEIQFjAC&amp;url=http%3A%2F%2Fdspace.uevora.pt%2Frdpc%2Fbitstream%2F10174%2F4635%2F1%2FSpeedAccuracyCEV_FFM%255B1%255D.pdf&amp;ei=Ea3lULLsBaPL0QXKuoHYAw&amp;usg=AFQjCNGkqkA5e_-0n_DATE9BTQVoL9NTkg&amp;cad=rja">not very precise in general</a>.</li></ul>It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<br /><br />If only it was simple to commit to open-source projects while working for a software company...
+
+
 
 </div>
 

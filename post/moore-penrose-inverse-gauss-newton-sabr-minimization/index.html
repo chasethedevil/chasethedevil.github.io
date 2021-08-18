@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Moore-Penrose Inverse &amp; Gauss-Newton SABR Minimization &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Moore-Penrose Inverse &amp; Gauss-Newton SABR Minimization</h1>
+  <time datetime=2014-06-24T15:29:00Z class="post-date">Tue, Jun 24, 2014</time>
+   
+
+I have found a particularly nice initial guess to calibrate SABR. As it is quite close to the true best fit, it is tempting to use a very simple minimizer to go to the best fit. Levenberg-Marquardt works well on this problem, but can we shave off a few iterations?<br /><br />I firstly considered the basic <a href="http://en.wikipedia.org/wiki/Newton%27s_method_in_optimization" target="_blank">Newton's method</a>, but for least squares minimization, the Hessian (second derivatives) is needed. It's possible to obtain it, even analytically with SABR, but it's quite annoying to derive it and code it without some automatic differentiation tool. It turns out that as I experimented with the numerical Hessian, I noticed that it actually did not help convergence in our problem. <a href="http://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm" target="_blank">Gauss-Newton</a> converges similarly (likely because the initial guess is good), and what's great about it is that you just need the Jacobian (first derivatives). <a href="https://www.math.lsu.edu/system/files/MunozGroup1%20-%20Paper.pdf" target="_blank">Here</a> is a good overview of Newton, Gauss-Newton and Levenberg-Marquardt methods.<br /><br />While Gauss-Newton worked on many input data, I noticed it failed also on some long maturities equity smiles. The full Newton's method did not fare&nbsp; better. I had to take a close look at the matrices involved to understand what was going on. It turns out that sometimes, mostly when the SABR rho parameter is close to -1, the Jacobian would be nearly rank deficient (a row close to 0), but not exactly rank deficient. So everything would appear to work, but it actually misbehaves badly.<br /><br />My first idea was to solve the reduced problem if a row of the Jacobian is too small, by just removing that row, and keep the previous value for the guess corresponding to that row. And this simplistic approach made the process work on all my input data. Here is the difference in RMSE compared to a highly accurate Levenberg-Marquardt minimization for 10 iterations:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-A37UNSIHtzQ/U6l53-sbMTI/AAAAAAAAHVA/s5g9safiiaw/s1600/Screenshot+-+06242014+-+10:01:39+AM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-A37UNSIHtzQ/U6l53-sbMTI/AAAAAAAAHVA/s5g9safiiaw/s1600/Screenshot+-+06242014+-+10:01:39+AM.png" height="260" width="320" /></a></div><br /><br />Later, while reading some more material related to least square optimization, I noticed the use of the <a href="http://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_pseudoinverse" target="_blank">Moore-Penrose inverse</a> in cases where a matrix is rank deficient. The Moore-Penrose inverse is defined as:<br />$$ M^\star = V S^\star U^T$$<br />where \( S^\star \) is the diagonal matrix with inverted eigenvalues and 0 if those are deemed numerically close to 0, and \(U, V\) the eigenvectors of the SVD decomposition:<br />$$M=U S V^T$$<br />It turns out to work very well, beside being simpler to code, I expected it to be more or less equivalent to the previous approach (a tiny bit slower but we don't care as we deal with small matrices, and the real slow part is the computation of the objective function and the Hessian, which is why looking at iterations is more important).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-pDJ-3L1PARQ/U6l63hQQcvI/AAAAAAAAHVI/8Y9fg-TEcf8/s1600/Screenshot+-+06242014+-+02:50:44+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-pDJ-3L1PARQ/U6l63hQQcvI/AAAAAAAAHVI/8Y9fg-TEcf8/s1600/Screenshot+-+06242014+-+02:50:44+PM.png" height="267" width="320" /></a></div><br />It seems to converge a little bit less quickly, likely due to the threshold criteria that I picked (1E-15).<br />Three iterations is actually most of the time (90%) more than enough to achieve a good accuracy (the absolute RMSE is between 1E-4 and 5E-2) as the following graph shows. The few spikes near 1E-3 represent too large errors, the rest is accurate enough compared to the absolute RMSE.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-uRD-sBYpw_E/U6l7YOQg-NI/AAAAAAAAHVQ/aGBd1twGu5U/s1600/Screenshot+-+06242014+-+03:20:34+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-uRD-sBYpw_E/U6l7YOQg-NI/AAAAAAAAHVQ/aGBd1twGu5U/s1600/Screenshot+-+06242014+-+03:20:34+PM.png" height="242" width="320" /></a></div><br />To conclude, we have seen that using the Moore-Penrose inverse in a Gauss-Newton iteration allowed the Gauss-Newton method to work on rank-deficient systems.<br />I am not sure how general that is, in my example, the true minimum either lies inside the region of interest, or on the border, where the system becomes deficient. Of course, this is related to a "physical" constraint, here namely rho &gt; -1.
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

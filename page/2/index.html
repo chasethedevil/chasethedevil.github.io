@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/about/">About</a>
+  </h1>
+  <time datetime="2018-12-17T10:05:07&#43;0100" class="post-date">Mon, Dec 17, 2018</time>
+  <p>I just moved my blog to a static website, created with <a href="https://gohugo.io/">Hugo</a>, I explain the reasons why <a href="/post/moved-to-hugo/">here</a>.
+You can find more about me on my <a href="https://fr.linkedin.com/in/fabien-le-floc-h-8aa306">linkedin profile</a>.
+In addition you might find the following interesting:</p>
+<ul>
+<li><a href="http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">List of quantitative finance papers</a> I have freely available on SSRN</li>
+<li><a href="/lefloch_trbdf2_draft.pdf">TR-BDF2 for Stable American Option Pricing</a>. This is the first draft, not the final version that was published in the Journal of Computational Finance.</li>
+<li><a href="/lefloch_sabr_slides.pdf">Presentation on finite difference techniques for arbitrage-free SABR</a> I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.</li>
+<li><a href="/lefloch_exact_log.pdf">Exact Forward for Finite-Difference Schemes on the Log-transformed Black-Scholes PDE</a>.</li>
+<li><a href="/lefloch_volatility_asymptotics.pdf">Asymptotic bounds of the normal volatility</a>.</li>
+</ul>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/quadprog-nans/">Fixing NaNs in Quadprog</a>
+  </h1>
+  <time datetime="2018-10-07T20:56:42&#43;0100" class="post-date">Sun, Oct 7, 2018</time>
+  <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
+<p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
+
+    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+
+    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
+    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
+    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
+    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
+
+    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
+    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
+
+    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+
+    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></code></pre></div>
+<p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
+<p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
+<figure><img src="/post/quadprog_nan_fix.png"/><figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
+</figure>
+
+<p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
+  </h1>
+  <time datetime="2018-07-12T20:56:42&#43;0100" class="post-date">Thu, Jul 12, 2018</time>
+  <p>This is a follow up to my <a href="/post/tsla-stock-crash-probability">previous post</a> where I explore the probability
+of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">results of Timothy Klassen</a>.</p>
+<p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
+high compared to other stocks? or is it the interpretation of the data erroneous?</p>
+<p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
+<figure><img src="/post/nflx2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration.</p>
+<p>The corresponding implied cumulative density is</p>
+<figure><img src="/post/nflx2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
+<p>For completeness, the implied probability density is</p>
+<figure><img src="/post/nflx2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
+too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
+<p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
+much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
+<figure><img src="/post/snap2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/snap2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<p>We find a probability of moving below 1/3 of the current price lower than with TSLA: around 12% SNAP vs 15% for TSLA.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
+  </h1>
+  <time datetime="2018-07-11T20:56:42&#43;0100" class="post-date">Wed, Jul 11, 2018</time>
+  <p>Timothy Klassen had an <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">interesting post</a> on linkedin recently, with the title &ldquo;the options market thinks there is a 16% chance that Tesla will not exist in January 2020&rdquo;.
+As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
+and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
+This results in the following graph</p>
+<figure><img src="/post/tsla2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration. Note that I
+removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
+<p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
+<figure><img src="/post/tsla2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
+</table>
+<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
+<figure><img src="/post/tsla2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
+modes, its fit in terms of volatilities is not better than the lognormal mixture model. We could reduce the number of modes by increasing
+the constant of the Tikhonov regularization, at the cost of a slightly worse fit.</p>
+<p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
+and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
+</table>
+<p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
+It is expected that the probability of going under $100 will be larger when the stock price moves down,
+which is what happen around March 27, 2018. But it is not so expected that when it comes back up higher
+(above $350 in mid June), the probability of going under $100 stays higher than it was before March 27, 2018,
+where the stock price was actually lower.
+In fact, there seems to be a signal in his time-serie, where the probability of going under $100 increases
+significantly, one week before March 27, that is one week before the actual drop,
+suggesting that the drop was priced in the options.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/">The Fourth Moment of the Normal SABR Model</a>
+  </h1>
+  <time datetime="2018-06-11T20:56:42&#43;0100" class="post-date">Mon, Jun 11, 2018</time>
+  <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
+simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
+For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
+<p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
+I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.degruyter.com/view/j/jip.2013.21.issue-1/jip-2012-0093/jip-2012-0093.xml">The use of statistical tests to calibrate the normal SABR model</a>
+with simple formulae for the third and fourth moments (sci-hub.nu is your friend to read this). I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
+consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
+<p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
+is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
+the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
+initial forward price.</p>
+<p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
+with
+$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2},,$$
+$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2},,$$
+$$ C = - A - B ,.$$</p>
+<p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
+no error in their third moment.</p>
+<p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/">Implying the Probability Density from Market Option Prices (Part 2)</a>
+  </h1>
+  <time datetime="2018-05-27T20:56:42&#43;0100" class="post-date">Sun, May 27, 2018</time>
+  <p>This is a follow-up to my posts on the implied risk-neutral density (RND) of the SPW options before and after the big volatility change that happened in early February with two different techniques:
+<a href="/post/spx500_bets_after_rates_hike/">a smoothing spline on the implied volatilities</a> and a <a href="/post/implying-the-probability-density-from-market-option-prices/">Gaussian kernel approach</a>.</p>
+<p>The Gaussian kernel (as well as to some extent the smoothing spline) let us believe that there are multiple modes in the distribution (multiple peaks in the density). In reality,
+Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
+for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
+<p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
+<figure><img src="/post/rnd_nonic_collocation.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>There is now just one mode, and the fit in implied volatilities is much better.</p>
+<figure><img src="/post/nonic_collocation_vol.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
+that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a noisy RND.
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3150689">Sebastian Schlenkrich uses</a> a simple regularization to calibrate his own piecewise-linear local volatility approximation
+(a Lamperti-transform based approximation instead of the single step PDE approach of Andreasen-Huge).
+His Tikhonov regularization consists here in applying a roughness penalty consisting
+in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
+This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
+<figure><img src="/post/rnd_ah_tikhonov.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
+</figure>
+
+<p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
+the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
+<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
+Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
+<p>The error of model versus market implied volatilies is similar to the nonic collocation (not better) even though the shape is less smooth and, a priori, less constrained as,
+on this example, the Andreasen-Huge method has 75 free-parameters while the nonic collocation has 9.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/">Senior Developers Don&#39;t Know OO Anymore</a>
+  </h1>
+  <time datetime="2018-03-08T20:56:42&#43;0100" class="post-date">Thu, Mar 8, 2018</time>
+  <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
+<p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<p>This is really breaking OO and moving back to procedural programming.</p>
+<p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
+<p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices/">Implying the Probability Density from Market Option Prices</a>
+  </h1>
+  <time datetime="2018-02-13T20:56:42&#43;0100" class="post-date">Tue, Feb 13, 2018</time>
+  <p>In the <a href="/post/spx500_bets_after_rates_hike/">previous post</a>, I showed a plot of the probability implied from SPW options before and after the big volatility change of last week.
+I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
+technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
+<p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
+<figure><img src="/post/spw_density_spline_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+        </figcaption>
+</figure>
+
+<p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
+obvious which value of N is the most appropriate.</p>
+<p>Another technique is to fit directly a weighted sum of Gaussian densities, of fixed standard deviation, where the weights are calibrated to the market option prices. This is
+described in various papers and books from Wystup such as <a href="https://mathfinance.com/wp-content/uploads/2017/06/FXSmileModelling.pdf">this one</a>. He calls it the kernel slice approach.
+If we impose that the weights are positive and sum to one, the resulting model density will integrate to one and be positive.</p>
+<p>It turns out that the price of a Vanilla option under this model is just the sum of vanilla options prices under the Bachelier model with shifted forwards (each &ldquo;optionlet&rdquo;
+forward corresponds to a peak on the market strike axis). So it is easy and fast to compute. But more importantly, the problem of finding the weights is linear. In deed, the typical
+measure to minimize is:
+$$ \sum_{i=0}^{n} w_i^2 \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right)^2 $$
+where \( w_i \) is a market weight related to the bid-ask spread,  \(  C_i^M \) is the market option price with strike \( K_i \), \( C_j^B(K_i) \) is the j-th Bachelier
+optionlet price with strike \( K_i \) and \( Q_j \) is the optionlet weight we want to optimize.</p>
+<p>The minimum is located where the gradient is zero.
+$$  \sum_{i=0}^{n} 2 w_i^2 C_k^B(K_i)  \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right) = 0 \text{ for } k=1,&hellip;,m $$
+It is a linear and can be rewritten in term of matrices as \(A Q = B\) but we have the additional constraints
+$$ Q_j \geq 0 $$
+$$ \sum_j Q_j = 1 $$</p>
+<p>The last constraint can be easily added with a Lagrange multiplier (or manually by elimination). The positivity constraint requires more work. As the problem is convex,
+the solution must lie either inside or on a boundary. So we need to explore each case where \(Q_k = 0\) for one or several k in 1,&hellip;m.
+In total we have \(2^{m-1}-1\) subsets to explore.</p>
+<p><em>How to list all the subsets of \( \{1,&hellip;,m\} \)?</em> It turns out it is very easy by using a <a href="https://www.quora.com/Given-an-array-of-size-n-how-do-you-find-all-the-possible-subsets-of-the-array-of-size-k">bijection of each subset with the binary representation</a> of \( {0,&hellip;,2^m} \). We then just need
+to increment a counter for 1 to \( 2^m \) and transform the binary representation to our original set elements. Each element of the subset corresponds to a 1 in the binary representation.</p>
+<p>Now this works well if m is not too large as we need to solve \(2^{m-1}-1\) linear systems.
+I actually found amazing, it took only a few minutes for m as high as 26 without any particular optimization. For m larger we need to be more clever.
+One possibility is to solve the unconstrained problem, and put all the negative quantities to 0  in the result, then solve again this new problem on those boundaries and repeat
+until we find a solution. This simple algorithm works often well, but not always. There exists specialized algorithms that are much better and nearly as fast.
+Unfortunately I was too lazy to code them. So I improvised on the <a href="http://en.wikipedia.org/Simplex">Simplex</a>. The problem can be transformed into something solvable by the Simplex algorithm.
+We maximize the function \( -\sum_j Z_j \) with the constraints
+$$ A Q - I Z = B $$
+$$ Q_j \geq 0 $$
+$$ Z_j \geq 0 $$
+where I is the identity matrix. The additonal Z variables are slack variables, just here to help transform the problem. This is a trick I found on a <a href="https://www.researchgate.net/post/How_to_get_the_positive_solution_x_of_a_linear_equation_Axb_if_A_is_a_non-negative_rectangular_matrix">researchgate forum</a>. The two problems
+are not fully equivalent, but they are close enough that the Simplex solution is quite good.</p>
+<p>With the spline, we minimize directly bid-ask weighted volatilities. With the kernel slice approach, the problem is linear only terms of call prices. We could use a non-linear solver
+with a good initial guess. Instead, I prefer to transform the weights so that the optimal solution on weighted prices is similar to the optimal solution on weighted volatilities.
+For this, we can just compare the gradients of the two problems:
+$$ \sum_{i=0}^{n} 2 {w}_i^2  \frac{\partial C}{\partial \xi}(\xi, K_i)   \left( C_i^M - C(\xi, K_i) \right) $$
+with
+$$ \sum_{i=0}^{n} 2 {w^\sigma_i}^2\frac{\partial \sigma}{\partial \xi}(\xi, K_i)  \left( \sigma_i^M - \sigma(\xi, K_i)\right) $$
+As we know that
+$$ \frac{\partial C}{\partial \xi} =  \frac{\partial \sigma}{\partial \xi} \frac{\partial C}{\partial \sigma} $$
+we approximate \( \frac{\partial C}{\partial \sigma} \) by the market Black-Scholes Vega and
+\( \left( C_i^M - C(\xi, K_i) \right) \) by \( \frac{\partial C}{\partial \xi} (\xi_{opt}-\xi) \),
+\( \left( \sigma_i^M - \sigma(\xi, K_i) \right) \) by \( \frac{\partial \sigma}{\partial \xi} (\xi_{opt}-\xi) \)
+to obtain
+$$ {w}_i \approx \frac{1}{ \frac{\partial C_i^M}{\partial \sigma_i^M} } {w^\sigma_i}  $$</p>
+<p>Now it turns out that the kernel slice approach is quite sensitive to the choice of nodes (strikes), but not as much as to the choice of number of nodes. Below is
+the same plot as with the spline approach, that is we choose every N market strike as node. For N=4, the density is composed of the sum of m/4 Gaussian densities. We
+optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
+in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
+narrower peaks.</p>
+<figure><img src="/post/spw_density_kernel_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+        </figcaption>
+</figure>
+
+<p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
+The fit can be much better by adding nodes at
+f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
+will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
+<figure><img src="/post/spw_vol_kernel2.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
+<figure><img src="/post/spw_density_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
+then we impose where the peaks will be located eventually.</p>
+<p>It is interesting to compare the graph with the one before the volatility jump:</p>
+<figure><img src="/post/spw_density_janfeb_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>
+<p>It is possible to use other kernels than the Gaussian kernel. The problem to solve would be exactly the same. It is not clear what would be the advantages
+of another kernel, except, possibly, speed to solve the linear system in O(n) operations for a compact kernel spanning at most 3 nodes (which would translate to a tridiagonal system).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/">Where is the S&amp;P 500 going to end?</a>
+  </h1>
+  <time datetime="2018-02-06T19:56:42&#43;0100" class="post-date">Tue, Feb 6, 2018</time>
+  <p>Yesterday the American stocks went a bit crazy along with the VIX that jumped from 17.50 to 38. It&rsquo;s not exactly clear why, the news mention that the Fed might raise its interest rates, the bonds yield have been recently increasing substantially, and the market self-correcting
+after stocks grew steadily for months in a low VIX environment.</p>
+<p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
+It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
+<figure><img src="/post/spw_density.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options.</h4>
+        </figcaption>
+</figure>
+
+<p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
+Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
+<p>Option traders like to look at the implied volatilities (below).</p>
+<figure><img src="/post/spw_vol.png"/><figcaption>
+            <h4>implied volatilities of 1-month SPW options.</h4>
+        </figcaption>
+</figure>
+
+<p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
+a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
+<p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/">Discrete Sine Transform via the FFT</a>
+  </h1>
+  <time datetime="2018-02-05T13:56:42&#43;0100" class="post-date">Mon, Feb 5, 2018</time>
+  <p>Several months ago, I had a quick look at <a href="https://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2585529">a recent paper</a> describing how to use
+Wavelets to price options under stochastic volatility models with a known characteristic function.
+The more classic method is to use some numerical quadrature directly on the Fourier integral as described <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2362968">in this paper</a> for example.
+When I read the paper, I was skeptical about the Wavelet approach, since it looked complicated, and with many additional parameters.</p>
+<p>I recently took a closer look and it turns out my judgment was bad. The additional parameters can be easily automatically and reliably set
+by very simple rules that work well (<a href="https://ssrn.com/abstract=2705699">a subsequent paper</a> by the same author, which applies the method to Bermudan options, clarifies this).
+The method is also not as complex as I first imagined. And more importantly, the FFT makes it fast. It is quite amazing to see
+the power of the FFT in action. It really is because of the FFT that the Shannon Wavelet method is practical.</p>
+<p>Anyway one of the things that need to be computed are the payoff coefficients, and one expression is just the sum of a <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">discrete Cosine transform</a> (DCT) and a discrete Sine transform (DST).
+I was wondering then
+about a simple way to use the FFT for the Sine transform. There are many papers around how to use the FFT to compute the Cosine transform. A technique
+that is efficient and simple is the one of <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwirtpu5upHZAhUFOBQKHZnHBFoQFgg2MAA&amp;url=http%3A%2F%2Feelinux.ee.usm.maine.edu%2Fcourses%2Fele486%2Fdocs%2Fmakhoul.fastDCT.pdf&amp;usg=AOvVaw0b3sdSzaT-A9fRAGWZbUcP">Makhoul</a>.</p>
+<p>The coefficients that need to be computed for all k can be represented by the following equation
+$$	V_{k} = \sum_{j=0}^{N-1} a_j \cos\left(\pi k\frac{j+\frac{1}{2}}{N}\right) + b_j \sin\left(\pi k\frac{j+\frac{1}{2}}{N}\right) $$
+with \( N= 2^{\bar{J}-1} \) for some positive integer \( \bar{J} \).
+Makhoul algorithm to compute the DCT of size N with one FFT of size N consists in</p>
+<ul>
+<li>initialize the FFT coefficients \(c_j\) with:
+$$	c_j = a_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \( hat{c} \), the DCT coefficients \( \hat{a} \) are
+$$ \hat{a}_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>Makhoul does not specify the equivalent formula for the DST, but we can do something similar.</p>
+<ul>
+<li>We first initialize the FFT coefficients \( c_j \) with:
+$$ c_j = b_{2j} \quad,,\quad	c_{N-1-j} = -b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \(\hat{c}\), the DST coefficients \(\hat{b}\) are
+$$\hat{b}_k = -\Im\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>For maximum performance, the two FFTs can reuse the same sine and cosine tables. And the last step of the DCT and DST can be combined together.</p>
+<p>Another approach would be to compute a single FFT of size 2N as we can rewrite the coefficients as
+$$	V_{k} = \Re\left[e^{-i \pi \frac{k}{2N}} \sum_{j=0}^{2N-1} (a_j + i b_j) e^{-2i\pi k\frac{j}{2N}} \right] $$
+with \(a_j = b_j =0 \) for \( j \geq N \)</p>
+<p>In fact the two are almost equivalent, since a FFT of size 2N is <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">decomposed</a> internally into two FFTs of size N.</p>
+<p>With this in mind we can improve a bit the above to merge the two transforms together:</p>
+<ul>
+<li>We first initialize the FFT coefficients \( c_j \) with:
+$$ c_j = a_{2j} + i b_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \(\hat{c}\), the coefficients are
+$$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>And we have computed the coefficients with a single FFT of size N.</p>
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/">Previous</a></p>
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/3/">Next</a></p>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

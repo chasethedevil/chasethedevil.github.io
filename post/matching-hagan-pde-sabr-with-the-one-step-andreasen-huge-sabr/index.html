@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Matching Hagan PDE SABR with the one-step Andreasen-Huge SABR &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,9 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Matching Hagan PDE SABR with the one-step Andreasen-Huge SABR</h1>
+  <time datetime=2015-04-30T17:16:00Z class="post-date">Thu, Apr 30, 2015</time>
+  <p>I looked nearly two years ago already at <!-- raw HTML omitted -->the arbitrage free SABR of Andreasen-Huge in comparison to the arbitrage free PDE of Hagan<!-- raw HTML omitted --> and showed how close the <!-- raw HTML omitted -->ideas were<!-- raw HTML omitted -->: Andreasen-Huge relies on the normal Dupire forward PDE using a slightly simpler local vol (no time dependent exponential term) while Hagan works directly on the Fokker-Planck PDE (you can think of it as the Dupire Forward PDE for the density) and uses an expansion of same order as the original SABR formula (which leads to an additional exponential term in the local volatility).<!-- raw HTML omitted --><!-- raw HTML omitted -->One clever idea from Andreasen-Huge is the use of a single step. It turns out that their idea is not completely new. Daniel Duffy sent me some old papers from Shishkin around fitted schemes (<!-- raw HTML omitted -->here is one<!-- raw HTML omitted -->). This is very much the same thing, except Shishkin concern is about a good handling of discontinuity in the initial condition, and therefore makes the association step function =&gt; cumulative density to fit the diffusion parameter. Andreasen-Huge work directly with the call prices as this is what they solve.<!-- raw HTML omitted --><!-- raw HTML omitted -->One drawback of Andreasen-Huge one step method is the inability to match the standard SABR smile: the parameters don&rsquo;t have exactly the same meaning. It turns out that by just shifting proportionally the local volatility by a constant factor, Andreasen Huge matches Hagan PDE vols quite closely.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Implied Black volatilities<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Probability density<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->While this is interesting in itself, it&rsquo;s still not so simple to backup this factor without solving for it (and then the method looses appeal).</p>
 
 </div>
 

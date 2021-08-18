@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Ubuntu 7.10 vs Fedora Core 8 - Gutsy vs Werewolf &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,16 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Ubuntu 7.10 vs Fedora Core 8 - Gutsy vs Werewolf</h1>
+  <time datetime=2007-11-20T16:23:00Z class="post-date">Tue, Nov 20, 2007</time>
+  <p>I was pretty happy with Ubuntu 7.10, but when Fedora 8 came out I decided to give it a try. Last time I tried it it was Core 2 or something like that, and it was NOT good.</p>
+<p>At first Fedora 8 looks quite good, has a good Live CD install, reminiscent of Ubuntu. The positive side is that it is based on the latest Kernel. It manages my Thinkpad T42 very well (suspend, hibernate work). But after a few days, one notice Fedora is not as stable as Ubuntu, for example:</p>
+<ul>
+<li>I have had weird behavior with windows not being updated properly</li>
+<li>I experienced big problems when playing with LVM,</li>
+<li>It is also a general impression when interacting with the system.</li>
+</ul>
+<p>One can wonder why Fedora 8 does not install OpenOffice by default.<!-- raw HTML omitted -->Ubuntu is IMHO still the king of distros.</p>
 
 </div>
 

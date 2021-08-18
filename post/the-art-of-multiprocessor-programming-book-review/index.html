@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>The Art of Multiprocessor Programming Book Review &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,17 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>The Art of Multiprocessor Programming Book Review</h1>
+  <time datetime=2008-09-11T19:32:00Z class="post-date">Thu, Sep 11, 2008</time>
+  <p>I don&rsquo;t remember why I started to subscribe to the Java concurrency-interest list. I find that overall, it is an excellent mailing list.</p>
+<p>There was <a href="http://cs.oswego.edu/pipermail/concurrency-interest/2008-June/005329.html">a post</a> at one point about the Dante Inferno&rsquo;s problem. It triggered my attention, so I decided to buy the book the post was referring to, <em>The Art of Multiprocessor Programming</em> by M Herlihy and N. Shavit.</p>
+<p>The books starts with the basics, and is very didactic in its approach. I enjoyed to learn how locks work and how to build them almost out of nothing. The progression is good, starting with a half broken but simple lock and evolving to the more standard algorithm, like the <a href="http://en.wikipedia.org/wiki/Lamport%27s_bakery_algorithm">Bakery Lock</a> algorithm. The algorithms are extremely well explained. Later it explains the differences between spin locks (Bakery for example) and blocking locks, while presenting new algorithms for blocking locks.<!-- raw HTML omitted --> <!-- raw HTML omitted -->What is described in the many chapters is mainly how to write the javax.concurrency.utils library, why, and what to add to it.<!-- raw HTML omitted --> <!-- raw HTML omitted -->Here are the main subjects I found interesting even if they are not always well presented:</p>
+<ul>
+<li><em><a href="http://www.inf.fh-flensburg.de/lang/algorithmen/sortieren/bitonic/bitonicen.htm">Bitonic networks</a></em>: I had not read about it before and I found the subject fascinating. Go and click on the link if you don&rsquo;t know what I am talking about.</li>
+<li><em>Skip Lists</em>: while I found the subject to be very interesting, I found the skip lists were not presented in a very clear manner. I find the <a href="http://en.wikipedia.org/wiki/Skip_list">wikipedia page about Skip Lists</a> and the <a href="ftp://ftp.cs.umd.edu/pub/skipLists/skiplists.pdf">original paper</a> much better to understand skip lists. Fortunately the authors talk about how to make it more concurrent friendly, and that part is well explained.</li>
+<li><em>Software transactional memory</em>: I have the same opinion than with skip list, except the wikipedia page is very short on details, and the book does give much more details. We feel it is the end of the book and the authors took less time to present it an easily understandable manner. One need to read the chapter several times or to have read before about it to really understand.</li>
+</ul>
+<p>I like books that make me learn new concepts. In <em>The Art of Multiprocessor Programming</em>, there are plenty of concepts, ideas I had never heard about before, even though most of it is probably well known to specialists in the field. So even if some rare subjects could be presented better, I recommend that book to anybody interested in concurrent programming.</p>
 
 </div>
 

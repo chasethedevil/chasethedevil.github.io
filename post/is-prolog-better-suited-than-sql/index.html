@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Is Prolog Better Suited Than SQL? &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,32 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Is Prolog Better Suited Than SQL?</h1>
+  <time datetime=2005-09-26T15:36:00Z class="post-date">Mon, Sep 26, 2005</time>
+  <p>I am currently reading a Prolog book <em>Artificial Intelligence Through Prolog</em>, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.</p>
+<p>It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project. With Prolog, there is no need to think about joins, type of joins, SQL syntax. It is at the level just higher. I wonder very much why Prolog did not become more mainstream as it seems to solve some problems in a much nicer, natural way.</p>
+<p>Here is a short example to get reviews of things by user or by user and tags or &hellip;:</p>
+<p>let&rsquo;s define some facts:</p>
+<ul>
+<li>is_tag(tag1, user1, thing_id)</li>
+<li>is_tag(tag2, user1, thing_id)</li>
+<li>&hellip;</li>
+<li>review(user1, thing_id, description, extended, date)</li>
+<li>&hellip;</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE)</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo; with tag &ldquo;tag_y&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE), is_tag(tag_y, user_x, THING_ID)</li>
+</ul>
+<p>We could imagine some better ways to lay out information. This is just a first draft.</p>
+<p>Now of course, Prolog does not necessary makes sense for us because:</p>
+<p>a) We already have it working in SQL</p>
+<p>b) SQL is much more used and should therefore be more tunable, stable, etc.</p>
+<p>Still the Prolog way of things is interesting and powerful. We could have written a code with a logic near Prolog instead of our custom code.</p>
 
 </div>
 

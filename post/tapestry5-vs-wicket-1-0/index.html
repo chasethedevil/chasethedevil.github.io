@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Tapestry5 vs Wicket: 1 - 0 &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Tapestry5 vs Wicket: 1 - 0</h1>
+  <time datetime=2007-07-11T12:49:00Z class="post-date">Wed, Jul 11, 2007</time>
+   
+
+Getting started with <a href="http://tapestry.apache.org/tapestry5/">Tapestry 5</a> is easier than with <a href="http://incubator.apache.org/wicket/">Wicket 1.3</a>. Some readers will complain that it is again the view of someone who has no deep knowledge of either Tapestry or Wicket. But I think it is important for projects to be easily accessible to developers. Wicket seems to have more buzz around these days, and has a detailed wiki with plenty of useful information in it. But that&#39;s the problem I see with Wicket, it is not simple to do simple things, that is why there is so much information to do simple things in the Wicket wiki. <br><br>Granted my test was based on a specific case for component frameworks, I was not so much interested into statefulness, I wanted to display a bookmarkable &quot;user page&quot; with content coming from hibernate.This  kind of behaviour is quite general in web applications, especially in web  2.0.<br><br>It was relatively easy to have the page working with Wicket, although I was disappointed at their hibernate integration. Hibernate integration in wicket means either using the full databinder project, or creating your own solution. I chose the later based on source code from databinder, but I actually rewrote everything in the end. I was disappointed that  <a href="http://databinder.net/">databinder</a>, a specific Hibernate oriented framework did not really <a href="http://www.hibernate.org/42.html">handle Hibernate sessions the simplest way possible</a>. Tapestry5 <a href="http://svn.apache.org/viewvc/tapestry/tapestry5/trunk/tapestry-hibernate/src/main/java/org/apache/tapestry/hibernate/HibernateModule.java?revision=548175&amp;view=markup"> got that right</a>. To manage Hibernate sessions right, I had to dwelve into Wicket code as no documentation offers insight about inner workings of wicket. The code was too complex for my taste. In my short experience, I saw it seemed the developers are changing it to the better, removing some unnecessary abstractions. <br><br>In the end I got frustrated many times with Wicket, and did not manage to have a bookmarkable page the way I wanted. You can have a bookmarkable page, but after some action on the page, it would become unbookmarkable. Furthermore, the structure of the URL is not very flexible without yourself rewriting completely the bookmarkable page feature of Wicket. <br><br>With Tapestry5, I was at first worried about the small amount of documentation on the site, the use of maven in the tutorial. I was wrong, documentation proved to be exactly what I needed, and detailed enough. It is much easier to understand how Tapestry5 works after reading the doc than Wicket. Concepts in Tapestry5 are simpler and more powerful. Maven use is in the end not that big of a deal, I am still not as comfortable with it but I am productive enough that it is not an issue, much more productive than with Wicket. The standard tutorial setup is a very good one. <br><br>Doing a bookmarkable page was trivial, it also was easy to have the format i wanted, and it was kept after action in the location bar. Hibernate integration was trivial, since Tapestry5 provides the tapestry-hibernate module, a few classes that helps managing the session and transactions for you. The only drawback is maybe the yet another inversion control system to learn. Tapestry5 IoC is very near from Guice in its philosophy. I wish Guice was made the default for IoC in Tapestry5. <br><br>To conclude, there is no doubt about it, Tapestry5 is the winner.<br> 
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Wizards Bad For Productivity &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,18 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Wizards Bad For Productivity</h1>
+  <time datetime=2007-05-16T14:56:00Z class="post-date">Wed, May 16, 2007</time>
+  <p>IBM RAD comes with many wizards, to create EJBs, to create Web Services, do struts mapping&hellip; They are quite well done, making EJB &lt; 3.0 usable, and Web Services look simple.</p>
+<p>But wizards sucks at:</p>
+<ul>
+<li>typos correction</li>
+<li>repetition</li>
+</ul>
+<p>But when you do a typo in your wizards, then all the files generated/changed are wrong, and you don&rsquo;t necessarily know if you can just do a search and replace. Plus you don&rsquo;t necessarily know all the files that were affected by the typo.</p>
+<p>In RAD, there is even a wizard to help you create a JSP. What does it do? Well, for example it generates those 2-3 lines of tag libraries include. The first time you write a JSP, it might help you, but the second time, it&rsquo;s much faster to copy/paste. Generally, when you have to do an wizard operation many times, it is much slower than doing it via copy/paste and few modifications here and there, or to use a more configurable alternative like XDoclets.</p>
+<p>The other complaint I have about wizards, is that they hide too much how things are working. As anybody can use them, it makes you think the operation it does and technologies behind are simple.</p>
+<p>More generally it feels to me like wizards are only there because of some over-complicated design somewhere. EJB 3.0 are much nicer to work with than EJB 2, a wizard will help you much less with EJB 3.0, and yet EJB 3.0 are more powerful.</p>
 
 </div>
 

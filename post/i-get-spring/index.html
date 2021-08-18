@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>I Get Spring &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>I Get Spring</h1>
+  <time datetime=2006-08-23T18:04:00Z class="post-date">Wed, Aug 23, 2006</time>
+  <p>When you google up Java Spring, one of the best results is a post from crazybob called &ldquo;<a href="http://crazybob.org/2006/01/i-dont-get-spring.html">I Don&rsquo;t Get Spring</a>&rdquo;. For a long time, I shared a similar opinion. But now that I have used it, I get it. I only use it for defining replaceable services, so when I talk about Spring, I mean spring-core and spring-beans.</p>
+<p>These two packages are not big, and have only very few dependencies. So it is quite easy to use Spring in any project, be it small or not. It is actually easier than using NanoContainer because Spring has less external dependencies.</p>
+<p>I did not talk about <a href="http://www.martinfowler.com/articles/injection.html">Dependency Injection</a> yet, because that was not my primary goal. Many times I had to write by hand configurable factories. By using Spring, I avoid writing all that boilerplate code. I was surprised that with 1 line of code I actually had my factory done. Granted, the config file is xml, an I am not necessarily an xml fan. But 1) it&rsquo;s very simple, and 2) if you don&rsquo;t want your custom factory to depend on all implementations, you will either use strings in your code or a config file, which in the end is no better than Spring config file.</p>
+<p>Dependency Injection is the big plus that Springs gives on top of it. It&rsquo;s very useful to define your dependencies explicitly in the config file, since all beans instantiated from the config file are instantiated dynamically. And by defining the dependencies, you also get for free the injection.</p>
+<p>Spring is not big and strange and unknown. It solves a fairly simple problem. But again I don&rsquo;t use it for everything, every class. I don&rsquo;t think it brings much versus straight Java code when you don&rsquo;t want replaceable services. And putting it in places where it is not needed would be dangerous, because of the unneeded xml configuration.</p>
 
 </div>
 

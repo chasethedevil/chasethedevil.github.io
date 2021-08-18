@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Job Hunting: Interview Madness &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,22 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Job Hunting: Interview Madness</h1>
+  <time datetime=2005-11-04T10:40:00Z class="post-date">Fri, Nov 4, 2005</time>
+  <p>I have been doing interviews those past weeks. Today I had to present my resume for the N time where N is big. It is very boring. In France, it is common to have 5 interviews for a small company (that says a bit about how people trust each other and makes me envy Germany where the practice is to select very strictly on the resume and be more relax about interviews). But all those interviews give a valuable insight on the current market, and on some companies.</p>
+<p><strong>0. The Monster Rage</strong></p>
+<p>The first 2 days after I put my resume on Monster France, I got more than 15 calls from consulting companies. The following day, I removed my resume from Monster</p>
+<p><strong>1. Interviewing People</strong></p>
+<p>When I started working, I was very bad at interviews, I had a good academic record and thought companies ringing me would have been interested automatically. I supposed most people were dedicated to their work and did not bother doing a show, I was passive. So I often failed the interview process at the HR level.</p>
+<p>Now I am doing the show everybody expects and it always works. Only one person asked me an unusual, clever question: &ldquo;Do you write?&rdquo; or</p>
+<p><em><strong>&ldquo;Do you like to write?&quot;</strong></em></p>
+<p>I am often more stressed by technical interviews as I find technical interviews can more easily be very badly done. Even specialists don&rsquo;t agree on a good method, cf the artima article on <a href="http://www.artima.com/wbc/interprogP.html">How to Interview a Programmer</a>. If someone asks you about some intricate details he knows lots about and you don&rsquo;t, or you used to but you don&rsquo;t remember, then that person can have a bad impression of you. In Java, this can be the supposedly trivial ,&ldquo;what classes do you have to implement for an EJB ?&rdquo;. I have done many EJBs in the past, but that was a long time enough that I need to look up somewhere to find the exact and precise answer. It is much better to ask someone about what he recently did, or about someone&rsquo;s view on general subjects, especially subjects he knows about.</p>
+<p><strong>2. Interviewing Companies</strong></p>
+<p>As a junior in the business world, I had a very angelic view of companies. I had been lucky enough to do internships around very good people. But nowadays, I am starting to find difficult to pick a good company to work for. I found one question especially useful to find out more about your future mates:</p>
+<p><em><strong>&ldquo;What do you like in this company?</strong></em></p>
+<p>and try to get to know the answer of <em>&ldquo;Why did you go there?&quot;</em></p>
+<p><strong>3. The $$$ in Current Market</strong></p>
+<p>There seem to be huge disparities in salaries in France. I found consulting companies were very reticent to offer a market salary. More regular companies can either offer a much lower salary than the market one, a market salary, or a much higher one, for the same job!</p>
 
 </div>
 

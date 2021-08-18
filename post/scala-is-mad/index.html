@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Scala is Mad &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Scala is Mad</h1>
+  <time datetime=2012-12-12T16:07:00Z class="post-date">Wed, Dec 12, 2012</time>
+   
+
+I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<br /><br />For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<br /><br />And then the quickSort method somehow does not work if invoked on a generic... like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<br /><br />In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<br /><br /><b>Update Dec 12 2012</b>: here is the actual code (this is kept close to the Java equivalent on purpose):<br /><pre>object Point {<br />  def sortAndRemoveIdenticalPoints[T <: Point : ClassManifest](points : Array[T]) : Array[T] = {<br />      Sorting.quickSort(points.asInstanceOf[Array[Point]])<br />      val l = new ArrayBuffer[T](points.length)<br />      var previous = points(0)<br />      l += points(0)<br />      for (i <- 1 until points.length) {<br />        if(math.abs(points(i).value - previous.value)< Epsilon.MACHINE_EPSILON_SQRT) {<br />          l += points(i)<br />        }<br />      }<br />      return l.toArray<br />    }<br />    return points<br />  }<br />}<br /><br />class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<br />  def compare(that: Point): Int = {<br />    return math.signum(this.value - that.value).toInt<br />  }<br />}<br /><!-----><!--:--></-></:></pre>In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point. 
+
+
 
 </div>
 

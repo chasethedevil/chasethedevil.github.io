@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Scala Again &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Scala Again</h1>
+  <time datetime=2012-02-06T17:52:00Z class="post-date">Mon, Feb 6, 2012</time>
+   
+
+I am trying <a href="http://www.scala-lang.org/">Scala</a> again. Last time, several years ago, I played around with it as a web tool, combining it with a Servlet Runner like Tomcat. This time, I play around with it for some quantitative finance experiments.<br /><br /><b>Why Scala?</b> It still seem the most advanced alternative to Java on the JVM, and the mix of functional programming and OO programming is interesting. Furthermore it goes quite far as it ships with its own library. I was curious to see if I could express some things better with Scala.<br /><br />Here are my first impressions after a week:<br /><ul><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> keyword. It avoids the messy singleton pattern, or the classes with many static methods. I think it makes things much cleaner to not use static at all but distinguish between <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> &amp; <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">class</span>.</li><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Array[Double]</span>, and especially <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ArrayBuffer[Double]</span>. Finally we don't have to worry between the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Double</span> and <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">double</span> performance issues.</li><li>I was a bit annoyed by <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a(i)</span> instead of <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a[i]</span> but it makes sense. I wonder if there is a performance implication for arrays, hopefully not.</li><li>I like the real properties, automatic getter/setter: less boilerplate code, less getThis(), setThat(toto).</li><li>Very natural interaction with Java libraries. </li><li>I found a good use of <b>case classes</b> (to my surprise): typically an enum that can have some well defined parameters, and that you don't want to make a class (because it's not). My use case was to define boundaries of a spline.</li><li>I love the formatter in the scala (eclipse) IDE. Finally a formatter in eclipse that does not produce crap.</li></ul>Now things I still need time to get used to:<br /><ul><li> member variable declared implicitly in the constructor. I first made the mistake (still?) to declare some variables twice.</li><li>I got hit by starting a line with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span> instead of ending with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span>. It is dangerous, but it certainly makes the code more consistent.</li><li>Performance impacts: I will need to take a look at the bytecode for some scala constructs to really understand the performance impact of some uses. For example I tend to use while loops instead of for comprehension after some scary post of the Twitter guys about for comprehension. But at first, it looks as fast as Java.</li><li>I wrote my code a bit fast. I am sure I could make use of more Scala features.</li><li>The scala IDE in eclipse 3.7.1 has known issues. I wish it was a bit more functional, but it's quite ok (search for references works, renaming works to some extent).</li><li>Scala unit tests: I used scala tests, but it seems a bit funny at first. Also I am not convinced by the syntax that avoid method names and prefer test("test name"). It makes it more difficult to browse the source code.</li></ul>Some things they should consider:<br /><ul><li>Integrate directly a Log API. I just use SLF4J without any scala wrapper, but it feels like it should be part of the standard API (even if that did not work out so well for Sun).</li><li>Double.Epsilon is not the machine epsilon: very strange. I found out somewhere else there was the machine epsilon, don't remember where because I ended up just making a small <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span>.</li><li>Unit tests should be part of the standard API.</li></ul>Overall I found it quite exciting as there are definitely new ways to solve problems. It was a while since I had been excited with actual coding.
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SVI and long maturities issues &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>SVI and long maturities issues</h1>
+  <time datetime=2014-08-01T12:51:00Z class="post-date">Fri, Aug 1, 2014</time>
+   
+
+On long maturities equity options, the smile is usually very much like a skew:&nbsp; very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).<br /><br />In terms of initial guess, <a href="http://chasethedevil.blogspot.com/2014/07/another-svi-initial-guess.html" target="_blank">we looked</a> at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings. We will see here that we can do also something a bit better than just a flat slice at-the-money in the case where rho is close to -1.<br /><br />In general when the asymptotes lead to rho &lt; -1, it means that we can't compute b from the asymptotes as there is in reality only one usable asymptote, the other one having a slope of 0 (rho=-1). The right way is to just recompute b by matching the ATM slope (which can be estimated by fitting a parabola at the money). Then we can try to match the ATM curvature, there are two possibilities to simplify the problem: s &gt;&gt; m or m &gt;&gt; s.<br /><br /><br />Interestingly, there is some kind of discontinuity at m = 0:<br /><ul><li>when m = 0, the at-the-money slope is just b*rho.&nbsp;</li></ul><ul><li>when m != 0 and m &gt;&gt; s, the at-the-money slope is b*(rho-1).&nbsp;</li></ul>In general it is therefore a bad idea to use m=0 in the initial guess. It appears then that assuming m &gt;&gt; s is better. However, in practice, with this choice, the curvature at the money is matched for a tiny m, even though actually the curvature explodes (sigma=5e-4) at m (so very close to the money). This produces this kind of graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-r86Oz7Hj_s0/U9tnuvvenVI/AAAAAAAAHdo/EncM2uPF9EY/s1600/Screenshot+from+2014-08-01+12:10:56.png" height="640" width="608" /></a></div>This apparently simple issue is actually a core problem with SVI. Looking back at our slopes but this time in the moneyness coordinate, the slope at m is b*rho while the slope at the money is b*(rho-1) if m != 0. If s is small, as the curvature at m is just b/s this means that our there will always be this funny shape if s is small. It seems then that the best we can do is hide it: let m&gt;max(moneyness) and compute the sigma to match the ATM curvature. This leads to the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-auKmewkgmDs/U9tsu29iSbI/AAAAAAAAHd4/DEm1FQx28rU/s1600/Screenshot+from+2014-08-01+12:32:18.png" height="640" width="608" /></a></div>This is all good so far. Unfortunately running a minimizer on it will lead to a solution with a small s. And the bigger picture looks like this (QE is Zeliade Quasi-Explicit, Levenberg-Marquardt would give the same result):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-bzb_LWMIiYw/U9tvtrWJWpI/AAAAAAAAHeU/DO3z0McihHY/s1600/Screenshot+from+2014-08-01+12:43:16.png" height="454" width="640" /></a></div>Of course a simple fix is to not let s to be too small, but how do we defined what is too small? I have found that a simple rule is too always ensure that s is increasing with the maturity supposing that we have to fit a surface. This rule has also a very nice side effect that spurious arbitrages will tend to disappear as well. On the figure above, I can bet that there is a big arbitrage at k=m for the QE result.
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

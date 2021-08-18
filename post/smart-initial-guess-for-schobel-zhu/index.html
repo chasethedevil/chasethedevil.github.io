@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Smart Initial Guess for Schobel-Zhu &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,9 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Smart Initial Guess for Schobel-Zhu</h1>
+  <time datetime=2014-02-19T18:57:00Z class="post-date">Wed, Feb 19, 2014</time>
+  <p>With a <!-- raw HTML omitted -->small time expansion<!-- raw HTML omitted -->, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.<!-- raw HTML omitted --><!-- raw HTML omitted -->Like <!-- raw HTML omitted -->Forde &amp; al did for Heston<!-- raw HTML omitted -->, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).<!-- raw HTML omitted --><!-- raw HTML omitted -->We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points. In practice, I have noticed that using a more refined expansion with more terms resulted not only in more complex formulas to lookup the original stochastic volatility parameters, but also in an increased error, because of the redundancy of parameters in the polynomial expansion. My previous Schobel-Zhu expansion becomes just:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In practice, I have found that the procedure works rather well.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->On some more extreme surfaces, where theta=0, the error in kappa and theta is higher. Interestingly, I received a few real world surfaces like this, where theta=0, which I found a bit puzzling. I wondered if it was because those surfaces were preprocessed with SABR, that has no mean reversion, but I could not fit those exactly with SABR.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update March 2014<!-- raw HTML omitted --> - this is now described in my paper <!-- raw HTML omitted -->Fourier Integration and Stochastic Volatility Calibration<!-- raw HTML omitted -->. </p>
 
 </div>
 

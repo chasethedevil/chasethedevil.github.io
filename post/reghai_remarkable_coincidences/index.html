@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Remarkable Coincidences, Bad Book? &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,21 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Remarkable Coincidences, Bad Book?</h1>
+  <time datetime=2020-11-21T07:56:42&#43;0100 class="post-date">Sat, Nov 21, 2020</time>
+  <p>I stumbled upon a new  short book <a href="https://link.springer.com/book/10.1007%2F978-3-030-57496-3">Financial Models in Production</a> from O. Kettani and A. Reghai. A page attracted my attention</p>
+<figure><img src="/post/reghai_coincidences.png"/><figcaption>
+            <h4>A page from Kettani and Reghai&#39;s book.</h4>
+        </figcaption>
+</figure>
+
+<p>This is the same example as I used on <a href="/post/implied-volatility-from-black-scholes-price/">my blog</a>, where I also present the Li&rsquo;s SOR method combined with the good initial guess from Stefanica. The idea has also been expanded on in <a href="https://jherekhealy.github.io">Jherek Healy&rsquo;s book</a>. What is shocking is that, beside reusing my example, <strong>they reuse my timing</strong> for Jäckel and my implementation is in <a href="https://golang.org">Google Go</a>, with a timing done on some older laptop. The numbers given are thus highly inconsistent. Of course, none of this is mentioned anywhere, and the book does not reference my blog.</p>
+<p>I also find the description of how they improve the implied volatility algorithm (detailed on the next page) to not make much sense. After this kind of stuff, you can&rsquo;t really trust anything that is in the book&hellip;</p>
+<p>Worst perhaps, is that the authors advertise their &ldquo;novel&rdquo; technique in otherwise decent talks and conferences, such as <a href="https://www.mathfinance.com/newsletter-october-2020-mathfinance-conference-recap/">the one from mathfinance</a>. Here is a quote</p>
+<blockquote>
+<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p>
+</blockquote>
+<p>It is really unfortunate that the world we live in encourages such boasting. Papers always need  to present some novel ideas to be published, but there is too often no check on whether the idea actually works, or is worth it. The temptation to make exagerated claims is very high for authors. In the end, it becomes not so easy to sort out the good from the bad.</p>
 
 </div>
 

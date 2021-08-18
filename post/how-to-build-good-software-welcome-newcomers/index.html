@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>How to Build Good Software? Welcome newcomers &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,16 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>How to Build Good Software? Welcome newcomers</h1>
+  <time datetime=2007-04-18T20:17:00Z class="post-date">Wed, Apr 18, 2007</time>
+  <p>Some companies do it naturally, some really don&rsquo;t. In small companies, it is almost natural, people will make a newcomer productive very quickly. In a big company it&rsquo;s not the same game.</p>
+<p>Some important points are:</p>
+<ul>
+<li>Computer ready the first day, well sized (right ram, right power, developers are not MS office users), right OS.  I had experience with having not the right amount of ram, not the right version of OS, not the right user rights to install and use critical software for my work, and all those were known from the team. I also hate when companies give the cheapest computer available for developers/architects. On top of that badly configured computers take often a month to be ready in big companies. It just does not makes sense.</li>
+<li>Network access. I have seen people coming for a short contract and not having network account or email account before 1 week.</li>
+<li>Give documents to read, show applications the person will work with. Involve newcomer in new decisions on his project.</li>
+<li>Some big companies have it right. I remember my internship at IBM Germany, where on the first day I had a box waiting for me with computer inside, that I had to unpack and install (with OS/2) for my use. I think this is the best way for developers/tech people. And then they recommended excellent reading on the subject I would be working on. It&rsquo;s not that difficult.</li>
+</ul>
 
 </div>
 

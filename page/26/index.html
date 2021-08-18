@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-linux-apple-bluetooth-keyboard/">Fedora Linux &amp; Apple Bluetooth Keyboard</a>
+  </h1>
+  <time datetime="2008-06-05T20:05:00Z" class="post-date">Thu, Jun 5, 2008</time>
+   
+
+It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd --search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS="--timeout 8 --connect 00:1D:4F:A7:15:CC --server"</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name "Apple Wireless Keyboard";</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are "lm master" (makes it connect automatically), and "--timeout 8" that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/">DecimalFormat Is Broken</a>
+  </h1>
+  <time datetime="2008-05-14T18:19:00Z" class="post-date">Wed, May 14, 2008</time>
+   
+
+A friend of mine recently noticed that the good old DecimalFormat class is "broken". If you try to parse a string that is not a number but is starting with a number, the DecimalFormat.parse will return what it managed to parse.<br /><br />The correct behavior should be to throw a parse exception IMHO. Judging from an old post in the Sun bug tracker, The folks at Sun don't think it really is, they call the default mode of parsing the "lenient" mode. It accepts bad inputs. Then why throwing ParseException at all and why not return 0/NaN when the first character is not a number? Why accepting <span style="font-family: courier new;">1toto2</span> as a number and not <span style="font-family: courier new;">toto2</span>?<br /><br />In reality it can really create unexpected problems. For example, in France,<span style="font-family: courier new;"> 0.1</span> is <span style="font-family: courier new;">0,1</span> because of the Locale conventions. If a user enters<span style="font-family: courier new;"> 0.1</span> in a French Locale, a method using DecimalFormat.parse will interpret it as <span style="font-family: courier new;">0</span> without throwing any exception.<br /><br />Note that DateFormat does not have that problem, at one point Sun added setLenient flag to be able to be in non Lenient mode. It would be very simple to do it with DecimalFormat, I did it myself as an exercise. In DecimalFormat.subparse, the 2 last break statements should stop processing in lenient mode. Lines 1528 to 1531:<br /><span style="font-size:85%;"> <span style="font-family: courier new;">                        sawExponent = true;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // Whether we fail or succeed, we exit this loop</span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span><br /> become:<br /><span style="font-size:85%;"><br /><span style="font-family: courier new;">                         sawExponent = true;</span><br /><span style="font-family: courier new;">                    } else {</span><br /><span style="font-family: courier new;">                        if (isLenient()) {</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            return false;</span><br /><span style="font-family: courier new;">                        }</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // we succeed, we exit this loop</span><br /><span style="font-family: courier new;">                    </span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    if (isLenient()) {</span><br /><span style="font-family: courier new;">                        parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                        parsePosition.errorIndex = oldStart;</span><br /><span style="font-family: courier new;">                        return false;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/using-mig-layout-for-better-swing-development/">Using MiG Layout For Better Swing Development</a>
+  </h1>
+  <time datetime="2008-04-29T18:27:00Z" class="post-date">Tue, Apr 29, 2008</time>
+  <p>I have forgotten a few libraries in my <a href="/post/better-java-swing-development">Better Swing Development</a> article, and notably <a href="http://www.miglayout.com">MiGLayout</a>.</p>
+<p>GridBagLayout is too verbose, and still feels too clumsy. This is why a while back I wrote <a href="http://easygridbag.sourceforge.net">a small tool</a> to help visualize various GridBagLayouts for people who are not used to it. But it would have been much simpler to use a better layout instead.</p>
+<p>MiGLayout is good, I managed to have good results without almost any practices on not so simple layouts. It also makes the code more concise.</p>
+<p>Related to my <a href="/post/swixml-review">previous post about SwiXml</a>, and as SwiXml does not yet support MiGLayout, I was thinking how easy it would be to achieve something relatively similar. With proper code conventions it is quite easy to describe the GUI outside a Java file, for example, for an easy start in a Beanshell file.</p>
+<p>The beanshell file would contain components construction, and MiGLayout of them afterwards, that&rsquo;s it. All listeners and component behaviours would be kept in java classes. With this kind of code split. The beanshell file is then extremely simple, as simple as the SwiXml.</p>
+<p>MiGLayout also has plenty of extra functionalities like <code>hidemode 1</code> that can help automatically redoing the layout if a component becomes visible/invisible.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/_the_-google-1998-paper/">_the_ Google 1998 paper</a>
+  </h1>
+  <time datetime="2008-04-25T14:22:00Z" class="post-date">Fri, Apr 25, 2008</time>
+  <p>I have just read <a href="http://infolab.stanford.edu/%7Ebackrub/google.html">the anatomy of a search engine</a> from S. Brin and L. Page. For those who don&rsquo;t know, it is <em>the</em> Google paper. I have read other google labs papers in the past. What I like in this one is that you can follow how they came into having the Google ideas, how they assembled their ideas.</p>
+<p>I should have read that a long time ago.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-9-already-stable/">Fedora 9 Already Stable</a>
+  </h1>
+  <time datetime="2008-04-25T11:33:00Z" class="post-date">Fri, Apr 25, 2008</time>
+   
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_9RyqGT46Fbk/SBGmDm9HaaI/AAAAAAAABL0/bgukGZZLRwA/s1600-h/Fedora9.png"><img style="margin: 0px auto 10px; display: block; text-align: center; cursor: pointer;" src="http://1.bp.blogspot.com/_9RyqGT46Fbk/SBGmDm9HaaI/AAAAAAAABL0/bgukGZZLRwA/s400/Fedora9.png" alt="" id="BLOGGER_PHOTO_ID_5193114426261596578" border="0" /></a><br />I "upgraded" my home computer to Fedora 9. "upgraded" because I reinstalled the OS instead of using the upgrade procedure. I have had so many issues with "partial" upgrades in the past (with any distro).<br /><br />Although it is the preview/RC1 version, Fedora 9 is already as stable as a release IMHO. No issues so far, it feels more polished than Fedora 8. OpenJDK 1.6 is there. Firefox 3 is there. Not a single problem with kernel 2.6.25 (while I had plenty with the 2.6.24 ones).<br /><br />Even <a href="https://bugzilla.redhat.com/show_bug.cgi?id=439858">Linus's wife</a> uses it!
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/swixml-review/">SwiXml Review</a>
+  </h1>
+  <time datetime="2008-04-24T12:19:00Z" class="post-date">Thu, Apr 24, 2008</time>
+   
+
+Externalizing the screen layout is a natural step for many applications. It can be because a customer might want a slightly different presentation, or just for the sake of clearly separating layout code, or for using a kind of screen generator. Back in 2003, I wrote <a href="http://easygridbag.sourceforge.net">a small utility to help with GridBagLayout</a>, nothing fantastic,  but there was the feature of saving a generated layout in XML (or Beanshell) and using it in an application.<br /><br /><a href="http://swixml.org">SwiXml</a> saves a bit more than a layout as it instantiates the components as well, allowing to represent a hierarchy of components in XML. But it does not more than that. The "no generation" approach is interesting, I bet the author thinks the XML should be kept concise enough to be used easily without using a kind of generator. the XML is almost a mirror of Java code, but fortunately makes layouts more compact and easier to read. I tried version 1.51, and while it is quite well done, its documentation is a bit lacking and to me an important functionality is missing:<br /><br />There is no "component" tag by default. One needs to explicitely name the class of component we want to add. I think there could be a component tag that instantiate an 0 parameter constructor by default, using reflection for example. The class of component to instantiate would be found through the field name.<br /><br />Fortunately SwiXml is quite well done and this is not that big of an issue since you can just interpret new tags with 1 line of code:<br /><span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  ><blockquote></blockquote>engine.getTaglib().registerTag("datecombobox", DateComboBox.class);</span><br />for a Jide DateComboBox.<br /><br />I said documentation was lacking, because in my first non Hello World trial, I wanted to use the standard constant names for GridBagConstraints (RELATIVE,REMAINDER, FIRST_LINE, LAST_LINE, ...). Putting <span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  >&lt;gridbagconstraint anchor="FIRST_LINE"&gt;</span>did not work. By reading the code, I found out you could achieve it but you have to do <span style="color: rgb(0, 0, 153);font-family:courier new;font-size:85%;"  >&lt;gridbagconstraint anchor="GridBagConstraint.FIRST_LINE"&gt;</span>.<br /><br />In the end SwiXml left me with a good impression. It is non intrusive, and handle well enough what it is done for. One major drawback, you can only use either BorderLayout or GridBagLayout or FormLayout (from JGoodies).
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/better-java-swing-development/">Better Java Swing Development</a>
+  </h1>
+  <time datetime="2008-04-17T20:55:00Z" class="post-date">Thu, Apr 17, 2008</time>
+   
+
+It has been a while since I have looked at the different options for building GUIs in Java. I like the approach taken by Eclipse, they provide not only GUI components, but a complete GUI application framework. Several years ago, I have stolen ideas from it (how they manage plugins) and applied it for Swing applications. This worked out quite well. The Netbeans platform now offers a more interesting alternative if you have to do Swing. The major drawback when compared to Eclipse, is that since the beginning Eclipse was all about making a platform, while Netbeans copied that idea only relatively recently and is less active about making it so. IBM uses Eclipse foundations for many of their products successfully.<br> <br>Unfortunately on many projects, a Swing application is already there and all you have to do is add more screens, more forms. What I am trying to see here, is what could help Swing development is those cases.<br><a href="http://www.jgoodies.com/"><br> <b>JGoodies</b></a><br><br>JGoodies is old now, but can be quite useful in creating nice looking forms quickly. It is basically all around a layout better tailored to forms that the can do everything GridBagLayout.<br>It can help but it does not make a significant difference vs good practices with the GridBagLayout.<br> <b><a href="http://www.jidesoft.com"><br>Jide Software</a></b><br><br>Jidesoft provides much more than JGoodies, but is not free (except the <a href="https://jide-oss.dev.java.net/">Jide Common Layer</a>). I have used it in the past and found their API quite clean and easy to use. They offer more elaborated Swing components that should be part of the JDK. They started to go to the platform area only recently with their Jide Desktop Application Framework, which is not free either. I am not sure I would base an application around an unfree framework.<br> <a href="http://swixat.org/"><br><b>SwiXAT</b></a><br><br>It is a recent BSD licensed project based on top of Swix. It is basically MVC for Swix, with command binding in XML. I need to look more into it, it seems to provide an &quot;application framework&quot; as well where you have to launch your app through a SwixAt class (which IMHO sucks). I hope it is not a requirement and that only parts of it can be used and integrated into an existing application. I will hopefully have time to try it more concretely and will blog about it. In any cases it looks interesting.<br> <br><b><a href="http://www.swixml.org/">SwiXml</a></b><br><br>An Apache licensed project, it seems like a decently used way of laying out swing components in XML, inspired by XUL. It might just be enough. Or is it just too similar to&nbsp; Java code translated to XML? I need to investigate this more.<br> <br><b><a href="http://www.sun.com/software/javafx/index.jsp">JavaFX</a></b><br><br>JavaFX is probably the serious alternative to SwiXml. I like the idea of a better grammar to lay out and assemble components instead of using XML. Unfortunately it seems a bit invasive to start using for a part only of an application<br> <br>I took a quick look at Swing Application Framework (JDNC2 redone once again). While it has interesting use of annotations, it seems very far from what Eclipse offers. And I don&#39;t feel like it will improve working with Swing a lot. I think except JavaFx, Sun seriously fucked around during many years with Swing. IBM has been much more focused and effective.<br> <br><br><br> 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-8-vs.-ubuntu-8/">Fedora 8 vs. Ubuntu 8</a>
+  </h1>
+  <time datetime="2008-02-28T14:23:00Z" class="post-date">Thu, Feb 28, 2008</time>
+  <p>I had the bad idea of trying (K)ubuntu 8.04 on my home computer. It worked for a few days, but as Ubuntu 8 is still in alpha, changes tend to break everything easily. At one point Wine stopped working, then the DVD, then the sound. I had crashes with USB plug/unplug. It was time to go back to a stable distro. I went back to Fedora 8.</p>
+<p>I found out that I had missed some positive sides of Fedora 8 before. It compares quite well with the future Ubuntu 8. Both include pulseaudio. Pulseaudio in Fedora 8 is very well integrated, works well by default. I had to manually tweak things with Ubuntu, probably because it is an alpha.</p>
+<p>Both have a relatively new kernel (2.6.23 for Fedora 8, 2.6.24 for Ubuntu 8).<!-- raw HTML omitted -->Packages I use everyday are as new in both Fedora 8 and Ubuntu 8.</p>
+<p>Fedora 8 is also more stable than it used to be on my machine. Fedora people do their job very well at fixing various bugs after a release.</p>
+<p>2 drawbacks of Fedora:</p>
+<ul>
+<li>the package management. I know by experience that rpm+yum is more problematic with dependencies than apt.</li>
+<li>Sun Java not installed by default (IcedTea instead). Being a Java developer, the reference is Sun JDK. Plus Sun JDK is open enough for me.</li>
+</ul>
+<p>Other than that, Fedora 8 is excellent. I feel it has more features than Ubuntu: pulseaudio already well integrated, SELinux, Firewall by default.</p>
+<p>Don&rsquo;t make the same mistake, don&rsquo;t install an alpha linux distro. It used to work without problems back in the days. I have used Gentoo, Slackware with custom kernel without troubles. Nowadays it seems quite risky to go without a distro that has not been well tested.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/windows-vista-is-crap/">Windows Vista Is Crap!</a>
+  </h1>
+  <time datetime="2008-02-08T17:59:00Z" class="post-date">Fri, Feb 8, 2008</time>
+  <p>It has been already 1 year since Windows Vista is out. In my new company, I had a new computer with Vista on it. I quickly installed Ubuntu in dual boot. I was happy with Ubuntu for my work, until I received many Excel files OpenOffice was not able to read properly. I decided to give a try to Vista. My first impression of it when I had the computer was quite negative. I was not able to find things that used to be easy to find. It seemed slow and not very interesting.</p>
+<p>As I thought I had to use it, I managed to make it a bit more pleasant by adopting the old Windows 95 style instead of the default colors and effects everywhere. I dislike the standard effects because it seems that they are only there to distract you from what you want to do with the computer, and don&rsquo;t help you to do things. I have used Windows a long time before, and installing Total Commander and Opera made Vista a bit more responsive for some tasks. Explorer is really slow and bloated.</p>
+<p>Still on the big Java project we are working with, it took 14 minutes to (clean and) build the first time. I struggle to find out why it was so slow. Under Ubuntu, the same command took <strong>5 minutes</strong>. As I thought it was swapping to disk, I decided to order more RAM so that I have 3GB (the build process takes around 1GB). If I build it many times in a row, because of the file cache, I can have the build in 4.30 min but it never happens in real life. In real cases it always takes at least <strong>14 minutes</strong>, event with 3GB. And it still seems to swap !?! Now I am not even sure of anything, the fact is I did not manage to make it faster. I tried messing with various registry parameters for the cache/memory with no success. <a href="http://www.codinghorror.com/blog/archives/000688.html">This article</a> is completely wrong about Vista memory being much better managed. It is really awfully managed. That frustrated me how a new OS can be 3x slower, until I heard about gnumeric. Gnumeric is able to read all kinds of difficult Excel formulas, and all my Excel documents worked under Ubuntu.</p>
+<p>So after 2 weeks of experiencing the slowness of Vista, and the first blue screen (BSODs are back with Vista), I switched back to Ubuntu. Other than being awfully slow, Vista does not have that many drawbacks, but it does not have anything compelling either when compared to XP (except a maybe better security system).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-2008-java-web-framework/">The 2008 Java Web Framework</a>
+  </h1>
+  <time datetime="2008-01-22T11:50:00Z" class="post-date">Tue, Jan 22, 2008</time>
+   
+
+One of my first web framework was a custom one, based on the book Web Development with<a href="http://www.amazon.com/Development-JavaServer-Pages-Duane-Fields/dp/193011012X/ref=pd_bbs_2?ie=UTF8&amp;s=books&amp;qid=1200994688&amp;sr=8-2">  Java Server Pages</a>. That was in 1999, when Struts was not yet known. But it was web-MVC, very near from what Struts gave later, without the custom tag stuff (custom tags were not yet part of JSP specifications).<br><br> Until 2007, Struts was IMHO the most used web framework and the default choice, even though many contenders appeared, with more features, better code. 2007 saw the maturity of some of these framework. As similar framework to Struts, I particularly like Stripes, because the API is very lean. Some component frameworks got a lot of buzz as well, Tapestry some time ago, and today Wicket. I tried both, and while they are very interesting, and can be very productive for some tasks (web application more than web site), I am not convinced they are the tech of 2008. Web Applications are better done with Flex, or GWT. <br><br>The major news in the past few years has been Ruby On Rails. Everybody tried to replicate it in every language (with their own twist):&nbsp; Django in Python, Lift in Scala, ErlyWeb in Erlang, Cake in PHP, Grails (along with now abandonned Sails, and less populair Trails) in Java. And some people fought for making the point they had the idea before Rails. But Rails is what made Rails-like development popular. <br>After trying Rails soon after it was out (way before 1.0) and more recently (just before 2.0), I was amazed by the progress of Rails. I was impressed in 2004 about Rails, because the approach was new and effective. I disliked a bit the choice of Ruby. In the end in the project we ended up rewriting the persistence layer because our application was very specific. And I ported the app very quickly to Java. In 2007, I was even more impressed, and did not need to dwelve into arcanes of Rails anymore, but merely using it was enough to do lots and lots of things. <br><br>In 2008 the Ruby On Rails mentality will continue to prevail. In the Java world, Grails is the most likely to benefit from it. But I would not be surprised if there was another new Rails-like contender in the game (Rails on JRuby?). It could also be something based around Spring as their current MVC solution is not very good and very old fashioned. <br> 
+
+
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/page/25/">Previous</a></p>
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/27/">Next</a></p>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

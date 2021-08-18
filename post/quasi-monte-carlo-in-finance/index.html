@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Quasi Monte Carlo in Finance &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Quasi Monte Carlo in Finance</h1>
+  <time datetime=2013-05-13T13:16:00Z class="post-date">Mon, May 13, 2013</time>
+   
+
+I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.<br /><br />Here is what I found:<br /><ol><li>Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed. This is all very well described in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=6&amp;cad=rja&amp;ved=0CFwQFjAF&amp;url=http%3A%2F%2Fwww-stat.stanford.edu%2F~owen%2Fcourses%2F362%2Freadings%2Fsiggraph03.pdf&amp;ei=08CQUea-F4jMhAfx5YDgCA&amp;usg=AFQjCNGLnKapkdJ4_caiSE3Ro_kf21NvkQ&amp;sig2=j2b_JqQuO9JNU0ko7yTeOw&amp;bvm=bv.46340616,d.ZG4">Owen Quasi Monte Carlo document</a> </li><li>Lattice rules. It is another form of quasi random sequences, which so far was not very well adapted to finance problems. A <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDYQFjAB&amp;url=https%3A%2F%2Fwww.maths.unsw.edu.au%2Fsites%2Fdefault%2Ffiles%2Famr08_9_0.pdf&amp;ei=ysKQUebXO4axO7ungPAN&amp;usg=AFQjCNErqQvM1IyLlUJH2EX5_mVG3f-ZCw&amp;sig2=gYbfQebTwUP4mtj6bteCcQ&amp;bvm=bv.46340616,d.ZWU">presentation from Giles &amp; Kuo</a> look like it's changing.</li><li>Fast PCA. An alternative to Brownian Bridge is the standard PCA. The problem with PCA is the performance in O(n^2). A possible speedup is possible in the case of a equidistant time steps. <a href="http://www.google.com/url?q=http://citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.142.5057%26rep%3Drep1%26type%3Dpdf&amp;sa=U&amp;ei=5MWQUaioA8KXhQfDnYCYDQ&amp;ved=0CB0QFjAC&amp;usg=AFQjCNHUhpr6_Ofiqqw2XeU8SY_amnx0pw">This paper</a> shows it can be generalized. But the data in it shows it is only advantageous for more than 1024 steps - not so interesting in Finance.</li></ol>
+
+
 
 </div>
 

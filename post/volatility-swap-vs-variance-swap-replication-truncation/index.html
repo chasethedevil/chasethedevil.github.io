@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Volatility Swap vs Variance Swap Replication - Truncation &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,9 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Volatility Swap vs Variance Swap Replication - Truncation</h1>
+  <time datetime=2015-03-16T14:39:00Z class="post-date">Mon, Mar 16, 2015</time>
+  <p>I have looked at <!-- raw HTML omitted -->jump effects on volatility vs. variance swaps<!-- raw HTML omitted -->. There is a similar behavior on tail events, that is, on truncating the replication.<!-- raw HTML omitted --><!-- raw HTML omitted -->One main <!-- raw HTML omitted -->problem with discrete replication of variance swaps<!-- raw HTML omitted --> is the implicit domain truncation, mainly because the variance swap equivalent log payoff is far from being linear in the wings.<!-- raw HTML omitted --><!-- raw HTML omitted -->The equivalent payoff with Carr-Lee for a volatility swap is much more linear in the wings (<!-- raw HTML omitted -->not so far of a straddle<!-- raw HTML omitted -->). So we could expect the replication to be less sensitive to the wings truncation.<!-- raw HTML omitted --><!-- raw HTML omitted -->I have done a simple test on flat 40% volatility:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->As expected, the vol swap is much less sensitive, and interestingly, very much like for the jumps, it moves in the opposite direction: the truncated price is higher than the non truncated price.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 
 </div>
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Non Blocking with Traditional Java IO - On the Use of InputStream.available() and Thread.sleep() &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Non Blocking with Traditional Java IO - On the Use of InputStream.available() and Thread.sleep()</h1>
+  <time datetime=2006-06-08T16:31:00Z class="post-date">Thu, Jun 8, 2006</time>
+   
+
+Some time ago I did quite a lot of IO in Java and I yet did not see this way of reading a InputStream from a Socket:<br /><table border="0" cellpadding="3" cellspacing="0" bgcolor="#ffffff"><tr><!-- start source code -->   <td nowrap="nowrap" valign="top" align="left">    <code><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">InputStream&nbsp;in=channel.getInputStream</font><font color="#000000">()</font><font color="#000000">;</font><br /><font color="#ffffff"></font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">channel.connect</font><font color="#000000">()</font><font color="#000000">;</font><br /><font color="#ffffff"></font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>byte</b></font><font color="#000000">[]&nbsp;</font><font color="#000000">tmp=</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#7f0055"><b>byte</b></font><font color="#000000">[</font><font color="#990000">1024</font><font color="#000000">]</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>while</b></font><font color="#000000">(</font><font color="#7f0055"><b>true</b></font><font color="#000000">){</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>while</b></font><font color="#000000">(</font><font color="#000000">in.available</font><font color="#000000">()</font><font color="#000000">&gt;</font><font color="#990000">0</font><font color="#000000">){</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">i=in.read</font><font color="#000000">(</font><font color="#000000">tmp,&nbsp;</font><font color="#990000">0</font><font color="#000000">,&nbsp;</font><font color="#990000">1024</font><font color="#000000">)</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if</b></font><font color="#000000">(</font><font color="#000000">i&lt;</font><font color="#990000">0</font><font color="#000000">)</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.print</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">String</font><font color="#000000">(</font><font color="#000000">tmp,&nbsp;</font><font color="#990000">0</font><font color="#000000">,&nbsp;i</font><font color="#000000">))</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if</b></font><font color="#000000">(</font><font color="#000000">channel.isClosed</font><font color="#000000">()){</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#2a00ff">&#34;exit-status:&nbsp;&#34;</font><font color="#000000">+channel.getExitStatus</font><font color="#000000">())</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>try</b></font><font color="#000000">{</font><font color="#000000">Thread.sleep</font><font color="#000000">(</font><font color="#990000">1000</font><font color="#000000">)</font><font color="#000000">;</font><font color="#000000">}</font><font color="#7f0055"><b>catch</b></font><font color="#000000">(</font><font color="#000000">Exception&nbsp;ee</font><font color="#000000">){}</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">channel.disconnect</font><font color="#000000">()</font><font color="#000000">;</font></code>       </td>  <!-- end source code -->   </tr></table><br /><br />This comes from a piece of code <a href="http://www.jcraft.com/jsch/examples/Exec.java">from an example of JSch </a>, a good ssh client in java. A work collegue had the bad idea to remove the Thread.sleep call and was struggling with why it would randomly work.The way I would have done it is the following:<br /><table border="0" cellpadding="3" cellspacing="0" bgcolor="#ffffff">   <tr>  <!-- start source code -->   <td nowrap="nowrap" valign="top" align="left">    <code><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">InputStream&nbsp;in=channel.getInputStream</font><font color="#000000">()</font><font color="#000000">;</font><br /><font color="#ffffff"></font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">channel.connect</font><font color="#000000">()</font><font color="#000000">;</font><br /><font color="#ffffff"></font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>byte</b></font><font color="#000000">[]&nbsp;</font><font color="#000000">tmp=</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#7f0055"><b>byte</b></font><font color="#000000">[</font><font color="#990000">1024</font><font color="#000000">]</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">bytesRead&nbsp;=&nbsp;</font><font color="#990000">0</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>while</b></font><font color="#000000">((</font><font color="#000000">bytesRead&nbsp;=&nbsp;in.read</font><font color="#000000">(</font><font color="#000000">tmp,</font><font color="#990000">0</font><font color="#000000">,</font><font color="#990000">1024</font><font color="#000000">)&nbsp;</font><font color="#000000">&gt;=&nbsp;</font><font color="#990000">0</font><font color="#000000">){</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.print</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">String</font><font color="#000000">(</font><font color="#000000">tmp,&nbsp;</font><font color="#990000">0</font><font color="#000000">,&nbsp;bytesRead</font><font color="#000000">))</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><font color="#ffffff"></font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if</b></font><font color="#000000">(</font><font color="#000000">channel.isClosed</font><font color="#000000">()){</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#2a00ff">&#34;exit-status:&nbsp;&#34;</font><font color="#000000">+channel.getExitStatus</font><font color="#000000">())</font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">channel.disconnect</font><font color="#000000">()</font><font color="#000000">;</font></code>       </td>  <!-- end source code -->   </tr></table><br /><br />This has the advantage of being more readable and having less secret spices in it. In the first code, the call to available() is non blocking, meaning that without the  Thread.sleep(), there will never be the time for the socket buffer to fill up. But is the first code more efficient or the second code?<br /><br />I did a search on google to understand the interest of the first code. The only advantages I found in the first code are the possibility to interrupt the thread running the code and a finer grained control on timeouts. <br /><br />There is a <a href="http://g.oswego.edu/dl/cpj/cancel.html">lengthy explanation</a> by Doug Lea in his book "Concurrent Programming in Java". This book usually provides excellent explanations, and is a must read for anybody doing concurrent programming. But this time, about this subject, I did not find him that clear.<br /><br />There is a more <a href="http://www.eli.sdsu.edu/courses/fall98/cs596/notes/thread2/thread2.html">simple explanation</a> in a course from San Diego State University (see last example)<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  A read() on an inputstream or reader blocks. Once a thread calls read() it will not respond to interrupt() (or much else) until the read is completed. This is a problem when a read could take a long time: reading from a socket or the keyboard. If the input is not forth coming, the read() could block forever. </blockquote><div><br /></div>As usual, you should not rely on all what you read on the web, as <a href="http://http://bobcat.webappcabaret.net/javachina/faq/05.htm">this page (SCJP Questions & Answers)</a> testifies:<br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div class="qabold"><a name="thr_m12" id="thr_m12" shape="rect"> Q</a>. When will a Thread I/O blocked?</div> <div class="qabold">A:</div> <div class="answer">When a thread executes a read() call on an InputStream, if no byte is available. The calling Thread blocks, in other words, stops executing until a byte is available or the Thread is interrupted.</div></blockquote><div><br />Still I am wondering if the second code would not just go into IOException (socket timeout), on timeout (adjustable with Socket.setTimeout ) and release the Thread then. Do you have an idea when the first code could be better?<br /></div>
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

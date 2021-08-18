@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Stupid Programmer Interviews &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,16 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Stupid Programmer Interviews</h1>
+  <time datetime=2008-09-17T10:56:00Z class="post-date">Wed, Sep 17, 2008</time>
+  <p>I have read a blog post a few days ago about someone thinking a good programmer interview question was:</p>
+<blockquote>
+<p>How does a hash table work?</p>
+</blockquote>
+<p>While it is a very interesting question, I doubt many programmers (even relatively good ones) can answer that question. If I look back and think of all the employees in all the companies I have known, I can count on one hand people that can answer that question. I can think of 3 or 4 I met in one company, and maybe another 1 or 2 in different companies. And I don&rsquo;t think anyone would have been able to go deeper in the details like mentioning <a href="http://www.dcs.gla.ac.uk/%7Epat/52219/l04.html">closed-addressed vs open-addressed</a> possible implementations.</p>
+<p>I am so negative, because a question about some important details of the inner working of the Java HashMap was raised at work a week ago. I was the only one (because I had read several times about hash tables) to be aware that the <code>equals</code> method of the key object was called every time you do a <code>table.get(xxx)</code> or a <code>table.put(xxx, yyy)</code>. Others thought only the <code>hashCode()</code> method was used.</p>
+<p>This kind of interview question creates a high bias towards people coming straight out of school if they have Hashtable in their program. For people with more experience, it is highly likely if they ever read about it that they forgot the details (and maybe more than the details).</p>
+<p>This can seem shocking as hash tables are used almost everywhere these days, but it&rsquo;s a reality.</p>
 
 </div>
 

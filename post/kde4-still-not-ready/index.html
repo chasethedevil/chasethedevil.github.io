@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>KDE4 Still Not Ready &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>KDE4 Still Not Ready</h1>
+  <time datetime=2008-01-18T19:08:00Z class="post-date">Fri, Jan 18, 2008</time>
+  <p>I tried KDE4.0 last week, when it was everywhere in the news. I was very disappointed.</p>
+<p>I have a long experience of trying beta software, not well known software. I have used Linux since 1998 (partly). I have even used windows beta at one point. And I have seen nothing as crappy as  KDE4.0 release.</p>
+<p>It is not usable at all.</p>
+<p>Now I can understand what are KDE motivations to do such a bad release. It is to gain momentum in their project. KDE4.0 is in development at least <a href="http://www.advogato.org/person/tjansen/diary.html?start=13">since 2002</a> - 6 years! By creating a .0 release now even if it is an alpha, they have at least something officially out and hope to have developers starting to improve it. It is especially important for them because Gnome has, in the mean time, made regularly lots of improvements.</p>
+<p>I admire the initiative, KDE 3.5 needed lots of improvements, and KDE4 goals are the right ones. But it just feel like the release was more political than everything else. Hell, <a href="https://lists.linux-foundation.org/pipermail/desktop_architects/2007-February/001129.html">even Linus seems to use Gnome</a> nowadays.</p>
 
 </div>
 

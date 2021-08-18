@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Placing the Strike on the Grid and Payoff Smoothing in Finite Difference Methods for Vanilla Options</h1>
+  <time datetime=2014-01-12T16:27:00Z class="post-date">Sun, Jan 12, 2014</time>
+   
+
+Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Convergence Remedies for non-smooth payoffs in option pricing</a> suggest that placing the strike on the grid for a Vanilla option is good enough:<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-CIS-yTdMn7k/UtKy6HtMIhI/AAAAAAAAG-I/Hef_w7gTcJ0/s1600/pooley_vanilla_smooth.png" height="48" width="640" /></a></div><br />At the same time, Tavella and Randall show in their book that numerically, placing the strike in the middle of two nodes leads to a more accurate result. My own numerical experiments confirm Tavella and Randall suggestion.<br /><br />In reality, what Pooley et al. really mean, is that quadratic convergence is maintained if the strike is on the grid for vanilla payoffs, contrary to the case of discontinuous payoffs (like digital options) where the convergence decreases to order 1. So it's ok to place the strike on the grid for a vanilla payoff, but it's not optimal, it's still better to place it in the middle of two nodes. Here are absolute errors in a put option price:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.04473021824995271</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 0.003942854282069419<br />on grid, projection smoothing 0.044730218065351934<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.004040359609906119</span><br /><br />As expected (and mentioned in Pooley et al.), the projection does not do anything here. When the grid size is doubled, the convergence ratio of all methods is the same (order 2), but placing the strike in the middle still increases accuracy significantly.<br /><br />Here is are the same results, but for a digital put option:<br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">on grid, no smoothing &nbsp; &nbsp; &nbsp; &nbsp; 0.03781319921461046<br />on grid, Simpson smoothing&nbsp;&nbsp;&nbsp; 8.289052335705427E-4<br />on grid, projection smoothing 1.9698293587372406E-4<br />middle, no smoothing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.5122153011418744E-4</span><br /><br />Here only the 3 last methods are of order-2 convergence, and projection is in deed the most accurate method, but placing the strike in the middle is really not that much worse, and much simpler.<br /><br />A disadvantage of Simpson smoothing (or smoothing by averaging), is that it breaks put-call parity (see the paper "<a href="http://papers.ssrn.com/abstract=2362969">Exact Forward and Put Call Parity with TR-BDF2</a>") <br /><br />I think the emphasis in their paper on "no smoothing is required" for vanilla payoffs can be misleading. I hope I have clarified it in this post.
+
+
 
 </div>
 

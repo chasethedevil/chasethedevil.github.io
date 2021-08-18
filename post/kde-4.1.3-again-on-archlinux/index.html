@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>KDE 4.1.3 (again) on ArchLinux &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,12 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>KDE 4.1.3 (again) on ArchLinux</h1>
+  <time datetime=2008-11-08T15:54:00Z class="post-date">Sat, Nov 8, 2008</time>
+  <p>I tried another silly thing with Linux, <a href="http://www.archlinux.org">ArchLinux</a>. The setup is quite rough as you have to edit many config files manually. But if you know a bit your way around it takes only a few hours to have everything running well. The installation manual on the wiki is detailed enough to correct all eventual mistakes humans do.</p>
+<p>I decided to try once more KDE 4 on it, as at first it was just a silly experiment: I was really not sure ArchLinux would be workable. In the end I am pleasantly surprised, KDE 4.1.3 is way way better than any other versions of KDE I have tried before. It is stable and quite pretty. It took the team a lot of time to get there but now I think KDE 4 is a very good window manager, pleasant to use.</p>
+<p>It&rsquo;s a big change from older versions which were too unstable/had too few features to be of any use.</p>
+<p>I am not convinced with ArchLinux compared to Ubuntu. The setup is much more complex, less packages are available. True you learn a bit more with ArchLinux. We will see if it can keep working well for a few years.</p>
 
 </div>
 

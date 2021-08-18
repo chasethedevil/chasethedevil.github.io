@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Numba, Pypy Overrated? &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,24 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Numba, Pypy Overrated?</h1>
+  <time datetime=2019-02-12T20:56:42&#43;0100 class="post-date">Tue, Feb 12, 2019</time>
+  <p>Many benchmarks show impressive performance gains with the use
+of <a href="https://numba.pydata.org/">Numba</a> or <a href="https://www.pypy.org/">Pypy</a>. Numba allows to compile just-in-time some specific methods, while Pypy takes
+the approach of compiling/optimizing the full python program: you use it just like the standard
+python runtime. From those benchmarks, I imagined that those  tools would improve my 2D Heston PDE solver
+performance easily. The initialization part of my program contains embedded for loops over several 10Ks elements.
+To my surprise, numba did not improve anything (and I had to isolate the code, as it would
+not work on 2D numpy arrays manipulations that are vectorized). I surmise it does not play well
+with scipy sparse matrices.
+Pypy did not behave better, the solver became actually slower than with the standard python
+interpreter, up to twice as slow, for example, in the case of the main solver loop which only does matrix multiplications and LU solves sparse systems. I did not necessarily expect any performance improvement in this specific loop, since it only consists in a few calls to expensive scipy calculations. But I did not expect a 2x performance drop either.</p>
+<p>While I am sure that there are good use cases, especially for numba, I was a bit disappointed
+that it likely would require to significantly change my code to have any effect (possibly to not do the initialization with scipy sparse matrices, but then, it is not so clear how). Also, I
+find <a href="https://www.ibm.com/developerworks/community/blogs/jfp/entry/A_Comparison_Of_C_Julia_Python_Numba_Cython_Scipy_and_BLAS_on_LU_Factorization?lang=en">most</a> <a href="https://modelingguru.nasa.gov/docs/DOC-2676">benchmarks</a> dumb. For example, the 2D ODE solver of the latter uses a simple dense 2D numpy array. On real code,
+things are not as simple.</p>
+<p>Next I should try Julia again out of curiosity. I tried it <a href="/post/modern-programming-language-for-monte-carlo/">several years ago</a> in the context of a simple Monte-Carlo simulation and my experiment at the time
+was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
 
 </div>
 

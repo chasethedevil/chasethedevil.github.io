@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/sabr-with-andreasen-huge/">SABR with Andreasen-Huge</a>
+  </h1>
+  <time datetime="2013-05-24T14:17:00Z" class="post-date">Fri, May 24, 2013</time>
+   
+
+I am on holiday today. Unfortunately I am still thinking about work-related matters, and out of curiosity, wanted to do a little experiment. I know it is not very good to spend free time on work related stuff: there is no reward for it, and there is so much more to life. Hopefully it will be over after this post.<br /><br />Around 2 years ago, I saw a presentation from <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDAQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1980726&amp;ei=-VOfUYncL8HB7AbK0YHgBg&amp;usg=AFQjCNHDopVl4pLOYEqepVK8Odhk9Td3iA&amp;sig2=SChIkU-TBR7ECaLdDm1orA&amp;bvm=bv.47008514,d.ZGU">Andreasen and Huge about how they were able to price/calibrate SABR</a> by a one-step finite difference technique. At that time, I did not understand much their idea. My mind was too focused on more classical finite differences techniques and not enough on the big picture in their idea. Their idea is quite general and can be applied to much more than SABR. <br /><br />Recently there has been some talk and development going on where I work about SABR (a popular way to interpolate the option implied volatility surface for interest rate derivatives), especially regarding the implied volatility wings at low strike, and sometimes on how to price in a negative rates environment. There are actually quite a bit of research papers around this. I am not really working on that part so I just mostly listened. Then a former coworker suggested that the Andreasen Huge method was actually what banks seemed to choose in practice. A few weeks later, the Thalesians (a group for people interested in quantitative finance) announced a presentation by Hagan (one of the inventor of SABR) about a technique that sounded very much like Andreasen-Huge&nbsp; to deal with the initial SABR issues in low rates.<br /><br />As the people working on this did not investigate Andreasen-Huge technique, I somehow felt that I had to and that maybe, this time, I would be able to grasp their idea.<br /><br />It took me just a few hours to have meaningful results. Here is the price of out of the money vanilla options using alpha = 0.0758194, nu = 0.1, beta = 0.5, rho = -0.1, forward = 0.02, and a maturity of 2 years.<br /><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s1600/Screenshot+from+2013-05-24+13:29:24.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s400/Screenshot+from+2013-05-24+13:29:24.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s1600/Screenshot+from+2013-05-24+13:30:09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s400/Screenshot+from+2013-05-24+13:30:09.png" width="400" /></a></div>I did not have in my home library a way to find the implied volatility for a given price. I knew of 2 existing methods, <a href="http://www.pjaeckel.webspace.virginmedia.com/ByImplication.pdf">Jaeckel "By Implication"</a>, and <a href="http://scholar.google.fr/citations?view_op=view_citation&amp;hl=fr&amp;user=3GRhH_IAAAAJ&amp;citation_for_view=3GRhH_IAAAAJ:d1gkVwhDpl0C">Li rational functions</a> approach. I discovered that Li wrote <a href="http://www.tandfonline.com/doi/abs/10.1080/14697680902849361">a new paper</a> on the subject where he uses a SOR method to find the implied volatility and claims it's very accurate, very fast and very robust. Furthermore, the same idea can be applied to normal implied volatility. What attracted me to it is the simplicity of the underlying algorithm. Jaeckel's way is a nice way to do Newton-Raphson, but there seems to be so many things to "prepare" to make it work in most cases, that I felt it would be too much work for my experiment. It took me a few more hours to code Li SOR solvers, but it worked amazingly well for my experiment.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s1600/Screenshot+from+2013-05-24+13%253A31%253A33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s400/Screenshot+from+2013-05-24+13%253A31%253A33.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s1600/Screenshot+from+2013-05-24+13%253A37%253A51.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="211" src="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s400/Screenshot+from+2013-05-24+13%253A37%253A51.png" width="400" /></a></div><br />At first I had an error in my boundary condition and had no so good results especially with a long maturity. The traps with Andreasen-Huge technique are very much the same as with classical finite differences: be careful to place the strike on the grid (eventually smooth it), and have good boundaries.<br /><br /><br />
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/large-steps-in-schobel-zhuheston-the-lazy-way/">Large Steps in Schobel-Zhu/Heston the Lazy Way</a>
+  </h1>
+  <time datetime="2013-05-17T12:46:00Z" class="post-date">Fri, May 17, 2013</time>
+   
+
+<a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1485403&amp;ei=ODqVUY-8GY2v7AaSsIHgDw&amp;usg=AFQjCNGxk1TqaYu0mxni-OQib6V6lU-M0g&amp;sig2=xzLPCiO5kdF97KN4Tz474A&amp;bvm=bv.46471029,d.ZGU">Van Haastrecht, Lord and Pelsser</a> present an effective way to price derivatives by Monte-Carlo under the Schobel-Zhu model (as well as under the Schobel-Zhu-Hull-White model). It's quite similar to Andersen QE scheme for Heston in spirit.<br /><br />In their paper they evolve the (log) asset process together with the volatility process, using the same discretization times. A while ago, when looking at&nbsp; <a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.risk.net%2Fdigital_assets%2F6415%2Fjcf_chan_web.pdf&amp;ei=MzyVUaHGO6qI7AbxwIDICQ&amp;usg=AFQjCNGKOILWMeH-0GMgfF-xv35Zq0XfLw&amp;sig2=iQ5RuV32i-pokPP5lzal-Q&amp;bvm=bv.46471029,d.ZGU">Joshi and Chan</a> large steps for Heston, I noticed that, inspired by Broadie-Kaya exact Heston scheme, they present the idea to evolve the variance process using small steps and the asset process using large steps (depending on the payoff) using the integrated variance value computed by small steps. The asset steps correspond to payoff evaluation dates&nbsp; At that time I had applied this idea to Andersen QE scheme and it worked reasonably well.<br /><br />So I tried to apply the same logic to Schobel Zhu, and my first tests show that it works too. Interestingly, the speed gain is about 2x. Here are the results for a vanilla call option of different strikes.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-mQzBUiL9Sz0/UZYJOvoQApI/AAAAAAAAGaA/1GnmgQQOIfs/s1600/Screenshot+from+2013-05-17+12:33:07.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="276" src="http://4.bp.blogspot.com/-mQzBUiL9Sz0/UZYJOvoQApI/AAAAAAAAGaA/1GnmgQQOIfs/s400/Screenshot+from+2013-05-17+12:33:07.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Similar Error between long and short asset steps</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-TtzRz_UvaRw/UZYJh9AHgCI/AAAAAAAAGaI/RBYU33FUdOs/s1600/Screenshot+from+2013-05-17+12:32:50.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="276" src="http://1.bp.blogspot.com/-TtzRz_UvaRw/UZYJh9AHgCI/AAAAAAAAGaI/RBYU33FUdOs/s400/Screenshot+from+2013-05-17+12:32:50.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Long steps take around 1/2 the time to compute</td></tr></tbody></table>I would have expected the difference in performance to increase when the step size is decreasing, but it's not the case on my computer.<br /><br />It's not truly large steps like <a href="http://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.risk.net%2Fdigital_assets%2F6415%2Fjcf_chan_web.pdf&amp;ei=MzyVUaHGO6qI7AbxwIDICQ&amp;usg=AFQjCNGKOILWMeH-0GMgfF-xv35Zq0XfLw&amp;sig2=iQ5RuV32i-pokPP5lzal-Q&amp;bvm=bv.46471029,d.ZGU">Joshi and Chan</a> do in their integrated double gamma scheme as the variance is still discretized in relatively small steps in my case, but it seems like a good, relatively simple optimization. A while ago, I did also implement the full Joshi and Chan scheme, but it's really interesting if one is always looking for long steps: it is horribly slow when the step size is small, which might occur for many exotic payoffs, while Andersen QE scheme perform almost as well as log-Euler in terms of computational cost.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/exact-forward-in-monte-carlo/">Exact Forward in Monte-Carlo</a>
+  </h1>
+  <time datetime="2013-05-13T17:58:00Z" class="post-date">Mon, May 13, 2013</time>
+  <p>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.</p>
+<p>In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices</p>
+<p>Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <a href="http://ssrn.com/abstract=2264327">this paper</a>.</p>
+<p>In short, for log-Euler, one can use the intuitive forward drift rate: r1<em>t1-r0</em>t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/">Quasi Monte Carlo in Finance</a>
+  </h1>
+  <time datetime="2013-05-13T13:16:00Z" class="post-date">Mon, May 13, 2013</time>
+   
+
+I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.<br /><br />Here is what I found:<br /><ol><li>Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed. This is all very well described in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=6&amp;cad=rja&amp;ved=0CFwQFjAF&amp;url=http%3A%2F%2Fwww-stat.stanford.edu%2F~owen%2Fcourses%2F362%2Freadings%2Fsiggraph03.pdf&amp;ei=08CQUea-F4jMhAfx5YDgCA&amp;usg=AFQjCNGLnKapkdJ4_caiSE3Ro_kf21NvkQ&amp;sig2=j2b_JqQuO9JNU0ko7yTeOw&amp;bvm=bv.46340616,d.ZG4">Owen Quasi Monte Carlo document</a> </li><li>Lattice rules. It is another form of quasi random sequences, which so far was not very well adapted to finance problems. A <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDYQFjAB&amp;url=https%3A%2F%2Fwww.maths.unsw.edu.au%2Fsites%2Fdefault%2Ffiles%2Famr08_9_0.pdf&amp;ei=ysKQUebXO4axO7ungPAN&amp;usg=AFQjCNErqQvM1IyLlUJH2EX5_mVG3f-ZCw&amp;sig2=gYbfQebTwUP4mtj6bteCcQ&amp;bvm=bv.46340616,d.ZWU">presentation from Giles &amp; Kuo</a> look like it's changing.</li><li>Fast PCA. An alternative to Brownian Bridge is the standard PCA. The problem with PCA is the performance in O(n^2). A possible speedup is possible in the case of a equidistant time steps. <a href="http://www.google.com/url?q=http://citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.142.5057%26rep%3Drep1%26type%3Dpdf&amp;sa=U&amp;ei=5MWQUaioA8KXhQfDnYCYDQ&amp;ved=0CB0QFjAC&amp;usg=AFQjCNHUhpr6_Ofiqqw2XeU8SY_amnx0pw">This paper</a> shows it can be generalized. But the data in it shows it is only advantageous for more than 1024 steps - not so interesting in Finance.</li></ol>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/time-estimates-in-software-development/">Time Estimates in Software Development</a>
+  </h1>
+  <time datetime="2013-05-07T21:01:00Z" class="post-date">Tue, May 7, 2013</time>
+  <p>Recently, that I completed a project that I had initially estimated to around 2 months,  in nearly 4 hours. This morning I fixed the few remaining bugs. I looked at the clock, surprised it was still so early and I still had so many hours left in the day.<!-- raw HTML omitted --><!-- raw HTML omitted -->Now I have more time to polish the details and go beyond the initial goal (I think this scares my manager a bit), but I could (and I believe some people do this often) stop now and all the management would be satisfied.<!-- raw HTML omitted --><!-- raw HTML omitted -->What&rsquo;s interesting is that everybody bought the 2 months estimate without questions (I almost even believed it myself). This reminded me of my <!-- raw HTML omitted -->productivity zero post<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/upper-bounds-in-american-monte-carlo/">Upper Bounds in American Monte-Carlo</a>
+  </h1>
+  <time datetime="2013-04-30T17:05:00Z" class="post-date">Tue, Apr 30, 2013</time>
+   
+
+<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.159.2367&amp;rep=rep1&amp;type=pdf">Glasserman and Yu</a> (GY) give a relatively simple algorithm to compute lower and upper bounds of a the price of a Bermudan Option through Monte-Carlo.<br /><br />I always thought it was very computer intensive to produce an upper bound, and that the standard <a href="http://escholarship.org/uc/item/43n1k4jb.pdf">Longstaff Schwartz algorithm</a> was quite precise already. GY algorithm is not much slower than the Longstaff-Schwartz algorithm, but what's a bit tricky is the choice of basis functions: they have to be Martingales. This is the detail I overlooked at first and I, then, could not understand why my results were so bad. I looked for a coding mistake for several hours before I figured out that my basis functions were not Martingales. Still it is possible to find good Martingales for the simple Bermudan Put option case and GY actually propose some <a href="http://arxiv.org/pdf/math.PR/0503556">in another paper</a>.<br /><br />Here are some preliminary results where I compare the random number generator influence and the different methods. I include results for GY using In-the-money paths only for the regression (-In suffix) or all (no suffix). <br /><br /><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s1600/gy_train16k_sim_value.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="238" src="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s400/gy_train16k_sim_value.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">value using 16k training path and Sobol - GY-Low-In is very close to LS.</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s1600/gy_tr16k_sim.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="300" src="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s640/gy_tr16k_sim.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 16k training path - a high number of simulations not that useful</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s1600/gy_sim1m_training.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="282" src="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s640/gy_sim1m_training.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 1m simulation paths - GY basis functions require less training than LS</td></tr></tbody></table><br />One can see the the upper bound is not that precise compared to the lower bound estimate, and that using only in the money paths makes a big difference. GY regression is good with only 1k paths, LS requires 10x more.<br /><br />Surprisingly, I noticed that the Brownian bridge variance reduction applied to Sobol was&nbsp; increasing the GY low estimate, so as to make it sometimes slightly higher than Longstaff-Schwartz price.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-wonderful-un/">The Wonderful UN</a>
+  </h1>
+  <time datetime="2013-04-24T21:35:00Z" class="post-date">Wed, Apr 24, 2013</time>
+  <p>Already the name United Nations should be suspicious, but now <a href="http://boingboing.net/2013/04/24/more-evidence-that-haitis-ch.html">they are shown to have spread Cholera</a> to Haiti, as if the country did not have enough suffering. They have a nice building in New-York, and used to have a popular representative, but unfortunately, for poor countries, they never really achieved much. In Haiti, there were many stories of rapes and corruption by U.N. members more than 10 years ago. The movie <a href="http://www.imdb.com/title/tt0896872/">The Whistleblower</a> suggests it was the same in the Balkans. I am sure it did not change much since.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/moved-from-dropbox-to-ubuntu-one/">Moved From Dropbox to Ubuntu One</a>
+  </h1>
+  <time datetime="2013-04-23T20:44:00Z" class="post-date">Tue, Apr 23, 2013</time>
+  <p>Dropbox worked well, but the company decided to blacklist it. I suppose some people abused it. While looking for an alternative, I found <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDMQFjAA&amp;url=https%3A%2F%2Fone.ubuntu.com%2F&amp;ei=QtZ2UY3NO83GPePRgOgF&amp;usg=AFQjCNFS8gIGpHCkBTGRPbT7qLVFzb584g&amp;sig2=z3LX3TTwx8lLoS41AJCgaA&amp;bvm=bv.45580626,d.ZWU">Ubuntu One</a>. It&rsquo;s funny I never tried it before even though I use Ubuntu. I did not think it was a dropbox replacement, but it is. And you get 5GB instead of Dropbox 2GB limit, which is enough for me (I was a bit above the 2GB limit). It works well under Linux but as well on Android and there is an iOS app I have not yet tried. It also works on Windows and Mac.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-longstaff-schwartz-american-option-price/">Quasi Monte-Carlo &amp; Longstaff-Schwartz American Option price</a>
+  </h1>
+  <time datetime="2013-04-22T18:00:00Z" class="post-date">Mon, Apr 22, 2013</time>
+   
+
+In the book <i><a href="http://books.google.fr/books?id=e9GWUsQkPNMC&amp;lpg=PA461&amp;vq=longstaff&amp;hl=fr&amp;pg=PA459#v=snippet&amp;q=longstaff&amp;f=false">Monte Carlo Methods in Financial Engineering</a></i>, Glasserman explains that if one reuses the paths used in the optimization procedure for the parameters of the exercise boundary (in this case the result of the regression in Longstaff-Schwartz method) to compute the Monte-Carlo mean value, we will introduce a bias: the estimate will be biased high because it will include knowledge about future paths.<br /><br />However Longstaff and Schwartz seem to just reuse the paths in <a href="http://rfs.oxfordjournals.org/content/14/1/113.short">their paper</a>, and Glasserman himself, when presenting Longstaff-Schwartz method later in the book just use the same paths for the regression and to compute the Monte-Carlo mean value.<br /><br />How large is this bias? What is the correct methodology?<br /><br />I have tried with Sobol quasi random numbers to evaluate that bias on a simple Bermudan put option of maturity 180 days, exercisable at 30 days, 60 days, 120 days and 180 days using a Black Scholes volatility of 20% and a dividend yield of 6%. As a reference I use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDcQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1648878&amp;ei=9151UZ3pM4LZPZ-ugeAF&amp;usg=AFQjCNFS9fdRJt9RoerSnb87YDIZmLcCtw&amp;sig2=k8lHjhUe14ep4giVM5Mr5Q&amp;bvm=bv.45512109,d.ZWU">a finite difference solver based on TR-BDF2</a>.<br /><br />I found it particularly difficult to evaluate it: should we use the same number of paths for the 2 methods or should we use the same number of paths for the monte carlo mean computation only? Should we use the same number of paths for regression and for monte carlo mean computation or should the monte carlo mean computation use much more paths?<br /><br />I have tried those combinations and was able to clearly see the bias only in one case: a large number of paths for the Monte-Carlo mean computation compared to the number of paths used for the regression using a fixed total number of paths of 256*1024+1, and 32*1024+1 paths for the regression.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">FDM price=2.83858387194312</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff discarded paths price=2.8385854695510426&nbsp;</span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Longstaff reused paths price=2.8386108892756847</span><br /><br />Those numbers are too good to be a real. If one reduces too much the total number of paths or the number of paths for the regression, the result is not precise enough to see the bias. For example, using 4K paths for the regression leads to 2.83770 vs 2.83767. Using 4K paths for regression and only 16K paths in total leads to 2.8383 vs 2.8387. Using 32K paths for regressions and increasing to 1M paths in total leads to 2.838539 vs 2.838546.<br /><br />For this example the Longstaff-Schwartz price is biased low, the slight increase due to path reuse is not very visible and most of the time does not deteriorate the overall accuracy. But as a result of reusing the paths, the Longstaff-Schwartz price might be higher than the real value.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-fast-exponential-function-in-java/">A Fast Exponential Function in Java</a>
+  </h1>
+  <time datetime="2013-04-19T16:48:00Z" class="post-date">Fri, Apr 19, 2013</time>
+   
+
+In finance, because one often dicretize the log process instead of the direct process for Monte-Carlo simulation, the Math.exp function can be called a lot (millions of times for a simulation) and can be a bottleneck. I have noticed that the simpler Euler discretization was for local volatility Monte-Carlo around 30% faster, because it avoids the use of Math.exp.<br /><br />Can we improve the speed of exp over the JDK one? At first it would seem that the JDK would just call either the processor exp using an <a href="http://bad-concurrency.blogspot.co.uk/2012/08/arithmetic-overflow-and-intrinsics.html">intrinsic function call</a> and that should be difficult to beat. However what if one is ok for a bit lower accuracy? Could a simple <a href="http://www.siam.org/books/ot99/OT99SampleChapter.pdf">Chebyshev polynomial expansion</a> be faster?<br /><br />Out of curiosity, I tried a Chebyshev polynomial expansion with 10 coefficients stored in a final double array. I computed the coefficient using a precise quadrature (Newton-Cotes) and end up with 1E-9, 1E-10 absolute and relative accuracy on [-1,1].<br /><br />Here are the results of a simple sum of 10M random numbers:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.75s for Math.exp sum=1.7182816693332244E7<br />0.48s for ChebyshevExp sum=1.718281669341388E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span><br /><br />So while this simple implementation is actually faster than Math.exp (but only works within [-1,1]), FastMath from Apache commons maths, that relies on a table lookup algorithm is just faster (in addition to being more precise and not limited to [-1,1]).<br /><br />Of course if I use only 5 coefficients, the speed is better, but the relative error becomes around 1e-4 which is unlikely to be satisfying for a finance application.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.78s for Math.exp sum=1.7182816693332244E7<br />0.27s for ChebyshevExp sum=1.718193001875838E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span>
+
+
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/page/15/">Previous</a></p>
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/17/">Next</a></p>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Portlets in an AJAX World &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,12 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Portlets in an AJAX World</h1>
+  <time datetime=2005-11-29T16:29:00Z class="post-date">Tue, Nov 29, 2005</time>
+   
+
+Recently, I have had my first encounter with <a href="http://developers.sun.com/prodtech/portalserver/reference/techart/jsr168/">Portlets</a> although Portlets are not very new. IBM had their own Portlet API before the JSR 168 was final in 2003. Unfortunately both approaches are quite different and IBM does not recommend the use of their own API.<br> <br> Portlets were a needed concept for a long time. I worked in 2000 on a java portal system and it would have been handy at that time. Portals are everywhere since the internet bubble. <br> <br> But Portlets do not do that much either. Sites designed with strict and intelligent rules can bypass the portlets need for example by using a combination of custom tags and java beans.<br> <br> What shocks me a bit more is that while not doing much, it looks a bit old fashioned already. With AJAX you could build very flexible and user-friendly Portlets replacement. This AJAX-let is actually probably what Microsoft has already done on their <a href="http://www.start.com/">start.com</a> web site. Now with AJAX, I just wish Javascript would evolve (a lot) or die to be more OO friendly.
+
 
 </div>
 

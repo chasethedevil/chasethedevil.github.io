@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Quantitative Finance Books Citing My Papers &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,20 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Quantitative Finance Books Citing My Papers</h1>
+  <time datetime=2017-12-09T13:56:42&#43;0100 class="post-date">Sat, Dec 9, 2017</time>
+  <p>I would have never really expected that when I started writing papers, but little by little there is a growing list of books citing <a href="https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">my papers</a>:</p>
+<ul>
+<li><a href="https://www.amazon.com/Applied-Quantitative-Finance-Equity-Derivatives/dp/1977557872/ref=sr_1_1?ie=UTF8&amp;qid=1512751819&amp;sr=8-1&amp;keywords=jherek+healy">Applied Quantitative Finance for Equity Derivatives</a> by <a href="https://jherekhealy.github.io">Jherek Healy</a>: the most recent book on equity derivatives refers to several of my papers. In contrast with many other books, the author goes beyond and provides additional insights on the papers.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Derivatives-Explained-Engineering/dp/1137360186/ref=sr_1_1?ie=UTF8&amp;qid=1512825081&amp;sr=8-1&amp;keywords=Interest+Rate+Derivatives+Explained%3A+Volume+2%3A+Term+Structure+and+Volatility+Modelling">Interest Rate Derivatives Explained: Volume 2: Term Structure and Volatility Modelling</a> by Jörg Kienitz and Peter Casper. It refers to the paper &ldquo;finite difference techniques for arbitrage-free SABR&rdquo;, written in collaboration with Gary Kennedy.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Derivatives-Explained-Engineering/dp/1137360062/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512824387&amp;sr=1-1">Interest Rate Derivatives Explained: Volume 1: Products and Markets</a> by Jörg Kienitz. It refers to my paper on curve interpolation (there is a mistake in the actual reference given inside the book,about arbitrage-free SABR, which unrelated to the text). I like how this book gives real world market data related to the products considered.</li>
+<li><a href="https://www.amazon.com/Interest-Rate-Modelling-Multi-Curve-Framework/dp/1137374659/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825258&amp;sr=1-1&amp;keywords=henrard+interest">Interest Rate Modelling in the Multi-Curve Framework: Foundations, Evolution and Implementation</a> by <a href="http://multi-curve-framework.blogspot.fr/">Marc Henrard</a>. It refers to the paper about yield curve interpolation. This is one of the rare books to present curve construction in depth.</li>
+</ul>
+<p>There are also some Springer books which are typically a collection of papers on a specific subject (which I find less interesting).</p>
+<ul>
+<li><a href="https://www.amazon.com/Methods-Computational-Finance-Mathematics-Industry/dp/3319612816/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825785&amp;sr=1-1&amp;keywords=Novel+Methods+in+Computational+Finance">Novel Methods in Computational Finance</a>. Jörg Kienitz refers to my paper on arbitrage free SABR in chapter 4.</li>
+<li><a href="https://www.amazon.com/Innovations-Derivatives-Markets-Adjustments-Proceedings/dp/331933445X/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825510&amp;sr=1-1&amp;keywords=Innovations+in+Derivatives+Markets">Innovations in Derivatives Markets: Fixed Income Modeling, Valuation Adjustments, Risk Management, and Regulation</a>. Christian Fries refers to my paper on curve interpolation in chapter 10.</li>
+</ul>
 
 </div>
 

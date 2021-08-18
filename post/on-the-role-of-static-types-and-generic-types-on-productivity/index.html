@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>On the Role of Static Types and Generic Types on Productivity &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,13 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>On the Role of Static Types and Generic Types on Productivity</h1>
+  <time datetime=2014-06-29T10:40:00Z class="post-date">Sun, Jun 29, 2014</time>
+   
+
+Most developers have strong opinions on dynamic types programming languages vs static types programming languages. The former is often assumed to be good for small projects/prototyping while the later better for bigger projects. But there is a surprisingly small number of studies to back those claims.<br /><br />One such study is "<a href="http://diyhpl.us/~bryan/papers2/paperbot/7a01e5a892a6d7a9f408df01905f9359.pdf" target="_blank">An experiment about static and dynamic type systems: doubts about the positive impact of static type systems on development time</a>" and came to the conclusion that on a small project, static typing did not decrease programming time, and actually increased debugging time. However 4 years later, "<a href="http://users.dcc.uchile.cl/~rrobbes/p/ICPC2014-idetypes.pdf" target="_blank">An empirical comparison of static and dynamic type systems on API usage in the presence of an IDE: Java vs. groovy with eclipse</a>" shows that a developer is 2x more productive with Java than with Groovy using an unknown API. This contrasts a bit (but does not contradict) with their previous study "<a href="http://swp.dcc.uchile.cl/TR/2012/TR_DCC-20120418-005.pdf" target="_blank">Static Type Systems (Sometimes) have a Positive Impact on the Usability of Undocumented Software: An Empirical Evaluation</a>" that showed Groovy to be more productive on small projects. One problem is that all these studies stem from the same person.<br /><br />It's more interesting to look at generic types vs raw types use, where even less studies have been done. "<a href="http://dl.acm.org/citation.cfm?id=2509528" target="_blank">Do developers benefit from generic types?: an empirical comparison of generic and raw types in java</a>" concludes that generic types do not provide any advantages to fix typing errors, hardly surprising in my opinion. Generic types (especially with type erasure as in Java) is the typical idea that sounds good but that in practice does not really help: it makes the code actually more awkward to read and tend to make developers too lazy to create new classes that would often be more appropriate than a generic type (think Map&lt;String,List&lt;Map&lt;String, Date&gt;&gt;&gt;).
+
+
 
 </div>
 

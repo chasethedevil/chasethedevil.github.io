@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</a>
+  </h1>
+  <time datetime="2013-04-12T13:41:00Z" class="post-date">Fri, Apr 12, 2013</time>
+  <p>I forgot two important points in my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted --> about <!-- raw HTML omitted -->Lord-Kahl method<!-- raw HTML omitted --> to compute the Heston call price:<!-- raw HTML omitted --><!-- raw HTML omitted -->- Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <!-- raw HTML omitted -->Carr-Madan<!-- raw HTML omitted --> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <!-- raw HTML omitted -->Lord-Kahl<!-- raw HTML omitted -->, <!-- raw HTML omitted -->Kahl-Jaeckel<!-- raw HTML omitted --> (the more usual way limited to machine epsilon accuracy), <!-- raw HTML omitted -->Forde-Jacquier-Lee<!-- raw HTML omitted --> ATM implied volatility without scaling for a maturity of 1 day:<!-- raw HTML omitted --><!-- raw HTML omitted -->strike 62.5=2.919316809400033E-34 8.405720564041985E-12 0.0<!-- raw HTML omitted -->strike 68.75=-8.923683388191852E-28 1.000266536266281E-11 0.0<!-- raw HTML omitted -->strike 75.0=-3.2319611910032E-22 2.454925152051146E-12 0.0<!-- raw HTML omitted -->strike 81.25=1.9401743410877718E-16 2.104982854689297E-12 0.0 <!-- raw HTML omitted -->strike 87.5=-Infinity -1.6480150577535824E-11 0.0<!-- raw HTML omitted -->strike 93.75=Infinity 1.8277663826893331E-9 1.948392142070432E-9<!-- raw HTML omitted -->strike 100.0=0.4174318393886519 0.41743183938679845 0.4174314959743768<!-- raw HTML omitted -->strike 106.25=1.326968012594355E-11 7.575717830832218E-11 1.1186618909114702E-11<!-- raw HTML omitted -->strike 112.5=-5.205783145942609E-21 2.5307755890935368E-11 6.719872683111381E-45<!-- raw HTML omitted -->strike 118.75=4.537094156599318E-25 1.8911094912255066E-11 3.615356241778357E-114<!-- raw HTML omitted -->strike 125.0=1.006555799739525E-27 3.2365221613872563E-12 2.3126009701775733E-240<!-- raw HTML omitted -->strike  131.25=4.4339539263484925E-31 2.4794388764348696E-11 0.0<!-- raw HTML omitted --><!-- raw HTML omitted -->One can see negative prices and meaningless prices outside ATM. With scaling it changes to: <!-- raw HTML omitted -->strike 62.5=2.6668642552659466E-182 8.405720564041985E-12 0.0<!-- raw HTML omitted -->strike 68.75=7.156278101597845E-132 1.000266536266281E-11 0.0<!-- raw HTML omitted -->strike 81.25=7.863105641534119E-55 2.104982854689297E-12 0.0<!-- raw HTML omitted -->strike 87.5=7.073641308465115E-28 -1.6480150577535824E-11 0.0<!-- raw HTML omitted -->strike 93.75=1.8375145950924849E-9 1.8277663826893331E-9 1.948392142070432E-9<!-- raw HTML omitted -->strike 100.0=0.41743183938755385 0.41743183938679845 0.4174314959743768<!-- raw HTML omitted -->strike 106.25=1.3269785342953315E-11 7.575717830832218E-11 1.1186618909114702E-11<!-- raw HTML omitted -->strike 112.5=8.803247187972696E-42 2.5307755890935368E-11 6.719872683111381E-45<!-- raw HTML omitted -->strike 118.75=5.594342441346233E-90 1.8911094912255066E-11 3.615356241778357E-114<!-- raw HTML omitted -->strike 125.0=7.6539757567179276E-149 3.2365221613872563E-12 2.3126009701775733E-240<!-- raw HTML omitted -->strike 131.25=0.0 2.4794388764348696E-11 0.0<!-- raw HTML omitted --><!-- raw HTML omitted -->One can now now see that the Jacquier-Lee approximation is quickly not very good.<!-- raw HTML omitted --><!-- raw HTML omitted -->- Put: the put option price can be computed using the exact same <!-- raw HTML omitted -->Carr-Madan <!-- raw HTML omitted -->formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part II)</a>
+  </h1>
+  <time datetime="2013-04-11T16:29:00Z" class="post-date">Thu, Apr 11, 2013</time>
+  <p>In my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted -->, I explored the <!-- raw HTML omitted -->Lord-Kahl method<!-- raw HTML omitted --> to compute the call option prices under the Heston model. One of the advantages of this method is to go beyond machine epsilon accuracy and be able to compute very far out of the money prices or very short maturities. The standard methods to compute the Heston price are based on a sum/difference where both sides are far from 0 and will therefore be limited to less than machine epsilon accuracy even if the integration is very precise.<!-- raw HTML omitted --><!-- raw HTML omitted -->However the big trick in it is to find the optimal alpha used in the integration. A suboptimal alpha will often lead to high inaccuracy, because of some strong oscillations that will appear in the integration. So the method is robust only if the root finding (for the optimal alpha) is robust.<!-- raw HTML omitted --><!-- raw HTML omitted -->The original paper looks the Ricatti equation for B where B is the following term in the characteristic function:
+$$\phi(u) = e^{iuf+A(u,t)+B(u,t)\sigma_0}$$</p>
+<p>The solution defines the \(\alpha_{max}\) where the characteristic function explodes. While the Ricatti equation is complex but not complicated:
+$$ dB/dt = \hat{\alpha}(u)-\beta(u) B+\gamma B^2 $$</p>
+<p>I initially did not understand its role (to compute \(\alpha_{max}\)), so that, later, one can compute alpha_optimal with a good bracketing. The bracketing is particularly important to use a decent solver, like the Brent solver. Otherwise, one is left with, mostly, Newton&rsquo;s method. It turns out that I explored a reduced function, which is quite simpler than the Ricatti and seems to work in all the cases I have found/tried: solve $$1/B = 0$$<!-- raw HTML omitted --> If B explodes, \(\phi\) will explode. The trick, like when solving the Ricatti equation, is to have either a good starting point (for Newton) or, better, a bracketing. It turns out that Lord and Kahl give a bracketing for (1/B), even if they don&rsquo;t present it like this: their \(\tau_{D+}\) on page 10 for the lower bracket, and \(\tau_+\) for the upper bracket. \(\tau_+\) will make \(1/B\) explode, exactly. One could also find the next periods by adding \(4\pi/t\) instead of \(2\pi/t\) like they do to move from \(\tau_{D+}\) to \(\tau_+\). But this does not have much interest as we don&rsquo;t want to go past the first explosion.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s quite interesting to see that my simple approach is actually closely related to the more involved Ricatti approach. The starting point could be the same. Although it is much more robust to just use Brent solver on the bracketed max. I actually believe that the Ricatti equation explodes at the same points, except, maybe for some rare combination of Heston parameters.<!-- raw HTML omitted --><!-- raw HTML omitted -->From a coding perspective, I found that <!-- raw HTML omitted -->Apache commons maths<!-- raw HTML omitted --> was a decent library to do complex calculus or solve/minimize functions. The complex part was better than some in-house implementation: for example the square root was more precise in commons maths, and the solvers are robust. It even made me think that it is often a mistake to reinvent to wheel. It&rsquo;s good to choose the best implementations/algorithms as possible. But reinventing a Brent solver??? a linear interpolator??? Also the commons maths library imposes a good structure. In house stuff tends to be messy (not real interfaces, or many different ones). I believe the right approach is to use and embrace/extends Apache commons maths. If some algorithms are badly coded/not performing well, then write your own using the same kind of interfaces as commons maths (or some other good maths library).<!-- raw HTML omitted --><!-- raw HTML omitted -->The next part of this series on Lord-Kahl method is <!-- raw HTML omitted -->here<!-- raw HTML omitted -->.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price/">Root finding in Lord Kahl Method to Compute Heston Call Price</a>
+  </h1>
+  <time datetime="2013-04-09T19:49:00Z" class="post-date">Tue, Apr 9, 2013</time>
+  <p><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I just tried to implement <!-- raw HTML omitted -->Lord Kahl algorithm to compute the Heston call price<!-- raw HTML omitted -->. The big difficulty of their method is to find the optimal alpha.  That&rsquo;s what make it work or break. The tricky part is that the function  of alpha we want to minimize has multiple discontinuities (it&rsquo;s  periodic in some ways). This is why the authors rely on the computation  of an alpha_max: bracketing is very important, otherwise your optimizer  will jump the discontinuity without even noticing it, while you really  want to stay in the region before the first discontinuity.<!-- raw HTML omitted --><!-- raw HTML omitted -->To find alpha_max, they solve a non linear differential equation,  for which I would need a few more readings to really understand it.  Given that the problem looked simple: if you graph the function to  minimize, it seems so simple to find the first discontinuity. So I just  tried to do it directly. Numerically, I was surprised it was not so  simple. I did find a solution that, amazingly seems to work in all the  examples of the paper, but it&rsquo;s luck. I use Newton-Raphson to find the  discontinuity, on a reduced function where the discontinuity really  lies. I solve the inverse of the discontinuity so that I can just solve  for 0. Earlier on I reduced the function too much and it did not work,  this is why I believe it is not very robust. Newton-Raphson is quite  simple, but also simple to understand why it breaks if it breaks, and  does not need a bracketing (what I am looking for in the first place).  Once I find the discontinuity, I can just use Brent on the right  interval and it works well.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In the end, it&rsquo;s neat to be able to compute option prices under  machine epsilon. But in practice, it&rsquo;s probably not that useful. For  calibration, those options should have a very small (insignificant)  weight. The only use case I found is really for graphing so that you  don&rsquo;t have some flat extrapolation too quickly, especially for short  maturities. I was curious as well about the accuracy of some  approximations of the implied volatility in the wings, to see if I could  use them instead of all this machinery.<!-- raw HTML omitted --><!-- raw HTML omitted -->In any case I did not think that such a simple problem was so challenging numerically.<!-- raw HTML omitted --><!-- raw HTML omitted -->There is a <!-- raw HTML omitted -->part II<!-- raw HTML omitted --> to this article.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution/">From Double Precision Normal Density to Double Precision Cumulative Normal Distribution</a>
+  </h1>
+  <time datetime="2013-04-02T14:24:00Z" class="post-date">Tue, Apr 2, 2013</time>
+  <p>Marsaglia in <!-- raw HTML omitted -->his paper on Normal Distribution<!-- raw HTML omitted --> made the same mistake I initially did while trying to verify <!-- raw HTML omitted -->the accuracy of the normal density<!-- raw HTML omitted -->.<!-- raw HTML omitted --><!-- raw HTML omitted -->In his table of values comparing the true value computed by Maple for some values of x to the values computed by Sun or Ooura erfc, he actually does not really use the same input for the comparison. One example is the last number: 16.6. 16.6 does not have an exact representation in double precision, even though it is displayed as 16.6 because of the truncation at machine epsilon precision. Using Python mpmath, one can see that:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; mpf(-16.6)<!-- raw HTML omitted -->mpf('-16.6000000000000014210854715202004')<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->This is the more accurate representation if one goes beyond double precision (here 30 digits). And the value of the cumulative normal distribution is:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; ncdf(-16.6)<!-- raw HTML omitted -->mpf(&lsquo;3.4845465199503256054808152068743e-62&rsquo;)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It is different from:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&gt;&gt;&gt; ncdf(mpf(&quot;-16.6&quot;))<!-- raw HTML omitted -->mpf(&lsquo;3.48454651995040810217553910503186e-62&rsquo;)<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->where in this case it is really evaluated around -16.6 (up to 30 digits precision). Marsaglia gives this second number as reference. But all the other algorithms will actually take as input the first input. It is more meaningful to compare results using the exact same input. Using human readable but computer truncated numbers is not the best.  The cumulative normal distribution will often be computed using some output of some calculation where one does not have an exact human readable input.<!-- raw HTML omitted --><!-- raw HTML omitted -->The standard code for Ooura and Schonfelder (as well as Marsaglia) algorithms for the cumulative normal distribution don&rsquo;t use Cody&rsquo;s trick to evaluate the exp(-x<em>x). This function appears in all those implementations because it is part of the dominant term in the usual expansions. Out of curiosity, I replaced this part with Cody trick. For Ooura I also made minor changes to make it work directly on the CND instead of going through the error function erfc indirection. Here are the results without the Cody trick (except for Cody):<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->and with it:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->All 3 algorithms are now of similiar accuracy (note the difference of scale compared to the previous graph), with Schonfelder being a bit worse, especially for x &gt;= -20. If one uses only easily representable numbers (for example -37, -36,75, -36,5, &hellip;) in double precision then, of course, Cody trick importance won&rsquo;t be visible and here is how the 3 algorithms would fare with or without Cody trick:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Schonfelder looks now worse than it actually is compared to Cody and Ooura.<!-- raw HTML omitted --><!-- raw HTML omitted -->To conclude, if someone claims that a cumulative normal distribution is up to double precision accuracy and it does not use any tricks to compute exp(-x</em>x), then beware, it probably is quite a bit less than double precision.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/">Cracking the Double Precision Gaussian Puzzle</a>
+  </h1>
+  <time datetime="2013-03-22T12:20:00Z" class="post-date">Fri, Mar 22, 2013</time>
+  <p><!-- raw HTML omitted -->In my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted -->, I stated that some library (SPECFUN by W.D. Cody) computes $$e^{-\frac{x^2}{2}}$$ the following way:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->xsq = fint(x * 1.6) / 1.6;<!-- raw HTML omitted -->del = (x - xsq) * (x + xsq);<!-- raw HTML omitted -->result = exp(-xsq * xsq * 0.<!-- raw HTML omitted -->5<!-- raw HTML omitted -->) * exp(-del <em> <!-- raw HTML omitted -->0.5<!-- raw HTML omitted -->);<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->where fint(z) computes the floor of z.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->1. Why 1.6?<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.6 is equivalent to multiplying by 10 and dividing by 16 which is an exact operation). It also allows to have something very close to a rounding function: x=2.6 will make xsq=2.5, x=2.4 will make xsq=1.875, x=2.5 will make xsq=2.5. The maximum difference between x and xsq will be 0.625.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->2. (a-b)</em>(a+b) decomposition<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->del is of the order of 2<em>x</em>(x-xsq). When (x-xsq) is very small, del will, most of the cases be small as well: when x is too high (beyond 39), the result will always be 0, because there is no small enough number to represent exp(-0.5<em>39</em>39) in double precision, while (x-xsq) can be as small as machine epsilon (around 2E-16). By splitting x<em>x into xsq</em>xsq and del, one allow exp to work on a more refined value of the remainder del, which in turn should lead to an increase of accuracy.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->3. Real world effect<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Let&rsquo;s make x move by machine epsilon and see how the result varies using the naive implementation exp(-0.5<em>x</em>x) and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac). <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what&rsquo;s interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->This is the relative error between the Naive implementation and Cody. The difference is higher than one could expect: a factor of 20. But it has one big drawbacks: it requires 2 exponential evaluations, which are relatively costly. <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update March 22, 2013<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I looked for a higher precision exp implementation, that can go beyond double precision. I found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library.<!-- raw HTML omitted --><!-- raw HTML omitted -->I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.7000000000000028421709430404007434844970703125.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7<!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
+  </h1>
+  <time datetime="2013-03-20T17:50:00Z" class="post-date">Wed, Mar 20, 2013</time>
+   
+
+Some library computes $$e^{-\frac{x^2}{2}}$$ the following way:<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">xsq = fint(x * 1.6) / 1.6;<br />del = (x - xsq) * (x + xsq);<br />result = exp(-xsq * xsq * 0.<span style="font-size: x-small;">5</span>) * exp(-del * <span style="font-size: x-small;">0.5</span>);</span></span><br /><br />where fint(z) computes the floor of z.<br /><br />Basically, x*x is rewritten as xsq*xsq+del. I have seen that trick once before, but I just can't figure out where and why (except that it is probably related to high accuracy issues).<br /><br />The answer is in the next post.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-seasoned-volatility-swap/">A Seasoned Volatility Swap</a>
+  </h1>
+  <time datetime="2013-03-14T19:55:00Z" class="post-date">Thu, Mar 14, 2013</time>
+   
+
+This is very much what's in the Carr-Lee paper "Robust Replication of Volatility Derivatives", but it wasn't so easy to obtain in practice:<br /><ul><li>The formulas as written in the paper are not usable as is: they can be simplified (not too difficult, but intimidating at first)</li><li>The numerical integration is not trivial: a simple Gauss-Laguerre is not precise enough (maybe if I had an implementation with more points), a Gauss-Kronrod is not either (maybe if we split it in different regions). Funnily a simple adaptive Simpson works ok (but my boundaries are very basic: 1e-5 to 1e5).</li></ul><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s1600/Screenshot+from+2013-03-14+19:33:04.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s320/Screenshot+from+2013-03-14+19:33:04.png" width="320" /></a></div>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
+  </h1>
+  <time datetime="2013-03-12T21:36:00Z" class="post-date">Tue, Mar 12, 2013</time>
+   
+
+A <a href="http://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper "<i>robust replication of volatility derivatives</i>". Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s1600/Screenshot+from+2013-03-12+18:14:34.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="312" src="http://4.bp.blogspot.com/-JMJOpTJ3hug/UT9kCR4k25I/AAAAAAAAGRw/nxE37l7KvN8/s400/Screenshot+from+2013-03-12+18:14:34.png" width="400" /></a></div>Those are very close payoffs!<br /><br />I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.<br /><br />The real payoff (very easy to obtain through Carr-Lee Bessel formula):<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s1600/Screenshot+from+2013-03-14+19:46:16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-95Wzs3hgNBI/UUIbC_ri6XI/AAAAAAAAGSA/D9ZfEYZ6n7E/s320/Screenshot+from+2013-03-14+19:46:16.png" width="320" /></a></div>&nbsp; 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/parallel-can-be-slower/">Parallel Can Be Slower</a>
+  </h1>
+  <time datetime="2013-02-13T17:05:00Z" class="post-date">Wed, Feb 13, 2013</time>
+  <p>I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step</p>
+<p>I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.</p>
+<p>I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/scala-is-mad-part-2/">Scala is Mad (part 2)</a>
+  </h1>
+  <time datetime="2013-02-13T16:20:00Z" class="post-date">Wed, Feb 13, 2013</time>
+  <p>I still did not abandon Scala despite my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted -->, mainly because I have already quite a bit of code, and am too lazy to port it. Furthermore the issues I detailed were not serious enough to motivate a switch. But these days I am more and more fed up with Scala, especially because of the Eclipse plugin. I tried the newer, the beta, and the older, the stable, the conclusion is the same. It&rsquo;s welcome but:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->code completion is not great compared to Java. For example one does not seem to be able to see the constructor parameters, or the method parameters can not be automatically populated.<!-- raw HTML omitted --><!-- raw HTML omitted -->the plugin makes Eclipse <em>very</em> slow. Everything seems at least 3-5x slower. On the fly compilation is also much much slower than Java&rsquo;s.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s nice to type less, but if overall writing is slower because of the above issues, it does not help. Beside curiosity of a new language features, I don&rsquo;t see any point in Scala today, even if some of the ideas are interesting. I am sure it will be forgotten/abandoned in a couple of years. Today, if I would try a new language, I would give Google Go a try: I don&rsquo;t think another big language can make it/be useful on the JVM (beside a scripting kind of language, like JavaScript or Jython).<!-- raw HTML omitted --><!-- raw HTML omitted -->Google Go focuses on the right problem: concurrency. It also is not constrained to JVM limitation (on the other side one can not use a Java library - but open source stuff is usually not too difficult to port from one language to another). It has one of the fastest compilers. It makes interesting practical choices: no inheritance.</p>
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/page/16/">Previous</a></p>
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/18/">Next</a></p>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

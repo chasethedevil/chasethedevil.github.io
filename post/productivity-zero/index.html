@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Github and SSH setup &middot; Chase the Devil</title>
+  <title>Productivity Zero &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,23 +70,16 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Github and SSH setup</h1>
-  <time datetime=2021-08-16T07:56:42&#43;0100 class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-ssh-add ~/.ssh/id_customrepo_ed25519</code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Host github-as-customrepo
-        HostName github.com
-        User git
-        IdentityFile ~/.ssh/id_customrepo_ed25519
-        IdentitiesOnly yes</code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git url via</p>
-<p><code>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</code></p>
+  <h1>Productivity Zero</h1>
+  <time datetime=2013-01-24T22:03:00Z class="post-date">Thu, Jan 24, 2013</time>
+  <p>Sometimes it feels like big companies try to enforce the Productivity Zero rule.</p>
+<p>Here is a guide:</p>
+<ul>
+<li>involve as many team as possible. It will help ensuring endless discussions about who is doing what, and then how do I interface with them. This is most (in)efficient when team managers interact and are not very technically competent. One consequence is that nobody is fully responsible/accountable, which helps reinforce the productivity zero.</li>
+<li>meetings, meetings and meetings. FUD (Fear Uncertainty and Doubt) is king here. By spreading FUD, there will be more and more meetings. Even if the &ldquo;project&rdquo; is actually not a real project, but amounts to 10 lines of code, it is possible to have many meetings around it, over the span of several months (because everybody is always busy with other tasks). Another strategy is to use vocabulary, talk about technical or functional parts the others don&rsquo;t understand. Some people are masters are talking technical to functional people and vice versa.</li>
+<li>multiply by 20, not 2. It is surprisingly easy to tell upper management something is going to take 3 months, when, in fact, it can be done in 3 days. This is a bit like bargaining in South East Asia: it&rsquo;s always amazing to find out how much you can push the price down (or how much they push it up).</li>
+<li>hire as many well paid managers and product specialists as you can, and make sure they know nothing about the product or the functional parts but are very good at playing the political game without any content. Those people often manage to stay a long time, a real talent.</li>
+</ul>
 
 </div>
 

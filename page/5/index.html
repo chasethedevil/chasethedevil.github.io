@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.87.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/">AES for Monte-Carlo</a>
+  </h1>
+  <time datetime="2016-08-17T09:55:32&#43;0100" class="post-date">Wed, Aug 17, 2016</time>
+  <p>In finance, and also in science, the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> is the de-factor pseudo-random number generator (PRNG) for Monte-Carlo simulations.
+By the way, there is a <a href="http://arxiv.org/abs/1301.5435">recent 64-bit maximally equidistributed version</a> called MEMT19937 with 53-bit double precision floating point numbers in mind.</p>
+<p>D.E. Shaw paper <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiyl5Lg8cjOAhVMahoKHVhPCPQQFggmMAA&amp;url=http%3A%2F%2Fwww.thesalmons.org%2Fjohn%2Frandom123%2Fpapers%2Frandom123sc11.pdf&amp;usg=AFQjCNEZ5I7JeeDSELDJBDjLU84tXKmI3w&amp;sig2=UqLBNOlLjkHsMMncABKkIg&amp;bvm=bv.129759880,d.d2s">Parallel Random Numbers: As easy as 1, 2, 3</a>
+makes a bold remark: since <a href="https://en.wikipedia.org/wiki/AES_instruction_set">specific AES instructions</a> have
+been available since 2010 in most x86 processors, why not use them?</p>
+<p>Historicaly, counter-based PRNGs based on cryptographic standards such as <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+were historically slow, which motivated the development of sequential PRNGs with good statistical properties,
+yet not cryptographically strong like the Mersenne Twister for Monte-Carlo simulations.</p>
+<p>The randomness of AES is of vital importance to its security making the use of the AES128 encryption algorithm as PRNG sound (see <a href="http://dl.acm.org/citation.cfm?id=945515">Hellekalek &amp; Wegenkittl paper</a>).
+Furthermore, D.E. Shaw study shows that AES can be faster than Mersenne-Twister.
+In my own simple implementation using the standard library of the Go language,
+it was around twice slower than Mersenne-Twister to generate random double precision floats,
+which can result in a 5% performance loss for a local volatility simulation.
+The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
+<p>The code is extremely simple, with many possible variations around the same idea. Here is mine
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
+	counter <span style="color:#902000">uint64</span>
+	bs      []<span style="color:#902000">byte</span>
+	block   cipher.Block
+}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
+	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
+	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
+	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
+</span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
+	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
+		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
+	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
+		u.counter<span style="color:#666">++</span>
+		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
+		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
+		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
+	}
+	u.counter<span style="color:#666">++</span>
+	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
+	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
+}</code></pre></div></p>
+<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
+<p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
+The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,
+whose goal is to identify new stream ciphers suitable for widespread adoption.
+It is faster than AES in the absence of specific AES CPU instructions.
+Our tests run with a straightforward implementation that does not make use of specific AMD64 instructions
+and show the resulting PRNG to be faster than MRG63k3a and only 5% slower than MEMT19937 for local volatility Monte-Carlo simulations, that is the same speed as the above Go AES PRNG.
+While it led to sensible results, there does not seem any study yet of its equidistribution properties.</p>
+<p>Counter-based PRNGs are parallelizable by nature: if a counter is used as plaintext,
+we can generate any point in the sequence at no additional cost by just setting
+the counter to the point position in the sequence, the generator is not sequential.
+Furthermore, alternate keys can be used to create independent substreams:
+the strong cryptographic property will guarantee the statistical independence.
+A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/piketty_capital/">A review of Thomas Piketty - Le capital au XXI siecle</a>
+  </h1>
+  <time datetime="2016-08-02T09:55:32&#43;0100" class="post-date">Tue, Aug 2, 2016</time>
+  <p>I found back some old notes I had written about the book &ldquo;Le capital au XXI siecle&rdquo; from Thomas Piketty. It took me a while to finish that book last summer.</p>
+<p>So many journalists have written around Piketty, that I had to buy the book and read it. It turns out that some of the criticism I have read is not really founded once one reads the book, but here are other real obvious criticisms that I suprisingly did not hear.</p>
+<p>The best part of the book is probably the introduction. It&rsquo;s actually not so short and gives a good overall view of the main subjects of the book. But it&rsquo;s a bit too concise to truely understand the point. Unfortunately as the book progresses, it feels more like someone trying to fill up empty pages than real content. The first half of the first chapter is still interesting, and then we are overwhelmed with too many graphs and even more words to just state the obvious in the graph, or to repeat over and over the same idea. His economic &ldquo;laws&rdquo; should really be summarized on one (or two) simple page, there is no need for hundreds of pages to understand them. Banks could learn a bit of basic statistics: Piketty makes the point of not considering only one measure of inequality like the Gini index, very much like banks should not consider only one measure of risk like the VaR.</p>
+<p>The title is clever, as it is a direct reference to Marx &ldquo;The Capital&rdquo;, but it&rsquo;s very far from the quality of Marx book. Marx can be wrong about many things, but in each chapter, he presents new ideas, a different way of looking at the problem. There is a real philosophical effort of defining the meaning of words, and there is fascinating analysis of the economic world of the 19th century. I am refering to the first volume, the only one Marx truly wrote.</p>
+<p>I hardly understand why Piketty is so popular in the US. I remember how much fun it was to read Adam Smith &ldquo;The Wealth of Nations&rdquo;, and again how different perpectives it tries to bring, and it&rsquo;s no small book either. Piketty is boring, extremely boring to read (except the intro). Maybe the Americans just stopped at the introduction. Likely it has more to do with Piketty being the intellectual defending the same ideas as the very popular Occupy movement (which we somehow don&rsquo;t hear about so much anymore). Bourdieu was very talented in mixing the right amount of statistics with extremely original views along with a philosophical stance. I expected more from Piketty, an admirer of the likes of Bourdieu.</p>
+<p>A much more interesting book would be something like a spiced up introduction to this book. One main leitmotiv is the fact that the 21st century will not look like the 20th century, but maybe more like the 19th century. Why wouldn&rsquo;t the 21st century look like the 21st century, that is different from the 20th and the 19th century? Still, where Picketty is interesting is in the fact that there is something to learn from the 19th century economics, and something to unlearn from the 20th century economics which might be too prevalent today.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
+  </h1>
+  <time datetime="2016-07-26T09:55:32&#43;0100" class="post-date">Tue, Jul 26, 2016</time>
+  <p>Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.</p>
+<p>It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables.
+Solving a BSDE on 10 variables for EDF was given as an illustration at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^{10}\) regression factors. The answer of the speaker was more or less that it was what they do, with no particular trick but with a large computing power, as if \(10^{10}\) was not so big.</p>
+<p>At this point I was really wondering why \(10^{10}\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).</p>
+<p>We can count then how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
+This number is simply \( C^{N+D-1}_{N-1} = C^{N+D-1}_D \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>.</p>
+<p>If this number is not so obvious, we can proceed step by step as well: for degree 1, there is just \( N \) factors (we assign 1 to one of the variables).
+For degree 2, there is \(N\) factors to place the number 2 on each variable, plus \( C^N_2 \) to place (1,1) on the variables. From Pascal triangle, we have \( C^{N+1}_{2} = C^N_2 + C^N_1\).
+For degree 3, there is \(N\) factors to place the number 3 on each variable, plus \( C^N_3 \) to place the numbers (1,1,1) on the variables plus \(2C^N_2\) to place (1,2) and (2,1). Applying the Pascal identity twice, we have \( C^{N+2}_{3} = (C^N_1+ C^N_2) + (C^N_2 + C^N_3)\). etc.</p>
+<p>Thus the total number of factors for \(N\) variables is</p>
+<!-- raw HTML omitted -->
+<p>For \(N=10\), the total number of factors is 184756.
+Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
+  </h1>
+  <time datetime="2016-07-05T09:55:32&#43;0100" class="post-date">Tue, Jul 5, 2016</time>
+  <p>In my [previous post]((/post/shooting_arbitrage/), I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
+In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
+because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
+it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
+where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
+Plugging this into the local variance formula leads to</p>
+<!-- raw HTML omitted -->
+<figure><img src="/post/svi_dearbitraging_lv_rk.png"/><figcaption>
+            <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
+        </figcaption>
+</figure>
+
+<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
+is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
+<figure><img src="/post/svi_dearbitraging_vol_rk_cap.png"/><figcaption>
+            <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The discontinuity renders the shooting technique useless.
+The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage - part I</a>
+  </h1>
+  <time datetime="2016-06-22T09:55:32&#43;0100" class="post-date">Wed, Jun 22, 2016</time>
+  <p>In my [previous post]((/post/damghani_dearbitraging_a_weak_smile_on_svi/), I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
+The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
+and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
+<figure><img src="/post/svi_dearbitraging_variance_spline.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+<p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
+<figure><img src="/post/svi_dearbitraging_g_spline.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
+<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.</p>
+<!-- raw HTML omitted -->
+<p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
+this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
+<figure><img src="/post/svi_dearbitraging_variance_rk.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+<p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
+is even smaller.</p>
+<figure><img src="/post/svi_dearbitraging_g_rk.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
+  </h1>
+  <time datetime="2016-06-15T09:55:32&#43;0100" class="post-date">Wed, Jun 15, 2016</time>
+  <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
+$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$
+The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
+Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
+<p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
+The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
+<!-- raw HTML omitted -->
+<p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
+While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
+<p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
+on the first derivative:</p>
+<!-- raw HTML omitted -->
+<p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
+There would be no loop over the minimization needed. Does this produce any good result?
+<figure><img src="/post/svi_dearbitraging_variance.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The graph is clear, the technique produces crap. This is the local variance denominator:
+<figure><img src="/post/svi_dearbitraging_g.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
+  </h1>
+  <time datetime="2016-06-14T09:55:32&#43;0100" class="post-date">Tue, Jun 14, 2016</time>
+  <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
+that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
+they vary wildly between the first and the second expiry.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">T</th>
+<th style="text-align:center">a</th>
+<th style="text-align:center">b</th>
+<th style="text-align:center">rho</th>
+<th style="text-align:center">m</th>
+<th style="text-align:center">s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0.082</td>
+<td style="text-align:center">0.027</td>
+<td style="text-align:center">0.234</td>
+<td style="text-align:center">0.068</td>
+<td style="text-align:center">0.100</td>
+<td style="text-align:center">0.028</td>
+</tr>
+<tr>
+<td style="text-align:center">0.16</td>
+<td style="text-align:center">0.030</td>
+<td style="text-align:center">0.125</td>
+<td style="text-align:center">-1.0</td>
+<td style="text-align:center">0.074</td>
+<td style="text-align:center">0.050</td>
+</tr>
+<tr>
+<td style="text-align:center">0.26</td>
+<td style="text-align:center">0.032</td>
+<td style="text-align:center">0.094</td>
+<td style="text-align:center">-1.0</td>
+<td style="text-align:center">0.093</td>
+<td style="text-align:center">0.041</td>
+</tr>
+</tbody>
+</table>
+<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
+in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
+<figure><img src="/post/svi_zeliade_arb.png"/><figcaption>
+            <h4>Arbitrage in Zeliade&#39;s example</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Why does this happen?</p>
+<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
+SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
+<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
+It is interesting to look at what happens to the implied volatility if we decide either to:</p>
+<ul>
+<li>set the undefined local volatility to zero</li>
+<li>take the absolute value of the local variance</li>
+<li>search for the closest defined local volatility on the log-moneyness axis</li>
+<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
+</ul>
+<figure><img src="/post/svi_zeliade_arb_zero.png"/><figcaption>
+            <h4>Total variance after flooring the local variance at zero.</h4>
+        </figcaption>
+</figure>
+
+<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
+that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
+<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
+is not going to improve anything.</p>
+<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
+<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
+Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
+More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
+So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
+<p>There is yet another solution to produce a similar effect while still working at the local volatility level: if there is an arbitrage with the previous expiry at a given moneyness,
+we compute the local volatility ignoring the previous expiry (eventually extrapolating in constant manner) and we override the previous expiry local volatility for this moneyness.
+In terms of implied variance, this would correspond to removing the arbitrageable part of a given expiry, and replacing it with a linear interpolation between encompassing expiries, working backwards in time.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
+  </h1>
+  <time datetime="2016-05-29T17:01:00&#43;0200" class="post-date">Sun, May 29, 2016</time>
+  <p>I had a look at how to price under Local Volatility with Cash dividends in <a href="/post/dupire_cash_dividend/">my previous post</a>. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).</p>
+<p>I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends <a href="http://www.lorenzobergomi.com/#!blank/cnec">in the book of Lorenzo Bergomi</a>, one can rely on the
+classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:</p>
+<!-- raw HTML omitted -->
+<p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
+<p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
+<p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
+<figure><img src="/post/dupire_labordere_ll3_modelvolraw.png"/><figcaption>
+            <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
+<figure><img src="/post/dupire_labordere_ll3_modelvol.png"/><figcaption>
+            <h4>Pure process model volatility.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The equivalent pure process Black vols looks like this:
+<figure><img src="/post/dupire_labordere_ll3_blackvol.png"/><figcaption>
+            <h4>Pure process Black volatility</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
+<figure><img src="/post/dupire_labordere_ll3_localvol.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>While the one of the pure process is:
+<figure><img src="/post/dupire_labordere_ll3_purelv.png"/><figcaption>
+            <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
+<p>So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as</p>
+<p>\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
+\(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.</p>
+<p>Not applying any particular policy would mean that the stock price can become negative:
+\(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
+<p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
+<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure><img src="/post/dupire_labordere_liquidator_modelvol.png"/><figcaption>
+            <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
+        </figcaption>
+</figure>
+
+It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
+<figure><img src="/post/dupire_labordere_liquidator_localvol.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
+<p>Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
+  </h1>
+  <time datetime="2016-05-19T17:01:00&#43;0200" class="post-date">Thu, May 19, 2016</time>
+  <p>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
+The extension to continuous dividend yield is described in many papers or books:</p>
+<!-- raw HTML omitted -->
+<p>With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
+approximations available to price an option supposing a constant (spot) volatility and jumps, for example, <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">this one</a>.</p>
+<p>Labordère, in his paper <a href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306">Calibration of local stochastic volatility models to market smiles</a>, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:</p>
+<!-- raw HTML omitted -->
+<p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
+we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
+<p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
+<figure><img src="/post/dupire_labordere_ll1.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
+</figure>
+
+<p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have</p>
+<!-- raw HTML omitted -->
+<p><figure><img src="/post/dupire_labordere_ll3.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/dupire_labordere_ll3shift.png"/><figcaption>
+            <h4>Look, when we shift by the dividend!</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
+<p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
+<figure><img src="/post/dupire_labordere_policy.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The analytical approximations lead to another different local volatility from both policies, but don&rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
+Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
+<p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
+<figure><img src="/post/dupire_labordere_yield3.png"/><figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
+</figure>
+
+The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
+<figure><img src="/post/dupire_labordere_yield3e.png"/><figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
+<p>I would have expected a much better accuracy from Labordère&rsquo;s approach, it&rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.</p>
+<p><strong>Update</strong>: A <a href="/post/dupire_cash_dividend_part2">follow-up</a> to this post where I resolve the mysterious remaining error.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
+  </h1>
+  <time datetime="2016-05-12T19:32:42&#43;0200" class="post-date">Thu, May 12, 2016</time>
+  <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
+<p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
+<figure><img src="/post/svi_sabr_parabola.png"/><figcaption>
+            <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
+        </figcaption>
+</figure>
+
+<p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/page/4/">Previous</a></p>
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/6/">Next</a></p>
+    </main>
+
+    
+      
+    
+  </body>
+</html>
