@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.87.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +74,7 @@
   <time datetime=2018-10-07T20:56:42&#43;0100 class="post-date">Sun, Oct 7, 2018</time>
   <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
 <p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
 
     n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
 
