@@ -73,6 +73,61 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/issues_with_bdk_extrapolation/">Benaim et al. extrapolation does not work on equities</a>
+  </h1>
+  <time datetime="2016-10-04T09:55:32&#43;0100" class="post-date">Tue, Oct 4, 2016</time>
+  <p>We have seen <a href="/mystic_parabola.md">earlier</a> that a simple parabola allows to capture the smile of AAPL 1m options surprisingly well. For very high and very low strikes,
+the parabola does not obey Lee&rsquo;s moments formula (the behavior in the wings needs to be at most linear in variance/log-moneyness).</p>
+<p>Extrapolating the volatility smile in the low or high strikes in a smooth \(C^2\) fashion is however not easy.
+A surprisingly popular so called &ldquo;arbitrage-free&rdquo;
+method is the <a href="http://www.quarchome.org/RiskTailsPaper_v5.pdf">extrapolation of Benaim, Dodgson and Kainth</a> developed to remedy the negative density of SABR in interest rates as
+well as to give more control over the wings.</p>
+<p>The call options prices (right wing) are extrapolated as:
+$$
+C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
+$$
+\(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
+$$
+c_R =\frac{{C'}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C'}_{R}^{2}}{C_{R}^2}+ \frac{{C''}_R}{C_R}\right) + \nu \right)\text{,} \<br>
+$$
+$$
+b_R =  - \frac{{C'}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\<br>
+$$
+$$
+a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
+$$
+The \( \ nu \) parameters allow to adjust the shape of the extrapolation.</p>
+<p>Unfortunately it does not really work for equities.
+Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
+our best fit parabola of the AAPL 1m options:
+<figure><img src="/post/bdk-explodes.png"/><figcaption>
+            <h4>BDK explodes on AAPL 1m options.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The \( \nu\) parameter does not help either.</p>
+<p><strong>Update Dec 5 2016</strong>
+Here are details about call option price, slope, curvature:
+The strike cutoff is \(K_R=115.00001307390328\). For the parabola,</p>
+<p>$$\begin{align}
+C(K_R)&amp;=0.014516747104643029,\\<br>
+C'(K_R)&amp;=-0.002899391065224203,\\<br>
+C''(K_R)&amp;=0.000750774042345718.
+\end{align}$$</p>
+<p>And the BDK parameters for the right wing:</p>
+<p>$$a_R=34.279812, b_R=-10292.881677, c_R=737108.461636.$$</p>
+<p>For the least squares spline,
+$$\begin{align}
+C(K_R)&amp;=0.03892674300426042,\\<br>
+C'(K_R)&amp;=-0.00171386452499034,\\<br>
+C''(K_R)&amp;=0.0007835686926501496.
+\end{align}$$
+which results in
+$$a_R=131.894286, b_R=-26839.217814, c_R=1550285.706087.$$</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/">AES for Monte-Carlo</a>
   </h1>
   <time datetime="2016-08-17T09:55:32&#43;0100" class="post-date">Wed, Aug 17, 2016</time>
@@ -479,21 +534,6 @@ The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happen
 <p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
 <p>I would have expected a much better accuracy from Labordère&rsquo;s approach, it&rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.</p>
 <p><strong>Update</strong>: A <a href="/post/dupire_cash_dividend_part2">follow-up</a> to this post where I resolve the mysterious remaining error.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/svi_sabr_or_parabola/">SVI, SABR, or parabola on AAPL?</a>
-  </h1>
-  <time datetime="2016-05-12T19:32:42&#43;0200" class="post-date">Thu, May 12, 2016</time>
-  <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
-<p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
-<figure><img src="/post/svi_sabr_parabola.png"/><figcaption>
-            <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
-        </figcaption>
-</figure>
-
-<p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
 
   
 </article>

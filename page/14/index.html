@@ -73,6 +73,26 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/">Maxima for Symbolic Calculus</a>
+  </h1>
+  <time datetime="2013-10-02T15:06:00Z" class="post-date">Wed, Oct 2, 2013</time>
+   
+
+A few years ago, I found an interesting open source symbolic calculus software called <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html%E2%80%8E">Xcas</a>. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.<br />Google pointed me to another popular open source package, <a href="http://maxima.sourceforge.net/">Maxima</a>. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:
+
+(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
+(%o14)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D(x) := sqrt((lambda - rho eta x)&nbsp; + (- x&nbsp; + x) eta )
+(%i15) G(x) := (lambda - rho*eta*x - D(x))/(lambda - rho*eta*x +D(x));
+(%o15)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; G(x) := -------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lambda - rho eta x + D(x)
+(%i16) tex(taylor((1-exp(-t*D(x)))/(1-G(x)*exp(-t*D(x)))*(lambda - rho*eta*x - D(x)),x,0,3));
+$$-{{\left(e^{t\,\lambda}-1\right)\,\eta^2\,x}\over{2\,e^{t\,\lambda}\,\lambda}}+{{\left(\left(4\,e^{t\,\lambda}\,t\,\eta^3\,\rho+\left(4\,\left(e^{t\,\lambda}\right)^2-4\,e^{t\,\lambda}\right)\,\eta^2\right)\,\lambda^2+\left(\left(-4\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,\eta^3\,\rho-2\,e^{t\,\lambda}\,t\,\eta^4\right)\,\lambda+\left(\left(e^{t\,\lambda}\right)^2-1\right)\,\eta^4\right)\,x^2}\over{8\,\left(e^{t\,\lambda}\right)^2\,\lambda^3}}+{{\left(\left(8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^4\,\rho^2-16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^3\,\rho\right)\,\lambda^4+\left(16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\,\rho^2+\left(-8\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^5+\left(16\,\left(e^{t\,\lambda}\right)^3-16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^3\right)\,\rho+16\,\left(e^{t\,\lambda}\right)^2\,t\,\eta^4\right)\,\lambda^3+\left(\left(-16\,\left(e^{t\,\lambda}\right)^3+16\,\left(e^{t\,\lambda}\right)^2\right)\,\eta^4\,\rho^2+\left(-16\,\left(e^{t\,\lambda}\right)^2-8\,e^{t\,\lambda}\right)\,t\,\eta^5\,\rho+2\,\left(e^{t\,\lambda}\right)^2\,t^2\,\eta^6+\left(-8\,\left(e^{t\,\lambda}\right)^3+8\,e^{t\,\lambda}\right)\,\eta^4\right)\,\lambda^2+\left(\left(12\,\left(e^{t\,\lambda}\right)^3-12\,e^{t\,\lambda}\right)\,\eta^5\,\rho+\left(2\,\left(e^{t\,\lambda}\right)^2+4\,e^{t\,\lambda}\right)\,t\,\eta^6\right)\,\lambda+\left(-2\,\left(e^{t\,\lambda}\right)^3-\left(e^{t\,\lambda}\right)^2+2\,e^{t\,\lambda}+1\right)\,\eta^6\right)\,x^3}\over{32\,\left(e^{t\,\lambda}\right)^3\,\lambda^5}}+\cdots $$
+Regarding Taylor expansion, there seems to be quite a few options possible, but I found that the default expansion was already relatively easy to read. XCas produced less readable expansions, or just failed. 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/">Martin Odersky teaches Scala to the Masses</a>
   </h1>
   <time datetime="2013-09-17T20:11:00Z" class="post-date">Tue, Sep 17, 2013</time>
@@ -153,19 +173,6 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
   </h1>
   <time datetime="2013-07-30T12:10:00Z" class="post-date">Tue, Jul 30, 2013</time>
   <p>I was used to <!-- raw HTML omitted -->Scilab<!-- raw HTML omitted --> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<!-- raw HTML omitted --><!-- raw HTML omitted -->Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <!-- raw HTML omitted -->Arbitrage Free SABR problem<!-- raw HTML omitted -->. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I heard about <!-- raw HTML omitted -->Octave<!-- raw HTML omitted -->, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 4.3s<!-- raw HTML omitted -->Octave 4.1s<!-- raw HTML omitted --><!-- raw HTML omitted -->I then added the keyword sparse when I build the tridiagonal matrix and end up with:<!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 0.04s<!-- raw HTML omitted -->Octave 0.02s<!-- raw HTML omitted -->Scala 0.034s (first run)<!-- raw HTML omitted -->Scala 0.004s (once Hotpot has kicked in)<!-- raw HTML omitted --><!-- raw HTML omitted -->So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<!-- raw HTML omitted --><!-- raw HTML omitted -->In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/joda-localdatetime-vs-datetime/">Joda LocalDateTime vs DateTime</a>
-  </h1>
-  <time datetime="2013-07-17T14:11:00Z" class="post-date">Wed, Jul 17, 2013</time>
-  <p>Joda has the concept of LocalDate <a href="http://joda-time.sourceforge.net/api-release/org/joda/time/LocalDateTime.html">LocalDateTime</a> and <a href="http://joda-time.sourceforge.net/api-release/org/joda/time/DateTime.html">DateTime</a>. The LocalDate is just a simple date, while DateTime is a date and a time zone.</p>
-<p>Where I work we have a similar distinction, although not the same: a simple &ldquo;absolute&rdquo; date object without time vs a relative date (a timestamp) like the JDK Date.</p>
-<p>The standard JDK Date class is a date without a time zone, but Sun deprecated in JDK 1.1 all methods allowing to use it like a LocalDate, forcing to use it through a Calendar (i.e. like a DateTime), that is, with a TimeZone.</p>
-<p>I have found one explanation for a potential use case of LocalDateTime vs DateTime: when you take an appointment to the doctor for July 22nd at 10am, the future date is a fixed event. Some people say you just don&rsquo;t care about the TimeZone in this case, and therefore use LocalDateTime. I think it is a bit more subtle than that. One could think of using fixed arbitrary TimeZone, it could just easily be set to UTC or to the default Java time zone or even the correct one. While it&rsquo;s not typically what the user want to worry about, it could be a default setting (like in Google Calendar or in your OS). And that is exactly what the LocalDateTime does internally, it uses a fixed, non modifiable TimeZone.</p>
-<p>If the future event is in a few years and you want to store it in a database, it can become more problematic because daylight saving might not be well determined yet. The number stored today might not mean the same thing in a few years. I am not sure if it can be a real issue, but I am <a href="http://stackoverflow.com/questions/9047501/how-do-you-keep-timezone-and-calendar-up-to-date-after-a-time-zone-change">not the only one</a> to worry about that. As the LocalDateTime internally relies on UTC, it is not affected by this.</p>
-<p>There is another more technical use case for LocalDateTime, if you have a list of dates in a contract, they are all according to the contract TimeZone, you then probably don&rsquo;t want to specify the TimeZone for each date. The question is then more is the DateTime concept a good idea?</p>
 
   
 </article>

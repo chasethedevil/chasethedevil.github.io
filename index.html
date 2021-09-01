@@ -73,6 +73,31 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/koonin-on-climate-book-review/">My Review of Steven Koonin&#39;s Book on Climate</a>
+  </h1>
+  <time datetime="2021-08-30T07:56:42&#43;0100" class="post-date">Mon, Aug 30, 2021</time>
+  <p>Steven Koonin, who was Secretary for Science, Department of Energy, in the Obama administration recently wrote a somewhat controversial book on climate science with the title <em>Unsettled</em>.  I was curious to read what kind of critics a physicist who partly worked in the field had, even if I believe that climate warming is real, and humans have an influence on it. It turns out that some of his remarks regarding models are relevant way beyond climate science, but some other subjects are not as convincing.</p>
+<p>The first half of the book explains how the influence of humans on climate is not as obvious as what many graphs suggest, even those published by well known groups such as CSSR or IPCC.
+A recurring theme is plots presented without context/with the wrong context. Many times, when we extend the time span in the past, a very different picture emerges of cyclic variations with cycles of different lengths and amplitudes. Other times, the choice of measure is not appropriate. Yey another aspect is the uncertainty of the models, which seems too rarely discussed in reports/papers, as well as the necessary model parameters tweaking.</p>
+<p>When it comes to CO2, Koonin explains that the decrease in cooling power is much much lower from 400ppm to 800ppm than from 0ppm to 400ppm, because, at 400ppm (the 2019 average) most of the light frequencies are already absorbed. The doubling corresponds only to a 0.8% change in heat intercepting. 1% is however not so small, as it corresponds to 3 degrees Kelvin/Celcius variation. Furthermore, while humans may increase warming with greenhouse gas, they also increase cooling via aerosols, the latter being much less well known and measured (with those taken into account, we arrive at the 1 degree Celcius impact). The author also presents some plots on CO2 on a scale of millions of years to explain that we live in an era of low CO2 ppm. While an interesting fact, this may be a bit misleading since, if we look at at <a href="https://climate.nasa.gov/vital-signs/carbon-dioxide/">up to 800,000 years back</a>, the CO2 concentration stayed between 200 and 250 ppm, with an explosion only in the recent decades. The <a href="https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide">climate.gov website</a> provides more context around the latter plot:</p>
+<blockquote>
+<p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p>
+</blockquote>
+<p>What I found disappointing is the absence of the <a href="https://www.climatefiles.com/exxonmobil/1982-memo-to-exxon-management-about-co2-greenhouse-effect/">famous 1982 plot from Exxon</a> (p. 7), see also <a href="https://gizmodo.com/exxon-predicted-2019-s-ominous-co2-milestone-in-1982-1834748763">the following article with nice red lines for 2019</a>.</p>
+<figure><img src="/post/exxon_co2ppm.jpg"/><figcaption>
+            <h4>The Exxon 1982 PPM Plot.</h4>
+        </figcaption>
+</figure>
+
+<p>On this plot, the relation between the temperature increase and the CO2 ppm looks linear, which would be somewhat more alarming.</p>
+<p>The conclusion from the first half of the book may be summarized as follows: while climate warming is real, it is not so obvious how much of it is due to humans. The author agrees for maybe around 1 degree Celcius, and suggests it is not necessarily accelerating. The causes are much less clear. There are some interesting subtleties: temperature increases in some places and decreases in others; around cities, the increase mostly due to the expansion of cities (more buildings).</p>
+<p>I found the second half to be in contradiction with the first half, although it is clearly not the author&rsquo;s intent: the second half focuses on how to address humans influence on the climate, and several times, suggests a strong influence of humans emissions on the climate, while the first half of the book was all about minimizing that aspect. This is especially true for carbon emissions, where it is suggested in the first half that additional emisssions will have a comparatively small impact.</p>
+<p>The overall message is relatively simple: reducing emissions won&rsquo;t help much as concentration will only increase in the coming decades (but then wouldn&rsquo;t it perhaps be so bad to think beyond the coming decades?). Also the scales of emission reductions necessary for a minimum increase (2 degrees)  is not realistic at all in the world we live in. Instead, we&rsquo;d be better off trying to adapt.</p>
+<p>Overall, the author denounce the issue of scientific integrity, which is too often absent or not strongly present enough. Having reviewed many papers, and published some in specialized journals, I can&rsquo;t say I am surprised. Peer review is important, but perhaps not good enough by itself, especially in the short run. Over decades, I think the system may autocorrect itself however.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/github-and-ssh/">Github and SSH setup</a>
   </h1>
   <time datetime="2021-08-16T07:56:42&#43;0100" class="post-date">Mon, Aug 16, 2021</time>
@@ -323,29 +348,6 @@ is located a little beyond 5000, which could mean that the market believes that 
 <p>42</p>
 </blockquote>
 <p>Then I looked at one exercise they did in class, which was simply to find different ways to pay 10 euros with bills of 10, 5 and coins of 2 and 1 euro(s).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/python-numba-overrated/">Numba, Pypy Overrated?</a>
-  </h1>
-  <time datetime="2019-02-12T20:56:42&#43;0100" class="post-date">Tue, Feb 12, 2019</time>
-  <p>Many benchmarks show impressive performance gains with the use
-of <a href="https://numba.pydata.org/">Numba</a> or <a href="https://www.pypy.org/">Pypy</a>. Numba allows to compile just-in-time some specific methods, while Pypy takes
-the approach of compiling/optimizing the full python program: you use it just like the standard
-python runtime. From those benchmarks, I imagined that those  tools would improve my 2D Heston PDE solver
-performance easily. The initialization part of my program contains embedded for loops over several 10Ks elements.
-To my surprise, numba did not improve anything (and I had to isolate the code, as it would
-not work on 2D numpy arrays manipulations that are vectorized). I surmise it does not play well
-with scipy sparse matrices.
-Pypy did not behave better, the solver became actually slower than with the standard python
-interpreter, up to twice as slow, for example, in the case of the main solver loop which only does matrix multiplications and LU solves sparse systems. I did not necessarily expect any performance improvement in this specific loop, since it only consists in a few calls to expensive scipy calculations. But I did not expect a 2x performance drop either.</p>
-<p>While I am sure that there are good use cases, especially for numba, I was a bit disappointed
-that it likely would require to significantly change my code to have any effect (possibly to not do the initialization with scipy sparse matrices, but then, it is not so clear how). Also, I
-find <a href="https://www.ibm.com/developerworks/community/blogs/jfp/entry/A_Comparison_Of_C_Julia_Python_Numba_Cython_Scipy_and_BLAS_on_LU_Factorization?lang=en">most</a> <a href="https://modelingguru.nasa.gov/docs/DOC-2676">benchmarks</a> dumb. For example, the 2D ODE solver of the latter uses a simple dense 2D numpy array. On real code,
-things are not as simple.</p>
-<p>Next I should try Julia again out of curiosity. I tried it <a href="/post/modern-programming-language-for-monte-carlo/">several years ago</a> in the context of a simple Monte-Carlo simulation and my experiment at the time
-was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
 
   
 </article>
