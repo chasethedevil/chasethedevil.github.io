@@ -73,6 +73,53 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/i-need-another-db-framework/">I Need Another DB Framework!</a>
+  </h1>
+  <time datetime="2005-08-23T19:37:00Z" class="post-date">Tue, Aug 23, 2005</time>
+  <p>I am currently facing a problem that neither <a href="http://www.hibernate.org">Hibernate</a> nor <a href="http://ibatis.apache.org/">iBatis</a> solves nicely. I also looked at other ORM or just DB framework, without success.</p>
+<p>What I would need is a framework that generates PreparedStatements with a query by Criteria like API. I have many queries that are similar but varying according to different input parameters. iBatis can handle this, but for complex queries and scenarios, the XML becomes completely unreadable, and you therefore loose any advantage that iBatis was bringing with the externalization of SQL statements in XML. The other issue I have with using iBatis is that for another part of my project, the automatic generation of SQL statements a-la Hibernate is useful.<!-- raw HTML omitted --> <!-- raw HTML omitted --> Hibernate has a very nice <a href="http://www.hibernate.org/hib_docs/v3/reference/en/html/querycriteria.html">Query by Criteria</a> API, but it lacks just a tiny bit of flexibility in customizing queries. For example, I could not find a way to specify a &ldquo;USE INDEX(index_name)&rdquo; in the generated SQL, after the SELECT FROM xxx and before the rest of the query. I did not find either a way to specify the use of a &ldquo;STRAIGHT_JOIN&rdquo; instead of an INNER JOIN. These are all MySQL specific issues, but those little things are extremely useful at improving some of my queries performances. Writing N sql queries hard coded is not a good option, since this N can be quite big, which is why I am using Query by Criteria in the first place.</p>
+<p>So is there a need for yet another DB framework?</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/del.icio.us-toolbar-customized/">del.icio.us toolbar customized</a>
+  </h1>
+  <time datetime="2005-08-21T05:20:00Z" class="post-date">Sun, Aug 21, 2005</time>
+   
+
+When I bookmark articles with <a href="http://del.icio.us">delicious</a>, I like to keep the content on my hard drive, because pages sometimes change, or are removed, or I want to do local searches. I believe this is one reason some people like furl (furl keeps a copy on their server that only yourself can read, but does not allow search).<br><br>A combination of slogger and delicious could solve partially the problem. But it is not integrated, I can't get my local version from delicious, so I loose the tagging, listing and all other plus from delicious.<br><br>I added my own feature to the delicious toolbar, which I like very much. This new toolbar saves automatically the file you bookmark (on the + button), and will add a link in your delicious home to the local version (if it exists).<br><br>I have it publicly accessible at <a href="http://perso.wanadoo.fr/logos01/deltoolbar.html">http://perso.wanadoo.fr/logos0</a><a href="http://perso.wanadoo.fr/logos01/deltoolbar.html">1/deltoolbar.html</a> <br><br>It is not meant to be used by everybody as it is not official. But the page will give you an idea of what it does. If you think it is useful, I will improve it, otherwise it will stay the way it is because it fits my use.<br><br /><span class="technoratitag">Categories: <a href="http://del.icio.us/tag/delicious" rel="tag">delicious</a>, <a href="http://del.icio.us/tag/firefox" rel="tag">firefox</a>, <a href="http://del.icio.us/tag/toolbar" rel="tag">toolbar</a></span>
+
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/inside-the-java-virtual-machine/">Inside the Java Virtual Machine</a>
+  </h1>
+  <time datetime="2005-08-18T11:03:00Z" class="post-date">Thu, Aug 18, 2005</time>
+   
+
+I am reading an old book, <a href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;camp=1789&amp;tag=michelin-20&amp;creative=9325&amp;path=tg/detail/-/0079132480">Inside the Java Virtual Machine</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=ur2&amp;o=1" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />. Some old books don't age, and this is one of them. The chapter on the Java Virtual Machine is just excellent and should be read by every Java developer. It explains each step a JVM does when you run a Java program, very clearly.<br /><br />You could get plenty of stupid interview questions from it like: How is the Java stack used? Between method area, heap, pc register, stack which one are shared among threads?<br /><br />Also they saw the full potential of Java quite early on (1997). They explain how the JVM specs allow for very different implementations, ones that can run in different environments, for example, simplifying a bit: low memory, embedded world, or lots of memory, mainframe world. It is not an accident if Microsoft chosed a very similar design for the CLI of .NET, they have been looking for getting into the embedded area for quite some time, and apparently, they are making good progress.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/firefox-shortcut-url-as-command-line-for-the-web/">Firefox Shortcut URL as Command Line for the Web</a>
+  </h1>
+  <time datetime="2005-08-16T13:42:00Z" class="post-date">Tue, Aug 16, 2005</time>
+   
+
+I have been doing some work on Firefox extensions. Mozilla/Firefox is a really interesting world, it is extremely flexible, you can make it transform the web the way you want.<br> <br> Recently, someone started <a href="http://www.yubnub.org">YubNub</a>, the "command line for the web", a very simple idea, but useful. This is a bit similar to the Firefox Search Bar, except more powerful, and quicker to use. Mozilla developers actually had that idea a long time ago (around 2000), it is called shortcut url. Basically to any bookmark, you can add a shortcut, you then just have to type that shortcut (let say g for google.com) in the address bar to go to the address pointed by the shortcut. This shortcut accepts 1 parameter (represented by <tt>%s</tt> in the URL), so you can do "<tt>g chasethedevil</tt>" to search google for "<tt>chasethedevil</tt>" if you set up your shortcut properly. Firefox can build this dynamic URL automatically for you if in an input box, you right click and choose "Add a keyword for this search".<br> <br> Now we have seen the Firefox address bar can be used to quickly perform a search on a selected website. But this can be much more powerful. As <a  href="http://www.mvps.org/dmcritchie/firefox/kws.htm">this</a> page suggests, you can associate a bookmarklet with a shortcut, you can execute whatever javascript you wish. One very simple example is: <br /><tt>javascript:void(location.href=<br />'http://web.archive.org/web/*dc_/'+location.href)</tt>. This shows how you can use the address bar in a very flexible manner. It would be easy to support a multiple parameters search using a bookmarklet. There is <a  href="http://www.wormus.com/leakytap/Internet/CustomKeywords/">a whole list</a> of commands very similar to yubnub ones in addition to those on the previously mentioned link.<br> <br> I first thought about writing a simple extension to have my command line in Firefox (for example by extending the getShortcutOnURI function), but after some information gathering, I discovered it was already possible. Firefox is truly amazing. It is a bit of a shame that this functionality is not a bit better exposed to the user.<br> <br> tags: <a rel="tag" href="http://technorati.com/tag/firefox">Firefox</a> <a rel="tag" href="http://technorati.com/tag/firefox">shortcut</a> <a  rel="tag" href="http://technorati.com/tag/firefox">extension</a> <a  rel="tag" href="http://technorati.com/tag/firefox">bookmarklet</a><br>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/hibernate-criteria-api-vs-hql-overhead/">Hibernate Criteria API vs HQL Overhead</a>
   </h1>
   <time datetime="2005-08-10T14:16:00Z" class="post-date">Wed, Aug 10, 2005</time>
@@ -139,56 +186,10 @@ This <a href="http://martinfowler.com/articles/languageWorkbench.html">Fowler ar
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/jython-instead-of-ant-sample-code/">Jython instead of Ant: sample code</a>
-  </h1>
-  <time datetime="2005-07-16T01:50:00Z" class="post-date">Sat, Jul 16, 2005</time>
-   
-
-Here is an example of how to use jython to deploy a web application under tomcat. The application is supposed here to be WAR packaged in a 'web' directory. Libraries used for the web-app are already in web/WEB-INF/lib, classes are compiled automatically by Eclipse under web/WEB-INF/classes, and resources are copied automatically by Eclipse. If necessary, it is very easy to script those actions in the python script, with very little code.<br /><br />The longest code is the TreeCopier class, that should probably be part of any python make script. The reload method could be reworked to provide a generic method for reloading a tomcat web application. The following is just a working sample code as proof of concept.<br /><pre><br /><span style="color: rgb(0, 0, 255);"># call jython make.py method1 method2, ... </span><br /><span style="color: rgb(0, 0, 255);"># to invoke method1 and then method2, ...</span><br /><br /><span style="color: rgb(160, 32, 240);">import</span> sys, os, os.path, shutil, urllib, base64, re<br />web_dir = '<span style="color: rgb(255, 0, 255);">web</span>'<br />webapp_name = '<span style="color: rgb(255, 0, 255);">myrestaurant</span>'<br />tomcat_dir = '<span style="color: rgb(255, 0, 255);">c:/java/Tomcat 5.5</span>'<br /><br /><span style="color: rgb(0, 0, 255);">#copy web directory to tomcat app dir</span><br /><span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">deploy</span>():<br />   target_dir = tomcat_dir+'<span style="color: rgb(255, 0, 255);">/webapps</span>'+'<span style="color: rgb(255, 0, 255);">/</span>'+webapp_name<br />   copier=LatestTreeCopier()<br />   copier.copytree(web_dir,target_dir)<br />   <span style="color: rgb(128, 64, 64);"><b>print</b></span> "<span style="color: rgb(255, 0, 255);">copied %s file(s) to %s</span>" % (copier.count,target_dir)<br /><br /><span style="color: rgb(0, 0, 255);">#reload tomcat web application</span><br /><span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">reload</span>():<br />   url = "<span style="color: rgb(255, 0, 255);">http://localhost:8080/manager/reload?path=/</span>"+webapp_name<br />   base64string = base64.encodestring("<span style="color: rgb(255, 0, 255);">%s:%s</span>"%('<span style="color: rgb(255, 0, 255);">michelin</span>','<span style="color: rgb(255, 0, 255);">michelin</span>'))[:-1]<br />   opener = urllib.URLopener()<br />   opener.addheader('<span style="color: rgb(255, 0, 255);">Authorization</span>',"<span style="color: rgb(255, 0, 255);">Basic %s</span>"%base64string)<br />   h = opener.open(url)<br />   <span style="color: rgb(128, 64, 64);"><b>print</b></span> h.read()<br />   h.close()<br /><br /><span style="color: rgb(128, 64, 64);"><b>class</b></span> <span style="color: rgb(0, 128, 128);">TreeCopier</span>:<br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">__init__</span>(self):<br />       self.count = 0<br /><br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">filter</span>(self, srcname, dstname):<br />       <span style="color: rgb(128, 64, 64);"><b>return</b></span> true<br /><br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">filterDir</span>(self, srcname):<br />       <span style="color: rgb(128, 64, 64);"><b>return</b></span> true<br /><br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">copytree</span>(self, src, dst, symlinks=0):<br />       """<span style="color: rgb(255, 0, 255);">Recursively copy a directory tree using copy2().</span><br /><span style="color: rgb(255, 0, 255);">        </span>"""<br />       names = os.listdir(src)<br />       <span style="color: rgb(128, 64, 64);"><b>if</b></span> <span style="color: rgb(128, 64, 64);"><b>not</b></span> os.path.exists(dst):<br />           os.mkdir(dst)<br />       count = 0<br />       <span style="color: rgb(128, 64, 64);"><b>for</b></span> name <span style="color: rgb(128, 64, 64);"><b>in</b></span> names:<br />           srcname = os.path.join(src, name)<br />           dstname = os.path.join(dst, name)<br />           <span style="color: rgb(128, 64, 64);"><b>try</b></span>:<br />               <span style="color: rgb(128, 64, 64);"><b>if</b></span> symlinks <span style="color: rgb(128, 64, 64);"><b>and</b></span> os.path.islink(srcname):<br />                   linkto = os.readlink(srcname)<br />                   os.symlink(linkto, dstname)<br />               <span style="color: rgb(128, 64, 64);"><b>elif</b></span> os.path.isdir(srcname):<br />                   <span style="color: rgb(128, 64, 64);"><b>if</b></span> self.filterDir(srcname):<br />                       self.copytree(srcname, dstname, symlinks)<br />               <span style="color: rgb(128, 64, 64);"><b>else</b></span>:<br />                   <span style="color: rgb(128, 64, 64);"><b>if</b></span> self.filter(srcname, dstname):<br />                       shutil.copy2(srcname, dstname)<br />                       <span style="color: rgb(128, 64, 64);"><b>print</b></span> srcname<br />                       count += 1<br />           <span style="color: rgb(128, 64, 64);"><b>except</b></span> (IOError, os.error), why:<br />               <span style="color: rgb(128, 64, 64);"><b>print</b></span> "<span style="color: rgb(255, 0, 255);">Can't copy %s to %s: %s</span>"%('<span style="color: rgb(255, 0, 255);">srcname</span>', '<span style="color: rgb(255, 0, 255);">dstname</span>', str(why))<br />       self.count += count<br /><br /><span style="color: rgb(128, 64, 64);"><b>class</b></span> <span style="color: rgb(0, 128, 128);">LatestTreeCopier</span>(TreeCopier):<br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">__init__</span>(self):<br />       self.count = 0<br />       self.excludePattern = re.compile(<br />               '<span style="color: rgb(255, 0, 255);">(^\.svn.*|.*\.swp$|.*\.bak$|.*~$|.*\.swo$)</span>',re.I)<br />       self.excludeDirPattern = re.compile('<span style="color: rgb(255, 0, 255);">^\.svn.*</span>',re.I)<br /><br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">filter</span>(self, srcname, dstname):<br />       <span style="color: rgb(128, 64, 64);"><b>return</b></span> (<span style="color: rgb(128, 64, 64);"><b>not</b></span> self.excludePattern.match(os.path.basename(srcname)))<br />               <span style="color: rgb(128, 64, 64);"><b>and</b></span> (os.path.getmtime(srcname) &gt; os.path.getmtime(dstname))<br /><br />   <span style="color: rgb(128, 64, 64);"><b>def</b></span> <span style="color: rgb(0, 128, 128);">filterDir</span>(self, srcname):<br />       <span style="color: rgb(128, 64, 64);"><b>return</b></span> (<span style="color: rgb(128, 64, 64);"><b>not</b></span> self.excludeDirPattern.match(os.path.basename(srcname)))<br /><br /><br /><span style="color: rgb(128, 64, 64);"><b>if</b></span> __name__ == "<span style="color: rgb(255, 0, 255);">__main__</span>":<br />   <span style="color: rgb(128, 64, 64);"><b>if</b></span> (len(sys.argv)) &gt;= 2:<br />       methods = sys.argv[1:]<br />       <span style="color: rgb(128, 64, 64);"><b>for</b></span> m <span style="color: rgb(128, 64, 64);"><b>in</b></span> methods:<br />           method = m+'<span style="color: rgb(255, 0, 255);">()</span>'<br />           <span style="color: rgb(128, 64, 64);"><b>print</b></span> "<span style="color: rgb(255, 0, 255);">launching %s</span>" % method<br />           eval(method)<br />   <span style="color: rgb(128, 64, 64);"><b>else</b></span>:<br />       deploy()<br />       reload()<br /></pre>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/java-development-without-ant/">Java development without Ant</a>
-  </h1>
-  <time datetime="2005-07-12T16:16:00Z" class="post-date">Tue, Jul 12, 2005</time>
-  <p>When <a href="http://jakarta.apache.org/ant">Ant</a> came out, I welcomed it. It was better than Makefiles for Java, it solved the path and classpath format difference between Windows and Linux, did not rely on shell programs. It did provide a platform independent way for building Java software. At that time, there was another alternative, <a href="http://jmk.sourceforge.net">JMK</a> which had a lisp like syntax, and solved the same problems as Ant. But Ant was backed by apache, and this were the times of XML everywhere.<!-- raw HTML omitted --> I got more and more fed up with ant scripts over the years. During a long time you had to resort to an XML trick just to include other ant file, you did not have conditionals, but more importantly, it is quite a pain to write long ant scripts in XML. XML is not that good to write logic with, XSLT did not become as big as it could have been partly for this reason.</p>
-<p>Recently, Java IDEs (<a href="http://www.eclipse.org">Eclipse</a>) have made Java coding really comfortable, but why is it that for each project, you need to have to setup your project classpath, build, and write an ant script that does the same? In many companies I have seen ant scripts taking minutes to do a build in order to test your latest modification. This is crazy when it took a few seconds to eclipse to compile it, and it&rsquo;s already compiled, so why not using that output for testing your development? Ant, despite its codebase and age, does not do much: it does not calculate dependencies, it leaves that to the java compiler, it does not keep checksums of files to check if one has changed, it just uses file system dates (which can be a problem if you retrieve an older version of some file).</p>
-<p>Now I am using a <a href="http://www.jython.org">Jython</a> script that justs copies my eclipse build and packages it appropriately, it works well, it is fast, it is flexible (all the power of python), and platform independent. You need to be a bit careful how you choose to design your Jython script, but hey, even with Ant limitations on messing everything around, I have seen so many awful Ant scripts.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/lion/">lion</a>
-  </h1>
-  <time datetime="2005-06-28T17:00:00Z" class="post-date">Tue, Jun 28, 2005</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/top_lion.1.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/400/top_lion.1.jpg" alt="" border="0" /></a><br /><br />test
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/this-is-who-i-am/">This is who I am</a>
-  </h1>
-  <time datetime="2005-06-19T18:20:00Z" class="post-date">Sun, Jun 19, 2005</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/IMG_3839-1.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/200/IMG_3839-1.jpg" border="0" alt="" /></a>
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/38/">Previous</a></p>
-
+<p style="text-align:right; width:50%;  display: inline-block;"><a href="/page/40/">Next</a></p>
     </main>
 
     

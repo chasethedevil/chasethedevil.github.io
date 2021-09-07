@@ -73,6 +73,70 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/bilinear-gaussian-lanczos-downsampling/">Bilinear Gaussian Lanczos? Downsampling!</a>
+  </h1>
+  <time datetime="2006-03-17T17:32:00Z" class="post-date">Fri, Mar 17, 2006</time>
+   
+
+Not easy to choose a downsampling algorithm. Some links:<br><ul><li><a href="http://www.mplayerhq.hu/DOCS/tech/swscaler_methods.txt" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">mplayer</a>: advises bilinear for quality and describes artifacts for each algo </li><li><a href="http://www.lassekolb.info/gim35_downsampling.htm" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)"> a blogger</a>: advises lanczos. This links shows pictures produced by each algo.<br></li><li><a href="http://www.cambridgeincolour.com/tutorials/image-interpolation.htm">digital image interpolation</a>: seems to have a preference for bicubic, what photoshop uses. </li><li><a href="http://forum.videohelp.com/viewtopic.php?t=295115">videohelp</a>: tested various algorithms and think <span class="postbody">Bicubic spline is the best.</span></li></ul>People don't seem to agree. If you want to check the theory: <br><ul><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia lanczos<br>   </a></li><li><a href="http://en.wikipedia.org/wiki/Bilinear_interpolation">wikipedia bilinear</a></li></ul><br><br>  
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/getting-started-with-dom-xom-dom4j-by-parsing-an-rss-feed-an-experience-review/">Getting Started With DOM, XOM, DOM4J by Parsing an RSS Feed - An Experience Review</a>
+  </h1>
+  <time datetime="2006-03-17T10:53:00Z" class="post-date">Fri, Mar 17, 2006</time>
+   
+
+Recently, I looked for a way to get info from some particular blog entries of mine on <a href="http://blogger.com">blogger.com</a>. Blogger used to offer an  <a href="http://www.blogger.com/developers/api/1_docs/">XML-RPC API </a>. They even designed a <a href="http://www.blogger.com/developers/api/documentation20.html">version 2</a>  of the XML-RPC API that does not seem to have ever been put in production. Or maybe I did not manage to make it work. I had no problem to make v1 work, however. I used apache XMLRPC v2, it was very simple to use. Unfortunately information accessible through XML-RPC Blogger API was incomplete for me. Furthermore, it is very likely that this API will disappear soon as it is deprecated since 2002.<br /><br />Blogger wants you to use their <a href="http://code.blogger.com/archives/atom-docs.html">Atom API</a>. It is not XML RPC anymore, you have to do the parsing by hand.<br /><br /><span style="font-weight: bold;">The DOM Experience </span><br /><br />I thought "no big deal, I will use DOM for it". I don't need performance and wanted a quick way to solve my problem, plus DOM does not require X number of libraries. It was easy to use regular DOM until I was frustrated by not being able to get the  <span style="font-family:courier new,monospace;">&lt;content&gt;</span> element full text easily as it is sometimes XML. I did not want to hand code a method to do that as I thought it should be done by the XML library.<br /><br /><span style="font-weight: bold;">The XOM Experience</span><br /><br />I heard previously of a simple XML parser, efficient, with an API that had been well designed, XOM. I looked at the API, there was a toXML<span style="font-family:courier new,monospace;"> ()</span> method to return the node content as XML (children included), sounded good. I saw there was even XPath support, and thought, great, it will simplify my code a bit. I will get the blog entries by just querying for " <span style="font-family:courier new,monospace;">/feed/entry</span>". No luck, it did not work, it returned 0 results. So I looked for mistakes in my code, did not find obvious ones. I tried other queries like " <span style="font-family:courier new,monospace;">//feed/entry</span>" or "<span style="font-family:courier new,monospace;">//entry</span>", same thing, not the right results. There must have been something wrong in my code, or maybe the XPath engine in XOM has particular settings to deal with RSS feeds (they contain various xmlns declarations). The point is that I got frustrated, it was supposed to be very simple, and in reality, not so!<br /><br /><span style="font-weight: bold;">The DOM4J Experience</span><br /><br />I had experience with Dom4j before, just once, to build XML, not to parse it. I had relatively good memories of my Dom4j experience for that so I decided to try it out on my problem. At first I found Dom4j API a bit confusing as there are so many methods on most used classes. This is because Dom4j is DOM compatible. But I quickly understand the logic of it and found some very useful methods, namely  <span style="font-family:courier new,monospace;">Element.elements(name)</span> to get all children elements by name. Of course, they have an asXML<span style="font-family:courier new,monospace;">()</span> method like XOM. There is also XPath support.<br />I tried the XPath on Blogger RSS without success again. There really must be a trick to get it to recognize RSS. But with the <span style="font-family:courier new,monospace;">elements("entry")</span> method, I very quickly got the same with not much more code, and it worked.<br /><br /><span style="font-weight: bold;">so DOM vs. XOM vs. DOM4J = 0 - 0 - 1</span><br /><br />Example Code:<pre><br /><font color="#4682b4">SAXReader</font> <font color="#8b008b">reader</font> = <font color="#ff0000">new</font> <font color="#4682b4">SAXReader</font>();<br /><font color="#4682b4">Document</font> <font color="#8b008b">doc</font> = reader.read(response);<br /><font color="#4682b4">Collection</font> <font color="#8b008b">posts</font> = <font color="#ff0000">new</font> <font color="#4682b4">ArrayList</font>();<br /><font color="#4682b4">List</font> <font color="#8b008b">entries</font> = doc.getRootElement().elements("<font color="#008b00">entry</font>");<br /><font color="#ff0000">if</font> (LOG.isDebugEnabled()) <br />{<br />        LOG.debug("<font color="#008b00">found </font>"+entries.size()+"<font color="#008b00"> entries</font>");<br />}<br /><font color="#ff0000">for</font> (<font color="#4682b4">int</font> <font color="#8b008b">i</font> = 0; i &lt;entries.size();i++)<br />{<br />        <font color="#4682b4">Element</font> <font color="#8b008b">entry</font> = (<font color="#4682b4">Element</font>) entries.get(i); <br />        <font color="#4682b4">Map</font> <font color="#8b008b">m</font> = <font color="#ff0000">new</font> <font color="#4682b4">HashMap</font>();<br />        <font color="#ff0000">for</font> (<font color="#4682b4">Iterator</font> <font color="#8b008b">it</font> = entry.elementIterator();it.hasNext();)<br />        {<br />                <font color="#4682b4">Element</font> <font color="#8b008b">detail</font> = (<font color="#4682b4">Element</font>) it.next();<br />                <font color="#4682b4">String</font> <font color="#8b008b">name</font> = detail.getName();<br />                <font color="#ff0000">if</font> (name.equals("<font color="#008b00">link</font>"))<br />                {<br />                        m.put("<font color="#008b00">link</font>",detail.attribute("<font color="#008b00">href</font>").getValue());<br />                }<br />                <font color="#ff0000">else</font> <font color="#ff0000">if</font> (name.equals("<font color="#008b00">content</font>"))<br />                {<br />                        m.put("<font color="#008b00">content</font>",detail.asXML());<br />                }<br />                <font color="#ff0000">else</font><br />                {<br />                        m.put(name,detail.getTextTrim());<br />                }<br />        }<br />        <br />        posts.add(m);                   <br />        <font color="#ff0000">if</font> (LOG.isDebugEnabled())<br />        {<br />                LOG.debug("<font color="#008b00">found=</font>"+m.get("<font color="#008b00">title</font>")+"<font color="#008b00">, url=</font>"+m.get("<font color="#008b00">link</font>"));<br />        }<br />}</pre>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/bad-jdk-design-example/">Bad JDK Design Example</a>
+  </h1>
+  <time datetime="2006-03-16T15:02:00Z" class="post-date">Thu, Mar 16, 2006</time>
+  <p>Have you ever used the Authenticator class? It is standard since JDK 1.2. This allows you to establish authenticated HTTP requests. OnJava has an in-depth <a href="http://www.onjava.com/pub/a/onjava/excerpt/jvntwkprg_3e/?page=4">article presenting it</a>. Now here is my story about it.<!-- raw HTML omitted --><!-- raw HTML omitted -->The other day I just wanted to do that a simple authenticated HTTP request. You would expect it to be very simple to do in the modern internet world. <!-- raw HTML omitted --><!-- raw HTML omitted --> It is actually not very difficult to do, by hand, a <a href="http://www.javaworld.com/javaworld/javatips/jw-javatip47.html">JavaWorld article</a>  presents this way. Unfortunately it uses internal JDK sun classes for Digest and I am uncomfortable to use that since it is not guaranteed to work on any JVM. So I have to download jakarta commons-codec to just do a simple authenticated HTTP request. I really wonder why some of those codecs are not in the JDK (not as sun.* classes but as java.* classes).</p>
+<p>When I read that it was possible to do it a standard way in JDK 1.2, I was excited. I was wrong. Not only you have to extend a class (ok, implementation is faily simple) that adds in my mind unnecessary clutter, but you are forced to have only 1  <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/net/Authenticator.html">Authenticator</a> at a given time (and this Authenticator scope seems much wider than just securing HTTP connection). What about server programs dealing with different credentials?</p>
+<p>So I am left downloading jarkata httpclient library that is more powerful and easier to use than hand coded digest authentication (that anyway needs common codecs) just to have HTTP authentication the way it should be done.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/current-popular-subjects-in-java-blogs/">Current Popular Subjects In Java Blogs</a>
+  </h1>
+  <time datetime="2006-03-15T20:00:00Z" class="post-date">Wed, Mar 15, 2006</time>
+  <p>Based on my blogs entries and success of other blog entries, I present the current trendy subjects and the not trendy ones:</p>
+<p>In:</p>
+<ul>
+<li>Design Patterns</li>
+<li>Ruby on Rails</li>
+<li>EJB (bashing)</li>
+<li>RSS</li>
+<li>Spring</li>
+<li>Hibernate</li>
+<li>Javascript and AJAX</li>
+<li>Java Virtual Machine</li>
+</ul>
+<p>Out:</p>
+<ul>
+<li>RMI</li>
+<li>Portal</li>
+<li>Jini</li>
+</ul>
+<p>Neutral</p>
+<ul>
+<li>JDK 5 features</li>
+</ul>
+<p>As you can see most of the popular stuff is fairly common, not that new. I will do a finer, less common, analysis later if I have time.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/non-fiction-books-mostly-software-programming-before-2003/">Non Fiction Books (Mostly Software Programming) Before 2003</a>
   </h1>
   <time datetime="2006-03-15T15:03:00Z" class="post-date">Wed, Mar 15, 2006</time>
@@ -140,54 +204,6 @@ I updated my little <a href="http://31416.org/deltoolbar.html">delicious toolbar
    
 
 Bertrand Meyer describes in his book <a href="http://www.amazon.com/exec/obidos/redirect?link_code=as2&amp;path=ASIN/0136291554&amp;tag=michelin-20&amp;camp=1789&amp;creative=9325%22">&quot;<span style="font-style: italic;"> Object Oriented Software Construction (2nd Ed)</span>&quot;</a> qualities that a good object oriented language should have. Java has almost all the features. Ruby is much farther off, which does not mean it is not a good language, I think it's very good to write some types of programs quickly (should I call them scripts?), syntax is quite nice, but it does lack the following useful features: <br><ul><li>Assertions:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">The language should make it possible to equip a class and its features with assertions (preconditions, postconditions and invariants), relying on tools to produce documentation out of these assertions and, optionally, monitor them at run time.&nbsp; </blockquote></li><li>Information Hiding (Java is not good either on that one, the protected keyword is of dubious value):<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  It should be possible for the author of a class to specify that a feature is available to all clients, to no client, or to specified clients<br></blockquote></li><li>Static Typing:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  A well-defined type system should, by enforcing a number of type declaration and compatibility rules, guarantee the run-time type safety of the systems it accepts.</blockquote></li></ul><ul><li>Genericity:<blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">  It should be possible to write classes with formal generic parameters representing arbitrary types.&nbsp;</blockquote></li></ul>More pragmatically, library choice and performance difference between Java and Ruby might be the most decisive. <br><br /><span class="technoratitag">Tags: <a target=_top href="http://del.icio.us/tag/book" rel="tag">book</a> <a target=_top href="http://del.icio.us/tag/review" rel="tag">review</a>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/what-is-modern-java-compilation/">What Is &#39;Modern&#39; Java Compilation?</a>
-  </h1>
-  <time datetime="2006-02-07T11:12:00Z" class="post-date">Tue, Feb 7, 2006</time>
-   
-
-<span class="gmail_quote"></span>Occasionally in <a href="http://ant.apache.org" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">Ant</a> you can see messages like this:<br><span style="background-color: rgb(255, 204, 0);"> &quot;</span><font size="-1"><span style="background-color: rgb(255, 204, 0);">[javac] </span><b style="background-color: rgb(255, 204, 0);">Using modern compiler</b><span style="background-color: rgb(255, 204, 0);">&quot; </span><br><br>What does this mean? <br><br></font><div style="text-align: left;"><font size="-1">In Ant you have the property &quot; <span style="font-weight: bold;">build.compiler</span>&quot; to specify if you want to use a classic or modern compiler. Now what do they mean by modern or classic. Well, they call classic compiler the compilers of JDK 1.1   and 1.2 and they call modern compiler the ones of JDK 1.3+. They made that distinction because a classic compiler does not support the same options as modern compilers: the semantics of javac tool changed in JDK 1.3.</font> <br></div><font size="-1"> <br>This terminology can easily be confused with java class file compatibility. Java class file compatibility is changed using the &quot;<span style="font-weight: bold;">-target</span>&quot; option of javac tool. One can specify in ant to compile with modern compilers and a target  1.4, the result is likely to not run on JVM 1.3. One can specify modern and a target 1.1, the resulting classes will run on JVM 1.1, but ant build.xml file will not be usable with JDK 1.1 without changing modern to classic. <br><br>I find Ant choice of word a bit confusing as using a &quot;modern&quot; compiler has little to do with the resulting class files.<br></font>  
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/rmi-nightmares-non-interoperability/">RMI Nightmares - Non Interoperability</a>
-  </h1>
-  <time datetime="2006-01-31T18:39:00Z" class="post-date">Tue, Jan 31, 2006</time>
-   
-
-These days we tried to make Websphere and <a href="http://jonas.objectweb.org">Jonas</a> interoperate. Some EJBs are deployed in Jonas and we just try to call them from Websphere. The most natural way is to use RMI (with JRMP) for that. Jonas uses  JDK1.4.2 (conforms to J2EE 1.4) and Websphere IBM JVM 1.3.1 (conforms to J2EE 1.3). Because of RMI serialization, an EJB from Jonas will not work on Websphere, because this EJB has references to J2EE 1.4 classes which are different from J2EE  1.3. The exact root cause is not exactly clear to me, it probably has to do with the Naming Factory and the EJB Stub, but we tried every possible thing here without success.<br /><span style="font-weight: bold;">Update: </span>JRMP worked between JBoss 3.X on JDK 1.4 and Websphere 5.X (IBM JDK 1.3) using JBoss NamingFactory. So RMI interoperation seems quite unpredictable. One thing is that you have to pay attention to the naming factory you use. If it is a special library like in JBoss case, make sure it is compatible with your JDK.<br /><br />One solution is to use RMI-IIOP, as it does not rely on serialization. It almost works. In our case we use Websphere Portal that needs to have security enabled. You might ask what security has to do with all that. Well, enabling security on websphere means that CORBA exchange will also be secured (using CSIv2). Tuning Jonas to understand what websphere asks is something we did not manage to do (and we don't know if it is possible at all).<br /><span style="font-weight: bold;">Update: </span>We did manage to make it work by disabling Jonas CSIv2 support.<br /><br />So there we are using Axis to do the communication!<br /><span style="font-weight: bold;">Update: </span>Axis is not needed anymore  as RMI-IIOP works as advertised.<br /><br />There is an interesting <a href="http://www.lifl.fr/%7Emerle/benchmarking.pdf">benchmark of Axis vs JRMP vs RMI-IIOP (pdf)</a>. Axis is more than 10x slower than pure JRMP. Application servers use of JRMP seems to matter a lot, JBoss looks bad.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/what-is-clustering-about-an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
-  </h1>
-  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
-  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
-<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
-<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
-<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
-<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/my-dream-job/">My Dream Job</a>
-  </h1>
-  <time datetime="2006-01-12T11:42:00Z" class="post-date">Thu, Jan 12, 2006</time>
-   
-
-<img src="file:///C:/Documents%20and%20Settings/flh/Mes%20documents/MSwanson%20-%20Leaf%2002.png" alt=""><br> In my dream job, I would have <span style="font-weight: bold;">freedom </span>to play with and build software based on new ideas I have.<br>  In my dream job, I would work with <span style="font-weight: bold;">creative </span>people, luminaries.<br>  In my dream job, I would have a good enough salary.<br>  In my dream job, I would not have to worry about the company <span style="font-weight: bold;">stability</span>.<br>  In my dream job, I would have freedom in my work schedule.<br>  <br>  Get <span style="font-weight: bold;">paid </span>for doing what you really want (i.e. your ideas) is possible. But without worrying about the next 6 months, I have not seen that. 
 
 
 

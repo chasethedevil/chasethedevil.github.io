@@ -73,6 +73,143 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/">Bachelier Normal Volatility Asymptotics</a>
+  </h1>
+  <time datetime="2017-01-17T09:55:32&#43;0100" class="post-date">Tue, Jan 17, 2017</time>
+  <p>It is relatively well known that the Black-Scholes volatility can not grow faster than \(\sqrt{\ln(K)}\).
+The rule is also sometimes simply stated as &ldquo;the implied variance can not grow faster than linear&rdquo; (in log-moneyness).
+The proof comes from Roger Lee <a href="http://math.uchicago.edu/~rogerlee/moment.pdf">&ldquo;The moment formula for implied volatility at extreme strikes&rdquo;</a> but the rule was suggested
+earlier, for example in Hodge&rsquo;s paper from 1996 <a href="http://www.iijournals.com/doi/pdfplus/10.3905/jod.1996.407950">&ldquo;Arbitrage bounds of the implied volatility strike and term structures of European-style options&rdquo;</a>.</p>
+<p>With the increasing use of the b.p. (a.k.a Normal, a.k.a Bachelier) vols, a natural question (that Gary asked) is:</p>
+<h4 id="is-there-a-similar-rule-for-the-normal-volatility">Is there a similar rule for the Normal volatility?</h4>
+<p>It turns out that the answer is not as simple. It can easily be shown that the normal volatility can not grow faster than linear
+in strike (not the variance this time). But it does not mean that linear is acceptable, in fact, it is not.
+The upper bound can be refined to
+$$ \frac{K-F}{\sqrt{2T \ln \frac{K}{F}}} $$</p>
+<p>It is still an asymptotic upper bound only.
+It can be shown that any number larger than the factor 2 in the denominator will not lead to asymptotic arbitrage.
+The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
+simple exact formula for the limit as in the Black-Scholes world.</p>
+<p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
+  </h1>
+  <time datetime="2017-01-06T07:55:32&#43;0100" class="post-date">Fri, Jan 6, 2017</time>
+  <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
+<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
+not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
+Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
+<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
+The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
+in the algorithm.</p>
+<p>In between step 3 and step 4, we should have
+$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
+$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
+<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
+<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
+very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
+to actually try it.
+<figure><img src="/post/heston_case3.png"/><figcaption>
+            <h4>Error on Leif Andersen Case III.</h4>
+        </figcaption>
+</figure>
+</p>
+<p><em>Update January 23rd</em>
+The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/">Andreasen-Huge interpolation - Don&#39;t stay flat</a>
+  </h1>
+  <time datetime="2016-12-13T09:55:32&#43;0100" class="post-date">Tue, Dec 13, 2016</time>
+  <p>Jesper Andreasen and Brian Huge propose an arbitrage-free interpolation method
+based on a single-step forward Dupire PDE solution in their paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1694972">Volatility interpolation</a>.
+To do so, they consider a piecewise constant representation of the local volatility in maturity time and strike
+where the number of constants matches the number of market option prices.</p>
+<p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
+Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
+<figure><img src="/post/kahale_spx500_1995.png"/><figcaption>
+            <h4>option volatilities for the SPX500 in October 1995.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
+The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
+the market vols are exactly reproduced by the following piecewise constant vols:
+<figure><img src="/post/kahale_ah_constant200.png"/><figcaption>
+            <h4>piecewise constant model on a grid of 200 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
+some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
+<figure><img src="/post/kahale_ah_constant400.png"/><figcaption>
+            <h4>piecewise constant model on a grid of 400 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The single step continuous model can not represent the market implied volatilities, while for some reason,
+the discrete model with 200 points can. Note that the model vols were capped, otherwise they would explode even higher.</p>
+<p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
+(a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
+becomes stable regardless of the number of grid points.
+<figure><img src="/post/kahale_ah_linear.png"/><figcaption>
+            <h4>piecewise linear model on a grid of 400 points.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
+likely because the objective function derivatives are smoother.
+In the most favorable case for the piecewise constant model,
+the minimization with the linear model requires about 40% less iterations.</p>
+<p>We could also interpolate with a cubic spline, as long as we make sure that the volatility does not go below zero, for example by imposing a limit on the derivative values.</p>
+<p>Overall, this raises questions on the interest of the numerically much more complex continuous time version of the piecewise-constant model
+as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/">Put-Call parity and the log-transformed Black-Scholes PDE</a>
+  </h1>
+  <time datetime="2016-12-05T09:55:32&#43;0100" class="post-date">Mon, Dec 5, 2016</time>
+  <p>We will assume zero interest rates and no dividends on the asset \(S\) for clarity.
+The results can be easily generalized to the case with non-zero interest rates and dividends.
+Under those assumptions, the Black-Scholes PDE is:
+$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = 0.$$</p>
+<p>An implicit Euler discretisation on a uniform grid in \(S\) of width \(h\) with linear boundary conditions (zero Gamma) leads to:</p>
+<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t S_i^2 \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}.$$
+for \(i=1,&hellip;,m-1\) with boundaries
+$$ V^{k+1}_i - V^{k}_i = 0.$$
+for \(i=0,m\).</p>
+<p>This forms a linear system \( M \cdot V^k = V^{k+1} \) with \(M\) is a tridiagonal matrix where each of its rows sums to 1 exactly.
+Furthermore, the payoff corresponding to the forward price \(V_i = S_i\) is exactly preserved as well by such a system as the discretized second derivative will be exactly zero.
+The scheme can be seen as preserving the zero-th and first moments.</p>
+<p>As a consequence, by linearity, the put-call parity relationship will hold exactly (note that in between nodes, any interpolation used should also be consistent with the put-call parity for the result to be more general).</p>
+<p>This result stays true for a non-uniform discretisation, and with other finite difference schemes as shown <a href="https://papers.ssrn.com/abstract=2362969">in this paper</a>.</p>
+<p>It is common to consider the log-transformed problem in \(X = \ln(S)\) as the diffusion is constant then, and a uniform grid much more adapted to the process.
+$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 V}{\partial X^2}-\frac{1}{2}\sigma^2 \frac{\partial V}{\partial X} = 0.$$</p>
+<p>An implicit Euler discretisation on a uniform grid in \(X\) of width \(h\) with linear boundary conditions (zero Gamma in \(S\) ) leads to:</p>
+<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}-\frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-V^{k}_{i-1}}{2h}.$$
+for \(i=1,&hellip;,m-1\) with boundaries
+$$ V^{k+1}_i - V^{k}_i = 0.$$
+for \(i=0,m\).</p>
+<p>Such a scheme will not preserve the forward price anymore. This is  because now, the forward price is \(V_i = e^{X_i}\). In particular, it is not linear in \(X\).</p>
+<p>It is possible to preserve the forward by changing slightly the diffusion coefficient, very much as in the <a href="https://papers.ssrn.com/abstract=2711720">exponential fitting idea</a>. The difference is that, here, we are not interested
+in handling a large drift (when compared to the diffusion) without oscillations, but merely to preserve the forward exactly.
+We want the adjusted volatility \(\bar{\sigma}\) to solve
+$$\frac{1}{2}\bar{\sigma}^2 \frac{e^{h}-2+e^{-h}}{h^2}-\frac{1}{2}\sigma^2 \frac{e^{h}-e^{-h}}{2h}=0.$$
+Note that the discretised drift does not change, only the discretised diffusion term. The solution is:
+$$\bar{\sigma}^2 = \frac{\sigma^2 h}{2} \coth\left(\frac{h}{2} \right) .$$
+This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
+<p>This is actually the same adjustment as the exponential fitting technique with a drift of zero. For a non-zero drift, the two adjustments would differ, as the exact forward adjustment will stay the same, along with an adjusted discrete drift.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/issues_with_bdk_extrapolation/">Benaim et al. extrapolation does not work on equities</a>
   </h1>
   <time datetime="2016-10-04T09:55:32&#43;0100" class="post-date">Tue, Oct 4, 2016</time>
@@ -297,243 +434,6 @@ is even smaller.</p>
         </figcaption>
 </figure>
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
-  </h1>
-  <time datetime="2016-06-15T09:55:32&#43;0100" class="post-date">Wed, Jun 15, 2016</time>
-  <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
-$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$
-The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
-Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
-<p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
-The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
-<!-- raw HTML omitted -->
-<p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
-While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
-<p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
-on the first derivative:</p>
-<!-- raw HTML omitted -->
-<p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
-There would be no loop over the minimization needed. Does this produce any good result?
-<figure><img src="/post/svi_dearbitraging_variance.png"/><figcaption>
-            <h4>implied variance with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The graph is clear, the technique produces crap. This is the local variance denominator:
-<figure><img src="/post/svi_dearbitraging_g.png"/><figcaption>
-            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/svi_zeliade_arbitrage/">Arbitrage in Zeliade&#39;s SVI example</a>
-  </h1>
-  <time datetime="2016-06-14T09:55:32&#43;0100" class="post-date">Tue, Jun 14, 2016</time>
-  <p>Zeliade wrote an <a href="http://www.zeliade.com/whitepapers/zwp-0005.pdf">excellent paper</a> about the calibration of the SVI parameterization for the volatility surface in 2008. I just noticed recently
-that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
-they vary wildly between the first and the second expiry.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">T</th>
-<th style="text-align:center">a</th>
-<th style="text-align:center">b</th>
-<th style="text-align:center">rho</th>
-<th style="text-align:center">m</th>
-<th style="text-align:center">s</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">0.082</td>
-<td style="text-align:center">0.027</td>
-<td style="text-align:center">0.234</td>
-<td style="text-align:center">0.068</td>
-<td style="text-align:center">0.100</td>
-<td style="text-align:center">0.028</td>
-</tr>
-<tr>
-<td style="text-align:center">0.16</td>
-<td style="text-align:center">0.030</td>
-<td style="text-align:center">0.125</td>
-<td style="text-align:center">-1.0</td>
-<td style="text-align:center">0.074</td>
-<td style="text-align:center">0.050</td>
-</tr>
-<tr>
-<td style="text-align:center">0.26</td>
-<td style="text-align:center">0.032</td>
-<td style="text-align:center">0.094</td>
-<td style="text-align:center">-1.0</td>
-<td style="text-align:center">0.093</td>
-<td style="text-align:center">0.041</td>
-</tr>
-</tbody>
-</table>
-<p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
-in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
-<figure><img src="/post/svi_zeliade_arb.png"/><figcaption>
-            <h4>Arbitrage in Zeliade&#39;s example</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Why does this happen?</p>
-<p>This is typically because the range of moneyness of actual market quotes for the first expiry is quite narrow, and looks more like a smile than a skew. The problem is that
-SVI is then quite bad at extrapolating this smile, likely because the SVI wings were used to fit well the curvature and have nothing to do with any actual market wings.</p>
-<p>A consequence is that that the local volatility will be undefined in the right wing of the second and third expiries, if we keep the first expiry.
-It is interesting to look at what happens to the implied volatility if we decide either to:</p>
-<ul>
-<li>set the undefined local volatility to zero</li>
-<li>take the absolute value of the local variance</li>
-<li>search for the closest defined local volatility on the log-moneyness axis</li>
-<li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
-</ul>
-<figure><img src="/post/svi_zeliade_arb_zero.png"/><figcaption>
-            <h4>Total variance after flooring the local variance at zero.</h4>
-        </figcaption>
-</figure>
-
-<p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
-that a zero vol would lead to a lower implied vol, the opposite happens, because the original local vol is negative, so flooring it zero is like increasing it.</p>
-<p>We can now deduce that taking the absolute value of the local variance is just going to push the implied variance even higher, and will therefore create a larger bias. Similarly, searching for closest local volatility
-is not going to improve anything.</p>
-<p>Fixing the local volatility after the facts produces only a forward looking fix: the next expiries are going to be adjusted as a result.</p>
-<p>Instead, in this example, the first maturity should  be adjusted. A simple adjustment would be to cap the total variance of the first expiry so that it is never higher than the next expiry, before computing the local volatility.
-Although the resulting implied volatility will not be C2 or even C1 at the cap, the local volatility can be computed analytically on the left side, before the cap, and also analytically after the cap, on the right side.
-More care needs to be taken if the next expiry also needs to be capped (for example because there is another calendar spread arbitrage between expiry two and expiry three). In this case, the analytical calculation must be split in three zones: first-nocap + second-nocap, first-cap+second-nocap, first-cap+second-cap.
-So in reality having non C2 extrapolation can work well with local volatility if we are careful enough to avoid the artificial spike at the points of discontinuity.</p>
-<p>There is yet another solution to produce a similar effect while still working at the local volatility level: if there is an arbitrage with the previous expiry at a given moneyness,
-we compute the local volatility ignoring the previous expiry (eventually extrapolating in constant manner) and we override the previous expiry local volatility for this moneyness.
-In terms of implied variance, this would correspond to removing the arbitrageable part of a given expiry, and replacing it with a linear interpolation between encompassing expiries, working backwards in time.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/dupire_cash_dividend_part2/">Dupire Local Volatility with Cash Dividends Part 2</a>
-  </h1>
-  <time datetime="2016-05-29T17:01:00&#43;0200" class="post-date">Sun, May 29, 2016</time>
-  <p>I had a look at how to price under Local Volatility with Cash dividends in <a href="/post/dupire_cash_dividend/">my previous post</a>. I still had a somewhat large error in my FDM price. After too much time, I managed to find the culprit, it was the extrapolation of the prices when applying the jump continuity condition \(V(S,t_\alpha^-) = V(S-\alpha, t_\alpha^+) \) for an asset \(S\) with a cash dividend of amount \(\alpha\) at \( t_\alpha \).</p>
-<p>I stumbled in the meantime on another alternative to compute the Dupire local volatility with cash dividends <a href="http://www.lorenzobergomi.com/#!blank/cnec">in the book of Lorenzo Bergomi</a>, one can rely on the
-classic Gatheral formulation in terms of total implied variance \(w(y,T)\) function of log-moneyness:</p>
-<!-- raw HTML omitted -->
-<p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
-<p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
-<p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
-<figure><img src="/post/dupire_labordere_ll3_modelvolraw.png"/><figcaption>
-            <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
-<figure><img src="/post/dupire_labordere_ll3_modelvol.png"/><figcaption>
-            <h4>Pure process model volatility.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The equivalent pure process Black vols looks like this:
-<figure><img src="/post/dupire_labordere_ll3_blackvol.png"/><figcaption>
-            <h4>Pure process Black volatility</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
-<figure><img src="/post/dupire_labordere_ll3_localvol.png"/><figcaption>
-            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
-        </figcaption>
-</figure>
-</p>
-<p>While the one of the pure process is:
-<figure><img src="/post/dupire_labordere_ll3_purelv.png"/><figcaption>
-            <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
-        </figcaption>
-</figure>
-</p>
-<p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
-<p>So far, this is not too far from the textbook theory. Now it happens that there is another subtlety related to the dividend policy. The dividend policy defines what happens when the spot price is lower than the cash dividend. Haug, Haug and Lewis defined two policies, liquidator and survivor as</p>
-<p>\(V(S,K,t_\alpha^-) = V(0,K, t_\alpha^+) \) for the liquidator - the stock drops to zero.
-\(V(S,K,t_\alpha^-) = V(S,K, t_\alpha^+) \) for the survivor - the dividend is not paid.</p>
-<p>Not applying any particular policy would mean that the stock price can become negative:
-\(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
-<p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
-<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure><img src="/post/dupire_labordere_liquidator_modelvol.png"/><figcaption>
-            <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
-        </figcaption>
-</figure>
-
-It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
-<figure><img src="/post/dupire_labordere_liquidator_localvol.png"/><figcaption>
-            <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
-<p>Note that this effect is not always simple to see, in my example, it is visible, especially on Put options of low strikes, because the volatility surface wings imply a high volatility when the strike is low and the option maturity is relatively long (5 years). For short maturities or lower volatilities, the dividend policy impact on the price is too small to be noticed.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/dupire_cash_dividend/">Dupire Local Volatility with Cash Dividends</a>
-  </h1>
-  <time datetime="2016-05-19T17:01:00&#43;0200" class="post-date">Thu, May 19, 2016</time>
-  <p>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
-The extension to continuous dividend yield is described in many papers or books:</p>
-<!-- raw HTML omitted -->
-<p>With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
-approximations available to price an option supposing a constant (spot) volatility and jumps, for example, <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">this one</a>.</p>
-<p>Labordère, in his paper <a href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306">Calibration of local stochastic volatility models to market smiles</a>, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:</p>
-<!-- raw HTML omitted -->
-<p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
-we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
-<p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
-<figure><img src="/post/dupire_labordere_ll1.png"/><figcaption>
-            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-        </figcaption>
-</figure>
-
-<p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have</p>
-<!-- raw HTML omitted -->
-<p><figure><img src="/post/dupire_labordere_ll3.png"/><figcaption>
-            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/dupire_labordere_ll3shift.png"/><figcaption>
-            <h4>Look, when we shift by the dividend!</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
-<p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
-<figure><img src="/post/dupire_labordere_policy.png"/><figcaption>
-            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The analytical approximations lead to another different local volatility from both policies, but don&rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
-Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
-<p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
-<figure><img src="/post/dupire_labordere_yield3.png"/><figcaption>
-            <h4>Dupire Local Volatility under the forward model.</h4>
-        </figcaption>
-</figure>
-
-The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
-<figure><img src="/post/dupire_labordere_yield3e.png"/><figcaption>
-            <h4>Dupire Local Volatility under the forward model.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
-<p>I would have expected a much better accuracy from Labordère&rsquo;s approach, it&rsquo;s still not entirely clear to me if there is not an error lurking somewhere. This is how an apparently simple formula can become a nightmare to use in practice.</p>
-<p><strong>Update</strong>: A <a href="/post/dupire_cash_dividend_part2">follow-up</a> to this post where I resolve the mysterious remaining error.</p>
 
   
 </article>

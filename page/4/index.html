@@ -73,6 +73,167 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/quantitative_finance_blogs/">Blogs on Quantitative Finance</a>
+  </h1>
+  <time datetime="2017-06-21T23:56:42&#43;0100" class="post-date">Wed, Jun 21, 2017</time>
+  <p>There are not many blogs on quantitative finance that I read. Blogs are not so popular anymore with the advent of the various social networks (facebook, stackoverflow, google plus, reddit, &hellip;). Here is a small list:</p>
+<ul>
+<li><a href="https://www.clarusft.com/blog/">Clarus FT</a>: often interesting statistics on the swap market, clearing, plus the <a href="https://www.clarusft.com/author/gary/">more technical articles from Gary</a>.</li>
+<li><a href="https://quantsrus.github.io/">Quants R Us</a>: A relatively new blog with a promising starting post analyzing <a href="https://quantsrus.github.io/post/andreasen_huge_spline/">Andreasen-Huge one-step local-volatility algorithm with a Spline</a></li>
+<li><a href="https://quantlib.wordpress.com/author/petercaspers/">Fooling around with Quantlib</a>: the blog from Peter Caspers, also relevant  to non-Quantlib professionals has original insights such as <a href="https://quantlib.wordpress.com/2015/09/19/smile-dynamics-by-densities/">Smile dynamics by densities</a> or the <a href="https://quantlib.wordpress.com/2015/08/23/supernatural-libor-coupons/">Supernatural Libor Coupons</a>. Unfortunately it is not so active anymore.</li>
+<li><a href="http://www.implementingquantlib.com">Implementing Quantlib</a>: the blog from Luigi Ballabio, which explains many of the design decisions in Quantlib. Very interesting for developer of financial libraries, see for example <a href="http://www.implementingquantlib.com/2017/04/fd-solvers.html">the fd solvers</a>.</li>
+<li><a href="https://hpcquantlib.wordpress.com/">HPC Quantlib</a> from Klaus Spanderen. Yes lots of quantlib blogs, but this one is actually not much focused on quantlib. It goes into great details about some numerical techniques, see for example the <a href="https://hpcquantlib.wordpress.com/2017/05/07/newer-semi-analytic-heston-pricing-algorithms/">analysis of Heston pricing algorithm</a></li>
+<li><a href="http://oxfordstrat.com/rd-blog/">Oxford Strat</a>. It is a different kind of subject: too many trading strategies but some interesting data, for example <a href="http://oxfordstrat.com/data/global-market-correlations/">global market correlations</a> and <a href="http://oxfordstrat.com/ideas/sharpe-ratio/">ideas</a>.</li>
+<li><a href="https://forum.wilmott.com/">Wilmott forums</a> not a blog, but it sometimes (not often) has interesting discussions and can be a good way to connect.</li>
+</ul>
+<p>Another way to find out what&rsquo;s going on in the quantitative finance world is to scan regularly recent papers on <a href="https://arxiv.org/list/q-fin/recent">arxiv</a>, <a href="http://www.ssrn.com">SSRN</a> or the suggestions of <a href="http://scholar.google.com">Google scholar</a>.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/">Typo in Hyman non-negative constraint - 28 years later</a>
+  </h1>
+  <time datetime="2017-05-23T23:56:42&#43;0100" class="post-date">Tue, May 23, 2017</time>
+  <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \( \Delta x_{i-1/2} \)  is interverted with  \( \Delta x_{i+1/2} \).</p>
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions</p>
+<!-- raw HTML omitted -->
+<p>In the above example, even though the step size \Delta x is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
+  </h1>
+  <time datetime="2017-04-02T07:56:42&#43;0100" class="post-date">Sun, Apr 2, 2017</time>
+  <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
+<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
+<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
+<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Original volatility</th>
+<th style="text-align:center">Method</th>
+<th style="text-align:left">Implied Volatility</th>
+<th style="text-align:right">Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.6400000000000002</td>
+<td style="text-align:right">1005 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.6495154924570236</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.6338265040549524</td>
+<td style="text-align:right">200 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.6400000010047917</td>
+<td style="text-align:right">436 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.6400000001905617</td>
+<td style="text-align:right">568 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.1575005551326285</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.15117970813645165</td>
+<td style="text-align:right">200 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.16000000000000025</td>
+<td style="text-align:right">1323 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.16000000000219483</td>
+<td style="text-align:right">714 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.16000000000018844</td>
+<td style="text-align:right">1030 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.1528010258201771</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.043006234681405076</td>
+<td style="text-align:right">190 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.03999999999999886</td>
+<td style="text-align:right">1519 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.040000000056277685</td>
+<td style="text-align:right">10235 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.040000000000453895</td>
+<td style="text-align:right">2405 ns</td>
+</tr>
+</tbody>
+</table>
+<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/vix-starts-smiling/">The VIX starts smiling</a>
+  </h1>
+  <time datetime="2017-03-21T07:56:42&#43;0100" class="post-date">Tue, Mar 21, 2017</time>
+  <p>The VIX implied volatilities used to look like a logarithmic function of the strikes. I don&rsquo;t look at them often, but today, I noticed that the VIX had the start of a smile shape.</p>
+<figure><img src="/post/vix_smile.png"/><figcaption>
+            <h4>1m VIX implied volatilities on March 21, 2017 with strictly positive volume.</h4>
+        </figcaption>
+</figure>
+
+<p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
+<p><strong>Update March 22:</strong> Actually the smile in VIX is not particularly new, it is visible in Jim Gatheral 2013 presentation <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiF2LP9turSAhUJVBQKHUVFCIoQFggoMAA&amp;url=http%3A%2F%2Fmfe.baruch.cuny.edu%2Fwp-content%2Fuploads%2F2012%2F09%2FBeijingSPXVIX2013.pdf&amp;usg=AFQjCNHCx2b2AXNXPHixUAYQC2nWH9ULHQ">Joint modeling of SPX and VIX</a> for the short maturities. Interestingly, <a href="/post/when-svi-breaks-down/">the issue with SVI</a> is also visible in those slides in the shortest maturity.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/">When SVI Breaks Down</a>
   </h1>
   <time datetime="2017-03-16T07:56:42&#43;0100" class="post-date">Thu, Mar 16, 2017</time>
@@ -290,143 +451,6 @@ V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\<br>
 =k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
 $$
 This concludes the proof.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/">Bachelier Normal Volatility Asymptotics</a>
-  </h1>
-  <time datetime="2017-01-17T09:55:32&#43;0100" class="post-date">Tue, Jan 17, 2017</time>
-  <p>It is relatively well known that the Black-Scholes volatility can not grow faster than \(\sqrt{\ln(K)}\).
-The rule is also sometimes simply stated as &ldquo;the implied variance can not grow faster than linear&rdquo; (in log-moneyness).
-The proof comes from Roger Lee <a href="http://math.uchicago.edu/~rogerlee/moment.pdf">&ldquo;The moment formula for implied volatility at extreme strikes&rdquo;</a> but the rule was suggested
-earlier, for example in Hodge&rsquo;s paper from 1996 <a href="http://www.iijournals.com/doi/pdfplus/10.3905/jod.1996.407950">&ldquo;Arbitrage bounds of the implied volatility strike and term structures of European-style options&rdquo;</a>.</p>
-<p>With the increasing use of the b.p. (a.k.a Normal, a.k.a Bachelier) vols, a natural question (that Gary asked) is:</p>
-<h4 id="is-there-a-similar-rule-for-the-normal-volatility">Is there a similar rule for the Normal volatility?</h4>
-<p>It turns out that the answer is not as simple. It can easily be shown that the normal volatility can not grow faster than linear
-in strike (not the variance this time). But it does not mean that linear is acceptable, in fact, it is not.
-The upper bound can be refined to
-$$ \frac{K-F}{\sqrt{2T \ln \frac{K}{F}}} $$</p>
-<p>It is still an asymptotic upper bound only.
-It can be shown that any number larger than the factor 2 in the denominator will not lead to asymptotic arbitrage.
-The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
-simple exact formula for the limit as in the Black-Scholes world.</p>
-<p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
-  </h1>
-  <time datetime="2017-01-06T07:55:32&#43;0100" class="post-date">Fri, Jan 6, 2017</time>
-  <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
-<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
-not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
-Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
-<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
-The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
-in the algorithm.</p>
-<p>In between step 3 and step 4, we should have
-$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
-$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
-<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
-<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
-very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
-to actually try it.
-<figure><img src="/post/heston_case3.png"/><figcaption>
-            <h4>Error on Leif Andersen Case III.</h4>
-        </figcaption>
-</figure>
-</p>
-<p><em>Update January 23rd</em>
-The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/">Andreasen-Huge interpolation - Don&#39;t stay flat</a>
-  </h1>
-  <time datetime="2016-12-13T09:55:32&#43;0100" class="post-date">Tue, Dec 13, 2016</time>
-  <p>Jesper Andreasen and Brian Huge propose an arbitrage-free interpolation method
-based on a single-step forward Dupire PDE solution in their paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1694972">Volatility interpolation</a>.
-To do so, they consider a piecewise constant representation of the local volatility in maturity time and strike
-where the number of constants matches the number of market option prices.</p>
-<p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
-Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
-<figure><img src="/post/kahale_spx500_1995.png"/><figcaption>
-            <h4>option volatilities for the SPX500 in October 1995.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
-The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
-the market vols are exactly reproduced by the following piecewise constant vols:
-<figure><img src="/post/kahale_ah_constant200.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 200 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
-some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
-<figure><img src="/post/kahale_ah_constant400.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 400 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The single step continuous model can not represent the market implied volatilities, while for some reason,
-the discrete model with 200 points can. Note that the model vols were capped, otherwise they would explode even higher.</p>
-<p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
-(a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
-becomes stable regardless of the number of grid points.
-<figure><img src="/post/kahale_ah_linear.png"/><figcaption>
-            <h4>piecewise linear model on a grid of 400 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
-likely because the objective function derivatives are smoother.
-In the most favorable case for the piecewise constant model,
-the minimization with the linear model requires about 40% less iterations.</p>
-<p>We could also interpolate with a cubic spline, as long as we make sure that the volatility does not go below zero, for example by imposing a limit on the derivative values.</p>
-<p>Overall, this raises questions on the interest of the numerically much more complex continuous time version of the piecewise-constant model
-as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/put_call_parity_with_log_transformed_pde/">Put-Call parity and the log-transformed Black-Scholes PDE</a>
-  </h1>
-  <time datetime="2016-12-05T09:55:32&#43;0100" class="post-date">Mon, Dec 5, 2016</time>
-  <p>We will assume zero interest rates and no dividends on the asset \(S\) for clarity.
-The results can be easily generalized to the case with non-zero interest rates and dividends.
-Under those assumptions, the Black-Scholes PDE is:
-$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = 0.$$</p>
-<p>An implicit Euler discretisation on a uniform grid in \(S\) of width \(h\) with linear boundary conditions (zero Gamma) leads to:</p>
-<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t S_i^2 \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}.$$
-for \(i=1,&hellip;,m-1\) with boundaries
-$$ V^{k+1}_i - V^{k}_i = 0.$$
-for \(i=0,m\).</p>
-<p>This forms a linear system \( M \cdot V^k = V^{k+1} \) with \(M\) is a tridiagonal matrix where each of its rows sums to 1 exactly.
-Furthermore, the payoff corresponding to the forward price \(V_i = S_i\) is exactly preserved as well by such a system as the discretized second derivative will be exactly zero.
-The scheme can be seen as preserving the zero-th and first moments.</p>
-<p>As a consequence, by linearity, the put-call parity relationship will hold exactly (note that in between nodes, any interpolation used should also be consistent with the put-call parity for the result to be more general).</p>
-<p>This result stays true for a non-uniform discretisation, and with other finite difference schemes as shown <a href="https://papers.ssrn.com/abstract=2362969">in this paper</a>.</p>
-<p>It is common to consider the log-transformed problem in \(X = \ln(S)\) as the diffusion is constant then, and a uniform grid much more adapted to the process.
-$$	\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 V}{\partial X^2}-\frac{1}{2}\sigma^2 \frac{\partial V}{\partial X} = 0.$$</p>
-<p>An implicit Euler discretisation on a uniform grid in \(X\) of width \(h\) with linear boundary conditions (zero Gamma in \(S\) ) leads to:</p>
-<p>$$ V^{k+1}_i - V^{k}_i = \frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-2V^k_{i}+V^{k}_{i-1}}{h^2}-\frac{1}{2}\sigma^2 \Delta t \frac{V^{k}_{i+1}-V^{k}_{i-1}}{2h}.$$
-for \(i=1,&hellip;,m-1\) with boundaries
-$$ V^{k+1}_i - V^{k}_i = 0.$$
-for \(i=0,m\).</p>
-<p>Such a scheme will not preserve the forward price anymore. This is  because now, the forward price is \(V_i = e^{X_i}\). In particular, it is not linear in \(X\).</p>
-<p>It is possible to preserve the forward by changing slightly the diffusion coefficient, very much as in the <a href="https://papers.ssrn.com/abstract=2711720">exponential fitting idea</a>. The difference is that, here, we are not interested
-in handling a large drift (when compared to the diffusion) without oscillations, but merely to preserve the forward exactly.
-We want the adjusted volatility \(\bar{\sigma}\) to solve
-$$\frac{1}{2}\bar{\sigma}^2 \frac{e^{h}-2+e^{-h}}{h^2}-\frac{1}{2}\sigma^2 \frac{e^{h}-e^{-h}}{2h}=0.$$
-Note that the discretised drift does not change, only the discretised diffusion term. The solution is:
-$$\bar{\sigma}^2 = \frac{\sigma^2 h}{2} \coth\left(\frac{h}{2} \right) .$$
-This needs to be applied only for \(i=1,&hellip;,m-1\).</p>
-<p>This is actually the same adjustment as the exponential fitting technique with a drift of zero. For a non-zero drift, the two adjustments would differ, as the exact forward adjustment will stay the same, along with an adjusted discrete drift.</p>
 
   
 </article>

@@ -73,6 +73,60 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-pain-of-java-matrix-libraries/">The Pain of Java Matrix Libraries</a>
+  </h1>
+  <time datetime="2009-11-26T09:17:00Z" class="post-date">Thu, Nov 26, 2009</time>
+  <p>Looking for a good Java Matrix (and actually also math) library, I was a bit surprised to find out there does not seem to be any really serious one still maintained.</p>
+<p>Sure, there is <a href="%22http://commons.apache.org/math/">Apache Commons Math</a>, but it is still changing a lot, and it is not very performance optimized yet, while it has been active for several years already. There is also Java3D, it does Matrix through GMatrix, but not much linear algebra and if you look at their implementation, it is very basic, not performance oriented.</p>
+<p>The other candidates seem to be 1-man projects that can disappear any other day (some of them look quite good like ojalgo, most of them are not interesting). Then you also have the serious but not maintained anymore <a href="http://dsd.lbl.gov/~hoschek/colt/">Cern Colt</a> library.</p>
+<p>Compared to C/C++, the Java world is worrying if you want to do maths.</p>
+<p>In those libraries, a dense matrix of double can be implemented two ways:</p>
+<ul>
+<li>by maintaining internally a double[][]. Usually those libraries allow for not copying the array, so it can be neat if your interfaces have this kind of arrays.</li>
+<li>by maintaining internally a double[]. The reason is for performance, but then each time you build a matrix from a double[][], an expensive copy will happen. So you need to use the Matrix object in your interfaces instead of double[][].</li>
+</ul>
+<p>This is a pain because you can be very quickly stuck in one or the other Matrix library. A &ldquo;solution&rdquo; is to have your own interface, but that is a pain to write. There is <a href="http://www.ujmp.org/">UJMP</a>, but it can hide some important methods (like transpose and multiply in one go from Colt or the ability to reuse an existing matrix in various operations to avoid allocating new memory), it is a students project (like parallel colt), but if it was a standard, it could be much more interesting.</p>
+<p>In summary it does really look like scientific people, universities don&rsquo;t use Java for computation otherwise Colt surely would have been maintained.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/java-calendar-is-broken-on-jvm-upgrade/">Java Calendar Is Broken On JVM Upgrade</a>
+  </h1>
+  <time datetime="2009-08-19T13:47:00Z" class="post-date">Wed, Aug 19, 2009</time>
+   
+
+We ran into an interesting issue with TimeZone and Dates. If you print the same date on different JVMs, it might show a different printed date.<br /><br />The reason behind this is the daylight saving time conventions. An old JVM won't necessarily have the same daylight saving time for a given TimeZone than a latest JVM, and therefore will interpret the date differently.<br /><br />Here is the output of a very simple program on 2 different JVMs. The number is the long number used to represent the date. I only use SimpleDateFormat with different TimeZone:<br /><br />JVM 1.5.0_12<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/17/09 11:59 PM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />JVM 1.5.0_20<br />loading date=Sat Jul 18 06:59:36 CEST 2009, number=1247893176505<br />using formatter in EST: <span style="font-weight: bold;">7/18/09 12:59 AM</span><br />using formatter in Asia/Singapore: 7/18/09 12:59 PM<br /><br />The source code:<pre><br />public class DateBug {       <br />   <br />    private static String FILE_NAME = "datebug.txt";<br />   <br />    public static void load() throws IOException {<br />        FileReader fr = new FileReader(FILE_NAME);<br />        BufferedReader br = new BufferedReader(fr);<br />        String l = br.readLine();<br />        br.close();<br />        long time = new Long(l);<br />        Date d = new Date(time);<br />        System.out.println("loading date="+d+", number="+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone("EST"));<br />        System.out.println("using formatter in EST: "+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));<br />        System.out.println("using formatter in Asia/Singapore: "+formatter.format(d));<br />    }<br />   <br />    public static void saveNew() throws IOException {<br />        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("EST"));<br />        c.set(2009, 06, 17, 23, 59);<br />        Date d = c.getTime();<br />        System.out.println("saving date="+d+", number="+d.getTime());<br />        SimpleDateFormat formatter = new SimpleDateFormat();<br />        formatter.setTimeZone(TimeZone.getTimeZone("EST"));<br />        System.out.println("using formatter in EST: "+formatter.format(d));<br />        formatter.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));<br />        System.out.println("using formatter in Asia/Singapore: "+formatter.format(d));<br />       <br />        FileWriter fw = new FileWriter(FILE_NAME);<br />        PrintWriter pw = new PrintWriter(fw);<br />        pw.println(d.getTime());<br />        pw.close();<br />    }<br />   <br />    public static void main(String[] args) throws IOException {<br />        System.out.println("JVM "+System.getProperty("java.version"));<br />        if (args.length == 1) {<br />            if (args[0].equals("save")) {<br />                saveNew();<br />            }<br />        } else {<br />            load();<br />        }<br />    }<br /></pre>What does this mean? This means that if you entered in a GUI in the first JVM a particular date &amp; time using EST time zone. This will change when you read back in the second JVM.<br />This suggests that if you want to keep the same dates, you are better off saving in UTC where daylight saving time is not used and trick DateFormat. But I have to say this looks quite ugly.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implicit-finite-differences-method-for-pricing-barrier-option/">Implicit Finite Differences Method For Pricing Barrier Option</a>
+  </h1>
+  <time datetime="2009-08-17T12:04:00Z" class="post-date">Mon, Aug 17, 2009</time>
+   
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s1600-h/implicit_method_barrier_option_html_m531cf9ea.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;width: 320px; height: 74px;" src="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s320/implicit_method_barrier_option_html_m531cf9ea.jpg" border="0" alt=""id="BLOGGER_PHOTO_ID_5370871824730605074" /></a><br />While trying to price a simple knock down and out barrier option, I encountered several difficulties I did not expect with the implicit finite differences method. The explicit method has less issues with barrier options pricing. I will show here what the tricky parts are and why explicit seems simpler in this case.<br /><br />The full article is <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.pdf">here (pdf)</a> or <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.html">here (html)</a> (the later is not very well formatted).<br /><br />Algorithms used in this article can be found at <a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares-pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
+  </h1>
+  <time datetime="2009-06-27T18:19:00Z" class="post-date">Sat, Jun 27, 2009</time>
+   
+
+In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting... Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm "hw:0,1"<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         "amix"      #redirect the output to dmix (instead of "hw:0,0")<br />    }<br />    control {<br />        name        "PCM"       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       "softvol"   #make use of softvol<br />}<br /></pre>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/">Java int Overflow Behavior</a>
   </h1>
   <time datetime="2009-06-15T16:15:00Z" class="post-date">Mon, Jun 15, 2009</time>
@@ -145,56 +199,6 @@ I often looked at the famous computer languages shootout for fun. Recently I not
    
 
 While starting a side project that does Monte Carlo pricing in Java (<a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a> - nothing yet there I am waiting for Mercurial repository support), I wondered what was the importance of quasi random numbers versus more regular pseudo random numbers in Monte Carlo simulations.<br /><br />This brought me to read more carefully several books about Monte Carlo and Finance (<a href="http://www.amazon.com/Complete-Guide-Option-Pricing-Formulas/dp/0786312408">Haug Option Pricing</a>, <a href="http://www.amazon.com/Primer-Monte-Carlo-Method/dp/084938673X">Sobol Primer on Monte Carlo</a>, and <a href="http://www.amazon.com/Financial-Engineering-Stochastic-Modelling-Probability/dp/0387004513">Glasserman Monte Carlo Methods in Finance Engineering</a>). I had quite a hard time to understand why the dimension of the quasi random generator was so important to price an asian option. Intuitively I thought the averaging points of an asian option were all on the same path, so they should be using the same random generator. This is very wrong as one does not care about the path in the first place but just in simulating each point in the average (using the regular black and scholes hypothesis). Finding the estimation for the average on the given points forces to use independent random generators for each point, because we want to approximate the estimation by the sum over those random points for each point.<br /><br />There is another simple argument to explain why independence of the random generators is so important. If we use the same generator for each point, then each point will move exactly the same way at each simulation. The average of those point will therefore behave exactly the same way as if there was only 1 point using the same generator. And we don't price an asian anymore but just a regular vanilla option.<br /><br />Using a pseudo random generator, one does not see the problem of dimension, because we can create N independent dimensions by just taking numbers N by N on a pseudo random generator. So effectively having 1 or N dimensions is the same on a pseudo random generator.<br /><br />Still I wrote a small test to see if a 1D quasi random generator was so bad when simulating N dimensions (taking values N by N on the quasi random generator). Here are the results:<br /><br /><span style="font-size:85%;"><span style="font-family: courier new;">MersenneTwister vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:43:51,111  INFO MonteCarloSimulationTest:114 - 867970000 -- expPrice=0.978958644504466</span><br /><span style="font-family: courier new;">14:43:51,428  INFO MonteCarloSimulationTest:120 - 314619000 -- expPrice=0.9733220318545934</span><br /><span style="font-family: courier new;">14:43:51,430  INFO MonteCarloSimulationTest:122 - relative difference=-0.005757763804951897</span><br /><span style="font-family: courier new; font-weight: bold;">can be as high as 2%</span><br /><br /><span style="font-family: courier new;">Sobol vs MersenneTwister on 10D asian:</span><br /><span style="font-family: courier new;">14:48:46,909  INFO MonteCarloSimulationTest:115 - 980209000 -- expPrice=0.9895032774079221</span><br /><span style="font-family: courier new;">14:48:47,345  INFO MonteCarloSimulationTest:121 - 433685000 -- expPrice=0.9790264042895171</span><br /><span style="font-family: courier new;">14:48:47,348  INFO MonteCarloSimulationTest:123 - relative difference=-0.010588012548932534</span><br /><span style="font-family: courier new; font-weight: bold;">about 1% it is actually bounded by MersenneTwister precision.</span><br /><br /><span style="font-family: courier new;">Sobol vs Sobol1D on 10D asian:</span><br /><span style="font-family: courier new;">14:47:08,614  INFO MonteCarloSimulationTest:115 - 717444000 -- expPrice=0.8810736428068913</span><br /><span style="font-family: courier new;">14:47:08,925  INFO MonteCarloSimulationTest:121 - 308499000 -- expPrice=0.9791449305055208</span><br /><span style="font-family: courier new;">14:47:08,927  INFO MonteCarloSimulationTest:123 - relative difference=0.11130884290920073</span><br /><span style="font-family: courier new; font-weight: bold;">about 10% and stays that way even when increasing number of simulations.</span></span><br /><br />Using an asian rate with 10 points, we see that Sobol1D will always give a very bad estimate, no matter the number of simulations. While Sobol used properly will give (much) better precision for less iterations. So even though there is the word random in quasi random, the numbers are very far from being random or even behaving like random numbers. It helped me to read about Van der Corput and Halton numbers to really understand quasi random numbers.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/java-logging-still-crap-in-2009/">Java Logging Still Crap in 2009</a>
-  </h1>
-  <time datetime="2009-04-24T15:01:00Z" class="post-date">Fri, Apr 24, 2009</time>
-  <p>When java logging API was first introduced in JDK 1.4 in 2002, it caused quite a lot a fuss around, with everybody asking &ldquo;Why did not they just include Log4j instead of creating their own bastard child?&rdquo;.</p>
-<p>I remember having looked at it very shortly before continuing using Log4j on all projects I have been involved with.</p>
-<p>Today, while doing a very small project, I tried once more to use <a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html">java logging</a>. The main reason is that I was lazy to add a dependency to one more jar for this small project. While trying I found out that:</p>
-<ul>
-<li>you still need to use a damned JVM parameter to point to your configuration file</li>
-<li>you can not change the formatting without writing a formatter class!</li>
-</ul>
-<p>It&rsquo;s 2009! What has Sun done? I am amazed the most elementary things you expect from a Logger are still not included by default in the JDK.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/bachelier-vs.-black/">Bachelier vs. Black</a>
-  </h1>
-  <time datetime="2009-03-23T17:58:00Z" class="post-date">Mon, Mar 23, 2009</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s1600-h/bachelier_vs_black_normal.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 400px; height: 300px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/ScfCRxmTocI/AAAAAAAACzk/5_lPpPc7LzU/s400/bachelier_vs_black_normal.png" alt="" id="BLOGGER_PHOTO_ID_5316431495761732034" border="0" /></a><br />Black and Scholes gives a strange result for the price of a binary option under high volatility.  You will learn here how to simulate a stock price evolution using Java, and how to show it using JFreeChart library. It starts with more complex concepts (don't be afraid) and goes done towards simpler things.<br /><br />I could not write all that in a blog format, so I created a old HTML page about it <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.html">here</a> and a <a href="http://31416.appspot.com/static/bachblack/Bachelier_vs_Black.pdf">PDF version</a>.<br /><span style="text-decoration: underline;"></span>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/linux-audio-state-miserable/">Linux Audio State = Miserable</a>
-  </h1>
-  <time datetime="2009-03-19T12:39:00Z" class="post-date">Thu, Mar 19, 2009</time>
-  <p>There are lots of programs for playing MP3 under linux, a few dealing decently with big libraries. But when you start looking for a program that does crossfade well and manage big libraries easily - there is nothing.</p>
-<p>Rhythmbox does some crossfade, but crashes when you move manually in the song. Audacious does some crossfade but regularly crashes with crossfade plugin.</p>
-<p>The real alternative are AIMP2 or Foobar2000 in Wine. It is quite incredible that you can have good solid crossfade in wine and not natively in Linux.</p>
-<p>Maybe people spent too much time on useless Pulseaudio (I have much less issues using only ALSA).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/senior-developers-team-productivity-x4-from-ms-research-paper/">Senior Developers Team Productivity X4 (from MS Research Paper)</a>
-  </h1>
-  <time datetime="2009-02-10T10:44:00Z" class="post-date">Tue, Feb 10, 2009</time>
-   
-
-There is a very interesting <a href="http://research.microsoft.com/en-us/projects/esm/nagappan_tdd.pdf">MS Research paper about test driven development</a> (TDD). It is one of the only real study about it that I know of. The paper conclusions from experiments over 4 TDD teams vs 4 traditional teams is:<br /><blockquote><span style="font-style: italic;">"TDD seems to be applicable in various domains and can significantly reduce the defect density of developed software without significant productivity reduction of the development team"</span></blockquote>Their data gives also other interesting results:<br /><ul><li>An experienced team (5 people over 10 years + 2 people under 5 years) : 155KLOC C# code (+60 test).<br /></li></ul><ul><li>A junior team (3 people under 10 years + 6 people under 5 years): 41 KLOC Java code (+28 test).<br /></li></ul>If you do the ratio of KLOC/man month, you have the following graph:<br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_9RyqGT46Fbk/SZFVEkXM8JI/AAAAAAAACts/_pwwDhnKTt0/s1600-h/MSPaperKLOCMonth.png"><img style="margin: 0px auto 10px; display: block; text-align: center; cursor: pointer; width: 400px; height: 252px;" src="http://2.bp.blogspot.com/_9RyqGT46Fbk/SZFVEkXM8JI/AAAAAAAACts/_pwwDhnKTt0/s400/MSPaperKLOCMonth.png" alt="" id="BLOGGER_PHOTO_ID_5301111773360615570" border="0" /></a><br />I know this is very far from scientific evidence and more like astrology, but still, the most conservative ratio for senior/junior is <span style="font-weight: bold;">4.23</span>!
 
 
 
