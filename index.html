@@ -73,6 +73,24 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/positive_stochastic_collocation/">Positive Stochastic Collocation</a>
+  </h1>
+  <time datetime="2021-08-31T07:56:42&#43;0100" class="post-date">Tue, Aug 31, 2021</time>
+  <p>In the context of my thesis, I <a href="https://arxiv.org/abs/2109.02405">explored</a> the use of stochastic collocation to capture the marginal densities of a positive asset.
+Indeed, most financial asset prices must be non-negative. But the classic stochastic collocation towards the normally distributed random variable, is not.</p>
+<p>A simple tweak, proposed early on by Grzelak, is to assume absorption and use the put-call parity to price put options (which otherwise depend on the left tail).
+This sort of works most of the time, but a priori, there is no guarantee that we will end up with a positive put option price.
+As an extreme example, we may consider the case where the collocation price formula leads to  \(V_{\textsf{call}}(K=0) &lt; f \) where  \(f \) is the forward price to maturity.
+The put-call parity relation applied at  \(K=0 \) leads to  \(V_{\textsf{put}}(K=0) = V_{\textsf{call}}(K=0)-f &lt; 0 \). This means that for some strictly positive strike, the put option price will be negative, which is non-sensical.
+In reality, it thus implies that absorption must happen earlier, not at  \(S=0 \), but at some strictly positive asset price. And then it is not so obvious to chose the right value in advance.</p>
+<p>In <a href="https://arxiv.org/abs/2109.02405">the paper</a>, I look at alternative ways of expressing the absorption, which do not have this issue. Intuitively however, one may wonder why we would go through the hassle of considering a distribution which may end up negative to model a positive price.</p>
+<p>In finance, the assumption of lognormal distribution of price returns is very common. The most straighforward would thus be to collocate towards a lognormal variate (instead of a normal one), and use an increasing polynomial map from  \([0, \infty) \) to  \([0, \infty) \).
+There is no real numerical challenge to implement the idea. However it turns out not to work well, for reasons explained in <a href="https://arxiv.org/abs/2109.02405">the paper</a>, one of those being a lack of invariance with regards to the lognormal distribution volatility.</p>
+<p>This did not make it directly to the final thesis, because it was not core to it. Instead, I explore absorption with the Heston driver process (although, in hindsight, I should have just considered mapping 0 to 0 in the monotonic spline extrapolation). I recently added <a href="https://arxiv.org/abs/2109.02405">the paper</a> on the simpler case of positive collocation with a normal or lognormal process to the arxiv.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/koonin-on-climate-book-review/">My Review of Steven Koonin&#39;s Book on Climate</a>
   </h1>
   <time datetime="2021-08-30T07:56:42&#43;0100" class="post-date">Mon, Aug 30, 2021</time>
@@ -392,33 +410,6 @@ For Well1024a (period of \(2^{1024}-1\)), full bit balance recovery takes around
                 2143158964<span style="color:#666">,</span> 592925741<span style="color:#666">,</span> <span style="color:#666">-</span>980213649<span style="color:#666">,</span> <span style="color:#666">-</span>724779906<span style="color:#666">,</span> 395465301<span style="color:#666">,</span> 635561967<span style="color:#666">,</span> 700445106<span style="color:#666">,</span> 1198493979<span style="color:#666">,</span> 1707436053<span style="color:#666">,</span>
                 149364933<span style="color:#666">,</span> <span style="color:#666">-</span>1767142986<span style="color:#666">,</span> 1950272542<span style="color:#666">,</span> <span style="color:#666">-</span>819076405<span style="color:#666">,</span> 687992680<span style="color:#666">,</span> 1960992977<span style="color:#666">,</span> 1342528780<span style="color:#666">,</span> <span style="color:#666">-</span>2110840904<span style="color:#666">,</span>
                 340172712<span style="color:#666">,</span> <span style="color:#666">-</span>486861654 <span style="color:#666">};</span></code></pre></div>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/war-of-the-random-number-generators/">The war of the random number generators</a>
-  </h1>
-  <time datetime="2020-09-17T20:56:42&#43;0100" class="post-date">Thu, Sep 17, 2020</time>
-  <p>These days, there seems to be some sort of small war to define what is a modern good random number generators to advise for simulations.
-Historically, the Mersenne-Twister (MT thereafter) won this war. It is used by default in many scientific libraries and software, even if there has been a few issues with it:</p>
-<ol>
-<li>A bad initial seed may make it generate a sequence of low quality for at least as many as 700K numbers.</li>
-<li>It is slow to jump-ahead, making parallelization not so practical.</li>
-<li>It fails some TestU01 Bigcrush tests, mostly related to the F2 linear algebra, the algebra of the Mersenne-Twister.</li>
-</ol>
-<p>It turns out, that before MT (1997), a lot of the alternatives were much worse, except, perhaps, <a href="https://arxiv.org/abs/hep-lat/9309020">RANLUX</a> (1993), which is quite slow due to the need of skipping many points of the generated sequence.</p>
-<p>The first issue has been mostly solved by more modern variants such as  <a href="https://dl.acm.org/doi/pdf/10.1145/369534.369540">MT-64</a> or <a href="https://www-labs.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf">Well19937a</a> or <a href="https://arxiv.org/pdf/1505.06582">Memt19997</a>. The warm-up needed has been thus significantly shortened, and a better seed initialization is present in those algorithms. It is not clear however that it has been fully solved, as there are very few studies analyzing the quality with many different seeds, I found only a summary of one test, p.7 of <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwjAo7TpuvLrAhXQCuwKHbgACJoQFjABegQIBRAB&amp;url=https%3A%2F%2Fwww6.inrae.fr%2Frecord%2FMedia%2Ffichiers%2FJ2_DHill&amp;usg=AOvVaw253AN7COqhMPQT3_KPuPe6">this presentation</a>.</p>
-<p>The second issue may be partly solved by considering a shorter period, such as in the Well1024 generator.</p>
-<p>The third issue may or may not be a real issue in practice. Those tests can be seen as taylored to make MT (and F2 algebra based generators) fail and not be all that practical. However, Vigna exposes the problem on some more concrete examples in <a href="https://arxiv.org/pdf/1910.06437.pdf">his recent paper</a>. The title of this paper has the provocative title <em>It Is High Time We Let Go Of The Mersenne Twister</em>. Before that paper, Vigna and her arch-enemy O&rsquo;Neil, regularly advised to let go of the Mersenne-Twister and use a generator they created instead. For Vigna, the generator is some variant of xorshift, the most recent being xoroshiro256**, and for O&rsquo;Neil, it is one of her numerous PCG algorithms. In both cases, a flurry of generators is proposed, and it seems that a lot of them are poor (Vigna criticizes strongly PCG on <a href="http://pcg.di.unimi.it/pcg.php">his personal page</a>; O&rsquo;Neil does something similar against xorshift variants <a href="https://lemire.me/blog/2017/09/08/the-xorshift128-random-number-generator-fails-bigcrush/">sometimes with the help of Lemire</a>). The recommended choice for each has evolved over the years. For a reader or a user, it looks then that both are risky/unproven. The authors of MT recently also added their own opinion on a specific xorshift variant (xorshift128+), with their papers <em><a href="https://arxiv.org/abs/1908.10020">Again, random numbers fall mainly in the planes: xorshift128+ generators</a></em> and <em><a href="https://arxiv.org/abs/1907.03251">Pseudo random number generators: attention for a newly proposed generator</a></em>. An important insight of that latter paper, is to insist that it is not enough to pass a good test suite like BigCrush for a generator to be good.</p>
-<p>So what is recommended then?</p>
-<p>A good read on the subject is another paper, with the title <a href="http://www.jucs.org/doi?doi=10.3217/jucs-012-06-0672">Pseudorandom Number Generation: Impossibility and Compromise</a>, also from the MT authors, explaining the challenge of defining what is a good random number generator. It ignores however the MRG family of generator studied by L&rsquo;Ecuyer, whose MRG32k3a is also relatively widely used, and has been there for a while now without any obvious defect against it being proven (good track record). This generator has a relatively fast jump-ahead, which is one of the reasons why it regained popularity with the advent of GPUs and does not fail TestU01 BigCrush. It is a bit slower than MT, but not much, especially with <a href="https://github.com/vigna/MRG32k3a">this implementation</a> from Vigna (3x faster than original double based implementation).</p>
-<p>There are not many studies on block based crypto-generator such as AES or Chacha for simulation, which become a bit more trendy (thanks to <a href="http://www.thesalmons.org/john/random123/papers/random123sc11.pdf">Salmons paper</a>) as they are trivial use in a parallel Monte-Carlo simulation (jump-ahead as fast as generation of one number). In theory the uniformity should be good, since otherwise that would be a channel of attack.</p>
-<p>The conclusion of the presentation referenced earlier in this post, is also very relevant:</p>
-<ul>
-<li>use the best sequential generators (i.e. MT, MRG32k3a or some Well),</li>
-<li>test the stochastic variability by changing generator,</li>
-<li>do not parallelize by inputing different seeds (prefer a jump-ahead or a tested substream approach).</li>
-</ul>
 
   
 </article>

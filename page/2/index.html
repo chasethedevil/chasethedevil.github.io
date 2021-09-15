@@ -73,6 +73,33 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/war-of-the-random-number-generators/">The war of the random number generators</a>
+  </h1>
+  <time datetime="2020-09-17T20:56:42&#43;0100" class="post-date">Thu, Sep 17, 2020</time>
+  <p>These days, there seems to be some sort of small war to define what is a modern good random number generators to advise for simulations.
+Historically, the Mersenne-Twister (MT thereafter) won this war. It is used by default in many scientific libraries and software, even if there has been a few issues with it:</p>
+<ol>
+<li>A bad initial seed may make it generate a sequence of low quality for at least as many as 700K numbers.</li>
+<li>It is slow to jump-ahead, making parallelization not so practical.</li>
+<li>It fails some TestU01 Bigcrush tests, mostly related to the F2 linear algebra, the algebra of the Mersenne-Twister.</li>
+</ol>
+<p>It turns out, that before MT (1997), a lot of the alternatives were much worse, except, perhaps, <a href="https://arxiv.org/abs/hep-lat/9309020">RANLUX</a> (1993), which is quite slow due to the need of skipping many points of the generated sequence.</p>
+<p>The first issue has been mostly solved by more modern variants such as  <a href="https://dl.acm.org/doi/pdf/10.1145/369534.369540">MT-64</a> or <a href="https://www-labs.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf">Well19937a</a> or <a href="https://arxiv.org/pdf/1505.06582">Memt19997</a>. The warm-up needed has been thus significantly shortened, and a better seed initialization is present in those algorithms. It is not clear however that it has been fully solved, as there are very few studies analyzing the quality with many different seeds, I found only a summary of one test, p.7 of <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwjAo7TpuvLrAhXQCuwKHbgACJoQFjABegQIBRAB&amp;url=https%3A%2F%2Fwww6.inrae.fr%2Frecord%2FMedia%2Ffichiers%2FJ2_DHill&amp;usg=AOvVaw253AN7COqhMPQT3_KPuPe6">this presentation</a>.</p>
+<p>The second issue may be partly solved by considering a shorter period, such as in the Well1024 generator.</p>
+<p>The third issue may or may not be a real issue in practice. Those tests can be seen as taylored to make MT (and F2 algebra based generators) fail and not be all that practical. However, Vigna exposes the problem on some more concrete examples in <a href="https://arxiv.org/pdf/1910.06437.pdf">his recent paper</a>. The title of this paper has the provocative title <em>It Is High Time We Let Go Of The Mersenne Twister</em>. Before that paper, Vigna and her arch-enemy O&rsquo;Neil, regularly advised to let go of the Mersenne-Twister and use a generator they created instead. For Vigna, the generator is some variant of xorshift, the most recent being xoroshiro256**, and for O&rsquo;Neil, it is one of her numerous PCG algorithms. In both cases, a flurry of generators is proposed, and it seems that a lot of them are poor (Vigna criticizes strongly PCG on <a href="http://pcg.di.unimi.it/pcg.php">his personal page</a>; O&rsquo;Neil does something similar against xorshift variants <a href="https://lemire.me/blog/2017/09/08/the-xorshift128-random-number-generator-fails-bigcrush/">sometimes with the help of Lemire</a>). The recommended choice for each has evolved over the years. For a reader or a user, it looks then that both are risky/unproven. The authors of MT recently also added their own opinion on a specific xorshift variant (xorshift128+), with their papers <em><a href="https://arxiv.org/abs/1908.10020">Again, random numbers fall mainly in the planes: xorshift128+ generators</a></em> and <em><a href="https://arxiv.org/abs/1907.03251">Pseudo random number generators: attention for a newly proposed generator</a></em>. An important insight of that latter paper, is to insist that it is not enough to pass a good test suite like BigCrush for a generator to be good.</p>
+<p>So what is recommended then?</p>
+<p>A good read on the subject is another paper, with the title <a href="http://www.jucs.org/doi?doi=10.3217/jucs-012-06-0672">Pseudorandom Number Generation: Impossibility and Compromise</a>, also from the MT authors, explaining the challenge of defining what is a good random number generator. It ignores however the MRG family of generator studied by L&rsquo;Ecuyer, whose MRG32k3a is also relatively widely used, and has been there for a while now without any obvious defect against it being proven (good track record). This generator has a relatively fast jump-ahead, which is one of the reasons why it regained popularity with the advent of GPUs and does not fail TestU01 BigCrush. It is a bit slower than MT, but not much, especially with <a href="https://github.com/vigna/MRG32k3a">this implementation</a> from Vigna (3x faster than original double based implementation).</p>
+<p>There are not many studies on block based crypto-generator such as AES or Chacha for simulation, which become a bit more trendy (thanks to <a href="http://www.thesalmons.org/john/random123/papers/random123sc11.pdf">Salmons paper</a>) as they are trivial use in a parallel Monte-Carlo simulation (jump-ahead as fast as generation of one number). In theory the uniformity should be good, since otherwise that would be a channel of attack.</p>
+<p>The conclusion of the presentation referenced earlier in this post, is also very relevant:</p>
+<ul>
+<li>use the best sequential generators (i.e. MT, MRG32k3a or some Well),</li>
+<li>test the stochastic variability by changing generator,</li>
+<li>do not parallelize by inputing different seeds (prefer a jump-ahead or a tested substream approach).</li>
+</ul>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/sobol-64-bits/">Sobol with 64-bits integers</a>
   </h1>
   <time datetime="2020-09-09T20:56:42&#43;0100" class="post-date">Wed, Sep 9, 2020</time>
@@ -388,33 +415,6 @@ where the stock price was actually lower.
 In fact, there seems to be a signal in his time-serie, where the probability of going under $100 increases
 significantly, one week before March 27, that is one week before the actual drop,
 suggesting that the drop was priced in the options.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/">The Fourth Moment of the Normal SABR Model</a>
-  </h1>
-  <time datetime="2018-06-11T20:56:42&#43;0100" class="post-date">Mon, Jun 11, 2018</time>
-  <p>I was wondering if I could use the SABR moments to calibrate a model to SABR parameters directly. It turns out that the SABR moments have relatively
-simple expressions when \(\beta=0\), that is, for the normal SABR model (with no absorption). This is for the pure SABR stochatic volatility model, not the Hagan approximation.
-For the Hagan approximation, we would need to use the replication by vanilla options to compute the moments.</p>
-<p>I first saw a simple derivation of the fourth moment in Xavier Charvet and Yann Ticot 2011 paper
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1968453">Pricing with a smile: an approach using Normal Inverse Gaussian distributions with a SABR-like parameterisation</a>.
-I discovered a more recent (2013) paper from Lorella Fatone et al. <a href="https://www.degruyter.com/view/j/jip.2013.21.issue-1/jip-2012-0093/jip-2012-0093.xml">The use of statistical tests to calibrate the normal SABR model</a>
-with simple formulae for the third and fourth moments (sci-hub.nu is your friend to read this). I had actually derived the third moment myself previously, based on the straighforward approach from Xavier Charvet, which
-consists merely in applying the Ito-Doeblin formula several times. Funnily, Xavier Charvet and Yann Ticot make it Irish, by calling it the Ito-Dublin formula.</p>
-<p>Now the two papers lead to a different formula for the fourth moment. I did not have the courage to find out where exactly was the mistake of Lorella Fatone et al., as their paper
-is much more abstract, and follow a somewhat convoluted path to derive the formula. But I could not find a mistake in Xavier Charvet and Yann Ticot paper. They don&rsquo;t directly give
-the fourth moment, but it is trivial to derive the centered fourth moment from their formulae. By centered, I mean the fourth moment of the process \(F(t)-F(0)\) where \(F(0)\) is the
-initial forward price.</p>
-<p>$$ \frac{A}{\nu^2}\left(e^{6\nu^2 t}-1\right)+2\frac{B}{\nu^2}\left(e^{3\nu^2 t}-1\right)+6\frac{C}{\nu^2}\left(e^{\nu^2 t}-1\right) $$
-with
-$$ A = \frac{\alpha^4 (1+ 4\rho^2)}{5 \nu^2},,$$
-$$ B = -\frac{2 \rho^2 \alpha^4}{\nu^2},,$$
-$$ C = - A - B ,.$$</p>
-<p>Fatone et al. includes a factor \(\frac{1}{3}\) in front of \(\rho^2\), which I believe is a mistake. There is however
-no error in their third moment.</p>
-<p>Unfortunately, my quick mapping idea does not appear to work so well for long maturities.</p>
 
   
 </article>

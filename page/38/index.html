@@ -73,6 +73,37 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/is-prolog-better-suited-than-sql/">Is Prolog Better Suited Than SQL?</a>
+  </h1>
+  <time datetime="2005-09-26T15:36:00Z" class="post-date">Mon, Sep 26, 2005</time>
+  <p>I am currently reading a Prolog book <em>Artificial Intelligence Through Prolog</em>, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.</p>
+<p>It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project. With Prolog, there is no need to think about joins, type of joins, SQL syntax. It is at the level just higher. I wonder very much why Prolog did not become more mainstream as it seems to solve some problems in a much nicer, natural way.</p>
+<p>Here is a short example to get reviews of things by user or by user and tags or &hellip;:</p>
+<p>let&rsquo;s define some facts:</p>
+<ul>
+<li>is_tag(tag1, user1, thing_id)</li>
+<li>is_tag(tag2, user1, thing_id)</li>
+<li>&hellip;</li>
+<li>review(user1, thing_id, description, extended, date)</li>
+<li>&hellip;</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE)</li>
+</ul>
+<p>review for user &ldquo;user_x&rdquo; with tag &ldquo;tag_y&rdquo;</p>
+<ul>
+<li>?review(user_x, THING_ID, DESC, EXT, DATE), is_tag(tag_y, user_x, THING_ID)</li>
+</ul>
+<p>We could imagine some better ways to lay out information. This is just a first draft.</p>
+<p>Now of course, Prolog does not necessary makes sense for us because:</p>
+<p>a) We already have it working in SQL</p>
+<p>b) SQL is much more used and should therefore be more tunable, stable, etc.</p>
+<p>Still the Prolog way of things is interesting and powerful. We could have written a code with a logic near Prolog instead of our custom code.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/when-california-was-an-island/">When California Was An Island</a>
   </h1>
   <time datetime="2005-09-21T19:01:00Z" class="post-date">Wed, Sep 21, 2005</time>
@@ -171,18 +202,6 @@ There are some open source projects that can help you in generating or reading R
    
 
 I was writing an Atom feed generator for my current project. I chosed to support <a href="http://www.atomenabled.org/developers/syndication/">Atom 1.0</a> since it looks like it has the capabilities to establish as the next standard. Unfortunately I quickly saw that it was quite hard to test it in the real world (out of the good feedvalidator), as almost nobody seems to accept Atom 1.0 feeds yet, even if it is rapidely changing (there is support for it in Firefox CVS version).<br /><br />So I decided to support RSS as well, the big question was: which RSS version? After grabbing lots of info on the subject, I opted for 1.0 again (more flexible, more different than Atom). It was actually quick to support RSS, but then when in real world, neither <a href="http://desktop.google.com/en/">Google Desktop</a> nor <a href="http://my.yahoo.com/">My Yahoo</a> was willing to accept my feed. I looked at every bit of my xml, fiddled with Tomcat configuration in any possible way when I saw that no request was coming to my server from Yahoo or Google. And finally I thought, hmm maybe it's the port. I restarted my server on port 80, and yup, it worked!<br /><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/mubot_local.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/320/mubot_local.jpg" alt="" border="0" /></a><br /><br />I wonder why Google Desktop and My Yahoo don't support another port than port 80 for RSS feeds.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/google-sidebar-hotkey-activation/">Google Sidebar Hotkey Activation</a>
-  </h1>
-  <time datetime="2005-08-25T14:35:00Z" class="post-date">Thu, Aug 25, 2005</time>
-   
-
-I like the new <a href="http://desktop.google.com/en/">Google Desktop</a> with the sidebar. It shares similarities with <a href="http://www.konfabulator.com/">Konfabulator</a>, recently bought by yahoo. They both allow easy access to some custom little widgets that I would call "active". They are active because they are refreshed periodically with new information (processor usage, news, scratch pad, emails, etc). But while Konfabulator choose to emphasize on visual effects, Google prefers a more standard information presentation. This shows as well in their choice of technologies:<br /><ul>   <li>Google Sidebar plug-ins are just Windows appz that can take advantage of Google Interfaces. That makes them quite powerful in theory, but programming them is less accessible.<br />  </li>   <li>Konfabulator plug-ins are Javascript+XML, the Javascript is not just regular client-side javascript, it can use Konfabulator API (containing many effect and rudimentary network access), and COM objects . That makes them very focused on presentation, and the Internet.</li> </ul> In the long run, Google choice makes sense, the forthcoming <a href="http://fortes.com/work">Avalon</a> will make visual effects very accessible to windows developers.<br /><br />Now back to the subject, I missed the 'activation on hotkey' feature from Konfabulator for the Google Sidebar. Fortunately, I a have found a powerful little open-source program, <a href="http://www.autohotkey.com/">Autohotkey</a>, that allowed me to do that very quickly. Here is the script I use (it's a hack since it relies on toolbar size (but not position), but I like the default position and it works (only using floating deskbar, i let you figure out for the non floating version)):<br /><span style="font-family:Courier New, Courier, monospace;">F12::<br />MouseGetPos, X, Y<br />if WinExist("ahk_class _GD_Sidebar")<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left, 160, 16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}<br />else if WinExist("ahk_class ATL:0044A4C8")<br />{<br />    WinActivate<br />    BlockInput,On<br />    MouseClick, left,  158,  16<br />    MouseMove, X,Y<br />    BlockInput,Off<br />    return<br />}</span>
 
 
 
