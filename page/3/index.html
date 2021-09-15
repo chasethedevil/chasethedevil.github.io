@@ -335,6 +335,93 @@ $$ c_j = a_{2j} + i b_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \
 $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
 <p>And we have computed the coefficients with a single FFT of size N.</p>
+<p>In terms of Go language code, the classic type-2 sine Fourier transforms reads
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">DST2</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+	result <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n)
+	<span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+		sum <span style="color:#666">:=</span> <span style="color:#40a070">0.0</span>
+		<span style="color:#007020;font-weight:bold">for</span> j, vj <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+			sum <span style="color:#666">+=</span> math.<span style="color:#06287e">Sin</span>((<span style="color:#007020">float64</span>(j)<span style="color:#666">+</span><span style="color:#40a070">0.5</span>)<span style="color:#666">*</span>math.Pi<span style="color:#666">*</span><span style="color:#007020">float64</span>(k)<span style="color:#666">/</span><span style="color:#007020">float64</span>(n)) <span style="color:#666">*</span> vj
+		}
+		result[k] = sum
+	}
+	<span style="color:#007020">copy</span>(vector, result)
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+}</code></pre></div></p>
+<p>And the Fast Type-2 Sine transform reads
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">FastDST2ByFFT</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+	halfLen <span style="color:#666">:=</span> n <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+	z <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">complex128</span>, n)
+	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; halfLen; i<span style="color:#666">++</span> {
+		z[i] = <span style="color:#007020">complex</span>(vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span>], <span style="color:#40a070">0</span>)
+		z[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#007020">complex</span>(<span style="color:#666">-</span>vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+	}
+	<span style="color:#007020;font-weight:bold">if</span> n<span style="color:#666">&amp;</span><span style="color:#40a070">1</span> <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
+		z[halfLen] = <span style="color:#007020">complex</span>(vector[n<span style="color:#666">-</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+	}
+	err <span style="color:#666">:=</span> <span style="color:#06287e">TransformRadix2Complex</span>(z)
+	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+		temp <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">*</span> math.Pi <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n<span style="color:#666">*</span><span style="color:#40a070">2</span>)
+		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(temp)
+		vector[i] = <span style="color:#007020">real</span>(z[i])<span style="color:#666">*</span>s <span style="color:#666">-</span> <span style="color:#007020">imag</span>(z[i])<span style="color:#666">*</span>c
+	}
+	<span style="color:#007020;font-weight:bold">return</span> err
+}</code></pre></div></p>
+<p>The function TransformRadix2Complex, used above, steams from a standard implementation of the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector (The vector&rsquo;s length must be a power of 2. Uses the Cooley-Tukey decimation-in-time radix-2 algorithm).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">TransformRadix2Complex</span>(z []<span style="color:#902000">complex128</span>) <span style="color:#902000">error</span> {
+	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(z)
+	levels <span style="color:#666">:=</span> <span style="color:#007020">uint</span>(<span style="color:#40a070">31</span> <span style="color:#666">-</span> bits.<span style="color:#06287e">LeadingZeros32</span>(<span style="color:#007020">uint32</span>(n))) <span style="color:#60a0b0;font-style:italic">// Equal to floor(log2(n))
+</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">if</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> levels) <span style="color:#666">!=</span> n {
+		<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Length is not a power of 2&#34;</span>)
+	}
+
+	<span style="color:#60a0b0;font-style:italic">// Trigonometric tables
+</span><span style="color:#60a0b0;font-style:italic"></span>	cosTable, sinTable <span style="color:#666">:=</span> <span style="color:#06287e">MakeCosSinTable</span>(n)
+
+	<span style="color:#60a0b0;font-style:italic">// Bit-reversed addressing permutation
+</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+		j <span style="color:#666">:=</span> <span style="color:#007020">int</span>(bits.<span style="color:#06287e">Reverse32</span>(<span style="color:#007020">uint32</span>(i)) <span style="color:#666">&gt;&gt;</span> (<span style="color:#40a070">32</span> <span style="color:#666">-</span> levels))
+		<span style="color:#007020;font-weight:bold">if</span> j &gt; i {
+			z[i], z[j] = z[j], z[i]
+		}
+	}
+
+	<span style="color:#60a0b0;font-style:italic">// Cooley-Tukey decimation-in-time radix-2 FFT
+</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> size <span style="color:#666">:=</span> <span style="color:#40a070">2</span>; size <span style="color:#666">&lt;=</span> n; size <span style="color:#666">*=</span> <span style="color:#40a070">2</span> {
+		halfsize <span style="color:#666">:=</span> size <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+		tablestep <span style="color:#666">:=</span> n <span style="color:#666">/</span> size
+		<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n; i <span style="color:#666">+=</span> size {
+			j <span style="color:#666">:=</span> i
+			k <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+			<span style="color:#007020;font-weight:bold">for</span> ; j &lt; i<span style="color:#666">+</span>halfsize; j<span style="color:#666">++</span> {
+				l <span style="color:#666">:=</span> j <span style="color:#666">+</span> halfsize
+				tpre <span style="color:#666">:=</span> <span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>cosTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>sinTable[k]
+				tpim <span style="color:#666">:=</span> <span style="color:#666">-</span><span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>sinTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>cosTable[k]
+				z[l] = z[j] <span style="color:#666">-</span> <span style="color:#007020">complex</span>(tpre, tpim)
+				z[j] <span style="color:#666">+=</span> <span style="color:#007020">complex</span>(tpre, tpim)
+				k <span style="color:#666">+=</span> tablestep
+			}
+		}
+		<span style="color:#007020;font-weight:bold">if</span> size <span style="color:#666">==</span> n { <span style="color:#60a0b0;font-style:italic">// Prevent overflow in &#39;size *= 2&#39;
+</span><span style="color:#60a0b0;font-style:italic"></span>			<span style="color:#007020;font-weight:bold">break</span>
+		}
+	}
+
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">MakeCosSinTable</span>(n <span style="color:#902000">int</span>) ([]<span style="color:#902000">float64</span>, []<span style="color:#902000">float64</span>) {
+	cosTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+	sinTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> cosTable {
+		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(<span style="color:#40a070">2</span> <span style="color:#666">*</span> math.Pi <span style="color:#666">*</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n))
+		cosTable[i] = c
+		sinTable[i] = s
+	}
+	<span style="color:#007020;font-weight:bold">return</span> cosTable, sinTable
+}</code></pre></div>
 
   
 </article><article class="post">
