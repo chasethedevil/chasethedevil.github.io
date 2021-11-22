@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.87.0" />
+  <meta name="generator" content="Hugo 0.89.3" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,11 +75,11 @@
   <p>The gnome shell has been crashing on me more regularly lately.
 XFCE is a good and fast more tradional desktop, but, from past experiences,
 it does not play well with power management if you only install it via</p>
-<pre><code>dnf install @xfce-desktop-environment
+<pre tabindex="0"><code>dnf install @xfce-desktop-environment
 </code></pre><p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
 most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
 to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
-<pre><code>systemctl disable gdm
+<pre tabindex="0"><code>systemctl disable gdm
 systemctl enable lightdm
 systemctl stop gdm
 systemctl start lightdm

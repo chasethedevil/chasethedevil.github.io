@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>exp(y*log(x)) Much Faster than Math.pow(x,y) &middot; Chase the Devil</title>
+  <title>Quadprog in Julia &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,9 +70,40 @@
 
     <main class="content container">
     <div class="post">
-  <h1>exp(y*log(x)) Much Faster than Math.pow(x,y)</h1>
-  <time datetime=2011-04-08T23:03:00Z class="post-date">Fri, Apr 8, 2011</time>
-  <p>Today I found out that replacing <em>Math.pow(x,y)</em> by <em>Math.exp(y</em>Math.log(x))* made me gain 50% performance in my program. Of course, both x and y are double in my case. I find this quite surprising, I expected better from Math.pow.</p>
+  <h1>Quadprog in Julia</h1>
+  <time datetime=2021-11-21T13:56:42&#43;0100 class="post-date">Sun, Nov 21, 2021</time>
+  <p>As described <a href="https://en.wikipedia.org/wiki/Quadratic_programming">on wikipedia</a>, a quadratic programming problem with <em>n</em> variables and <em>m</em> constraints is of the  form
+$$ \min(-d^T x + 1/2 x^T D x) $$ with the
+constraints \( A^T x \geq b_0 \), were \(D\) is a \n \cross n\)-dimensional real symmetric matrix, \(A\) is a \n \cross m\)-dimensional real matrix, \( b_0 \) is a \(m\)-dimensional vector of constraints,\( d \) is a \(n\)-dimensional vector, and the variable \(x\) is a \(n\)-dimensional vector.</p>
+<p>Solving convex quadratic programming problems happens to be useful in several areas of finance. One of the applications is to find the set of arbitrage-free option prices closest to a given set of market option prices as described in <a href="https://arxiv.org/abs/2004.08650">An arbitrage-free interpolation of class C2 for option prices</a> (also published in the <a href="https://jod.pm-research.com/content/28/4/64">Journal of Derivatives</a>). Another application is portfolio optimization.</p>
+<p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
+<p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the COSMO solver on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Solver</th>
+<th style="text-align:right">RMSE</th>
+<th style="text-align:right">Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GoldfarbIdnaniSolver</td>
+<td style="text-align:right">0.0031130349998388157</td>
+<td style="text-align:right">0.205</td>
+</tr>
+<tr>
+<td style="text-align:left">COSMO</td>
+<td style="text-align:right">0.0031130309597602370</td>
+<td style="text-align:right">21.485</td>
+</tr>
+<tr>
+<td style="text-align:left">SCS</td>
+<td style="text-align:right">0.0031130429769795193</td>
+<td style="text-align:right">8.381</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.87.0" />
+  <meta name="generator" content="Hugo 0.89.3" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,24 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
+  </h1>
+  <time datetime="2017-01-19T09:55:32&#43;0100" class="post-date">Thu, Jan 19, 2017</time>
+  <p>The gnome shell has been crashing on me more regularly lately.
+XFCE is a good and fast more tradional desktop, but, from past experiences,
+it does not play well with power management if you only install it via</p>
+<pre tabindex="0"><code>dnf install @xfce-desktop-environment
+</code></pre><p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
+most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
+to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
+<pre tabindex="0"><code>systemctl disable gdm
+systemctl enable lightdm
+systemctl stop gdm
+systemctl start lightdm
+</code></pre>
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/">Equivalence between floating-strike and fixed-strike Asian options</a>
   </h1>
   <time datetime="2017-01-18T09:55:32&#43;0100" class="post-date">Wed, Jan 18, 2017</time>
@@ -89,7 +107,7 @@ or Henderson et al. <a href="https://pdfs.semanticscholar.org/7aca/df634e96744a5
 None of those really consider the simple case of Black-Scholes with a term-structure of rates, dividends and volatilities.</p>
 <p>We have:
 $$
-V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\<br>
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\
 \quad k V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
 $$
 where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are the Vanilla options implied volatilities at the averaging times \(t_i\), \(C(0,t_i)\) are the capitalization factors, and \(B(0,T)\) is the discount factor.</p>
@@ -97,17 +115,17 @@ where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are t
 We assume that \(S\) follows \(dS = \mu_t S dt + \sigma_t S dW_t\). The discount factor \(B\) is defined as \(B(0,T)=e^{-\int_{0}^T r_s ds}\). Let \(C(0,t) = e^{\int_{0}^t \mu_s ds}\). The process associated to the forward to time \(t\) is \(F_t=S_0 C(0,t)M_t\) with \(M_t = e^{\int_0^t \sigma_s dW_s - \frac{1}{2}\int_0^t \sigma_s^2 ds}\) being a martingale.
 We have:
 $$
-V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\<br>
-= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\<br>
-= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\<br>
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
+= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
+= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
 =k B(0,T)C(0,T)\mathbb{E}\left[ M_T \max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)M_{t_i}}{C(0,T) M_T },0\right)\right]
 $$
 We now proceed to a change of measure defined by \(M_T\). Under the new measure \(\mathbb{Q}^T\), \(\bar{W}_t = W_t - \int_0^t \sigma_s ds\) is a Brownian motion. \(\frac{M_t}{M_T}\) under \(\mathbb{Q}\) has the same law as \(\frac{M_t}{M_T} e^{-\int_t^T \sigma_s^2 ds}\) under \(\mathbb{Q}^T\) or equivalently as
 \(\bar{M}_t = e^{\int_t^T \sigma_s d\bar{W}_s - \frac{1}{2}\int_t^T \sigma_s^2 ds}\)  under \(\mathbb{Q}^T\).
 Defining \(\mathbb{E}^T\) to be the expectation under \(\mathbb{Q}^T\), we thus have
 $$
-V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\<br>
-=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\<br>
+V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
+=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\
 =k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
 $$
 This concludes the proof.</p>
@@ -267,10 +285,10 @@ C(K) = \frac{1}{K^\nu} e^{a_R + \frac{b_R}{K} +  \frac{c_R}{K^2}} \text{.}
 $$
 \(C^2\) continuity conditions for the right wing at strike \(K_R\) lead to:
 $$
-c_R =\frac{{C'}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C'}_{R}^{2}}{C_{R}^2}+ \frac{{C''}_R}{C_R}\right) + \nu \right)\text{,} \<br>
+c_R =\frac{{C'}_R}{C_R}K_{R}^3+ \frac{1}{2}K_{R}^2 \left(K_{R}^2 \left(- \frac{{C'}_{R}^{2}}{C_{R}^2}+ \frac{{C''}_R}{C_R}\right) + \nu \right)\text{,} \
 $$
 $$
-b_R =  - \frac{{C'}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\<br>
+b_R =  - \frac{{C'}_R}{C_R} K_R^2 - \nu K_R-2 \frac{c_R}{K_R}\text{,}\
 $$
 $$
 a_R = \log(C_R)+ \nu \log(K_R) - \frac{b_R}{K_R} - \frac{c_R}{K_{R}^2}\text{.}
@@ -289,16 +307,16 @@ our best fit parabola of the AAPL 1m options:
 Here are details about call option price, slope, curvature:
 The strike cutoff is \(K_R=115.00001307390328\). For the parabola,</p>
 <p>$$\begin{align}
-C(K_R)&amp;=0.014516747104643029,\\<br>
-C'(K_R)&amp;=-0.002899391065224203,\\<br>
+C(K_R)&amp;=0.014516747104643029,\\
+C'(K_R)&amp;=-0.002899391065224203,\\
 C''(K_R)&amp;=0.000750774042345718.
 \end{align}$$</p>
 <p>And the BDK parameters for the right wing:</p>
 <p>$$a_R=34.279812, b_R=-10292.881677, c_R=737108.461636.$$</p>
 <p>For the least squares spline,
 $$\begin{align}
-C(K_R)&amp;=0.03892674300426042,\\<br>
-C'(K_R)&amp;=-0.00171386452499034,\\<br>
+C(K_R)&amp;=0.03892674300426042,\\
+C'(K_R)&amp;=-0.00171386452499034,\\
 C''(K_R)&amp;=0.0007835686926501496.
 \end{align}$$
 which results in
@@ -410,34 +428,6 @@ For degree 3, there is \(N\) factors to place the number 3 on each variable, plu
 <!-- raw HTML omitted -->
 <p>For \(N=10\), the total number of factors is 184756.
 Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
-  </h1>
-  <time datetime="2016-07-05T09:55:32&#43;0100" class="post-date">Tue, Jul 5, 2016</time>
-  <p>In my [previous post]((/post/shooting_arbitrage/), I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
-In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
-because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
-it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
-where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
-Plugging this into the local variance formula leads to</p>
-<!-- raw HTML omitted -->
-<figure><img src="/post/svi_dearbitraging_lv_rk.png"/><figcaption>
-            <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
-        </figcaption>
-</figure>
-
-<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
-is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
-<figure><img src="/post/svi_dearbitraging_vol_rk_cap.png"/><figcaption>
-            <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The discontinuity renders the shooting technique useless.
-The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
 
   
 </article>
