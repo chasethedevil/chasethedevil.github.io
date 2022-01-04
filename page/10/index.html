@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.89.3" />
+  <meta name="generator" content="Hugo 0.91.2" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2021. All rights reserved. </p>
+    <p>&copy; 2022. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/pseudo-random-vs-quasi-random-numbers/">Pseudo-Random vs Quasi-Random Numbers</a>
+  </h1>
+  <time datetime="2014-11-12T17:05:00Z" class="post-date">Wed, Nov 12, 2014</time>
+   
+
+Quasi-Random numbers (like <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol</a>) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like <a href="http://en.wikipedia.org/wiki/Mersenne_twister">Mersenne-Twister</a>). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).<br /><br />For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions). Later Lemieux gave direction numbers for up to 360 dimensions. Then, P. Jäckel proposed some extension with a random initialization of the direction vectors in his book from 2006. And finally Joe &amp; Kuo published direction numbers for up to 21200 dimensions.<br /><br />But there are very few studies about how good are real world simulations with so many quasi-random dimensions. A recent paper "<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2210420">Fast Ninomiya-Victoir Calibration of the Double-Mean-Reverting Model</a>" by Bayer, Gatheral &amp; Karlsmark tests this for once, and the results are not so pretty:<br /><div class="separator" style="clear: both; text-align: center;"><a href="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s1600/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="342" src="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s640/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" width="640" /></a></div>With their model, the convergence with Sobol numbers becomes worse when the number of time-steps increases, that is when the number of dimension increases. There seems to be even a threshold around 100 time steps (=300 dimensions for Euler) beyond which a much higher number of paths (2^13) is necessary to restore a proper convergence. And they use the latest and greatest Joe-Kuo direction numbers.<br /><br />Still the total number of paths is not that high compared to what I am usually using (2^13 = 8192). It's an interesting aspect of their paper: the calibration with a low number of paths.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/integrating-an-oscillatory-function/">Integrating an oscillatory function</a>
   </h1>
@@ -167,18 +179,6 @@ The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$
    
 
 In a talk at the Global Derivatives conference of Amsterdam (2014), Pat Hagan presented some new SABR formulas, supposedly close to the arbitrage free PDE behavior.<br /><br />I tried to code those from the slides, but somehow that did not work out well on his example, I just had something very close to the good old SABR formulas. I am not 100% sure (only 99%) that it is due to a mistake in my code. Here is what I was looking to reproduce:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-gSpOYAndMkk/U8bfHfczKEI/AAAAAAAAHZ8/-eBE_igGVgw/s1600/Screenshot+from+2014-07-16+22:21:08.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-gSpOYAndMkk/U8bfHfczKEI/AAAAAAAAHZ8/-eBE_igGVgw/s1600/Screenshot+from+2014-07-16+22:21:08.png" height="328" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Pat Hagan Global Derivatives example</td></tr></tbody></table><br />Fortunately, I then found in some thesis the idea of using Andersen &amp; Brotherton-Ratcliffe local volatility expansion. In deed, the arbitrage free PDE from Hagan is equivalent to some Dupire local volatility forward PDE (see <a href="http://papers.ssrn.com/abstract=2402001">http://papers.ssrn.com/abstract=2402001</a>), so Hagan just gave us the local volatility expansion to expand on&nbsp; (the thesis uses Doust, which is not so different in this case).<br /><br />And then it produces on this global derivatives example the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-xH6i6aZ0O0A/U8bhUO5EQlI/AAAAAAAAHaI/oobJM0YaWQs/s1600/Screenshot+-+07162014+-+10:32:04+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-xH6i6aZ0O0A/U8bhUO5EQlI/AAAAAAAAHaI/oobJM0YaWQs/s1600/Screenshot+-+07162014+-+10:32:04+PM.png" height="267" width="400" /></a></div><br />The AB suffix are the new SABR formula. Even though the formulas are different, that looks very much like Hagan's own illustration (with a better scale)!<br /><br />I have a draft paper around this and more practical ideas to calibrate SABR:<br /><a href="http://papers.ssrn.com/abstract=2467231">http://papers.ssrn.com/abstract=2467231</a><br /><br />
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/heston-or-schobel-zhu-issues-with-short-expiries/">Heston or Schobel-Zhu issues with short expiries</a>
-  </h1>
-  <time datetime="2014-07-03T23:28:00Z" class="post-date">Thu, Jul 3, 2014</time>
-   
-
-It's relatively well known that Heston does not fit the market for short expiries. Given that there are just 5 parameters to fit a full surface, it's almost logical that one part of the surface of it is not going to fit well the market.<br />I was more surprised to see how bad Heston or Schobel-Zhu were to fit a single short expiry volatility slice. As an example I looked at SP500 options with 1 week expiry. It does not really matter if one forces kappa and rho to constant values (even to 0) the behavior is the same and the error in fit does not change much.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-BBnY4WPXQSY/U7XGBnRN4oI/AAAAAAAAHV8/xhG_WFcg2gI/s1600/Screenshot+-+07032014+-+11%253A02%253A15+PM.png" height="400" width="390" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu fit for a slice of maturity 1 week</td></tr></tbody></table>In this graph, the brown, green and red smiles corresponds to Schobel-Zhu fit using an explicit guess (matching skew &amp; curvature ATM), using Levenberg-Marquardt on this guess, and using plain differential evolution. <br />What happens is that the smiles flattens to quickly in the strike dimension. One consequence is that the implied volatility can not be computed for extreme strikes: the smile being too low, the price becomes extremely small, under machine epsilon and the numerical method (Cos) fails. There is also a bogus angle in the right wing, because of numerical error. I paid attention to ignore too small prices in the calibration by truncating the initial data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-2ezn28O1sEw/U7XKnXa7OaI/AAAAAAAAHWM/jUXgimXTsHU/s1600/Screenshot+-+07032014+-+11:25:26+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston fit, with Lord-Kahl (exact wings)</td></tr></tbody></table><br />SABR behaves much better (fixing beta=1 in this case) in comparison (As I use the same truncation as for Schobel-Zhu, the flat left wing part is ignored). <br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-5f4nhQUoASE/U7XGYmQtQhI/AAAAAAAAHWA/mV2tcliE1oo/s1600/Screenshot+-+07032014+-+11:06:42+PM.png" height="400" width="391" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">SABR fit for a slice of maturity 1 week</td></tr></tbody></table>For longer expiries, Heston &amp; Schobel-Zhu, even limited to 3 parameters, actually give a better fit in general than SABR.
 
 
 

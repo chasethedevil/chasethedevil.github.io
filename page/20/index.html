@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.89.3" />
+  <meta name="generator" content="Hugo 0.91.2" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2021. All rights reserved. </p>
+    <p>&copy; 2022. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/binary-voting/">Binary Voting</a>
+  </h1>
+  <time datetime="2012-09-07T17:21:00Z" class="post-date">Fri, Sep 7, 2012</time>
+   
+
+How many reports have you had to fill up with a number of stars to choose? How much useless time is spent on figuring the this number just because it is always very ambiguous?<br /><br />Some blogger wrote an interesting entry on <a href="http://davidcelis.com/blog/2012/02/01/why-i-hate-five-star-ratings/">Why I Hate Five Stars Reviews</a>. Basically he advocates binary voting instead via like/dislike. Maybe a ternary system via like/dislike/don't care would be ok too.<br /><br />One coworker used to advocate the same for a similar reason: people reading those reports only pay attention to the extremes: the 5 stars or the 0 stars. So if you want to have a voice, you need to express it via 5 or 0, nothing in between.<br /><br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/moving-the-needle/">Moving The Needle</a>
   </h1>
@@ -170,18 +182,6 @@ Regularly, the unity dock made some applications inaccessible: clicking on the a
   <time datetime="2012-02-29T10:01:00Z" class="post-date">Wed, Feb 29, 2012</time>
   <p>In the past, I have seen that one could greatly improve performance of some Monte-Carlo simulation by using as much as possible <code>double[][]</code> instead of arrays of objects.</p>
 <p>It was interesting to read <a href="http://flavor8.com/index.php/2012/02/25/java-performance-autoboxing-and-data-structure-choice-obviously-matter-but-by-how-much/">this blog post explaining why that happens</a>: it is all about memory access.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/scala-again/">Scala Again</a>
-  </h1>
-  <time datetime="2012-02-06T17:52:00Z" class="post-date">Mon, Feb 6, 2012</time>
-   
-
-I am trying <a href="http://www.scala-lang.org/">Scala</a> again. Last time, several years ago, I played around with it as a web tool, combining it with a Servlet Runner like Tomcat. This time, I play around with it for some quantitative finance experiments.<br /><br /><b>Why Scala?</b> It still seem the most advanced alternative to Java on the JVM, and the mix of functional programming and OO programming is interesting. Furthermore it goes quite far as it ships with its own library. I was curious to see if I could express some things better with Scala.<br /><br />Here are my first impressions after a week:<br /><ul><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> keyword. It avoids the messy singleton pattern, or the classes with many static methods. I think it makes things much cleaner to not use static at all but distinguish between <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span> &amp; <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">class</span>.</li><li>I like the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Array[Double]</span>, and especially <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ArrayBuffer[Double]</span>. Finally we don't have to worry between the <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">Double</span> and <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">double</span> performance issues.</li><li>I was a bit annoyed by <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a(i)</span> instead of <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">a[i]</span> but it makes sense. I wonder if there is a performance implication for arrays, hopefully not.</li><li>I like the real properties, automatic getter/setter: less boilerplate code, less getThis(), setThat(toto).</li><li>Very natural interaction with Java libraries. </li><li>I found a good use of <b>case classes</b> (to my surprise): typically an enum that can have some well defined parameters, and that you don't want to make a class (because it's not). My use case was to define boundaries of a spline.</li><li>I love the formatter in the scala (eclipse) IDE. Finally a formatter in eclipse that does not produce crap.</li></ul>Now things I still need time to get used to:<br /><ul><li> member variable declared implicitly in the constructor. I first made the mistake (still?) to declare some variables twice.</li><li>I got hit by starting a line with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span> instead of ending with a <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">+</span>. It is dangerous, but it certainly makes the code more consistent.</li><li>Performance impacts: I will need to take a look at the bytecode for some scala constructs to really understand the performance impact of some uses. For example I tend to use while loops instead of for comprehension after some scary post of the Twitter guys about for comprehension. But at first, it looks as fast as Java.</li><li>I wrote my code a bit fast. I am sure I could make use of more Scala features.</li><li>The scala IDE in eclipse 3.7.1 has known issues. I wish it was a bit more functional, but it's quite ok (search for references works, renaming works to some extent).</li><li>Scala unit tests: I used scala tests, but it seems a bit funny at first. Also I am not convinced by the syntax that avoid method names and prefer test("test name"). It makes it more difficult to browse the source code.</li></ul>Some things they should consider:<br /><ul><li>Integrate directly a Log API. I just use SLF4J without any scala wrapper, but it feels like it should be part of the standard API (even if that did not work out so well for Sun).</li><li>Double.Epsilon is not the machine epsilon: very strange. I found out somewhere else there was the machine epsilon, don't remember where because I ended up just making a small <span style="font-family: &quot;Courier New&quot;,Courier,monospace;">object</span>.</li><li>Unit tests should be part of the standard API.</li></ul>Overall I found it quite exciting as there are definitely new ways to solve problems. It was a while since I had been excited with actual coding.
-
-
 
   
 </article>
