@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Monte-Carlo Parallelization: to vectorize or not? &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2022. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Monte-Carlo Parallelization: to vectorize or not?</h1>
+  <time datetime=2022-04-09T21:56:42&#43;0100 class="post-date">Sat, Apr 9, 2022</time>
+  <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
+I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup.</p>
+<p>A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.</p>
+<p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
+<p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
+<p>Which one is most appropriate?</p>
+<p>I first heard about this debate in a Quantlib user meeting a long time ago. Alexander Sokol was arguing for (B) as it simplified the implementation of AAD, while Peter Caspers was more a (A) kind of guy. At the time, I had not fully grasped the interest of (B) as it seemed more complex to put in place properly.</p>
+<p>It is interesting to think about those in terms of parallelization. At first, it may seem that (A) is simple to parallelize: you just process N/M package where M is the number of processors and N the total number of paths. Unfortunately, such a design implies a stateful payoff, which is not necessarily trivial to make thread-safe (actually very challenging). So the first drawback is that you may have to limit the parallelization to the path generation and to perform the payoff evaluation in a single thread. And then if you think more about it, you notice that while the first package is being computed, the payoff evaluation will just wait there. Sure, other packages will be computed in parallel, but this may again blow off the memory as you essentially keep all the paths in each package in memory. In practice, we would thus need to compute each path in some sort of thread pool and push those to a path queue of fixed length (blocking), which is read by the single thread, by taking a path from the queue, evaluate the payoff on this path, and pushing it back to a free queue in order to recycle the path. Alternatively, some sort of <a href="https://www.baeldung.com/java-ring-buffer">ring buffer</a> structure could be used for the paths. One has also to be quite careful as well about the random number generator skipping to the correct position in order to keep the same sequence of random numbers as in a fully single threaded approach.</p>
+<p>Taking parallelization into account, (A) is not that the trivial approach anymore. In contrast, (B) or (C) would parallelize the payoff evaluation by design, making the implementation of the full simulation parallelization much easier. Arguably, the package of paths approach may consume less memory than (C), as (1) the path generation usually involves many intermediate time-steps which may be discarded (kept only in cache per core) while in a vectorized approach, the full vector of those intermediate time-steps may be needed (typically for a classical Brownian-Bridge variance reduction), (2) the payoff evaluates scalars (and its state is thus comprised of scalars). A clever vectorized payoff evaluation would however reuse most vectors. The memory reduction may not be real in practice.</p>
+<p>Now, if we include callability or particle method kind of evaluation,  full vectorization, but keeping only the payoff (vector) variables in memory and building up the path step by step may be the most effective as described in <a href="https://www.amazon.fr/Applied-Quantitative-Finance-Equity-Derivatives/dp/B08VCM9HBL">Jherek Healy&rsquo;s book</a>.</p>
+<p>To conclude, not vectorizing the path generation and payoff evaluation would be a design mistake nowadays.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

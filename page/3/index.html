@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,40 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/quadprog-nans/">Fixing NaNs in Quadprog</a>
+  </h1>
+  <time datetime="2018-10-07T20:56:42&#43;0100" class="post-date">Sun, Oct 7, 2018</time>
+  <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
+<p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>    <span style="color:#06287e">library</span>(quadprog)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
+</span></span><span style="display:flex;"><span>    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
+</span></span><span style="display:flex;"><span>    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
+</span></span><span style="display:flex;"><span>    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
+</span></span><span style="display:flex;"><span>    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></span></span></code></pre></div>
+<p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
+<p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
+<figure><img src="/post/quadprog_nan_fix.png"/><figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
+</figure>
+
+<p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
   </h1>
@@ -315,13 +349,13 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
   <time datetime="2018-03-08T20:56:42&#43;0100" class="post-date">Thu, Mar 8, 2018</time>
   <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
 <p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></span></span></code></pre></div>
 <p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></span></span></code></pre></div>
 <p>This is really breaking OO and moving back to procedural programming.</p>
 <p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
 <p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
@@ -499,92 +533,92 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
 <p>And we have computed the coefficients with a single FFT of size N.</p>
 <p>In terms of Go language code, the classic type-2 sine Fourier transforms reads
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">DST2</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
-	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
-	result <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n)
-	<span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
-		sum <span style="color:#666">:=</span> <span style="color:#40a070">0.0</span>
-		<span style="color:#007020;font-weight:bold">for</span> j, vj <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
-			sum <span style="color:#666">+=</span> math.<span style="color:#06287e">Sin</span>((<span style="color:#007020">float64</span>(j)<span style="color:#666">+</span><span style="color:#40a070">0.5</span>)<span style="color:#666">*</span>math.Pi<span style="color:#666">*</span><span style="color:#007020">float64</span>(k)<span style="color:#666">/</span><span style="color:#007020">float64</span>(n)) <span style="color:#666">*</span> vj
-		}
-		result[k] = sum
-	}
-	<span style="color:#007020">copy</span>(vector, result)
-	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
-}</code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">DST2</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	result <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>		sum <span style="color:#666">:=</span> <span style="color:#40a070">0.0</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> j, vj <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>			sum <span style="color:#666">+=</span> math.<span style="color:#06287e">Sin</span>((<span style="color:#007020">float64</span>(j)<span style="color:#666">+</span><span style="color:#40a070">0.5</span>)<span style="color:#666">*</span>math.Pi<span style="color:#666">*</span><span style="color:#007020">float64</span>(k)<span style="color:#666">/</span><span style="color:#007020">float64</span>(n)) <span style="color:#666">*</span> vj
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		result[k] = sum
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020">copy</span>(vector, result)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
 <p>And the Fast Type-2 Sine transform reads
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">FastDST2ByFFT</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
-	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
-	halfLen <span style="color:#666">:=</span> n <span style="color:#666">/</span> <span style="color:#40a070">2</span>
-	z <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">complex128</span>, n)
-	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; halfLen; i<span style="color:#666">++</span> {
-		z[i] = <span style="color:#007020">complex</span>(vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span>], <span style="color:#40a070">0</span>)
-		z[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#007020">complex</span>(<span style="color:#666">-</span>vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
-	}
-	<span style="color:#007020;font-weight:bold">if</span> n<span style="color:#666">&amp;</span><span style="color:#40a070">1</span> <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
-		z[halfLen] = <span style="color:#007020">complex</span>(vector[n<span style="color:#666">-</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
-	}
-	err <span style="color:#666">:=</span> <span style="color:#06287e">TransformRadix2Complex</span>(z)
-	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
-		temp <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">*</span> math.Pi <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n<span style="color:#666">*</span><span style="color:#40a070">2</span>)
-		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(temp)
-		vector[i] = <span style="color:#007020">real</span>(z[i])<span style="color:#666">*</span>s <span style="color:#666">-</span> <span style="color:#007020">imag</span>(z[i])<span style="color:#666">*</span>c
-	}
-	<span style="color:#007020;font-weight:bold">return</span> err
-}</code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">FastDST2ByFFT</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	halfLen <span style="color:#666">:=</span> n <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>	z <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">complex128</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; halfLen; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>		z[i] = <span style="color:#007020">complex</span>(vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>		z[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#007020">complex</span>(<span style="color:#666">-</span>vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> n<span style="color:#666">&amp;</span><span style="color:#40a070">1</span> <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
+</span></span><span style="display:flex;"><span>		z[halfLen] = <span style="color:#007020">complex</span>(vector[n<span style="color:#666">-</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	err <span style="color:#666">:=</span> <span style="color:#06287e">TransformRadix2Complex</span>(z)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		temp <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">*</span> math.Pi <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n<span style="color:#666">*</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(temp)
+</span></span><span style="display:flex;"><span>		vector[i] = <span style="color:#007020">real</span>(z[i])<span style="color:#666">*</span>s <span style="color:#666">-</span> <span style="color:#007020">imag</span>(z[i])<span style="color:#666">*</span>c
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> err
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
 <p>The function TransformRadix2Complex, used above, steams from a standard implementation of the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector (The vector&rsquo;s length must be a power of 2. Uses the Cooley-Tukey decimation-in-time radix-2 algorithm).</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">TransformRadix2Complex</span>(z []<span style="color:#902000">complex128</span>) <span style="color:#902000">error</span> {
-	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(z)
-	levels <span style="color:#666">:=</span> <span style="color:#007020">uint</span>(<span style="color:#40a070">31</span> <span style="color:#666">-</span> bits.<span style="color:#06287e">LeadingZeros32</span>(<span style="color:#007020">uint32</span>(n))) <span style="color:#60a0b0;font-style:italic">// Equal to floor(log2(n))
-</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">if</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> levels) <span style="color:#666">!=</span> n {
-		<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Length is not a power of 2&#34;</span>)
-	}
-
-	<span style="color:#60a0b0;font-style:italic">// Trigonometric tables
-</span><span style="color:#60a0b0;font-style:italic"></span>	cosTable, sinTable <span style="color:#666">:=</span> <span style="color:#06287e">MakeCosSinTable</span>(n)
-
-	<span style="color:#60a0b0;font-style:italic">// Bit-reversed addressing permutation
-</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
-		j <span style="color:#666">:=</span> <span style="color:#007020">int</span>(bits.<span style="color:#06287e">Reverse32</span>(<span style="color:#007020">uint32</span>(i)) <span style="color:#666">&gt;&gt;</span> (<span style="color:#40a070">32</span> <span style="color:#666">-</span> levels))
-		<span style="color:#007020;font-weight:bold">if</span> j &gt; i {
-			z[i], z[j] = z[j], z[i]
-		}
-	}
-
-	<span style="color:#60a0b0;font-style:italic">// Cooley-Tukey decimation-in-time radix-2 FFT
-</span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> size <span style="color:#666">:=</span> <span style="color:#40a070">2</span>; size <span style="color:#666">&lt;=</span> n; size <span style="color:#666">*=</span> <span style="color:#40a070">2</span> {
-		halfsize <span style="color:#666">:=</span> size <span style="color:#666">/</span> <span style="color:#40a070">2</span>
-		tablestep <span style="color:#666">:=</span> n <span style="color:#666">/</span> size
-		<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n; i <span style="color:#666">+=</span> size {
-			j <span style="color:#666">:=</span> i
-			k <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
-			<span style="color:#007020;font-weight:bold">for</span> ; j &lt; i<span style="color:#666">+</span>halfsize; j<span style="color:#666">++</span> {
-				l <span style="color:#666">:=</span> j <span style="color:#666">+</span> halfsize
-				tpre <span style="color:#666">:=</span> <span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>cosTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>sinTable[k]
-				tpim <span style="color:#666">:=</span> <span style="color:#666">-</span><span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>sinTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>cosTable[k]
-				z[l] = z[j] <span style="color:#666">-</span> <span style="color:#007020">complex</span>(tpre, tpim)
-				z[j] <span style="color:#666">+=</span> <span style="color:#007020">complex</span>(tpre, tpim)
-				k <span style="color:#666">+=</span> tablestep
-			}
-		}
-		<span style="color:#007020;font-weight:bold">if</span> size <span style="color:#666">==</span> n { <span style="color:#60a0b0;font-style:italic">// Prevent overflow in &#39;size *= 2&#39;
-</span><span style="color:#60a0b0;font-style:italic"></span>			<span style="color:#007020;font-weight:bold">break</span>
-		}
-	}
-
-	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
-}
-
-<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">MakeCosSinTable</span>(n <span style="color:#902000">int</span>) ([]<span style="color:#902000">float64</span>, []<span style="color:#902000">float64</span>) {
-	cosTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
-	sinTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
-	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> cosTable {
-		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(<span style="color:#40a070">2</span> <span style="color:#666">*</span> math.Pi <span style="color:#666">*</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n))
-		cosTable[i] = c
-		sinTable[i] = s
-	}
-	<span style="color:#007020;font-weight:bold">return</span> cosTable, sinTable
-}</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">TransformRadix2Complex</span>(z []<span style="color:#902000">complex128</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(z)
+</span></span><span style="display:flex;"><span>	levels <span style="color:#666">:=</span> <span style="color:#007020">uint</span>(<span style="color:#40a070">31</span> <span style="color:#666">-</span> bits.<span style="color:#06287e">LeadingZeros32</span>(<span style="color:#007020">uint32</span>(n))) <span style="color:#60a0b0;font-style:italic">// Equal to floor(log2(n))
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">if</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> levels) <span style="color:#666">!=</span> n {
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Length is not a power of 2&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Trigonometric tables
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	cosTable, sinTable <span style="color:#666">:=</span> <span style="color:#06287e">MakeCosSinTable</span>(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Bit-reversed addressing permutation
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		j <span style="color:#666">:=</span> <span style="color:#007020">int</span>(bits.<span style="color:#06287e">Reverse32</span>(<span style="color:#007020">uint32</span>(i)) <span style="color:#666">&gt;&gt;</span> (<span style="color:#40a070">32</span> <span style="color:#666">-</span> levels))
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> j &gt; i {
+</span></span><span style="display:flex;"><span>			z[i], z[j] = z[j], z[i]
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Cooley-Tukey decimation-in-time radix-2 FFT
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> size <span style="color:#666">:=</span> <span style="color:#40a070">2</span>; size <span style="color:#666">&lt;=</span> n; size <span style="color:#666">*=</span> <span style="color:#40a070">2</span> {
+</span></span><span style="display:flex;"><span>		halfsize <span style="color:#666">:=</span> size <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>		tablestep <span style="color:#666">:=</span> n <span style="color:#666">/</span> size
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n; i <span style="color:#666">+=</span> size {
+</span></span><span style="display:flex;"><span>			j <span style="color:#666">:=</span> i
+</span></span><span style="display:flex;"><span>			k <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#007020;font-weight:bold">for</span> ; j &lt; i<span style="color:#666">+</span>halfsize; j<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>				l <span style="color:#666">:=</span> j <span style="color:#666">+</span> halfsize
+</span></span><span style="display:flex;"><span>				tpre <span style="color:#666">:=</span> <span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>cosTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>sinTable[k]
+</span></span><span style="display:flex;"><span>				tpim <span style="color:#666">:=</span> <span style="color:#666">-</span><span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>sinTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>cosTable[k]
+</span></span><span style="display:flex;"><span>				z[l] = z[j] <span style="color:#666">-</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				z[j] <span style="color:#666">+=</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				k <span style="color:#666">+=</span> tablestep
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> size <span style="color:#666">==</span> n { <span style="color:#60a0b0;font-style:italic">// Prevent overflow in &#39;size *= 2&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>			<span style="color:#007020;font-weight:bold">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">MakeCosSinTable</span>(n <span style="color:#902000">int</span>) ([]<span style="color:#902000">float64</span>, []<span style="color:#902000">float64</span>) {
+</span></span><span style="display:flex;"><span>	cosTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	sinTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> cosTable {
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(<span style="color:#40a070">2</span> <span style="color:#666">*</span> math.Pi <span style="color:#666">*</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n))
+</span></span><span style="display:flex;"><span>		cosTable[i] = c
+</span></span><span style="display:flex;"><span>		sinTable[i] = s
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> cosTable, sinTable
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
   
 </article><article class="post">
@@ -604,23 +638,6 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 <li><a href="https://www.amazon.com/Methods-Computational-Finance-Mathematics-Industry/dp/3319612816/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825785&amp;sr=1-1&amp;keywords=Novel+Methods+in+Computational+Finance">Novel Methods in Computational Finance</a>. Jörg Kienitz refers to my paper on arbitrage free SABR in chapter 4.</li>
 <li><a href="https://www.amazon.com/Innovations-Derivatives-Markets-Adjustments-Proceedings/dp/331933445X/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1512825510&amp;sr=1-1&amp;keywords=Innovations+in+Derivatives+Markets">Innovations in Derivatives Markets: Fixed Income Modeling, Valuation Adjustments, Risk Management, and Regulation</a>. Christian Fries refers to my paper on curve interpolation in chapter 10.</li>
 </ul>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/google_phones_are_overrated/">Google phones are overrated</a>
-  </h1>
-  <time datetime="2017-10-02T23:56:42&#43;0100" class="post-date">Mon, Oct 2, 2017</time>
-  <p>It is a relatively common belief that the vanilla Android experience is better, as it runs smoother. The Samsung Touchwiz is often blamed for making things slow and not more practical.</p>
-<p>I have had a Nexus 6 for a couple of years and I noticed the slowdowns after each update, up to a point where it sometimes took a few seconds to open the phone app, or to display the keyboard. I freed up storage, removed some apps but this did not make any difference. This is more or less the same experience that people have with the Samsung devices if <a href="https://www.reddit.com/r/Android/comments/73necm/with_the_note_8_samsung_no_longer_delivers/">reddit comments</a> are to be believed.</p>
-<p>The other myth is that Google phones will be updated for a longer time. Prior to the Nexus 6, I had a Galaxy Nexus, which Google stopped supporting after less than 2 years. The Nexus 6 received security update until this October, that is nearly 2 years for me and 2.5 years for early buyers.</p>
-<p>In comparison Apple updates its phones for much longer and a 4 years old iphone 5s still runs smoothly. Fortunately for Android phones, there are the alternative roms. Being desperate with the state of my Nexus phone, I installed <a href="http://get.aospa.co/">paranoid android</a>. I am surprised at how good it is. My phone feels like new again, and as good as any flagship I would purchase today. To my great surprise I did not find any clear step by step installation process for Paranoid Android. I just followed the <a href="https://wiki.lineageos.org/devices/shamu/install">detailed steps for LineageOS</a> (CyanogenMod descendent), but with the paranoid android zip file instead of the LineageOS one. I have some trouble to understand how some open source ROM can be much nicer than the pure Google Android ROM, but it is. I have had no crash/reboot (which became more common as well with the years), plus it&rsquo;s still updated regularly. Google does not set a good standard by not supporting its own devices better.</p>
-<p>There is however one thing that Google does well, it&rsquo;s the camera app. The HDR+ mode makes my Nexus 6 take great pictures, even compared to new android phones or iphones. I am often amazed at the pictures I manage to take, and others are also amazed at how good they look (especially since they look often better on the Nexus 6 screen than on a computer monitor). Initially I remember the camera to be not so great, but some update that came in 2016 transformed the phone into a fantastic shooter. It allowed me to take very nice pictures in difficult conditions, see for example <a href="https://photos.app.goo.gl/s2IHVtKMzRkxDY1q1">this google photo gallery</a>. Fortunately it&rsquo;s still possible to install the app in the Google Play store on Paranoid Android. They should really make it open-source and easier to adapt it to other android phones.</p>
-<figure><a href="https://photos.google.com/share/AF1QipOGPpDIYCAYJ_636MtjEGWQHj6da0EukBqwoAGMYvuMoWGGJ8EjCx4ADVNffqulPA?key=YjF4VnRGRGlqNlgtbS1Cb0U0WFo3djl5NEdUSk5R&amp;source=ctrlq.org"><img src="https://lh3.googleusercontent.com/JjEGDeF4uiw1FPFVVDotOPNeN-GPr_5s8-n0ud7Ioio8GvegtJqJ_C6AinmV0plNBnEINZEVr6LZvHb7I68HbGaZcTRUlldsxHoXZVGSLJAYZHqEM94JnDINlVVEWSOvP39Qwj4dWw"/></a><figcaption>
-            <h4>A photo made with the Google camera app on the Nexus 6.</h4>
-        </figcaption>
-</figure>
-
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,15 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/bye-bye-firefox/">Bye Bye Firefox</a>
+  </h1>
+  <time datetime="2010-07-21T15:30:00Z" class="post-date">Wed, Jul 21, 2010</time>
+  <p>I have been a long user of Firefox, mostly thanks to the adblock extension. But recently, Firefox decided to change the way arrows work on the web pages, they don&rsquo;t make the page scroll anymore. Meanwhile Chrome has now a good adblock plugin (that filters ads on load, not after load like it use to be) and is really much much faster than Firefox. So there is no more reason not to use it.</p>
+<p>Hello Chrome, bye bye Firefox. Google has won the web browsers war.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/diffusion-limited-aggregation-applet/">Diffusion Limited Aggregation Applet</a>
   </h1>
   <time datetime="2010-06-09T14:05:00Z" class="post-date">Wed, Jun 9, 2010</time>
@@ -86,7 +95,7 @@ Yes, I wrote an applet. I know it is very 1990s but, amazingly, it still does th
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/java-3d-surface/">Java &amp; 3D Surface</a>
+    <a href="https://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
   </h1>
   <time datetime="2009-12-18T16:07:00Z" class="post-date">Fri, Dec 18, 2009</time>
   <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts.</p>
@@ -149,7 +158,7 @@ We ran into an interesting issue with TimeZone and Dates. If you print the same 
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares-pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
+    <a href="https://chasethedevil.github.io/post/pulseaudio-nightmares---pure-alsa-to-the-rescue/">Pulseaudio Nightmares - Pure ALSA to the Rescue</a>
   </h1>
   <time datetime="2009-06-27T18:19:00Z" class="post-date">Sat, Jun 27, 2009</time>
    
@@ -168,9 +177,9 @@ In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on m
 <p>can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?</p>
 <p>I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.</p>
 <p>I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#902000">long</span> l <span style="color:#666">=</span> Integer<span style="color:#666">.</span><span style="color:#4070a0">MAX_VALUE</span><span style="color:#666">;</span>
-l <span style="color:#666">=</span> l <span style="color:#666">+</span>1<span style="color:#666">;</span>
-x <span style="color:#666">=</span> <span style="color:#666">(</span><span style="color:#902000">int</span><span style="color:#666">)</span>l<span style="color:#666">;</span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#902000">long</span> l <span style="color:#666">=</span> Integer<span style="color:#666">.</span><span style="color:#4070a0">MAX_VALUE</span><span style="color:#666">;</span>
+</span></span><span style="display:flex;"><span>l <span style="color:#666">=</span> l <span style="color:#666">+</span>1<span style="color:#666">;</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> <span style="color:#666">(</span><span style="color:#902000">int</span><span style="color:#666">)</span>l<span style="color:#666">;</span></span></span></code></pre></div></p>
 <p>x has a guaranteed value.
 <a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a> paragraph 5.1.3.</p>
 
@@ -183,18 +192,6 @@ x <span style="color:#666">=</span> <span style="color:#666">(</span><span style
    
 
 Someone asked me recently to find out the real reason why the code from this thread fails. This is a fairly bad code, and not even a very good way to point out the problem. But the question is nonetheless interesting.<br /><br /><pre class="jive-pre"><code class="jive-code jive-java"><span style="color:navy;"><b>class</b></span> Toto <span style="color:navy;"><b>extends</b></span> TotoParent<span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>final</b></span> <span style="color:navy;"><b>static</b></span> Toto a = <span style="color:navy;"><b>new</b></span> Toto (<span style="color:red;">"a"</span>);<br /><br /> <span style="color:navy;"><b>public</b></span> Toto(String a)<span style="color:navy;">{</span><br />  <span style="color:navy;"><b>super</b></span>(a);<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> java.util.ArrayList;<br /><span style="color:navy;"><b>import</b></span> java.util.List;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>abstract</b></span> <span style="color:navy;"><b>class</b></span> TotoParent <span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>static</b></span> List<string> list = <span style="color:navy;"><b>new</b></span> ArrayList<string>();<br /> <br /> <span style="color:navy;"><b>public</b></span> TotoParent(String a) <span style="color:navy;">{</span><br />  list.add(a);<br /> <span style="color:navy;">}</span><br /><br /> <span style="color:navy;"><b>protected</b></span> <span style="color:navy;"><b>static</b></span> List<string> get() <span style="color:navy;">{</span><br />  <span style="color:navy;"><b>return</b></span> list;<br />  <br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> org.junit.Test;<br /><span style="color:navy;"><b>import</b></span> <span style="color:navy;"><b>static</b></span> org.junit.Assert.*;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>class</b></span> TotoTest <span style="color:navy;">{</span><br /><br /> @Test<br /> <span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>void</b></span> testGet()<span style="color:navy;">{</span><br />  assertEquals(1, Toto.get().size());<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /></code></pre>I am quite used to static initialization, and would have answered the same as the first answer in the thread:<br />"Get is static and associated with TotoParent, so that is the same as calling TotoParent.get().size()". I would have even thought that the compiler would compile the call Toto.get() to TotoParent.get(). But running javap, you can see it is still compiled as TotoParent.get(). So there is still a lookup done. This is why the first answer is actually not that correct.<br /><br />The important bit here is that Toto is never initialized, even if we call Toto.get(). The java specs (invaluable reference) explains clearly that calling a static method not declared in the class does not initialize the class.<br /><br />Calling Toto.get() is not exactly the same as calling TotoParent.get().<br />If TotoParent.get() called another TotoSuperParent.get():<br />Toto.get() -> TotoParent.get() -> TotoSuperParent.get()<br />We compile then later we change to make TotoParent have a specific implementation of get(). Toto will then be automatically aware of it, without even recompiling it.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/execution.html" target="_blank">http://java.sun.com/docs/<wbr>books/jls/third_edition/html/<wbr>execution.html</a><br />paragraph 12.4.1
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/benchmarking-languages-is-difficult/">Benchmarking Languages Is Difficult</a>
-  </h1>
-  <time datetime="2009-06-03T16:53:00Z" class="post-date">Wed, Jun 3, 2009</time>
-   
-
-I often looked at the famous computer languages shootout for fun. Recently I noticed they had the infamous <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=all">thread ring test</a>. I posted not very long ago several <a href="http://chasethedevil.blogspot.com/2009/01/end-of-rings-around-plain-java-better.html">blog entries about it showing how silly</a> this test was.<br /><br />Looking at the existing Java implementation for the test I decided to try to submit the tricky one using a pool of thread, and pooling message processing rather creating 1 thread per node. To my surprise, it was accepted without questions and I did have the best score for a Java program for a while. Shortly after <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=3">someone else</a> copied my program and got rid of various stuff not useful for the particular benchmark (breaking the interesting part of the design) and got accepted as well with of course a better result.<br /><br />I decided to see if I could make an <a href="http://shootout.alioth.debian.org/u32q/benchmark.php?test=threadring&amp;lang=java&amp;id=6">even more silly program</a> - tailored for the test only. I managed to be orders of magnitude faster - 1 thread, no synchronization, everything processed in a FIFO (linkedlist) queue. This is actually a standard way to reimplement recursion. But I was honest enough not to hide that I consider that kind of program to cheat the test and got my entry in the "interesting alternatives".<br /><br />In reality there is no difference in the "cheating" between my new program and the program that got accepted in the official list, they both cheat by using only 1 thread and process everything 1 by 1. There is not 1 thread per node in any of the program, and they can avoid any concurrency issues. One "looks" better because it uses a pool of 503 threads (but really use only 1 or 2 threads) and the other does not hide its use of 1 thread for processing. But this is not evident to people accepting the programs.<br /><br />When I look at the haskell code, I can not really tell if it is creating 503 threads in the language or a pool or ..., you have to know each language quite well and sometimes it is not that easy to define what cheating is. Therefore this kind of benchmark is a bit disappointing. One should force the use of the same algorithm. But can you do so (a functional language won't use the same algo as a procedural one)?
 
 
 

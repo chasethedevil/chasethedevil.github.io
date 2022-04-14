@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Getting Started With DOM, XOM, DOM4J by Parsing an RSS Feed - An Experience Review &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2022. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Getting Started With DOM, XOM, DOM4J by Parsing an RSS Feed - An Experience Review</h1>
+  <time datetime=2006-03-17T10:53:00Z class="post-date">Fri, Mar 17, 2006</time>
+   
+
+Recently, I looked for a way to get info from some particular blog entries of mine on <a href="http://blogger.com">blogger.com</a>. Blogger used to offer an  <a href="http://www.blogger.com/developers/api/1_docs/">XML-RPC API </a>. They even designed a <a href="http://www.blogger.com/developers/api/documentation20.html">version 2</a>  of the XML-RPC API that does not seem to have ever been put in production. Or maybe I did not manage to make it work. I had no problem to make v1 work, however. I used apache XMLRPC v2, it was very simple to use. Unfortunately information accessible through XML-RPC Blogger API was incomplete for me. Furthermore, it is very likely that this API will disappear soon as it is deprecated since 2002.<br /><br />Blogger wants you to use their <a href="http://code.blogger.com/archives/atom-docs.html">Atom API</a>. It is not XML RPC anymore, you have to do the parsing by hand.<br /><br /><span style="font-weight: bold;">The DOM Experience </span><br /><br />I thought "no big deal, I will use DOM for it". I don't need performance and wanted a quick way to solve my problem, plus DOM does not require X number of libraries. It was easy to use regular DOM until I was frustrated by not being able to get the  <span style="font-family:courier new,monospace;">&lt;content&gt;</span> element full text easily as it is sometimes XML. I did not want to hand code a method to do that as I thought it should be done by the XML library.<br /><br /><span style="font-weight: bold;">The XOM Experience</span><br /><br />I heard previously of a simple XML parser, efficient, with an API that had been well designed, XOM. I looked at the API, there was a toXML<span style="font-family:courier new,monospace;"> ()</span> method to return the node content as XML (children included), sounded good. I saw there was even XPath support, and thought, great, it will simplify my code a bit. I will get the blog entries by just querying for " <span style="font-family:courier new,monospace;">/feed/entry</span>". No luck, it did not work, it returned 0 results. So I looked for mistakes in my code, did not find obvious ones. I tried other queries like " <span style="font-family:courier new,monospace;">//feed/entry</span>" or "<span style="font-family:courier new,monospace;">//entry</span>", same thing, not the right results. There must have been something wrong in my code, or maybe the XPath engine in XOM has particular settings to deal with RSS feeds (they contain various xmlns declarations). The point is that I got frustrated, it was supposed to be very simple, and in reality, not so!<br /><br /><span style="font-weight: bold;">The DOM4J Experience</span><br /><br />I had experience with Dom4j before, just once, to build XML, not to parse it. I had relatively good memories of my Dom4j experience for that so I decided to try it out on my problem. At first I found Dom4j API a bit confusing as there are so many methods on most used classes. This is because Dom4j is DOM compatible. But I quickly understand the logic of it and found some very useful methods, namely  <span style="font-family:courier new,monospace;">Element.elements(name)</span> to get all children elements by name. Of course, they have an asXML<span style="font-family:courier new,monospace;">()</span> method like XOM. There is also XPath support.<br />I tried the XPath on Blogger RSS without success again. There really must be a trick to get it to recognize RSS. But with the <span style="font-family:courier new,monospace;">elements("entry")</span> method, I very quickly got the same with not much more code, and it worked.<br /><br /><span style="font-weight: bold;">so DOM vs. XOM vs. DOM4J = 0 - 0 - 1</span><br /><br />Example Code:<pre><br /><font color="#4682b4">SAXReader</font> <font color="#8b008b">reader</font> = <font color="#ff0000">new</font> <font color="#4682b4">SAXReader</font>();<br /><font color="#4682b4">Document</font> <font color="#8b008b">doc</font> = reader.read(response);<br /><font color="#4682b4">Collection</font> <font color="#8b008b">posts</font> = <font color="#ff0000">new</font> <font color="#4682b4">ArrayList</font>();<br /><font color="#4682b4">List</font> <font color="#8b008b">entries</font> = doc.getRootElement().elements("<font color="#008b00">entry</font>");<br /><font color="#ff0000">if</font> (LOG.isDebugEnabled()) <br />{<br />        LOG.debug("<font color="#008b00">found </font>"+entries.size()+"<font color="#008b00"> entries</font>");<br />}<br /><font color="#ff0000">for</font> (<font color="#4682b4">int</font> <font color="#8b008b">i</font> = 0; i &lt;entries.size();i++)<br />{<br />        <font color="#4682b4">Element</font> <font color="#8b008b">entry</font> = (<font color="#4682b4">Element</font>) entries.get(i); <br />        <font color="#4682b4">Map</font> <font color="#8b008b">m</font> = <font color="#ff0000">new</font> <font color="#4682b4">HashMap</font>();<br />        <font color="#ff0000">for</font> (<font color="#4682b4">Iterator</font> <font color="#8b008b">it</font> = entry.elementIterator();it.hasNext();)<br />        {<br />                <font color="#4682b4">Element</font> <font color="#8b008b">detail</font> = (<font color="#4682b4">Element</font>) it.next();<br />                <font color="#4682b4">String</font> <font color="#8b008b">name</font> = detail.getName();<br />                <font color="#ff0000">if</font> (name.equals("<font color="#008b00">link</font>"))<br />                {<br />                        m.put("<font color="#008b00">link</font>",detail.attribute("<font color="#008b00">href</font>").getValue());<br />                }<br />                <font color="#ff0000">else</font> <font color="#ff0000">if</font> (name.equals("<font color="#008b00">content</font>"))<br />                {<br />                        m.put("<font color="#008b00">content</font>",detail.asXML());<br />                }<br />                <font color="#ff0000">else</font><br />                {<br />                        m.put(name,detail.getTextTrim());<br />                }<br />        }<br />        <br />        posts.add(m);                   <br />        <font color="#ff0000">if</font> (LOG.isDebugEnabled())<br />        {<br />                LOG.debug("<font color="#008b00">found=</font>"+m.get("<font color="#008b00">title</font>")+"<font color="#008b00">, url=</font>"+m.get("<font color="#008b00">link</font>"));<br />        }<br />}</pre>
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

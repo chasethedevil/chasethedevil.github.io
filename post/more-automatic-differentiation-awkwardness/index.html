@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,17 +76,17 @@
 into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number).
 This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</p>
 <p>I played myself with Julia&rsquo;s excellent ForwardDiff package, and found out a completely different example which illustrates a simple and easy trap with automatic differentiation. The example is a typical cubic spline evaluation routine:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
-  i <span style="color:#666">=</span> searchsortedfirst(self<span style="color:#666">.</span>x, z)  <span style="color:#60a0b0;font-style:italic"># x[i-1]&lt;z&lt;=x[i]</span>
-  <span style="color:#007020;font-weight:bold">if</span> z <span style="color:#666">==</span> self<span style="color:#666">.</span>x[i]
-    <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i]
-  <span style="color:#007020;font-weight:bold">end</span>
-  <span style="color:#007020;font-weight:bold">if</span> i <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span>
-    i <span style="color:#666">-=</span> <span style="color:#40a070">1</span>
-  <span style="color:#007020;font-weight:bold">end</span>
-  h <span style="color:#666">=</span> z <span style="color:#666">-</span> self<span style="color:#666">.</span>x[i]
-  <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>b[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>c[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>d[i])))
-<span style="color:#007020;font-weight:bold">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
+</span></span><span style="display:flex;"><span>  i <span style="color:#666">=</span> searchsortedfirst(self<span style="color:#666">.</span>x, z)  <span style="color:#60a0b0;font-style:italic"># x[i-1]&lt;z&lt;=x[i]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> z <span style="color:#666">==</span> self<span style="color:#666">.</span>x[i]
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i]
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> i <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>    i <span style="color:#666">-=</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>  h <span style="color:#666">=</span> z <span style="color:#666">-</span> self<span style="color:#666">.</span>x[i]
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>b[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>c[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>d[i])))
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
 <p>The ForwardDiff will lead to derivative = 0 at z = x[i], while, in reality, it is not - the derivative is b[i]. The case z = x[i] is just a (not so clever) optimization.
 Granted, it is wrong only at the spline knots, but if those correspond to key points we evaluate as part of a minimization, it might become very problematic.</p>
 <p>Another interesting remark to make on automatic differentiation is on the choice of backward (reverse) vs. forward (tangent) automatic differentiation: we often read that backward is more appropriate when the dimension of the output is low compared to the dimension of the input, and forward when the dimension of the output is large compared to the dimension of the input.
@@ -103,7 +103,7 @@ And thus, for least-squares, backward automatic differentiation will likely be s
 <h2>Comments</h2>
 <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.96.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Coordinate Transform of the Andreasen Huge SABR PDE &amp; Spline Interpolation &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2022. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Coordinate Transform of the Andreasen Huge SABR PDE &amp; Spline Interpolation</h1>
+  <time datetime=2014-01-08T18:51:00Z class="post-date">Wed, Jan 8, 2014</time>
+  <p>Recently, I noticed <!-- raw HTML omitted -->how close<!-- raw HTML omitted --> are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.<!-- raw HTML omitted --><!-- raw HTML omitted -->Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy. The transform itself can be found in the <!-- raw HTML omitted -->Andersen-Piterbarg book<!-- raw HTML omitted --> &ldquo;Interest Rate Modeling&rdquo;, and is similar to the famous log transform, but for a general local volatility function (phi in the book notation).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->There are two ways to transform Andreasen Huge PDE:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->through a non-uniform grid: the input strikes are directly transformed based on a uniform grid in the inverse transformed grid (paying attention to still put the strike in the middle of two points). This is detailed in the Andersen-Piterbarg book.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->through a variable transform in the PDE: this gives a slightly different PDE to solve. One still needs to convert then a given strike, to the new PDE variable. This kind of transform is detailed in the <!-- raw HTML omitted -->Tavella-Randall book<!-- raw HTML omitted --> &ldquo;Pricing Financial Instruments: the Finite Difference Method&rdquo;, for example.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Both are more or less equivalent. I would expect the later to be slightly more precise but I tried the former as it is simpler to test if you have non uniform parabolic PDE solvers.<!-- raw HTML omitted --><!-- raw HTML omitted -->It works very well, but I found an interesting issue when computing the density (second derivative of the call price): if one relies on a Hermite kind of spline (Bessel/Parabolic or Harmonic), the density wiggles around. The C2 cubic spline solves this problem as it is C2. Initially I thought those wiggles could be produced because the interpolation did not respect monotonicity and I tried a Hyman monotonic cubic spline out of curiosity, it did not change anything (in an earlier version of this post I had a bug in my Hyman filter) as it preserves monotonicity but not convexity. The wiggles are only an effect of the approximation of the derivatives value.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Initially, I did not notice this on the uniform discretization mostly because I used a large number of strikes in the PDE (here I use only 50 strikes) but also because the effect is somewhat less pronounced in this case.<!-- raw HTML omitted --><!-- raw HTML omitted -->I also discovered a bug in my non uniform implementation of Hagan Density PDE, I forgot to take into account an additional dF/dz factor when the density is integrated. As a result, the density was garbage when computed by a numerical difference.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->HaganDensity denotes the transformed PDE on density approach. Notice the non-sensical spikes<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&ldquo;Bad&rdquo; Call prices around the forward with Hagan Density PDE. Notice the jumps.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->No jumps anymore after the dF/dZ fit <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update March 2014<!-- raw HTML omitted --> - I have now a paper with Matlab code &ldquo;<!-- raw HTML omitted -->Finite Difference Techniques for Arbitrage Free SABR<!-- raw HTML omitted -->&quot;<!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

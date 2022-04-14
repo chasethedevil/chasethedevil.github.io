@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,13 +74,13 @@
   <time datetime=2018-03-08T20:56:42&#43;0100 class="post-date">Thu, Mar 8, 2018</time>
   <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
 <p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">()</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span><span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></span></span></code></pre></div>
 <p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
-    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">boolean</span> <span style="color:#06287e">isHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">public</span> <span style="color:#007020;font-weight:bold">static</span> <span style="color:#902000">void</span> <span style="color:#06287e">setHappy</span><span style="color:#666">(</span>Dog dog<span style="color:#666">,</span> <span style="color:#902000">boolean</span> isHappy<span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#666">...</span> <span style="color:#666">}</span></span></span></code></pre></div>
 <p>This is really breaking OO and moving back to procedural programming.</p>
 <p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
 <p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
@@ -90,7 +90,7 @@
 <h2>Comments</h2>
 <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,9 +76,9 @@
 <p>can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?</p>
 <p>I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.</p>
 <p>I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#902000">long</span> l <span style="color:#666">=</span> Integer<span style="color:#666">.</span><span style="color:#4070a0">MAX_VALUE</span><span style="color:#666">;</span>
-l <span style="color:#666">=</span> l <span style="color:#666">+</span>1<span style="color:#666">;</span>
-x <span style="color:#666">=</span> <span style="color:#666">(</span><span style="color:#902000">int</span><span style="color:#666">)</span>l<span style="color:#666">;</span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#902000">long</span> l <span style="color:#666">=</span> Integer<span style="color:#666">.</span><span style="color:#4070a0">MAX_VALUE</span><span style="color:#666">;</span>
+</span></span><span style="display:flex;"><span>l <span style="color:#666">=</span> l <span style="color:#666">+</span>1<span style="color:#666">;</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> <span style="color:#666">(</span><span style="color:#902000">int</span><span style="color:#666">)</span>l<span style="color:#666">;</span></span></span></code></pre></div></p>
 <p>x has a guaranteed value.
 <a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a> paragraph 5.1.3.</p>
 
@@ -87,7 +87,7 @@ x <span style="color:#666">=</span> <span style="color:#666">(</span><span style
 <h2>Comments</h2>
 <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

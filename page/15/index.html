@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/setting-values-in-java-enum---a-bad-idea/">Setting Values in Java Enum - A Bad Idea</a>
+  </h1>
+  <time datetime="2013-09-12T10:06:00Z" class="post-date">Thu, Sep 12, 2013</time>
+   
+
+My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <a href="http://www.scala-lang.org/old/node/107">case classes</a> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<br /><br />I wrote an enum with a setter like:<br /><br />&nbsp;<span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; public static enum BlackVariateType {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V0,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZERO_DERIVATIVE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private double volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public double getBlackVolatilitySquare() {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void setBlackVolatilitySquare(double volSquare) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.volSquare = volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; }</span></span><br /><br />Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<br /><br />I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <br /><br />
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/">Making Classic Heston Integration Faster than the Cos Method</a>
   </h1>
   <time datetime="2013-09-05T17:35:00Z" class="post-date">Thu, Sep 5, 2013</time>
@@ -93,7 +105,7 @@
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/attari-lord-kahl-cos-methods-comparison-on-heston/">Attari, Lord-Kahl &amp; Cos Methods Comparison on Heston</a>
+    <a href="https://chasethedevil.github.io/post/attari-lord-kahl--cos-methods-comparison-on-heston/">Attari, Lord-Kahl &amp; Cos Methods Comparison on Heston</a>
   </h1>
   <time datetime="2013-08-28T17:54:00Z" class="post-date">Wed, Aug 28, 2013</time>
   <p>I recently wrote about the <!-- raw HTML omitted -->Cos method<!-- raw HTML omitted -->. While rereading the various papers on Heston semi-analytical pricing, especially the <!-- raw HTML omitted -->nice summary by Schmelzle<!-- raw HTML omitted -->, it struck me how close were the Attari/Bates methods and the Cos method derivations. I then started wondering if Attari was really much worse than the Cos method or not.<!-- raw HTML omitted --><!-- raw HTML omitted -->I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto). If the accuracy of the integration is 1e-6, Attari maximum accuracy will also be 1E-6, this means that very out of the money options will be completely mispriced (might even be negative). In a sense it is similar to what I observed on the Cos method.<!-- raw HTML omitted --><!-- raw HTML omitted -->&ldquo;Lord-Kahl&rdquo; uses 1e-4 integration accuracy, &ldquo;Attari&rdquo; uses 1E-6, and &ldquo;Cos&rdquo; uses 128 points. The reference is computed using <!-- raw HTML omitted -->Lord-Kahl<!-- raw HTML omitted --> with Newton-Cotes &amp; 1E-10 integration accuracy.<!-- raw HTML omitted -->Well here are the results in terms of accuracy:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->As expected, Lord-Kahl absolute accuracy is only 1E-5 (a bit better than 1E-4 integration accuracy), while Attari is a bit better than 1E-6, and Cos is nearly 1E-7 (higher inaccuracy in the high strikes, probably because of the truncation inherent in the Cos method).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <!-- raw HTML omitted -->optimal alpha<!-- raw HTML omitted --> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.<!-- raw HTML omitted --><!-- raw HTML omitted -->Cos 0.012s<!-- raw HTML omitted -->Lord-Kahl 0.099s<!-- raw HTML omitted -->Attari 0.086s<!-- raw HTML omitted -->Reference 0.682s<!-- raw HTML omitted --><!-- raw HTML omitted -->The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
@@ -152,15 +164,6 @@
   </h1>
   <time datetime="2013-07-12T15:23:00Z" class="post-date">Fri, Jul 12, 2013</time>
   <p>This is a kind of following to the <!-- raw HTML omitted -->CUDA performance myth<!-- raw HTML omitted -->. There is a recent news on the java concurrent mailing list about <!-- raw HTML omitted -->SplittableRandom class<!-- raw HTML omitted --> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.<!-- raw HTML omitted --><!-- raw HTML omitted -->It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <!-- raw HTML omitted -->MRG32k3a<!-- raw HTML omitted --> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <!-- raw HTML omitted -->MTGP<!-- raw HTML omitted -->, and even the less rigourous XorWow popularized by NVidia CUDA.<!-- raw HTML omitted --><!-- raw HTML omitted -->The book <!-- raw HTML omitted -->GPU Computing Gems<!-- raw HTML omitted --> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister) <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/unity-vs-kde-in-virtualbox/">Unity vs KDE in Virtualbox</a>
-  </h1>
-  <time datetime="2013-07-10T23:17:00Z" class="post-date">Wed, Jul 10, 2013</time>
-  <p>The other day I installed the latest Ubuntu 13.04 under a VirtualBox virtual machine using Windows as host. To my surprise, unity failed to launch properly on the virtual machine reboot, with compiz complaining, something I have sometimes seen on my work laptop. It&rsquo;s more surprising in a VM since it is in a way much more standard (no strange graphic card, no strange driver, the same stuff for every VirtualBox user (maybe I&rsquo;m wrong there?)). I therefore installed KDE as a way to bypass this issue. Not only it worked, but the UI was much faster: there was some very noticeable lag in Unity, slow fade in fade out effects, when it worked before the reboot.</p>
-<p>I am no hater of Unity, it looks well polished, nice to the eye and I use it on a home computer. I find KDE looks a tiny bit less nice, although I prefer the standard scrollbars of KDE. I wonder if others have the same dreadful experience with Unity under VirtualBox.</p>
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,23 +74,23 @@
   <time datetime=2018-10-07T20:56:42&#43;0100 class="post-date">Sun, Oct 7, 2018</time>
   <p>Out of curiosity, I tried <a href="https://github.com/cran/quadprog">quadprog</a> as <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">open-source quadratic programming convex optimizer</a>, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.</p>
 <p>Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog. In particular, in 2014, Benjamen Tyner <a href="http://r.789695.n4.nabble.com/quadprog-solve-QP-sometimes-returns-NaNs-td4697548.html">gave a simple example in R</a>, where solve.QP returns NaNs while the input is very simple: an identity matrix with small perturbations out of the diagonal. Here is a copy of his example:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">    <span style="color:#06287e">library</span>(quadprog)
-
-    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
-
-    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
-    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
-    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
-    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
-    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
-    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
-
-    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
-    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
-
-    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
-
-    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>    <span style="color:#06287e">library</span>(quadprog)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    n <span style="color:#666">&lt;-</span> <span style="color:#40a070">66L</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">set.seed</span>(<span style="color:#40a070">6860</span>)
+</span></span><span style="display:flex;"><span>    X <span style="color:#666">&lt;-</span> <span style="color:#06287e">matrix</span>(<span style="color:#40a070">1e-20</span>, n, n)
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">diag</span>(X) <span style="color:#666">&lt;-</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>    Dmat <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X)
+</span></span><span style="display:flex;"><span>    y <span style="color:#666">&lt;-</span> <span style="color:#06287e">seq_len</span>(n)
+</span></span><span style="display:flex;"><span>    dvec <span style="color:#666">&lt;-</span> <span style="color:#06287e">crossprod</span>(X, y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Amat <span style="color:#666">&lt;-</span> <span style="color:#06287e">diag</span>(n)
+</span></span><span style="display:flex;"><span>    bvec <span style="color:#666">&lt;-</span> y <span style="color:#666">+</span> <span style="color:#06287e">runif</span>(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    sol <span style="color:#666">&lt;-</span> <span style="color:#06287e">solve.QP</span>(Dmat, dvec, Amat, bvec, meq <span style="color:#666">=</span> n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></span></span></code></pre></div>
 <p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
 <p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
 <figure><img src="/post/quadprog_nan_fix.png"/><figcaption>
@@ -105,7 +105,7 @@
 <h2>Comments</h2>
 <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     
