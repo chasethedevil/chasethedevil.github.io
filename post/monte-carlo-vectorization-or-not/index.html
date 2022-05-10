@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.96.0" />
+  <meta name="generator" content="Hugo 0.98.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,8 +73,16 @@
   <h1>Monte-Carlo Parallelization: to vectorize or not?</h1>
   <time datetime=2022-04-09T21:56:42&#43;0100 class="post-date">Sat, Apr 9, 2022</time>
   <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
-I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup.</p>
-<p>A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.</p>
+I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; numSimulations; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>	pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path) <span style="color:#60a0b0;font-style:italic">//path contains an array of n time-steps of float64.
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path, output)
+</span></span><span style="display:flex;"><span>	statistics.<span style="color:#06287e">RecordValue</span>(output)
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths) <span style="color:#60a0b0;font-style:italic">//paths contains an array of n time-steps of vectors of size numSimulations 
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths, output)
+</span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
 <p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
 <p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
 <p>Which one is most appropriate?</p>
