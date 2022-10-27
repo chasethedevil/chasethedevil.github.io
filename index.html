@@ -46,7 +46,7 @@
     <nav>
       <ul class="sidebar-nav">
         <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
-        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
       </ul>
 
         <ul class="sidebar-nav">
@@ -72,6 +72,21 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/linux-in-2022/">Desktop Linux in 2022</a>
+  </h1>
+  <time datetime="2022-10-26T07:56:42&#43;0100" class="post-date">Wed, Oct 26, 2022</time>
+  <p>I have been a long time user of Fedora at work and have been happy quite happy about it. Around 6 months ago, I moved to Manjaro under VirtualBox in a Windows host, because the company imposes the use of a VPN client that does not run on Linux. It&rsquo;s much less great for several reasons:</p>
+<ul>
+<li>VirtualBox makes everything graphics much slower. It is still way better than WSL2 as I found WSL2 to be a poor man&rsquo;s Linux, where graphics is via some half broken X11 client for Windows. With VirtualBox, programming is ok, watching videos is not (you need to use the host for that). Something relatively neat is that the VM can be run on any other host, including a Linux host by just copying the vm file.</li>
+<li>I picked Manjaro out of curiosity and because it was perhaps faster/more optimized than Fedora. I don&rsquo;t have too many issues with it. But I found out that the use of AUR packages would frequently break on upgrades. Futhermore, it is updated less frequently than Fedora, which is a bit surprising for a rolling release. I also installed it with ext4. With hindsight, I think both choices were poor, Fedora with brtfs is the way to go, or some Ubuntu variant.</li>
+<li>Work also imposes various antivirus programs which tend to always keep the cpu busy.</li>
+</ul>
+<p>Overall I am still much more productive than with a raw Windows, which is surprisingly slow for many software development related tasks. Having to deal more with Windows showed me how slow the system is, and how poor the experience is. Before using it again (after many years completely off it), I had started thinking it was good (well, it does crash much less than back in the days).</p>
+<p>I otherwise use Fedora with either KDE or Gnome on my personal desktop and laptop with very few issues overall. Gnome seems much better since 42 even if overall, Gnome shell has not been the most stable in the past. Steam runs great. I also encountered some grub bootloader bug recently, which disappeared once I upgraded my bios.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/implied_volatility_roughness/">Roughness of the Implied Volatility</a>
   </h1>
@@ -353,23 +368,6 @@ This means the observed number of deaths is lower than expected compared with mo
 </ul>
 <p><strong>Conclusion</strong></p>
 <p>This was not the only motivator, another strong one is a Russian friend who caught the Covid-19 in July 2021, who was not very pro-vaccination, but thought, once it was too late, &ldquo;I really should have applied for the vaccine&rdquo;, as he realized it impacted the whole circle of relations around him. Then, one by one, his whole family caught the Covid. Fortunately, no-one died.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/are-tradional-banks-ready-for-the-21st/">Are traditional banks ready for the 21st century?</a>
-  </h1>
-  <time datetime="2021-06-12T07:56:42&#43;0100" class="post-date">Sat, Jun 12, 2021</time>
-  <p>This is a follow up on my parents phishing scam.</p>
-<p>After several weeks, my parents and I were finally able to have a real world meeting with the advisor at the bank. The advisor is a young woman with an obvious background in sales.</p>
-<p>In order to process the paperwork around the reimbursement of the phishing scam, the main issue was the request of the original phishing e-mail by the bank, as my mother had deleted the e-mail. It turns out, that in Thunderbird, deleted e-mails are not deleted on disk until an operation of compactification of the mailbox is done. I was thus able to recover the deleted e-mail. Interestingly, the deleted e-mail was not in the trash file, but directly in the inbox file.</p>
-<p>At first, I sent the message source as PDF, along with a screenshot to the bank. The bank asked to forward the e-mail instead. Interestingly, it turns out that once a phishing e-mail is registered in the various anti-phishing filters, it is not possible to forward (directly or in attachment) or copy paste the email as most servers (including the bank servers) will detect the new email as potential phishing and directly reject the e-mail (reject error).</p>
-<p>So the standard process of the bank is not really appropriate. It can be followed only during the very short period (more luck than anything) where the phishing has not yet been registered in the anti-phishing filters. I noticed by a simple Google search that many other institution follow a similar process, where they ask to forward the phishing e-mail to a specific e-mail address.</p>
-<p>The good news so far is that officially, the advisor pushed the fraud case forward, although it is not entirely clear at this point if it will be processed properly. What shocked me more was the speech of the bank advisor. First, she scared us by telling stories of various credit card frauds (obviously not related to our bank credentials fraud). When she mentioned insurances against credit card frauds, without selling them yet to us, her goal became clear. Then she thought comforting that this kind of fraud only happens once, because once you are confronted to a fraud, you would then be more careful and not make the same mistake anymore, not a convincing argument at all in my views. She indirectly kept blaming my mother for entering her credentials, but was much less clear about the strong authentication at the bank, especially when I explained that, usually, at another bank, I receive a text message with a unique code to enter each time I try to wire money towards a new account, something this bank obviously did not implement properly. Strong authentication is now part of the European law (<a href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072026/LEGISCTA000035407258/#LEGISCTA000035407332">DSP-2</a>). Then she found every single argument to not close some of the accounts of my parents (they have far too many pointless accounts at this bank). And finally she tried to sell us some special managed account for stock trading (managed by the bank entirely, with the money from my parents), claiming the economy was really great in these COVID-19 times.</p>
-<p>Overall there is a real important problem with bank frauds in the 21st century. The system currently in place expects that most people, including 80 years old, must be tech experts, who know how to carefully look at any suspicious email header, such as the from field email address (which could also be better forged than the phishing email my parents received). It expects that everybody carefully checks the http address in the browser (which may also interestingly forged via UTF-8 codes). It relies on somewhat buggy phone applications, which constantly change, and are different for every bank. It expects that most people never click on a link, but then banks themselves send emails with links to promote various products they sell. Banks should really think of adopting a more unified, standard approach to authentication, such as <a href="https://freeotp.github.io/">FreeOTP</a>, based on <a href="https://www.ietf.org/rfc/rfc4226.txt">HOTP</a> and <a href="https://www.ietf.org/rfc/rfc6238.txt">TOTP</a>.</p>
-<p>My mother became so paranoid that she does not recognize a valid message from the bank as a normal, standard communication from the bank anymore.
-And we are left me with a bank advisor who is not far of being a fraudster him/herself. One may wonder if things would really be much worse with a bitcoin wallet.</p>
-<p>By the time I am writing this, my parents were fully reimbursed by the bank, the phishing e-mail was really all they needed.</p>
 
   
 </article>

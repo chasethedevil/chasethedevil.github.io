@@ -46,7 +46,7 @@
     <nav>
       <ul class="sidebar-nav">
         <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
-        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
       </ul>
 
         <ul class="sidebar-nav">
@@ -72,6 +72,14 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/">Octave vs Scilab for PDEs in Finance</a>
+  </h1>
+  <time datetime="2013-07-30T12:10:00Z" class="post-date">Tue, Jul 30, 2013</time>
+  <p>I was used to <!-- raw HTML omitted -->Scilab<!-- raw HTML omitted --> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<!-- raw HTML omitted --><!-- raw HTML omitted -->Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <!-- raw HTML omitted -->Arbitrage Free SABR problem<!-- raw HTML omitted -->. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I heard about <!-- raw HTML omitted -->Octave<!-- raw HTML omitted -->, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 4.3s<!-- raw HTML omitted -->Octave 4.1s<!-- raw HTML omitted --><!-- raw HTML omitted -->I then added the keyword sparse when I build the tridiagonal matrix and end up with:<!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 0.04s<!-- raw HTML omitted -->Octave 0.02s<!-- raw HTML omitted -->Scala 0.034s (first run)<!-- raw HTML omitted -->Scala 0.004s (once Hotpot has kicked in)<!-- raw HTML omitted --><!-- raw HTML omitted -->So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<!-- raw HTML omitted --><!-- raw HTML omitted -->In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/joda-localdatetime-vs-datetime/">Joda LocalDateTime vs DateTime</a>
   </h1>
@@ -172,18 +180,6 @@ As Bessel (sometimes called Hermite) spline interpolation is only <a href="http:
    
 
 On my test of <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDgQFjAB&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D2175002&amp;ei=d8GrUb70CJCChQeA7IHoCg&amp;usg=AFQjCNHHizgzORef228lnYX3HygLb9okAg&amp;sig2=NYbhD30aD7sD8TS7CYodzw&amp;bvm=bv.47244034,d.ZG4">yield curve interpolations</a>, focusing on parallel delta versus sequential delta, <a href="http://200.17.213.49/lib/exe/fetch.php/wiki:internas:biblioteca:akima.pdf">Akima</a> is the worst of the lot. I am not sure why this interpolation is still popular when most alternatives seem much better. Hyman presented some of the issues with Akima in <a href="http://epubs.siam.org/doi/abs/10.1137/0904045">his paper</a> in 1983. <br /><br />In the following graph, a higher value is a higher parallel-vs-sequential difference. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-y1jkd6Pu4Y8/UavBtMgvLQI/AAAAAAAAGc4/CDRwTqv-suc/s1600/snapshot18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="272" src="http://4.bp.blogspot.com/-y1jkd6Pu4Y8/UavBtMgvLQI/AAAAAAAAGc4/CDRwTqv-suc/s400/snapshot18.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: center;"></div>That plus the Hagan-West example of a tricky curve looks a bit convoluted with it (although it does not have any negative forward).<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kKk7NEYtUaw/UavB245C8OI/AAAAAAAAGdA/elBq-es3jWY/s1600/snapshot19.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="225" src="http://4.bp.blogspot.com/-kKk7NEYtUaw/UavB245C8OI/AAAAAAAAGdA/elBq-es3jWY/s400/snapshot19.png" width="400" /></a></div>I have used Quantlib implementation, those results make me wonder if there is not something wrong with the boundaries.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/2-ways-for-an-accurate-barrier-with-finite-difference/">2 Ways for an Accurate Barrier with Finite Difference </a>
-  </h1>
-  <time datetime="2013-06-02T00:46:00Z" class="post-date">Sun, Jun 2, 2013</time>
-   
-
-I had explored the issue of pricing a barrier using finite difference discretization of the Black-Scholes PDE a few years ago. Briefly, for explicit schemes, one just need to place the barrier on the grid and not worry about much else, but for implicit schemes, either the barrier should be placed on the grid and the grid&nbsp; <b>truncated </b>at the barrier, or a <b>fictitious point</b> should be introduced to force the correct price at the barrier level (0, typically).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s1600/barrier_grid.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="135" src="http://1.bp.blogspot.com/-BDNo4x-nxVw/Uap5CCA8BJI/AAAAAAAAGco/SxT1WlDrIbA/s400/barrier_grid.png" width="400" /></a></div><br />The fictitious point approach is interesting for the case of varying rebates, or when the barrier moves around. I first saw this idea in the book "Paul Wilmott on Quantitative Finance".<br /><br />Recently, I noticed that Hagan made use of the ficitious point approach in its "Arbitrage free SABR" paper, specifically he places the barrier in the middle of 2 grid points. There is very little difference between truncating the grid and the fictitious point for a constant barrier.<br /><br />In this specific case there is a difference because there are 2 additional ODE solved on the same grid, at the boundaries. I was especially curious if one could place the barrier exactly at 0 with the fictitious point, because then one would potentially need to evaluate coefficients for negative values. It turns out you can, as values at the fictitious point are actually not used: the mirror point inside is used because of the mirror boundary conditions.<br /><br />So the only difference is the evaluation of the first derivative at the barrier (used only for the ODE): the fictitious point uses the value at barrier+h/2 where h is the space between two points at the same timestep, while the truncated barrier uses a value at barrier+h (which can be seen as standard forward/backward first order finite difference discretization at the boundaries). For this specific case, the fictitious point will be a little bit more precise for the ODE.
 
 
 
