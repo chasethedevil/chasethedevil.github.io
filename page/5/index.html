@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.93.3" />
+  <meta name="generator" content="Hugo 0.98.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,120 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
+  </h1>
+  <time datetime="2017-04-02T07:56:42&#43;0100" class="post-date">Sun, Apr 2, 2017</time>
+  <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
+<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
+<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
+<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Original volatility</th>
+<th style="text-align:center">Method</th>
+<th style="text-align:left">Implied Volatility</th>
+<th style="text-align:right">Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.6400000000000002</td>
+<td style="text-align:right">1005 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.6495154924570236</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.6338265040549524</td>
+<td style="text-align:right">200 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.6400000010047917</td>
+<td style="text-align:right">436 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">64%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.6400000001905617</td>
+<td style="text-align:right">568 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.1575005551326285</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.15117970813645165</td>
+<td style="text-align:right">200 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.16000000000000025</td>
+<td style="text-align:right">1323 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.16000000000219483</td>
+<td style="text-align:right">714 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">16%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.16000000000018844</td>
+<td style="text-align:right">1030 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Rational</td>
+<td style="text-align:left">0.1528010258201771</td>
+<td style="text-align:right">72 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">SR</td>
+<td style="text-align:left">0.043006234681405076</td>
+<td style="text-align:right">190 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Jäckel</td>
+<td style="text-align:left">0.03999999999999886</td>
+<td style="text-align:right">1519 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">Rational-Li</td>
+<td style="text-align:left">0.040000000056277685</td>
+<td style="text-align:right">10235 ns</td>
+</tr>
+<tr>
+<td style="text-align:center">4%</td>
+<td style="text-align:center">SR-Li</td>
+<td style="text-align:left">0.040000000000453895</td>
+<td style="text-align:right">2405 ns</td>
+</tr>
+</tbody>
+</table>
+<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/vix-starts-smiling/">The VIX starts smiling</a>
   </h1>
@@ -355,56 +469,6 @@ to actually try it.
 </p>
 <p><em>Update January 23rd</em>
 The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/dont-stay-flat-with-andreasen-huge-interpolation/">Andreasen-Huge interpolation - Don&#39;t stay flat</a>
-  </h1>
-  <time datetime="2016-12-13T09:55:32&#43;0100" class="post-date">Tue, Dec 13, 2016</time>
-  <p>Jesper Andreasen and Brian Huge propose an arbitrage-free interpolation method
-based on a single-step forward Dupire PDE solution in their paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1694972">Volatility interpolation</a>.
-To do so, they consider a piecewise constant representation of the local volatility in maturity time and strike
-where the number of constants matches the number of market option prices.</p>
-<p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
-Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
-<figure><img src="/post/kahale_spx500_1995.png"/><figcaption>
-            <h4>option volatilities for the SPX500 in October 1995.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
-The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
-the market vols are exactly reproduced by the following piecewise constant vols:
-<figure><img src="/post/kahale_ah_constant200.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 200 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
-some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
-<figure><img src="/post/kahale_ah_constant400.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 400 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The single step continuous model can not represent the market implied volatilities, while for some reason,
-the discrete model with 200 points can. Note that the model vols were capped, otherwise they would explode even higher.</p>
-<p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
-(a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
-becomes stable regardless of the number of grid points.
-<figure><img src="/post/kahale_ah_linear.png"/><figcaption>
-            <h4>piecewise linear model on a grid of 400 points.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
-likely because the objective function derivatives are smoother.
-In the most favorable case for the piecewise constant model,
-the minimization with the linear model requires about 40% less iterations.</p>
-<p>We could also interpolate with a cubic spline, as long as we make sure that the volatility does not go below zero, for example by imposing a limit on the derivative values.</p>
-<p>Overall, this raises questions on the interest of the numerically much more complex continuous time version of the piecewise-constant model
-as described in <a href="http://www.city.ac.uk/__data/assets/pdf_file/0015/110085/Filling-the-gaps-Lipton-Sepp.pdf">Filling the gaps</a> by Alex Lipton and Artur Sepp: a piecewise constant representation is too restrictive.</p>
 
   
 </article>

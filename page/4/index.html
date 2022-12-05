@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.93.3" />
+  <meta name="generator" content="Hugo 0.98.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,103 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices/">Implying the Probability Density from Market Option Prices</a>
+  </h1>
+  <time datetime="2018-02-13T20:56:42&#43;0100" class="post-date">Tue, Feb 13, 2018</time>
+  <p>In the <a href="/post/spx500_bets_after_rates_hike/">previous post</a>, I showed a plot of the probability implied from SPW options before and after the big volatility change of last week.
+I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
+technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
+<p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
+<figure><img src="/post/spw_density_spline_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+        </figcaption>
+</figure>
+
+<p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
+obvious which value of N is the most appropriate.</p>
+<p>Another technique is to fit directly a weighted sum of Gaussian densities, of fixed standard deviation, where the weights are calibrated to the market option prices. This is
+described in various papers and books from Wystup such as <a href="https://mathfinance.com/wp-content/uploads/2017/06/FXSmileModelling.pdf">this one</a>. He calls it the kernel slice approach.
+If we impose that the weights are positive and sum to one, the resulting model density will integrate to one and be positive.</p>
+<p>It turns out that the price of a Vanilla option under this model is just the sum of vanilla options prices under the Bachelier model with shifted forwards (each &ldquo;optionlet&rdquo;
+forward corresponds to a peak on the market strike axis). So it is easy and fast to compute. But more importantly, the problem of finding the weights is linear. In deed, the typical
+measure to minimize is:
+$$ \sum_{i=0}^{n} w_i^2 \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right)^2 $$
+where \( w_i \) is a market weight related to the bid-ask spread,  \(  C_i^M \) is the market option price with strike \( K_i \), \( C_j^B(K_i) \) is the j-th Bachelier
+optionlet price with strike \( K_i \) and \( Q_j \) is the optionlet weight we want to optimize.</p>
+<p>The minimum is located where the gradient is zero.
+$$  \sum_{i=0}^{n} 2 w_i^2 C_k^B(K_i)  \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right) = 0 \text{ for } k=1,&hellip;,m $$
+It is a linear and can be rewritten in term of matrices as \(A Q = B\) but we have the additional constraints
+$$ Q_j \geq 0 $$
+$$ \sum_j Q_j = 1 $$</p>
+<p>The last constraint can be easily added with a Lagrange multiplier (or manually by elimination). The positivity constraint requires more work. As the problem is convex,
+the solution must lie either inside or on a boundary. So we need to explore each case where \(Q_k = 0\) for one or several k in 1,&hellip;m.
+In total we have \(2^{m-1}-1\) subsets to explore.</p>
+<p><em>How to list all the subsets of \( \{1,&hellip;,m\} \)?</em> It turns out it is very easy by using a <a href="https://www.quora.com/Given-an-array-of-size-n-how-do-you-find-all-the-possible-subsets-of-the-array-of-size-k">bijection of each subset with the binary representation</a> of \( {0,&hellip;,2^m} \). We then just need
+to increment a counter for 1 to \( 2^m \) and transform the binary representation to our original set elements. Each element of the subset corresponds to a 1 in the binary representation.</p>
+<p>Now this works well if m is not too large as we need to solve \(2^{m-1}-1\) linear systems.
+I actually found amazing, it took only a few minutes for m as high as 26 without any particular optimization. For m larger we need to be more clever.
+One possibility is to solve the unconstrained problem, and put all the negative quantities to 0  in the result, then solve again this new problem on those boundaries and repeat
+until we find a solution. This simple algorithm works often well, but not always. There exists specialized algorithms that are much better and nearly as fast.
+Unfortunately I was too lazy to code them. So I improvised on the <a href="http://en.wikipedia.org/Simplex">Simplex</a>. The problem can be transformed into something solvable by the Simplex algorithm.
+We maximize the function \( -\sum_j Z_j \) with the constraints
+$$ A Q - I Z = B $$
+$$ Q_j \geq 0 $$
+$$ Z_j \geq 0 $$
+where I is the identity matrix. The additonal Z variables are slack variables, just here to help transform the problem. This is a trick I found on a <a href="https://www.researchgate.net/post/How_to_get_the_positive_solution_x_of_a_linear_equation_Axb_if_A_is_a_non-negative_rectangular_matrix">researchgate forum</a>. The two problems
+are not fully equivalent, but they are close enough that the Simplex solution is quite good.</p>
+<p>With the spline, we minimize directly bid-ask weighted volatilities. With the kernel slice approach, the problem is linear only terms of call prices. We could use a non-linear solver
+with a good initial guess. Instead, I prefer to transform the weights so that the optimal solution on weighted prices is similar to the optimal solution on weighted volatilities.
+For this, we can just compare the gradients of the two problems:
+$$ \sum_{i=0}^{n} 2 {w}_i^2  \frac{\partial C}{\partial \xi}(\xi, K_i)   \left( C_i^M - C(\xi, K_i) \right) $$
+with
+$$ \sum_{i=0}^{n} 2 {w^\sigma_i}^2\frac{\partial \sigma}{\partial \xi}(\xi, K_i)  \left( \sigma_i^M - \sigma(\xi, K_i)\right) $$
+As we know that
+$$ \frac{\partial C}{\partial \xi} =  \frac{\partial \sigma}{\partial \xi} \frac{\partial C}{\partial \sigma} $$
+we approximate \( \frac{\partial C}{\partial \sigma} \) by the market Black-Scholes Vega and
+\( \left( C_i^M - C(\xi, K_i) \right) \) by \( \frac{\partial C}{\partial \xi} (\xi_{opt}-\xi) \),
+\( \left( \sigma_i^M - \sigma(\xi, K_i) \right) \) by \( \frac{\partial \sigma}{\partial \xi} (\xi_{opt}-\xi) \)
+to obtain
+$$ {w}_i \approx \frac{1}{ \frac{\partial C_i^M}{\partial \sigma_i^M} } {w^\sigma_i}  $$</p>
+<p>Now it turns out that the kernel slice approach is quite sensitive to the choice of nodes (strikes), but not as much as to the choice of number of nodes. Below is
+the same plot as with the spline approach, that is we choose every N market strike as node. For N=4, the density is composed of the sum of m/4 Gaussian densities. We
+optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
+in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
+narrower peaks.</p>
+<figure><img src="/post/spw_density_kernel_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+        </figcaption>
+</figure>
+
+<p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
+The fit can be much better by adding nodes at
+f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
+will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
+<figure><img src="/post/spw_vol_kernel2.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
+<figure><img src="/post/spw_density_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
+then we impose where the peaks will be located eventually.</p>
+<p>It is interesting to compare the graph with the one before the volatility jump:</p>
+<figure><img src="/post/spw_density_janfeb_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>
+<p>It is possible to use other kernels than the Gaussian kernel. The problem to solve would be exactly the same. It is not clear what would be the advantages
+of another kernel, except, possibly, speed to solve the linear system in O(n) operations for a compact kernel spanning at most 3 nodes (which would translate to a tridiagonal system).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/">Where is the S&amp;P 500 going to end?</a>
   </h1>
@@ -501,120 +598,6 @@ function startStop() {
 <!-- raw HTML omitted -->
 <p>In the above example, even though the step size \Delta x is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
 <p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
-  </h1>
-  <time datetime="2017-04-02T07:56:42&#43;0100" class="post-date">Sun, Apr 2, 2017</time>
-  <p>Dan Stefanica and Rados Radoicic propose a quite good initial guess in their very recent paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2908494">An Explicit Implied Volatility Formula</a>. Their formula is simple, fast to compute and results in an implied volatility guess with a relative error of less than 10%.</p>
-<p>It is more robust than the rational fraction from <a href="https://mpra.ub.uni-muenchen.de/6867/1/MPRA_paper_6867.pdf">Minquiang Li</a>: his rational fraction is only valid for a fixed range of strikes and maturities. The new approximation is mathematically proved accurate across all strikes and all maturities. There is only the need to be careful in the numerical implementation with the case where the price is very small (a Taylor expansion of the variable C will be useful in this case).</p>
-<p>As mentioned in an <a href="/post/fast-and-accurate-implied-volatility-solver/">earlier post</a>, Peter Jäckel solved the real problem by providing the code for a fast, very accurate and robust solver along with his paper <a href="http://jaeckel.16mb.com/LetsBeRational.pdf">Let&rsquo;s be rational</a>. This new formula used as initial guess to Minquiang Li SOR-TS solver provides an interesting alternative: the resulting code is very simple and efficient. The accuracy, relative or absolute can be set to eventually speedup the calculation.</p>
-<p>Below is an example of the performance on a few different cases for strike 150, forward 100, time to maturity 1.0 year and a relative tolerance of 1E-8 using <a href="https://golang.org/">Go 1.8</a>.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Original volatility</th>
-<th style="text-align:center">Method</th>
-<th style="text-align:left">Implied Volatility</th>
-<th style="text-align:right">Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.6400000000000002</td>
-<td style="text-align:right">1005 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.6495154924570236</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.6338265040549524</td>
-<td style="text-align:right">200 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.6400000010047917</td>
-<td style="text-align:right">436 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">64%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.6400000001905617</td>
-<td style="text-align:right">568 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.1575005551326285</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.15117970813645165</td>
-<td style="text-align:right">200 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.16000000000000025</td>
-<td style="text-align:right">1323 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.16000000000219483</td>
-<td style="text-align:right">714 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">16%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.16000000000018844</td>
-<td style="text-align:right">1030 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Rational</td>
-<td style="text-align:left">0.1528010258201771</td>
-<td style="text-align:right">72 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">SR</td>
-<td style="text-align:left">0.043006234681405076</td>
-<td style="text-align:right">190 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Jäckel</td>
-<td style="text-align:left">0.03999999999999886</td>
-<td style="text-align:right">1519 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">Rational-Li</td>
-<td style="text-align:left">0.040000000056277685</td>
-<td style="text-align:right">10235 ns</td>
-</tr>
-<tr>
-<td style="text-align:center">4%</td>
-<td style="text-align:center">SR-Li</td>
-<td style="text-align:left">0.040000000000453895</td>
-<td style="text-align:right">2405 ns</td>
-</tr>
-</tbody>
-</table>
-<p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
 
   
 </article>
