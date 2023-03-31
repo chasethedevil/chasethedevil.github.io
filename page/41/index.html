@@ -73,6 +73,16 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/java-development-without-ant/">Java development without Ant</a>
+  </h1>
+  <time datetime="2005-07-12T16:16:00Z" class="post-date">Tue, Jul 12, 2005</time>
+  <p>When <a href="http://jakarta.apache.org/ant">Ant</a> came out, I welcomed it. It was better than Makefiles for Java, it solved the path and classpath format difference between Windows and Linux, did not rely on shell programs. It did provide a platform independent way for building Java software. At that time, there was another alternative, <a href="http://jmk.sourceforge.net">JMK</a> which had a lisp like syntax, and solved the same problems as Ant. But Ant was backed by apache, and this were the times of XML everywhere.<!-- raw HTML omitted --> I got more and more fed up with ant scripts over the years. During a long time you had to resort to an XML trick just to include other ant file, you did not have conditionals, but more importantly, it is quite a pain to write long ant scripts in XML. XML is not that good to write logic with, XSLT did not become as big as it could have been partly for this reason.</p>
+<p>Recently, Java IDEs (<a href="http://www.eclipse.org">Eclipse</a>) have made Java coding really comfortable, but why is it that for each project, you need to have to setup your project classpath, build, and write an ant script that does the same? In many companies I have seen ant scripts taking minutes to do a build in order to test your latest modification. This is crazy when it took a few seconds to eclipse to compile it, and it&rsquo;s already compiled, so why not using that output for testing your development? Ant, despite its codebase and age, does not do much: it does not calculate dependencies, it leaves that to the java compiler, it does not keep checksums of files to check if one has changed, it just uses file system dates (which can be a problem if you retrieve an older version of some file).</p>
+<p>Now I am using a <a href="http://www.jython.org">Jython</a> script that justs copies my eclipse build and packages it appropriately, it works well, it is fast, it is flexible (all the power of python), and platform independent. You need to be a bit careful how you choose to design your Jython script, but hey, even with Ant limitations on messing everything around, I have seen so many awful Ant scripts.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/lion/">lion</a>
   </h1>
   <time datetime="2005-06-28T17:00:00Z" class="post-date">Tue, Jun 28, 2005</time>
@@ -93,59 +103,6 @@
 <a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/IMG_3839-1.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/200/IMG_3839-1.jpg" border="0" alt="" /></a>
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/the_return_of_the_arbitrage/">The Return of the Arbitrage in the Perfect Volatility Surface</a>
-  </h1>
-  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
-  <p>In a Wilmott article from 2018 (Wilmott magazine no. 97) titled &ldquo;Arbitrage in the perfect volatility surface&rdquo;, Uwe Wystup points out some interesting issues on seemingly innocuous FX volatility surfaces:</p>
-<ul>
-<li>a cubic spline tends to produce artificial peaks/modes in the density.</li>
-<li>SVI not arbitrage-free even on seemingly trivial input.</li>
-</ul>
-<p>The examples provided are indeed great and the remarks very valid. There is more to it however:</p>
-<ul>
-<li>a cubic spline on strikes or log-moneyness does not produce the artificial peak.</li>
-<li>SVI with a=0 is arbitrage-free on this example.</li>
-</ul>
-<p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
-with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
-In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
-<figure><img src="/post/audnzd_delta_spline_dens.png"/><figcaption>
-            <h4>Splines on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
-nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
-Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
-<figure><img src="/post/audnzd_delta_svi.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-</p>
-<figure><img src="/post/audnzd_delta_svi_denom.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-
-<p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
-<p><figure><img src="/post/wilmott_wystup_delta.png"/><figcaption>
-            <h4>extract of the Wilmott article.</h4>
-        </figcaption>
-</figure>
-
-There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
-For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
-One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
-<figure><img src="/post/omg-oh-my-god.gif"/><figcaption>
-            <h4>Ooohhhh!</h4>
-        </figcaption>
-</figure>
-
-<p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
 
   
 </article>

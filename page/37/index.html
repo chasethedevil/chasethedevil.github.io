@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/rmi-nightmares---non-interoperability/">RMI Nightmares - Non Interoperability</a>
+  </h1>
+  <time datetime="2006-01-31T18:39:00Z" class="post-date">Tue, Jan 31, 2006</time>
+   
+
+These days we tried to make Websphere and <a href="http://jonas.objectweb.org">Jonas</a> interoperate. Some EJBs are deployed in Jonas and we just try to call them from Websphere. The most natural way is to use RMI (with JRMP) for that. Jonas uses  JDK1.4.2 (conforms to J2EE 1.4) and Websphere IBM JVM 1.3.1 (conforms to J2EE 1.3). Because of RMI serialization, an EJB from Jonas will not work on Websphere, because this EJB has references to J2EE 1.4 classes which are different from J2EE  1.3. The exact root cause is not exactly clear to me, it probably has to do with the Naming Factory and the EJB Stub, but we tried every possible thing here without success.<br /><span style="font-weight: bold;">Update: </span>JRMP worked between JBoss 3.X on JDK 1.4 and Websphere 5.X (IBM JDK 1.3) using JBoss NamingFactory. So RMI interoperation seems quite unpredictable. One thing is that you have to pay attention to the naming factory you use. If it is a special library like in JBoss case, make sure it is compatible with your JDK.<br /><br />One solution is to use RMI-IIOP, as it does not rely on serialization. It almost works. In our case we use Websphere Portal that needs to have security enabled. You might ask what security has to do with all that. Well, enabling security on websphere means that CORBA exchange will also be secured (using CSIv2). Tuning Jonas to understand what websphere asks is something we did not manage to do (and we don't know if it is possible at all).<br /><span style="font-weight: bold;">Update: </span>We did manage to make it work by disabling Jonas CSIv2 support.<br /><br />So there we are using Axis to do the communication!<br /><span style="font-weight: bold;">Update: </span>Axis is not needed anymore  as RMI-IIOP works as advertised.<br /><br />There is an interesting <a href="http://www.lifl.fr/%7Emerle/benchmarking.pdf">benchmark of Axis vs JRMP vs RMI-IIOP (pdf)</a>. Axis is more than 10x slower than pure JRMP. Application servers use of JRMP seems to matter a lot, JBoss looks bad.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
   </h1>
   <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
@@ -192,18 +204,6 @@ A friend asked me for a list, here is it. I found those books the most interesti
 <li>XBox 360 has almost arrived. While not a direct competitor, it can be used as media center, it is cheap and powerful. Unfortunately it&rsquo;s not customizable enough.</li>
 <li>Powerbooks got a recent update. They are advertised heavily on apple websites, while the mac mini had just a silent and minor upgrade and is not advertised anymore.</li>
 </ul>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/7-years-later-still-ejbs/">7 Years Later: Still EJBs</a>
-  </h1>
-  <time datetime="2005-11-07T16:29:00Z" class="post-date">Mon, Nov 7, 2005</time>
-   
-
-In 1998, a student of my school had a project with Sun about EJBs. This was the beginning of EJBs, they were not public, and there was no J2EE. At that time he found it utterly complicated, and had difficulties to understand why they made it so complicated.<br /><br />In 2000, I worked for a company who had built in-house most components of a today J2EE application server. For example, they had their own unified messaging system, on the JSP side, they were already using custom tags, etc.. Their problem is that they took lots of time to develop in-house, all what later became standard, and almost freely available.<br /><br />Today, 7 years later, the big talk, new Java products, be it Spring, or JBoss Seam, are still all about the same ideas as in the first J2EE. Spring has the freedom to include whatever technology, but in the end, their scope closely matches J2EE scope. Service Oriented Architecture (SOA), the current buzzword, will come out relatively naturally with J2EE, session EJBs being natural candidate to expose functionalities to the outer world. JBoss (or Geronimo) architecture is fully SOA: a small kernel managing services, that are exposed for other to use.<br /><br />To learn about EJBs, I still find <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/059600530X&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Enterprise JavaBeans</a> by Richard Monson-Haefel, the best book. The chapter (in the 2nd Edition of the book, not in the 4th unfortunately) where he rolls his own distributed objects system is for me a testimony on how well he wants you to understand what's behind EJBs. And if you want to better understand what's behind RMI, <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/1565922069&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Java Distributed Computing (O'Reilly)</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=as2&amp;o=1&amp;a=1565922069" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /> has a chapter where the author rolls his own RMI.<br /><br />To conclude, Sun was really clever in defining J2EE scope and branding several Java technologies as J2EE (despite the awful version naming). While the ideas were very good, the developer's life was forgotten. It was too much a pain in the a** and not flexible enough (especially the ORM side). JBoss gets it right, what people need is a way to use pieces of J2EE, without imposing too much unnecessary hurdle on development.
-
-
 
   
 </article>

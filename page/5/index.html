@@ -73,6 +73,20 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/">Typo in Hyman non-negative constraint - 28 years later</a>
+  </h1>
+  <time datetime="2017-05-23T23:56:42&#43;0100" class="post-date">Tue, May 23, 2017</time>
+  <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \( \Delta x_{i-1/2} \)  is interverted with  \( \Delta x_{i+1/2} \).</p>
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions</p>
+<!-- raw HTML omitted -->
+<p>In the above example, even though the step size \Delta x is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
   </h1>
   <time datetime="2017-04-02T07:56:42&#43;0100" class="post-date">Sun, Apr 2, 2017</time>
@@ -441,34 +455,6 @@ It can be shown that any number larger than the factor 2 in the denominator will
 The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
 simple exact formula for the limit as in the Black-Scholes world.</p>
 <p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
-  </h1>
-  <time datetime="2017-01-06T07:55:32&#43;0100" class="post-date">Fri, Jan 6, 2017</time>
-  <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
-<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
-not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
-Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
-<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
-The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
-in the algorithm.</p>
-<p>In between step 3 and step 4, we should have
-$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
-$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
-<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
-<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
-very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
-to actually try it.
-<figure><img src="/post/heston_case3.png"/><figcaption>
-            <h4>Error on Leif Andersen Case III.</h4>
-        </figcaption>
-</figure>
-</p>
-<p><em>Update January 23rd</em>
-The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
 
   
 </article>

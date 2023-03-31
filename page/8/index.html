@@ -73,6 +73,35 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/linear_flat_forward_interpolation/">Linear and Flat forward interpolation with cash dividends</a>
+  </h1>
+  <time datetime="2016-01-19T09:55:32&#43;0100" class="post-date">Tue, Jan 19, 2016</time>
+  <p>When the dividend curve is built from discrete cash dividends, the dividend yield is discontinuous at the dividend time as the asset price jumps from the dividend amount.
+This can be particularly problematic for numerical schemes like finite difference methods. In deed, a finite difference grid
+will make use of the forward yield (eventually adjusted to the discretisation scheme), which explodes then.
+Typically, if one is not careful about this, then increasing the number of time steps does not increase accuracy anymore, as
+the spike just becomes bigger on a smaller time interval. A simple work-around is to limit the resolution to one day.
+This means that intraday, we interpolate the dividend yield.</p>
+<p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
+But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
+<figure><img src="/post/linear_flat_forward.png"/><figcaption>
+            <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
+        </figcaption>
+</figure>
+
+On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
+<p>In reality, one should use flat forward interpolation instead, where the forward yield is maintained constant during the day. The forward rate is defined as</p>
+<p>$$f(t_0,t_1)= \frac{r(t_1) t_1 -r(t_0) t_0}{t_1-t_0}$$</p>
+<p>where the continuously compounded rate \(r\) is defined so that \(Z(0,t)= e^{-r(t)t}\).
+In the case of the Black-Scholes drift, the drift rate is defined so that the forward price (not to confuse with the forward rate) \(F(0,t)= e^{-q(t)t}\).</p>
+<p>The flat forward interpolation is equivalent to a linear interpolation on the logarithm of discount factors.
+In ACT/365, let \(t_0=\max\left(0,\frac{365}{\left\lceil 365 t \right\rceil-1}\right), t_1 = \frac{365}{\left\lceil 365 t \right\rceil}\), the interpolated yield is:</p>
+<p>$$\bar{q}(0,t)t = q(t_0)t_0\frac{t_1-t}{t_1-t_0} + q(t_1)t_1\frac{t-t_0}{t_1-t_0}\text{.}$$</p>
+<p>Another work-around would be to model this via proportional dividends instead of a &ldquo;continuous&rdquo; yield curve.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/moved-to-hugo/">Moved to hugo</a>
   </h1>
   <time datetime="2015-12-20T21:00:57&#43;0100" class="post-date">Sun, Dec 20, 2015</time>
@@ -167,39 +196,6 @@ In his book "<i>Monte Carlo Methods in Finance</i>", P. Jäckel explains a simpl
   </h1>
   <time datetime="2015-07-13T17:35:00Z" class="post-date">Mon, Jul 13, 2015</time>
   <p>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&rsquo;t obey Lee&rsquo;s moments condition.<!-- raw HTML omitted --><!-- raw HTML omitted -->On a Wilmott forum, <!-- raw HTML omitted -->P. Caspers proposed<!-- raw HTML omitted --> the following counter-example based on extrapolating SABR: \( \alpha=15%, \beta=80%, \nu=50%, \rho=-48%, f=3%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.<!-- raw HTML omitted --><!-- raw HTML omitted -->A truly arbitrage free extrapolation can be obtained through <!-- raw HTML omitted -->Andreasen Huge volatility interpolation<!-- raw HTML omitted -->, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Smile<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Density with piecewise linear local volatility<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.<!-- raw HTML omitted -->Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.<!-- raw HTML omitted --><!-- raw HTML omitted -->It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Density with cubic spline local volatility<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Interestingly, the right side of the density is much better captured.<!-- raw HTML omitted -->The wiggle persists, although it is smaller. This is likely due to the fact that I am using a cubic spline on top of the finite difference prices (in order to have a C2 density). Using a better C2 convexity preserving interpolation would likely remove this artefact.<!-- raw HTML omitted --><!-- raw HTML omitted -->Those figures also show why relying just on extrapolation to fix SABR is not necessarily a good idea: even a real arbitrage free extrapolation will make a not so meaningful density. The proper solution is to really use <!-- raw HTML omitted -->Hagan&rsquo;s arbitrage free SABR PDE<!-- raw HTML omitted -->, which would be as nearly fast in this case.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/unintuitive-behavior-of-the-black-scholes-formula---negative-volatilities-in-displaced-diffusion-extrapolation/">Unintuitive behavior of the Black-Scholes formula - negative volatilities in displaced diffusion extrapolation</a>
-  </h1>
-  <time datetime="2015-07-07T16:43:00Z" class="post-date">Tue, Jul 7, 2015</time>
-   
-
-I am looking at various extrapolation schemes of the implied volatilities. An interesting one I stumbled upon is due to Kahale. Even if <a href="http://nkahale.free.fr/papers/Interpolation.pdf">his paper</a> is on interpolation, there is actually a small paragraph on using the same kind of function for extrapolation. His idea is to simply lookup the standard deviation \\( \Sigma \\) and the forward \\(f\\) corresponding to a given market volatility and slope:
-$$ c_{f,\Sigma} = f N(d_1) - k N(d_2)$$
-with
-$$ d_1 = \frac{\log(f/k)+\Sigma^2 /2}{\Sigma} $$
-
-We have simply:
-$$ c'(k) = - N(d_2)$$
-
-He also proves that we can always find those two parameters for any \\( k_0 > c_0 > 0,  -1 < c_0' < 0 \\)
-
-Then I had the silly idea of trying to match with a put&nbsp; instead of a call for the left wing (as those are out-of-the-money, and therefore easier to invert numerically). It turns out that it works in most cases in practice and produces relatively nice looking extrapolations, but it does not always work. This is because contrary to the call, the put value is bounded with \\(f\\).
-$$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$ 
-
-Inverting \\( p\_0' \\) is going to lead to a specific \\( d\_2 \\), and you are not guaranteed that you can push \\( f \\) high and have \\( p\_{f, \Sigma} \\) large enough to match \\( p\_0 \\). As example we can just take \\(p\_0 \geq k N(-d_2)\\) which will only be matched if \\( f \leq 0 \\).
-
-This is slightly unintuitive as put-call parity would suggest some kind of equivalence. The problem here is that we would need to consider the function of \\(k\\) instead of \\(f\\) for it to work, so we can't really work with a put directly.
-
-Here are the two different extrapolations on Kahale own example:
-<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s1600/Screenshot-Untitled%2BWindow.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-UcomxGsx_r0/VZvSdzoBBVI/AAAAAAAAIEU/_V542xidbgc/s400/Screenshot-Untitled%2BWindow.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing with calls (blue doted line)</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s1600/Screenshot-Untitled%2BWindow-1.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-sDl37fFAImE/VZvSd5eWCgI/AAAAAAAAIEQ/tOUG7nHrg_Q/s400/Screenshot-Untitled%2BWindow-1.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing with puts (blue doted line)</td></tr></tbody></table>
-Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
-I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).
-<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s1600/Screenshot-Untitled%2BWindow-2.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="297" src="http://4.bp.blogspot.com/-VSy7uTzu56U/VZwJUDT5iJI/AAAAAAAAIEo/lsi8EakZ-kA/s400/Screenshot-Untitled%2BWindow-2.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)</td></tr></tbody></table>
-
-
 
   
 </article>
