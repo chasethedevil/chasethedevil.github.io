@@ -65,7 +65,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2022. All rights reserved. </p>
+    <p>&copy; 2023. All rights reserved. </p>
   </div>
 </aside>
 
@@ -93,6 +93,59 @@
 <a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/IMG_3839-1.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/200/IMG_3839-1.jpg" border="0" alt="" /></a>
 
 
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the_return_of_the_arbitrage/">The Return of the Arbitrage in the Perfect Volatility Surface</a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  <p>In a Wilmott article from 2018 (Wilmott magazine no. 97) titled &ldquo;Arbitrage in the perfect volatility surface&rdquo;, Uwe Wystup points out some interesting issues on seemingly innocuous FX volatility surfaces:</p>
+<ul>
+<li>a cubic spline tends to produce artificial peaks/modes in the density.</li>
+<li>SVI not arbitrage-free even on seemingly trivial input.</li>
+</ul>
+<p>The examples provided are indeed great and the remarks very valid. There is more to it however:</p>
+<ul>
+<li>a cubic spline on strikes or log-moneyness does not produce the artificial peak.</li>
+<li>SVI with a=0 is arbitrage-free on this example.</li>
+</ul>
+<p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
+with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
+In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
+<figure><img src="/post/audnzd_delta_spline_dens.png"/><figcaption>
+            <h4>Splines on AUD/NZD 1w options.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
+nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
+Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
+<figure><img src="/post/audnzd_delta_svi.png"/><figcaption>
+            <h4>SVI on AUD/NZD 1w options.</h4>
+        </figcaption>
+</figure>
+</p>
+<figure><img src="/post/audnzd_delta_svi_denom.png"/><figcaption>
+            <h4>SVI on AUD/NZD 1w options.</h4>
+        </figcaption>
+</figure>
+
+<p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
+<p><figure><img src="/post/wilmott_wystup_delta.png"/><figcaption>
+            <h4>extract of the Wilmott article.</h4>
+        </figcaption>
+</figure>
+
+There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
+For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
+One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
+<figure><img src="/post/omg-oh-my-god.gif"/><figcaption>
+            <h4>Ooohhhh!</h4>
+        </figcaption>
+</figure>
+
+<p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
 
   
 </article>
