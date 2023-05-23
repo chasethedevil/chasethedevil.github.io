@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.98.0" />
+  <meta name="generator" content="Hugo 0.101.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,14 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">A Small-Time Schobel-Zhu Expansion</a>
+  </h1>
+  <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
+  <p>The paper &ldquo;<!-- raw HTML omitted -->implied vol for any local stochastic vol model<!-- raw HTML omitted -->&rdquo; from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).<!-- raw HTML omitted --><!-- raw HTML omitted -->I tried it on the <!-- raw HTML omitted -->Schobel-Zhu<!-- raw HTML omitted --> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <!-- raw HTML omitted -->fit was as good<!-- raw HTML omitted -->, while the <!-- raw HTML omitted -->simulation under the QE scheme<!-- raw HTML omitted --> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->And this is how it behaves on some realistic input:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->T=0.1<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->T=0.5<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Update March 2014<!-- raw HTML omitted --> - this is now described in my paper <!-- raw HTML omitted -->Fourier Integration and Stochastic Volatility Calibration<!-- raw HTML omitted -->.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/an-ssd-instead-of-a-laptop/">An SSD instead of a laptop</a>
   </h1>
@@ -167,18 +175,6 @@ Several months ago, I took a look at<a href="http://chasethedevil.blogspot.co.uk
   <p>Prices of a Future contract and a Forward contract are the same under the Black-Scholes assumptions (deterministic rates) but the price of options on Futures or options on Forwards might still differ. I did not find this obvious at first.</p>
 <p>For example, when the underlying contract expiration date (Futures, Forward) is different from the option expiration date. For a Future Option, the Black-76 formula can be used, the discounting is done from the option expiry date, because one receives the cash on expiration due to the margin account. For a Forward Option, the discounting need to be done from the Forward contract expiry date.</p>
 <p>European options prices will be the same when the underlying contract expiration date is the same as the option expiration date. However, this is not true for American options: the immediate exercise will need to be discounted to the Forward expiration date for a Forward underlying, not for a Future.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/">Spikes in Heston/Schobel-Zhu Local Volatility</a>
-  </h1>
-  <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
-   
-
-Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s1600/Screenshot+from+2013-11-20+12:53:32.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="203" src="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s400/Screenshot+from+2013-11-20+12:53:32.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Local Volatility</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s1600/Screenshot+from+2013-11-20+12:54:39.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="213" src="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s400/Screenshot+from+2013-11-20+12:54:39.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Volatility</td></tr></tbody></table><br /><br />The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.<br /><br />After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.<br /><br /><br />
-
-
 
   
 </article>

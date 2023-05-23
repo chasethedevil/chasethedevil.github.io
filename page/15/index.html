@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.98.0" />
+  <meta name="generator" content="Hugo 0.101.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,18 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/">Spikes in Heston/Schobel-Zhu Local Volatility</a>
+  </h1>
+  <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
+   
+
+Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s1600/Screenshot+from+2013-11-20+12:53:32.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="203" src="http://3.bp.blogspot.com/-WxQrKtq1lVw/Uoym7R2zEaI/AAAAAAAAG4M/WLQZeSpMw8I/s400/Screenshot+from+2013-11-20+12:53:32.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Local Volatility</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s1600/Screenshot+from+2013-11-20+12:54:39.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="213" src="http://3.bp.blogspot.com/-FT_fi2em31I/Uoym7c4JSlI/AAAAAAAAG4Q/3Ex1VcMuPmU/s400/Screenshot+from+2013-11-20+12:54:39.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Implied Volatility</td></tr></tbody></table><br /><br />The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.<br /><br />After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.<br /><br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/">Local Stochastic Volatility with Monte-Carlo</a>
   </h1>
@@ -171,16 +183,6 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
   </h1>
   <time datetime="2013-08-28T17:54:00Z" class="post-date">Wed, Aug 28, 2013</time>
   <p>I recently wrote about the <!-- raw HTML omitted -->Cos method<!-- raw HTML omitted -->. While rereading the various papers on Heston semi-analytical pricing, especially the <!-- raw HTML omitted -->nice summary by Schmelzle<!-- raw HTML omitted -->, it struck me how close were the Attari/Bates methods and the Cos method derivations. I then started wondering if Attari was really much worse than the Cos method or not.<!-- raw HTML omitted --><!-- raw HTML omitted -->I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto). If the accuracy of the integration is 1e-6, Attari maximum accuracy will also be 1E-6, this means that very out of the money options will be completely mispriced (might even be negative). In a sense it is similar to what I observed on the Cos method.<!-- raw HTML omitted --><!-- raw HTML omitted -->&ldquo;Lord-Kahl&rdquo; uses 1e-4 integration accuracy, &ldquo;Attari&rdquo; uses 1E-6, and &ldquo;Cos&rdquo; uses 128 points. The reference is computed using <!-- raw HTML omitted -->Lord-Kahl<!-- raw HTML omitted --> with Newton-Cotes &amp; 1E-10 integration accuracy.<!-- raw HTML omitted -->Well here are the results in terms of accuracy:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->As expected, Lord-Kahl absolute accuracy is only 1E-5 (a bit better than 1E-4 integration accuracy), while Attari is a bit better than 1E-6, and Cos is nearly 1E-7 (higher inaccuracy in the high strikes, probably because of the truncation inherent in the Cos method).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <!-- raw HTML omitted -->optimal alpha<!-- raw HTML omitted --> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.<!-- raw HTML omitted --><!-- raw HTML omitted -->Cos 0.012s<!-- raw HTML omitted -->Lord-Kahl 0.099s<!-- raw HTML omitted -->Attari 0.086s<!-- raw HTML omitted -->Reference 0.682s<!-- raw HTML omitted --><!-- raw HTML omitted -->The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.<!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/giving-fedora-another-chance/">Giving Fedora Another Chance</a>
-  </h1>
-  <time datetime="2013-08-14T22:15:00Z" class="post-date">Wed, Aug 14, 2013</time>
-  <p>I have had some stability issues with the Ubuntu 13.04 on my home computer, not on my laptop. It might be related to hard disk encryption (out of curiosity I encrypted my main hard drive in the installer option, resulting in a usable but quite slow system - it&rsquo;s incredible how much the hard drive is still important for performance). I did not have any particular issue on my work laptop with it.</p>
-<p>Anyway I gave Fedora 19 a try, with Gnome Shell, even if I am no particular fan of it. So far so good, it seems more stable than my previous Fedora 17 trial, and I get used to Gnome Shell. It&rsquo;s quite different, so it takes a while to get used to, but it is as productive as any other env (maybe more so even).</p>
-<p>It made me notice that Ubuntu One cloud storage is much less open that it seems: it&rsquo;s extremely difficult to make it work under Fedora. Some people manage this, I did not. I moved to owncloud, which fits my needs.</p>
 
   
 </article>

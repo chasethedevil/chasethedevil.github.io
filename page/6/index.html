@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.98.0" />
+  <meta name="generator" content="Hugo 0.101.0" />
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,28 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/">Bachelier Normal Volatility Asymptotics</a>
+  </h1>
+  <time datetime="2017-01-17T09:55:32&#43;0100" class="post-date">Tue, Jan 17, 2017</time>
+  <p>It is relatively well known that the Black-Scholes volatility can not grow faster than \(\sqrt{\ln(K)}\).
+The rule is also sometimes simply stated as &ldquo;the implied variance can not grow faster than linear&rdquo; (in log-moneyness).
+The proof comes from Roger Lee <a href="http://math.uchicago.edu/~rogerlee/moment.pdf">&ldquo;The moment formula for implied volatility at extreme strikes&rdquo;</a> but the rule was suggested
+earlier, for example in Hodge&rsquo;s paper from 1996 <a href="http://www.iijournals.com/doi/pdfplus/10.3905/jod.1996.407950">&ldquo;Arbitrage bounds of the implied volatility strike and term structures of European-style options&rdquo;</a>.</p>
+<p>With the increasing use of the b.p. (a.k.a Normal, a.k.a Bachelier) vols, a natural question (that Gary asked) is:</p>
+<h4 id="is-there-a-similar-rule-for-the-normal-volatility">Is there a similar rule for the Normal volatility?</h4>
+<p>It turns out that the answer is not as simple. It can easily be shown that the normal volatility can not grow faster than linear
+in strike (not the variance this time). But it does not mean that linear is acceptable, in fact, it is not.
+The upper bound can be refined to
+$$ \frac{K-F}{\sqrt{2T \ln \frac{K}{F}}} $$</p>
+<p>It is still an asymptotic upper bound only.
+It can be shown that any number larger than the factor 2 in the denominator will not lead to asymptotic arbitrage.
+The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
+simple exact formula for the limit as in the Black-Scholes world.</p>
+<p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
   </h1>
@@ -412,39 +434,6 @@ is even smaller.</p>
         </figcaption>
 </figure>
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/damghani_dearbitraging_a_weak_smile_on_svi/">Dearbitraging a weak smile on SVI with Damghani&#39;s method</a>
-  </h1>
-  <time datetime="2016-06-15T09:55:32&#43;0100" class="post-date">Wed, Jun 15, 2016</time>
-  <p>Yesterday, I wrote about some <a href="/post/svi_zeliade_arbitrage/">calendar spread arbitrages with SVI</a>. Today I am looking at the famous example of butterfly spread arbitrage from Axel Vogt.
-$$(a, b, m, \rho, \sigma) = (−0.0410, 0.1331, 0.3586, 0.3060, 0.4153)$$
-The parameters obey the weak no-arbitrage constraint of Gatheral, and yet produce a negative density, or equivalently, a negative denominator in the local variance Dupire formula.
-Those parameters are mentioned in Jim Gatheral and Antoine Jacquier paper on <a href="http://ssrn.com/abstract=2033323">arbitrage free SVI volatility surfaces</a> and also in Damghani&rsquo;s paper <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2428532">dearbitraging a weak smile</a>.</p>
-<p>Gatheral proposes to adjust just two of the parameters (corresponding to call wing and minimum variance) and run an optimizer with a large penalty on arbitrage to find the best-fit SVI parameters.
-The arbitrage can be easily detected by just computing the local variance denominator, which is not much more costly than computing the implied variance (the analytical derivatives come almost for free):</p>
-<!-- raw HTML omitted -->
-<p>It is also possible include this penalty directly in the Nelder-Mead minimization of Zeliade&rsquo;s quasi explicit calibration. In this case, all the parameters will be optimized. It is also not much slower than the more classic minimization without penalty.
-While it results a much lower RMSE, the solution might not be as visually pleasing as Gatheral&rsquo;s one.</p>
-<p>I was curious to see what Damghani&rsquo;s technique would produce on this same example. Instead of doing the minimization with the full denominator evaluation, Damghani uses a simpler no-arbitrage necessary constraint
-on the first derivative:</p>
-<!-- raw HTML omitted -->
-<p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
-There would be no loop over the minimization needed. Does this produce any good result?
-<figure><img src="/post/svi_dearbitraging_variance.png"/><figcaption>
-            <h4>implied variance with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The graph is clear, the technique produces crap. This is the local variance denominator:
-<figure><img src="/post/svi_dearbitraging_g.png"/><figcaption>
-            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
 
   
 </article>
