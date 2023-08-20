@@ -73,6 +73,28 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ghost_vacations/">Ghost Vacations</a>
+  </h1>
+  <time datetime="2023-08-20T20:56:42&#43;0100" class="post-date">Sun, Aug 20, 2023</time>
+  <p>During my vacation, I don&rsquo;t know why, but I looked at some stability issue with ghost points and the explicit method. I was initially trying out ghost points with the explicit runge kutta Chebyshev/Legendre/Gegenbauger technique and noticed some explosion in some cases.</p>
+<p>I cornered it down to a stability issue of the standard explicit Euler method with ghost (or fictitious) points. The technique is described in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo; (also in Paul Wilmott introduces quantitative finance), which I find quite good, although I have some friends who are not much fond of it. The technique may be used to compute the price of a continuously monitored barrier option when the barrier does not fall on the grid, or more generally for time-dependent barriers. I however look at it in the simple context of a constant barrier in time.</p>
+<p>I found out that there the explicit Euler scheme is unstable if we let the grid boundaries be random. In practice, for more exotic derivatives, the grid upper bound will typically be based on a number of standard deviations from the spot or from the strike price. The spot price moves continually, and the strike price is fairly flexible for OTC options. So the upper bound can really be anything and the explicit Euler may require way too many time-steps to be practical with the ghost point technique. This is all described in the preprint <a href="https://arxiv.org/abs/2308.04629">Instabilities of explicit finite difference schemes with ghost points on the diffusion equation</a>.</p>
+<p>What does this mean?</p>
+<p>The ghost point technique is not appropriate for the explicit Euler scheme (and thus for the Runge-Kutta explicit schemes as well), unless the ghost point is fixed to be in the middle of the grid, or on the grid outside by one space-step. This means the grid needs to be setup in a particular fashion. But if we need to setup the grid such that the barrier falls exactly somewhere then, for a constant barrier option, no ghost point is needed, one just need to place the barrier on the grid and use a Dirichlet boundary condition.</p>
+<figure><img src="/post/ghost_unstable_euler.png"/><figcaption>
+            <h4>Explicit scheme requires a very large number of time-steps.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/ghost_unstable_cn.png"/><figcaption>
+            <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
+        </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/maximum_implied_variance_slope/">Maximum Implied Variance Slope</a>
   </h1>
   <time datetime="2023-05-22T23:56:42&#43;0100" class="post-date">Mon, May 22, 2023</time>
@@ -354,24 +376,6 @@ constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional rea
 </tr>
 </tbody>
 </table>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/positive_stochastic_collocation/">Positive Stochastic Collocation</a>
-  </h1>
-  <time datetime="2021-08-31T07:56:42&#43;0100" class="post-date">Tue, Aug 31, 2021</time>
-  <p>In the context of my thesis, I <a href="https://arxiv.org/abs/2109.02405">explored</a> the use of stochastic collocation to capture the marginal densities of a positive asset.
-Indeed, most financial asset prices must be non-negative. But the classic stochastic collocation towards the normally distributed random variable, is not.</p>
-<p>A simple tweak, proposed early on by Grzelak, is to assume absorption and use the put-call parity to price put options (which otherwise depend on the left tail).
-This sort of works most of the time, but a priori, there is no guarantee that we will end up with a positive put option price.
-As an extreme example, we may consider the case where the collocation price formula leads to  \(V_{\textsf{call}}(K=0) &lt; f \) where  \(f \) is the forward price to maturity.
-The put-call parity relation applied at  \(K=0 \) leads to  \(V_{\textsf{put}}(K=0) = V_{\textsf{call}}(K=0)-f &lt; 0 \). This means that for some strictly positive strike, the put option price will be negative, which is non-sensical.
-In reality, it thus implies that absorption must happen earlier, not at  \(S=0 \), but at some strictly positive asset price. And then it is not so obvious to chose the right value in advance.</p>
-<p>In <a href="https://arxiv.org/abs/2109.02405">the paper</a>, I look at alternative ways of expressing the absorption, which do not have this issue. Intuitively however, one may wonder why we would go through the hassle of considering a distribution which may end up negative to model a positive price.</p>
-<p>In finance, the assumption of lognormal distribution of price returns is very common. The most straighforward would thus be to collocate towards a lognormal variate (instead of a normal one), and use an increasing polynomial map from  \([0, \infty) \) to  \([0, \infty) \).
-There is no real numerical challenge to implement the idea. However it turns out not to work well, for reasons explained in <a href="https://arxiv.org/abs/2109.02405">the paper</a>, one of those being a lack of invariance with regards to the lognormal distribution volatility.</p>
-<p>This did not make it directly to the final thesis, because it was not core to it. Instead, I explore absorption with the Heston driver process (although, in hindsight, I should have just considered mapping 0 to 0 in the monotonic spline extrapolation). I recently added <a href="https://arxiv.org/abs/2109.02405">the paper</a> on the simpler case of positive collocation with a normal or lognormal process to the arxiv.</p>
 
   
 </article>

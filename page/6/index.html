@@ -73,6 +73,48 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/">Equivalence between floating-strike and fixed-strike Asian options</a>
+  </h1>
+  <time datetime="2017-01-18T09:55:32&#43;0100" class="post-date">Wed, Jan 18, 2017</time>
+  <p>Many papers present formulae to price Asian options in the Black-Scholes world only for the fixed strike Asian case, that is
+a contract that pays \( \max(A-K,0)\) at maturity \(T\) where \(A = \sum_{i=0}^{n-1} w_i S(t_i) \) is the Asian average.</p>
+<p>More generally, this can be seen as the payoff of a Basket option where the underlyings are just the same asset but at different times.
+And any Basket option formula can actually be used to price fixed-strike Asian options by letting the correlation correspond to the correlation between the asset at the averaging times
+and the variances correspond to the variance at each averaging time. The basket approach allows then naturally for a term-structure of rates, dividends and volatilities.</p>
+<p>In order to price floating-strike Asian options paying  \( \max(S-kA,0)\) at maturity \(T\) where \(k\) is a percent strike,
+we can use a change of measure to express it as the price of a fixed-strike Asian. This equivalence is presented in several paperS: it is somewhat hidden in
+Andreasen <a href="https://www.researchgate.net/profile/Jesper_Andreasen2/publication/247953507_The_Pricing_of_Discretely_Sampled_Asian_and_Lookback_Options_A_Change_of_Numeraire_Approach/links/5445184a0cf2091108a4d9b5.pdf">&ldquo;The pricing of discretely sampled Asian and lookback options: a change of numeraire approach&rdquo;</a>, more explicit in Eberlein and Papapantoleon
+<a href="http://www.sciencedirect.com/science/article/pii/S0304414904001061">&ldquo;Equivalence of floating and fixed strike Asian and lookback options&rdquo;</a>
+or Henderson et al. <a href="https://pdfs.semanticscholar.org/7aca/df634e96744a5ff58a6a29f619b8438aabae.pdf">&ldquo;Bounds for in-progress floating-strike Asian options using symmetry&rdquo;</a>.
+None of those really consider the simple case of Black-Scholes with a term-structure of rates, dividends and volatilities.</p>
+<p>We have:
+$$
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\
+\quad k V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
+$$
+where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are the Vanilla options implied volatilities at the averaging times \(t_i\), \(C(0,t_i)\) are the capitalization factors, and \(B(0,T)\) is the discount factor.</p>
+<p><strong>Proof:</strong>
+We assume that \(S\) follows \(dS = \mu_t S dt + \sigma_t S dW_t\). The discount factor \(B\) is defined as \(B(0,T)=e^{-\int_{0}^T r_s ds}\). Let \(C(0,t) = e^{\int_{0}^t \mu_s ds}\). The process associated to the forward to time \(t\) is \(F_t=S_0 C(0,t)M_t\) with \(M_t = e^{\int_0^t \sigma_s dW_s - \frac{1}{2}\int_0^t \sigma_s^2 ds}\) being a martingale.
+We have:
+$$
+V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
+= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
+= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
+=k B(0,T)C(0,T)\mathbb{E}\left[ M_T \max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)M_{t_i}}{C(0,T) M_T },0\right)\right]
+$$
+We now proceed to a change of measure defined by \(M_T\). Under the new measure \(\mathbb{Q}^T\), \(\bar{W}_t = W_t - \int_0^t \sigma_s ds\) is a Brownian motion. \(\frac{M_t}{M_T}\) under \(\mathbb{Q}\) has the same law as \(\frac{M_t}{M_T} e^{-\int_t^T \sigma_s^2 ds}\) under \(\mathbb{Q}^T\) or equivalently as
+\(\bar{M}_t = e^{\int_t^T \sigma_s d\bar{W}_s - \frac{1}{2}\int_t^T \sigma_s^2 ds}\)  under \(\mathbb{Q}^T\).
+Defining \(\mathbb{E}^T\) to be the expectation under \(\mathbb{Q}^T\), we thus have
+$$
+V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
+=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\
+=k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
+$$
+This concludes the proof.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/normal_volatility_asymptotics/">Bachelier Normal Volatility Asymptotics</a>
   </h1>
   <time datetime="2017-01-17T09:55:32&#43;0100" class="post-date">Tue, Jan 17, 2017</time>
@@ -396,44 +438,6 @@ is nearly the same as the one stemming from a capped local variance (we imply th
 </p>
 <p>The discontinuity renders the shooting technique useless.
 The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/shooting_arbitrage/">Shooting arbitrage - part I</a>
-  </h1>
-  <time datetime="2016-06-22T09:55:32&#43;0100" class="post-date">Wed, Jun 22, 2016</time>
-  <p>In my [previous post]((/post/damghani_dearbitraging_a_weak_smile_on_svi/), I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
-The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
-and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
-<figure><img src="/post/svi_dearbitraging_variance_spline.png"/><figcaption>
-            <h4>implied variance with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-
-<p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
-<figure><img src="/post/svi_dearbitraging_g_spline.png"/><figcaption>
-            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
-<p>I wondered then what would be the corresponding implied volatility for a constant denominator of 1E-4, glued to the implied volatility surface at the point where it reaches 1E-4.</p>
-<!-- raw HTML omitted -->
-<p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
-this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
-<figure><img src="/post/svi_dearbitraging_variance_rk.png"/><figcaption>
-            <h4>implied variance with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-
-<p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
-is even smaller.</p>
-<figure><img src="/post/svi_dearbitraging_g_rk.png"/><figcaption>
-            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-        </figcaption>
-</figure>
-
 
   
 </article>

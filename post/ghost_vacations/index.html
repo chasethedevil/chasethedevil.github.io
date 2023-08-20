@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.101.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ghost Vacations &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Ghost Vacations</h1>
+  <time datetime=2023-08-20T20:56:42&#43;0100 class="post-date">Sun, Aug 20, 2023</time>
+  <p>During my vacation, I don&rsquo;t know why, but I looked at some stability issue with ghost points and the explicit method. I was initially trying out ghost points with the explicit runge kutta Chebyshev/Legendre/Gegenbauger technique and noticed some explosion in some cases.</p>
+<p>I cornered it down to a stability issue of the standard explicit Euler method with ghost (or fictitious) points. The technique is described in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo; (also in Paul Wilmott introduces quantitative finance), which I find quite good, although I have some friends who are not much fond of it. The technique may be used to compute the price of a continuously monitored barrier option when the barrier does not fall on the grid, or more generally for time-dependent barriers. I however look at it in the simple context of a constant barrier in time.</p>
+<p>I found out that there the explicit Euler scheme is unstable if we let the grid boundaries be random. In practice, for more exotic derivatives, the grid upper bound will typically be based on a number of standard deviations from the spot or from the strike price. The spot price moves continually, and the strike price is fairly flexible for OTC options. So the upper bound can really be anything and the explicit Euler may require way too many time-steps to be practical with the ghost point technique. This is all described in the preprint <a href="https://arxiv.org/abs/2308.04629">Instabilities of explicit finite difference schemes with ghost points on the diffusion equation</a>.</p>
+<p>What does this mean?</p>
+<p>The ghost point technique is not appropriate for the explicit Euler scheme (and thus for the Runge-Kutta explicit schemes as well), unless the ghost point is fixed to be in the middle of the grid, or on the grid outside by one space-step. This means the grid needs to be setup in a particular fashion. But if we need to setup the grid such that the barrier falls exactly somewhere then, for a constant barrier option, no ghost point is needed, one just need to place the barrier on the grid and use a Dirichlet boundary condition.</p>
+<figure><img src="/post/ghost_unstable_euler.png"/><figcaption>
+            <h4>Explicit scheme requires a very large number of time-steps.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/ghost_unstable_cn.png"/><figcaption>
+            <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
+        </figcaption>
+</figure>
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

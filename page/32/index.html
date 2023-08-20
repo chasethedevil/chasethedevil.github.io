@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/tired-of-bad-singletons/">Tired Of Bad Singletons</a>
+  </h1>
+  <time datetime="2007-01-04T11:50:00Z" class="post-date">Thu, Jan 4, 2007</time>
+   
+
+While looking through some code for a project, I saw that:<br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&nbsp; public static final ProductYP instance = new ProductYP(); <br>&nbsp; <br>&nbsp; public ProductYP()<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; if (instance != null)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new RuntimeException(&quot;Only one instance allowed&quot;);<br><br>&nbsp;&nbsp;&nbsp; prods = new HashMap();<br>&nbsp; }<br><br>&nbsp; public static ProductYP getInstance() <br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; return instance;<br>&nbsp; }<br></blockquote><br>And I don&#39;t think it was done by a newbie... It&#39;s actually not far from being correct, it&#39;s just that the guy obviously does not know about private constructors. I have seen several broken singleton implementations in previous projects and had several debates on the  <a href="http://www.cs.umd.edu/%7Epugh/java/memoryModel/DoubleCheckedLocking.html">double-checked locking pattern</a> (<a href="http://en.wikipedia.org/wiki/Double-checked_locking">it works since JDK1.5</a> with volatiles but is useless). I am upset to see another half broken implementation. Everybody should have read at least  <a href="http://java.sun.com/developer/technicalArticles/Programming/singletons/">this</a>.<br><br>What have you seen as broken singletons?<br><br> 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/declaring-your-logger---no-problem/">Declaring Your Logger - No Problem</a>
   </h1>
   <time datetime="2006-12-29T11:45:00Z" class="post-date">Fri, Dec 29, 2006</time>
@@ -200,18 +212,6 @@ Until recently, I always found Eclipse CVS support to be excellent. The synchron
 <pre><code>`throw (IOException) new IOException(&quot;message&quot;).initCause(e);`
 </code></pre>
 <p>It is not a major problem, but still. We can all thank the guy who <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5070673">reported that as a bug</a> to Sun in 2004.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/good-software-books---2006-version/">Good Software Books - 2006 version</a>
-  </h1>
-  <time datetime="2006-09-11T14:27:00Z" class="post-date">Mon, Sep 11, 2006</time>
-   
-
-Here is an update of the most interesting software books I found interesting. I already made <a  href="http://chasethedevil.blogspot.com/2005/11/good-software-books.html">such a list in 2005</a>:<br> <br> <ul>   <li><i>Object Oriented Software Construction, 2nd Ed</i>, by Bertrand Meyer. This made me understand why OOP is important, what is important in OOP and why it is still relevant. It contains lots of important guidelines you can apply to better design programs. One famous quote is "<b>Real systems have no top</b>". <i>Code Complete</i> (Microsoft Press) covers some of the same ideas as Meyer's book, and some more pragmatic issues that arise in software projects ("<b>measure twice, cut once</b>"). I also liked the chapter on "table driven design".</li>   <li><i>Concurrent Programming in Java, Second Edition</i>, by Doug&nbsp;Lea: there is all you need to know about programming in a multithreaded environment in it. The chapter on synchronization should be a must read for every Java developer.</li>   <li><i>Design Patterns</i> by the GoF: simply the best presentation of most common design patterns. I have a glance on it once in a while.<br>   </li>   <li><i>Artificial Intelligence through Prolog</i>, by Neil C. Rowe (Prentice-Hall): if you don't remember much about Prolog, it's a good book. It details how Prolog interpreters work.</li>   <li><i>File Systems Forensic Analysis, </i>by Brian Carrier (Addison Wesley): everything you need to know about disks and file systems, every trick to recover lost data. To go more in depth into file systems theory, you can read the free <i><a  href="http://www.nobius.org/%7Edbg/">Practical File System Design with the Be File System</a> </i>from D. Giampaolo, the creator of BeFS.<br>   </li>   <li><i>Mind Hacks </i>(O'Reilly): you probably already bought that one. Not about software, but excellent.<br>   </li>   <li><i>Practical Issues in Database Management</i> by Fabian Pascal (Addison Wesley): short but concise book on relational database theory. F Pascal is of CJ Date school of thoughts, "null are evil". You don't need to read it if you have read any other similar book (by CJ Date for example).<br>   </li>   <li><i>Inside The Java Virtual Machine,</i> by Bill Venners (McGraw-Hill): there are other books on the same subject. While this book has some bad reviews, I found it an easy read, and it explain well enough for me all the inner details of Java. I found "Programming for the Java Virtual Machine" not better, and with some bad example of a Prolog language for the JVM (1 full chapter for this to present a way too simple thing to be of any use).</li>   <li><i>Programming Jabber</i>, by O'Reilly: I have read it 2 years ago, I enjoyed how they made you go through building a Jabber server.</li>   <li><i>Lucene In Action</i>: the only book about Lucene, some of the info is useful to understand how it is designed.</li>   <li><i>Hibernate In Action:</i> if you have to use hibernate, this is the book to read. It presents different ways of using it.</li>   <li>some Javascript+DHTML(+CSS) book: useful if you have none. They often have good tricks to solve the usual problems. In the AJAX days, it becomes useful again. I find O'Reilly's "<i>Javascript - The Definitive Guide</i>" good to have an API reference (as ebook), and "<i>Javascript and DHTML Cookbook</i>" has the most useful recipes.</li>   <li><i>Lean Software Development </i>by Poppendieck (Addison Wesley): easy to read, good presentation of software dev management problems and pragmatic solutions. My favorite on the subject. Another good one but very specific is "<i>Requirements Management</i>" (MS Press).</li>   <li><i>UML Distilled </i>by M Fowler: always useful to have if you need to draw UML diagrams.</li> </ul>
-
-
 
   
 </article>
