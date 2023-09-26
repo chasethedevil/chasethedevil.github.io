@@ -1785,9 +1785,8 @@ Scaling: scaling the call price appropriately allows to increase the maximum pre
       <pubDate>Fri, 22 Mar 2013 12:20:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/</guid>
-      <description>In my previous post, I stated that some library (SPECFUN by W.D. Cody) computes $$e^{-\frac{x^2}{2}}$$ the following way: xsq = fint(x * 1.6) / 1.6;
-del = (x - xsq) * (x + xsq);
-result = exp(-xsq * xsq * 0.5) * exp(-del *&amp;nbsp;0.5); where fint(z) computes the floor of z.
+      <description>In my previous post, I stated that some library (SPECFUN by W.D. Cody) computes \(e^{-\frac{x^2}{2}}\) the following way: xsq = fint(x * 1.6) / 1.6; del = (x - xsq) * (x + xsq); result = exp(-xsq * xsq * 0.5) * exp(-del *0.5);
+where fint(z) computes the floor of z.
 Why 1.6? An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.</description>
     </item>
     
@@ -1797,12 +1796,9 @@ Why 1.6? An integer divided by 1.6 will be an exact representation of the corres
       <pubDate>Wed, 20 Mar 2013 17:50:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/</guid>
-      <description>Some library computes $$e^{-\frac{x^2}{2}}$$ the following way:
-xsq = fint(x * 1.6) / 1.6;
-del = (x - xsq) * (x + xsq);
-result = exp(-xsq * xsq * 0.5) * exp(-del * 0.5);
+      <description>Some library computes the Gaussian density function $$e^{-\frac{x^2}{2}}$$ the following way: xsq = fint(x * 1.6) / 1.6; del = (x - xsq) * (x + xsq); result = exp(-xsq * xsq * 0.5) * exp(-del *0.5);
 where fint(z) computes the floor of z.
-Basically, x*x is rewritten as xsq*xsq+del. I have seen that trick once before, but I just can&#39;t figure out where and why (except that it is probably related to high accuracy issues).</description>
+Basically, x*x is rewritten as xsq*xsq+del. I have seen that trick once before, but I just can&amp;rsquo;t figure out where and why (except that it is probably related to high accuracy issues).</description>
     </item>
     
     <item>
