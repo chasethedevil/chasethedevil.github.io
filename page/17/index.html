@@ -73,6 +73,17 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/godaddy-sold-my-domain-name/">Godaddy sold my domain name</a>
+  </h1>
+  <time datetime="2013-06-24T19:11:00Z" class="post-date">Mon, Jun 24, 2013</time>
+  <p>I discovered that suddenly emails sent to me bounced back yesterday. I logged in my godaddy account and to my surprise saw that I did not own any domain name anymore. I looked at my emails to see if I had received a warning as is usually the case when your domain is about to expire. There was none recent, the most recent was from may 2011, the last time I had renewed my domain.</p>
+<p>I then tried to buy again the same domain name only to discover it was already taken! The whois record indicated a day old registration through godaddy itself.</p>
+<p>It&rsquo;s no coincidence that godaddy sells for 3 times the price the possibility to try to take over a domain as soon as it will expire. I find particularly dishonest that in this case they fail to warn their own customers that their domain is about to expire. As a result of this policy, someone else will take over the domain through them for a much higher price. A conflict of interest.</p>
+<p>From now on I will not register a domain through a registrar that offers the service to snatch up a domain.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/scala-build-tool--sbt/">Scala Build Tool : SBT</a>
   </h1>
   <time datetime="2013-06-19T18:01:00Z" class="post-date">Wed, Jun 19, 2013</time>
@@ -192,18 +203,6 @@ I am on holiday today. Unfortunately I am still thinking about work-related matt
 <p>In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices</p>
 <p>Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <a href="http://ssrn.com/abstract=2264327">this paper</a>.</p>
 <p>In short, for log-Euler, one can use the intuitive forward drift rate: r1<em>t1-r0</em>t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/">Quasi Monte Carlo in Finance</a>
-  </h1>
-  <time datetime="2013-05-13T13:16:00Z" class="post-date">Mon, May 13, 2013</time>
-   
-
-I have been wondering if there was any better alternative than the standard Sobol (+ Brownian Bridge) quasi random sequence generator for the Monte Carlo simulations of finance derivatives.<br /><br />Here is what I found:<br /><ol><li>Scrambled Sobol. The idea is to rerandomize the quasi random numbers slightly. It can provide better uniformity properties and allows for a real estimate of the standard error. There are many ways to do that. The simple Cranley Patterson rotation consisting in adding a pseudo random number modulo 1, Owen scrambling (permutations of the digits) and simplifications of it to achieve a reasonable speed. This is all very well described in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=6&amp;cad=rja&amp;ved=0CFwQFjAF&amp;url=http%3A%2F%2Fwww-stat.stanford.edu%2F~owen%2Fcourses%2F362%2Freadings%2Fsiggraph03.pdf&amp;ei=08CQUea-F4jMhAfx5YDgCA&amp;usg=AFQjCNGLnKapkdJ4_caiSE3Ro_kf21NvkQ&amp;sig2=j2b_JqQuO9JNU0ko7yTeOw&amp;bvm=bv.46340616,d.ZG4">Owen Quasi Monte Carlo document</a> </li><li>Lattice rules. It is another form of quasi random sequences, which so far was not very well adapted to finance problems. A <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDYQFjAB&amp;url=https%3A%2F%2Fwww.maths.unsw.edu.au%2Fsites%2Fdefault%2Ffiles%2Famr08_9_0.pdf&amp;ei=ysKQUebXO4axO7ungPAN&amp;usg=AFQjCNErqQvM1IyLlUJH2EX5_mVG3f-ZCw&amp;sig2=gYbfQebTwUP4mtj6bteCcQ&amp;bvm=bv.46340616,d.ZWU">presentation from Giles &amp; Kuo</a> look like it's changing.</li><li>Fast PCA. An alternative to Brownian Bridge is the standard PCA. The problem with PCA is the performance in O(n^2). A possible speedup is possible in the case of a equidistant time steps. <a href="http://www.google.com/url?q=http://citeseerx.ist.psu.edu/viewdoc/download%3Fdoi%3D10.1.1.142.5057%26rep%3Drep1%26type%3Dpdf&amp;sa=U&amp;ei=5MWQUaioA8KXhQfDnYCYDQ&amp;ved=0CB0QFjAC&amp;usg=AFQjCNHUhpr6_Ofiqqw2XeU8SY_amnx0pw">This paper</a> shows it can be generalized. But the data in it shows it is only advantageous for more than 1024 steps - not so interesting in Finance.</li></ol>
-
-
 
   
 </article>

@@ -73,6 +73,24 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/1-year-of-mac-mini---the-deception-point/">1 year of mac mini - the deception point</a>
+  </h1>
+  <time datetime="2007-01-08T15:56:00Z" class="post-date">Mon, Jan 8, 2007</time>
+  <p>I am less enthusiastic about the Apple experience than I was one year ago. <!-- raw HTML omitted --><!-- raw HTML omitted -->I am quite enthusiastic with the hardware in general, except the keyboard. The computer is small and quiet, and there are not many competitors at this price on the market.</p>
+<p><em>Experience as a developer</em></p>
+<p>I feel frustrated with MacOs X as a development environment, when compared with Ubuntu Linux. I always miss the multiple desktop, despite expose magnificient look. The standard behaviour for the terminal, bash, vim, etc. are more convenient in Linux. Installing software and updates is much more convenient on Linux thanks to the open source repositories.
+The key bindings for special characters is awful for a programmer on the Apple keyboard, because non standard, and not even written on the keyboard. Installing linux on a mac mini intel is not trivial, but I am considering it seriously.</p>
+<p><em>Experience as audio/web user</em></p>
+<p>No particular complaint about the web, but I use Firefox instead of Safari, because of Firefox Adblock extension. Chat works well, Skype is ok. There are sometimes problems with bluetooth audio for Skype that, I think, are related to MacOs.</p>
+<p>Audio is good too, I end up finding iTunes ok to use, it is fast enough to manipulate 100GB of songs. But I don&rsquo;t use any fancy feature, except cd-burning. It makes a good jukebox, and the remote is handy, but not terrific (any wireless keyboard would do in the PC world, for 90% of the cases).</p>
+<p>Photo is not great, I don&rsquo;t like iPhoto that much (especially when compared to Picasa). iPhoto is quite slow for me (and I have 2gb of RAM). I found it a pain to install TheGimp on MacOs, not knowing which X server to use. Photoshop is still not compiled for intel, and dog slow on my mac mini.</p>
+<p>Page is not great either. It does render beautiful letters, but overall I don&rsquo;t find it very usable compared to more standard software like OpenOffice, and it&rsquo;s time limited!</p>
+<p><em>Conclusion</em></p>
+<p>Overall I think I would not buy a Mac again if comparable PC hardware exists. MacOs is not a bad OS, but I prefer Ubuntu Linux. If you don&rsquo;t use or like Linux then is really Vista worse? I don&rsquo;t think so.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/tired-of-bad-singletons/">Tired Of Bad Singletons</a>
   </h1>
   <time datetime="2007-01-04T11:50:00Z" class="post-date">Thu, Jan 4, 2007</time>
@@ -195,23 +213,6 @@ Until recently, I always found Eclipse CVS support to be excellent. The synchron
 <p>I fell myself in many of those traps. Fortunately I stumbled on my way on <a href="http://clarkware.com/software/JDepend.html">JDepend</a> package analysis program. At first I wondered why JDepend calculated dependencies between Java packages and not between Jars, as in your project what matters is jar interdependencies. After using it regularly, first for the fun of trying not to have cyclic dependencies in my Java packages - the green light effect (I wanted my green light on my project), I understood much better its interest. I now make Java packages that are much more meaningful. They not only separate functionalities, but also create excellent modularity. Building a project is very easy, reusing parts of it is very clear. If one needs to split a jar in a project, it&rsquo;s very clear how to split it (by Java packages). And I find that in the end my packages make much more sense.</p>
 <p>Placing a class in the right package is most of the time not difficult, especially for experienced programmers. But now and then, with JDepend, I find mistakes. Correcting those mistakes regularly, when it&rsquo;s just about one or two classes is quick and easy. Correcting them on a project where dependency analysis was never done is a nightmare.</p>
 <p>Now I don&rsquo;t really care about JDepend metrics about abstractness and instability so much, I did not find any good use of them. But <a href="http://clarkware.com/software/JDepend.html">JDepend</a> (or a package dependencies checker) really is an essential program for good Java development.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/you-know-ioexception-think-again/">You Know IOException? Think Again!</a>
-  </h1>
-  <time datetime="2006-09-14T10:59:00Z" class="post-date">Thu, Sep 14, 2006</time>
-  <p>I was amazed today to find out that there was no constructor <code>IOException(String, Throwable)</code> or <code>IOException(Throwable)</code> in JDK1.4 and JDK1.5. It is finally in JDK1.6, I can&rsquo;t believe it took Sun that much time to change that.</p>
-<p>So the workaround is:</p>
-<pre><code>`IOException ioe = new IOException(&quot;message&quot;);`
-`ioe.initCause(e);`
-`throw ioe;`
-</code></pre>
-<p>It can also be written as:</p>
-<pre><code>`throw (IOException) new IOException(&quot;message&quot;).initCause(e);`
-</code></pre>
-<p>It is not a major problem, but still. We can all thank the guy who <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5070673">reported that as a bug</a> to Sun in 2004.</p>
 
   
 </article>

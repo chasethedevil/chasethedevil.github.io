@@ -73,6 +73,16 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/simd-and-mersenne-twister/">SIMD and Mersenne-Twister</a>
+  </h1>
+  <time datetime="2011-02-05T13:18:00Z" class="post-date">Sat, Feb 5, 2011</time>
+  <p>Since 2007, there is a new kind of Mersenne-Twister (MT) that exploits SIMD architecture, the <a href="http://www.math.sci.hiroshima-u.ac.jp/%7Em-mat/MT/SFMT/">SFMT</a>. The Mersenne-Twister has set quite a standard in random number generation for Monte-Carlo simulations, even though it has flaws.</p>
+<p>I was wondering if SFMT improved the performance over MT for a Java implementation. There is actually on the same page a decent Java port of the original algorithm. When I ran it, it ended up slower by more than 20% than the classical Mersenne-Twister (32-bit) on a 64-bit JDK 1.6.0.23 for Windows.</p>
+<p>This kind of result is not too unsurprising as the code is more complex. But this shows that Java is unable to use SIMD instructions properly, which is still a bit disappointing.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/xorwow-lecuyer-testu01-results/">XORWOW L&#39;ecuyer TestU01 Results</a>
   </h1>
   <time datetime="2011-01-12T20:26:00Z" class="post-date">Wed, Jan 12, 2011</time>
@@ -174,15 +184,6 @@ Yes, I wrote an applet. I know it is very 1990s but, amazingly, it still does th
 
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
-  </h1>
-  <time datetime="2009-12-18T16:07:00Z" class="post-date">Fri, Dec 18, 2009</time>
-  <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts.</p>
-<p>I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
 
   
 </article>

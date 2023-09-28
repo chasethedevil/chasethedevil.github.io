@@ -73,6 +73,99 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
+  </h1>
+  <time datetime="2018-07-11T20:56:42&#43;0100" class="post-date">Wed, Jul 11, 2018</time>
+  <p>Timothy Klassen had an <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">interesting post</a> on linkedin recently, with the title &ldquo;the options market thinks there is a 16% chance that Tesla will not exist in January 2020&rdquo;.
+As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
+and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
+This results in the following graph</p>
+<figure><img src="/post/tsla2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration. Note that I
+removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
+<p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
+<figure><img src="/post/tsla2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
+</table>
+<p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
+<figure><img src="/post/tsla2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
+</figure>
+
+<p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
+modes, its fit in terms of volatilities is not better than the lognormal mixture model. We could reduce the number of modes by increasing
+the constant of the Tikhonov regularization, at the cost of a slightly worse fit.</p>
+<p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
+and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
+</table>
+<p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
+It is expected that the probability of going under $100 will be larger when the stock price moves down,
+which is what happen around March 27, 2018. But it is not so expected that when it comes back up higher
+(above $350 in mid June), the probability of going under $100 stays higher than it was before March 27, 2018,
+where the stock price was actually lower.
+In fact, there seems to be a signal in his time-serie, where the probability of going under $100 increases
+significantly, one week before March 27, that is one week before the actual drop,
+suggesting that the drop was priced in the options.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/normal-sabr-fourth-moment/">The Fourth Moment of the Normal SABR Model</a>
   </h1>
   <time datetime="2018-06-11T20:56:42&#43;0100" class="post-date">Mon, Jun 11, 2018</time>
@@ -475,28 +568,6 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 <p>Now onto the second argument, SVN is proven to work well. But so is Cobol. Today it should be clear that SVN is essentially dead. Most big projects move or have moved to git. Tools work better with Git, even <a href="https://www.eclipse.org/">Eclipse</a> works natively with Git but requires buggy plugins for SVN. New developers don&rsquo;t know SVN.</p>
 <p>I heard other much worse arguments against Git since. For example, some people believed that, with Git, they could lose some of their code changes. This was partially due to sensational news article such as the <a href="https://www.theregister.co.uk/2017/02/01/gitlab_data_loss/">Gitlab.com data loss</a>, where in reality some administrator deleted some directory and had non-working backups. As a result, some Git repositories were deleted, but in reality it&rsquo;s a common data loss situation, unrelated to the use of Git as version control system. This Stackoverflow question gives a nice overview of <a href="https://stackoverflow.com/questions/21048765/what-can-cause-data-loss-in-git">data loss risks with Git</a>.</p>
 <p>What I feel is true however is that Git is more complex than SVN, because it is more powerful and more flexible. But if you adopt a simple workflow, it&rsquo;s not necessarily more complicated.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/the_neural_network_in_your_cpu/">The Neural Network in Your CPU</a>
-  </h1>
-  <time datetime="2017-08-06T23:56:42&#43;0100" class="post-date">Sun, Aug 6, 2017</time>
-  <p>Machine learning and artificial intelligence are the current hype (again). In their new Ryzen processors, <a href="http://www.anandtech.com/Gallery/Album/5197#18">AMD advertises the Neural Net Prediction</a>. It turns out this is was already used in their older (2012) Piledriver architecture used for example in the <a href="http://www.anandtech.com/show/5831/amd-trinity-review-a10-4600m-a-new-hope">AMD A10-4600M</a>. It is also present in recent Samsung processors such as <a href="https://www.theregister.co.uk/2016/08/22/samsung_m1_core/">the one powering the Galaxy S7</a>. What is it really?</p>
-<p>The basic idea can be traced to a paper from Daniel Jimenez and Calvin Lin <a href="https://www.cs.utexas.edu/~lin/papers/hpca01.pdf">&ldquo;Dynamic Branch Prediction with Perceptrons&rdquo;</a>, more precisely described in the subsequent paper <a href="http://taco.cse.tamu.edu/pdfs/tocs02.pdf">&ldquo;Neural methods for dynamic branch prediction&rdquo;</a>. Branches typically occur  in <code>if-then-else</code> statements. <a href="https://en.wikipedia.org/wiki/Branch_predictor">Branch prediction</a> consists in guessing which code branch, the <code>then</code> or the <code>else</code>, the code will execute, thus allowing to precompute the branch in parallel for faster evaluation.</p>
-<p>Jimenez and Lin rely on a simple single-layer perceptron neural network whose input are the branch outcome (global or hybrid local and global) histories and the output predicts which branch will be taken. In reality, because there is a single layer, the output y is simply a weighted average of the input (x, and the constant 1):</p>
-<p>$$ y = w_0 + \sum_{i=1}^n x_i w_i $$</p>
-<p>\( x_i = \pm 1 \) for a taken or not taken. \( y &gt; 0 \) predicts to take the branch.</p>
-<p>Ideally, each static branch is allocated its own perceptron. In practice, a hash of the branch address is used.</p>
-<p>The training consists in updating each weight according to the actual branch outcome t : \( w_i = w_i + 1 \) if \( x_i = t \) otherwise \( w_i = w_i - 1 \). But this is done only if the predicted outcome is lower than the training (stopping) threshold or if the branch was mispredicted. The threshold keeps from overtraining and allow to adapt quickly to changing behavior.</p>
-<p>The perceptron is one of those algorithms created by a psychologist. In this case, the culprit is Frank Rosenblatt. Another more recent algorithm created by a psychologist is the <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">particle swarm optimization</a> from James Kennedy. As <a href="https://quantsrus.github.io/post/particle_swarm_optimization/">in the case of</a> particle swarm optimization, there is not a single well defined perceptron, but many variations around some key principles. A reference seems to be the perceptron from H.D. Block, probably because he describes the perceptron in terms closer to code, while Rosenblatt was really describing a perceptron machine.</p>
-<p>The perceptron from H.D. Block is slightly more general than the perceptron used for branch prediction:</p>
-<ul>
-<li>the output can be -1, 0 or 1. The output is zero if the weighted average is below a threshold (a different constant from the training threshold of the branch prediction perceptron).</li>
-<li>reinforcement is not done on inactive connections, that is for \( x_i = 0 \).</li>
-<li>a learning rate \( \alpha \) is used to update the weight: \( w_i += \alpha t x_i \)</li>
-</ul>
-<p>The perceptron used for branch prediction is quite different from the deep learning neural networks fad, which have many more layers, with some feedback loop. The challenge of those is the training: when many layers are added to the perceptron, the gradients of each layer activation function multiply in the backpropagation algorithm. This makes the &ldquo;effective&rdquo; gradient at the first layers to be very small, which translates to tiny changes in the weights, making training not only very slow but also likely stuck in a sub-optimal local minimum. Beside the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient</a> problem, there is also the <a href="https://en.wikipedia.org/wiki/Catastrophic_interference">catastrophic interference</a> problem to pay attention to. Those issues are today dealt with the use of <a href="http://neuralnetworksanddeeplearning.com/chap6.html">specific strategies to train / structure the network</a> combined with raw computational power that was unavailable in the 90s.</p>
 
   
 </article>
