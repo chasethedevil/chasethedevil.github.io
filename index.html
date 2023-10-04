@@ -73,6 +73,23 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/black_with_bachelier/">Black with Bachelier</a>
+  </h1>
+  <time datetime="2023-10-03T20:56:42&#43;0100" class="post-date">Tue, Oct 3, 2023</time>
+  <p>I was experimenting with the recent <a href="https://www.researchgate.net/publication/348192007_SABR_for_Baskets">SABR basket approximation</a> of Hagan. The approximation only works
+for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier option formula.</p>
+<p>I was wondering how good the approximation would be for two flat smiles (in terms of Black volatilities). I then noticed something that escaped me before: the normal SABR model is able to fit the pure Black model (with constant vols) extremely well. A calibration near the money stays valid very out-of-the-money and the error in Black volatilities is very small.</p>
+<p>For very low strikes (25%) the error in vol is below one basis point. And in fact, for a 1 year option of vol 20%, the option value is extremely small: we are in deep extrapolation territory.</p>
+<p>It is remarkable that a Bachelier smile formula with 3 free parameters can fit so well the Black vols. Compared to stochastic collocation on a cubic polynomial (also 3 free parameters), the fit is 100x better with the normal SABR.</p>
+<figure><img src="/post/normal_sabr_black_fit_collo.png"/><figcaption>
+            <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
+        </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/clenshaw_fft_implementation/">Clenshaw-Curtis Quadrature Implementation by FFT in Practice</a>
   </h1>
   <time datetime="2023-09-27T20:56:42&#43;0100" class="post-date">Wed, Sep 27, 2023</time>
@@ -358,38 +375,6 @@ A python programmer would likely not write a simulation this way, as the python 
 <p>Taking parallelization into account, (A) is not that the trivial approach anymore. In contrast, (B) or (C) would parallelize the payoff evaluation by design, making the implementation of the full simulation parallelization much easier. Arguably, the package of paths approach may consume less memory than (C), as (1) the path generation usually involves many intermediate time-steps which may be discarded (kept only in cache per core) while in a vectorized approach, the full vector of those intermediate time-steps may be needed (typically for a classical Brownian-Bridge variance reduction), (2) the payoff evaluates scalars (and its state is thus comprised of scalars). A clever vectorized payoff evaluation would however reuse most vectors. The memory reduction may not be real in practice.</p>
 <p>Now, if we include callability or particle method kind of evaluation,  full vectorization, but keeping only the payoff (vector) variables in memory and building up the path step by step may be the most effective as described in <a href="https://www.amazon.fr/Applied-Quantitative-Finance-Equity-Derivatives/dp/B08VCM9HBL">Jherek Healy&rsquo;s book</a>.</p>
 <p>To conclude, not vectorizing the path generation and payoff evaluation would be a design mistake nowadays.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/more-automatic-differentiation-awkwardness/">More Automatic Differentiation Awkwardness</a>
-  </h1>
-  <time datetime="2022-01-04T21:56:42&#43;0100" class="post-date">Tue, Jan 4, 2022</time>
-  <p><a href="https://quantsrus.github.io/post/exp_b_spline_collocation_autodiff/">This blog post</a> from Jherek Healy presents some not so obvious behavior of automatic differentiation, when a function is decomposed
-into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number).
-This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</p>
-<p>I played myself with Julia&rsquo;s excellent ForwardDiff package, and found out a completely different example which illustrates a simple and easy trap with automatic differentiation. The example is a typical cubic spline evaluation routine:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
-</span></span><span style="display:flex;"><span>  i <span style="color:#666">=</span> searchsortedfirst(self<span style="color:#666">.</span>x, z)  <span style="color:#60a0b0;font-style:italic"># x[i-1]&lt;z&lt;=x[i]</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> z <span style="color:#666">==</span> self<span style="color:#666">.</span>x[i]
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> i <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span>
-</span></span><span style="display:flex;"><span>    i <span style="color:#666">-=</span> <span style="color:#40a070">1</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  h <span style="color:#666">=</span> z <span style="color:#666">-</span> self<span style="color:#666">.</span>x[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>b[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>c[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>d[i])))
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
-<p>The ForwardDiff will lead to derivative = 0 at z = x[i], while, in reality, it is not - the derivative is b[i]. The case z = x[i] is just a (not so clever) optimization.
-Granted, it is wrong only at the spline knots, but if those correspond to key points we evaluate as part of a minimization, it might become very problematic.</p>
-<p>Another interesting remark to make on automatic differentiation is on the choice of backward (reverse) vs. forward (tangent) automatic differentiation: we often read that backward is more appropriate when the dimension of the output is low compared to the dimension of the input, and forward when the dimension of the output is large compared to the dimension of the input.
-This is however not strictly true. A good example is the case of a least-squares minimization. The objective could be seen as a one-dimensional output: the sum of squares of the values of an underlying function.
-But in reality, it is really N-dimensional, where N is the number of terms in the sum, as one sum involves N calculations of the underlying function.
-And thus, for least-squares, backward automatic differentiation will likely be slower than forward since the number of terms in the sum is typically larger than the number of input parameters we are trying to fit.</p>
-<p>Interestingly, the <a href="https://fr.mathworks.com/help/optim/ug/autodiff-background.html">Matlab documentation</a> mentions explicitly this use case:</p>
-<blockquote>
-<p>lsqnonlin defaults to forward AD when the number of elements in the objective vector is greater than or equal to the number of variables. Otherwise, lsqnonlin defaults to reverse AD.</p>
-</blockquote>
 
   
 </article>

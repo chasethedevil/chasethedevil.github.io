@@ -73,6 +73,17 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/why-did-netscape-choose-javascript/">Why did Netscape choose Javascript?!?</a>
+  </h1>
+  <time datetime="2006-03-09T17:10:00Z" class="post-date">Thu, Mar 9, 2006</time>
+  <p>Last year, I have helped building an AJAX web application, where the web client was composed of only one web page and tons of javascript. The 1 web page for a site approach is similar to Gmail and many full AJAX sites. This approach looks quite elegant. Using JSON (and JSON templates) we were able to separated fully presentation logic and business logic and componentization seemed to occur naturally.</p>
+<p>But I remember how often I complained on how bad Javascript was to code. I find it does not encourage good practices at all. The object orientation of Javascript is really a pain to use. If I had not a small experience with  <a href="http://python.org">Python</a> before, I would have thought scripting languages were really bad at building applications, even not so big ones. I find that even for good programmers, Javascript is a challenge, as it seems to always be a struggle to organize properly your code with it.</p>
+<p>I was recently relieved to see that around me, almost nobody likes Javascript either. It is very sad that Netscape chosed such a bad language in 1995. Firefox appears like a miraculous program to me as a lot of the UI is done in Javascript.</p>
+<p>Ah! If ever it had been Python all the way.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/new-mac-mini/">New Mac Mini</a>
   </h1>
   <time datetime="2006-03-07T20:51:00Z" class="post-date">Tue, Mar 7, 2006</time>
@@ -187,18 +198,6 @@ These days we tried to make Websphere and <a href="http://jonas.objectweb.org">J
 <p>The rest of the book really looks like a list of disconnected subjects, the important ones are not given more attention to the non-relevant ones. Portal Navigation is a problem you will encounter in any Portal development, but you won&rsquo;t find much in the book except a short example. The author also writes with way too many words for the content about CVS, Subversion, JUnit, AntHill, Scarab. And then he goes on about Java Web Start, woohoo! Yes, it almost reads as well as a resume full of keywords.</p>
 <p><strong>Summary:</strong></p>
 <p>Don&rsquo;t buy this book.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/ibm-websphere-portal-strategy/">IBM Websphere Portal Strategy</a>
-  </h1>
-  <time datetime="2005-12-07T17:48:00Z" class="post-date">Wed, Dec 7, 2005</time>
-  <p>I digged a bit deeper in a current project where they use IBM Websphere Portal Server (WPS) with IBM Web Content Management (WCM). I found out that both products collide and disintegrate.</p>
-<p>WCM is like a regular content management system, quite flexible and performant on its own. It has a nice way to separate layout concern from content concern. It has a flexible cache. It has a user repository to set different permissions. Its architecture is even so well done (very modular) that you can tailor it to your needs to do things a content management system is not supposed to do. It could do most of what you would do with a Portal system. And that&rsquo;s the problem.</p>
-<p>WPS is a Porlet server, now compatible with JSR 168. You can again do the layout of your portlets, you have an administrative interface to handle them and one to handle user permissions. There is a caching system although it&rsquo;s not very clear how that works. Standard administration Portlets seem awfully slow to use any cache. To be integrate WCM content in the Portal Server, they ship a WCM Portlet. While JSR 168 API is recommended by IBM, the WCM Portlet is not a JSR 168 one.</p>
-<p>So you have 2 products where you can layout your pages, and have dynamic behaviour in them, locally as components, easily manageable. One can be embedded in the other, but it does not make much sense, because you would then just use a tiny part of its possibilities, and its flexibility will be more a burden (extra abstraction layer) than anything. The integration of the 2 products is very superficial. Although recently they can share a common user repository, the WCM portlet does not do any caching of WCM content, linking between content and portlets is a very cumbersome task. IBM provides tips to build a framework that does just that. All that for not using most of the WCM possibilities and always having difficulties in defining their roles and using them collaboratively.</p>
-<p>Now, if you look at how JBoss Portal works, and what features they focused on, you will see a well designed solution whose aim is to build pragmatically a Portal using Portlets. They have a very simple content management system used to administrate HTML snippets. Content is put inside the Portal page using CMS Portlets, the layout is the one you specified in the Portal page. They provide automatic caching of CMS content and easy to use links. Integration with their CMS is already using JSR 170 standard. You can plugin other CMS systems easily.<!-- raw HTML omitted --> <!-- raw HTML omitted --> IBM strategy with their WPS+CMS does not look very good, and their version is currently 5.1, soon 6.</p>
 
   
 </article>
