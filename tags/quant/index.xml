@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2018 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 03 Oct 2023 20:56:42 +0100</lastBuildDate><atom:link href="https://chasethedevil.github.io/tags/quant/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 Nov 2023 20:56:42 +0100</lastBuildDate><atom:link href="https://chasethedevil.github.io/tags/quant/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Measuring Roughness with Julia</title>
+      <link>https://chasethedevil.github.io/post/measuring_roughness_with_julia/</link>
+      <pubDate>Tue, 07 Nov 2023 20:56:42 +0100</pubDate>
+      
+      <guid>https://chasethedevil.github.io/post/measuring_roughness_with_julia/</guid>
+      <description>I received a few e-mails asking me for the code I used to measure roughness in my preprint on the roughness of the implied volatility. Unfortunately, the code I wrote for this paper is not in a good state, it&amp;rsquo;s all in one long file line by line, not necessarily in order of execution, with comments that are only meaningful to myself.
+In this post I will present the code relevant to measuring the oxford man institute roughness with Julia.</description>
+    </item>
+    
     <item>
       <title>Black with Bachelier</title>
       <link>https://chasethedevil.github.io/post/black_with_bachelier/</link>
@@ -571,7 +581,8 @@ One of the cited applications is &#34;stress testing and scenario analysis for m
       <pubDate>Mon, 13 Jul 2015 17:35:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/andreasen-huge-extrapolation/</guid>
-      <description>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&amp;rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&amp;rsquo;t obey Lee&amp;rsquo;s moments condition.On a Wilmott forum, P. Caspers proposed the following counter-example based on extrapolating SABR: \( \alpha=15%, \beta=80%, \nu=50%, \rho=-48%, f=3%, T=20.</description>
+      <description>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&amp;rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&amp;rsquo;t obey Lee&amp;rsquo;s moments condition.
+On a Wilmott forum, P. Caspers proposed the following counter-example based on extrapolating SABR: \( \alpha=15%, \beta=80%, \nu=50%, \rho=-48%, f=3%, T=20.</description>
     </item>
     
     <item>
@@ -772,8 +783,8 @@ As an illustration, we calibrate SABR (with two different values of beta) and SV
       <pubDate>Fri, 01 Aug 2014 12:51:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/svi-and-long-maturities-issues/</guid>
-      <description>On long maturities equity options, the smile is usually very much like a skew:&amp;nbsp; very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).
-In terms of initial guess, we looked at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings.</description>
+      <description>On long maturities equity options, the smile is usually very much like a skew: very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).
+In terms of initial guess, I looked at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings.</description>
     </item>
     
     <item>
@@ -957,7 +968,9 @@ Originally, I knew that, on this data, the SVI fit was perfect. Until today, I j
       <pubDate>Wed, 19 Feb 2014 18:57:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/smart-initial-guess-for-schobel-zhu/</guid>
-      <description>With a small time expansion, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.Like Forde &amp;amp; al did for Heston, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points.</description>
+      <description>With a small time expansion, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.
+Like Forde did for Heston, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).
+We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points.</description>
     </item>
     
     <item>
@@ -966,7 +979,8 @@ Originally, I knew that, on this data, the SVI fit was perfect. Until today, I j
       <pubDate>Wed, 12 Feb 2014 13:13:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/</guid>
-      <description>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.In 2011, Forde et al. proposed a second order small time expansion around the money, which I found to work well for calibration.</description>
+      <description>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.
+In 2011, Forde et al. proposed a second order small time expansion around the money, which I found to work well for calibration.</description>
     </item>
     
     <item>
@@ -975,7 +989,8 @@ Originally, I knew that, on this data, the SVI fit was perfect. Until today, I j
       <pubDate>Mon, 10 Feb 2014 18:30:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/</guid>
-      <description>The paper &amp;ldquo;implied vol for any local stochastic vol model&amp;rdquo; from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).I tried it on the Schobel-Zhu stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface fit was as good, while the simulation under the QE scheme is quite faster (and simpler) than Heston.</description>
+      <description>The paper implied vol for any local stochastic vol model from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).
+I tried it on the Schobel-Zhu stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface fit was as good, while the simulation under the QE scheme is quite faster (and simpler) than Heston.</description>
     </item>
     
     <item>
@@ -1015,7 +1030,8 @@ In reality, what Pooley et al.</description>
       <pubDate>Wed, 08 Jan 2014 18:51:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/</guid>
-      <description>Recently, I noticed how close are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy.</description>
+      <description>Recently, I noticed how close are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.
+Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy.</description>
     </item>
     
     <item>
@@ -1056,9 +1072,7 @@ For example, when the underlying contract expiration date (Futures, Forward) is 
       
       <guid>https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/</guid>
       <description>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).
-Local Volatility
-Implied Volatility
-The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</description>
+Local volatility Implied volatility The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</description>
     </item>
     
     <item>
@@ -1107,7 +1121,7 @@ Google pointed me to another popular open source package, Maxima. It looks a bit
       <pubDate>Thu, 05 Sep 2013 17:35:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/</guid>
-      <description>A coworker pointed to me that Andersen and Piterbarg book &amp;ldquo;Interest Rate Modeling&amp;rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston.Lewis formulaMore importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method.</description>
+      <description>A coworker pointed to me that Andersen and Piterbarg book &amp;ldquo;Interest Rate Modeling&amp;rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston. Lewis formula More importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method.</description>
     </item>
     
     <item>
@@ -1116,7 +1130,8 @@ Google pointed me to another popular open source package, Maxima. It looks a bit
       <pubDate>Wed, 28 Aug 2013 17:54:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/attari-lord-kahl--cos-methods-comparison-on-heston/</guid>
-      <description>I recently wrote about the Cos method. While rereading the various papers on Heston semi-analytical pricing, especially the nice summary by Schmelzle, it struck me how close were the Attari/Bates methods and the Cos method derivations. I then started wondering if Attari was really much worse than the Cos method or not.I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto).</description>
+      <description>I recently wrote about the Cos method. While rereading the various papers on Heston semi-analytical pricing, especially the nice summary by Schmelzle, it struck me how close were the Attari/Bates methods and the Cos method derivations. I then started wondering if Attari was really much worse than the Cos method or not.
+I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto).</description>
     </item>
     
     <item>
@@ -1134,7 +1149,8 @@ Google pointed me to another popular open source package, Maxima. It looks a bit
       <pubDate>Fri, 02 Aug 2013 14:19:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/the-cos-method-for-heston/</guid>
-      <description>Fang, in his thesis, has the idea of the COS method and applies it to Heston. There are several published papers around it to price options under various models that have a known characteristic function, as well as to price more exotic options like barriers or bermudans.The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple Fourier series are used instead of the standard Fourier transform.</description>
+      <description>Fang, in her thesis, has the idea of the COS method and applies it to Heston. There are several published papers around it to price options under various models that have a known characteristic function, as well as to price more exotic options like barriers or bermudans.
+The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple Fourier series are used instead of the standard Fourier transform.</description>
     </item>
     
     <item>

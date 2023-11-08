@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.101.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Measuring Roughness with Julia &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Measuring Roughness with Julia</h1>
+  <time datetime=2023-11-07T20:56:42&#43;0100 class="post-date">Tue, Nov 7, 2023</time>
+  <p>I received a few e-mails asking me for the code I used to measure roughness in my preprint on the <a href="/post/implied_volatility_roughness">roughness of the implied volatility</a>. Unfortunately, the code I wrote for this paper is not in a <em>good</em> state, it&rsquo;s all in one long file line by line, not necessarily in order of execution, with comments that are only meaningful to myself.</p>
+<p>In this post I will present the code relevant to measuring the oxford man institute roughness with Julia. I won&rsquo;t go into generating Heston or rough volatility model implied volatilities, and focus only on the measure on roughness based on some CSV like input. I downloaded the oxfordmanrealizedvolatilityindices.csv from the Oxford Man Institute website (unfortunately now discontinued, data bought by Refinitiv but still available in some github repos) to my home directory</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones
+</span></span><span style="display:flex;"><span>df <span style="color:#666">=</span> DataFrame(CSV<span style="color:#666">.</span>File(<span style="color:#4070a0">&#34;/home/niamh/Downloads/oxfordmanrealizedvolatilityindices.csv&#34;</span>))
+</span></span><span style="display:flex;"><span>df1 <span style="color:#666">=</span>  df[df<span style="color:#666">.</span><span style="color:#902000">Symbol</span> <span style="color:#666">.==</span> <span style="color:#4070a0">&#34;.SPX&#34;</span>,<span style="color:#666">:</span>]
+</span></span><span style="display:flex;"><span>dsize <span style="color:#666">=</span>  trunc(<span style="color:#902000">Int</span>,length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">/</span><span style="color:#40a070">1.0</span>)
+</span></span><span style="display:flex;"><span>dfv <span style="color:#666">=</span> df1[length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">-</span>dsize<span style="color:#666">+</span><span style="color:#40a070">1</span><span style="color:#666">:</span><span style="color:#007020;font-weight:bold">end</span>,<span style="color:#666">:</span>]
+</span></span><span style="display:flex;"><span>n <span style="color:#666">=</span> length(dfv<span style="color:#666">.</span>close_time)
+</span></span><span style="display:flex;"><span>K0<span style="color:#666">=</span>trunc(<span style="color:#902000">Int</span>,sqrt(n))
+</span></span><span style="display:flex;"><span>tm <span style="color:#666">=</span> [abs((Date(ZonedDateTime(<span style="color:#902000">String</span>(d),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>))<span style="color:#666">-</span>Date(ZonedDateTime(<span style="color:#902000">String</span>(dfv<span style="color:#666">.</span>Column1[<span style="color:#40a070">1</span>]),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>)))<span style="color:#666">.</span>value) <span style="color:#007020;font-weight:bold">for</span> d <span style="color:#007020;font-weight:bold">in</span> dfv<span style="color:#666">.</span>Column1[<span style="color:#666">:</span>]];
+</span></span><span style="display:flex;"><span>ivm <span style="color:#666">=</span> dfv<span style="color:#666">.</span>rv5[<span style="color:#666">:</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Roots, Statistics
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> wStatA(ts, vs, K0,L,step,p)
+</span></span><span style="display:flex;"><span>     bvs <span style="color:#666">=</span> vs <span style="color:#60a0b0;font-style:italic"># big.(vs)</span>
+</span></span><span style="display:flex;"><span>     bts <span style="color:#666">=</span> ts <span style="color:#60a0b0;font-style:italic"># big.(ts)</span>
+</span></span><span style="display:flex;"><span>     value <span style="color:#666">=</span> sum( abs(log(bvs[k<span style="color:#666">+</span>K0])<span style="color:#666">-</span>log(bvs[k]))<span style="color:#666">^</span>p <span style="color:#666">/</span> sum(abs(log(bvs[l<span style="color:#666">+</span>step])<span style="color:#666">-</span>log(bvs[l]))<span style="color:#666">^</span>p <span style="color:#007020;font-weight:bold">for</span> l <span style="color:#007020;font-weight:bold">in</span> k<span style="color:#666">:</span>step<span style="color:#517918">:k</span><span style="color:#666">+</span>K0<span style="color:#666">-</span>step) <span style="color:#666">*</span> abs((bts[k<span style="color:#666">+</span>K0]<span style="color:#666">-</span>bts[k])) <span style="color:#007020;font-weight:bold">for</span> k<span style="color:#666">=</span><span style="color:#40a070">1</span><span style="color:#666">:</span>K0<span style="color:#666">:</span>L<span style="color:#666">-</span>K0<span style="color:#666">+</span><span style="color:#40a070">1</span>)
+</span></span><span style="display:flex;"><span>     <span style="color:#60a0b0;font-style:italic">#println(&#34;wStat &#34;, p, &#34; &#34;,value)</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#007020;font-weight:bold">return</span> value
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> meanRoughness(tm, ivm, K0, L)
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">local</span> cm <span style="color:#666">=</span> zeros(length(tm)<span style="color:#666">-</span>L);
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">local</span> ivi <span style="color:#666">=</span> ivm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">local</span> ti <span style="color:#666">=</span> tm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
+</span></span><span style="display:flex;"><span>    T <span style="color:#666">=</span> abs((ti[<span style="color:#007020;font-weight:bold">end</span>]<span style="color:#666">-</span>ti[<span style="color:#40a070">1</span>]))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">try</span>
+</span></span><span style="display:flex;"><span>      cm[i] <span style="color:#666">=</span> <span style="color:#40a070">1.0</span> <span style="color:#666">/</span>  find_zero(p <span style="color:#666">-&gt;</span> wStatA(ti, ivi, K0, L, <span style="color:#40a070">1</span>,p)<span style="color:#666">-</span>T,(<span style="color:#40a070">1.0</span>,<span style="color:#40a070">100.0</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">catch</span> e
+</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">if</span> <span style="color:#007020;font-weight:bold">isa</span>(e, <span style="color:#902000">ArgumentError</span>)
+</span></span><span style="display:flex;"><span>        cm[i] <span style="color:#666">=</span> <span style="color:#40a070">0.0</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        throw(e)
+</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>  meanValue <span style="color:#666">=</span> mean(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
+</span></span><span style="display:flex;"><span>  stdValue <span style="color:#666">=</span> std(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
+</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">return</span> meanValue, stdValue, cm
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>K0 <span style="color:#666">-=</span> <span style="color:#40a070">3</span>
+</span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#666">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#666">^</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>p <span style="color:#666">=</span> plot(tm[<span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)],cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;Estimate&#34;</span>)
+</span></span><span style="display:flex;"><span>std(cm), mean(cm), median(cm)
+</span></span><span style="display:flex;"><span>plot(Date<span style="color:#666">.</span>(DateTime<span style="color:#666">.</span>(string<span style="color:#666">.</span>(dfv<span style="color:#666">.</span>Column1[<span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)]),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>)),cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>, xlabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Start Date&#34;</span>)
+</span></span><span style="display:flex;"><span>density(cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>,ylabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Density&#34;</span>)</span></span></code></pre></div>
+<p>The last plot should look like
+<figure><img src="/post/oxford_spx500_roughness.png"/>
+</figure>
+</p>
+<p>It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>
