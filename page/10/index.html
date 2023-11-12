@@ -122,7 +122,14 @@ There is very little information on variance swaps on a foreign asset. There can
     <a href="https://chasethedevil.github.io/post/jumps-impact-variance-swap-vs-volatility-swap/">Jumps impact: Variance swap vs volatility swap</a>
   </h1>
   <time datetime="2015-02-20T13:24:00Z" class="post-date">Fri, Feb 20, 2015</time>
-  <!-- raw HTML omitted -->
+  <figure><img src="/post/Screenshot%20-%20200215%20-%2013%2013%2038.png"/>
+</figure>
+
+<p>Beside <a href="/post/variance-swap-replication--discrete-or-continuous">the problem with the discreteness</a> of the replication, variance swaps are sensitive to jumps. This is an often mentioned reason for the collapse of the single name variance swap market in 2008 as jumps are more likely on single name equities.</p>
+<p>Those graphs are the result of Monte-Carlo simulations with various jump sizes using the Bates model, and using Local Volatility implied from the Bates vanilla prices. The local volatility price will be the same price as per static replication for the variance swap, and we can see it they converge when there is no jump.</p>
+<p>The presence of jumps lead to a theoretically higher variance swap price, again, which we miss completely with the static replication. As jumps go higher, the difference is more pronounced.</p>
+<p>Volatility swaps are a bit better behaved in this regard. Interestingly, local volatility overestimate the value in this case (which for variance swaps it underestimates the value). I also noticed that the relatively <a href="/post/a-volatility-swap-and-straddle">recent formula from Carr-Lee</a> will underestimate jumps even more so than local volatility: it is more precise in the absence of jumps, very close to Heston, but less precise than local volatility when jumps increase in size.</p>
+<p>I have added a small section around this in <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2567398">my paper on SSRN</a>.</p>
 
   
 </article><article class="post">
