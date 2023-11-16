@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.101.0" />
+  <meta name="generator" content="Hugo 0.111.3">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -181,7 +181,7 @@
     <a href="https://chasethedevil.github.io/post/volatility-swap-vs-variance-swap-replication---truncation/">Volatility Swap vs Variance Swap Replication - Truncation</a>
   </h1>
   <time datetime="2015-03-16T14:39:00Z" class="post-date">Mon, Mar 16, 2015</time>
-  <p>I have looked at <a href="/post/jumps-impact-variance-swap-vs-volatility-swap/">jump effects on volatility vs. variance swaps</a>. There is a similar behavior on tail events, that is, on truncating the replication. One main <a href="/post/variance-swap-replication--discrete-or-continuous">problem with discrete replication of variance swaps</a> is the implicit domain truncation, mainly because the variance swap equivalent log payoff is far from being linear in the wings. The equivalent payoff with Carr-Lee for a volatility swap is much more linear in the wings (<a href="/post/a-volatility-swap-and-straddle">not so far of a straddle</a>). So we could expect the replication to be less sensitive to the wings truncation.
+  <p>I have looked at <a href="/post/jumps-impact-variance-swap-vs-volatility-swap/">jump effects on volatility vs. variance swaps</a>. There is a similar behavior on tail events, that is, on truncating the replication. One main <a href="/post/variance-swap-replication--discrete-or-continuous">problem with discrete replication of variance swaps</a> is the implicit domain truncation, mainly because the variance swap equivalent log payoff is far from being linear in the wings. The equivalent payoff with Carr-Lee for a volatility swap is much more linear in the wings (<a href="/post/a-volatility-swap-and-a-straddle">not so far of a straddle</a>). So we could expect the replication to be less sensitive to the wings truncation.
 I have done a simple test on flat 40% volatility:</p>
 <p><figure><img src="/post/Screenshot%20from%202015-03-16%2014%2019%2033.png"/>
 </figure>
@@ -229,7 +229,7 @@ There is very little information on variance swaps on a foreign asset. There can
 <p>Beside <a href="/post/variance-swap-replication--discrete-or-continuous">the problem with the discreteness</a> of the replication, variance swaps are sensitive to jumps. This is an often mentioned reason for the collapse of the single name variance swap market in 2008 as jumps are more likely on single name equities.</p>
 <p>Those graphs are the result of Monte-Carlo simulations with various jump sizes using the Bates model, and using Local Volatility implied from the Bates vanilla prices. The local volatility price will be the same price as per static replication for the variance swap, and we can see it they converge when there is no jump.</p>
 <p>The presence of jumps lead to a theoretically higher variance swap price, again, which we miss completely with the static replication. As jumps go higher, the difference is more pronounced.</p>
-<p>Volatility swaps are a bit better behaved in this regard. Interestingly, local volatility overestimate the value in this case (which for variance swaps it underestimates the value). I also noticed that the relatively <a href="/post/a-volatility-swap-and-straddle">recent formula from Carr-Lee</a> will underestimate jumps even more so than local volatility: it is more precise in the absence of jumps, very close to Heston, but less precise than local volatility when jumps increase in size.</p>
+<p>Volatility swaps are a bit better behaved in this regard. Interestingly, local volatility overestimate the value in this case (which for variance swaps it underestimates the value). I also noticed that the relatively <a href="/post/a-volatility-swap-a-and-straddle">recent formula from Carr-Lee</a> will underestimate jumps even more so than local volatility: it is more precise in the absence of jumps, very close to Heston, but less precise than local volatility when jumps increase in size.</p>
 <p>I have added a small section around this in <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2567398">my paper on SSRN</a>.</p>
 
   

@@ -855,7 +855,7 @@ On a Wilmott forum, P. Caspers proposed the following counter-example based on e
       <pubDate>Tue, 07 Jul 2015 16:43:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/unintuitive-behavior-of-the-black-scholes-formula---negative-volatilities-in-displaced-diffusion-extrapolation/</guid>
-      <description>I am looking at various extrapolation schemes of the implied volatilities. An interesting one I stumbled upon is due to Kahale. Even if his paper is on interpolation, there is actually a small paragraph on using the same kind of function for extrapolation. His idea is to simply lookup the standard deviation \\( \Sigma \\) and the forward \\(f\\) corresponding to a given market volatility and slope: $$ c_{f,\Sigma} = f N(d_1) - k N(d_2)$$ with $$ d_1 = \frac{\log(f/k)+\Sigma^2 /2}{\Sigma} $$ We have simply: $$ c&#39;(k) = - N(d_2)$$ He also proves that we can always find those two parameters for any \\( k_0 &gt; c_0 &gt; 0, -1 &lt; c_0&#39; &lt; 0 \\) Then I had the silly idea of trying to match with a put&amp;nbsp; instead of a call for the left wing (as those are out-of-the-money, and therefore easier to invert numerically).</description>
+      <description>I am looking at various extrapolation schemes of the implied volatilities. An interesting one I stumbled upon is due to Kahale. Even if his paper is on interpolation, there is actually a small paragraph on using the same kind of function for extrapolation. His idea is to simply lookup the standard deviation \( \Sigma \) and the forward \(f\) corresponding to a given market volatility and slope: $$ c_{f,\Sigma} = f N(d_1) - k N(d_2)$$ with $$ d_1 = \frac{\log(f/k)+\Sigma^2 /2}{\Sigma} $$</description>
     </item>
     
     <item>
@@ -1422,7 +1422,7 @@ A large \(\alpha\) will make tiny changes in \(t\) appear large.</description>
       
       <guid>https://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/</guid>
       <description>Several months ago, I took a look at two interesting recent ways to price under SABR with no arbitrage:
-One way is due to Andreasen and Huge, where they find an equivalent local volatility expansion, and then use a one-step finite difference technique to price.The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</description>
+One way is due to Andreasen and Huge, where they find an equivalent local volatility expansion, and then use a one-step finite difference technique to price. The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</description>
     </item>
     
     <item>
@@ -1472,7 +1472,8 @@ To my surprise, the Heston fit is quite good: the implied volatility error is le
       <pubDate>Thu, 03 Oct 2013 17:27:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/second-cumulant-of-heston/</guid>
-      <description>I recently stumbled upon an error in the various papers related to the Heston Cos method regarding the second cumulant. It is used to define the boundaries of the Cos method.Letting phi be Heston characteristic function, the cumulant generating function is:$$g(u) = \log(\phi(-iu))$$And the second cumulant is defined a: $$c_2 = g&amp;rsquo;&amp;rsquo;(0)$$Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.This is where Maxima comes useful, even if I had to simplify the results by hand.</description>
+      <description>I recently stumbled upon an error in the various papers related to the Heston Cos method regarding the second cumulant. It is used to define the boundaries of the Cos method. Letting phi be Heston characteristic function, the cumulant generating function is: $$g(u) = \log(\phi(-iu))$$
+And the second cumulant is defined a: $$c_2 = g&amp;rsquo;&amp;rsquo;(0)$$Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.</description>
     </item>
     
     <item>
@@ -1481,8 +1482,7 @@ To my surprise, the Heston fit is quite good: the implied volatility error is le
       <pubDate>Wed, 02 Oct 2013 15:06:00 +0000</pubDate>
       
       <guid>https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/</guid>
-      <description>A few years ago, I found an interesting open source symbolic calculus software called Xcas. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions.
-Google pointed me to another popular open source package, Maxima. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command.</description>
+      <description>A few years ago, I found an interesting open source symbolic calculus software called Xcas. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions. Google pointed me to another popular open source package, Maxima. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</description>
     </item>
     
     <item>
