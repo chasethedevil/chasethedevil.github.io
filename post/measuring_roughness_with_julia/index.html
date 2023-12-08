@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Measuring Roughness with Julia &middot; Chase the Devil</title>
+  <title>Roughness of Stochastic Volatility with Jumps &middot; Chase the Devil</title>
   <meta name="description" content="" />
 
   
@@ -70,61 +70,53 @@
 
     <main class="content container">
     <div class="post">
-  <h1>Measuring Roughness with Julia</h1>
-  <time datetime=2023-11-07T20:56:42&#43;0100 class="post-date">Tue, Nov 7, 2023</time>
-  <p>I received a few e-mails asking me for the code I used to measure roughness in my preprint on the <a href="/post/implied_volatility_roughness">roughness of the implied volatility</a>. Unfortunately, the code I wrote for this paper is not in a <em>good</em> state, it&rsquo;s all in one long file line by line, not necessarily in order of execution, with comments that are only meaningful to myself.</p>
-<p>In this post I will present the code relevant to measuring the oxford man institute roughness with Julia. I won&rsquo;t go into generating Heston or rough volatility model implied volatilities, and focus only on the measure on roughness based on some CSV like input. I downloaded the oxfordmanrealizedvolatilityindices.csv from the Oxford Man Institute website (unfortunately now discontinued, data bought by Refinitiv but still available in some github repos) to my home directory</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones
-</span></span><span style="display:flex;"><span>df <span style="color:#666">=</span> DataFrame(CSV<span style="color:#666">.</span>File(<span style="color:#4070a0">&#34;/home/niamh/Downloads/oxfordmanrealizedvolatilityindices.csv&#34;</span>))
-</span></span><span style="display:flex;"><span>df1 <span style="color:#666">=</span>  df[df<span style="color:#666">.</span><span style="color:#902000">Symbol</span> <span style="color:#666">.==</span> <span style="color:#4070a0">&#34;.SPX&#34;</span>,<span style="color:#666">:</span>]
-</span></span><span style="display:flex;"><span>dsize <span style="color:#666">=</span>  trunc(<span style="color:#902000">Int</span>,length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">/</span><span style="color:#40a070">1.0</span>)
-</span></span><span style="display:flex;"><span>dfv <span style="color:#666">=</span> df1[length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">-</span>dsize<span style="color:#666">+</span><span style="color:#40a070">1</span><span style="color:#666">:</span><span style="color:#007020;font-weight:bold">end</span>,<span style="color:#666">:</span>]
-</span></span><span style="display:flex;"><span>n <span style="color:#666">=</span> length(dfv<span style="color:#666">.</span>close_time)
-</span></span><span style="display:flex;"><span>K0<span style="color:#666">=</span>trunc(<span style="color:#902000">Int</span>,sqrt(n))
-</span></span><span style="display:flex;"><span>tm <span style="color:#666">=</span> [abs((Date(ZonedDateTime(<span style="color:#902000">String</span>(d),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>))<span style="color:#666">-</span>Date(ZonedDateTime(<span style="color:#902000">String</span>(dfv<span style="color:#666">.</span>Column1[<span style="color:#40a070">1</span>]),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>)))<span style="color:#666">.</span>value) <span style="color:#007020;font-weight:bold">for</span> d <span style="color:#007020;font-weight:bold">in</span> dfv<span style="color:#666">.</span>Column1[<span style="color:#666">:</span>]];
-</span></span><span style="display:flex;"><span>ivm <span style="color:#666">=</span> dfv<span style="color:#666">.</span>rv5[<span style="color:#666">:</span>]
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Roots, Statistics
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> wStatA(ts, vs, K0,L,step,p)
-</span></span><span style="display:flex;"><span>     bvs <span style="color:#666">=</span> vs <span style="color:#60a0b0;font-style:italic"># big.(vs)</span>
-</span></span><span style="display:flex;"><span>     bts <span style="color:#666">=</span> ts <span style="color:#60a0b0;font-style:italic"># big.(ts)</span>
-</span></span><span style="display:flex;"><span>     value <span style="color:#666">=</span> sum( abs(log(bvs[k<span style="color:#666">+</span>K0])<span style="color:#666">-</span>log(bvs[k]))<span style="color:#666">^</span>p <span style="color:#666">/</span> sum(abs(log(bvs[l<span style="color:#666">+</span>step])<span style="color:#666">-</span>log(bvs[l]))<span style="color:#666">^</span>p <span style="color:#007020;font-weight:bold">for</span> l <span style="color:#007020;font-weight:bold">in</span> k<span style="color:#666">:</span>step<span style="color:#517918">:k</span><span style="color:#666">+</span>K0<span style="color:#666">-</span>step) <span style="color:#666">*</span> abs((bts[k<span style="color:#666">+</span>K0]<span style="color:#666">-</span>bts[k])) <span style="color:#007020;font-weight:bold">for</span> k<span style="color:#666">=</span><span style="color:#40a070">1</span><span style="color:#666">:</span>K0<span style="color:#666">:</span>L<span style="color:#666">-</span>K0<span style="color:#666">+</span><span style="color:#40a070">1</span>)
-</span></span><span style="display:flex;"><span>     <span style="color:#60a0b0;font-style:italic">#println(&#34;wStat &#34;, p, &#34; &#34;,value)</span>
-</span></span><span style="display:flex;"><span>     <span style="color:#007020;font-weight:bold">return</span> value
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> meanRoughness(tm, ivm, K0, L)
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">local</span> cm <span style="color:#666">=</span> zeros(length(tm)<span style="color:#666">-</span>L);
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">local</span> ivi <span style="color:#666">=</span> ivm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">local</span> ti <span style="color:#666">=</span> tm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
-</span></span><span style="display:flex;"><span>    T <span style="color:#666">=</span> abs((ti[<span style="color:#007020;font-weight:bold">end</span>]<span style="color:#666">-</span>ti[<span style="color:#40a070">1</span>]))
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">try</span>
-</span></span><span style="display:flex;"><span>      cm[i] <span style="color:#666">=</span> <span style="color:#40a070">1.0</span> <span style="color:#666">/</span>  find_zero(p <span style="color:#666">-&gt;</span> wStatA(ti, ivi, K0, L, <span style="color:#40a070">1</span>,p)<span style="color:#666">-</span>T,(<span style="color:#40a070">1.0</span>,<span style="color:#40a070">100.0</span>))
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">catch</span> e
-</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">if</span> <span style="color:#007020;font-weight:bold">isa</span>(e, <span style="color:#902000">ArgumentError</span>)
-</span></span><span style="display:flex;"><span>        cm[i] <span style="color:#666">=</span> <span style="color:#40a070">0.0</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">else</span>
-</span></span><span style="display:flex;"><span>        throw(e)
-</span></span><span style="display:flex;"><span>      <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  meanValue <span style="color:#666">=</span> mean(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
-</span></span><span style="display:flex;"><span>  stdValue <span style="color:#666">=</span> std(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">return</span> meanValue, stdValue, cm
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>K0 <span style="color:#666">-=</span> <span style="color:#40a070">3</span>
-</span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#666">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#666">^</span><span style="color:#40a070">2</span>)
-</span></span><span style="display:flex;"><span>p <span style="color:#666">=</span> plot(tm[<span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)],cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;Estimate&#34;</span>)
-</span></span><span style="display:flex;"><span>std(cm), mean(cm), median(cm)
-</span></span><span style="display:flex;"><span>plot(Date<span style="color:#666">.</span>(DateTime<span style="color:#666">.</span>(string<span style="color:#666">.</span>(dfv<span style="color:#666">.</span>Column1[<span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)]),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>)),cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>, xlabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Start Date&#34;</span>)
-</span></span><span style="display:flex;"><span>density(cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>,ylabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Density&#34;</span>)</span></span></code></pre></div>
-<p>The last plot should look like
-<figure><img src="/post/oxford_spx500_roughness.png"/>
+  <h1>Roughness of Stochastic Volatility with Jumps</h1>
+  <time datetime=2023-12-07T20:56:42&#43;0100 class="post-date">Thu, Dec 7, 2023</time>
+  <p>I was wondering if adding jumps to stochastic volatility, as is done in the SVCJ model of Duffie, Singleton and Pan <em>&ldquo;Transform Analysis and Asset Pricing for Affine Jump-Diffusion&rdquo;</em> also in Broadie and Kaya <em>&ldquo;Exact simulation of stochastic volatility and other affine jump diffusion processes&rdquo;</em>, would lead to rougher paths, or if it would mislead the roughness estimators.</p>
+<p>The answer to the first question can almost be answered visually:
+<figure><img src="/post/svcj_variance_path.png"/>
 </figure>
 </p>
-<p>It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>
+<p>The parameters used are the one from Broadie and Kaya: v0=0.007569, kappa=3.46, theta=0.008, rho=-0.82, sigma=0.14 (Heston), jump correlation -0.38, jump intensity 0.47, jump vol 0.0001, jump mean 0.05, jump drift -0.1.</p>
+<p>The Rough Heston with H=0.1 is much &ldquo;noisier&rdquo;. There is not apparent difference between SVCJ and Heston in the path of the variance.</p>
+<p>The estimator of Cont and Das (on a subsampled path) leads to a Hurst exponent H=0.503, in line with a standard Brownian motion.
+<figure><img src="/post/svcj_estimate.png"/><figcaption>
+            <h4>Cont-Das estimate H=0.503.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The estimator from Rosenbaum and Gatheral leads to a Hurst exponent (slope of the regression) H=0.520 with well behaved regressions:
+<figure><img src="/post/svcj_estimate_gatheral_1.png"/><figcaption>
+            <h4>Regressions for each q.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/svcj_estimate_gatheral_2.png"/><figcaption>
+            <h4>Regression over all qs which leads to the estimate of H.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>On this example, there are relatively few jumps during the 1 year duration. If we multiply the jump intensity by 1000 and reduce the jump mean accordingly, the conclusions are the same. Jumps and roughness are fundamentally different.</p>
+<p>Of course this does not mean that the short term realized volatility does not look rough as evidenced in Cont and Das paper:
+<figure><img src="/post/svcj_rv.png"/><figcaption>
+            <h4>The 1 hour realized volatility looks rough.</h4>
+        </figcaption>
+</figure>
+
+I computed the realized volatility on a subsampled path, using disjoint windows of 1h of length.</p>
+<p>It is not really rough, estimators will have a tough time leading to stable estimates on it.
+<figure><img src="/post/svcj_rv_estimate.png"/><figcaption>
+            <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>This is very visible with the Rosenbaum-Gatheral way of estimating H, we see that the observations do not fall on a line at all but flatten:
+<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"/><figcaption>
+            <h4>Regressions for each q based on the 1h realized variance.</h4>
+        </figcaption>
+</figure>
+</p>
+<p>The pure Heston model leads to similar observations.</p>
 
 </div>
 
