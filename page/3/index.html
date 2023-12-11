@@ -73,6 +73,26 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/reghai_remarkable_coincidences/">Remarkable Coincidences, Bad Book?</a>
+  </h1>
+  <time datetime="2020-11-21T07:56:42&#43;0100" class="post-date">Sat, Nov 21, 2020</time>
+  <p>I stumbled upon a new  short book <a href="https://link.springer.com/book/10.1007%2F978-3-030-57496-3">Financial Models in Production</a> from O. Kettani and A. Reghai. A page attracted my attention</p>
+<figure><img src="/post/reghai_coincidences.png"/><figcaption>
+            <h4>A page from Kettani and Reghai&#39;s book.</h4>
+        </figcaption>
+</figure>
+
+<p>This is the same example as I used on <a href="/post/implied-volatility-from-black-scholes-price/">my blog</a>, where I also present the Li&rsquo;s SOR method combined with the good initial guess from Stefanica. The idea has also been expanded on in <a href="https://jherekhealy.github.io">Jherek Healy&rsquo;s book</a>. What is shocking is that, beside reusing my example, <strong>they reuse my timing</strong> for Jäckel and my implementation is in <a href="https://golang.org">Google Go</a>, with a timing done on some older laptop. The numbers given are thus highly inconsistent. Of course, none of this is mentioned anywhere, and the book does not reference my blog.</p>
+<p>I also find the description of how they improve the implied volatility algorithm (detailed on the next page) to not make much sense. After this kind of stuff, you can&rsquo;t really trust anything that is in the book&hellip;</p>
+<p>Worst perhaps, is that the authors advertise their &ldquo;novel&rdquo; technique in otherwise decent talks and conferences, such as <a href="https://www.mathfinance.com/newsletter-october-2020-mathfinance-conference-recap/">the one from mathfinance</a>. Here is a quote</p>
+<blockquote>
+<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p>
+</blockquote>
+<p>It is really unfortunate that the world we live in encourages such boasting. Papers always need  to present some novel ideas to be published, but there is too often no check on whether the idea actually works, or is worth it. The temptation to make exagerated claims is very high for authors. In the end, it becomes not so easy to sort out the good from the bad.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/bad-papers-polynomial-roots/">Bad papers and the roots of high degree polynomials</a>
   </h1>
   <time datetime="2020-11-07T07:56:42&#43;0100" class="post-date">Sat, Nov 7, 2020</time>
@@ -361,23 +381,6 @@ find <a href="https://www.ibm.com/developerworks/community/blogs/jfp/entry/A_Com
 things are not as simple.</p>
 <p>Next I should try Julia again out of curiosity. I tried it <a href="/post/modern-programming-language-for-monte-carlo/">several years ago</a> in the context of a simple Monte-Carlo simulation and my experiment at the time
 was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/about/">About</a>
-  </h1>
-  <time datetime="2018-12-17T10:05:07&#43;0100" class="post-date">Mon, Dec 17, 2018</time>
-  <p>I just moved my blog to a static website, created with <a href="https://gohugo.io/">Hugo</a>, I explain the reasons why <a href="/post/moved-to-hugo/">here</a>.
-You can find more about me on my <a href="https://fr.linkedin.com/in/fabien-le-floc-h-8aa306">linkedin profile</a>.
-In addition you might find the following interesting:</p>
-<ul>
-<li><a href="http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">List of quantitative finance papers</a> I have freely available on SSRN</li>
-<li><a href="/lefloch_trbdf2_draft.pdf">TR-BDF2 for Stable American Option Pricing</a>. This is the first draft, not the final version that was published in the Journal of Computational Finance.</li>
-<li><a href="/lefloch_sabr_slides.pdf">Presentation on finite difference techniques for arbitrage-free SABR</a> I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.</li>
-<li><a href="/lefloch_exact_log.pdf">Exact Forward for Finite-Difference Schemes on the Log-transformed Black-Scholes PDE</a>.</li>
-<li><a href="/lefloch_volatility_asymptotics.pdf">Asymptotic bounds of the normal volatility</a>.</li>
-</ul>
 
   
 </article>

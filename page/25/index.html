@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/static-fields-and-inheritance/">Static Fields and Inheritance</a>
+  </h1>
+  <time datetime="2009-06-15T16:02:00Z" class="post-date">Mon, Jun 15, 2009</time>
+   
+
+Someone asked me recently to find out the real reason why the code from this thread fails. This is a fairly bad code, and not even a very good way to point out the problem. But the question is nonetheless interesting.<br /><br /><pre class="jive-pre"><code class="jive-code jive-java"><span style="color:navy;"><b>class</b></span> Toto <span style="color:navy;"><b>extends</b></span> TotoParent<span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>final</b></span> <span style="color:navy;"><b>static</b></span> Toto a = <span style="color:navy;"><b>new</b></span> Toto (<span style="color:red;">"a"</span>);<br /><br /> <span style="color:navy;"><b>public</b></span> Toto(String a)<span style="color:navy;">{</span><br />  <span style="color:navy;"><b>super</b></span>(a);<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> java.util.ArrayList;<br /><span style="color:navy;"><b>import</b></span> java.util.List;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>abstract</b></span> <span style="color:navy;"><b>class</b></span> TotoParent <span style="color:navy;">{</span><br /><br /> <span style="color:navy;"><b>static</b></span> List<string> list = <span style="color:navy;"><b>new</b></span> ArrayList<string>();<br /> <br /> <span style="color:navy;"><b>public</b></span> TotoParent(String a) <span style="color:navy;">{</span><br />  list.add(a);<br /> <span style="color:navy;">}</span><br /><br /> <span style="color:navy;"><b>protected</b></span> <span style="color:navy;"><b>static</b></span> List<string> get() <span style="color:navy;">{</span><br />  <span style="color:navy;"><b>return</b></span> list;<br />  <br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /><br /><span style="color:navy;"><b>import</b></span> org.junit.Test;<br /><span style="color:navy;"><b>import</b></span> <span style="color:navy;"><b>static</b></span> org.junit.Assert.*;<br /><br /><span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>class</b></span> TotoTest <span style="color:navy;">{</span><br /><br /> @Test<br /> <span style="color:navy;"><b>public</b></span> <span style="color:navy;"><b>void</b></span> testGet()<span style="color:navy;">{</span><br />  assertEquals(1, Toto.get().size());<br /> <span style="color:navy;">}</span><br /><span style="color:navy;">}</span><br /></code></pre>I am quite used to static initialization, and would have answered the same as the first answer in the thread:<br />"Get is static and associated with TotoParent, so that is the same as calling TotoParent.get().size()". I would have even thought that the compiler would compile the call Toto.get() to TotoParent.get(). But running javap, you can see it is still compiled as TotoParent.get(). So there is still a lookup done. This is why the first answer is actually not that correct.<br /><br />The important bit here is that Toto is never initialized, even if we call Toto.get(). The java specs (invaluable reference) explains clearly that calling a static method not declared in the class does not initialize the class.<br /><br />Calling Toto.get() is not exactly the same as calling TotoParent.get().<br />If TotoParent.get() called another TotoSuperParent.get():<br />Toto.get() -> TotoParent.get() -> TotoSuperParent.get()<br />We compile then later we change to make TotoParent have a specific implementation of get(). Toto will then be automatically aware of it, without even recompiling it.<br /><br /><a href="http://java.sun.com/docs/books/jls/third_edition/html/execution.html" target="_blank">http://java.sun.com/docs/<wbr>books/jls/third_edition/html/<wbr>execution.html</a><br />paragraph 12.4.1
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/benchmarking-languages-is-difficult/">Benchmarking Languages Is Difficult</a>
   </h1>
   <time datetime="2009-06-03T16:53:00Z" class="post-date">Wed, Jun 3, 2009</time>
@@ -255,23 +267,6 @@ The Core2Duo is Intel(R) Core(TM)2 Duo CPU     T7250  @ 2.00GHz
 The Core2Quad is Intel(R) Core(TM)2 Quad CPU    Q6600  @ 2.40GHz</p>
 <p>It is interesting to compare results of 4 threads on a biprocessor with monte carlo count of 10 and 100. We see a much higher thread overhead with fewer computation. With too few computation in monte carlo, the overhead of threads is too high over 2 concurrent threads. This explains why the very simple threading architecture fares much better in the last column compared to the previous one.</p>
 <p>Scala Actors fares much better when it is not hindered in the creation of too many threads. It seem actually very good at abstracting multithreading intricacies, while still providing near Java performance in the real world where each actor does enough computation and multithreading is important.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/object-oriented-analysis-and-design-with-applications-book-review/">Object Oriented Analysis And Design with Applications Book Review</a>
-  </h1>
-  <time datetime="2009-01-08T17:24:00Z" class="post-date">Thu, Jan 8, 2009</time>
-  <p>A while ago, I had a comment from someone implying I knew nothing about OO programming because I had not mentioned (and therefore read) <em>Object Oriented Analysis And Design with Applications</em> from G. Booch. I was intrigued by such a silly comment and decided to look at this book that was considered as the bible of OOP.</p>
-<p>Well, I don&rsquo;t find it that good! But I don&rsquo;t find the bible particularly good either. I like <a href="http://archive.eiffel.com/doc/oosc/">B. Meyer Object Oriented Software Construction</a> book much more, because it is more practical, more in touch with realities while pointing at the real important problems like:</p>
-<blockquote>
-<p>Real systems have no top</p>
-</blockquote>
-<p>In contrast G Booch book has too much evident concepts that don&rsquo;t really make you learn anything or think things a different way. It is a good book for someone who is learning OO for the first time. It covers the subject in details, but I did not find anything in it that made me say</p>
-<blockquote>
-<p>wow!</p>
-</blockquote>
-<p>It is like most other book you can find on OO. Furthermore only the first parts are on OO, the rest is more a UML tutorial.</p>
 
   
 </article>
