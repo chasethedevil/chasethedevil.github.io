@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-fast-exponential-function-in-java/">A Fast Exponential Function in Java</a>
+  </h1>
+  <time datetime="2013-04-19T16:48:00Z" class="post-date">Fri, Apr 19, 2013</time>
+   
+
+In finance, because one often dicretize the log process instead of the direct process for Monte-Carlo simulation, the Math.exp function can be called a lot (millions of times for a simulation) and can be a bottleneck. I have noticed that the simpler Euler discretization was for local volatility Monte-Carlo around 30% faster, because it avoids the use of Math.exp.<br /><br />Can we improve the speed of exp over the JDK one? At first it would seem that the JDK would just call either the processor exp using an <a href="http://bad-concurrency.blogspot.co.uk/2012/08/arithmetic-overflow-and-intrinsics.html">intrinsic function call</a> and that should be difficult to beat. However what if one is ok for a bit lower accuracy? Could a simple <a href="http://www.siam.org/books/ot99/OT99SampleChapter.pdf">Chebyshev polynomial expansion</a> be faster?<br /><br />Out of curiosity, I tried a Chebyshev polynomial expansion with 10 coefficients stored in a final double array. I computed the coefficient using a precise quadrature (Newton-Cotes) and end up with 1E-9, 1E-10 absolute and relative accuracy on [-1,1].<br /><br />Here are the results of a simple sum of 10M random numbers:<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.75s for Math.exp sum=1.7182816693332244E7<br />0.48s for ChebyshevExp sum=1.718281669341388E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span><br /><br />So while this simple implementation is actually faster than Math.exp (but only works within [-1,1]), FastMath from Apache commons maths, that relies on a table lookup algorithm is just faster (in addition to being more precise and not limited to [-1,1]).<br /><br />Of course if I use only 5 coefficients, the speed is better, but the relative error becomes around 1e-4 which is unlikely to be satisfying for a finance application.<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">0.78s for Math.exp sum=1.7182816693332244E7<br />0.27s for ChebyshevExp sum=1.718193001875838E7<br />0.40s for FastMath.exp sum=1.7182816693332244E7</span>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</a>
   </h1>
   <time datetime="2013-04-12T13:41:00Z" class="post-date">Fri, Apr 12, 2013</time>
@@ -389,14 +401,6 @@ Those are very close payoffs!</p>
   <p>I found a nice finite difference scheme, where the solving part can be parallelized on 2 processors at each time-step</p>
 <p>I was a bit surprised to notice that the parallelized algorithm ran in some cases twice slower than the same algorithm not parallelized. I tried ForkJoinPool, ThreadPoolExecutor, my one notify/wait based parallelization. All resulted in similar performance compared to just calling thread1.run() and thread2.run() directly.</p>
 <p>I am still a bit puzzled by the results. Increasing the time of the task by increasing the number of discretization points does not really improve the parallelization. The task is relatively fast to perform and is repeated many (around of 1000) times, so synchronized around 1000 times, which is likely why parallelization is not great on it: synchronization overhead reaps any benefit of the parallelization. But I expected better. Using a Thread pool of 1 thread is also much slower than calling run() twice (and fortunately slower than the pool of 2 threads).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/scala-is-mad-part-2/">Scala is Mad (part 2)</a>
-  </h1>
-  <time datetime="2013-02-13T16:20:00Z" class="post-date">Wed, Feb 13, 2013</time>
-  <p>I still did not abandon Scala despite my <!-- raw HTML omitted -->previous post<!-- raw HTML omitted -->, mainly because I have already quite a bit of code, and am too lazy to port it. Furthermore the issues I detailed were not serious enough to motivate a switch. But these days I am more and more fed up with Scala, especially because of the Eclipse plugin. I tried the newer, the beta, and the older, the stable, the conclusion is the same. It&rsquo;s welcome but:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->code completion is not great compared to Java. For example one does not seem to be able to see the constructor parameters, or the method parameters can not be automatically populated.<!-- raw HTML omitted --><!-- raw HTML omitted -->the plugin makes Eclipse <em>very</em> slow. Everything seems at least 3-5x slower. On the fly compilation is also much much slower than Java&rsquo;s.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It&rsquo;s nice to type less, but if overall writing is slower because of the above issues, it does not help. Beside curiosity of a new language features, I don&rsquo;t see any point in Scala today, even if some of the ideas are interesting. I am sure it will be forgotten/abandoned in a couple of years. Today, if I would try a new language, I would give Google Go a try: I don&rsquo;t think another big language can make it/be useful on the JVM (beside a scripting kind of language, like JavaScript or Jython).<!-- raw HTML omitted --><!-- raw HTML omitted -->Google Go focuses on the right problem: concurrency. It also is not constrained to JVM limitation (on the other side one can not use a Java library - but open source stuff is usually not too difficult to port from one language to another). It has one of the fastest compilers. It makes interesting practical choices: no inheritance.</p>
 
   
 </article>

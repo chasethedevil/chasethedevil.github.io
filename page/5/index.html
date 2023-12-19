@@ -73,6 +73,142 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/">Discrete Sine Transform via the FFT</a>
+  </h1>
+  <time datetime="2018-02-05T13:56:42&#43;0100" class="post-date">Mon, Feb 5, 2018</time>
+  <p>Several months ago, I had a quick look at <a href="https://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2585529">a recent paper</a> describing how to use
+Wavelets to price options under stochastic volatility models with a known characteristic function.
+The more classic method is to use some numerical quadrature directly on the Fourier integral as described <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2362968">in this paper</a> for example.
+When I read the paper, I was skeptical about the Wavelet approach, since it looked complicated, and with many additional parameters.</p>
+<p>I recently took a closer look and it turns out my judgment was bad. The additional parameters can be easily automatically and reliably set
+by very simple rules that work well (<a href="https://ssrn.com/abstract=2705699">a subsequent paper</a> by the same author, which applies the method to Bermudan options, clarifies this).
+The method is also not as complex as I first imagined. And more importantly, the FFT makes it fast. It is quite amazing to see
+the power of the FFT in action. It really is because of the FFT that the Shannon Wavelet method is practical.</p>
+<p>Anyway one of the things that need to be computed are the payoff coefficients, and one expression is just the sum of a <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">discrete Cosine transform</a> (DCT) and a discrete Sine transform (DST).
+I was wondering then
+about a simple way to use the FFT for the Sine transform. There are many papers around how to use the FFT to compute the Cosine transform. A technique
+that is efficient and simple is the one of <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwirtpu5upHZAhUFOBQKHZnHBFoQFgg2MAA&amp;url=http%3A%2F%2Feelinux.ee.usm.maine.edu%2Fcourses%2Fele486%2Fdocs%2Fmakhoul.fastDCT.pdf&amp;usg=AOvVaw0b3sdSzaT-A9fRAGWZbUcP">Makhoul</a>.</p>
+<p>The coefficients that need to be computed for all k can be represented by the following equation
+$$	V_{k} = \sum_{j=0}^{N-1} a_j \cos\left(\pi k\frac{j+\frac{1}{2}}{N}\right) + b_j \sin\left(\pi k\frac{j+\frac{1}{2}}{N}\right) $$
+with \( N= 2^{\bar{J}-1} \) for some positive integer \( \bar{J} \).
+Makhoul algorithm to compute the DCT of size N with one FFT of size N consists in</p>
+<ul>
+<li>initialize the FFT coefficients \(c_j\) with:
+$$	c_j = a_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \( hat{c} \), the DCT coefficients \( \hat{a} \) are
+$$ \hat{a}_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>Makhoul does not specify the equivalent formula for the DST, but we can do something similar.</p>
+<ul>
+<li>We first initialize the FFT coefficients \( c_j \) with:
+$$ c_j = b_{2j} \quad,,\quad	c_{N-1-j} = -b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \(\hat{c}\), the DST coefficients \(\hat{b}\) are
+$$\hat{b}_k = -\Im\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>For maximum performance, the two FFTs can reuse the same sine and cosine tables. And the last step of the DCT and DST can be combined together.</p>
+<p>Another approach would be to compute a single FFT of size 2N as we can rewrite the coefficients as
+$$	V_{k} = \Re\left[e^{-i \pi \frac{k}{2N}} \sum_{j=0}^{2N-1} (a_j + i b_j) e^{-2i\pi k\frac{j}{2N}} \right] $$
+with \(a_j = b_j =0 \) for \( j \geq N \)</p>
+<p>In fact the two are almost equivalent, since a FFT of size 2N is <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">decomposed</a> internally into two FFTs of size N.</p>
+<p>With this in mind we can improve a bit the above to merge the two transforms together:</p>
+<ul>
+<li>We first initialize the FFT coefficients \( c_j \) with:
+$$ c_j = a_{2j} + i b_{2j} \quad,,\quad	c_{N-1-j} = a_{2j+1} -i b_{2j+1} \quad \text{ for } j = 0,&hellip;, \frac{N}{2}-1 $$</li>
+<li>and then from the result of the FFT \(\hat{c}\), the coefficients are
+$$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
+</ul>
+<p>And we have computed the coefficients with a single FFT of size N.</p>
+<p>In terms of Go language code, the classic type-2 sine Fourier transforms reads
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">DST2</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	result <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>		sum <span style="color:#666">:=</span> <span style="color:#40a070">0.0</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> j, vj <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>			sum <span style="color:#666">+=</span> math.<span style="color:#06287e">Sin</span>((<span style="color:#007020">float64</span>(j)<span style="color:#666">+</span><span style="color:#40a070">0.5</span>)<span style="color:#666">*</span>math.Pi<span style="color:#666">*</span><span style="color:#007020">float64</span>(k)<span style="color:#666">/</span><span style="color:#007020">float64</span>(n)) <span style="color:#666">*</span> vj
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		result[k] = sum
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020">copy</span>(vector, result)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
+<p>And the Fast Type-2 Sine transform reads
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">FastDST2ByFFT</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	halfLen <span style="color:#666">:=</span> n <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>	z <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">complex128</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; halfLen; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>		z[i] = <span style="color:#007020">complex</span>(vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>		z[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#007020">complex</span>(<span style="color:#666">-</span>vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> n<span style="color:#666">&amp;</span><span style="color:#40a070">1</span> <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
+</span></span><span style="display:flex;"><span>		z[halfLen] = <span style="color:#007020">complex</span>(vector[n<span style="color:#666">-</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	err <span style="color:#666">:=</span> <span style="color:#06287e">TransformRadix2Complex</span>(z)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		temp <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">*</span> math.Pi <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n<span style="color:#666">*</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(temp)
+</span></span><span style="display:flex;"><span>		vector[i] = <span style="color:#007020">real</span>(z[i])<span style="color:#666">*</span>s <span style="color:#666">-</span> <span style="color:#007020">imag</span>(z[i])<span style="color:#666">*</span>c
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> err
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
+<p>The function TransformRadix2Complex, used above, steams from a standard implementation of the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector (The vector&rsquo;s length must be a power of 2. Uses the Cooley-Tukey decimation-in-time radix-2 algorithm).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">TransformRadix2Complex</span>(z []<span style="color:#902000">complex128</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(z)
+</span></span><span style="display:flex;"><span>	levels <span style="color:#666">:=</span> <span style="color:#007020">uint</span>(<span style="color:#40a070">31</span> <span style="color:#666">-</span> bits.<span style="color:#06287e">LeadingZeros32</span>(<span style="color:#007020">uint32</span>(n))) <span style="color:#60a0b0;font-style:italic">// Equal to floor(log2(n))
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">if</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> levels) <span style="color:#666">!=</span> n {
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Length is not a power of 2&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Trigonometric tables
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	cosTable, sinTable <span style="color:#666">:=</span> <span style="color:#06287e">MakeCosSinTable</span>(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Bit-reversed addressing permutation
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		j <span style="color:#666">:=</span> <span style="color:#007020">int</span>(bits.<span style="color:#06287e">Reverse32</span>(<span style="color:#007020">uint32</span>(i)) <span style="color:#666">&gt;&gt;</span> (<span style="color:#40a070">32</span> <span style="color:#666">-</span> levels))
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> j &gt; i {
+</span></span><span style="display:flex;"><span>			z[i], z[j] = z[j], z[i]
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Cooley-Tukey decimation-in-time radix-2 FFT
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> size <span style="color:#666">:=</span> <span style="color:#40a070">2</span>; size <span style="color:#666">&lt;=</span> n; size <span style="color:#666">*=</span> <span style="color:#40a070">2</span> {
+</span></span><span style="display:flex;"><span>		halfsize <span style="color:#666">:=</span> size <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>		tablestep <span style="color:#666">:=</span> n <span style="color:#666">/</span> size
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n; i <span style="color:#666">+=</span> size {
+</span></span><span style="display:flex;"><span>			j <span style="color:#666">:=</span> i
+</span></span><span style="display:flex;"><span>			k <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#007020;font-weight:bold">for</span> ; j &lt; i<span style="color:#666">+</span>halfsize; j<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>				l <span style="color:#666">:=</span> j <span style="color:#666">+</span> halfsize
+</span></span><span style="display:flex;"><span>				tpre <span style="color:#666">:=</span> <span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>cosTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>sinTable[k]
+</span></span><span style="display:flex;"><span>				tpim <span style="color:#666">:=</span> <span style="color:#666">-</span><span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>sinTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>cosTable[k]
+</span></span><span style="display:flex;"><span>				z[l] = z[j] <span style="color:#666">-</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				z[j] <span style="color:#666">+=</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				k <span style="color:#666">+=</span> tablestep
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> size <span style="color:#666">==</span> n { <span style="color:#60a0b0;font-style:italic">// Prevent overflow in &#39;size *= 2&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>			<span style="color:#007020;font-weight:bold">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">MakeCosSinTable</span>(n <span style="color:#902000">int</span>) ([]<span style="color:#902000">float64</span>, []<span style="color:#902000">float64</span>) {
+</span></span><span style="display:flex;"><span>	cosTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	sinTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> cosTable {
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(<span style="color:#40a070">2</span> <span style="color:#666">*</span> math.Pi <span style="color:#666">*</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n))
+</span></span><span style="display:flex;"><span>		cosTable[i] = c
+</span></span><span style="display:flex;"><span>		sinTable[i] = s
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> cosTable, sinTable
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/quantitative_finance_books/">Quantitative Finance Books Citing My Papers</a>
   </h1>
   <time datetime="2017-12-09T13:56:42&#43;0100" class="post-date">Sat, Dec 9, 2017</time>
@@ -474,34 +610,6 @@ z <span style="color: #666666">:=</span> <span style="color: #40a070">0.74101842
 
 <p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
 <p><strong>Update March 22:</strong> Actually the smile in VIX is not particularly new, it is visible in Jim Gatheral 2013 presentation <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiF2LP9turSAhUJVBQKHUVFCIoQFggoMAA&amp;url=http%3A%2F%2Fmfe.baruch.cuny.edu%2Fwp-content%2Fuploads%2F2012%2F09%2FBeijingSPXVIX2013.pdf&amp;usg=AFQjCNHCx2b2AXNXPHixUAYQC2nWH9ULHQ">Joint modeling of SPX and VIX</a> for the short maturities. Interestingly, <a href="/post/when-svi-breaks-down/">the issue with SVI</a> is also visible in those slides in the shortest maturity.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/when-svi-breaks-down/">When SVI Breaks Down</a>
-  </h1>
-  <time datetime="2017-03-16T07:56:42&#43;0100" class="post-date">Thu, Mar 16, 2017</time>
-  <p>In order to fit the implied volatility smile of equity options, one of the most popular parameterization is Jim Gatheral&rsquo;s SVI, which I have written about before <a href="/post/another-svi-initial-guess/">here</a>.</p>
-<p>It turns out that in the current market conditions, SVI does not work well for short maturities. <a href="http://www.optionistics.com/quotes/stock-option-chains/SPX">SPX options</a> expiring on March 24, 2017 (one week) offer a good example. I paid attention to include only options with non zero volume, that is options that are actually traded.</p>
-<figure><img src="/post/spxw_03242017.png"/><figcaption>
-            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive volume.</h4>
-        </figcaption>
-</figure>
-
-<p>SVI does not fit well near the money (the SPX index is at 2385) and has an obviously wrong right wing. This is not due to the choice of weights used for the calibration (I used the volume as weight; equal weights would be even worse). Interestingly, SABR (with beta=1) does much better, even though it has two less parameters than SVI. Also a simple least squares parabola here does not work at all as it ends up fitting only the left wing.</p>
-<p>If we include all options with non zero open interest and use ask/(bid-ask) weights, SVI is even worse:
-<figure><img src="/post/spxw_03242017f.png"/><figcaption>
-            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>We can do a bit better with SVI by squaring the weights and it shows the problem of SVI more clearly:
-<figure><img src="/post/spxw_03242017f2.png"/><figcaption>
-            <h4>SPXW implied volatilities on March 16, 2017 with strictly positive open interest and SVI weights squared.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>These days, the VIX index is particularly low. Today, it is at 11.32. Usually, a low VIX translates to growing stocks as investors are confident in a low volatility environment. The catch with those extremely low ATM vols, is that the curvature is more pronounced, and so people are not so confident after all.</p>
 
   
 </article>

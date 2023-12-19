@@ -73,6 +73,24 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/roughness_of_jumps/">Roughness of Pure Jumps</a>
+  </h1>
+  <time datetime="2023-12-18T20:56:42&#43;0100" class="post-date">Mon, Dec 18, 2023</time>
+  <p>In my previous <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">blog post</a>, I looked at the roughness of the SVCJ stochastic volatility model with jumps (in the volatility). In this model, the jumps occur randomly, but at discrete times. And with typical parameters used in the litterature, the jumps are not so frequent. It is thus more interesting to look at the roughness of pure jump processes, such as the <a href="https://engineering.nyu.edu/sites/default/files/2018-09/CarrJournalofBusiness2002.pdf">CGMY process</a>.</p>
+<p>The CGMY process is more challenging to simulate. I used the approach based on the characteristic function described in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1983134">Simulating Levy Processes from Their Characteristic Functions and Financial Applications</a>. Ballota and Kyriakou add some variations based on FFT pricing of the characteristic function in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1951537">Monte Carlo simulation of the CGMY process and option pricing</a> and pay much care about a proper truncation range. Indeed, I found that the truncation range was key to simulate the process properly and not always trivial to set up especially for \(Y \in (0,1) \). I however did not  implement any automated range guess as I am merely interested in very specific use cases, and I used the COS method instead of FFT.</p>
+<p>I also directly analyze the roughness of a sub-sampled asset path (the exponential of the CGMY process), and not of some volatility path as I was curious if pure jump processes would mislead roughness estimators. I simulated the paths corresponding to parameters given in Fang thesis <a href="https://repository.tudelft.nl/islandora/object/uuid%3A9aa17357-af21-4c09-86a2-3904ced4b873">The COS Method - An Efficient Fourier Method for Pricing Financial Derivatives</a>: C = 1, G = 5, M = 5, Y = 0.5 or Y = 1.5.</p>
+<figure><img src="/post/cgmy_path.png"/>
+</figure>
+
+<p>And the corresponding Hurst index estimate via the Cont-Das method:
+<figure><img src="/post/cgmy_estimate.png"/>
+</figure>
+</p>
+<p>Similarly the Gatheral-Rosenbaum estimate has no issue finding H=0.5.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">Roughness of Stochastic Volatility with Jumps</a>
   </h1>
   <time datetime="2023-12-07T20:56:42&#43;0100" class="post-date">Thu, Dec 7, 2023</time>
@@ -370,68 +388,6 @@ the Black-Scholes case, possibly because the first, second and third derivatives
 </ul>
 <p>Overall I am still much more productive than with a raw Windows, which is surprisingly slow for many software development related tasks. Having to deal more with Windows showed me how slow the system is, and how poor the experience is. Before using it again (after many years completely off it), I had started thinking it was good (well, it does crash much less than back in the days).</p>
 <p>I otherwise use Fedora with either KDE or Gnome on my personal desktop and laptop with very few issues overall. Gnome seems much better since 42 even if overall, Gnome shell has not been the most stable in the past. Steam runs great. I also encountered some grub bootloader bug recently, which disappeared once I upgraded my bios.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/implied_volatility_roughness/">Roughness of the Implied Volatility</a>
-  </h1>
-  <time datetime="2022-07-09T07:56:42&#43;0100" class="post-date">Sat, Jul 9, 2022</time>
-  <p>This is a follow up of my <a href="/post/rough-volatility-or-not-a-review/">previous post</a> on rough volatility. I recently tried to reproduce the results of the paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4065951">Rough Volatility: Fact or Artefact?</a> as I was curious to apply the technique using different inputs. The 5-minutes SPX realized volatility is freely available in CSV format at the <a href="https://realized.oxford-man.ox.ac.uk/data">
-Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
-<p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
-It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
-            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
-            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
-            <h4>SPX roughness index sliding estimate with K=50.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
-            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-        </figcaption>
-</figure>
-</p>
-<p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
-<p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
-<p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
-            <h4>VIX roughness index sliding estimate with K=51.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
-            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-        </figcaption>
-</figure>
-</p>
-<p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
-<p>To conclude, the Hurst index H of the implied volatility, and of the VIX index appear to be not as low as the one of the 5 minutes historical volatility. The estimated roughness H=0.35 is much closer to the standard Brownian motion roughness. In fact, for the 30-day implied volatility (with daily quotes), the measure is even closer to 0.5.</p>
-<p>Looking at the 5 minutes historical volatility may make sense to price intraday options, but it is not clear what is the importance of it for traditional derivatives pricing (with maturities longer than a week). Does the historical micro-structure really matter there?</p>
-<p>After writing all that, I found out Livieri et al. (2017) paper titled <a href="https://arxiv.org/abs/1702.02777">Rough volatility: evidence from
-option prices</a> which also measures the roughness of the implied volatilities. Interestingly, I did not reproduce some of the claims in that paper: I find a large bias in the implied volatility proxy even for a low H value. The large bias, combined to the uncertainty in the measurement makes the implied volatility proxy not very practical to estimate the true Hurst index of the underlying volatility process. Another discrepancy with the paper is around the Heston model: I do not find any apparent roughness at all in the Heston model.</p>
-<p>I added this post, with more details, as <a href="https://arxiv.org/abs/2207.04930">a note on arxiv</a>, just in case someone needs to reference this. I intend to place some the Julia code I wrote in the context of the paper on github, although I did not find the time yet.</p>
 
   
 </article>
