@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 2023. All rights reserved. </p>
+    <p>&copy; 2024. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/logeuler_not_exact/">Easy Mistake With the Log-Euler Discretization On Black-Scholes</a>
+  </h1>
+  <time datetime="2024-03-11T20:56:42&#43;0100" class="post-date">Mon, Mar 11, 2024</time>
+  <p>In the Black-Scholes model with a term-structure of volatilities, the Log-Euler Monte-Carlo scheme is not necessarily exact.</p>
+<p>This happens if you have two assets \(S_1\) and \(S_2\), with two different time varying volatilities \(\sigma_1(t), \sigma_2(t) \). The covariance from the Ito isometry from \(t=t_0\) to \(t=t_1\) reads $$ \int_{t_0}^{t_1} \sigma_1(s)\sigma_2(s) \rho ds, $$ while a naive log-Euler discretization may use
+$$ \rho  \bar\sigma_1(t_0) \bar\sigma_2(t_0)  (t_1-t_0). $$
+In practice, the \( \bar\sigma_i(t_0) \) are calibrated such that the vanilla option prices are exact, meaning
+$$ \bar{\sigma}_i^2(t_0)(t_1-t_0) = \int_{t_0}^{t_1} \sigma_i^2(s) ds.$$</p>
+<p>As such the covariance of the log-Euler scheme does not match the covariance from the Ito isometry unless the volatilities are constant in time. This means that the prices of European vanilla basket options is going to be slightly off, even though they are not path dependent.</p>
+<p>The fix is of course to use the true covariance matrix between \(t_0\) and \(t_1\).</p>
+<p>The issue may also happen if instead of using the square root of the covariance matrix in the Monte-Carlo discretization, the square root of the correlation matrix is used.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/roughness_of_jumps/">Roughness of Pure Jumps</a>
   </h1>
@@ -373,21 +388,6 @@ the Black-Scholes case, possibly because the first, second and third derivatives
 
 <p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
 <p><a href="/post/lefloch_bachelier_slides.pdf">Slides of the presentation</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/linux-in-2022/">Desktop Linux in 2022</a>
-  </h1>
-  <time datetime="2022-10-26T07:56:42&#43;0100" class="post-date">Wed, Oct 26, 2022</time>
-  <p>I have been a long time user of Fedora at work and have been happy quite happy about it. Around 6 months ago, I moved to Manjaro under VirtualBox in a Windows host, because the company imposes the use of a VPN client that does not run on Linux. It&rsquo;s much less great for several reasons:</p>
-<ul>
-<li>VirtualBox makes everything graphics much slower. It is still way better than WSL2 as I found WSL2 to be a poor man&rsquo;s Linux, where graphics is via some half broken X11 client for Windows. With VirtualBox, programming is ok, watching videos is not (you need to use the host for that). Something relatively neat is that the VM can be run on any other host, including a Linux host by just copying the vm file.</li>
-<li>I picked Manjaro out of curiosity and because it was perhaps faster/more optimized than Fedora. I don&rsquo;t have too many issues with it. But I found out that the use of AUR packages would frequently break on upgrades. Futhermore, it is updated less frequently than Fedora, which is a bit surprising for a rolling release. I also installed it with ext4. With hindsight, I think both choices were poor, Fedora with brtfs is the way to go, or some Ubuntu variant.</li>
-<li>Work also imposes various antivirus programs which tend to always keep the cpu busy.</li>
-</ul>
-<p>Overall I am still much more productive than with a raw Windows, which is surprisingly slow for many software development related tasks. Having to deal more with Windows showed me how slow the system is, and how poor the experience is. Before using it again (after many years completely off it), I had started thinking it was good (well, it does crash much less than back in the days).</p>
-<p>I otherwise use Fedora with either KDE or Gnome on my personal desktop and laptop with very few issues overall. Gnome seems much better since 42 even if overall, Gnome shell has not been the most stable in the past. Steam runs great. I also encountered some grub bootloader bug recently, which disappeared once I upgraded my bios.</p>
 
   
 </article>

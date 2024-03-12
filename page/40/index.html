@@ -65,13 +65,26 @@
     </ul>
  </nav>
 
-    <p>&copy; 2023. All rights reserved. </p>
+    <p>&copy; 2024. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/javablogs-weekly-top-10-and-java-html-parsing/">JavaBlogs Weekly Top 10 and Java HTML parsing</a>
+  </h1>
+  <time datetime="2005-09-12T16:00:00Z" class="post-date">Mon, Sep 12, 2005</time>
+  <p>I took some time to continue my little JavaBlogs analysis, I now have a page summarizing the <a href="http://gopix.net:8081/javabuzz/buzzweek.html">top 10</a> most read blog entries in the last week. The page is generated every 24h (this is why there is no &lsquo;best progression&rsquo; as of today).</p>
+<p>I also fixed some bugs related to HTML in RSS2. I understand a bit better why a RSS 1.0 co-author decided to remove the possibility of HTML descriptions for <a href="http://www.aaronsw.com/2002/rss30">RSS 3.0</a>. It often does not make sense to keep all that information about styles, fonts, etc. from different sources. What I do is rewrite the HTML, allowing only b,i,a,p,br tags, with the style information stripped. I found the open-source <a href="http://htmlparser.sourceforge.net">htmlparser</a> java library quite helpful to achieve that.</p>
+<p><strong>Mai 2006 Update</strong></p>
+<p>I now post the top10 every week to my blog, I wrote a little piece on <a href="/post/how-to-use-java-with-blogger-a-tutorial">how to interact with Blogger API in Java</a>. This avoids me having to maintain an extra site.</p>
+<p>HTTP requests handling is done using commons-httpclient library to have more control  over how http requests to javablogs.com are performed. commons-httpclient is also useful to post to blogger. About the parsing with htmlparser, I changed the way to do it, I used to only use a simple Lexer, but now I changed to using NodeVisitor as it allows me to parse with finer granularity more easily, even though it is probably slower. I needed that to update  href elements to that they are XHTML compliant.</p>
+<p>You will find <a href="/post/java-html-parsing-example-with-htmlparser">concrete code using htmlparser</a> in a more recent post,  just follow the link.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/spam-in-blog-comments/">Spam In Blog Comments</a>
   </h1>
@@ -166,18 +179,6 @@ When I bookmark articles with <a href="http://del.icio.us">delicious</a>, I like
    
 
 I am reading an old book, <a href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;camp=1789&amp;tag=michelin-20&amp;creative=9325&amp;path=tg/detail/-/0079132480">Inside the Java Virtual Machine</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=ur2&amp;o=1" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />. Some old books don't age, and this is one of them. The chapter on the Java Virtual Machine is just excellent and should be read by every Java developer. It explains each step a JVM does when you run a Java program, very clearly.<br /><br />You could get plenty of stupid interview questions from it like: How is the Java stack used? Between method area, heap, pc register, stack which one are shared among threads?<br /><br />Also they saw the full potential of Java quite early on (1997). They explain how the JVM specs allow for very different implementations, ones that can run in different environments, for example, simplifying a bit: low memory, embedded world, or lots of memory, mainframe world. It is not an accident if Microsoft chosed a very similar design for the CLI of .NET, they have been looking for getting into the embedded area for quite some time, and apparently, they are making good progress.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/firefox-shortcut-url-as-command-line-for-the-web/">Firefox Shortcut URL as Command Line for the Web</a>
-  </h1>
-  <time datetime="2005-08-16T13:42:00Z" class="post-date">Tue, Aug 16, 2005</time>
-   
-
-I have been doing some work on Firefox extensions. Mozilla/Firefox is a really interesting world, it is extremely flexible, you can make it transform the web the way you want.<br> <br> Recently, someone started <a href="http://www.yubnub.org">YubNub</a>, the "command line for the web", a very simple idea, but useful. This is a bit similar to the Firefox Search Bar, except more powerful, and quicker to use. Mozilla developers actually had that idea a long time ago (around 2000), it is called shortcut url. Basically to any bookmark, you can add a shortcut, you then just have to type that shortcut (let say g for google.com) in the address bar to go to the address pointed by the shortcut. This shortcut accepts 1 parameter (represented by <tt>%s</tt> in the URL), so you can do "<tt>g chasethedevil</tt>" to search google for "<tt>chasethedevil</tt>" if you set up your shortcut properly. Firefox can build this dynamic URL automatically for you if in an input box, you right click and choose "Add a keyword for this search".<br> <br> Now we have seen the Firefox address bar can be used to quickly perform a search on a selected website. But this can be much more powerful. As <a  href="http://www.mvps.org/dmcritchie/firefox/kws.htm">this</a> page suggests, you can associate a bookmarklet with a shortcut, you can execute whatever javascript you wish. One very simple example is: <br /><tt>javascript:void(location.href=<br />'http://web.archive.org/web/*dc_/'+location.href)</tt>. This shows how you can use the address bar in a very flexible manner. It would be easy to support a multiple parameters search using a bookmarklet. There is <a  href="http://www.wormus.com/leakytap/Internet/CustomKeywords/">a whole list</a> of commands very similar to yubnub ones in addition to those on the previously mentioned link.<br> <br> I first thought about writing a simple extension to have my command line in Firefox (for example by extending the getShortcutOnURI function), but after some information gathering, I discovered it was already possible. Firefox is truly amazing. It is a bit of a shame that this functionality is not a bit better exposed to the user.<br> <br> tags: <a rel="tag" href="http://technorati.com/tag/firefox">Firefox</a> <a rel="tag" href="http://technorati.com/tag/firefox">shortcut</a> <a  rel="tag" href="http://technorati.com/tag/firefox">extension</a> <a  rel="tag" href="http://technorati.com/tag/firefox">bookmarklet</a><br>
 
 
 

@@ -65,13 +65,54 @@
     </ul>
  </nav>
 
-    <p>&copy; 2023. All rights reserved. </p>
+    <p>&copy; 2024. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/second-cumulant-of-heston/">Second Cumulant of Heston</a>
+  </h1>
+  <time datetime="2013-10-03T17:27:00Z" class="post-date">Thu, Oct 3, 2013</time>
+  <p>I recently stumbled upon an error in the various papers related to the Heston <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;ved=0CEEQFjAC&amp;url=http%3A%2F%2Fta.twi.tudelft.nl%2Fmf%2Fusers%2Foosterle%2Foosterlee%2FCOS.pdf&amp;ei=qYxNUqryFqXJ0QW5u4HYDA&amp;usg=AFQjCNGaMK8Lotud1DP5qReeLWgpoCA0aA&amp;sig2=fljLmTq0WhG8SCgzaOxXxA&amp;bvm=bv.53537100,d.d2k">Cos method</a> regarding the second cumulant. It is used to define the boundaries of the Cos method. Letting phi be Heston characteristic function, the cumulant generating function is:
+$$g(u) = \log(\phi(-iu))$$</p>
+<p>And the second cumulant is defined a: <!-- raw HTML omitted -->$$c_2 = g&rsquo;&rsquo;(0)$$<!-- raw HTML omitted --><!-- raw HTML omitted -->Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.</p>
+<p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
+$$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
+<p>In contrast, the paper formula was:
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
+</figure>
+</p>
+<p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
+<p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New</td>
+<td>0.1640581405</td>
+</tr>
+<tr>
+<td>Paper</td>
+<td>0.1743425406</td>
+</tr>
+<tr>
+<td>N=30 with 10000 points</td>
+<td>0.1640581423</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/">Maxima for Symbolic Calculus</a>
   </h1>
@@ -279,14 +320,6 @@ Well here are the results in terms of accuracy:
 <p>In practice the COS method was effectively 2x to 3x faster than my Lord-Kahl implementation. As a side note, on this problem, Java is only 2x faster than Octave.</p>
 <p>As long as we don&rsquo;t care about very small option prices, it is an interesting alternative, especially because it is simple.</p>
 <p><strong>Update April 2014</strong> - There is more information on the subject in my paper at <a href="http://papers.ssrn.com/abstract=2362968">http://papers.ssrn.com/abstract=2362968</a></p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/">Octave vs Scilab for PDEs in Finance</a>
-  </h1>
-  <time datetime="2013-07-30T12:10:00Z" class="post-date">Tue, Jul 30, 2013</time>
-  <p>I was used to <!-- raw HTML omitted -->Scilab<!-- raw HTML omitted --> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.<!-- raw HTML omitted --><!-- raw HTML omitted -->Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <!-- raw HTML omitted -->Arbitrage Free SABR problem<!-- raw HTML omitted -->. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Then I heard about <!-- raw HTML omitted -->Octave<!-- raw HTML omitted -->, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps: <!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 4.3s<!-- raw HTML omitted -->Octave 4.1s<!-- raw HTML omitted --><!-- raw HTML omitted -->I then added the keyword sparse when I build the tridiagonal matrix and end up with:<!-- raw HTML omitted --><!-- raw HTML omitted -->Scilab 0.04s<!-- raw HTML omitted -->Octave 0.02s<!-- raw HTML omitted -->Scala 0.034s (first run)<!-- raw HTML omitted -->Scala 0.004s (once Hotpot has kicked in)<!-- raw HTML omitted --><!-- raw HTML omitted -->So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.<!-- raw HTML omitted --><!-- raw HTML omitted -->In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
 
   
 </article>

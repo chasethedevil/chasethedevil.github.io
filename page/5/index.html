@@ -65,13 +65,40 @@
     </ul>
  </nav>
 
-    <p>&copy; 2023. All rights reserved. </p>
+    <p>&copy; 2024. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/">Where is the S&amp;P 500 going to end?</a>
+  </h1>
+  <time datetime="2018-02-06T19:56:42&#43;0100" class="post-date">Tue, Feb 6, 2018</time>
+  <p>Yesterday the American stocks went a bit crazy along with the VIX that jumped from 17.50 to 38. It&rsquo;s not exactly clear why, the news mention that the Fed might raise its interest rates, the bonds yield have been recently increasing substantially, and the market self-correcting
+after stocks grew steadily for months in a low VIX environment.</p>
+<p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
+It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
+<figure><img src="/post/spw_density.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options.</h4>
+        </figcaption>
+</figure>
+
+<p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
+Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
+<p>Option traders like to look at the implied volatilities (below).</p>
+<figure><img src="/post/spw_vol.png"/><figcaption>
+            <h4>implied volatilities of 1-month SPW options.</h4>
+        </figcaption>
+</figure>
+
+<p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
+a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
+<p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/discrete_sine_transform_fft/">Discrete Sine Transform via the FFT</a>
   </h1>
@@ -595,21 +622,6 @@ z <span style="color: #666666">:=</span> <span style="color: #40a070">0.74101842
 </tbody>
 </table>
 <p>The case 4% was an example of a particularly challenging setting in a <a href="https://forum.wilmott.com/viewtopic.php?f=34&amp;t=97812&amp;start=75">Wilmott forum</a>. It results in a very small call option price (9E-25).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/vix-starts-smiling/">The VIX starts smiling</a>
-  </h1>
-  <time datetime="2017-03-21T07:56:42&#43;0100" class="post-date">Tue, Mar 21, 2017</time>
-  <p>The VIX implied volatilities used to look like a logarithmic function of the strikes. I don&rsquo;t look at them often, but today, I noticed that the VIX had the start of a smile shape.</p>
-<figure><img src="/post/vix_smile.png"/><figcaption>
-            <h4>1m VIX implied volatilities on March 21, 2017 with strictly positive volume.</h4>
-        </figcaption>
-</figure>
-
-<p>Very few strikes trades below the VIX future level (12.9). All of this is likely because the VIX is unusually low: not many people are looking to trade it much lower.</p>
-<p><strong>Update March 22:</strong> Actually the smile in VIX is not particularly new, it is visible in Jim Gatheral 2013 presentation <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiF2LP9turSAhUJVBQKHUVFCIoQFggoMAA&amp;url=http%3A%2F%2Fmfe.baruch.cuny.edu%2Fwp-content%2Fuploads%2F2012%2F09%2FBeijingSPXVIX2013.pdf&amp;usg=AFQjCNHCx2b2AXNXPHixUAYQC2nWH9ULHQ">Joint modeling of SPX and VIX</a> for the short maturities. Interestingly, <a href="/post/when-svi-breaks-down/">the issue with SVI</a> is also visible in those slides in the shortest maturity.</p>
 
   
 </article>

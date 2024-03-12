@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2018 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 18 Dec 2023 20:56:42 +0100</lastBuildDate><atom:link href="https://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 11 Mar 2024 20:56:42 +0100</lastBuildDate><atom:link href="https://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Easy Mistake With the Log-Euler Discretization On Black-Scholes</title>
+      <link>https://chasethedevil.github.io/post/logeuler_not_exact/</link>
+      <pubDate>Mon, 11 Mar 2024 20:56:42 +0100</pubDate>
+      
+      <guid>https://chasethedevil.github.io/post/logeuler_not_exact/</guid>
+      <description>In the Black-Scholes model with a term-structure of volatilities, the Log-Euler Monte-Carlo scheme is not necessarily exact.
+This happens if you have two assets \(S_1\) and \(S_2\), with two different time varying volatilities \(\sigma_1(t), \sigma_2(t) \). The covariance from the Ito isometry from \(t=t_0\) to \(t=t_1\) reads $$ \int_{t_0}^{t_1} \sigma_1(s)\sigma_2(s) \rho ds, $$ while a naive log-Euler discretization may use $$ \rho \bar\sigma_1(t_0) \bar\sigma_2(t_0) (t_1-t_0). $$ In practice, the \( \bar\sigma_i(t_0) \) are calibrated such that the vanilla option prices are exact, meaning $$ \bar{\sigma}_i^2(t_0)(t_1-t_0) = \int_{t_0}^{t_1} \sigma_i^2(s) ds.</description>
+    </item>
+    
     <item>
       <title>Roughness of Pure Jumps</title>
       <link>https://chasethedevil.github.io/post/roughness_of_jumps/</link>
