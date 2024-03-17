@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
+  </h1>
+  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
+  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
+<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
+<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
+<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
+<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/my-dream-job/">My Dream Job</a>
   </h1>
   <time datetime="2006-01-12T11:42:00Z" class="post-date">Thu, Jan 12, 2006</time>
@@ -192,27 +204,6 @@ A friend asked me for a list, here is it. I found those books the most interesti
 In 1998, a student of my school had a project with Sun about EJBs. This was the beginning of EJBs, they were not public, and there was no J2EE. At that time he found it utterly complicated, and had difficulties to understand why they made it so complicated.<br /><br />In 2000, I worked for a company who had built in-house most components of a today J2EE application server. For example, they had their own unified messaging system, on the JSP side, they were already using custom tags, etc.. Their problem is that they took lots of time to develop in-house, all what later became standard, and almost freely available.<br /><br />Today, 7 years later, the big talk, new Java products, be it Spring, or JBoss Seam, are still all about the same ideas as in the first J2EE. Spring has the freedom to include whatever technology, but in the end, their scope closely matches J2EE scope. Service Oriented Architecture (SOA), the current buzzword, will come out relatively naturally with J2EE, session EJBs being natural candidate to expose functionalities to the outer world. JBoss (or Geronimo) architecture is fully SOA: a small kernel managing services, that are exposed for other to use.<br /><br />To learn about EJBs, I still find <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/059600530X&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Enterprise JavaBeans</a> by Richard Monson-Haefel, the best book. The chapter (in the 2nd Edition of the book, not in the 4th unfortunately) where he rolls his own distributed objects system is for me a testimony on how well he wants you to understand what's behind EJBs. And if you want to better understand what's behind RMI, <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/1565922069&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Java Distributed Computing (O'Reilly)</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=as2&amp;o=1&amp;a=1565922069" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /> has a chapter where the author rolls his own RMI.<br /><br />To conclude, Sun was really clever in defining J2EE scope and branding several Java technologies as J2EE (despite the awful version naming). While the ideas were very good, the developer's life was forgotten. It was too much a pain in the a** and not flexible enough (especially the ORM side). JBoss gets it right, what people need is a way to use pieces of J2EE, without imposing too much unnecessary hurdle on development.
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/job-hunting-interview-madness/">Job Hunting: Interview Madness</a>
-  </h1>
-  <time datetime="2005-11-04T10:40:00Z" class="post-date">Fri, Nov 4, 2005</time>
-  <p>I have been doing interviews those past weeks. Today I had to present my resume for the N time where N is big. It is very boring. In France, it is common to have 5 interviews for a small company (that says a bit about how people trust each other and makes me envy Germany where the practice is to select very strictly on the resume and be more relax about interviews). But all those interviews give a valuable insight on the current market, and on some companies.</p>
-<p><strong>0. The Monster Rage</strong></p>
-<p>The first 2 days after I put my resume on Monster France, I got more than 15 calls from consulting companies. The following day, I removed my resume from Monster</p>
-<p><strong>1. Interviewing People</strong></p>
-<p>When I started working, I was very bad at interviews, I had a good academic record and thought companies ringing me would have been interested automatically. I supposed most people were dedicated to their work and did not bother doing a show, I was passive. So I often failed the interview process at the HR level.</p>
-<p>Now I am doing the show everybody expects and it always works. Only one person asked me an unusual, clever question: &ldquo;Do you write?&rdquo; or</p>
-<p><em><strong>&ldquo;Do you like to write?&rdquo;</strong></em></p>
-<p>I am often more stressed by technical interviews as I find technical interviews can more easily be very badly done. Even specialists don&rsquo;t agree on a good method, cf the artima article on <a href="http://www.artima.com/wbc/interprogP.html">How to Interview a Programmer</a>. If someone asks you about some intricate details he knows lots about and you don&rsquo;t, or you used to but you don&rsquo;t remember, then that person can have a bad impression of you. In Java, this can be the supposedly trivial ,&ldquo;what classes do you have to implement for an EJB ?&rdquo;. I have done many EJBs in the past, but that was a long time enough that I need to look up somewhere to find the exact and precise answer. It is much better to ask someone about what he recently did, or about someone&rsquo;s view on general subjects, especially subjects he knows about.</p>
-<p><strong>2. Interviewing Companies</strong></p>
-<p>As a junior in the business world, I had a very angelic view of companies. I had been lucky enough to do internships around very good people. But nowadays, I am starting to find difficult to pick a good company to work for. I found one question especially useful to find out more about your future mates:</p>
-<p><em><strong>&ldquo;What do you like in this company?</strong></em></p>
-<p>and try to get to know the answer of <em>&ldquo;Why did you go there?&rdquo;</em></p>
-<p><strong>3. The $$$ in Current Market</strong></p>
-<p>There seem to be huge disparities in salaries in France. I found consulting companies were very reticent to offer a market salary. More regular companies can either offer a much lower salary than the market one, a market salary, or a much higher one, for the same job!</p>
 
   
 </article>

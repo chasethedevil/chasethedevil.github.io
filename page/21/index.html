@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/local-volatility-delta--dynamic/">Local Volatility Delta &amp; Dynamic</a>
+  </h1>
+  <time datetime="2012-11-29T12:30:00Z" class="post-date">Thu, Nov 29, 2012</time>
+   
+
+This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.<br /><div><br /></div><div>Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</div><div><br /></div><div>But this finite-difference grid Delta is also different from a standard numerical Delta where one just move the initial spot up and down, and takes the difference of computed prices. The numerical Delta will eventually include a change in implied volatility, depending if the surface is sticky-strike (vol will stay constant) or sticky-delta (vol will change). So the numerical Delta produced with a sticky-strike surface will be the same as the standard Black-Scholes Delta. In reality, what happens is that the local volatility is different when the spot moves up, if we recompute it: it is not static. The finite difference solver computes Delta with a static local volatility. If we call twice the finite difference solver with a different initial spot, we will reproduce the correct Delta, that takes into account the dynamic of the implied volatility surface.</div><div><br /></div><div>Here how different it can be if the delta is computed from the grid (static local volatility) or numerically (dynamic local volatility) on an exotic trade:</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s1600/static_localvol.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="235" src="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s320/static_localvol.png" width="320" /></a></div><div><br /><br />This is often why people assume the local volatility model is wrong, not consistent. It is wrong if we consider the local volatility surface as static to compute hedges.</div>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/opensuse-12.2/">OpenSuse 12.2</a>
   </h1>
   <time datetime="2012-11-14T10:12:00Z" class="post-date">Wed, Nov 14, 2012</time>
@@ -194,18 +206,6 @@ At home I have a Logitech K800, very practical as I often use it from the couch 
 
 Somehow despite all this research for a better keyboard, I kind of like my current work keyboard, which is just a cheap Microsoft Wired Keyboard 600. It does feel comfortable, and easy to type on. If it ages, it is just $17 to replace. I am less convinced that another keyboard would improve things significantly, I disliked the very clicky feeling of IBM model M and the old, not so comfortable (because relatively high), straight keyboards. I found also the Apple keyboards to be sadly a bit tiring with their very short action, I enjoyed their compactness but I suspect this is what made me place my hands in bad positions.</p>
 <p>I manage to do around 70 wpm (words per minute) on the Microsoft Wired Keyboard 600, as well as on some very basic 4€ keyboard (old style slightly noisy chinese rubber dome Atlantis Land K2101), but on the Logitech K800, I only do 55 wpm. So there it is for the 80€ keyboard compared to the 4€ one. Those numbers are not very precise, I only tried a silly simple <a href="http://www.typeonline.co.uk/typingspeed.php">wpm website</a>. I am still a bit curious about those MS comfort curve keyboards, they don&rsquo;t have great reviews but it might be a small improvement over the basic Wired Keyboard 600.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/adaptive-quadrature-for-pricing-european-option-with-heston/">Adaptive Quadrature for Pricing European Option with Heston</a>
-  </h1>
-  <time datetime="2012-06-25T12:50:00Z" class="post-date">Mon, Jun 25, 2012</time>
-   
-
-The Quantlib code to evaluate the Heston integral for European options is quite nice. It proposes <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=4&amp;ved=0CGoQFjAD&amp;url=http%3A%2F%2Fwww.math.uni-wuppertal.de%2F%7Ekahl%2Fpublications%2FNotSoComplexLogarithmsInTheHestonModel.pdf&amp;ei=MkDoT8HHOaO_0QXS_6SeCQ&amp;usg=AFQjCNFbAMQBLoKRd0BR_-HC0CkP4zrMtg">Kahl &amp; Jaeckel</a> method as well as Gatheral method for the complex logarithm. It also contains expansions where it matters so that the resulting code is very robust. One minor issue is that it does not integrate both parts at the same time, and also does not propose Attari method for the Heston integral that is supposed to be more stable.<br /><br />I was surprised to find out that out of the money, short expiry options seemed badly mispriced. In the end I discovered it was just that it required sometimes more than 3500 function evaluations to have an accuracy of 1e-6.<br /><br />As this sounds a bit crazy, I thought that Jaeckel log transform was the culprit. In reality, it turned out that it was <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CFMQFjAA&amp;url=http%3A%2F%2Fusers.wpi.edu%2F%7Ewalker%2FMA510%2FHANDOUTS%2Fw.gander%2Cw.gautschi%2CAdaptive_Quadrature%2CBIT_40%2C2000%2C84-101.pdf&amp;ei=U0HoT_HWBeXP0QW23O3xBw&amp;usg=AFQjCNH4KRWMprUvL8yBPKRxO_sVNyc2Pg">Gauss Lobatto Gander &amp; Gautschi implementation</a>. I tried the simplest algorithm in <a href="http://www.ii.uib.no/%7Eterje/Papers/bit2003.pdf">Espelid improved algorithms</a>: modsim, an adaptive extrapolated Simpson method, and it was 4x faster for the same accuracy. That plus the fact that it worked out of the box (translated to Java) on my problem was impressive.<br /><br />Jaeckel log transform (to change the interval from 0,+inf to 0,1) works well, and seems to offer a slight speedup (10% to 15%) for around ATM options, mid to long term for the same accuracy. Unfortunately, it can also slow down by up to 50% the convergence for more OTM options or shorter expiries. So I am not so sure about its interest vs just cutting off the integration at phi=200.
-
-
 
   
 </article>

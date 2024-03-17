@@ -73,6 +73,22 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/new_asian_approximation/">New Approximations for the Prices of Asian and basket Options</a>
+  </h1>
+  <time datetime="2024-03-17T12:56:42&#43;0100" class="post-date">Sun, Mar 17, 2024</time>
+  <p>Many years ago, I had <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">applied the stochastic expansion</a> technique of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1687590">Etore and Gobet</a> to a refined proxy, in order to produce more accurate prices for vanilla options with cash dividends under the Black-Scholes model with deterministic jumps at the dividend dates. Any approximation for vanilla basket option prices can also be applied on this problem, and the sophisticated Curran geometric conditioning was found to be particularly competitive in <a href="https://arxiv.org/abs/2106.12971">The Pricing of Vanilla Options with Cash Dividends as a Classic Vanilla Basket Option Problem</a>.</p>
+<p>Recently, I had the idea of <a href="https://arxiv.org/abs/2402.17684">applying the same stochastic expansion technique to the prices of Asian options</a>, and more generally to the prices of vanilla basket options. It works surprising well for Asian options. A main advantage is that the expansion is straightforward to implement: there is no numerical solving or numerical quadrature needed.</p>
+<figure><img src="/post/asian_expansion_vg3.png"/><figcaption>
+            <h4>VGn and VLn are stochastic expansions of order n using two different proxies</h4>
+        </figcaption>
+</figure>
+
+<p>It works a little bit less well for basket options. Even though I found a better proxy for those, the expansions behave less well with large volatility (really, large total variance), regardless of the proxy. I notice now this was also true for the case of discrete dividends where, clearly the accuracy deteriorates somewhat significantly in &ldquo;extreme&rdquo; examples such as a vol of 80% for an option maturity of 1 year (see <a href="https://arxiv.org/pdf/2106.12971.pdf">Figure 3</a>).</p>
+<p>I did not compare the use of the direct stochastic expansion for discrete dividends, and the one going through the vanilla basket expansion, maybe for a next post.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/logeuler_not_exact/">Easy Mistake With the Log-Euler Discretization On Black-Scholes</a>
   </h1>
   <time datetime="2024-03-11T20:56:42&#43;0100" class="post-date">Mon, Mar 11, 2024</time>
@@ -365,29 +381,6 @@ One of the axis is reversed. This is particularly surprising for an expert like 
 </figure>
 
 <p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/princeton_fintech_conference/">Princeton Fintech and Quant conference of December 2022</a>
-  </h1>
-  <time datetime="2022-12-04T07:56:42&#43;0100" class="post-date">Sun, Dec 4, 2022</time>
-  <p>I recently presented my latest published paper <a href="https://wilmott.com/wilmott-magazine-november-2022-issue/">On the Bachelier implied volatility at extreme strikes</a> at the Princeton Fintech and Quant conference.
-The presenters were of quite various backgrounds. The first presentations were much more business oriented with lots of AI keywords, but relatively little technical content while the last presentation was
-about parallel programming. Many were a pitch to recruit to employees.</p>
-<p>The diversity was interesting: it was refreshing to hear about quantitative finance from vastly different perspectives. The presentation from Morgan Stanley about <a href="https://github.com/morganstanley/optimus-cirrus">their scala annotation framework</a> to ease up
-parallel programming was enlightening. The main issue they were trying to solve is the necessity for all the boilerplate code to handle concurrency, caching, robustness, which obfuscates significantly the business logic in the code.
-This is an old problem. Decades ago, rule engines were the trend for similar reasons. Using the example of pricing bonds, the presenters put very well forward the issues in evidence, issues that I found
-very relevant.</p>
-<p>While writing my own presentation, I realized I had not tried to plot the Bachelier implied volatility fractals. The one corresponding to the Householder method is pretty, and not too far off from
-the Black-Scholes case, possibly because the first, second and third derivatives towards the vol are similar between the two models.</p>
-<figure><img src="/post/bachelier_householder_factor2_5.png"/><figcaption>
-            <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
-        </figcaption>
-</figure>
-
-<p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
-<p><a href="/post/lefloch_bachelier_slides.pdf">Slides of the presentation</a>.</p>
 
   
 </article>
