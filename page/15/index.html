@@ -73,6 +73,17 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/an-ssd-instead-of-a-laptop/">An SSD instead of a laptop</a>
+  </h1>
+  <time datetime="2014-02-04T15:45:00Z" class="post-date">Tue, Feb 4, 2014</time>
+  <p>Last week, my work laptop died after spilling out some water on its keyboard inadvertently. Fortunately, its SSD was intact.</p>
+<p>As the laptop SSD connector (SATA) and power follow the desktop computers standards, and as I use Linux, I just plugged the SSD to my home desktop and booted off the SSD. I had to change slightly the X configuration but otherwise everything worked. Linux is great for that</p>
+<p>The same way, I just plugged the SSD to the desktop at work and it worked. Instead of carrying a laptop, I carry now my small and ultra-light SSD.</p>
+<p>The experience is so good, that it seems to me it should be an option to everybody. Before, hard drives were very sensitive to travel, but now with SSDs, I don&rsquo;t really see why we should carry a screen and a keyboard unless we use them (for example in a travel). Also I find that I actually notice the speed difference between my desktops and former laptop, which I never really paid too much attention to before.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/brownian-bridge-or-not-with-heston-quadratic-exponential-qmc/">Brownian Bridge or Not with Heston Quadratic Exponential QMC</a>
   </h1>
   <time datetime="2014-01-24T19:35:00Z" class="post-date">Fri, Jan 24, 2014</time>
@@ -238,18 +249,6 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
 </p>
 <p>The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</p>
 <p>After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/local-stochastic-volatility-with-monte-carlo/">Local Stochastic Volatility with Monte-Carlo</a>
-  </h1>
-  <time datetime="2013-10-16T16:14:00Z" class="post-date">Wed, Oct 16, 2013</time>
-   
-
-I always imagined local stochastic volatility to be complicated, and thought it would be very slow to calibrate.<br /><br />After reading a bit about it, I noticed that the calibration phase could just consist in calibrating independently a Dupire local volatility model and a stochastic volatility model the usual way.<br /><br />One can then choose to compute on the fly the local volatility component (not equal the Dupire one, but including the stochastic adjustment) in the Monte-Carlo simulation to price a product. <br /><br />There are two relatively simple algorithms that are remarkably similar, one by Guyon and Henry-Labordère in "<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1885032">The Smile Calibration Problem Solved</a>":<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-uV792mNz4Xo/Ul6baEs2ktI/AAAAAAAAG1Q/RpvCpcEygXc/s1600/Screenshot+from+2013-10-16+15:51:46.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="157" src="http://4.bp.blogspot.com/-uV792mNz4Xo/Ul6baEs2ktI/AAAAAAAAG1Q/RpvCpcEygXc/s400/Screenshot+from+2013-10-16+15:51:46.png" width="400" /></a></div><br />And one from Van der Stoep, Grzelak &amp; Oosterlee "<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDIQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fabstract%3D2278122&amp;ei=255eUqaEDMaxhAfdqoBI&amp;usg=AFQjCNF2KqSTT2ouvAyiA2J77foOFTzMKw&amp;sig2=fzb4vlDPp49Hp1oT5Wja4A&amp;bvm=bv.54176721,d.ZG4">The Heston Stochastic-Local Volatility Model: Efficient Monte Carlo Simulation</a>":<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-6-0MMofCHVo/Ul6cWo9JtkI/AAAAAAAAG1Y/xBQnqY_J8tM/s1600/Screenshot+from+2013-10-16+16:01:01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="63" src="http://1.bp.blogspot.com/-6-0MMofCHVo/Ul6cWo9JtkI/AAAAAAAAG1Y/xBQnqY_J8tM/s400/Screenshot+from+2013-10-16+16:01:01.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-UkLwvQNeeak/Ul6cWrspGxI/AAAAAAAAG1c/S_X907BJur4/s1600/Screenshot+from+2013-10-16+15:59:08.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="256" src="http://3.bp.blogspot.com/-UkLwvQNeeak/Ul6cWrspGxI/AAAAAAAAG1c/S_X907BJur4/s400/Screenshot+from+2013-10-16+15:59:08.png" width="400" /></a></div><br />In the particle method, the delta function is a regularizing kernel approximating the Dirac function. If we use the notation of the second paper, we have a = psi.<br /><br />The methods are extremely similar, the evaluation of the expectation is slightly different, but even that is not very different. The disadvantage is that all paths are needed at each time step. As a payoff is evaluated over one full path, this is quite memory intensive.<br /><br /><br />
-
-
 
   
 </article>

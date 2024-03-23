@@ -73,6 +73,26 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/new_basket_approximation_and_cash_dividends/">New Basket Expansions and Cash Dividends</a>
+  </h1>
+  <time datetime="2024-03-23T09:56:42&#43;0100" class="post-date">Sat, Mar 23, 2024</time>
+  <p>In the <a href="/post/new_asian_approximation/">previous post</a>, I presented a <a href="https://arxiv.org/abs/2106.12971">new stochastic expansion</a> for the prices of Asian options. The stochastic expansion is generalized to basket options in the paper, and <a href="https://arxiv.org/abs/2106.12971">can thus be applied</a> on the problem of pricing vanilla options with cash dividends.</p>
+<p>I have updated the paper with comparisons to more direct stochastic expansions for pricing vanilla options with cash dividends, such as the one of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1687590">Etoré and Gobet</a>, and <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">my own refinement</a> on it.</p>
+<p>The second and third order basket expansions turn out to be significantly more accurate than the previous, more direct stochastic expansions, even on extreme examples.</p>
+<figure><img src="/post/basket_expansion_pln_zhang.png"/><figcaption>
+            <h4>Extreme case with large volatility (80% on 1 year) and two unrealistically large dividends of 25 (spot=100). VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/basket_expansion_pln_gs.png"/><figcaption>
+            <h4>Long maturity (10y) with dividend (amount=2) every six month. VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
+        </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/new_asian_approximation/">New Approximations for the Prices of Asian and basket Options</a>
   </h1>
   <time datetime="2024-03-17T12:56:42&#43;0100" class="post-date">Sun, Mar 17, 2024</time>
@@ -328,59 +348,6 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 </figure>
 
 <p>The <a href="https://arxiv.org/abs/2304.13610">paper on arxiv</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/the_return_of_the_arbitrage/">The Return of the Arbitrage in the Perfect Volatility Surface</a>
-  </h1>
-  <time datetime="2023-03-29T23:56:42&#43;0100" class="post-date">Wed, Mar 29, 2023</time>
-  <p>In a Wilmott article from 2018 (Wilmott magazine no. 97) titled &ldquo;Arbitrage in the perfect volatility surface&rdquo;, Uwe Wystup points out some interesting issues on seemingly innocuous FX volatility surfaces:</p>
-<ul>
-<li>a cubic spline tends to produce artificial peaks/modes in the density.</li>
-<li>SVI not arbitrage-free even on seemingly trivial input.</li>
-</ul>
-<p>The examples provided are indeed great and the remarks very valid. There is more to it however:</p>
-<ul>
-<li>a cubic spline on strikes or log-moneyness does not produce the artificial peak.</li>
-<li>SVI with a=0 is arbitrage-free on this example.</li>
-</ul>
-<p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
-with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
-In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
-<figure><img src="/post/audnzd_delta_spline_dens.png"/><figcaption>
-            <h4>Splines on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
-nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
-Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
-<figure><img src="/post/audnzd_delta_svi.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-</p>
-<figure><img src="/post/audnzd_delta_svi_denom.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
-</figure>
-
-<p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
-<p><figure><img src="/post/wilmott_wystup_delta.png"/><figcaption>
-            <h4>extract of the Wilmott article.</h4>
-        </figcaption>
-</figure>
-
-There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
-For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
-One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
-<figure><img src="/post/omg-oh-my-god.gif"/><figcaption>
-            <h4>Ooohhhh!</h4>
-        </figcaption>
-</figure>
-
-<p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
 
   
 </article>
