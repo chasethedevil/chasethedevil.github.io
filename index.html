@@ -73,6 +73,33 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/unrealistic_variance_swaps_under_schobel_zhu/">Variance Swap Term-Structure under Schobel-Zhu</a>
+  </h1>
+  <time datetime="2024-03-26T12:56:42&#43;0100" class="post-date">Tue, Mar 26, 2024</time>
+  <p>I never paid too much attention to it, but the term-structure of variance swaps is not always realistic under the Schobel-Zhu stochastic volatility model.</p>
+<p>This is not fundamentally the case with the Heston model, the Heston model is merely extremely limited to produce either a flat shape or a downward sloping exponential shape.</p>
+<p>Under the Schobel-Zhu model, the price of a newly issued variance swap reads
+$$	V(T) = \left[\left(v_0-\theta\right)^2-\frac{\eta^2}{2\kappa}\right]\frac{1-e^{-2\kappa T}}{2\kappa T}+2\theta(v_0-\theta)\frac{1-e^{-\kappa T}}{\kappa T}+\theta^2+\frac{\eta^2}{2\kappa},,$$
+where \( \eta \) is the vol of vol.</p>
+<p>When \( T \to \infty \), we have \( V(T) \to \theta^2 + \frac{\eta^2}{2\kappa} \).
+Unless \( \kappa \) is very large, or the vol of vol is very small, the second term will often dominate. In plain words, the prices of long-term variance swaps are almost purely dictated by the vol of vol when the speed of mean reversion is lower than 1.0.</p>
+<p>Below is an example of fit to the market. If the vol of vol and kappa are exogeneous and we calibrate only the initial vol v0, plus the long term vol theta to the term-structure of variance swaps, then we end up with upward shapes for the term-structure, regardless of theta. Only when we add the vol of vol to the calibration, we find a reasonable solution. The solution is however not really better than the one corresponding to the Heston fit with only 2 parameters. It thus looks overparameterized.</p>
+<figure><img src="/post/varswap_sz_russel.png"/><figcaption>
+            <h4>Term-structure of variance swap prices on Russell 2000 index</h4>
+        </figcaption>
+</figure>
+
+<p>There are some cases where the Schobel-Zhu model allows for a better fit than Heston, and makes use of the flexibility due to the vol of vol.</p>
+<figure><img src="/post/varswap_sz_spx.png"/><figcaption>
+            <h4>Term-structure of variance swap prices on SPX 500 index</h4>
+        </figcaption>
+</figure>
+
+<p>It is awkward that the variance swap term-structure depends on the vol of vol in the Schobel-Zhu model.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/new_basket_approximation_and_cash_dividends/">New Basket Expansions and Cash Dividends</a>
   </h1>
   <time datetime="2024-03-23T09:56:42&#43;0100" class="post-date">Sat, Mar 23, 2024</time>
@@ -331,23 +358,6 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
         </figcaption>
 </figure>
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/maximum_implied_variance_slope/">Maximum Implied Variance Slope</a>
-  </h1>
-  <time datetime="2023-05-22T23:56:42&#43;0100" class="post-date">Mon, May 22, 2023</time>
-  <p>The paper <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwim__mNp4v_AhUPI0QIHfICCjEQFnoECBEQAQ&amp;url=http%3A%2F%2Fmath.uchicago.edu%2F~rogerlee%2Fmoment.pdf&amp;usg=AOvVaw36Aps9YuK7f3sovbO-KAOW">The Moment Formula for Implied Volatility at Extreme Strikes</a> by Roger Lee redefined how practioners extrapolate the implied volatility, by showing that the total implied variance can be at most linear in the wings, with a slope below 2.</p>
-<p>Shortly after, the SVI model of Jim Gatheral, with its linear wings, started to become popular.</p>
-<p>In a recent paper in collaboration with Winfried Koller, we show that the asymptotic bounds are usually overly optimistic. This is somewhat expected, as the bound only holds as the log-moneyness goes to infinity. What is less expected, is that, even at very large strikes (nearly up to the limit of what SVI allow numerically), we may happen to have arbitrages, even though the bounds are respected.</p>
-<p>In practice, this manifests by increasing call option prices far away in the wings (increasing call prices are an arbitrage opportunity), which could be problematic for any kind of replication based pricing, such as variance swap pricing.</p>
-<figure><img src="/post/maximum_slope_svi.png"/><figcaption>
-            <h4>Increasing call prices for various calibrated SVI parameters respecting the asymptotic boundary constraints.</h4>
-        </figcaption>
-</figure>
-
-<p>The <a href="https://arxiv.org/abs/2304.13610">paper on arxiv</a>.</p>
 
   
 </article>

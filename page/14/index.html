@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/building-a-more-accurate-basis-point-volatility-formula/">Building a more accurate basis point volatility formula</a>
+  </h1>
+  <time datetime="2014-04-05T15:42:00Z" class="post-date">Sat, Apr 5, 2014</time>
+   
+
+P. Jaeckel has defied the limits of accuracy with his<a href="http://www.pjaeckel.webspace.virginmedia.com/LetsBeRational.7z" target="_blank"> latest Black-Scholes volatility solver</a>, managing to also improve performance compared to his earlier solver "<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CC8QFjAA&amp;url=http%3A%2F%2Fwww.pjaeckel.webspace.virginmedia.com%2FByImplication.pdf&amp;ei=dwNAU5zkO4aI7AaFy4H4BQ&amp;usg=AFQjCNF1RnfynBrckd79E9RVbhVhuXQrQg&amp;sig2=kOxFO9jmD3wL1E94GjYhRQ&amp;bvm=bv.64125504,d.ZGU" target="_blank">By Implication</a>". Out of a silly exercise, I decided to try my hand for a more accurate <a href="http://www.clarusft.com/analytic-implied-basis-point-volatility/" target="_blank">Normal (or basis point) volatility solver</a>.<br /><br />In reality, the problem is much simpler in the Bachelier/Normal model. A very basic analysis of Bachelier formula shows that the problem can be reduced to a single variable, as Choi et al explain in <a href="http://www.tandfonline.com/doi/abs/10.1080/13504860802583436" target="_blank">their paper</a>. So the problem is not really one of solving, but one of approximating (the inverse of) a function.<br /><br />The first step to build that function is to actually have a highly accurate slow solver as reference. This is quite easy, I just started with Choi formula and used <a href="http://en.wikipedia.org/wiki/Halley%27s_method" target="_blank">Halley's method</a> to refine. In reality, <a href="http://en.wikipedia.org/wiki/Halley%27s_method" target="_blank">Halley's method</a> is already a bit overkill on this problem: it works impressively well, 1 iteration is enough to have an insane level of accuracy, only noticeable when one works in high precision arithmetic (for example 50 digits). For double precision, <a href="http://en.wikipedia.org/wiki/Newton%27s_method" target="_blank">Newton's method</a> would actually be enough - I initially thought that my Halley's implementation did not work as it produced the exact same output as Newton in double precision. <a href="http://www.tandfonline.com/doi/abs/10.1080/14697680902849361" target="_blank">Li proposes</a> the use of the SOR method, which for this exercise, behaves very much like Newton's method.<br /><br />I then followed the logic from Choi et al, but working directly with in-the-money call options instead of <a href="http://en.wikipedia.org/wiki/Straddle" target="_blank">straddles</a>. Straddles sound neat at first (hides that we work in-the-money), but it's actually useless for the algorithm. Choi et al. ignore half of the straddle range when they use their eta transform in the paper. One other change is the mapping itself, I found a better mapping for the call options (but not that far of Choi initial idea). Finally, because I am lazy, I did not go to the pain of finding a good rational fraction approximation along with the square root problem they describe, I just tried a Chebyshev polynomial.<br /><br />Unfortunately, a single Chebyshev polynomial does not work well: even with a very large (1000) degree it's not very precise, so much that I thought that my transform was garbage. I had noticed by mistake, that on another part (negative) of the interval, the Chebyshev polynomial worked actually very well to approximate something related to the volatility of another option. Suddendly came to me the idea of, like Johnson does in <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package" target="_blank">his Faddeeva package</a>, using N Chebyshev polynomials on N small intervals. This is like the big heavy hammer for which everything looks like nails, but it's actually very fast to evaluate as the degree of each polynomial can then be low (7), plus a table lookup (could be coded as switch statements if one really cares about such details). The slowest part is actually the call to the log function.<br /><br />The final bit is the use of a Taylor approximation for my -u/log(1-u) transform as it is not all that accurate in double precision when u is near 0. And that produces the following graph<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-r3FCXrjN13k/U0AHWIg7MRI/AAAAAAAAHGU/yDE6BEPtmIs/s1600/Screenshot+from+2014-04-05+15%253A37%253A03.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-r3FCXrjN13k/U0AHWIg7MRI/AAAAAAAAHGU/yDE6BEPtmIs/s1600/Screenshot+from+2014-04-05+15%253A37%253A03.png" height="342" width="400" /></a></div><br />It is interesting to note that "solving" the b.p. vol is <b>10x faster</b> than solving the Black vol.<br /><br />I wrote <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757" target="_blank">a small paper around all this</a> where you'll find the details as well as Matlab code.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/fast-and-accurate-implied-volatility-solver/">Fast and Accurate Implied Volatility Solver</a>
   </h1>
   <time datetime="2014-03-19T18:10:00Z" class="post-date">Wed, Mar 19, 2014</time>
@@ -193,30 +205,6 @@ Several papers show that the limit for large strikes of <a href="http://www.goog
 
 <p>Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.
 The order-3 formula, even though it is more precise at the money, was actually more problematic for calibration: it failed to find a good enough initial guess in some cases, maybe because the reference data should be truncated, to possibly keep the few shortest expiries, and close to ATM strikes.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">A Small-Time Schobel-Zhu Expansion</a>
-  </h1>
-  <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
-  <p>The paper <a href="http://arxiv.org/abs/1306.5447">implied vol for any local stochastic vol model</a> from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).</p>
-<p>I tried it on the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDIQFjAB&amp;url=http%3A%2F%2Fssrn.com%2Fabstract%3D100831&amp;ei=3gr5UtzkOYm90QWD7IDwBA&amp;usg=AFQjCNFY9anH_AU0A5pWRX4Qdo6Kp2CjEg&amp;sig2=teGVgsV4uneROlzZCuUFBw&amp;bvm=bv.60983673,d.d2k">Schobel-Zhu</a> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <a href="/post/heston-schobel-zhu-bates-double-heston-fit">fit was as good</a>, while the <a href="/post/brownian-bridge-or-not-with-heston">simulation under the QE scheme</a> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:</p>
-<figure><img src="/post/SZ_EXP1.png"/>
-</figure>
-
-<p>And this is how it behaves on some realistic input:</p>
-<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"/><figcaption>
-            <h4>T=0.1</h4>
-        </figcaption>
-</figure>
- <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"/><figcaption>
-             <h4>T=0.5</h4>
-         </figcaption>
- </figure>
-</p>
-<p>In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.</p>
-<p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
 
   
 </article>

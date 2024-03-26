@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.111.3">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Variance Swap Term-Structure under Schobel-Zhu &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2024. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Variance Swap Term-Structure under Schobel-Zhu</h1>
+  <time datetime=2024-03-26T12:56:42&#43;0100 class="post-date">Tue, Mar 26, 2024</time>
+  <p>I never paid too much attention to it, but the term-structure of variance swaps is not always realistic under the Schobel-Zhu stochastic volatility model.</p>
+<p>This is not fundamentally the case with the Heston model, the Heston model is merely extremely limited to produce either a flat shape or a downward sloping exponential shape.</p>
+<p>Under the Schobel-Zhu model, the price of a newly issued variance swap reads
+$$	V(T) = \left[\left(v_0-\theta\right)^2-\frac{\eta^2}{2\kappa}\right]\frac{1-e^{-2\kappa T}}{2\kappa T}+2\theta(v_0-\theta)\frac{1-e^{-\kappa T}}{\kappa T}+\theta^2+\frac{\eta^2}{2\kappa},,$$
+where \( \eta \) is the vol of vol.</p>
+<p>When \( T \to \infty \), we have \( V(T) \to \theta^2 + \frac{\eta^2}{2\kappa} \).
+Unless \( \kappa \) is very large, or the vol of vol is very small, the second term will often dominate. In plain words, the prices of long-term variance swaps are almost purely dictated by the vol of vol when the speed of mean reversion is lower than 1.0.</p>
+<p>Below is an example of fit to the market. If the vol of vol and kappa are exogeneous and we calibrate only the initial vol v0, plus the long term vol theta to the term-structure of variance swaps, then we end up with upward shapes for the term-structure, regardless of theta. Only when we add the vol of vol to the calibration, we find a reasonable solution. The solution is however not really better than the one corresponding to the Heston fit with only 2 parameters. It thus looks overparameterized.</p>
+<figure><img src="/post/varswap_sz_russel.png"/><figcaption>
+            <h4>Term-structure of variance swap prices on Russell 2000 index</h4>
+        </figcaption>
+</figure>
+
+<p>There are some cases where the Schobel-Zhu model allows for a better fit than Heston, and makes use of the flexibility due to the vol of vol.</p>
+<figure><img src="/post/varswap_sz_spx.png"/><figcaption>
+            <h4>Term-structure of variance swap prices on SPX 500 index</h4>
+        </figcaption>
+</figure>
+
+<p>It is awkward that the variance swap term-structure depends on the vol of vol in the Schobel-Zhu model.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

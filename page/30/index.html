@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/i-fell-in-the-trap-of-boolean.getboolean/">I fell in the trap of Boolean.getBoolean()</a>
+  </h1>
+  <time datetime="2007-10-12T16:10:00Z" class="post-date">Fri, Oct 12, 2007</time>
+   
+
+I was struggling to find a bug in a very simple application, it ended up being something as simple as using the damned Boolean.getBoolean(&quot;true&quot;) call instead of Boolean.valueOf(&quot;true&quot;).booleanValue() call. <br><br>The Boolean.getBoolean method is something you almost never need to use, as it checks if a particular system property is true or false. There is a similar method for Integer.getInteger, and a quick <a href="http://toadbalancing.blogspot.com/2005/10/java-api-pitfalls-booleangetbooleanstr.html"> google search shows</a> I am not the only one to think those method should never have been part of the basic API for Boolean/Integer. It is too easy to confuse with parseBoolean/parseInt, especially as parseBoolean does not exist in JDKs prior to JDK  1.5 (parseInt is older).<br><br>I can not imagine the improductivity this method has produced given its part of one of the most used class in the world.<br> 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/fast-web-development-with-scala/">Fast Web Development With Scala</a>
   </h1>
   <time datetime="2007-09-25T14:02:00Z" class="post-date">Tue, Sep 25, 2007</time>
@@ -184,16 +196,6 @@ Getting started with <a href="http://tapestry.apache.org/tapestry5/">Tapestry 5<
 This is not something I would have though a few years ago. It is something I learnt after working on many different projects, some using an ORM layer like Hibernate, Entity EJBs, or JDO, some using JDBC approach via Spring Templates or custom frameworks. Many projects that use ORM have performance problems, that don&#39;t seem that common with projects using JDBC. But the size of the database model of ORM projects is often much bigger than the one of JDBC projects (which actually makes sense). If you have only a few queries to do, why bother with ORM? This would be complexity for nothing.  <br><br>But for most enterprise projects, the size of the database model is quite big, and the model itself can be complex (many relations between many tables). With this kind of model, ORM is more efficient. It is faster to develop with, creates less bugs due to string misspelled, or types badly read. It is also better performing. Doing 1 giant query to retrieve everything in 1 step is not faster, especially if you don&#39;t always need all the information retrieved. In a complex model, many cases are specifics, only useful in 10% of the cases. The temptation is high with a JDBC approach to do one giant query, because it is substantially longer (and more work) to do N queries.&nbsp; With ORM, it is a bit the opposite, by default N queries is easier to do. The problem is that N(ORM) tends to be very high if one is not careful with the mapping to  <a href="http://www.hibernate.org/118.html#A23">avoid the N+1 problem</a>. However it is simpler to reduce the number of queries by joining tables, rather than splitting queries, ORM performance optimization feels more natural. <br><br>Martin Fowler tends to be also pro ORM in its <a href="http://www.martinfowler.com/articles/dblogic.html">&quot;Domain Logic and SQL&quot; article</a>. He also mentions something interesting about SQL query optimization: <br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><p>It&#39;s also worth pointing out that this example is one that plays to a database&#39;s strengths. Many queries don&#39;t have the strong elements of selection and aggregation that this one does, and won&#39;t show such a performance change. In addition multi-user scenarios often cause surprising changes to the way queries behave, so real profiling has to be done under a realistic multi-user load. You may find that locking issues outweigh anything you can get by faster individual queries.</p>      <a name="id2249937"></a>     </blockquote><br>In the end it is up to us to make ORM or JDBC approach perform. JDBC provides much more direct access to database, and in benchmarks (always simple database models) or in theory it should be faster. But in the real world, I argue that ORM optimization is simpler and therefore, often ORM projects will perform better. <br> 
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/people-using-spring-ejbs-dont-know-basic-jdbc/">People Using Spring, EJBs Don&#39;t Know Basic JDBC</a>
-  </h1>
-  <time datetime="2007-05-30T12:03:00Z" class="post-date">Wed, May 30, 2007</time>
-  <p>I recently found a bug in software we are developing. I traced it and found the root was improper JDBC handling. The application is written using EJBs, Spring and plenty of other relatively complex technologies. I was surprised that developers who were able to use all those technologies had no understanding of basic JDBC.</p>
-<p>They fetched all the data (including double, decimal numbers) from the database as String using rs.getString() !</p>
-<p>While this is most of the time <a href="http://java.sun.com/docs/books/tutorial/jdbc/basics/retrieving.html">possible</a>, it is also most of the time not desirable (in the code they were actually converting it to numbers, etc.). More importantly, this can lead to nasty bugs due to different Locales (the . vs , game for example). And this is what&rsquo;s happening in our application.</p>
 
   
 </article>

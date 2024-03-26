@@ -73,6 +73,53 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices-ii/">Implying the Probability Density from Market Option Prices (Part 2)</a>
+  </h1>
+  <time datetime="2018-05-27T20:56:42&#43;0100" class="post-date">Sun, May 27, 2018</time>
+  <p>This is a follow-up to my posts on the implied risk-neutral density (RND) of the SPW options before and after the big volatility change that happened in early February with two different techniques:
+<a href="/post/spx500_bets_after_rates_hike/">a smoothing spline on the implied volatilities</a> and a <a href="/post/implying-the-probability-density-from-market-option-prices/">Gaussian kernel approach</a>.</p>
+<p>The Gaussian kernel (as well as to some extent the smoothing spline) let us believe that there are multiple modes in the distribution (multiple peaks in the density). In reality,
+Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
+for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
+<p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
+<figure><img src="/post/rnd_nonic_collocation.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>There is now just one mode, and the fit in implied volatilities is much better.</p>
+<figure><img src="/post/nonic_collocation_vol.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
+</figure>
+
+<p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
+that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a noisy RND.
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3150689">Sebastian Schlenkrich uses</a> a simple regularization to calibrate his own piecewise-linear local volatility approximation
+(a Lamperti-transform based approximation instead of the single step PDE approach of Andreasen-Huge).
+His Tikhonov regularization consists here in applying a roughness penalty consisting
+in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
+This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
+<figure><img src="/post/rnd_ah_tikhonov.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
+</figure>
+
+<p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
+the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
+<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
+</figure>
+
+<p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
+Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
+<p>The error of model versus market implied volatilies is similar to the nonic collocation (not better) even though the shape is less smooth and, a priori, less constrained as,
+on this example, the Andreasen-Huge method has 75 free-parameters while the nonic collocation has 9.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/">Senior Developers Don&#39;t Know OO Anymore</a>
   </h1>
   <time datetime="2018-03-08T20:56:42&#43;0100" class="post-date">Thu, Mar 8, 2018</time>
@@ -585,24 +632,6 @@ function startStop() {
 </script>
 
 </p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/quantitative_finance_blogs/">Blogs on Quantitative Finance</a>
-  </h1>
-  <time datetime="2017-06-21T23:56:42&#43;0100" class="post-date">Wed, Jun 21, 2017</time>
-  <p>There are not many blogs on quantitative finance that I read. Blogs are not so popular anymore with the advent of the various social networks (facebook, stackoverflow, google plus, reddit, &hellip;). Here is a small list:</p>
-<ul>
-<li><a href="https://www.clarusft.com/blog/">Clarus FT</a>: often interesting statistics on the swap market, clearing, plus the <a href="https://www.clarusft.com/author/gary/">more technical articles from Gary</a>.</li>
-<li><a href="https://quantsrus.github.io/">Quants R Us</a>: A relatively new blog with a promising starting post analyzing <a href="https://quantsrus.github.io/post/andreasen_huge_spline/">Andreasen-Huge one-step local-volatility algorithm with a Spline</a></li>
-<li><a href="https://quantlib.wordpress.com/author/petercaspers/">Fooling around with Quantlib</a>: the blog from Peter Caspers, also relevant  to non-Quantlib professionals has original insights such as <a href="https://quantlib.wordpress.com/2015/09/19/smile-dynamics-by-densities/">Smile dynamics by densities</a> or the <a href="https://quantlib.wordpress.com/2015/08/23/supernatural-libor-coupons/">Supernatural Libor Coupons</a>. Unfortunately it is not so active anymore.</li>
-<li><a href="http://www.implementingquantlib.com">Implementing Quantlib</a>: the blog from Luigi Ballabio, which explains many of the design decisions in Quantlib. Very interesting for developer of financial libraries, see for example <a href="http://www.implementingquantlib.com/2017/04/fd-solvers.html">the fd solvers</a>.</li>
-<li><a href="https://hpcquantlib.wordpress.com/">HPC Quantlib</a> from Klaus Spanderen. Yes lots of quantlib blogs, but this one is actually not much focused on quantlib. It goes into great details about some numerical techniques, see for example the <a href="https://hpcquantlib.wordpress.com/2017/05/07/newer-semi-analytic-heston-pricing-algorithms/">analysis of Heston pricing algorithm</a></li>
-<li><a href="http://oxfordstrat.com/rd-blog/">Oxford Strat</a>. It is a different kind of subject: too many trading strategies but some interesting data, for example <a href="http://oxfordstrat.com/data/global-market-correlations/">global market correlations</a> and <a href="http://oxfordstrat.com/ideas/sharpe-ratio/">ideas</a>.</li>
-<li><a href="https://forum.wilmott.com/">Wilmott forums</a> not a blog, but it sometimes (not often) has interesting discussions and can be a good way to connect.</li>
-</ul>
-<p>Another way to find out what&rsquo;s going on in the quantitative finance world is to scan regularly recent papers on <a href="https://arxiv.org/list/q-fin/recent">arxiv</a>, <a href="http://www.ssrn.com">SSRN</a> or the suggestions of <a href="http://scholar.google.com">Google scholar</a>.</p>
 
   
 </article>

@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/upper-bounds-in-american-monte-carlo/">Upper Bounds in American Monte-Carlo</a>
+  </h1>
+  <time datetime="2013-04-30T17:05:00Z" class="post-date">Tue, Apr 30, 2013</time>
+   
+
+<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.159.2367&amp;rep=rep1&amp;type=pdf">Glasserman and Yu</a> (GY) give a relatively simple algorithm to compute lower and upper bounds of a the price of a Bermudan Option through Monte-Carlo.<br /><br />I always thought it was very computer intensive to produce an upper bound, and that the standard <a href="http://escholarship.org/uc/item/43n1k4jb.pdf">Longstaff Schwartz algorithm</a> was quite precise already. GY algorithm is not much slower than the Longstaff-Schwartz algorithm, but what's a bit tricky is the choice of basis functions: they have to be Martingales. This is the detail I overlooked at first and I, then, could not understand why my results were so bad. I looked for a coding mistake for several hours before I figured out that my basis functions were not Martingales. Still it is possible to find good Martingales for the simple Bermudan Put option case and GY actually propose some <a href="http://arxiv.org/pdf/math.PR/0503556">in another paper</a>.<br /><br />Here are some preliminary results where I compare the random number generator influence and the different methods. I include results for GY using In-the-money paths only for the regression (-In suffix) or all (no suffix). <br /><br /><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s1600/gy_train16k_sim_value.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="238" src="http://2.bp.blogspot.com/-c7Jhn_s05Ak/UYACCpfoRjI/AAAAAAAAGXQ/LoQscl4b4yM/s400/gy_train16k_sim_value.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">value using 16k training path and Sobol - GY-Low-In is very close to LS.</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s1600/gy_tr16k_sim.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="300" src="http://4.bp.blogspot.com/-Jx0NPC1QvAs/UYACisXbFiI/AAAAAAAAGXY/mvsHmNhENcE/s640/gy_tr16k_sim.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 16k training path - a high number of simulations not that useful</td></tr></tbody></table><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s1600/gy_sim1m_training.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="282" src="http://2.bp.blogspot.com/-w6Mp3BDNp-w/UYADEhUQx4I/AAAAAAAAGXg/ESRJyLUybNk/s640/gy_sim1m_training.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">error using 1m simulation paths - GY basis functions require less training than LS</td></tr></tbody></table><br />One can see the the upper bound is not that precise compared to the lower bound estimate, and that using only in the money paths makes a big difference. GY regression is good with only 1k paths, LS requires 10x more.<br /><br />Surprisingly, I noticed that the Brownian bridge variance reduction applied to Sobol was&nbsp; increasing the GY low estimate, so as to make it sometimes slightly higher than Longstaff-Schwartz price.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/the-wonderful-un/">The Wonderful UN</a>
   </h1>
   <time datetime="2013-04-24T21:35:00Z" class="post-date">Wed, Apr 24, 2013</time>
@@ -377,20 +389,6 @@ We can see that Cody is really much more accurate (more than 20x). The differenc
 </figure>
 </p>
 <p>Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks. The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary Kennedy commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
-  </h1>
-  <time datetime="2013-03-20T17:50:00Z" class="post-date">Wed, Mar 20, 2013</time>
-  <p>Some library computes the Gaussian density function $$e^{-\frac{x^2}{2}}$$ the following way:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span>xsq <span style="color:#666">=</span> <span style="color:#06287e">fint</span>(x <span style="color:#666">*</span> <span style="color:#40a070">1.6</span>) <span style="color:#666">/</span> <span style="color:#40a070">1.6</span>;
-</span></span><span style="display:flex;"><span>del <span style="color:#666">=</span> (x <span style="color:#666">-</span> xsq) <span style="color:#666">*</span> (x <span style="color:#666">+</span> xsq);
-</span></span><span style="display:flex;"><span>result <span style="color:#666">=</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>xsq <span style="color:#666">*</span> xsq <span style="color:#666">*</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>del <span style="color:#666">*</span><span style="color:#40a070">0.5</span>);</span></span></code></pre></div></p>
-<p>where <code class="code-inline language-C"><span style="color:#06287e">fint</span>(z)</code> computes the floor of z.</p>
-<p>Basically, <code class="code-inline language-C">x<span style="color:#666">*</span>x</code> is rewritten as <code class="code-inline language-C">xsq<span style="color:#666">*</span>xsq<span style="color:#666">+</span>del</code>. I have seen that trick once before, but I just can&rsquo;t figure out where and why (except that it is probably related to high accuracy issues).</p>
-<p>The answer is in the <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/">next post</a>.</p>
 
   
 </article>
