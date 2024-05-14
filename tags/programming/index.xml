@@ -7,172 +7,126 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2018 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 04 Dec 2022 07:56:42 +0100</lastBuildDate><atom:link href="https://chasethedevil.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Dec 2022 07:56:42 +0100</lastBuildDate>
+    <atom:link href="https://chasethedevil.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Princeton Fintech and Quant conference of December 2022</title>
       <link>https://chasethedevil.github.io/post/princeton_fintech_conference/</link>
       <pubDate>Sun, 04 Dec 2022 07:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/princeton_fintech_conference/</guid>
-      <description>I recently presented my latest published paper On the Bachelier implied volatility at extreme strikes at the Princeton Fintech and Quant conference. The presenters were of quite various backgrounds. The first presentations were much more business oriented with lots of AI keywords, but relatively little technical content while the last presentation was about parallel programming. Many were a pitch to recruit to employees.
-The diversity was interesting: it was refreshing to hear about quantitative finance from vastly different perspectives.</description>
+      <description>I recently presented my latest published paper On the Bachelier implied volatility at extreme strikes at the Princeton Fintech and Quant conference. The presenters were of quite various backgrounds. The first presentations were much more business oriented with lots of AI keywords, but relatively little technical content while the last presentation was about parallel programming. Many were a pitch to recruit to employees.&#xA;The diversity was interesting: it was refreshing to hear about quantitative finance from vastly different perspectives.</description>
     </item>
-    
     <item>
       <title>Monte-Carlo Parallelization: to vectorize or not?</title>
       <link>https://chasethedevil.github.io/post/monte-carlo-vectorization-or-not/</link>
       <pubDate>Sat, 09 Apr 2022 21:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/monte-carlo-vectorization-or-not/</guid>
       <description>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation). I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup.</description>
     </item>
-    
     <item>
       <title>More Automatic Differentiation Awkwardness</title>
       <link>https://chasethedevil.github.io/post/more-automatic-differentiation-awkwardness/</link>
       <pubDate>Tue, 04 Jan 2022 21:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/more-automatic-differentiation-awkwardness/</guid>
       <description>This blog post from Jherek Healy presents some not so obvious behavior of automatic differentiation, when a function is decomposed into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number). This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</description>
     </item>
-    
     <item>
       <title>More on random number generators</title>
       <link>https://chasethedevil.github.io/post/more-on-random-number-generators/</link>
       <pubDate>Sat, 10 Oct 2020 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/more-on-random-number-generators/</guid>
-      <description>My previous post described the recent view on random number generators, with a focus on the Mersenne-Twister war.
-Since, I have noticed another front in the war of the random number generators:
-An example in dimension 121 from K Savvidy where L&amp;rsquo;Ecuyer MRG32k3a fails to compute the correct result, regardless of the seed. This is a manufactured example, such that the vector, used in the example, falls in the dual lattice of the generator.</description>
+      <description>My previous post described the recent view on random number generators, with a focus on the Mersenne-Twister war.&#xA;Since, I have noticed another front in the war of the random number generators:&#xA;An example in dimension 121 from K Savvidy where L&amp;rsquo;Ecuyer MRG32k3a fails to compute the correct result, regardless of the seed. This is a manufactured example, such that the vector, used in the example, falls in the dual lattice of the generator.</description>
     </item>
-    
     <item>
       <title>The war of the random number generators</title>
       <link>https://chasethedevil.github.io/post/war-of-the-random-number-generators/</link>
       <pubDate>Thu, 17 Sep 2020 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/war-of-the-random-number-generators/</guid>
-      <description>These days, there seems to be some sort of small war to define what is a modern good random number generators to advise for simulations. Historically, the Mersenne-Twister (MT thereafter) won this war. It is used by default in many scientific libraries and software, even if there has been a few issues with it:
-A bad initial seed may make it generate a sequence of low quality for at least as many as 700K numbers.</description>
+      <description>These days, there seems to be some sort of small war to define what is a modern good random number generators to advise for simulations. Historically, the Mersenne-Twister (MT thereafter) won this war. It is used by default in many scientific libraries and software, even if there has been a few issues with it:&#xA;A bad initial seed may make it generate a sequence of low quality for at least as many as 700K numbers.</description>
     </item>
-    
     <item>
       <title>Sobol with 64-bits integers</title>
       <link>https://chasethedevil.github.io/post/sobol-64-bits/</link>
       <pubDate>Wed, 09 Sep 2020 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/sobol-64-bits/</guid>
-      <description>A while ago, I wondered how to make some implementation of Sobol support 64-bits integers (long) and double floating points. Sobol is the most used quasi random number generator (QRNG) for (quasi) Monte-Carlo simulations.
-The standard Sobol algorithms are all coded with 32-bits integers and lead to double floating point numbers which can not be smaller than \( 2^{-31} \). I was recently looking back at the internals at Sobol generators, and noticed that generating with 64-bits integers would not help much.</description>
+      <description>A while ago, I wondered how to make some implementation of Sobol support 64-bits integers (long) and double floating points. Sobol is the most used quasi random number generator (QRNG) for (quasi) Monte-Carlo simulations.&#xA;The standard Sobol algorithms are all coded with 32-bits integers and lead to double floating point numbers which can not be smaller than \( 2^{-31} \). I was recently looking back at the internals at Sobol generators, and noticed that generating with 64-bits integers would not help much.</description>
     </item>
-    
     <item>
       <title>Intel failure and the future of computing</title>
       <link>https://chasethedevil.github.io/post/intel-failures-and-the-future/</link>
       <pubDate>Fri, 24 Jul 2020 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/intel-failures-and-the-future/</guid>
-      <description>What has been happening to the INTC stock today may be revealing of the future. The stock dropped more than 16%, mainly because they announced that their 7nm process does not work (well) and they may rely on an external foundry for their processors. Initially, in 2015, they thought they would have 8nm process by 2017, and 7nm by 2018. They are more than 3 years late.
-Intel used to be a leader in the manufacturing process for microprocessor.</description>
+      <description>What has been happening to the INTC stock today may be revealing of the future. The stock dropped more than 16%, mainly because they announced that their 7nm process does not work (well) and they may rely on an external foundry for their processors. Initially, in 2015, they thought they would have 8nm process by 2017, and 7nm by 2018. They are more than 3 years late.&#xA;Intel used to be a leader in the manufacturing process for microprocessor.</description>
     </item>
-    
     <item>
       <title>Numba, Pypy Overrated?</title>
       <link>https://chasethedevil.github.io/post/python-numba-overrated/</link>
       <pubDate>Tue, 12 Feb 2019 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/python-numba-overrated/</guid>
       <description>Many benchmarks show impressive performance gains with the use of Numba or Pypy. Numba allows to compile just-in-time some specific methods, while Pypy takes the approach of compiling/optimizing the full python program: you use it just like the standard python runtime. From those benchmarks, I imagined that those tools would improve my 2D Heston PDE solver performance easily. The initialization part of my program contains embedded for loops over several 10Ks elements.</description>
     </item>
-    
     <item>
       <title>Fixing NaNs in Quadprog</title>
       <link>https://chasethedevil.github.io/post/quadprog-nans/</link>
       <pubDate>Sun, 07 Oct 2018 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/quadprog-nans/</guid>
-      <description>Out of curiosity, I tried quadprog as open-source quadratic programming convex optimizer, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.
-Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog.</description>
+      <description>Out of curiosity, I tried quadprog as open-source quadratic programming convex optimizer, as it is looks fast, and the code stays relatively simple. I however stumbled on cases where the algorithm would return NaNs even though my inputs seemed straighforward. Other libraries such as CVXOPT did not have any issues with those inputs.&#xA;Searching on the web, I found that I was not the only one to stumble on this kind of issue with quadprog.</description>
     </item>
-    
     <item>
       <title>Senior Developers Don&#39;t Know OO Anymore</title>
       <link>https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/</link>
       <pubDate>Thu, 08 Mar 2018 20:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/</guid>
-      <description>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&amp;rsquo;s not how it is marketed or considered by the community.
-Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java.</description>
+      <description>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&amp;rsquo;s not how it is marketed or considered by the community.&#xA;Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java.</description>
     </item>
-    
     <item>
       <title>SVN is dead</title>
       <link>https://chasethedevil.github.io/post/svn_is_dead/</link>
       <pubDate>Tue, 26 Sep 2017 23:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/svn_is_dead/</guid>
-      <description>A few years ago, when Git was rising fast and SVN was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:
-Who needs decentralization for a small team or a small company working together? ‎SVN is proven, works well and is simple to use and put in place. Each argument is in reality not so strong.</description>
+      <description>A few years ago, when Git was rising fast and SVN was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:&#xA;Who needs decentralization for a small team or a small company working together? ‎SVN is proven, works well and is simple to use and put in place. Each argument is in reality not so strong.</description>
     </item>
-    
     <item>
       <title>The Neural Network in Your CPU</title>
       <link>https://chasethedevil.github.io/post/the_neural_network_in_your_cpu/</link>
       <pubDate>Sun, 06 Aug 2017 23:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/the_neural_network_in_your_cpu/</guid>
-      <description>Machine learning and artificial intelligence are the current hype (again). In their new Ryzen processors, AMD advertises the Neural Net Prediction. It turns out this is was already used in their older (2012) Piledriver architecture used for example in the AMD A10-4600M. It is also present in recent Samsung processors such as the one powering the Galaxy S7. What is it really?
-The basic idea can be traced to a paper from Daniel Jimenez and Calvin Lin &amp;ldquo;Dynamic Branch Prediction with Perceptrons&amp;rdquo;, more precisely described in the subsequent paper &amp;ldquo;Neural methods for dynamic branch prediction&amp;rdquo;.</description>
+      <description>Machine learning and artificial intelligence are the current hype (again). In their new Ryzen processors, AMD advertises the Neural Net Prediction. It turns out this is was already used in their older (2012) Piledriver architecture used for example in the AMD A10-4600M. It is also present in recent Samsung processors such as the one powering the Galaxy S7. What is it really?&#xA;The basic idea can be traced to a paper from Daniel Jimenez and Calvin Lin &amp;ldquo;Dynamic Branch Prediction with Perceptrons&amp;rdquo;, more precisely described in the subsequent paper &amp;ldquo;Neural methods for dynamic branch prediction&amp;rdquo;.</description>
     </item>
-    
     <item>
       <title>Benham disc in web canvas</title>
       <link>https://chasethedevil.github.io/post/benham_disc_in_web_canvas/</link>
       <pubDate>Mon, 10 Jul 2017 23:56:42 +0100</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/benham_disc_in_web_canvas/</guid>
       <description>Around 15 years ago, I wrote a small Java applet to try and show the Benham disk effect. Even back then applets were already passé and Flash would have been more appropriate. These days, no browser support Java applets anymore, and very few web users have Java installed. Flash also mostly disappeared. The web canvas is today&amp;rsquo;s standard allowing to embbed animations in a web page. This effect shows color perception from a succession of black and white pictures.</description>
     </item>
-    
     <item>
       <title>Carmack &amp; GPGPU programming</title>
       <link>https://chasethedevil.github.io/post/carmack--gpgpu-programming/</link>
       <pubDate>Sun, 14 Aug 2011 10:20:00 +0000</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/carmack--gpgpu-programming/</guid>
-      <description>Finally someone who shares the same opinion on the current state of GPGPU programming.
-John Carmack: On the other hand, we have converted all of our offline processing stuff to ray tracing. For years, the back-end MegaTexture generation for Rage was done with&amp;hellip; we had a GPGPU cluster with NVIDIA cards and it was such a huge pain to keep. It was an amazing pain where one system would be having heat problems and would be behaving weird even though we thought they had identical drivers.</description>
+      <description>Finally someone who shares the same opinion on the current state of GPGPU programming.&#xA;John Carmack: On the other hand, we have converted all of our offline processing stuff to ray tracing. For years, the back-end MegaTexture generation for Rage was done with&amp;hellip; we had a GPGPU cluster with NVIDIA cards and it was such a huge pain to keep. It was an amazing pain where one system would be having heat problems and would be behaving weird even though we thought they had identical drivers.</description>
     </item>
-    
     <item>
       <title>Interesting Plug-In Framework - DPML Transit</title>
       <link>https://chasethedevil.github.io/post/interesting-plug-in-framework---dpml-transit/</link>
       <pubDate>Thu, 29 Sep 2005 15:20:00 +0000</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/interesting-plug-in-framework---dpml-transit/</guid>
       <description>Today, I just found out about DPML Transit, it is a small framework that helps you build plug-ins based software. It seems to work a bit with DPML Magic, their build system based upon Ant. Both are quite interesting, since in big projects, you often end up with a packaging per component (which DPML Magic seems to make very simple) and a versioning of those components. DPML Transit allows then for an efficient way to look up a particular version of one component.</description>
     </item>
-    
     <item>
       <title>Is Prolog Better Suited Than SQL?</title>
       <link>https://chasethedevil.github.io/post/is-prolog-better-suited-than-sql/</link>
       <pubDate>Mon, 26 Sep 2005 15:36:00 +0000</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/is-prolog-better-suited-than-sql/</guid>
-      <description>I am currently reading a Prolog book Artificial Intelligence Through Prolog, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.
-It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project.</description>
+      <description>I am currently reading a Prolog book Artificial Intelligence Through Prolog, I have been doing a bit of Prolog when I was very young and wanted to refresh my memory a bit. It is a very interesting read, especially when I take the viewpoint of our current application where no ACID compliance is required.&#xA;It seems to me that all the logic we coded to parametrize SQL queries and construct them dynamically could have been avoided if we had chosen Prolog as Prolog expressions would have been very natural to use in our project.</description>
     </item>
-    
     <item>
       <title>Java is more productive than Ruby/Rails</title>
       <link>https://chasethedevil.github.io/post/java-is-more-productive-than-rubyrails/</link>
       <pubDate>Tue, 26 Jul 2005 13:26:00 +0000</pubDate>
-      
       <guid>https://chasethedevil.github.io/post/java-is-more-productive-than-rubyrails/</guid>
-      <description>I have been doing some Ruby On Rails, for 2 small projects. While I think it is good, I think it is overhyped as well. It is well designed, has good ideas (easy configuration), and focus on the right problem, architecture. But my conclusion is that I am not more productive with it than with Java.
-I think most of the development time is not spent coding, but thinking. It is a very obvious statement, and yet too often ignored.</description>
+      <description>I have been doing some Ruby On Rails, for 2 small projects. While I think it is good, I think it is overhyped as well. It is well designed, has good ideas (easy configuration), and focus on the right problem, architecture. But my conclusion is that I am not more productive with it than with Java.&#xA;I think most of the development time is not spent coding, but thinking. It is a very obvious statement, and yet too often ignored.</description>
     </item>
-    
   </channel>
 </rss>
