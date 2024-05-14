@@ -73,6 +73,168 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/benham_disc_in_web_canvas/">Benham disc in web canvas</a>
+  </h1>
+  <time datetime="2017-07-10T23:56:42&#43;0100" class="post-date">Mon, Jul 10, 2017</time>
+  <p>Around 15 years ago, I wrote a small Java applet to try and show the <a href="https://en.wikipedia.org/wiki/Benham%27s_top">Benham disk</a> effect. Even back then applets were already passé and Flash would have been more appropriate. These days, no browser support Java applets anymore, and very few web users have Java installed. Flash also mostly disappeared. The <a href="https://www.w3schools.com/html/html5_canvas.asp">web canvas</a> is today&rsquo;s standard allowing to embbed animations in a web page.
+ 
+
+This effect shows color perception from a succession of black and white pictures. It is a computer reproduction from the Benham disc with ideas borrowed from "Pour La Science Avril/Juin 2003".
+Using a delay between 40 and 60ms, the inner circle should appear <font color="#770000">red</font>, the one in the middle 
+<font color="#000077">blue</font> and the outer one <font color="#007700">green</font>. When you reverse the rotation direction,
+blue and red circles should be inverted.
+
+<form>
+  Delay: <input type="number" name="delay" value="60" id="delayInput"> Reverse <input type="checkbox" value="false" id="reverseInput" onclick="javascript:reverse()"> <input type="button" value="Start" onclick="javascript:startStop()" id="startButton">
+</form>
+
+<canvas id="myCanvas" width="480" height="480" style="border:1px solid #000000;">
+</canvas> 
+
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");
+  c.style.width ='100%';
+  c.style.height='100%';
+  // ...then set the internal size to match
+  c.width  = c.offsetWidth;
+  c.height = c.offsetWidth;
+var x=c.width/2;
+var y=x;
+linewidth = c.width / 100;
+var g = c.getContext("2d");
+
+function paintImage(g, x,y,startArcAngle) {
+var radius = 0.9;
+var r = radius*x; endAngle = 2*Math.PI/3+startArcAngle;
+g.beginPath();
+g.arc(x, y, r, Math.PI/3+startArcAngle, endAngle, false);
+g.lineWidth = linewidth;
+g.strokeStyle = "black";
+g.stroke();
+
+radius = 0.8; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
+g.stroke();
+
+radius = 0.7; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1, Math.PI/3+startArcAngle, endAngle, false);
+g.stroke();
+
+radius = 0.6; r = radius*x; endAngle = Math.PI/3+startArcAngle;
+g.beginPath();
+g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
+g.stroke();
+
+radius = 0.5; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false); 
+g.stroke();
+
+radius = 0.4; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1, 0+startArcAngle, endAngle, false);
+g.stroke();
+
+//  paintImage(g, startArcAngle, 60, 0.3); //red -180 to -60
+radius = 0.3; r = radius*x; endAngle = Math.PI+startArcAngle;// if (endAngle > Math.PI*2) endAngle = endAngle - 2*Math.PI 
+g.beginPath();
+g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
+g.stroke();
+        
+radius = 0.2; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
+g.stroke();
+
+radius = 0.1; r = radius*x;
+g.beginPath();
+g.arc(x, y, r + 1,  2*Math.PI/3+startArcAngle, endAngle, false); 
+g.stroke();
+
+g.beginPath();
+g.arc(x, y, x,  Math.PI+startArcAngle, Math.PI*2+startArcAngle, false); 
+g.fill();
+}
+
+var delay = 40;
+var currentAnimate = 0;
+var animationStartTime = window.performance.now();
+var currentIndex = 3;
+var angles = [0.0, 2*Math.PI/3, 4*Math.PI/3];
+
+var offscreenCanvas = [document.createElement('canvas'),document.createElement('canvas'),document.createElement('canvas')];
+for (var i in offscreenCanvas) {
+  offscreenCanvas[i].width = c.offsetWidth;
+  offscreenCanvas[i].height = c.offsetWidth;
+  g = offscreenCanvas[i].getContext("2d");
+  paintImage(g, x, y, angles[i]);
+}
+g = c.getContext("2d");
+
+//function animate0() {
+//  g.clearRect(0,0,c.width, c.height);
+//  paintImage(g,x, y,  0.0);
+//  currentAnimate = setTimeout(animate1, delay);
+//}
+//function animate1() {
+//  g.clearRect(0,0,c.width, c.height);
+//  paintImage(g,x, y,  2*Math.PI/3);
+//  currentAnimate = setTimeout(animate2, delay);
+//}
+//function animate2() {
+//  g.clearRect(0,0,c.width, c.height);
+//  paintImage(g,x, y, 4*Math.PI/3);
+//  currentAnimate= setTimeout(animate0, delay);
+//}
+
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+
+function animateContinuous(time) {
+  var index = Math.floor(((time - animationStartTime) % (3*delay))/delay);
+  if (index < 0) index = 0
+  if (index != currentIndex) {
+    //g.clearRect(0,0,c.width, c.height);
+    //paintImage(g, x, y, angles[index]);
+    var offscreenContext = offscreenCanvas[index].getContext('2d');
+    var image = offscreenContext.getImageData(0,0,c.width,c.height); 
+    g.putImageData(image, 0, 0);       
+    currentIndex = index;
+  }
+  currentAnimate = requestAnimationFrame(animateContinuous);
+}
+
+function reverse() {
+  //tmp = angles[2]; angles[2] = angles[0]; angles[0] = tmp;
+  tmp = offscreenCanvas[2]; offscreenCanvas[2] = offscreenCanvas[0]; offscreenCanvas[0] = tmp;
+}
+
+function startStop() {
+  var elem = document.getElementById("startButton");
+  var delayElem = document.getElementById("delayInput");
+ if (elem.value=="Stop") {
+    elem.value = "Start";
+    //clearTimeout(currentAnimate);
+    window.cancelAnimationFrame(currentAnimate);
+    currentAnimate = 0;
+  } else {
+    elem.value = "Stop";
+    delay = delayElem.value;
+    animationStartTime = window.performance.now();
+    //animate0();
+    currentAnimate = requestAnimationFrame(animateContinuous);
+  }
+}
+</script>
+
+</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/quantitative_finance_blogs/">Blogs on Quantitative Finance</a>
   </h1>
   <time datetime="2017-06-21T23:56:42&#43;0100" class="post-date">Wed, Jun 21, 2017</time>
@@ -417,48 +579,6 @@ systemctl enable lightdm
 systemctl stop gdm
 systemctl start lightdm
 </code></pre>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/">Equivalence between floating-strike and fixed-strike Asian options</a>
-  </h1>
-  <time datetime="2017-01-18T09:55:32&#43;0100" class="post-date">Wed, Jan 18, 2017</time>
-  <p>Many papers present formulae to price Asian options in the Black-Scholes world only for the fixed strike Asian case, that is
-a contract that pays \( \max(A-K,0)\) at maturity \(T\) where \(A = \sum_{i=0}^{n-1} w_i S(t_i) \) is the Asian average.</p>
-<p>More generally, this can be seen as the payoff of a Basket option where the underlyings are just the same asset but at different times.
-And any Basket option formula can actually be used to price fixed-strike Asian options by letting the correlation correspond to the correlation between the asset at the averaging times
-and the variances correspond to the variance at each averaging time. The basket approach allows then naturally for a term-structure of rates, dividends and volatilities.</p>
-<p>In order to price floating-strike Asian options paying  \( \max(S-kA,0)\) at maturity \(T\) where \(k\) is a percent strike,
-we can use a change of measure to express it as the price of a fixed-strike Asian. This equivalence is presented in several paperS: it is somewhat hidden in
-Andreasen <a href="https://www.researchgate.net/profile/Jesper_Andreasen2/publication/247953507_The_Pricing_of_Discretely_Sampled_Asian_and_Lookback_Options_A_Change_of_Numeraire_Approach/links/5445184a0cf2091108a4d9b5.pdf">&ldquo;The pricing of discretely sampled Asian and lookback options: a change of numeraire approach&rdquo;</a>, more explicit in Eberlein and Papapantoleon
-<a href="http://www.sciencedirect.com/science/article/pii/S0304414904001061">&ldquo;Equivalence of floating and fixed strike Asian and lookback options&rdquo;</a>
-or Henderson et al. <a href="https://pdfs.semanticscholar.org/7aca/df634e96744a5ff58a6a29f619b8438aabae.pdf">&ldquo;Bounds for in-progress floating-strike Asian options using symmetry&rdquo;</a>.
-None of those really consider the simple case of Black-Scholes with a term-structure of rates, dividends and volatilities.</p>
-<p>We have:
-$$
-V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T)) =\\
-\quad k V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
-$$
-where \(\eta = \pm 1\) for a call (respectively a put), \(\bar{\sigma}_i\) are the Vanilla options implied volatilities at the averaging times \(t_i\), \(C(0,t_i)\) are the capitalization factors, and \(B(0,T)\) is the discount factor.</p>
-<p><strong>Proof:</strong>
-We assume that \(S\) follows \(dS = \mu_t S dt + \sigma_t S dW_t\). The discount factor \(B\) is defined as \(B(0,T)=e^{-\int_{0}^T r_s ds}\). Let \(C(0,t) = e^{\int_{0}^t \mu_s ds}\). The process associated to the forward to time \(t\) is \(F_t=S_0 C(0,t)M_t\) with \(M_t = e^{\int_0^t \sigma_s dW_s - \frac{1}{2}\int_0^t \sigma_s^2 ds}\) being a martingale.
-We have:
-$$
-V_{\textsf{floating}}(\eta,S_0,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
-= B(0,T)\mathbb{E}\left[\max\left(\eta F_T-\eta k\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
-= k B(0,T)\mathbb{E}\left[\max\left(\eta\frac{1}{k}F_T-\eta\sum_{i=0}^{n-1}w_i F_{t_i},0\right)\right]\\
-=k B(0,T)C(0,T)\mathbb{E}\left[ M_T \max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)M_{t_i}}{C(0,T) M_T },0\right)\right]
-$$
-We now proceed to a change of measure defined by \(M_T\). Under the new measure \(\mathbb{Q}^T\), \(\bar{W}_t = W_t - \int_0^t \sigma_s ds\) is a Brownian motion. \(\frac{M_t}{M_T}\) under \(\mathbb{Q}\) has the same law as \(\frac{M_t}{M_T} e^{-\int_t^T \sigma_s^2 ds}\) under \(\mathbb{Q}^T\) or equivalently as
-\(\bar{M}_t = e^{\int_t^T \sigma_s d\bar{W}_s - \frac{1}{2}\int_t^T \sigma_s^2 ds}\)  under \(\mathbb{Q}^T\).
-Defining \(\mathbb{E}^T\) to be the expectation under \(\mathbb{Q}^T\), we thus have
-$$
-V_{\textsf{floating}}(\eta,S,k,\bar{\sigma}_i^2 t_i, C(0,t_i), B(0,T))\\
-=k B(0,T)C(0,T)\mathbb{E}^{T}\left[\max\left(\eta\frac{S_0}{k}-\eta\sum_{i=0}^{n-1}w_i S_0 \frac{C(0,t_i)}{C(0,T)}\bar{M}_{t_i},0\right)\right]\\
-=k  V_{\textsf{fixed}}\left(-\eta,S_0, \frac{S_0}{k},\bar{\sigma}^2(T) T-\bar{\sigma}_i^2 t_i,\frac{C(0,t_i)}{C(0,T)},B(0,T)C(0,T) \right)
-$$
-This concludes the proof.</p>
-
   
 </article>
 </div>

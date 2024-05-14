@@ -73,6 +73,28 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-look-at-small-time-expansions-for-heston/">A Look at Small Time Expansions for Heston</a>
+  </h1>
+  <time datetime="2014-02-12T13:13:00Z" class="post-date">Wed, Feb 12, 2014</time>
+  <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.</p>
+<p>In 2011, Forde et al. proposed <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">a second order small time expansion</a> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <a href="http://arxiv.org/abs/1306.5447">different expansions up to order-3</a> around the money. I already looked at the later in my <a href="/post/a-small-time-schobel-zhu-expansion">previous post</a>, applying the idea to Schobel-Zhu.</p>
+<p>I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.</p>
+<figure><img src="/post/heston_expansions_order3a.png"/><figcaption>
+            <h4>T=0.5, Feller condition largely violated</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/heston_expansions_order3b.png"/><figcaption>
+            <h4>T=0.5, Feller condition slightly violated</h4>
+        </figcaption>
+</figure>
+
+<p>Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.
+The order-3 formula, even though it is more precise at the money, was actually more problematic for calibration: it failed to find a good enough initial guess in some cases, maybe because the reference data should be truncated, to possibly keep the few shortest expiries, and close to ATM strikes.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">A Small-Time Schobel-Zhu Expansion</a>
   </h1>
   <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
@@ -244,16 +266,6 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
 <p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>
 <p>Hagan managed to derive a slightly more precise local volatility by going through the probability density route, and his paper formalizes his model in a clearer way: the probability density accumulates at the boundaries. But in practice, this formalism does not seem to matter. The forward Dupire way is more direct and slightly faster. This later way also allows to use alternative boundaries, like Andreasen-Huge did.</p>
 <p><strong>Update March 2014</strong> - I have now a paper around this &ldquo;<a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a>&rdquo;</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/american-option-on-forwardfutures/">American Option on Forward/Futures</a>
-  </h1>
-  <time datetime="2013-11-21T11:17:00Z" class="post-date">Thu, Nov 21, 2013</time>
-  <p>Prices of a Future contract and a Forward contract are the same under the Black-Scholes assumptions (deterministic rates) but the price of options on Futures or options on Forwards might still differ. I did not find this obvious at first.</p>
-<p>For example, when the underlying contract expiration date (Futures, Forward) is different from the option expiration date. For a Future Option, the Black-76 formula can be used, the discounting is done from the option expiry date, because one receives the cash on expiration due to the margin account. For a Forward Option, the discounting need to be done from the Forward contract expiry date.</p>
-<p>European options prices will be the same when the underlying contract expiration date is the same as the option expiration date. However, this is not true for American options: the immediate exercise will need to be discounted to the Forward expiration date for a Forward underlying, not for a Future.</p>
 
   
 </article>

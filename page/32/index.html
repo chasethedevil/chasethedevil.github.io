@@ -73,6 +73,15 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-private-office/">How to Build Good Software? Private Office</a>
+  </h1>
+  <time datetime="2007-04-11T10:52:00Z" class="post-date">Wed, Apr 11, 2007</time>
+  <p>In an open space, people keep on coming to discuss various issues with various people, issues that have nothing to do with your work. You end up either being distracted, or annoyed by the increased noise level.</p>
+<p>Apparently at Microsoft, they have private offices for each programmer. It might be extreme, paradoxally not in the XP (extreme programming) sense, but it is much better than open space for productivity. In XP, it&rsquo;s almost the opposite with 2 developers working often together.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/how-to-build-good-software-lay-off-quickly./">How to Build Good Software? Lay Off Quickly.</a>
   </h1>
   <time datetime="2007-04-10T11:12:00Z" class="post-date">Tue, Apr 10, 2007</time>
@@ -172,18 +181,6 @@ The key bindings for special characters is awful for a programmer on the Apple k
 <p>Page is not great either. It does render beautiful letters, but overall I don&rsquo;t find it very usable compared to more standard software like OpenOffice, and it&rsquo;s time limited!</p>
 <p><em>Conclusion</em></p>
 <p>Overall I think I would not buy a Mac again if comparable PC hardware exists. MacOs is not a bad OS, but I prefer Ubuntu Linux. If you don&rsquo;t use or like Linux then is really Vista worse? I don&rsquo;t think so.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/tired-of-bad-singletons/">Tired Of Bad Singletons</a>
-  </h1>
-  <time datetime="2007-01-04T11:50:00Z" class="post-date">Thu, Jan 4, 2007</time>
-   
-
-While looking through some code for a project, I saw that:<br><br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote">&nbsp; public static final ProductYP instance = new ProductYP(); <br>&nbsp; <br>&nbsp; public ProductYP()<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; if (instance != null)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new RuntimeException(&quot;Only one instance allowed&quot;);<br><br>&nbsp;&nbsp;&nbsp; prods = new HashMap();<br>&nbsp; }<br><br>&nbsp; public static ProductYP getInstance() <br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; return instance;<br>&nbsp; }<br></blockquote><br>And I don&#39;t think it was done by a newbie... It&#39;s actually not far from being correct, it&#39;s just that the guy obviously does not know about private constructors. I have seen several broken singleton implementations in previous projects and had several debates on the  <a href="http://www.cs.umd.edu/%7Epugh/java/memoryModel/DoubleCheckedLocking.html">double-checked locking pattern</a> (<a href="http://en.wikipedia.org/wiki/Double-checked_locking">it works since JDK1.5</a> with volatiles but is useless). I am upset to see another half broken implementation. Everybody should have read at least  <a href="http://java.sun.com/developer/technicalArticles/Programming/singletons/">this</a>.<br><br>What have you seen as broken singletons?<br><br> 
-
-
 
   
 </article>
