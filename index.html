@@ -73,6 +73,32 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/copilot_vs_chatgpt_optimal_step_size/">Copilot vs ChatGPT on the Optimal Finite Difference Step-Size</a>
+  </h1>
+  <time datetime="2024-07-25T12:56:42&#43;0100" class="post-date">Thu, Jul 25, 2024</time>
+  <p>When computing the derivative of a function by finite difference, which step size is optimal? The answer depends on the kind of difference (forward, backward or central), and the degree of the derivative (first or second typically for finance).</p>
+<p>For the first derivative, the result is very quick to find (it&rsquo;s on <a href="https://en.wikipedia.org/wiki/Numerical_differentiation">wikipedia</a>). For the second derivative, it&rsquo;s more challenging. The <a href="https://paulklein.ca/newsite/teaching/Notes_NumericalDifferentiation.pdf">Lecture Notes</a> of Karen Kopecky provide an answer. I wonder if Copilot or ChatGPT would find a good solution to the question:</p>
+<blockquote>
+<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p>
+</blockquote>
+<p>Here is the answer of copilot:
+<figure><img src="/post/step_size_copilot.png"/>
+</figure>
+
+and the one of chatGPT:
+<figure><img src="/post/step_size_chatgpt1.png"/>
+</figure>
+
+and a second answer from chatGPT:
+<figure><img src="/post/step_size_chatgpt2.png"/>
+</figure>
+</p>
+<p>Copilot always fails to provide a valid answer. ChatGPT v4 proves to be quite impressive: it is able to reproduce some of the reasoning presented in the lecture notes.</p>
+<p>Interestingly, with centered difference, for a given accuracy, the optimal step size is different for the first and for the second derivative. It may, at first, seem like a good idea to use a different size for each. In reality, when both the first and second derivative of the function are needed (for example the Delta and Gamma greeks of a financial product), it is rarely a good idea to use a different step size for each. Firstly, it will be slower since more the function will be evaluated at more points. Secondly, if there is a discontinuity in the function or in its derivatives, the first derivative may be estimated without going over the discontinuity while the second derivative may be estimated going over the discontinuity, leading to puzzling results.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/cos_method_truncation/">News on the COS Method Truncation</a>
   </h1>
   <time datetime="2024-05-13T20:56:42&#43;0100" class="post-date">Mon, May 13, 2024</time>
@@ -293,54 +319,6 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 <p>It is remarkable that a Bachelier smile formula with 3 free parameters can fit so well the Black vols. Compared to stochastic collocation on a cubic polynomial (also 3 free parameters), the fit is 100x better with the normal SABR.</p>
 <figure><img src="/post/normal_sabr_black_fit_collo.png"/><figcaption>
             <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
-        </figcaption>
-</figure>
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/clenshaw_fft_implementation/">Clenshaw-Curtis Quadrature Implementation by FFT in Practice</a>
-  </h1>
-  <time datetime="2023-09-27T20:56:42&#43;0100" class="post-date">Wed, Sep 27, 2023</time>
-  <p>The <a href="https://en.wikipedia.org/wiki/Clenshaw%E2%80%93Curtis_quadrature">Clenshaw-Curtis quadrature</a> is known to be competitive with Gauss quadratures. It has several advantages:</p>
-<ul>
-<li>the weights are easy and fast to compute.</li>
-<li>adaptive / doubling quadratures are possible with when the Chebyshev polynomial of the second kind is used for the quadrature.</li>
-<li>the Chebyshev nodes may also be used to interpolate some costly function.</li>
-</ul>
-<p>The wikipedia article has a relatively detailed description on how to compute the quadrature weights corresponding to the Chebyshev polynomial of the second kind (where the points -1 and 1 are included), via a type-I DCT. It does not describe the weights corresponding to the Chebyshev polynomials of the first kind (where -1 and 1 are excluded, like the Gauss quadratures). <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">The numbersandshapes blog post</a> describes it very nicely. There are some publications around computation of Clenshaw-Curtis or Fejer rules, a recent one is <a href="https://www.sciencedirect.com/science/article/pii/S089812211200689X">Fast construction of Fejér and Clenshaw–Curtis rules for general weight functions</a>.</p>
-<p>I was looking for a simple implementation of the quadrature or its weights, leveraging some popular FFT library such as <a href="https://www.fftw.org/">fftw (The Fastest Fourier Transform in the West)</a>. I expected it to be a simple search. Instead, it was surprisingly difficult to find even though the code in Julia consists only in a few lines:</p>
-<ul>
-<li>
-<p>First kind (following the <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">numbersandshapes blog post</a>)
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span>n) <span style="color:#666">-</span> <span style="color:#40a070">1</span>) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> <span style="color:#40a070">2</span>n))
-</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> chebnodes(<span style="color:#902000">Float64</span>, N)
-</span></span><span style="display:flex;"><span>m <span style="color:#666">=</span> vcat(sqrt(<span style="color:#40a070">2</span>), <span style="color:#40a070">0.0</span>, [(<span style="color:#40a070">1</span> <span style="color:#666">+</span> (<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">^</span>k) <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> k<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span>N<span style="color:#666">-</span><span style="color:#40a070">1</span>])
-</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> sqrt(<span style="color:#40a070">2</span> <span style="color:#666">/</span> N) <span style="color:#666">*</span> idct(m)</span></span></code></pre></div></p>
-</li>
-<li>
-<p>Second kind (the classic Clenshaw-Curtis, following some article from Treffenden)
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">0</span><span style="color:#666">:</span>n<span style="color:#666">-</span><span style="color:#40a070">1</span>)) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> (n<span style="color:#666">-</span><span style="color:#40a070">1</span>)))
-</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> cheb2nodes(<span style="color:#902000">Float64</span>, N)
-</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(<span style="color:#40a070">2</span>, [<span style="color:#40a070">2</span> <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> i<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span>(N<span style="color:#666">-</span><span style="color:#40a070">1</span>)]) <span style="color:#60a0b0;font-style:italic"># Standard Chebyshev moments</span>
-</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(c, c[<span style="color:#902000">Int</span>(floor(N <span style="color:#666">/</span> <span style="color:#40a070">2</span>))<span style="color:#666">:-</span><span style="color:#40a070">1</span><span style="color:#666">:</span><span style="color:#40a070">2</span>])         <span style="color:#60a0b0;font-style:italic"># Mirror for DCT via FFT </span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> real(ifft(c))                             <span style="color:#60a0b0;font-style:italic"># Interior weight</span>
-</span></span><span style="display:flex;"><span>ws[<span style="color:#40a070">1</span>] <span style="color:#666">/=</span> <span style="color:#40a070">2</span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> vcat(ws, ws[<span style="color:#40a070">1</span>])                           <span style="color:#60a0b0;font-style:italic"># Boundary weights</span></span></span></code></pre></div></p>
-</li>
-</ul>
-<p>There are some obvious possible improvements: the nodes are symmetric and only need to be computed up to N/2, but the above is quite fast already. The Julia package <a href="https://github.com/JuliaApproximation/FastTransforms.jl">FastTransforms.jl</a> provides the quadrature weights although the API is not all that intuitive:</p>
-<ul>
-<li>First kind:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
-<li>Second kind:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
-</ul>
-<p>Interestingly the first kind is twice faster with FastTransforms, which suggests a similar symetry use as for the second kind. But the second kind is nearly twice slower.</p>
-<p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
-<figure><img src="/post/quad_rho_all.png"/><figcaption>
-            <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
         </figcaption>
 </figure>
 

@@ -73,6 +73,24 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
+  </h1>
+  <time datetime="2017-01-19T09:55:32&#43;0100" class="post-date">Thu, Jan 19, 2017</time>
+  <p>The gnome shell has been crashing on me more regularly lately.
+XFCE is a good and fast more tradional desktop, but, from past experiences,
+it does not play well with power management if you only install it via</p>
+<pre tabindex="0"><code>dnf install @xfce-desktop-environment
+</code></pre><p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
+most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
+to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
+<pre tabindex="0"><code>systemctl disable gdm
+systemctl enable lightdm
+systemctl stop gdm
+systemctl start lightdm
+</code></pre>
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/floating_strike_fixed_strike_asian_equivalence/">Equivalence between floating-strike and fixed-strike Asian options</a>
   </h1>
   <time datetime="2017-01-18T09:55:32&#43;0100" class="post-date">Wed, Jan 18, 2017</time>
@@ -410,38 +428,6 @@ For degree 3, there is \(N\) factors to place the number 3 on each variable, plu
 <!-- raw HTML omitted -->
 <p>For \(N=10\), the total number of factors is 184756.
 Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
-  </h1>
-  <time datetime="2016-07-05T09:55:32&#43;0100" class="post-date">Tue, Jul 5, 2016</time>
-  <p>In my <a href="https://chasethedevil.github.io/post/shooting_arbitrage/">previous post</a>, I looked at de-arbitraging volatilities of options of a specific maturity with the shooting method.
-In reality it is not so practical. While the local volatility will be continuous at the given expiry \(T\), it won&rsquo;t be so at the times \( t \lt T \)
-because of the interpolation or extrapolation in time. If we consider a single market expiry at time \(T\),
-it is standard practice to extrapolate the implied volatility flatly for \(t \lt T\), that is, \(w(y,t) = v_T(y) t\)
-where the variance at time \(T\) is defined as \(v_T(y)= \frac{1}{T}w(y,T)\).
-Plugging this into the local variance formula leads to
-$$\sigma^{\star 2}\left(y, t\right) = \frac{ v_T(y)}{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}	+ \frac{1}{4}\left(-\frac{t^2}{4}-\frac{t}{v_T}+\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2 + \frac{t}{2}\frac{\partial^{2} v_T}{\partial y^2}}$$
-for \(t\leq T\). In particular, for \(t=0\), we have
-$$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
-{1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}	+ \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$
-But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
-<figure><img src="/post/svi_dearbitraging_lv_rk.png"/><figcaption>
-            <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
-        </figcaption>
-</figure>
-
-<p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
-is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
-<figure><img src="/post/svi_dearbitraging_vol_rk_cap.png"/><figcaption>
-            <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The discontinuity renders the shooting technique useless.
-The penalized spline does not have this issue as the resulting local volatility is smooth from \(t=0\) to \(t=T\).</p>
 
   
 </article>
