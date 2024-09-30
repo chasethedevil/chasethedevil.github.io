@@ -73,6 +73,17 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/exact-forward-in-monte-carlo/">Exact Forward in Monte-Carlo</a>
+  </h1>
+  <time datetime="2013-05-13T17:58:00Z" class="post-date">Mon, May 13, 2013</time>
+  <p>Where I work, there used to be quite a bit of a confusion on which rates one should use as input to a Local Volatility Monte-Carlo simulation.</p>
+<p>In particular there is a paper in the Journal of Computation Finance by Andersen and Ratcliffe &ldquo;The Equity Option Volatility Smile: a Finite Difference Approach&rdquo; which explains one should use specially tailored rates for the finite difference scheme in order to reproduce exact Bond price and exact Forward contract prices</p>
+<p>Code has been updated and roll-backed, people have complained around it. But nobody really made the effort to simply write clearly what&rsquo;s going on, or even write a unit test around it. So it was just FUD, until <a href="http://ssrn.com/abstract=2264327">this paper</a>.</p>
+<p>In short, for log-Euler, one can use the intuitive forward drift rate: r1<em>t1-r0</em>t0 (ratio of discount factors), but for Euler, one need to use a less intuitive forward drift rate to reproduce a nearly exact forward price.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/quasi-monte-carlo-in-finance/">Quasi Monte Carlo in Finance</a>
   </h1>
   <time datetime="2013-05-13T13:16:00Z" class="post-date">Mon, May 13, 2013</time>
@@ -335,26 +346,6 @@ $$ dB/dt = \hat{\alpha}(u)-\beta(u) B+\gamma B^2 $$</p>
 <p>I initially did not understand its role (to compute \(\alpha_{max}\)), so that, later, one can compute alpha_optimal with a good bracketing. The bracketing is particularly important to use a decent solver, like the Brent solver. Otherwise, one is left with, mostly, Newton&rsquo;s method. It turns out that I explored a reduced function, which is quite simpler than the Ricatti and seems to work in all the cases I have found/tried: solve $$1/B = 0$$<!-- raw HTML omitted --> If B explodes, \(\phi\) will explode. The trick, like when solving the Ricatti equation, is to have either a good starting point (for Newton) or, better, a bracketing. It turns out that Lord and Kahl give a bracketing for (1/B), even if they don&rsquo;t present it like this: their \(\tau_{D+}\) on page 10 for the lower bracket, and \(\tau_+\) for the upper bracket. \(\tau_+\) will make \(1/B\) explode, exactly. One could also find the next periods by adding \(4\pi/t\) instead of \(2\pi/t\) like they do to move from \(\tau_{D+}\) to \(\tau_+\). But this does not have much interest as we don&rsquo;t want to go past the first explosion.</p>
 <p>It&rsquo;s quite interesting to see that my simple approach is actually closely related to the more involved Ricatti approach. The starting point could be the same. Although it is much more robust to just use Brent solver on the bracketed max. I actually believe that the Ricatti equation explodes at the same points, except, maybe for some rare combination of Heston parameters.</p>
 <p>From a coding perspective, I found that <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDUQFjAA&amp;url=http%3A%2F%2Fcommons.apache.org%2Fmath&amp;ei=kctmUajvIoWs0QXC-4HoDQ&amp;usg=AFQjCNFaOPmpFKpVp5Ba9fVtRNSgefKwhA&amp;sig2=vQZ7geKUB1iGDu5cDOjO0g&amp;bvm=bv.45107431,d.d2k">Apache commons maths</a> was a decent library to do complex calculus or solve/minimize functions. The complex part was better than some in-house implementation: for example the square root was more precise in commons maths, and the solvers are robust. It even made me think that it is often a mistake to reinvent to wheel. It&rsquo;s good to choose the best implementations/algorithms as possible. But reinventing a Brent solver??? a linear interpolator??? Also the commons maths library imposes a good structure. In house stuff tends to be messy (not real interfaces, or many different ones). I believe the right approach is to use and embrace/extends Apache commons maths. If some algorithms are badly coded/not performing well, then write your own using the same kind of interfaces as commons maths (or some other good maths library).<!-- raw HTML omitted --><!-- raw HTML omitted -->The next part of this series on Lord-Kahl method is <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">here</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price/">Root finding in Lord Kahl Method to Compute Heston Call Price</a>
-  </h1>
-  <time datetime="2013-04-09T19:49:00Z" class="post-date">Tue, Apr 9, 2013</time>
-  <p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2009.png"/>
-</figure>
-
-I just tried to implement <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord Kahl algorithm to compute the Heston call price</a>. The big difficulty of their method is to find the optimal alpha.  That&rsquo;s what make it work or break. The tricky part is that the function  of alpha we want to minimize has multiple discontinuities (it&rsquo;s  periodic in some ways). This is why the authors rely on the computation  of an alpha_max: bracketing is very important, otherwise your optimizer  will jump the discontinuity without even noticing it, while you really  want to stay in the region before the first discontinuity.</p>
-<p>To find alpha_max, they solve a non linear differential equation,  for which I would need a few more readings to really understand it.  Given that the problem looked simple: if you graph the function to  minimize, it seems so simple to find the first discontinuity. So I just  tried to do it directly. Numerically, I was surprised it was not so  simple. I did find a solution that, amazingly seems to work in all the  examples of the paper, but it&rsquo;s luck. I use Newton-Raphson to find the  discontinuity, on a reduced function where the discontinuity really  lies. I solve the inverse of the discontinuity so that I can just solve  for 0. Earlier on I reduced the function too much and it did not work,  this is why I believe it is not very robust. Newton-Raphson is quite  simple, but also simple to understand why it breaks if it breaks, and  does not need a bracketing (what I am looking for in the first place).  Once I find the discontinuity, I can just use Brent on the right  interval and it works well.</p>
-<p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2030.png"/>
-</figure>
- <figure><img src="/post/Screenshot%20from%202013-04-09%2019%2045%2039.png"/>
- </figure>
-</p>
-<p>In the end, it&rsquo;s neat to be able to compute option prices under  machine epsilon. But in practice, it&rsquo;s probably not that useful. For  calibration, those options should have a very small (insignificant)  weight. The only use case I found is really for graphing so that you  don&rsquo;t have some flat extrapolation too quickly, especially for short  maturities. I was curious as well about the accuracy of some  approximations of the implied volatility in the wings, to see if I could  use them instead of all this machinery.</p>
-<p>In any case I did not think that such a simple problem was so challenging numerically.</p>
-<p>There is a <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">part II</a> to this article.</p>
 
   
 </article>

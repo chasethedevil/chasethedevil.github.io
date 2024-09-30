@@ -73,6 +73,22 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/volatility-swap-vs-variance-swap-replication---truncation/">Volatility Swap vs Variance Swap Replication - Truncation</a>
+  </h1>
+  <time datetime="2015-03-16T14:39:00Z" class="post-date">Mon, Mar 16, 2015</time>
+  <p>I have looked at <a href="/post/jumps-impact-variance-swap-vs-volatility-swap/">jump effects on volatility vs. variance swaps</a>. There is a similar behavior on tail events, that is, on truncating the replication. One main <a href="/post/variance-swap-replication--discrete-or-continuous">problem with discrete replication of variance swaps</a> is the implicit domain truncation, mainly because the variance swap equivalent log payoff is far from being linear in the wings. The equivalent payoff with Carr-Lee for a volatility swap is much more linear in the wings (<a href="/post/a-volatility-swap-and-a-straddle">not so far of a straddle</a>). So we could expect the replication to be less sensitive to the wings truncation.
+I have done a simple test on flat 40% volatility:</p>
+<p><figure><img src="/post/Screenshot%20from%202015-03-16%2014%2019%2033.png"/>
+</figure>
+
+<figure><img src="/post/Screenshot%20-%2003162015%20-%2002%2019%2047%20PM.png"/>
+</figure>
+</p>
+<p>As expected, the vol swap is much less sensitive, and interestingly, very much like for the jumps, it moves in the opposite direction: the truncated price is higher than the non truncated price.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/arbitrage-free-sabr-with-negative-rates---alternative-to-shifted-sabr/">Arbitrage free SABR with negative rates - alternative to shifted SABR</a>
   </h1>
   <time datetime="2015-03-11T18:48:00Z" class="post-date">Wed, Mar 11, 2015</time>
@@ -200,18 +216,6 @@ In papers around volatility and cash (discrete) dividends, we often encounter th
 </ul>
 <p>It&rsquo;s also interesting to hear the teacher repeating that people should not try possible improvements at random (often because they have only one idea) but analyze before what makes the most sense. And that can imply digging in the details, looking at what&rsquo;s going on 100 samples.</p>
 <p>While it sounds like a straightforward remark, I have found that people (including myself) tend to do the same mistakes in finance. We might use some quadrature, find out it does not perform that well in some cases, replace it with another one that behaves a bit better, without investigating the real issue: why does the first quadrature break? is the new quadrature really fixing the issue?</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/pseudo-random-vs-quasi-random-numbers/">Pseudo-Random vs Quasi-Random Numbers</a>
-  </h1>
-  <time datetime="2014-11-12T17:05:00Z" class="post-date">Wed, Nov 12, 2014</time>
-   
-
-Quasi-Random numbers (like <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol</a>) are a relatively popular way in finance to improve the Monte-Carlo convergence compared to more classic Pseudo-Random numbers (like <a href="http://en.wikipedia.org/wiki/Mersenne_twister">Mersenne-Twister</a>). Behind the scenes one has to be a bit more careful about the dimension of the problem as the Quasi-Random numbers depends on the dimension (defined by how many random variables are independent from each other).<br /><br />For a long time, Sobol was limited to 40 dimensions using the so called Bratley-Fox direction numbers (his paper actually gives the numbers for 50 dimensions). Later Lemieux gave direction numbers for up to 360 dimensions. Then, P. Jäckel proposed some extension with a random initialization of the direction vectors in his book from 2006. And finally Joe &amp; Kuo published direction numbers for up to 21200 dimensions.<br /><br />But there are very few studies about how good are real world simulations with so many quasi-random dimensions. A recent paper "<a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2210420">Fast Ninomiya-Victoir Calibration of the Double-Mean-Reverting Model</a>" by Bayer, Gatheral &amp; Karlsmark tests this for once, and the results are not so pretty:<br /><div class="separator" style="clear: both; text-align: center;"><a href="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s1600/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="342" src="https://3.bp.blogspot.com/-aYBusg02Kr0/VGOAlrsHGjI/AAAAAAAAHis/o4zfFf8-5hA/s640/Screenshot%2Bfrom%2B2014-11-12%2B16%3A15%3A17.png" width="640" /></a></div>With their model, the convergence with Sobol numbers becomes worse when the number of time-steps increases, that is when the number of dimension increases. There seems to be even a threshold around 100 time steps (=300 dimensions for Euler) beyond which a much higher number of paths (2^13) is necessary to restore a proper convergence. And they use the latest and greatest Joe-Kuo direction numbers.<br /><br />Still the total number of paths is not that high compared to what I am usually using (2^13 = 8192). It's an interesting aspect of their paper: the calibration with a low number of paths.
-
-
 
   
 </article>

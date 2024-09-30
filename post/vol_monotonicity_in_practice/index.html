@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.121.2">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Monotonicity of the Black-Scholes Option Prices in Practice &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2024. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Monotonicity of the Black-Scholes Option Prices in Practice</h1>
+  <time datetime=2024-09-29T12:56:42&#43;0100 class="post-date">Sun, Sep 29, 2024</time>
+  <p>It is well known that vanilla option prices must increase when we increase the implied volatility. Recently, a post on the Wilmott forums wondered about the true accuracy of Peter Jaeckel implied volatility solver, whether it was truely IEEE 754 compliant. In fact, the author noticed some inaccuracy in the option price itself. Unfortunately I can not reply to the forum, its login process does not seem to be working anymore.</p>
+<p>It can be quite challenging to evaluate the accuracy. For example, one potential error that the author makes is to use numbers that are not exactly representable in IEEE 754 standard such as 4.45 or 0.04. In Julia, and I believe in Python mpmath as well, there is a difference between a BigFloat(4.45) and a BigFloat(&ldquo;4.45&rdquo;):</p>
+<p><code>BigFloat(4.45)  = 4.45000000000000017763568394002504646778106689453125 BigFloat(&quot;4.45&quot;)= 4.449999999999999999999999999999999999999999999999999999999999999999999999999972</code></p>
+<p>If we work only on usual 64-bit floats, we likely want to estimate the accuracy of an implementation using BigFloat(4.45) as input rather than BigFloat(&ldquo;4.45&rdquo;). To compute a vanilla option price, the naive way would be through the cumulative normal distribution function (the textbook way), which looks like</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> bs(strike, forward, voltte)
+</span></span><span style="display:flex;"><span>    d1 <span style="color:#666">=</span> (log(forward<span style="color:#666">/</span>strike)<span style="color:#666">+</span>voltte<span style="color:#666">^</span><span style="color:#40a070">2</span> <span style="color:#666">/</span> <span style="color:#40a070">2</span>)<span style="color:#666">/</span>voltte
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
+<figure><img src="/post/bs_price.png"/>
+</figure>
+</p>
+<p>Peter Jaeckel proposes several improvements, the first simple one is to use the scaled complementary error function <code>erfcx</code> rather than the cumulative normal distribution function directly. A second improvement is to use Taylor expansions for small prices. It turns out that on the example with strike K=2.0, forward F=1.0, vol=0.125, the Taylor expansion is being used.</p>
+<figure><img src="/post/bs_price_jaeckel.png"/>
+</figure>
+
+<p>The error is much lower, with Taylor being even a little bit better. But the price is still not monotonic.</p>
+<p>How would the implied vol corresponding to those prices look like? If we apply Peter Jaeckel implied vol solver to the naive Black-Scholes formula, we end up with an accuracy limited by the naive formula.
+<figure><img src="/post/bs_vol_naive.png"/>
+</figure>
+</p>
+<p>If we apply it to the exact prices or to erfcx or to Taylor, we still end up with a non monotonic implied vol:</p>
+<figure><img src="/post/bs_vol_jaeckel.png"/>
+</figure>
+
+<p>There is no visible difference in accuracy if we start from the erfcx prices and apply the SR Householder solver of <a href="https://github.com/jherekhealy/AQFED.jl/tree/master/src/black">Jherek Healy</a>:</p>
+<figure><img src="/post/bs_vol_erfcx.png"/>
+</figure>
+
+<p>It should not be too surprising: if we compose the Black-Scholes formula with the associated solver from Peter Jaeckel, we do not obtain the identity function. Because the option prices are not monotonic with the vol, there are several vols which may be solution to the same price, and the solver is guaranteed to not solve exactly, which leads to the numerical noise we see on the plots. In contrast, it is remarkable that if we compose exp with log we have a nice monotonic shape:</p>
+<figure><img src="/post/logexp.png"/>
+</figure>
+
+<p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

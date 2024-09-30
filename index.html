@@ -73,6 +73,47 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/vol_monotonicity_in_practice/">Monotonicity of the Black-Scholes Option Prices in Practice</a>
+  </h1>
+  <time datetime="2024-09-29T12:56:42&#43;0100" class="post-date">Sun, Sep 29, 2024</time>
+  <p>It is well known that vanilla option prices must increase when we increase the implied volatility. Recently, a post on the Wilmott forums wondered about the true accuracy of Peter Jaeckel implied volatility solver, whether it was truely IEEE 754 compliant. In fact, the author noticed some inaccuracy in the option price itself. Unfortunately I can not reply to the forum, its login process does not seem to be working anymore.</p>
+<p>It can be quite challenging to evaluate the accuracy. For example, one potential error that the author makes is to use numbers that are not exactly representable in IEEE 754 standard such as 4.45 or 0.04. In Julia, and I believe in Python mpmath as well, there is a difference between a BigFloat(4.45) and a BigFloat(&ldquo;4.45&rdquo;):</p>
+<p><code>BigFloat(4.45)  = 4.45000000000000017763568394002504646778106689453125 BigFloat(&quot;4.45&quot;)= 4.449999999999999999999999999999999999999999999999999999999999999999999999999972</code></p>
+<p>If we work only on usual 64-bit floats, we likely want to estimate the accuracy of an implementation using BigFloat(4.45) as input rather than BigFloat(&ldquo;4.45&rdquo;). To compute a vanilla option price, the naive way would be through the cumulative normal distribution function (the textbook way), which looks like</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> bs(strike, forward, voltte)
+</span></span><span style="display:flex;"><span>    d1 <span style="color:#666">=</span> (log(forward<span style="color:#666">/</span>strike)<span style="color:#666">+</span>voltte<span style="color:#666">^</span><span style="color:#40a070">2</span> <span style="color:#666">/</span> <span style="color:#40a070">2</span>)<span style="color:#666">/</span>voltte
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
+<figure><img src="/post/bs_price.png"/>
+</figure>
+</p>
+<p>Peter Jaeckel proposes several improvements, the first simple one is to use the scaled complementary error function <code>erfcx</code> rather than the cumulative normal distribution function directly. A second improvement is to use Taylor expansions for small prices. It turns out that on the example with strike K=2.0, forward F=1.0, vol=0.125, the Taylor expansion is being used.</p>
+<figure><img src="/post/bs_price_jaeckel.png"/>
+</figure>
+
+<p>The error is much lower, with Taylor being even a little bit better. But the price is still not monotonic.</p>
+<p>How would the implied vol corresponding to those prices look like? If we apply Peter Jaeckel implied vol solver to the naive Black-Scholes formula, we end up with an accuracy limited by the naive formula.
+<figure><img src="/post/bs_vol_naive.png"/>
+</figure>
+</p>
+<p>If we apply it to the exact prices or to erfcx or to Taylor, we still end up with a non monotonic implied vol:</p>
+<figure><img src="/post/bs_vol_jaeckel.png"/>
+</figure>
+
+<p>There is no visible difference in accuracy if we start from the erfcx prices and apply the SR Householder solver of <a href="https://github.com/jherekhealy/AQFED.jl/tree/master/src/black">Jherek Healy</a>:</p>
+<figure><img src="/post/bs_vol_erfcx.png"/>
+</figure>
+
+<p>It should not be too surprising: if we compose the Black-Scholes formula with the associated solver from Peter Jaeckel, we do not obtain the identity function. Because the option prices are not monotonic with the vol, there are several vols which may be solution to the same price, and the solver is guaranteed to not solve exactly, which leads to the numerical noise we see on the plots. In contrast, it is remarkable that if we compose exp with log we have a nice monotonic shape:</p>
+<figure><img src="/post/logexp.png"/>
+</figure>
+
+<p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/copilot_vs_chatgpt_optimal_step_size/">Copilot vs ChatGPT on the Optimal Finite Difference Step-Size</a>
   </h1>
   <time datetime="2024-07-25T12:56:42&#43;0100" class="post-date">Thu, Jul 25, 2024</time>
@@ -305,23 +346,6 @@ The last plot should look like
 </figure>
 
 It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/black_with_bachelier/">Black with Bachelier</a>
-  </h1>
-  <time datetime="2023-10-03T20:56:42&#43;0100" class="post-date">Tue, Oct 3, 2023</time>
-  <p>I was experimenting with the recent <a href="https://www.researchgate.net/publication/348192007_SABR_for_Baskets">SABR basket approximation</a> of Hagan. The approximation only works
-for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier option formula.</p>
-<p>I was wondering how good the approximation would be for two flat smiles (in terms of Black volatilities). I then noticed something that escaped me before: the normal SABR model is able to fit the pure Black model (with constant vols) extremely well. A calibration near the money stays valid very out-of-the-money and the error in Black volatilities is very small.</p>
-<p>For very low strikes (25%) the error in vol is below one basis point. And in fact, for a 1 year option of vol 20%, the option value is extremely small: we are in deep extrapolation territory.</p>
-<p>It is remarkable that a Bachelier smile formula with 3 free parameters can fit so well the Black vols. Compared to stochastic collocation on a cubic polynomial (also 3 free parameters), the fit is 100x better with the normal SABR.</p>
-<figure><img src="/post/normal_sabr_black_fit_collo.png"/><figcaption>
-            <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
-        </figcaption>
-</figure>
-
 
   
 </article>
