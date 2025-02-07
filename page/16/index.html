@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,59 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/">Coordinate Transform of the Andreasen Huge SABR PDE &amp; Spline Interpolation</a>
+  </h1>
+  <time datetime="2014-01-08T18:51:00Z" class="post-date">Wed, Jan 8, 2014</time>
+  <p>Recently, I noticed <a href="/post/arbitrage-free-sabr---another-view-on-hagan-approach">how close</a> are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.</p>
+<p>Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy. The transform itself can be found in the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.andersen-piterbarg-book.com%2F&amp;ei=dYzNUrG6Eo7n7Aamp4GwAQ&amp;usg=AFQjCNE3sdrH2B8EDg40Gocp8FB-QEtnew&amp;sig2=aoDaRX5-zTolem9mUrEumw&amp;bvm=bv.58187178,d.ZGU">Andersen-Piterbarg book</a> &ldquo;Interest Rate Modeling&rdquo;, and is similar to the famous log transform, but for a general local volatility function (phi in the book notation).</p>
+<figure><img src="/post/piterbarg_lv_transform1.png">
+</figure>
+
+<p>There are two ways to transform Andreasen Huge PDE:</p>
+<ul>
+<li>through a non-uniform grid: the input strikes are directly transformed based on a uniform grid in the inverse transformed grid (paying attention to still put the strike in the middle of two points). This is detailed in the Andersen-Piterbarg book.
+<figure><img src="/post/piterbarg_lv_transform2.png">
+</figure>
+</li>
+<li>through a variable transform in the PDE: this gives a slightly different PDE to solve. One still needs to convert then a given strike, to the new PDE variable. This kind of transform is detailed in the <a href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471197602.html">Tavella-Randall book</a> &ldquo;Pricing Financial Instruments: the Finite Difference Method&rdquo;, for example.
+<figure><img src="/post/tavella_lv_transform3.png">
+</figure>
+</li>
+</ul>
+<p>Both are more or less equivalent. I would expect the later to be slightly more precise but I tried the former as it is simpler to test if you have non uniform parabolic PDE solvers.</p>
+<p>It works very well, but I found an interesting issue when computing the density (second derivative of the call price): if one relies on a Hermite kind of spline (Bessel/Parabolic or Harmonic), the density wiggles around. The C2 cubic spline solves this problem as it is C2. Initially I thought those wiggles could be produced because the interpolation did not respect monotonicity and I tried a Hyman monotonic cubic spline out of curiosity, it did not change anything (in an earlier version of this post I had a bug in my Hyman filter) as it preserves monotonicity but not convexity. The wiggles are only an effect of the approximation of the derivatives value.</p>
+<figure><img src="/post/ah_dens3.png">
+</figure>
+
+<p>Initially, I did not notice this on the uniform discretization mostly because I used a large number of strikes in the PDE (here I use only 50 strikes) but also because the effect is somewhat less pronounced in this case.</p>
+<p>I also discovered a bug in my non uniform implementation of Hagan Density PDE, I forgot to take into account an additional dF/dz factor when the density is integrated. As a result, the density was garbage when computed by a numerical difference.</p>
+<p><figure><img src="/post/hagan_lv_spline_density2.png"><figcaption>
+      <h4>HaganDensity denotes the transformed PDE on density approach. Notice the non-sensical spikes</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/density_transform_bad.png"><figcaption>
+      <h4>Bad Call prices around the forward with Hagan Density PDE. Notice the jumps.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/density_transform_good.png"><figcaption>
+      <h4>No jumps anymore after the dF/dZ fit </h4>
+    </figcaption>
+</figure>
+</p>
+<p><strong>Update March 2014</strong> - I have now a paper with Matlab code <a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a></p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/random-hardware-issues/">Random Hardware Issues</a>
   </h1>
@@ -103,25 +149,25 @@ The Fortran <a href="http://www.netlib.org/minpack/">minpack</a> library has a g
 <li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li>
 </ul>
 <p>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the <a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation">Fokker-Planck</a> (forward) equation.
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png">
 </figure>
 
 The \(\alpha D(F)\) is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png">
 </figure>
 
 A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a> of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:
-<figure><img src="/post/hagan_dens1.png"/>
+<figure><img src="/post/hagan_dens1.png">
 </figure>
 
-<figure><img src="/post/hagan_iv.png"/>
+<figure><img src="/post/hagan_iv.png">
 </figure>
 
 The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:
-<figure><img src="/post/ah_dens1.png"/>
+<figure><img src="/post/ah_dens1.png">
 </figure>
 
-<figure><img src="/post/ah_iv1.png"/>
+<figure><img src="/post/ah_iv1.png">
 </figure>
 </p>
 <p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>
@@ -145,13 +191,13 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
   </h1>
   <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
   <p>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).</p>
-<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"/><figcaption>
-            <h4>Local volatility</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"><figcaption>
+      <h4>Local volatility</h4>
+    </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"/><figcaption>
-             <h4>Implied volatility</h4>
-         </figcaption>
+ <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"><figcaption>
+       <h4>Implied volatility</h4>
+     </figcaption>
  </figure>
 </p>
 <p>The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</p>
@@ -193,7 +239,7 @@ $$g(u) = \log(\phi(-iu))$$</p>
 <p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
 $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
 <p>In contrast, the paper formula was:
-<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png">
 </figure>
 </p>
 <p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
@@ -236,16 +282,6 @@ $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}
 Regarding Taylor expansion, there seems to be quite a few options possible, but I found that the default expansion was already relatively easy to read. XCas produced less readable expansions, or just failed.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/martin-odersky-teaches-scala-to-the-masses/">Martin Odersky teaches Scala to the Masses</a>
-  </h1>
-  <time datetime="2013-09-17T20:11:00Z" class="post-date">Tue, Sep 17, 2013</time>
-  <p>I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a> by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What&rsquo;s nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.</p>
-<p>I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).</p>
-<p>I believe it will make my code more functional programming oriented in the future, especially at the high level.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/15/">Previous</a></p>
@@ -254,6 +290,9 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
 
     
       
+  
+
+
     
   </body>
 </html>

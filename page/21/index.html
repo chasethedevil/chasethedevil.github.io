@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,30 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/from-opensuse-to-ubuntu-13.04/">From OpenSuse to Ubuntu 13.04</a>
+  </h1>
+  <time datetime="2013-02-01T18:22:00Z" class="post-date">Fri, Feb 1, 2013</time>
+  <p>In my Linux quest, I changed distribution again on my home desktop, from OpenSuse 11.1 with KDE to Ubuntu 13.04 (not yet released - so alpha) with Unity. Why?</p>
+<ul>
+<li>KDE was crashing a bit too often for my taste (more than once a week). Although I enjoyed the KDE environment.</li>
+<li>Not easy to transfer files to my Android 4.2 phone. Ubuntu 13.04 is not fully there yet, but is on its way.</li>
+<li>zypper is a bit too specific for my taste. I would be ok with yum+rpm or apt-get, but another tool just for a single distribution, not really.</li>
+<li>Plus I&rsquo;m just curious what&rsquo;s next for Ubuntu, and Linux makes it very simple to change distributions, and reinstall applications with the same settings. So it&rsquo;s never a big task to change distribution.</li>
+<li>I somehow like how Ubuntu feels, not sure what it is exactly, maybe the Debian roots.</li>
+</ul>
+<p>When people say OpenSuse is rock solid, I don&rsquo;t have that impression, at least on the desktop. It might have been true in the past. But in the past, most distros were very stable. I never remember having big stability issues until, maybe, late 2010. In the early 2000s, a laptop would work very well with Linux, suspend included. I remember that my Dell Inspiron 8200 was working perfectly with Mandrake and WindowMaker. Nowadays, it never seem to work that well, but is just ok: Optimus comes to mind (especially with external screen), suspend problems, wifi (not anymore).</p>
+<p>So far I can see that Ubuntu 13.04 is prettier than the past versions, the installer is great. I encrypted my two hard disks, it was just a matter of ticking a box - very nice. Unity Launcher, while interesting, is still not the greatest tool to find an installed application (compared to KDE launcher or Gnome Shell). I don&rsquo;t notice any stability issue so far, even though I have some popup messages that sometimes tells me something crashed (typical for an alpha version). If I just ignore the messages, everything seems fine. OpenSuse-KDE was logging me out (session crash), or just stopped completely being responsive (hard reset necessary).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/productivity-zero/">Productivity Zero</a>
   </h1>
@@ -125,7 +142,7 @@ I was looking for an implementation of the non central chi squared distribution 
 <p>$$ f&rsquo;(x) = \frac{f(x_{i+1})-f(x_{i-1})}{x_{i+1} - x_{i-1}} $$</p>
 <p>However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \(f(x_{i+1})\) and \(f(x_{i-1})\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).</p>
 <p>This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0, 0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.</p>
-<figure><img src="/post/cir_bond_euler_discretizations.png"/>
+<figure><img src="/post/cir_bond_euler_discretizations.png">
 </figure>
 
 <p>I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:<!-- raw HTML omitted -->
@@ -196,18 +213,6 @@ This will be a very technical post, I am not sure that it will be very understan
 <p><a href="http://nvidia.fullviewmedia.com/gtc2010/0923-a7-2032.html">http://nvidia.fullviewmedia.com/gtc2010/0923-a7-2032.html</a></p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/pretty-fonts-in-chrome-with-linux/">Pretty Fonts in Chrome with Linux</a>
-  </h1>
-  <time datetime="2012-09-12T18:06:00Z" class="post-date">Wed, Sep 12, 2012</time>
-   
-
-It's a bit incredible, but in 2012, some linux distros (like Fedora, or Kubuntu) still have trouble to have pretty fonts everywhere. I found a nice tip initially for Google Chrome but that seems to improve more than Chrome: create ~/.fonts.conf with the following:<br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">[match target="font"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit name="autohint" mode="assign"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [bool]true[/bool]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit name="hinting" mode="assign"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [bool]true[/bool]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit mode="assign" name="hintstyle"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [const]hintslight[/const]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">[/match]</span><br /><div><br /></div><div>replace [ and ] with brackets &lt; and &gt;<br /><br />Update from 2013 - This can be done system wide, see <a href="http://chasethedevil.blogspot.com/2013/08/better-fonts-in-fedora-than-in-ubuntu.html">http://chasethedevil.blogspot.com/2013/08/better-fonts-in-fedora-than-in-ubuntu.html</a> </div><pre></pre>
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/20/">Previous</a></p>
@@ -216,6 +221,9 @@ It's a bit incredible, but in 2012, some linux distros (like Fedora, or Kubuntu)
 
     
       
+  
+
+
     
   </body>
 </html>

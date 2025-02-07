@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/arbitrage-free-wiggles/">Arbitrage Free Wiggles</a>
+  </h1>
+  <time datetime="2014-03-03T17:13:00Z" class="post-date">Mon, Mar 3, 2014</time>
+   
+
+Peter Jaeckel, in a <a href="http://www.pjaeckel.webspace.virginmedia.com/ClampingDownOnArbitrage.pdf">recent paper (pdf)</a>, shows that something that sounds like a reasonable arbitrage free interpolation can produce wiggles in the implied volatility slice.<br /><br />The interpolation in question is using some convexity preserving spline on call and put option prices directly and in strike, assuming those input prices are arbitrage free. This is very similar to <a href="http://nkahale.free.fr/papers/Interpolation.pdf">Kahale interpolation (pdf)</a>.<br /><br />It seemed too crazy for me so I had to try out his example. And using a <a href="http://papers.ssrn.com/abstract=2175002">harmonic spline</a>, it does produce arbitrage free wiggles.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-HhHvYhvdlwU/UxSkNCTJiXI/AAAAAAAAHBQ/buAU6Q_wALM/s1600/Screenshot+from+2014-03-03+16:29:29.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-HhHvYhvdlwU/UxSkNCTJiXI/AAAAAAAAHBQ/buAU6Q_wALM/s1600/Screenshot+from+2014-03-03+16:29:29.png" height="297" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Wiggles in the implied volatility</td></tr></tbody></table>If we look at the probability density (the curvature), the Harmonic spline maintains a positive density, nearly piecewise flat in log scale, while Hyman, because it preserves only monotonicity, has some negative density which are cut out from the graph.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-UKuoXUcVRYY/UxSk1ylZ7jI/AAAAAAAAHBY/RDxMR2Q69GY/s1600/Screenshot+from+2014-03-03+16:47:46.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-UKuoXUcVRYY/UxSk1ylZ7jI/AAAAAAAAHBY/RDxMR2Q69GY/s1600/Screenshot+from+2014-03-03+16:47:46.png" height="297" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Probability Density</td></tr></tbody></table>In reality, if we look at the interpolation of prices in log scale, one can see that splines won't behave as expected at first on small numbers: they will give a much higher weight to the high values, producing something like a piecewise linear interpolation.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-5WOPPmW088c/UxSml6PGWmI/AAAAAAAAHBk/xOfiaaRcpLI/s1600/Screenshot+from+2014-03-03+16:57:33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-5WOPPmW088c/UxSml6PGWmI/AAAAAAAAHBk/xOfiaaRcpLI/s1600/Screenshot+from+2014-03-03+16:57:33.png" height="297" width="400" /></a></div><br />In reality, what one really wants for such data is to just interpolate the log prices with a spline, not the prices. This is the curve named "Log" in the graphs, where a simple cubic spline is used on the log prices, and fed to exp after interpolation.<br /><br />Now it sounds like a reasonable arbitrage free interpolation would be to interpolate the discrete density log linearly, in a similar spirit as <a href="http://finmod.co.za/interpreview.pdf">Hagan-West yield curve interpolation</a> (pdf).<br /><br />In general, if you interpolate very small numbers with a spline, you probably are doing something wrong.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/adjoint-delta-for-monte-carlo/">Adjoint Delta for Monte-Carlo</a>
   </h1>
@@ -99,11 +111,11 @@ Several papers show that the limit for large strikes of <a href="http://www.goog
   <p>With a <a href="/post/a-small-time-schobel-zhu-expansion">small time expansion</a>, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.</p>
 <p>Like <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">Forde did for Heston</a>, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).</p>
 <p>We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points. In practice, I have noticed that using a more refined expansion with more terms resulted not only in more complex formulas to lookup the original stochastic volatility parameters, but also in an increased error, because of the redundancy of parameters in the polynomial expansion. My previous Schobel-Zhu expansion becomes just:</p>
-<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2007%2007.png"/>
+<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2007%2007.png">
 </figure>
 
 <p>In practice, I have found that the procedure works rather well.</p>
-<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2004%2033.png"/>
+<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2004%2033.png">
 </figure>
 
 <p>On some more extreme surfaces, where theta=0, the error in kappa and theta is higher. Interestingly, I received a few real world surfaces like this, where theta=0, which I found a bit puzzling. I wondered if it was because those surfaces were preprocessed with SABR, that has no mean reversion, but I could not fit those exactly with SABR.</p>
@@ -118,14 +130,14 @@ Several papers show that the limit for large strikes of <a href="http://www.goog
   <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.</p>
 <p>In 2011, Forde et al. proposed <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">a second order small time expansion</a> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <a href="http://arxiv.org/abs/1306.5447">different expansions up to order-3</a> around the money. I already looked at the later in my <a href="/post/a-small-time-schobel-zhu-expansion">previous post</a>, applying the idea to Schobel-Zhu.</p>
 <p>I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.</p>
-<figure><img src="/post/heston_expansions_order3a.png"/><figcaption>
-            <h4>T=0.5, Feller condition largely violated</h4>
-        </figcaption>
+<figure><img src="/post/heston_expansions_order3a.png"><figcaption>
+      <h4>T=0.5, Feller condition largely violated</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/heston_expansions_order3b.png"/><figcaption>
-            <h4>T=0.5, Feller condition slightly violated</h4>
-        </figcaption>
+<figure><img src="/post/heston_expansions_order3b.png"><figcaption>
+      <h4>T=0.5, Feller condition slightly violated</h4>
+    </figcaption>
 </figure>
 
 <p>Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.
@@ -139,17 +151,17 @@ The order-3 formula, even though it is more precise at the money, was actually m
   <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
   <p>The paper <a href="http://arxiv.org/abs/1306.5447">implied vol for any local stochastic vol model</a> from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).</p>
 <p>I tried it on the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDIQFjAB&amp;url=http%3A%2F%2Fssrn.com%2Fabstract%3D100831&amp;ei=3gr5UtzkOYm90QWD7IDwBA&amp;usg=AFQjCNFY9anH_AU0A5pWRX4Qdo6Kp2CjEg&amp;sig2=teGVgsV4uneROlzZCuUFBw&amp;bvm=bv.60983673,d.d2k">Schobel-Zhu</a> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <a href="/post/heston-schobel-zhu-bates-double-heston-fit">fit was as good</a>, while the <a href="/post/brownian-bridge-or-not-with-heston">simulation under the QE scheme</a> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:</p>
-<figure><img src="/post/SZ_EXP1.png"/>
+<figure><img src="/post/SZ_EXP1.png">
 </figure>
 
 <p>And this is how it behaves on some realistic input:</p>
-<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"/><figcaption>
-            <h4>T=0.1</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"><figcaption>
+      <h4>T=0.1</h4>
+    </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"/><figcaption>
-             <h4>T=0.5</h4>
-         </figcaption>
+ <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"><figcaption>
+       <h4>T=0.5</h4>
+     </figcaption>
  </figure>
 </p>
 <p>In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.</p>
@@ -203,52 +215,6 @@ Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Converg
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation/">Coordinate Transform of the Andreasen Huge SABR PDE &amp; Spline Interpolation</a>
-  </h1>
-  <time datetime="2014-01-08T18:51:00Z" class="post-date">Wed, Jan 8, 2014</time>
-  <p>Recently, I noticed <a href="/post/arbitrage-free-sabr---another-view-on-hagan-approach">how close</a> are the two PDE based approaches from Andreasen-Huge and Hagan for an arbitrage free SABR. Hagan gives a local volatility very close to the one Andreasen-Huge use in the forward PDE in call prices. A multistep Andreasen-Huge (instead of their one step PDE method) gives back prices and densities nearly equal to Hagan density based approach.</p>
-<p>Hagan proposed in some unpublished paper a coordinate transformation for two reasons: the ideal range of strikes for the PDE can be very large, and concentrating the points where it matters should improve stability and accuracy. The transform itself can be found in the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.andersen-piterbarg-book.com%2F&amp;ei=dYzNUrG6Eo7n7Aamp4GwAQ&amp;usg=AFQjCNE3sdrH2B8EDg40Gocp8FB-QEtnew&amp;sig2=aoDaRX5-zTolem9mUrEumw&amp;bvm=bv.58187178,d.ZGU">Andersen-Piterbarg book</a> &ldquo;Interest Rate Modeling&rdquo;, and is similar to the famous log transform, but for a general local volatility function (phi in the book notation).</p>
-<figure><img src="/post/piterbarg_lv_transform1.png"/>
-</figure>
-
-<p>There are two ways to transform Andreasen Huge PDE:</p>
-<ul>
-<li>through a non-uniform grid: the input strikes are directly transformed based on a uniform grid in the inverse transformed grid (paying attention to still put the strike in the middle of two points). This is detailed in the Andersen-Piterbarg book.
-<figure><img src="/post/piterbarg_lv_transform2.png"/>
-</figure>
-</li>
-<li>through a variable transform in the PDE: this gives a slightly different PDE to solve. One still needs to convert then a given strike, to the new PDE variable. This kind of transform is detailed in the <a href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471197602.html">Tavella-Randall book</a> &ldquo;Pricing Financial Instruments: the Finite Difference Method&rdquo;, for example.
-<figure><img src="/post/tavella_lv_transform3.png"/>
-</figure>
-</li>
-</ul>
-<p>Both are more or less equivalent. I would expect the later to be slightly more precise but I tried the former as it is simpler to test if you have non uniform parabolic PDE solvers.</p>
-<p>It works very well, but I found an interesting issue when computing the density (second derivative of the call price): if one relies on a Hermite kind of spline (Bessel/Parabolic or Harmonic), the density wiggles around. The C2 cubic spline solves this problem as it is C2. Initially I thought those wiggles could be produced because the interpolation did not respect monotonicity and I tried a Hyman monotonic cubic spline out of curiosity, it did not change anything (in an earlier version of this post I had a bug in my Hyman filter) as it preserves monotonicity but not convexity. The wiggles are only an effect of the approximation of the derivatives value.</p>
-<figure><img src="/post/ah_dens3.png"/>
-</figure>
-
-<p>Initially, I did not notice this on the uniform discretization mostly because I used a large number of strikes in the PDE (here I use only 50 strikes) but also because the effect is somewhat less pronounced in this case.</p>
-<p>I also discovered a bug in my non uniform implementation of Hagan Density PDE, I forgot to take into account an additional dF/dz factor when the density is integrated. As a result, the density was garbage when computed by a numerical difference.</p>
-<p><figure><img src="/post/hagan_lv_spline_density2.png"/><figcaption>
-            <h4>HaganDensity denotes the transformed PDE on density approach. Notice the non-sensical spikes</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/density_transform_bad.png"/><figcaption>
-            <h4>Bad Call prices around the forward with Hagan Density PDE. Notice the jumps.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/density_transform_good.png"/><figcaption>
-            <h4>No jumps anymore after the dF/dZ fit </h4>
-        </figcaption>
-</figure>
-</p>
-<p><strong>Update March 2014</strong> - I have now a paper with Matlab code <a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a></p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/14/">Previous</a></p>
@@ -257,6 +223,9 @@ Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Converg
 
     
       
+  
+
+
     
   </body>
 </html>

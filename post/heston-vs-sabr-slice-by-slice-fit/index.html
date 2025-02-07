@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
@@ -73,23 +73,23 @@
   <h1>Heston vs SABR slice by slice fit</h1>
   <time datetime=2014-05-15T22:06:00Z class="post-date">Thu, May 15, 2014</time>
   <p>Some people use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1496982&amp;ei=nx11U6QOoozQBcrfgIAK&amp;usg=AFQjCNHi149E0_JiOzZRT9kgDWWYvHWlFQ&amp;sig2=ZnhySOuJd8V-jBcWo4Ky2w&amp;bvm=bv.66699033,d.d2k">Heston to fit one slice</a> of a volatility surface. In this case, some parameters are clearly redundant. Still, I was wondering how it fared against SABR, which is always used to fit a slice. And what about Schobel-Zhu?
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>With Heston, the calibration is actually slightly better with kappa=0, that is, without mean reversion, because the global optimization is easier and the mean reversion is fully redundant. It&rsquo;s still quite remarkable that 3 parameters result in a fit as good as 5 parameters.</p>
 <p>This is however not the case for Schobel-Zhu, where each &ldquo;redundant parameter&rdquo; seem to make a slight difference in the quality of calibration. kappa = 0 deteriorate a little bit the fit (the mean error is clearly higher), and theta near 0 (so calibrating 4 parameters) is also a little worse (although better than kappa = 0). Also interestingly, the five parameters Schobel-Zhu fit is slightly better than Heston, but not so when one reduce the number of free parameters.</p>
 <p>So what about Heston vs SABR. It is interesting to consider the case of general Beta and Beta=1: it turns out that as confirmed for equities, beta=1 is actually a better choice.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Overall on my 10 surfaces composed each of around 10 slices, an admittedly small sample, Heston (without mean-reversion) fit is a little bit better than SABR. Also the <a href="/post/svi-on-top-of-sabr">SVI-SABR</a> idea from Gatheral is not great: the fit is clearly worse than SABR with Beta=1 and even worse than a simple quadratic.
 Of course the best overall fit is achieved with the classic SVI, because it has 6 parameters while the others have only 3.</p>
 <p>All the calibrations so far were done slice by slice independently, using levenberg marquardt on an initial guess found by differential evolution. Some people advocate for speed or stability of parameters reasons the idea of calibrating each slice using the previous slice as initial guess with a local optimizer like levenberg marquardt, in a bootstrapping fashion.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png">
 </figure>
 </p>
 <p>The results can be quite different, especially for SVI, which then becomes the worst, even worse than SVI-SABR, which is actually a subset of SVI with fewer parameters. How can this be?</p>
@@ -123,6 +123,9 @@ Of course the best overall fit is achieved with the classic SVI, because it has 
 
     
       
+  
+
+
     
   </body>
 </html>

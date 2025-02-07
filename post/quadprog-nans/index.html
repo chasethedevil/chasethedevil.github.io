@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
@@ -93,9 +93,9 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></span></span></code></pre></div>
 <p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
 <p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
-<figure><img src="/post/quadprog_nan_fix.png"/><figcaption>
-            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
-        </figcaption>
+<figure><img src="/post/quadprog_nan_fix.png"><figcaption>
+      <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+    </figcaption>
 </figure>
 
 <p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
@@ -127,6 +127,9 @@
 
     
       
+  
+
+
     
   </body>
 </html>

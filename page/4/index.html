@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,33 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/reghai_remarkable_coincidences/">Remarkable Coincidences, Bad Book?</a>
+  </h1>
+  <time datetime="2020-11-21T07:56:42&#43;0100" class="post-date">Sat, Nov 21, 2020</time>
+  <p>I stumbled upon a new  short book <a href="https://link.springer.com/book/10.1007%2F978-3-030-57496-3">Financial Models in Production</a> from O. Kettani and A. Reghai. A page attracted my attention</p>
+<figure><img src="/post/reghai_coincidences.png"><figcaption>
+      <h4>A page from Kettani and Reghai&#39;s book.</h4>
+    </figcaption>
+</figure>
+
+<p>This is the same example as I used on <a href="/post/implied-volatility-from-black-scholes-price/">my blog</a>, where I also present the Li&rsquo;s SOR method combined with the good initial guess from Stefanica. The idea has also been expanded on in <a href="https://jherekhealy.github.io">Jherek Healy&rsquo;s book</a>. What is shocking is that, beside reusing my example, <strong>they reuse my timing</strong> for Jäckel and my implementation is in <a href="https://golang.org">Google Go</a>, with a timing done on some older laptop. The numbers given are thus highly inconsistent. Of course, none of this is mentioned anywhere, and the book does not reference my blog.</p>
+<p>I also find the description of how they improve the implied volatility algorithm (detailed on the next page) to not make much sense. After this kind of stuff, you can&rsquo;t really trust anything that is in the book&hellip;</p>
+<p>Worst perhaps, is that the authors advertise their &ldquo;novel&rdquo; technique in otherwise decent talks and conferences, such as <a href="https://www.mathfinance.com/newsletter-october-2020-mathfinance-conference-recap/">the one from mathfinance</a>. Here is a quote</p>
+<blockquote>
+<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p>
+</blockquote>
+<p>It is really unfortunate that the world we live in encourages such boasting. Papers always need  to present some novel ideas to be published, but there is too often no check on whether the idea actually works, or is worth it. The temptation to make exagerated claims is very high for authors. In the end, it becomes not so easy to sort out the good from the bad.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/bad-papers-polynomial-roots/">Bad papers and the roots of high degree polynomials</a>
   </h1>
@@ -89,9 +109,9 @@ Furthermore, the method is not particularly fast either compared to some other a
 <p>I find it a bit incredible that this gets published, although I am not too surprised since the bar for publication is low for many journals (see <a href="https://quantsrus.github.io/post/on-the-quality-of-research-publications/">this enlightening post</a> by J. Healy),  and even for more serious journals, referees almost never actually try the method in question, so they have to blindly trust the results and focus mostly on style/presentation of ideas.</p>
 <p>Fortunately, some papers are very good, such as <a href="https://arxiv.org/abs/1611.02435">Fast and backward stable computation of roots of polynomials, Part II: backward error analysis; companion matrix and companion pencil</a>. In this case, the authors even provide <a href="https://github.com/jverzani/AMRVW.jl">a library in Julia</a>, so the claims can be easily verified, and without surprise, it works very well, and is (very) fast. It also supports multiple precision, if needed. For the specific case of the Mersenne-Twister polynomial, it leads to the correct entropy value, working only with 64-bit floats, even though many eigenvalues have a not-so-small error. It is still relatively fast (compared to a standard LinearAlgebra.eigvals) using quadruple precision (128-bits), and there, the error in the eigenvalues is small.</p>
 <p>Overall, I found with this method an entropy of 10.377 (quite different from what is stated in K. Savvidy paper), although the plot of the distribution looks similar (but with a different scale: the total number of eigenvalues reported in K. Savvidy paper just does not add up to 19937, which is somewhat puzzling). A naive companion matrix solution led to 10.482. More problematic, if we look directly for the eigenvalues of the Mersenne-Twister transition matrix (Appendix A of the MT paper), we find 10.492, perhaps it is again an issue with the limited precision of 64-bits here.</p>
-<figure><img src="/post/mt19937_hist64_poly128roots.png"/><figcaption>
-            <h4>Distribution of the eigenvalues of the Mersenne-Twister.</h4>
-        </figcaption>
+<figure><img src="/post/mt19937_hist64_poly128roots.png"><figcaption>
+      <h4>Distribution of the eigenvalues of the Mersenne-Twister.</h4>
+    </figcaption>
 </figure>
 
 <p>Below is the Mersenne-Twister polynomial, expressed in Julia code.
@@ -146,9 +166,9 @@ This summer I read <em>Shock Therapy - The rise of disaster capitalism</em>. It 
 I see one major issue with the idea: if you stumble upon a tiny number (perhaps you&rsquo;re unlucky) like \(10^{-100}\), then it may distort significantly your result (for example if you call the inverse cumulative normal to generate normal numbers and calculate the mean), because your sample size may not be not large enough to compensate. Perhaps for the same kind of reason, it may be better to use only 32 bits (or less bits). The consequence is that tail events are bound to be underestimated by computers. In a way this is <a href="/post/sobol-64-bits/">similar to Sobol</a>, which generates with a precision of \(2^{-L}\), for \(2^{L} - 1\) samples.</p>
 <p>Finally, some personal tests convinced me that a very long period, such as the one in MT, may not be a good idea, as, in the case of MT, the generator is then slower to recover from a bad state. For Well19337a, it may take 5000 numbers and the excess-0 state is very pronounced (period of \(2^{19937}-1\)). While this is way better than the old MersenneTwister (the newer dSFMT is also much better, around twice slower than Well19937a in terms of recovery), which requires more than 700 000 numbers to recover from the bad state, it may still be problematic in some cases. For example, if you are particularly unlucky, and pick a bad choice of initial state (which may actually have good properties in terms of number of 0 bits and 1 bits) and your simulation is of small size (16K o even 64K numbers), there may be visible an impact of this excess-0 state on the simulation results.
 For Well1024a (period of \(2^{1024}-1\)), full bit balance recovery takes around 500 numbers and the excess-0 state is much much milder so as to be a non-issue really.</p>
-<figure><img src="/post/well_bad.png"/><figcaption>
-            <h4>Example with a manufactured by seed to go into excess-0 state.</h4>
-        </figcaption>
+<figure><img src="/post/well_bad.png"><figcaption>
+      <h4>Example with a manufactured by seed to go into excess-0 state.</h4>
+    </figcaption>
 </figure>
 
 <p>Below is an example of (manufactured) bad seed for Well19937a, which will lead to excess-0 state after ~1000 numbers, and lasts ~3000 numbers.</p>
@@ -297,29 +317,29 @@ I looked at BNP warrant prices on the CAC40 French index, with a maturity of Mar
 <li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
 <li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
 </ul>
-<figure><img src="/post/cac40_mar9_dens.png"/><figcaption>
-            <h4>Implied probability density for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_dens.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 <p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
 is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
 <p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
-<figure><img src="/post/cac40_mar9_dens_0.png"/><figcaption>
-            <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_dens_0.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
-<figure><img src="/post/cac40_mar9_collo.png"/><figcaption>
-            <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_collo.png"><figcaption>
+      <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 <p>And for the curious, here are the implied vol plots:</p>
-<figure><img src="/post/cac40_mar9_vol.png"/><figcaption>
-            <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_vol.png"><figcaption>
+      <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 
@@ -363,23 +383,6 @@ things are not as simple.</p>
 was not all that encouraging, but it may be much better at building PDE solvers and not too much work to port my python code. I am curious to see if it ends up being faster, and whether the accessible LU solvers are any good. If Julia delivers, it&rsquo;s a bit of a shame for python, since it has so many excellent high quality numerical libraries. Also when I look back at my old Monte-Carlo test, I bet it would benefit greatly from numba, somewhat paradoxically, compared to my current experiment.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/about/">About</a>
-  </h1>
-  <time datetime="2018-12-17T10:05:07&#43;0100" class="post-date">Mon, Dec 17, 2018</time>
-  <p>I just moved my blog to a static website, created with <a href="https://gohugo.io/">Hugo</a>, I explain the reasons why <a href="/post/moved-to-hugo/">here</a>.
-You can find more about me on my <a href="https://fr.linkedin.com/in/fabien-le-floc-h-8aa306">linkedin profile</a>.
-In addition you might find the following interesting:</p>
-<ul>
-<li><a href="http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1514784">List of quantitative finance papers</a> I have freely available on SSRN</li>
-<li><a href="/lefloch_trbdf2_draft.pdf">TR-BDF2 for Stable American Option Pricing</a>. This is the first draft, not the final version that was published in the Journal of Computational Finance.</li>
-<li><a href="/lefloch_sabr_slides.pdf">Presentation on finite difference techniques for arbitrage-free SABR</a> I gave at the conference on models and numerics in financial mathematics at the Lorentz center in 2015.</li>
-<li><a href="/lefloch_exact_log.pdf">Exact Forward for Finite-Difference Schemes on the Log-transformed Black-Scholes PDE</a>.</li>
-<li><a href="/lefloch_volatility_asymptotics.pdf">Asymptotic bounds of the normal volatility</a>.</li>
-</ul>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/3/">Previous</a></p>
@@ -388,6 +391,9 @@ In addition you might find the following interesting:</p>
 
     
       
+  
+
+
     
   </body>
 </html>

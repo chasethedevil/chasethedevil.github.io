@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,65 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">Roughness of Stochastic Volatility with Jumps</a>
+  </h1>
+  <time datetime="2023-12-07T20:56:42&#43;0100" class="post-date">Thu, Dec 7, 2023</time>
+  <p>I was wondering if adding jumps to stochastic volatility, as is done in the SVCJ model of Duffie, Singleton and Pan <em>&ldquo;Transform Analysis and Asset Pricing for Affine Jump-Diffusion&rdquo;</em> also in Broadie and Kaya <em>&ldquo;Exact simulation of stochastic volatility and other affine jump diffusion processes&rdquo;</em>, would lead to rougher paths, or if it would mislead the roughness estimators.</p>
+<p>The answer to the first question can almost be answered visually:
+<figure><img src="/post/svcj_variance_path.png">
+</figure>
+</p>
+<p>The parameters used are the one from Broadie and Kaya: v0=0.007569, kappa=3.46, theta=0.008, rho=-0.82, sigma=0.14 (Heston), jump correlation -0.38, jump intensity 0.47, jump vol 0.0001, jump mean 0.05, jump drift -0.1.</p>
+<p>The Rough Heston with H=0.1 is much &ldquo;noisier&rdquo;. There is not apparent difference between SVCJ and Heston in the path of the variance.</p>
+<p>The estimator of Cont and Das (on a subsampled path) leads to a Hurst exponent H=0.503, in line with a standard Brownian motion.
+<figure><img src="/post/svcj_estimate.png"><figcaption>
+      <h4>Cont-Das estimate H=0.503.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>The estimator from Rosenbaum and Gatheral leads to a Hurst exponent (slope of the regression) H=0.520 with well behaved regressions:
+<figure><img src="/post/svcj_estimate_gatheral_1.png"><figcaption>
+      <h4>Regressions for each q.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/svcj_estimate_gatheral_2.png"><figcaption>
+      <h4>Regression over all qs which leads to the estimate of H.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>On this example, there are relatively few jumps during the 1 year duration. If we multiply the jump intensity by 1000 and reduce the jump mean accordingly, the conclusions are the same. Jumps and roughness are fundamentally different.</p>
+<p>Of course this does not mean that the short term realized volatility does not look rough as evidenced in Cont and Das paper:
+<figure><img src="/post/svcj_rv.png"><figcaption>
+      <h4>The 1 hour realized volatility looks rough.</h4>
+    </figcaption>
+</figure>
+
+I computed the realized volatility on a subsampled path, using disjoint windows of 1h of length.</p>
+<p>It is not really rough, estimators will have a tough time leading to stable estimates on it.
+<figure><img src="/post/svcj_rv_estimate.png"><figcaption>
+      <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>This is very visible with the Rosenbaum-Gatheral way of estimating H, we see that the observations do not fall on a line at all but flatten:
+<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"><figcaption>
+      <h4>Regressions for each q based on the 1h realized variance.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>The pure Heston model leads to similar observations.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/measuring_roughness_with_julia/">Measuring Roughness with Julia</a>
   </h1>
@@ -114,7 +166,7 @@
 </span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#666">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#666">^</span><span style="color:#40a070">2</span>)
 </span></span><span style="display:flex;"><span>density(cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>,ylabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Density&#34;</span>)</span></span></code></pre></div>
 The last plot should look like
-<figure><img src="/post/oxford_spx500_roughness.png"/>
+<figure><img src="/post/oxford_spx500_roughness.png">
 </figure>
 
 It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>
@@ -130,9 +182,9 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 <p>I was wondering how good the approximation would be for two flat smiles (in terms of Black volatilities). I then noticed something that escaped me before: the normal SABR model is able to fit the pure Black model (with constant vols) extremely well. A calibration near the money stays valid very out-of-the-money and the error in Black volatilities is very small.</p>
 <p>For very low strikes (25%) the error in vol is below one basis point. And in fact, for a 1 year option of vol 20%, the option value is extremely small: we are in deep extrapolation territory.</p>
 <p>It is remarkable that a Bachelier smile formula with 3 free parameters can fit so well the Black vols. Compared to stochastic collocation on a cubic polynomial (also 3 free parameters), the fit is 100x better with the normal SABR.</p>
-<figure><img src="/post/normal_sabr_black_fit_collo.png"/><figcaption>
-            <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
-        </figcaption>
+<figure><img src="/post/normal_sabr_black_fit_collo.png"><figcaption>
+      <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
+    </figcaption>
 </figure>
 
 
@@ -178,9 +230,9 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 </ul>
 <p>Interestingly the first kind is twice faster with FastTransforms, which suggests a similar symetry use as for the second kind. But the second kind is nearly twice slower.</p>
 <p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
-<figure><img src="/post/quad_rho_all.png"/><figcaption>
-            <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
-        </figcaption>
+<figure><img src="/post/quad_rho_all.png"><figcaption>
+      <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
+    </figcaption>
 </figure>
 
 
@@ -192,22 +244,22 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
   <time datetime="2023-08-20T20:56:42&#43;0100" class="post-date">Sun, Aug 20, 2023</time>
   <p>During my vacation, I don&rsquo;t know why, but I looked at some stability issue with ghost points and the explicit method. I was initially trying out ghost points with the explicit runge kutta Chebyshev/Legendre/Gegenbauer technique and noticed some explosion in some cases.</p>
 <p>I cornered it down to a stability issue of the standard explicit Euler method with ghost (or fictitious) points. The technique is described in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo; (also in Paul Wilmott introduces quantitative finance), which I find quite good, although I have some friends who are not much fond of it. The technique may be used to compute the price of a continuously monitored barrier option when the barrier does not fall on the grid, or more generally for time-dependent barriers. I however look at it in the simple context of a constant barrier in time.</p>
-<figure><img src="/post/ghost_wilmott.png"/><figcaption>
-            <h4>The ghost point technique (from Paul Wilmott on Quantitative Finance).</h4>
-        </figcaption>
+<figure><img src="/post/ghost_wilmott.png"><figcaption>
+      <h4>The ghost point technique (from Paul Wilmott on Quantitative Finance).</h4>
+    </figcaption>
 </figure>
 
 <p>I found out that the explicit Euler scheme is unstable if we let the grid boundaries be random. In practice, for more exotic derivatives, the grid upper bound will typically be based on a number of standard deviations from the spot or from the strike price. The spot price moves continually, and the strike price is fairly flexible for OTC options. So the upper bound can really be anything and the explicit Euler may require way too many time-steps to be practical with the ghost point technique. This is all described in the preprint <a href="https://arxiv.org/abs/2308.04629">Instabilities of explicit finite difference schemes with ghost points on the diffusion equation</a>.</p>
 <p>What does this mean?</p>
 <p>The ghost point technique is not appropriate for the explicit Euler scheme (and thus for the Runge-Kutta explicit schemes as well), unless the ghost point is fixed to be in the middle of the grid, or on the grid outside by one space-step. This means the grid needs to be setup in a particular fashion. But if we need to setup the grid such that the barrier falls exactly somewhere then, for a constant barrier option, no ghost point is needed, one just need to place the barrier on the grid and use a Dirichlet boundary condition.</p>
-<figure><img src="/post/ghost_unstable_euler.png"/><figcaption>
-            <h4>Explicit scheme requires a very large number of time-steps.</h4>
-        </figcaption>
+<figure><img src="/post/ghost_unstable_euler.png"><figcaption>
+      <h4>Explicit scheme requires a very large number of time-steps.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/ghost_unstable_cn.png"/><figcaption>
-            <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
-        </figcaption>
+<figure><img src="/post/ghost_unstable_cn.png"><figcaption>
+      <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
+    </figcaption>
 </figure>
 
 
@@ -221,9 +273,9 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 <p>Shortly after, the SVI model of Jim Gatheral, with its linear wings, started to become popular.</p>
 <p>In a recent paper in collaboration with Winfried Koller, we show that the asymptotic bounds are usually overly optimistic. This is somewhat expected, as the bound only holds as the log-moneyness goes to infinity. What is less expected, is that, even at very large strikes (nearly up to the limit of what SVI allow numerically), we may happen to have arbitrages, even though the bounds are respected.</p>
 <p>In practice, this manifests by increasing call option prices far away in the wings (increasing call prices are an arbitrage opportunity), which could be problematic for any kind of replication based pricing, such as variance swap pricing.</p>
-<figure><img src="/post/maximum_slope_svi.png"/><figcaption>
-            <h4>Increasing call prices for various calibrated SVI parameters respecting the asymptotic boundary constraints.</h4>
-        </figcaption>
+<figure><img src="/post/maximum_slope_svi.png"><figcaption>
+      <h4>Increasing call prices for various calibrated SVI parameters respecting the asymptotic boundary constraints.</h4>
+    </figcaption>
 </figure>
 
 <p>The <a href="https://arxiv.org/abs/2304.13610">paper on arxiv</a>.</p>
@@ -247,36 +299,36 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 <p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
 with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
 In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
-<figure><img src="/post/audnzd_delta_spline_dens.png"/><figcaption>
-            <h4>Splines on AUD/NZD 1w options.</h4>
-        </figcaption>
+<figure><img src="/post/audnzd_delta_spline_dens.png"><figcaption>
+      <h4>Splines on AUD/NZD 1w options.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
 nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
 Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
-<figure><img src="/post/audnzd_delta_svi.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
+<figure><img src="/post/audnzd_delta_svi.png"><figcaption>
+      <h4>SVI on AUD/NZD 1w options.</h4>
+    </figcaption>
 </figure>
 </p>
-<figure><img src="/post/audnzd_delta_svi_denom.png"/><figcaption>
-            <h4>SVI on AUD/NZD 1w options.</h4>
-        </figcaption>
+<figure><img src="/post/audnzd_delta_svi_denom.png"><figcaption>
+      <h4>SVI on AUD/NZD 1w options.</h4>
+    </figcaption>
 </figure>
 
 <p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
-<p><figure><img src="/post/wilmott_wystup_delta.png"/><figcaption>
-            <h4>extract of the Wilmott article.</h4>
-        </figcaption>
+<p><figure><img src="/post/wilmott_wystup_delta.png"><figcaption>
+      <h4>extract of the Wilmott article.</h4>
+    </figcaption>
 </figure>
 
 There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
 For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
 One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
-<figure><img src="/post/omg-oh-my-god.gif"/><figcaption>
-            <h4>Ooohhhh!</h4>
-        </figcaption>
+<figure><img src="/post/omg-oh-my-god.gif"><figcaption>
+      <h4>Ooohhhh!</h4>
+    </figcaption>
 </figure>
 
 <p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
@@ -296,9 +348,9 @@ This is an old problem. Decades ago, rule engines were the trend for similar rea
 very relevant.</p>
 <p>While writing my own presentation, I realized I had not tried to plot the Bachelier implied volatility fractals. The one corresponding to the Householder method is pretty, and not too far off from
 the Black-Scholes case, possibly because the first, second and third derivatives towards the vol are similar between the two models.</p>
-<figure><img src="/post/bachelier_householder_factor2_5.png"/><figcaption>
-            <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
-        </figcaption>
+<figure><img src="/post/bachelier_householder_factor2_5.png"><figcaption>
+      <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
+    </figcaption>
 </figure>
 
 <p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
@@ -329,49 +381,49 @@ the Black-Scholes case, possibly because the first, second and third derivatives
 Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
 <p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
 It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
-            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
+      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
-            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
+      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
-            <h4>SPX roughness index sliding estimate with K=50.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
+      <h4>SPX roughness index sliding estimate with K=50.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
-            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
+      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+    </figcaption>
 </figure>
 </p>
 <p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
 <p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-        </figcaption>
+<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
 <p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
-            <h4>VIX roughness index sliding estimate with K=51.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
+      <h4>VIX roughness index sliding estimate with K=51.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
-            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
+      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+    </figcaption>
 </figure>
 </p>
 <p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
@@ -382,24 +434,6 @@ option prices</a> which also measures the roughness of the implied volatilities.
 <p>I added this post, with more details, as <a href="https://arxiv.org/abs/2207.04930">a note on arxiv</a>, just in case someone needs to reference this. I intend to place some the Julia code I wrote in the context of the paper on github, although I did not find the time yet.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/rough-volatility-or-not-a-review/">Volatility: Rough or Not? A Short Review</a>
-  </h1>
-  <time datetime="2022-05-10T17:56:42&#43;0100" class="post-date">Tue, May 10, 2022</time>
-  <p>It is well-known that the assumption of constant volatility in the Black-Scholes model for pricing financial contracts is wrong and may lead
-to serious mispricing, especially for any exotic derivative contracts.
-A classic approach is to use a deterministic local volatility model to take into account the variation both in the time dimension and in the underlying asset price dimension. But
-the model is still not realistic in terms of forward smile (the implied volatilities of forward starting options). A stochastic volatility component must be added to correct for it.
-More recently, the concept of rough volatility emerged in many academic papers. Instead of using a classic Brownian motion for the stochastic volatility process,
-a fractional Brownian motion is used. The idea of using a fractional Brownian motion for financial time-series can be traced back to Mandelbrot, but it is only relatively recently that it has been proposed for the volatility process (and not the stock process).</p>
-<p>After many published papers on the subject, Rama Cont and Purba Das recently added their preprint <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4065951">Rough Volatility: Fact or Artefact?</a> on SSRN, raising the question whether using a rough volatility process makes sense from a practical point of view. Indeed, they show that the Hurst index measured is different for the realized volatility (even based on very short sampling intervals) and the instantaneous volatility. The authors make the conjecture that is is all due to the discretization error (a.k.a. the microstructure noise), and that in fact, a standard Brownian motion is compatible with the low Hurst index of the realized volatility.</p>
-<p>As mentioned in their conclusion, they are not alone in showing that the rough volatility assumption may not be justified, LCG Rogers has also published a note in 2019 <a href="https://www.skokholm.co.uk/wp-content/uploads/2019/11/TWTWKpaper.pdf">Things we think we know</a>, with the same conclusion.</p>
-<p>In a 2019 paper, Masaaki Fukasawa, Tetsuya Takabatake and Rebecca Westphal also attempt to answer the question <a href="https://arxiv.org/pdf/1905.04852.pdf">Is volatility rough?</a>. They present the same problem with the estimation method of Rosenbaum and Gatheral, namely that their measure may actually not measure the true Hurst index, and this could be why it is always close to H=0.1, regardless of the market index. It is shown that for specific models, the Rosenbaum and Gatheral measure is dependent on the period length considered (5 minutes vs. 1 minute lead to different Hurst indices). The authors therefore devise a more robust (and much more complex) way to estimate the Hurst index of time series, which is not so sensitive to the period length considered. They find that the market volatility, measured through the realized variance proxy is rough, with H=0.04, rougher than what Jim Gatheral suggested.</p>
-<p>To conclude, the study of Gatheral and Rosenbaum, which motivated the use of rough volatility, was based on &ldquo;biased&rdquo; estimates of the Hurst index of the realized volatility of high frequency data  as evidenced in the three papers cited above. Clearly then, this justification does not hold. But Fukasawa et al. suggest the volatility is rougher, and it is slightly surprising that Rama Cont and Purba Das do not take more those results into account. They shortly discuss it, but then go on proposing another biased estimate (one which seems to lead to the same results as Rosenbaum and Gatheral). To their credit, Rama Cont and Purba Das show that the microstructure noise is far from IID, while Fukasawa et al. assume it is close to IID in their method. Perhaps their indirect conclusion is that Fukasaza et al. estimates are also biased (i.e. measuring something else - although the results presented in their paper seem solid).</p>
-<p>Now, there are also other interesting features of the rough volatility models, such as the variation of the at-the-money skew in time, which mimicks the market implied skews in practice, a feature not easily achieved by stochastic volatility models (this typically requires a multidimensional stochastic volatility process to approach it crudely).</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/">Previous</a></p>
@@ -408,6 +442,9 @@ a fractional Brownian motion is used. The idea of using a fractional Brownian mo
 
     
       
+  
+
+
     
   </body>
 </html>

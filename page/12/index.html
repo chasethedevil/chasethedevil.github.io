@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/flat-volatility-surfaces--discrete-dividends/">Flat Volatility Surfaces &amp; Discrete Dividends</a>
+  </h1>
+  <time datetime="2014-11-25T13:58:00Z" class="post-date">Tue, Nov 25, 2014</time>
+   
+
+In papers around volatility and cash (discrete) dividends, we often encounter the example of the flat volatility surface. For example, the <a href="http://www.opengamma.com/sites/default/files/equity-variance-swaps-dividends-opengamma.pdf">OpenGamma paper</a> presents this graph:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-AuaTFyvjgVA/VHRxUid4HzI/AAAAAAAAHjs/T4PAQTnUBN8/s1600/Screenshot%2Bfrom%2B2014-11-25%2B12%3A59%3A09.png" height="167" width="400" /></a></div><br />It shows that if the Black volatility surface is fully flat, there are jumps in the pure volatility surface (corresponding to a process that includes discrete dividends in a consistent manner) at the dividend dates or equivalently if the pure volatility surface is flat, the Black volatility jumps.<br /><br />This can be traced to the fact that the Black formula does not respect C(S,K,Td-) = C(S,K-d,Td) as the forward drops from F(Td-) to F(Td-)-d where d is dividend amount at td, the dividend ex date.<br /><br />Unfortunately, those examples are not very helpful. In practice, the market observables are just Black volatility points, which can be interpolated to volatility slices for each expiry without regards to dividends, not a full volatility surface. Discrete dividends will mostly happen between two slices: the Black volatility jump will happen on some time-interpolated data.<br /><br />While the jump size is known (it must obey to the call price continuity), the question of how one should interpolate that data until the jump is far from trivial even using two flat Black volatility slices.<br /><br />The most logical is to consider a model that includes discrete dividends consistently. For example, one can fully lookup the Black volatility corresponding the price of an option assuming a piecewise lognormal process with jumps at the dividend dates. It can be priced by applying a finite difference method on the PDE. Alternatively, <a href="http://www.risk.net/risk-magazine/technical-paper/1530307/finessing-fixed-dividends">Bos &amp; Vandermark</a> propose a simple spot and strike adjusted Black formula that obey the continuity requirement (the Lehman model), which, in practice, stays quite close to the piecewise lognormal model price. Another possibility is to rely on a forward modelling of the dividends, as in <a href="http://www.quantitative-research.de/dl/Dividends_And_Volatility.pdf">Buehler</a> (if one is comfortable with the idea that the option price will then depend ultimately on dividends past the option expiry).<br /><br />Recently, a <a href="http://onlinelibrary.wiley.com/doi/10.1002/wilm.10112/abstract">Wilmott article</a> suggested to only rely on the jump adjustment, but did not really mention how to find the volatility just before or just after the dividend. Here is an illustration of how those assumptions can change the volatility in between slices using two dividends at T=0.9 and T=1.1.<br /><br />In the first graph, we just interpolate linearly in forward moneyness the pure vol from the Bos &amp; Vandermark formula, as it should be continuous with the forward (the PDE would give nearly the same result) and compute the equivalent Black volatility (and thus the jump at the dividend dates).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-Pye5KeoR16M/VHR1WACQD3I/AAAAAAAAHj4/h65Vpj4mMjI/s1600/bos_2_div_flat.png" height="300" width="400" /></a></div><br />In the second graph, we interpolate linearly the two Black slices, until we find a dividend, at which point we impose the jump condition and repeat the process until the next slice. We process forward (while the Wilmott article processes backward) as it seemed a bit more natural to make the interpolation not depend on future dividends. Processing backward would just make the last part flat and first part down-slopping. On this example backward would be closer to the Bos Black volatility, but when the dividends are near the first slice, the opposite becomes true.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-ScSlBHCBoWc/VHR1eOigrXI/AAAAAAAAHkA/3HJ9zRQvguA/s1600/blackjump_2_div_flat.png" height="300" width="400" /></a></div>While the scale of those changes is not that large on the example considered, the choice can make quite a difference in the price of structures that depend on the volatility in between slices. A recent example I encountered is the variance swap when one includes adjustment for discrete dividends (then the prices just after the dividend date are used).<br /><br />To conclude, if one wants to use the classic Black formula everywhere, the volatility must jump at the dividend dates. Interpolation in time is then not straightforward and one will need to rely on a consistent model to interpolate. It is not exactly clear then why would anyone stay with the Black formula except familiarity.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/machine-learning--quantitative-finance/">Machine Learning &amp; Quantitative Finance</a>
   </h1>
@@ -120,16 +132,16 @@ Recently, some instabilities were noticed in the Carr-Lee seasoned volatility sw
   </h1>
   <time datetime="2014-11-03T11:23:00Z" class="post-date">Mon, Nov 3, 2014</time>
   <p>Without knowing that it was a well known general concept, I first noticed the use of the Lamperti transform in the Andersen-Piterbarg &ldquo;Interest rate modeling&rdquo; book p.292 &ldquo;finite difference solutions for general phi&rdquo;.
-<figure><img src="/post/Screenshot%20from%202014-11-03%2010%2055%2001.png"/>
+<figure><img src="/post/Screenshot%20from%202014-11-03%2010%2055%2001.png">
 </figure>
 </p>
 <p>Pat Hagan used that transformation for a better discretization of the <a href="/post/coordinate-transform-of-the-andreasen-huge-sabr-pde--spline-interpolation">arbitrage free SABR PDE model</a>.I then started to notice the use of this transformation in many more papers. The first one I saw naming it &ldquo;Lamperti transform&rdquo; was the paper from Ait-Sahalia  <a href="http://www.princeton.edu/~yacine/mle.pdf">Maximum likelyhood estimation of discretely sampled diffusions: a closed-form approximation approach</a>. Recently those closed form formulae have been applied to the quadrature method (where one integrates the transition density by a quadrature rule) in &ldquo;Advancing the universality of quadrature methods to any underlying process for option pricing&rdquo;. There is also a recent interesting application to Monte-Carlo simulation in &ldquo;<a href="http://www-leland.stanford.edu/~glynn/papers/2013/RheeG13a.pdf">Unbiased Estimation with Square Root Convergence for SDE Models</a>&rdquo;.</p>
 <p>So the range of practical applications is quite large. But there was still no reference. A google search pointed me to a well written paper that describes the application of the Lamperti transform to various stochastic differential equations, showing its limits &ldquo;<a href="http://orbit.dtu.dk/en/publications/from-state-dependent-diffusion-to-constant-diffusion-in-stochastic-differential-equations-by-the-lamperti-transform(8c869be7-68e9-4b47-acb1-05529b9a8590).html">From State Dependent Diffusion to Constant Diffusion in Stochastic Differential Equations by the Lamperti Transform</a>&rdquo;.</p>
-<p><figure><img src="/post/Screenshot%20from%202014-11-03%2010%2050%2020.png"/>
+<p><figure><img src="/post/Screenshot%20from%202014-11-03%2010%2050%2020.png">
 </figure>
 
 Gary then <a href="http://www.clarusft.com/lamperti-transform/">blogged about the Lamperti transform</a> and various papers from Lamperti, but does not say which one is the source. After going through some, I noticed that Lamperti&rsquo;s 1964 &ldquo;<a href="http://projecteuclid.org/euclid.kjm/1250524711">A simple construction of certain diffusion processes</a>&rdquo; seemed to be the closest, even though it seems to go beyond stochastic differential equations.
-<figure><img src="/post/Screenshot%20from%202014-11-03%2011%2014%2005.png"/>
+<figure><img src="/post/Screenshot%20from%202014-11-03%2011%2014%2005.png">
 </figure>
 </p>
 <p>Today, I found a paper referencing this paper explicitly when presenting the transformation of a stochastic process to a unit diffusion in &ldquo;<a href="http://arxiv.org/pdf/1109.5381">Density estimates for solutions to one dimensional Backward SDE&rsquo;s</a>&rdquo;. In addition it also references one exercise of the Karatzas-Schreve book &ldquo;Brownian motion and Stochastic calculus&rdquo;, which presents again the same idea, without calling it Lamperti transform.</p>
@@ -184,15 +196,15 @@ The variance under SVI becomes linear when the log-moneyness is very large in ab
 <li>when m != 0 and m &raquo; s, the at-the-money slope is b*(rho-1).</li>
 </ul>
 <p>In general it is therefore a bad idea to use m=0 in the initial guess. It appears then that assuming m &raquo; s is better. However, in practice, with this choice, the curvature at the money is matched for a tiny m, even though actually the curvature explodes (sigma=5e-4) at m (so very close to the money). This produces this kind of graph:</p>
-<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2010%2056.png"/>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2010%2056.png">
 </figure>
 
 <p>This apparently simple issue is actually a core problem with SVI. Looking back at our slopes but this time in the moneyness coordinate, the slope at m is \(b \rho\) while the slope at the money is \(b(\rho-1)\) if m != 0. If s is small, as the curvature at m is just b/s this means that our there will always be this funny shape if s is small. It seems then that the best we can do is hide it: let m &gt; max(moneyness) and compute the sigma to match the ATM curvature. This leads to the following:</p>
-<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2032%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2032%2018.png">
 </figure>
 
 <p>This is all good so far. Unfortunately running a minimizer on it will lead to a solution with a small s. And the bigger picture looks like this (QE is Zeliade Quasi-Explicit, Levenberg-Marquardt would give the same result):</p>
-<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2043%2016.png"/>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2043%2016.png">
 </figure>
 
 <p>Of course a simple fix is to not let s to be too small, but how do we defined what is too small? I have found that a simple rule is too always ensure that s is increasing with the maturity supposing that we have to fit a surface. This rule has also a very nice side effect that spurious arbitrages will tend to disappear as well. On the figure above, I can bet that there is a big arbitrage at k=m for the QE result.</p>
@@ -210,18 +222,6 @@ In the previous post, I showed one could extract the SVI parameters from a best 
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/another-svi-initial-guess/">Another SVI Initial Guess</a>
-  </h1>
-  <time datetime="2014-07-29T14:39:00Z" class="post-date">Tue, Jul 29, 2014</time>
-   
-
-The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$$<br />where k is the log-moneyness, w(k) the implied variance at a given moneyness and a,b,rho,m,sigma the 5 SVI parameters.<br /><br />A. Vogt described a particularly simple way to find an initial guess to fit SVI to an implied volatility slice <a href="http://www.nuclearphynance.com/User%20Files/66/GatheralSmile_estimation_for_one_expiry_NP.pdf" target="_blank">a while ago</a>. The idea to compute rho and sigma from the left and right asymptotic slopes. a,m are recovered from the crossing point of the asymptotes and sigma using the minimum variance.<br /><br />Later, <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CB4QFjAA&amp;url=http%3A%2F%2Fwww.zeliade.com%2Fwhitepapers%2Fzwp-0005.pdf&amp;ei=xI3XU9T3OYme7AbzwoHQDw&amp;usg=AFQjCNGsvbseObGCDAZ1QbYtvOL9J2-aRw&amp;sig2=rz4SilY2q1RSuD9XgWKFig&amp;bvm=bv.71778758,d.ZGU" target="_blank">Zeliade has shown</a> a very nice reduction of the problem to 2 variables, while the remaining 3 can be deduced explicitly. The practical side is that constraints are automatically included, the less practical side is the choice of minimizer for the two variables (Nelder-Mead) and of initial guess (a few random points).<br /><br />Instead, a simple alternative is the following: given b and rho from the asymptotic slopes, one could also just fit a parabola at-the-money, in a similar spirit as the <a href="http://papers.ssrn.com/abstract=2467231" target="_blank">explicit SABR calibration</a>, and recover explicitly a, m and sigma.<br /><br />To illustrate I take the data from Zeliade, where the input is already some SVI fit to market data.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-nX_T_AL-OTs/U9eShNryCVI/AAAAAAAAHcE/hmho6OMqGks/s1600/Screenshot+from+2014-07-29+13:38:09.png" height="385" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">3M expiry - Zeliade data</td></tr></tbody></table><br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-PSrSfZ2DLms/U9eTJXJ0WdI/AAAAAAAAHcM/Mvw0c_Reo-c/s1600/Screenshot+-+290714+-+13:36:05.png" height="391" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry, Zeliade data</td></tr></tbody></table>We clearly see that ATM the fit is better for the parabolic initial guess than for Vogt, but as one goes further away from ATM, Vogt guess seems better.<br /><br />Compared to SABR, the parabola itself fits decently only very close to ATM. If one computes the higher order Taylor expansion of SVI around k=0, powers of (k/sigma) appear, while sigma is often relatively small especially for short expiries: the fourth derivative will quickly make a difference.<br /><br />On implied volatilities stemming from a SABR fit of the SP500, here is how the various methods behave:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-FfrG3BodMg4/U9eUXHyHoWI/AAAAAAAAHcY/AILqs_rf5us/s1600/Screenshot+-+290714+-+11:57:48.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">1M expiry on SABR data</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-KtBTJ6WvRew/U9eUsgTvEuI/AAAAAAAAHcg/Re-gFxN3Rcg/s1600/Screenshot+-+290714+-+11:51:15.png" height="383" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">4Y expiry on SABR data</td></tr></tbody></table>As expected, because SABR (and thus the input implied vol) is much closer to a parabola, the parabolic initial guess is much better than Vogt. The initial guess of Vogt is particularly bad on long expiries, although it will still converge quite quickly to the true minimum with Levenberg-Marquardt.<br /><br />In practice, I have found the method of Zeliade to be very robust, even if a bit slower than Vogt, while Vogt can sometimes (rarely) be too sensitive to the estimate of the asymptotes.<br /><br />The parabolic guess method could also be applied to always fit exactly ATM vol, slope and curvature, and calibrate rho, b to gives the best overall fit. It might be an idea for the next blog post.
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/11/">Previous</a></p>
@@ -230,6 +230,9 @@ The SVI formula is:<br />$$w(k) = a + b ( \rho (k-m) + \sqrt{(k-m)^2+ \sigma^2}$
 
     
       
+  
+
+
     
   </body>
 </html>

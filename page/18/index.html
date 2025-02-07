@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,29 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-cuda-performance-myth-ii/">The CUDA Performance Myth II</a>
+  </h1>
+  <time datetime="2013-07-12T15:23:00Z" class="post-date">Fri, Jul 12, 2013</time>
+  <p>This is a kind of following to the <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/">CUDA performance myth</a>. There is a recent news on the java concurrent mailing list about <a href="http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/SplittableRandom.java?revision=1.7&amp;view=markup">SplittableRandom class</a> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.</p>
+<p>It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <a href="http://www.iro.umontreal.ca/~simardr/rng/MRG32k3a.c">MRG32k3a</a> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MTGP/">MTGP</a>, and even the less rigourous XorWow popularized by NVidia CUDA.</p>
+<p>The book <a href="http://my.safaribooksonline.com/book/-/9780123849885/chapter-16dot-parallelization-techniques-for-random-number-generators/232#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDEyMzg0OTg4NS8yNDQ=">GPU Computing Gems</a> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister)</p>
+<figure><img src="/post/snapshot32.png"><figcaption>
+      <h4>Excerpt from the book</h4>
+    </figcaption>
+</figure>
+
+<p>A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/unity-vs-kde-in-virtualbox/">Unity vs KDE in Virtualbox</a>
   </h1>
@@ -128,7 +144,7 @@ and to ensure that \(\theta \geq 0 \):
 $$b \frac{\Delta t}{(\Delta x)^2} \geq \frac{1}{6}$$</p>
 <p>Crank-Nicolson has a similar requirement to ensure the absence of oscillations given non smooth initial value, but because it is unconditionality stable, the condition is actually much weaker if \(b\) depends on \(x\). Crank-Nicolson will be oscillation free if \(b(x_{j0}) \frac{\Delta t}{(\Delta x)^2} &lt; 1\) where \(j0\) is the index of the discontinuity, while the theta scheme needs to be stable, that is \(\max(b) \frac{\Delta t}{(\Delta x)^2} \leq \frac{5}{6}\)</p>
 <p>This is a much stricter condition if \(b\) varies a lot, as it is the case for the <a href="https://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/">arbitrage free SABR PDE</a> where \(\max(b) &gt; 200 b_{j0}\)
-<figure><img src="/post/snapshot23.png"/>
+<figure><img src="/post/snapshot23.png">
 </figure>
 
 The advantages of such a scheme are then not clear compared to a simpler explicit scheme (eventually predictor corrector), that will have a similar constraint on the ratio \( \frac{\Delta t}{(\Delta x)^2} \).</p>
@@ -191,18 +207,6 @@ At a presentation of the Thalesians, Hagan has presented a new PDE based approac
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/sabr-with-andreasen-huge/">SABR with Andreasen-Huge</a>
-  </h1>
-  <time datetime="2013-05-24T14:17:00Z" class="post-date">Fri, May 24, 2013</time>
-   
-
-I am on holiday today. Unfortunately I am still thinking about work-related matters, and out of curiosity, wanted to do a little experiment. I know it is not very good to spend free time on work related stuff: there is no reward for it, and there is so much more to life. Hopefully it will be over after this post.<br /><br />Around 2 years ago, I saw a presentation from <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDAQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1980726&amp;ei=-VOfUYncL8HB7AbK0YHgBg&amp;usg=AFQjCNHDopVl4pLOYEqepVK8Odhk9Td3iA&amp;sig2=SChIkU-TBR7ECaLdDm1orA&amp;bvm=bv.47008514,d.ZGU">Andreasen and Huge about how they were able to price/calibrate SABR</a> by a one-step finite difference technique. At that time, I did not understand much their idea. My mind was too focused on more classical finite differences techniques and not enough on the big picture in their idea. Their idea is quite general and can be applied to much more than SABR. <br /><br />Recently there has been some talk and development going on where I work about SABR (a popular way to interpolate the option implied volatility surface for interest rate derivatives), especially regarding the implied volatility wings at low strike, and sometimes on how to price in a negative rates environment. There are actually quite a bit of research papers around this. I am not really working on that part so I just mostly listened. Then a former coworker suggested that the Andreasen Huge method was actually what banks seemed to choose in practice. A few weeks later, the Thalesians (a group for people interested in quantitative finance) announced a presentation by Hagan (one of the inventor of SABR) about a technique that sounded very much like Andreasen-Huge&nbsp; to deal with the initial SABR issues in low rates.<br /><br />As the people working on this did not investigate Andreasen-Huge technique, I somehow felt that I had to and that maybe, this time, I would be able to grasp their idea.<br /><br />It took me just a few hours to have meaningful results. Here is the price of out of the money vanilla options using alpha = 0.0758194, nu = 0.1, beta = 0.5, rho = -0.1, forward = 0.02, and a maturity of 2 years.<br /><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s1600/Screenshot+from+2013-05-24+13:29:24.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s400/Screenshot+from+2013-05-24+13:29:24.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s1600/Screenshot+from+2013-05-24+13:30:09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s400/Screenshot+from+2013-05-24+13:30:09.png" width="400" /></a></div>I did not have in my home library a way to find the implied volatility for a given price. I knew of 2 existing methods, <a href="http://www.pjaeckel.webspace.virginmedia.com/ByImplication.pdf">Jaeckel "By Implication"</a>, and <a href="http://scholar.google.fr/citations?view_op=view_citation&amp;hl=fr&amp;user=3GRhH_IAAAAJ&amp;citation_for_view=3GRhH_IAAAAJ:d1gkVwhDpl0C">Li rational functions</a> approach. I discovered that Li wrote <a href="http://www.tandfonline.com/doi/abs/10.1080/14697680902849361">a new paper</a> on the subject where he uses a SOR method to find the implied volatility and claims it's very accurate, very fast and very robust. Furthermore, the same idea can be applied to normal implied volatility. What attracted me to it is the simplicity of the underlying algorithm. Jaeckel's way is a nice way to do Newton-Raphson, but there seems to be so many things to "prepare" to make it work in most cases, that I felt it would be too much work for my experiment. It took me a few more hours to code Li SOR solvers, but it worked amazingly well for my experiment.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s1600/Screenshot+from+2013-05-24+13%253A31%253A33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s400/Screenshot+from+2013-05-24+13%253A31%253A33.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s1600/Screenshot+from+2013-05-24+13%253A37%253A51.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="211" src="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s400/Screenshot+from+2013-05-24+13%253A37%253A51.png" width="400" /></a></div><br />At first I had an error in my boundary condition and had no so good results especially with a long maturity. The traps with Andreasen-Huge technique are very much the same as with classical finite differences: be careful to place the strike on the grid (eventually smooth it), and have good boundaries.<br /><br /><br />
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/17/">Previous</a></p>
@@ -211,6 +215,9 @@ I am on holiday today. Unfortunately I am still thinking about work-related matt
 
     
       
+  
+
+
     
   </body>
 </html>

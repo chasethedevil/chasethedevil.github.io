@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,60 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/brownian-bridge-and-discrete-sampling/">Brownian Bridge and Discrete Random Variables</a>
+  </h1>
+  <time datetime="2017-01-26T14:55:32&#43;0100" class="post-date">Thu, Jan 26, 2017</time>
+  <p>The <a href="/post/a-new-scheme-for-heston">new Heston discretisation scheme</a> I wrote about a few weeks ago makes use
+a discrete random variable matching the first five moments of the normal distribution instead of the usual
+normally distributed random variable, computed via the inverse cumulative distribution function. Their discrete random
+variable is:
+$$\xi =	\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &lt; 3,,$$
+$$	\xi =-\sqrt{1-\frac{\sqrt{6}}{3}} \quad \text{ if } U_1 &gt; 4,,$$
+$$\xi =	\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 3,,$$
+$$\xi =	-\sqrt{1+\sqrt{6}} \quad \text{ if } U_1 = 4,,$$
+with \(U_1 \in \{0,1,&hellip;,7\}\)</p>
+<p>The advantage of the discrete variable is that it is much faster to generate. But there are some interesting
+side-effects. The first clue I found is a loss of accuracy on forward-start vanilla options.</p>
+<p>By accident, I found a much more interesting side-effect: you can not use the Brownian-Bridge variance reduction
+on the discrete random variable. This is very well illustrated by the case
+of a digital option in the Black model, for example with volatility 10% and a 3 months maturity, zero interest rate and dividends. For the following graph,
+I use 16000 Sobol paths composed of 100 time-steps.</p>
+<figure><img src="/post/black_discrete_sampling.png"><figcaption>
+      <h4>Digital Call price with different random variables.</h4>
+    </figcaption>
+</figure>
+
+<p>The &ldquo;-BB&rdquo; suffix stands for the Brownian-Bridge path construction, &ldquo;Five&rdquo; for five moments discrete variable
+and &ldquo;AS241&rdquo; for the inverse cumulative distribution function (continuous approach). As you can see,
+the price is discrete, and follows directly from the discrete distribution.
+The use of any random number generator with a large enough number of paths would lead to the same conclusion.</p>
+<p>This is because with the Brownian-Bridge technique, the last point in the path, corresponding to the maturity,
+is sampled first, and the other path points are then completed inside from the first and last points.
+But the digital option depends only on the value of the path at maturity, that is, on this last point.
+As this point corresponds follows our discrete distribution, the price of the digital option is a step function.</p>
+<p>In contrast, for the incremental path construction, each point is computed from the previous point.
+The last point will thus include the variation of all points in the path, which will be very close to normal, even with a discrete distribution per point.</p>
+<p>The take-out to price more exotic derivatives (including forward-start options) with discrete random variables
+and the incremental path construction, is that several intermediate time-steps (between payoff observations)
+are a must-have with discrete random variables, however small is the original time-step size.</p>
+<p>Furthermore, one can notice the discrete staircase even with a relavely small time-step for example of 1/32 (meaning 8 intermediate time-steps in
+our digital option example). I suppose this is a direct consequence of the digital payoff discontinuity. In Talay
+<a href="http://link.springer.com/chapter/10.1007/BFb0006577">&ldquo;Efficient numerical schemes for the approximation of expectations of functionals of the solution of a SDE, and applications&rdquo;</a> (which you can
+read by adding .sci-hub.cc to the URL host name), second order convergence
+is proven only if the payoff function and its derivatives up to order 6 are continuous. There is something natural
+that a discrete random variable imposes continuity conditions on the payoff, not necessary with a continuous,
+smooth random variable: either the payoff or the distribution needs to be smooth.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/samsung_wireless_printer_fedora25/">Samsung Wireless Printer under Fedora 25</a>
   </h1>
@@ -112,9 +159,9 @@ A forward start call option will pay \(\max(S(T)-k S(T_1),0)\).
 This is particularly visible on the following graph of the price against
 the time-step size (1,1/2,1/4,1/8,1/16,1/32), for strikes 100% and 140% (it works well for strike=70%)
 where 32 time-steps are necessary.
-<figure><img src="/post/heston_dvss2.png"/><figcaption>
-            <h4>Forward start Call price with different discretization schemes.</h4>
-        </figcaption>
+<figure><img src="/post/heston_dvss2.png"><figcaption>
+      <h4>Forward start Call price with different discretization schemes.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>It would appear that the forward dynamic is sometimes poorly captured by the DVSS2 scheme.
@@ -132,9 +179,9 @@ And it is obviously detrimental in the limit case where the volatility is determ
 the log-process will only match the first 5 moments of the normal distribution, while it should be exactly normal.</p>
 <p>Replacing \(\xi\) by a standard normally distributed random variable is enough to fix DVSS2. Note
 that it could also be discretized like the QE scheme, using a Broadie-Kaya interpolation scheme.
-<figure><img src="/post/heston_dvss2x.png"/><figcaption>
-            <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with continuous normal random variable.</h4>
-        </figcaption>
+<figure><img src="/post/heston_dvss2x.png"><figcaption>
+      <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with continuous normal random variable.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The problem is that then, it is not faster than QE anymore. So it is not clear why it would be preferable.</p>
@@ -150,9 +197,9 @@ The nodes are:
 The probabilities approximate those given by the ideal solution on 8 nodes,
 that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
 <p>While this helps a bit for small steps as shown on the following graph, it is far from good:
-<figure><img src="/post/heston_dvss2xd.png"/><figcaption>
-            <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with discrete random variable matching the first 9 moments of the normal distribution.</h4>
-        </figcaption>
+<figure><img src="/post/heston_dvss2xd.png"><figcaption>
+      <h4>Forward start Call price with different discretization schemes. DVSS2X denotes here the scheme with discrete random variable matching the first 9 moments of the normal distribution.</h4>
+    </figcaption>
 </figure>
 </p>
 
@@ -258,9 +305,9 @@ $$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
 <p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
 very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
 to actually try it.
-<figure><img src="/post/heston_case3.png"/><figcaption>
-            <h4>Error on Leif Andersen Case III.</h4>
-        </figcaption>
+<figure><img src="/post/heston_case3.png"><figcaption>
+      <h4>Error on Leif Andersen Case III.</h4>
+    </figcaption>
 </figure>
 </p>
 <p><em>Update January 23rd</em>
@@ -278,24 +325,24 @@ To do so, they consider a piecewise constant representation of the local volatil
 where the number of constants matches the number of market option prices.</p>
 <p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
 Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
-<figure><img src="/post/kahale_spx500_1995.png"/><figcaption>
-            <h4>option volatilities for the SPX500 in October 1995.</h4>
-        </figcaption>
+<figure><img src="/post/kahale_spx500_1995.png"><figcaption>
+      <h4>option volatilities for the SPX500 in October 1995.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
 The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
 the market vols are exactly reproduced by the following piecewise constant vols:
-<figure><img src="/post/kahale_ah_constant200.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 200 points.</h4>
-        </figcaption>
+<figure><img src="/post/kahale_ah_constant200.png"><figcaption>
+      <h4>piecewise constant model on a grid of 200 points.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
 some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
-<figure><img src="/post/kahale_ah_constant400.png"/><figcaption>
-            <h4>piecewise constant model on a grid of 400 points.</h4>
-        </figcaption>
+<figure><img src="/post/kahale_ah_constant400.png"><figcaption>
+      <h4>piecewise constant model on a grid of 400 points.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The single step continuous model can not represent the market implied volatilities, while for some reason,
@@ -303,9 +350,9 @@ the discrete model with 200 points can. Note that the model vols were capped, ot
 <p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
 (a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
 becomes stable regardless of the number of grid points.
-<figure><img src="/post/kahale_ah_linear.png"/><figcaption>
-            <h4>piecewise linear model on a grid of 400 points.</h4>
-        </figcaption>
+<figure><img src="/post/kahale_ah_linear.png"><figcaption>
+      <h4>piecewise linear model on a grid of 400 points.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,
@@ -383,9 +430,9 @@ The \( \ nu \) parameters allow to adjust the shape of the extrapolation.</p>
 <p>Unfortunately it does not really work for equities.
 Very often, the extrapolation will explode, which is what we wanted to avoid in the first place. We illustrate it here on
 our best fit parabola of the AAPL 1m options:
-<figure><img src="/post/bdk-explodes.png"/><figcaption>
-            <h4>BDK explodes on AAPL 1m options.</h4>
-        </figcaption>
+<figure><img src="/post/bdk-explodes.png"><figcaption>
+      <h4>BDK explodes on AAPL 1m options.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The \( \nu\) parameter does not help either.</p>
@@ -409,74 +456,6 @@ which results in
 $$a_R=131.894286, b_R=-26839.217814, c_R=1550285.706087.$$</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/aes_for_monte_carlo/">AES for Monte-Carlo</a>
-  </h1>
-  <time datetime="2016-08-17T09:55:32&#43;0100" class="post-date">Wed, Aug 17, 2016</time>
-  <p>In finance, and also in science, the <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">Mersenne-Twister</a> is the de-factor pseudo-random number generator (PRNG) for Monte-Carlo simulations.
-By the way, there is a <a href="http://arxiv.org/abs/1301.5435">recent 64-bit maximally equidistributed version</a> called MEMT19937 with 53-bit double precision floating point numbers in mind.</p>
-<p>D.E. Shaw paper <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwiyl5Lg8cjOAhVMahoKHVhPCPQQFggmMAA&amp;url=http%3A%2F%2Fwww.thesalmons.org%2Fjohn%2Frandom123%2Fpapers%2Frandom123sc11.pdf&amp;usg=AFQjCNEZ5I7JeeDSELDJBDjLU84tXKmI3w&amp;sig2=UqLBNOlLjkHsMMncABKkIg&amp;bvm=bv.129759880,d.d2s">Parallel Random Numbers: As easy as 1, 2, 3</a>
-makes a bold remark: since <a href="https://en.wikipedia.org/wiki/AES_instruction_set">specific AES instructions</a> have
-been available since 2010 in most x86 processors, why not use them?</p>
-<p>Historicaly, counter-based PRNGs based on cryptographic standards such as <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
-were historically slow, which motivated the development of sequential PRNGs with good statistical properties,
-yet not cryptographically strong like the Mersenne Twister for Monte-Carlo simulations.</p>
-<p>The randomness of AES is of vital importance to its security making the use of the AES128 encryption algorithm as PRNG sound (see <a href="http://dl.acm.org/citation.cfm?id=945515">Hellekalek &amp; Wegenkittl paper</a>).
-Furthermore, D.E. Shaw study shows that AES can be faster than Mersenne-Twister.
-In my own simple implementation using the standard library of the Go language,
-it was around twice slower than Mersenne-Twister to generate random double precision floats,
-which can result in a 5% performance loss for a local volatility simulation.
-The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
-<p>The code is extremely simple, with many possible variations around the same idea. Here is mine
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
-</span></span><span style="display:flex;"><span>	counter <span style="color:#902000">uint64</span>
-</span></span><span style="display:flex;"><span>	bs      []<span style="color:#902000">byte</span>
-</span></span><span style="display:flex;"><span>	block   cipher.Block
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
-</span></span><span style="display:flex;"><span>	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
-</span></span><span style="display:flex;"><span>	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
-</span></span><span style="display:flex;"><span>	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
-</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
-</span></span><span style="display:flex;"><span>		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
-</span></span><span style="display:flex;"><span>		u.counter<span style="color:#666">++</span>
-</span></span><span style="display:flex;"><span>		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
-</span></span><span style="display:flex;"><span>		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
-</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	u.counter<span style="color:#666">++</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
-<p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
-<p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
-The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,
-whose goal is to identify new stream ciphers suitable for widespread adoption.
-It is faster than AES in the absence of specific AES CPU instructions.
-Our tests run with a straightforward implementation that does not make use of specific AMD64 instructions
-and show the resulting PRNG to be faster than MRG63k3a and only 5% slower than MEMT19937 for local volatility Monte-Carlo simulations, that is the same speed as the above Go AES PRNG.
-While it led to sensible results, there does not seem any study yet of its equidistribution properties.</p>
-<p>Counter-based PRNGs are parallelizable by nature: if a counter is used as plaintext,
-we can generate any point in the sequence at no additional cost by just setting
-the counter to the point position in the sequence, the generator is not sequential.
-Furthermore, alternate keys can be used to create independent substreams:
-the strong cryptographic property will guarantee the statistical independence.
-A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/6/">Previous</a></p>
@@ -485,6 +464,9 @@ A PRNG based on AES will allow \(2^{128}\) substreams of period  \(2^{128}\).</p
 
     
       
+  
+
+
     
   </body>
 </html>

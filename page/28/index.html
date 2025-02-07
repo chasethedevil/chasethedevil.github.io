@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/stupid-programmer-interviews/">Stupid Programmer Interviews</a>
+  </h1>
+  <time datetime="2008-09-17T10:56:00Z" class="post-date">Wed, Sep 17, 2008</time>
+  <p>I have read a blog post a few days ago about someone thinking a good programmer interview question was:</p>
+<blockquote>
+<p>How does a hash table work?</p>
+</blockquote>
+<p>While it is a very interesting question, I doubt many programmers (even relatively good ones) can answer that question. If I look back and think of all the employees in all the companies I have known, I can count on one hand people that can answer that question. I can think of 3 or 4 I met in one company, and maybe another 1 or 2 in different companies. And I don&rsquo;t think anyone would have been able to go deeper in the details like mentioning <a href="http://www.dcs.gla.ac.uk/%7Epat/52219/l04.html">closed-addressed vs open-addressed</a> possible implementations.</p>
+<p>I am so negative, because a question about some important details of the inner working of the Java HashMap was raised at work a week ago. I was the only one (because I had read several times about hash tables) to be aware that the <code>equals</code> method of the key object was called every time you do a <code>table.get(xxx)</code> or a <code>table.put(xxx, yyy)</code>. Others thought only the <code>hashCode()</code> method was used.</p>
+<p>This kind of interview question creates a high bias towards people coming straight out of school if they have Hashtable in their program. For people with more experience, it is highly likely if they ever read about it that they forgot the details (and maybe more than the details).</p>
+<p>This can seem shocking as hash tables are used almost everywhere these days, but it&rsquo;s a reality.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/the-art-of-multiprocessor-programming-book-review/">The Art of Multiprocessor Programming Book Review</a>
   </h1>
@@ -184,18 +199,6 @@ I tried <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3</a> twice befo
 <p>The book is filled up with graphs, which is a good thing. While browsing the book for the first time, I did not really grasp those graphs well. But after having read it, they do make sense and help visualize what&rsquo;s happening. With those graphs, volatility and other parameters don&rsquo;t look only like abstract variables in a formula.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/fedora-linux--apple-bluetooth-keyboard/">Fedora Linux &amp; Apple Bluetooth Keyboard</a>
-  </h1>
-  <time datetime="2008-06-05T20:05:00Z" class="post-date">Thu, Jun 5, 2008</time>
-   
-
-It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd --search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS="--timeout 8 --connect 00:1D:4F:A7:15:CC --server"</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name "Apple Wireless Keyboard";</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are "lm master" (makes it connect automatically), and "--timeout 8" that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/27/">Previous</a></p>
@@ -204,6 +207,9 @@ It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium mode
 
     
       
+  
+
+
     
   </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/workaround-when-eclipse-fucks-off-with-cvs/">Workaround When Eclipse Fucks Off With CVS</a>
+  </h1>
+  <time datetime="2006-11-28T11:42:00Z" class="post-date">Tue, Nov 28, 2006</time>
+   
+
+Until recently, I always found Eclipse CVS support to be excellent. The synchronize view was really a big plus to do clean commits, without forgetting any file.<br> <br> But I have encountered several problem with Eclipse 3.2+:<br> <br> <blockquote>On one project, it keeps putting the build directory into CVS, and I can't find how to change that setting. Each time I open the project I have to change the CVS/Entries file.<br>   <br> On another, where I have lots of files in, Eclipse delete some of the files (checked in CVS) regularly, although not often. It won't retrieve them back again from CVS. It seems to be the same files each time. I have no clue why.<br>   <br> The diff sometimes tells me the whole file has changed while there is absolutely no change.<br>   <br> I could not make the merge work. It kept on complaining about some parameters.<br>   <br> </blockquote> And now the workaround for all those cases: <br> <blockquote><b>The good old CVS command line.<br>   <br>   </b></blockquote> I never remember how do to a merge with the command line, so I each time go to google and read<a  href="http://www.csc.calpoly.edu/%7Ejdalbey/205/Resources/cvsBranchMerge.html"> this merge example page</a>. Here are the very simple steps if you are in a branch and want to merge:<br> <ol>   <li>     <pre>cvs update -A mypoem.txt (use head as local repository)</pre>   </li>   <li>     <pre class="source">cvs update -j release-1 (merge release-1 changes into local repository)</pre>   </li>   <li>     <pre class="source">cvs update mypoem.txt</pre>   </li>   <li>     <pre class="source">cvs commit mypoem.txt</pre>   </li> </ol> <br> 
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/maven-game-over-try-again/">Maven: Game Over, Try Again</a>
   </h1>
@@ -180,15 +192,6 @@ Did you know what happens in Java when you serialize a subclass of a non seriali
 <p>Java is much nicer to use in the old way. Everything seems fast to do. I am surprised it is more pleasant to work with Java in this kind of environment than in a web/J2EE environment.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/moving-weekly-javablog-stats-to-a-new-blog/">Moving weekly Javablog stats to a new blog</a>
-  </h1>
-  <time datetime="2006-06-26T17:25:00Z" class="post-date">Mon, Jun 26, 2006</time>
-  <p>Javablogs.com top 10 weekly/monthly/yearly entries were starting to pollute my blog too much for my taste. It is more appropriate to dedicate a blog to them. That is what I should have done in the first place as it is very easy to have many blogs with blogger.com.</p>
-<p>So you&rsquo;ll find at <a href="http://javabuzz.blogspot.com">javabuzz.blogspot.com</a> the weekly top 10 most read entries on Javablogs, and sometimes more.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/33/">Previous</a></p>
@@ -197,6 +200,9 @@ Did you know what happens in Java when you serialize a subclass of a non seriali
 
     
       
+  
+
+
     
   </body>
 </html>

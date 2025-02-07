@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
@@ -75,21 +75,21 @@
   <p>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&rsquo;t obey Lee&rsquo;s moments condition.</p>
 <p>On a Wilmott forum, <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=95309">P. Caspers proposed</a> the following counter-example based on extrapolating SABR: \( \alpha=15%, \beta=80%, \nu=50%, \rho=-48%, f=3%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.</p>
 <p>A truly arbitrage free extrapolation can be obtained through <a href="http://ssrn.com/abstract=1694972">Andreasen Huge volatility interpolation</a>, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.</p>
-<p><figure><img src="/post/Screenshot-Untitled%20Window-5.png"/><figcaption>
-            <h4>Smile.</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot-Untitled%20Window-5.png"><figcaption>
+      <h4>Smile.</h4>
+    </figcaption>
 </figure>
- <figure><img src="/post/Screenshot-Untitled%20Window-4.png"/><figcaption>
-             <h4>Density with piecewise linear local volatility.</h4>
-         </figcaption>
+ <figure><img src="/post/Screenshot-Untitled%20Window-4.png"><figcaption>
+       <h4>Density with piecewise linear local volatility.</h4>
+     </figcaption>
  </figure>
 </p>
 <p>There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.
 Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.</p>
 <p>It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then:
-<figure><img src="/post/Screenshot-Untitled%20Window-3.png"/><figcaption>
-            <h4>Density with cubic spline local volatility.</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot-Untitled%20Window-3.png"><figcaption>
+      <h4>Density with cubic spline local volatility.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Interestingly, the right side of the density is much better captured.
@@ -123,6 +123,9 @@ The wiggle persists, although it is smaller. This is likely due to the fact that
 
     
       
+  
+
+
     
   </body>
 </html>

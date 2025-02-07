@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-linux--apple-bluetooth-keyboard/">Fedora Linux &amp; Apple Bluetooth Keyboard</a>
+  </h1>
+  <time datetime="2008-06-05T20:05:00Z" class="post-date">Thu, Jun 5, 2008</time>
+   
+
+It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd --search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS="--timeout 8 --connect 00:1D:4F:A7:15:CC --server"</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name "Apple Wireless Keyboard";</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are "lm master" (makes it connect automatically), and "--timeout 8" that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/">DecimalFormat Is Broken</a>
   </h1>
@@ -110,9 +122,9 @@ A friend of mine recently noticed that the good old DecimalFormat class is "brok
     <a href="https://chasethedevil.github.io/post/fedora-9-already-stable/">Fedora 9 Already Stable</a>
   </h1>
   <time datetime="2008-04-25T11:33:00Z" class="post-date">Fri, Apr 25, 2008</time>
-  <figure><img src="/post/Fedora9.png"/><figcaption>
-            <h4>Fedora 9</h4>
-        </figcaption>
+  <figure><img src="/post/Fedora9.png"><figcaption>
+      <h4>Fedora 9</h4>
+    </figcaption>
 </figure>
 
 <p>I &ldquo;upgraded&rdquo; my home computer to Fedora 9. &ldquo;upgraded&rdquo; because I reinstalled the OS instead of using the upgrade procedure. I have had so many issues with &ldquo;partial&rdquo; upgrades in the past (with any distro).</p>
@@ -185,18 +197,6 @@ One of my first web framework was a custom one, based on the book Web Developmen
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/kde4-still-not-ready/">KDE4 Still Not Ready</a>
-  </h1>
-  <time datetime="2008-01-18T19:08:00Z" class="post-date">Fri, Jan 18, 2008</time>
-  <p>I tried KDE4.0 last week, when it was everywhere in the news. I was very disappointed.</p>
-<p>I have a long experience of trying beta software, not well known software. I have used Linux since 1998 (partly). I have even used windows beta at one point. And I have seen nothing as crappy as  KDE4.0 release.</p>
-<p>It is not usable at all.</p>
-<p>Now I can understand what are KDE motivations to do such a bad release. It is to gain momentum in their project. KDE4.0 is in development at least <a href="http://www.advogato.org/person/tjansen/diary.html?start=13">since 2002</a> - 6 years! By creating a .0 release now even if it is an alpha, they have at least something officially out and hope to have developers starting to improve it. It is especially important for them because Gnome has, in the mean time, made regularly lots of improvements.</p>
-<p>I admire the initiative, KDE 3.5 needed lots of improvements, and KDE4 goals are the right ones. But it just feel like the release was more political than everything else. Hell, <a href="https://lists.linux-foundation.org/pipermail/desktop_architects/2007-February/001129.html">even Linus seems to use Gnome</a> nowadays.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/28/">Previous</a></p>
@@ -205,6 +205,9 @@ One of my first web framework was a custom one, based on the book Web Developmen
 
     
       
+  
+
+
     
   </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,31 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/rough-volatility-or-not-a-review/">Volatility: Rough or Not? A Short Review</a>
+  </h1>
+  <time datetime="2022-05-10T17:56:42&#43;0100" class="post-date">Tue, May 10, 2022</time>
+  <p>It is well-known that the assumption of constant volatility in the Black-Scholes model for pricing financial contracts is wrong and may lead
+to serious mispricing, especially for any exotic derivative contracts.
+A classic approach is to use a deterministic local volatility model to take into account the variation both in the time dimension and in the underlying asset price dimension. But
+the model is still not realistic in terms of forward smile (the implied volatilities of forward starting options). A stochastic volatility component must be added to correct for it.
+More recently, the concept of rough volatility emerged in many academic papers. Instead of using a classic Brownian motion for the stochastic volatility process,
+a fractional Brownian motion is used. The idea of using a fractional Brownian motion for financial time-series can be traced back to Mandelbrot, but it is only relatively recently that it has been proposed for the volatility process (and not the stock process).</p>
+<p>After many published papers on the subject, Rama Cont and Purba Das recently added their preprint <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4065951">Rough Volatility: Fact or Artefact?</a> on SSRN, raising the question whether using a rough volatility process makes sense from a practical point of view. Indeed, they show that the Hurst index measured is different for the realized volatility (even based on very short sampling intervals) and the instantaneous volatility. The authors make the conjecture that is is all due to the discretization error (a.k.a. the microstructure noise), and that in fact, a standard Brownian motion is compatible with the low Hurst index of the realized volatility.</p>
+<p>As mentioned in their conclusion, they are not alone in showing that the rough volatility assumption may not be justified, LCG Rogers has also published a note in 2019 <a href="https://www.skokholm.co.uk/wp-content/uploads/2019/11/TWTWKpaper.pdf">Things we think we know</a>, with the same conclusion.</p>
+<p>In a 2019 paper, Masaaki Fukasawa, Tetsuya Takabatake and Rebecca Westphal also attempt to answer the question <a href="https://arxiv.org/pdf/1905.04852.pdf">Is volatility rough?</a>. They present the same problem with the estimation method of Rosenbaum and Gatheral, namely that their measure may actually not measure the true Hurst index, and this could be why it is always close to H=0.1, regardless of the market index. It is shown that for specific models, the Rosenbaum and Gatheral measure is dependent on the period length considered (5 minutes vs. 1 minute lead to different Hurst indices). The authors therefore devise a more robust (and much more complex) way to estimate the Hurst index of time series, which is not so sensitive to the period length considered. They find that the market volatility, measured through the realized variance proxy is rough, with H=0.04, rougher than what Jim Gatheral suggested.</p>
+<p>To conclude, the study of Gatheral and Rosenbaum, which motivated the use of rough volatility, was based on &ldquo;biased&rdquo; estimates of the Hurst index of the realized volatility of high frequency data  as evidenced in the three papers cited above. Clearly then, this justification does not hold. But Fukasawa et al. suggest the volatility is rougher, and it is slightly surprising that Rama Cont and Purba Das do not take more those results into account. They shortly discuss it, but then go on proposing another biased estimate (one which seems to lead to the same results as Rosenbaum and Gatheral). To their credit, Rama Cont and Purba Das show that the microstructure noise is far from IID, while Fukasawa et al. assume it is close to IID in their method. Perhaps their indirect conclusion is that Fukasaza et al. estimates are also biased (i.e. measuring something else - although the results presented in their paper seem solid).</p>
+<p>Now, there are also other interesting features of the rough volatility models, such as the variation of the at-the-money skew in time, which mimicks the market implied skews in practice, a feature not easily achieved by stochastic volatility models (this typically requires a multidimensional stochastic volatility process to approach it crudely).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/monte-carlo-vectorization-or-not/">Monte-Carlo Parallelization: to vectorize or not?</a>
   </h1>
@@ -199,9 +217,9 @@ A recurring theme is plots presented without context/with the wrong context. Man
 <p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p>
 </blockquote>
 <p>What I found disappointing is the absence of the <a href="https://www.climatefiles.com/exxonmobil/1982-memo-to-exxon-management-about-co2-greenhouse-effect/">famous 1982 plot from Exxon</a> (p. 7), see also <a href="https://gizmodo.com/exxon-predicted-2019-s-ominous-co2-milestone-in-1982-1834748763">the following article with nice red lines for 2019</a>.</p>
-<figure><img src="/post/exxon_co2ppm.jpg"/><figcaption>
-            <h4>The Exxon 1982 PPM Plot.</h4>
-        </figcaption>
+<figure><img src="/post/exxon_co2ppm.jpg"><figcaption>
+      <h4>The Exxon 1982 PPM Plot.</h4>
+    </figcaption>
 </figure>
 
 <p>On this plot, the relation between the temperature increase and the CO2 ppm looks linear, which would be somewhat more alarming.</p>
@@ -329,26 +347,6 @@ some arab name servers, and the country of registration is Saudi Arabia. When I 
 <p>Although I have no real proof, I am quite confident the water softener SPAM and the bank hack are very closely related. I did not think phishing was so &ldquo;targeted&rdquo;, and again it is my wife, who told me that targeting is apparently common in phishing. All this targeting makes me think of another story, involving an 80-years old member of the family, where the special forces broke into his house around 3 a.m. a few months back, shouting &ldquo;target, target&rdquo;, pointing their big guns, and arresting everybody in the house. But that&rsquo;s a story for another time.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/reghai_remarkable_coincidences/">Remarkable Coincidences, Bad Book?</a>
-  </h1>
-  <time datetime="2020-11-21T07:56:42&#43;0100" class="post-date">Sat, Nov 21, 2020</time>
-  <p>I stumbled upon a new  short book <a href="https://link.springer.com/book/10.1007%2F978-3-030-57496-3">Financial Models in Production</a> from O. Kettani and A. Reghai. A page attracted my attention</p>
-<figure><img src="/post/reghai_coincidences.png"/><figcaption>
-            <h4>A page from Kettani and Reghai&#39;s book.</h4>
-        </figcaption>
-</figure>
-
-<p>This is the same example as I used on <a href="/post/implied-volatility-from-black-scholes-price/">my blog</a>, where I also present the Li&rsquo;s SOR method combined with the good initial guess from Stefanica. The idea has also been expanded on in <a href="https://jherekhealy.github.io">Jherek Healy&rsquo;s book</a>. What is shocking is that, beside reusing my example, <strong>they reuse my timing</strong> for Jäckel and my implementation is in <a href="https://golang.org">Google Go</a>, with a timing done on some older laptop. The numbers given are thus highly inconsistent. Of course, none of this is mentioned anywhere, and the book does not reference my blog.</p>
-<p>I also find the description of how they improve the implied volatility algorithm (detailed on the next page) to not make much sense. After this kind of stuff, you can&rsquo;t really trust anything that is in the book&hellip;</p>
-<p>Worst perhaps, is that the authors advertise their &ldquo;novel&rdquo; technique in otherwise decent talks and conferences, such as <a href="https://www.mathfinance.com/newsletter-october-2020-mathfinance-conference-recap/">the one from mathfinance</a>. Here is a quote</p>
-<blockquote>
-<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p>
-</blockquote>
-<p>It is really unfortunate that the world we live in encourages such boasting. Papers always need  to present some novel ideas to be published, but there is too often no check on whether the idea actually works, or is worth it. The temptation to make exagerated claims is very high for authors. In the end, it becomes not so easy to sort out the good from the bad.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/2/">Previous</a></p>
@@ -357,6 +355,9 @@ some arab name servers, and the country of registration is Saudi Arabia. When I 
 
     
       
+  
+
+
     
   </body>
 </html>

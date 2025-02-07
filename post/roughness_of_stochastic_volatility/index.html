@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,46 +74,46 @@
   <time datetime=2023-12-07T20:56:42&#43;0100 class="post-date">Thu, Dec 7, 2023</time>
   <p>I was wondering if adding jumps to stochastic volatility, as is done in the SVCJ model of Duffie, Singleton and Pan <em>&ldquo;Transform Analysis and Asset Pricing for Affine Jump-Diffusion&rdquo;</em> also in Broadie and Kaya <em>&ldquo;Exact simulation of stochastic volatility and other affine jump diffusion processes&rdquo;</em>, would lead to rougher paths, or if it would mislead the roughness estimators.</p>
 <p>The answer to the first question can almost be answered visually:
-<figure><img src="/post/svcj_variance_path.png"/>
+<figure><img src="/post/svcj_variance_path.png">
 </figure>
 </p>
 <p>The parameters used are the one from Broadie and Kaya: v0=0.007569, kappa=3.46, theta=0.008, rho=-0.82, sigma=0.14 (Heston), jump correlation -0.38, jump intensity 0.47, jump vol 0.0001, jump mean 0.05, jump drift -0.1.</p>
 <p>The Rough Heston with H=0.1 is much &ldquo;noisier&rdquo;. There is not apparent difference between SVCJ and Heston in the path of the variance.</p>
 <p>The estimator of Cont and Das (on a subsampled path) leads to a Hurst exponent H=0.503, in line with a standard Brownian motion.
-<figure><img src="/post/svcj_estimate.png"/><figcaption>
-            <h4>Cont-Das estimate H=0.503.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_estimate.png"><figcaption>
+      <h4>Cont-Das estimate H=0.503.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The estimator from Rosenbaum and Gatheral leads to a Hurst exponent (slope of the regression) H=0.520 with well behaved regressions:
-<figure><img src="/post/svcj_estimate_gatheral_1.png"/><figcaption>
-            <h4>Regressions for each q.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_estimate_gatheral_1.png"><figcaption>
+      <h4>Regressions for each q.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/svcj_estimate_gatheral_2.png"/><figcaption>
-            <h4>Regression over all qs which leads to the estimate of H.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_estimate_gatheral_2.png"><figcaption>
+      <h4>Regression over all qs which leads to the estimate of H.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>On this example, there are relatively few jumps during the 1 year duration. If we multiply the jump intensity by 1000 and reduce the jump mean accordingly, the conclusions are the same. Jumps and roughness are fundamentally different.</p>
 <p>Of course this does not mean that the short term realized volatility does not look rough as evidenced in Cont and Das paper:
-<figure><img src="/post/svcj_rv.png"/><figcaption>
-            <h4>The 1 hour realized volatility looks rough.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_rv.png"><figcaption>
+      <h4>The 1 hour realized volatility looks rough.</h4>
+    </figcaption>
 </figure>
 
 I computed the realized volatility on a subsampled path, using disjoint windows of 1h of length.</p>
 <p>It is not really rough, estimators will have a tough time leading to stable estimates on it.
-<figure><img src="/post/svcj_rv_estimate.png"/><figcaption>
-            <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_rv_estimate.png"><figcaption>
+      <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>This is very visible with the Rosenbaum-Gatheral way of estimating H, we see that the observations do not fall on a line at all but flatten:
-<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"/><figcaption>
-            <h4>Regressions for each q based on the 1h realized variance.</h4>
-        </figcaption>
+<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"><figcaption>
+      <h4>Regressions for each q based on the 1h realized variance.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The pure Heston model leads to similar observations.</p>
@@ -145,6 +145,9 @@ I computed the realized volatility on a subsampled path, using disjoint windows 
 
     
       
+  
+
+
     
   </body>
 </html>

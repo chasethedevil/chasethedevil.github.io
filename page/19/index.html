@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/sabr-with-andreasen-huge/">SABR with Andreasen-Huge</a>
+  </h1>
+  <time datetime="2013-05-24T14:17:00Z" class="post-date">Fri, May 24, 2013</time>
+   
+
+I am on holiday today. Unfortunately I am still thinking about work-related matters, and out of curiosity, wanted to do a little experiment. I know it is not very good to spend free time on work related stuff: there is no reward for it, and there is so much more to life. Hopefully it will be over after this post.<br /><br />Around 2 years ago, I saw a presentation from <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDAQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1980726&amp;ei=-VOfUYncL8HB7AbK0YHgBg&amp;usg=AFQjCNHDopVl4pLOYEqepVK8Odhk9Td3iA&amp;sig2=SChIkU-TBR7ECaLdDm1orA&amp;bvm=bv.47008514,d.ZGU">Andreasen and Huge about how they were able to price/calibrate SABR</a> by a one-step finite difference technique. At that time, I did not understand much their idea. My mind was too focused on more classical finite differences techniques and not enough on the big picture in their idea. Their idea is quite general and can be applied to much more than SABR. <br /><br />Recently there has been some talk and development going on where I work about SABR (a popular way to interpolate the option implied volatility surface for interest rate derivatives), especially regarding the implied volatility wings at low strike, and sometimes on how to price in a negative rates environment. There are actually quite a bit of research papers around this. I am not really working on that part so I just mostly listened. Then a former coworker suggested that the Andreasen Huge method was actually what banks seemed to choose in practice. A few weeks later, the Thalesians (a group for people interested in quantitative finance) announced a presentation by Hagan (one of the inventor of SABR) about a technique that sounded very much like Andreasen-Huge&nbsp; to deal with the initial SABR issues in low rates.<br /><br />As the people working on this did not investigate Andreasen-Huge technique, I somehow felt that I had to and that maybe, this time, I would be able to grasp their idea.<br /><br />It took me just a few hours to have meaningful results. Here is the price of out of the money vanilla options using alpha = 0.0758194, nu = 0.1, beta = 0.5, rho = -0.1, forward = 0.02, and a maturity of 2 years.<br /><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s1600/Screenshot+from+2013-05-24+13:29:24.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://3.bp.blogspot.com/-DFehlDerd_U/UZ9ZC6WjBPI/AAAAAAAAGag/P0xM8hHgNt0/s400/Screenshot+from+2013-05-24+13:29:24.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s1600/Screenshot+from+2013-05-24+13:30:09.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://4.bp.blogspot.com/-6gkuKp8sN9o/UZ9ZC2xvT7I/AAAAAAAAGaY/ELh6t9NyOTY/s400/Screenshot+from+2013-05-24+13:30:09.png" width="400" /></a></div>I did not have in my home library a way to find the implied volatility for a given price. I knew of 2 existing methods, <a href="http://www.pjaeckel.webspace.virginmedia.com/ByImplication.pdf">Jaeckel "By Implication"</a>, and <a href="http://scholar.google.fr/citations?view_op=view_citation&amp;hl=fr&amp;user=3GRhH_IAAAAJ&amp;citation_for_view=3GRhH_IAAAAJ:d1gkVwhDpl0C">Li rational functions</a> approach. I discovered that Li wrote <a href="http://www.tandfonline.com/doi/abs/10.1080/14697680902849361">a new paper</a> on the subject where he uses a SOR method to find the implied volatility and claims it's very accurate, very fast and very robust. Furthermore, the same idea can be applied to normal implied volatility. What attracted me to it is the simplicity of the underlying algorithm. Jaeckel's way is a nice way to do Newton-Raphson, but there seems to be so many things to "prepare" to make it work in most cases, that I felt it would be too much work for my experiment. It took me a few more hours to code Li SOR solvers, but it worked amazingly well for my experiment.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s1600/Screenshot+from+2013-05-24+13%253A31%253A33.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="215" src="http://2.bp.blogspot.com/-dsDHXQXC7FQ/UZ9ZDjmJkQI/AAAAAAAAGas/lmclHTb4Fy0/s400/Screenshot+from+2013-05-24+13%253A31%253A33.png" width="400" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s1600/Screenshot+from+2013-05-24+13%253A37%253A51.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="211" src="http://3.bp.blogspot.com/-2_g6KW3a-Ds/UZ9ZDmAFjiI/AAAAAAAAGa0/g9Ktmp9Dsr8/s400/Screenshot+from+2013-05-24+13%253A37%253A51.png" width="400" /></a></div><br />At first I had an error in my boundary condition and had no so good results especially with a long maturity. The traps with Andreasen-Huge technique are very much the same as with classical finite differences: be careful to place the strike on the grid (eventually smooth it), and have good boundaries.<br /><br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/large-steps-in-schobel-zhuheston-the-lazy-way/">Large Steps in Schobel-Zhu/Heston the Lazy Way</a>
   </h1>
@@ -166,184 +178,6 @@ In finance, because one often dicretize the log process instead of the direct pr
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part III)</a>
-  </h1>
-  <time datetime="2013-04-12T13:41:00Z" class="post-date">Fri, Apr 12, 2013</time>
-  <p>I forgot two important points in my <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">previous post</a> about <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the Heston call price:</p>
-<ul>
-<li>Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl</a>, <a href="http://pjaeckel.webspace.virginmedia.com/NotSoComplexLogarithmsInTheHestonModel.pdf">Kahl-Jaeckel</a> (the more usual way limited to machine epsilon accuracy), <a href="http://epubs.siam.org/doi/abs/10.1137/110830241">Forde-Jacquier-Lee</a> ATM implied volatility without scaling for a maturity of 1 day:</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Strike</th>
-<th>Lord-Kahl</th>
-<th>Kahl-Jaeckel</th>
-<th>Forde-Jacquier-Lee</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>62.5</td>
-<td>2.919316809400033E-34</td>
-<td>8.405720564041985E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>68.75</td>
-<td>-8.923683388191852E-28</td>
-<td>1.000266536266281E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>75.0</td>
-<td>-3.2319611910032E-22</td>
-<td>2.454925152051146E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>81.25</td>
-<td>1.9401743410877718E-16</td>
-<td>2.104982854689297E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>87.5</td>
-<td>-Infinity</td>
-<td>-1.6480150577535824E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>93.75</td>
-<td>Infinity</td>
-<td>1.8277663826893331E-9</td>
-<td>1.948392142070432E-9</td>
-</tr>
-<tr>
-<td>100.0</td>
-<td>0.4174318393886519</td>
-<td>0.41743183938679845</td>
-<td>0.4174314959743768</td>
-</tr>
-<tr>
-<td>106.25</td>
-<td>1.326968012594355E-11</td>
-<td>7.575717830832218E-11</td>
-<td>1.1186618909114702E-11</td>
-</tr>
-<tr>
-<td>112.5</td>
-<td>-5.205783145942609E-21</td>
-<td>2.5307755890935368E-11</td>
-<td>6.719872683111381E-45</td>
-</tr>
-<tr>
-<td>118.75</td>
-<td>4.537094156599318E-25</td>
-<td>1.8911094912255066E-11</td>
-<td>3.615356241778357E-114</td>
-</tr>
-<tr>
-<td>125.0</td>
-<td>1.006555799739525E-27</td>
-<td>3.2365221613872563E-12</td>
-<td>2.3126009701775733E-240</td>
-</tr>
-<tr>
-<td>131.25</td>
-<td>4.4339539263484925E-31</td>
-<td>2.4794388764348696E-11</td>
-<td>0.0</td>
-</tr>
-</tbody>
-</table>
-<p>One can see negative prices and meaningless prices outside ATM. With scaling it changes to:</p>
-<table>
-<thead>
-<tr>
-<th>Strike</th>
-<th>Lord-Kahl</th>
-<th>Kahl-Jaeckel</th>
-<th>Forde-Jacquier-Lee</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>62.5</td>
-<td>2.6668642552659466E-182</td>
-<td>8.405720564041985E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>68.75</td>
-<td>7.156278101597845E-132</td>
-<td>1.000266536266281E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>81.25</td>
-<td>7.863105641534119E-55</td>
-<td>2.104982854689297E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>87.5</td>
-<td>7.073641308465115E-28</td>
-<td>-1.6480150577535824E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>93.75</td>
-<td>1.8375145950924849E-9</td>
-<td>1.8277663826893331E-9</td>
-<td>1.948392142070432E-9</td>
-</tr>
-<tr>
-<td>100.0</td>
-<td>0.41743183938755385</td>
-<td>0.41743183938679845</td>
-<td>0.4174314959743768</td>
-</tr>
-<tr>
-<td>106.25</td>
-<td>1.3269785342953315E-11</td>
-<td>7.575717830832218E-11</td>
-<td>1.1186618909114702E-11</td>
-</tr>
-<tr>
-<td>112.5</td>
-<td>8.803247187972696E-42</td>
-<td>2.5307755890935368E-11</td>
-<td>6.719872683111381E-45</td>
-</tr>
-<tr>
-<td>118.75</td>
-<td>5.594342441346233E-90</td>
-<td>1.8911094912255066E-11</td>
-<td>3.615356241778357E-114</td>
-</tr>
-<tr>
-<td>125.0</td>
-<td>7.6539757567179276E-149</td>
-<td>3.2365221613872563E-12</td>
-<td>2.3126009701775733E-240</td>
-</tr>
-<tr>
-<td>131.25</td>
-<td>0.0</td>
-<td>2.4794388764348696E-11</td>
-<td>0.0</td>
-</tr>
-</tbody>
-</table>
-<p>One can now now see that the Jacquier-Lee approximation is quickly not very good.</p>
-<ul>
-<li>Put: the put option price can be computed using the exact same <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula, but using a negative alpha instead of a positive alpha. When I derived this result (by just reproducing the Carr-Madan steps with the put payoff instead of the call payoff), I was surprised, but it works.</li>
-</ul>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/18/">Previous</a></p>
@@ -352,6 +186,9 @@ In finance, because one often dicretize the log process instead of the direct pr
 
     
       
+  
+
+
     
   </body>
 </html>

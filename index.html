@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.121.2">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 2024. All rights reserved. </p>
+    <p>&copy; 2025. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/opensuse_tumbleweed/">OpenSuse Tumbleweed to the Rescue</a>
+  </h1>
+  <time datetime="2025-02-06T12:56:42&#43;0100" class="post-date">Thu, Feb 6, 2025</time>
+  <p>I recently upgraded a desktop computer, and to my surprise, the new motherboard was not fully supported by most Linux distributions.
+The main culprit was the network adapter, although the secure boot setup gave me lots of troubles as well. I had only a small usb key (2GB)
+and most (all?) live distributions do not fit on 2GB anymore. With the exception of Ubuntu images, I did not manage to boot from USB hard drive where I dumped the live image ISO, due to Secure boot
+related issues, even when disabling the feature or changing the settings in the BIOS. Using the small USB key worked with Secure boot enabled only.</p>
+<p>So I had to find a distribution with a small size and with a new kernel which supported the network adapter (6.13+). I tried the rawhide Fedora, which has a small network install image, but that just did not work, because it&rsquo;s too alpha.</p>
+<p>I thought most rolling distributions would fit the bill. It turns out they don&rsquo;t, EndeavourOS or Manjaro have relatively recent live install but (a) they are not small enough to fit on the USB key and (b) the images are a few months old where the kernel is too old.</p>
+<p><a href="https://get.opensuse.org/tumbleweed/">OpenSuse Tumbleweed</a> provides a daily updated network installer iso (and a live CD), this is the only thing that worked, and it worked well.</p>
+<p>Overall I was a bit surprised that it was so challenging to find an installable distribution with the latest kernel.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/saving_us_book_review/">Saving Us - Book Review</a>
   </h1>
@@ -97,28 +112,28 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 </span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
 </span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
 <p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
-<figure><img src="/post/bs_price.png"/>
+<figure><img src="/post/bs_price.png">
 </figure>
 </p>
 <p>Peter Jaeckel proposes several improvements, the first simple one is to use the scaled complementary error function <code>erfcx</code> rather than the cumulative normal distribution function directly. A second improvement is to use Taylor expansions for small prices. It turns out that on the example with strike K=2.0, forward F=1.0, vol=0.125, the Taylor expansion is being used.</p>
-<figure><img src="/post/bs_price_jaeckel.png"/>
+<figure><img src="/post/bs_price_jaeckel.png">
 </figure>
 
 <p>The error is much lower, with Taylor being even a little bit better. But the price is still not monotonic.</p>
 <p>How would the implied vol corresponding to those prices look like? If we apply Peter Jaeckel implied vol solver to the naive Black-Scholes formula, we end up with an accuracy limited by the naive formula.
-<figure><img src="/post/bs_vol_naive.png"/>
+<figure><img src="/post/bs_vol_naive.png">
 </figure>
 </p>
 <p>If we apply it to the exact prices or to erfcx or to Taylor, we still end up with a non monotonic implied vol:</p>
-<figure><img src="/post/bs_vol_jaeckel.png"/>
+<figure><img src="/post/bs_vol_jaeckel.png">
 </figure>
 
 <p>There is no visible difference in accuracy if we start from the erfcx prices and apply the SR Householder solver of <a href="https://github.com/jherekhealy/AQFED.jl/tree/master/src/black">Jherek Healy</a>:</p>
-<figure><img src="/post/bs_vol_erfcx.png"/>
+<figure><img src="/post/bs_vol_erfcx.png">
 </figure>
 
 <p>It should not be too surprising: if we compose the Black-Scholes formula with the associated solver from Peter Jaeckel, we do not obtain the identity function. Because the option prices are not monotonic with the vol, there are several vols which may be solution to the same price, and the solver is guaranteed to not solve exactly, which leads to the numerical noise we see on the plots. In contrast, it is remarkable that if we compose exp with log we have a nice monotonic shape:</p>
-<figure><img src="/post/logexp.png"/>
+<figure><img src="/post/logexp.png">
 </figure>
 
 <p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
@@ -135,15 +150,15 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 <p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p>
 </blockquote>
 <p>Here is the answer of copilot:
-<figure><img src="/post/step_size_copilot.png"/>
+<figure><img src="/post/step_size_copilot.png">
 </figure>
 
 and the one of chatGPT:
-<figure><img src="/post/step_size_chatgpt1.png"/>
+<figure><img src="/post/step_size_chatgpt1.png">
 </figure>
 
 and a second answer from chatGPT:
-<figure><img src="/post/step_size_chatgpt2.png"/>
+<figure><img src="/post/step_size_chatgpt2.png">
 </figure>
 </p>
 <p>Copilot always fails to provide a valid answer. ChatGPT v4 proves to be quite impressive: it is able to reproduce some of the reasoning presented in the lecture notes.</p>
@@ -176,15 +191,15 @@ where \( \eta \) is the vol of vol.</p>
 <p>When \( T \to \infty \), we have \( V(T) \to \theta^2 + \frac{\eta^2}{2\kappa} \).
 Unless \( \kappa \) is very large, or the vol of vol is very small, the second term will often dominate. In plain words, the prices of long-term variance swaps are almost purely dictated by the vol of vol when the speed of mean reversion is lower than 1.0.</p>
 <p>Below is an example of fit to the market. If the vol of vol and kappa are exogeneous and we calibrate only the initial vol v0, plus the long term vol theta to the term-structure of variance swaps, then we end up with upward shapes for the term-structure, regardless of theta. Only when we add the vol of vol to the calibration, we find a reasonable solution. The solution is however not really better than the one corresponding to the Heston fit with only 2 parameters. It thus looks overparameterized.</p>
-<figure><img src="/post/varswap_sz_russel.png"/><figcaption>
-            <h4>Term-structure of variance swap prices on Russell 2000 index</h4>
-        </figcaption>
+<figure><img src="/post/varswap_sz_russel.png"><figcaption>
+      <h4>Term-structure of variance swap prices on Russell 2000 index</h4>
+    </figcaption>
 </figure>
 
 <p>There are some cases where the Schobel-Zhu model allows for a better fit than Heston, and makes use of the flexibility due to the vol of vol.</p>
-<figure><img src="/post/varswap_sz_spx.png"/><figcaption>
-            <h4>Term-structure of variance swap prices on SPX 500 index</h4>
-        </figcaption>
+<figure><img src="/post/varswap_sz_spx.png"><figcaption>
+      <h4>Term-structure of variance swap prices on SPX 500 index</h4>
+    </figcaption>
 </figure>
 
 <p>It is awkward that the variance swap term-structure depends on the vol of vol in the Schobel-Zhu model.</p>
@@ -198,14 +213,14 @@ Unless \( \kappa \) is very large, or the vol of vol is very small, the second t
   <p>In the <a href="/post/new_asian_approximation/">previous post</a>, I presented a <a href="https://arxiv.org/abs/2106.12971">new stochastic expansion</a> for the prices of Asian options. The stochastic expansion is generalized to basket options in the paper, and <a href="https://arxiv.org/abs/2106.12971">can thus be applied</a> on the problem of pricing vanilla options with cash dividends.</p>
 <p>I have updated the paper with comparisons to more direct stochastic expansions for pricing vanilla options with cash dividends, such as the one of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1687590">Etoré and Gobet</a>, and <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">my own refinement</a> on it.</p>
 <p>The second and third order basket expansions turn out to be significantly more accurate than the previous, more direct stochastic expansions, even on extreme examples.</p>
-<figure><img src="/post/basket_expansion_pln_zhang.png"/><figcaption>
-            <h4>Extreme case with large volatility (80% on 1 year) and two unrealistically large dividends of 25 (spot=100). VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
-        </figcaption>
+<figure><img src="/post/basket_expansion_pln_zhang.png"><figcaption>
+      <h4>Extreme case with large volatility (80% on 1 year) and two unrealistically large dividends of 25 (spot=100). VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/basket_expansion_pln_gs.png"/><figcaption>
-            <h4>Long maturity (10y) with dividend (amount=2) every six month. VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
-        </figcaption>
+<figure><img src="/post/basket_expansion_pln_gs.png"><figcaption>
+      <h4>Long maturity (10y) with dividend (amount=2) every six month. VGn and VLn are stochastic expansions of order n using two different proxies. EG3 and LL3 are the third order expansions of Etore-Gobet and Le Floc&#39;h. Deelstra is the refined Curran moment matching technique.</h4>
+    </figcaption>
 </figure>
 
 
@@ -217,9 +232,9 @@ Unless \( \kappa \) is very large, or the vol of vol is very small, the second t
   <time datetime="2024-03-17T12:56:42&#43;0100" class="post-date">Sun, Mar 17, 2024</time>
   <p>Many years ago, I had <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">applied the stochastic expansion</a> technique of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1687590">Etore and Gobet</a> to a refined proxy, in order to produce more accurate prices for vanilla options with cash dividends under the Black-Scholes model with deterministic jumps at the dividend dates. Any approximation for vanilla basket option prices can also be applied on this problem, and the sophisticated Curran geometric conditioning was found to be particularly competitive in <a href="https://arxiv.org/abs/2106.12971">The Pricing of Vanilla Options with Cash Dividends as a Classic Vanilla Basket Option Problem</a>.</p>
 <p>Recently, I had the idea of <a href="https://arxiv.org/abs/2402.17684">applying the same stochastic expansion technique to the prices of Asian options</a>, and more generally to the prices of vanilla basket options. It works surprising well for Asian options. A main advantage is that the expansion is straightforward to implement: there is no numerical solving or numerical quadrature needed.</p>
-<figure><img src="/post/asian_expansion_vg3.png"/><figcaption>
-            <h4>VGn and VLn are stochastic expansions of order n using two different proxies</h4>
-        </figcaption>
+<figure><img src="/post/asian_expansion_vg3.png"><figcaption>
+      <h4>VGn and VLn are stochastic expansions of order n using two different proxies</h4>
+    </figcaption>
 </figure>
 
 <p>It works a little bit less well for basket options. Even though I found a better proxy for those, the expansions behave less well with large volatility (really, large total variance), regardless of the proxy. I notice now this was also true for the case of discrete dividends where, clearly the accuracy deteriorates somewhat significantly in &ldquo;extreme&rdquo; examples such as a vol of 80% for an option maturity of 1 year (see <a href="https://arxiv.org/pdf/2106.12971.pdf">Figure 3</a>).</p>
@@ -249,66 +264,14 @@ $$ \bar{\sigma}_i^2(t_0)(t_1-t_0) = \int_{t_0}^{t_1} \sigma_i^2(s) ds.$$</p>
   <p>In my previous <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">blog post</a>, I looked at the roughness of the SVCJ stochastic volatility model with jumps (in the volatility). In this model, the jumps occur randomly, but at discrete times. And with typical parameters used in the litterature, the jumps are not so frequent. It is thus more interesting to look at the roughness of pure jump processes, such as the <a href="https://engineering.nyu.edu/sites/default/files/2018-09/CarrJournalofBusiness2002.pdf">CGMY process</a>.</p>
 <p>The CGMY process is more challenging to simulate. I used the approach based on the characteristic function described in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1983134">Simulating Levy Processes from Their Characteristic Functions and Financial Applications</a>. Ballota and Kyriakou add some variations based on FFT pricing of the characteristic function in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1951537">Monte Carlo simulation of the CGMY process and option pricing</a> and pay much care about a proper truncation range. Indeed, I found that the truncation range was key to simulate the process properly and not always trivial to set up especially for \(Y \in (0,1) \). I however did not  implement any automated range guess as I am merely interested in very specific use cases, and I used the COS method instead of FFT.</p>
 <p>I also directly analyze the roughness of a sub-sampled asset path (the exponential of the CGMY process), and not of some volatility path as I was curious if pure jump processes would mislead roughness estimators. I simulated the paths corresponding to parameters given in Fang thesis <a href="https://repository.tudelft.nl/islandora/object/uuid%3A9aa17357-af21-4c09-86a2-3904ced4b873">The COS Method - An Efficient Fourier Method for Pricing Financial Derivatives</a>: C = 1, G = 5, M = 5, Y = 0.5 or Y = 1.5.</p>
-<figure><img src="/post/cgmy_path.png"/>
+<figure><img src="/post/cgmy_path.png">
 </figure>
 
 <p>And the corresponding Hurst index estimate via the Cont-Das method:
-<figure><img src="/post/cgmy_estimate.png"/>
+<figure><img src="/post/cgmy_estimate.png">
 </figure>
 </p>
 <p>Similarly the Gatheral-Rosenbaum estimate has no issue finding H=0.5.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">Roughness of Stochastic Volatility with Jumps</a>
-  </h1>
-  <time datetime="2023-12-07T20:56:42&#43;0100" class="post-date">Thu, Dec 7, 2023</time>
-  <p>I was wondering if adding jumps to stochastic volatility, as is done in the SVCJ model of Duffie, Singleton and Pan <em>&ldquo;Transform Analysis and Asset Pricing for Affine Jump-Diffusion&rdquo;</em> also in Broadie and Kaya <em>&ldquo;Exact simulation of stochastic volatility and other affine jump diffusion processes&rdquo;</em>, would lead to rougher paths, or if it would mislead the roughness estimators.</p>
-<p>The answer to the first question can almost be answered visually:
-<figure><img src="/post/svcj_variance_path.png"/>
-</figure>
-</p>
-<p>The parameters used are the one from Broadie and Kaya: v0=0.007569, kappa=3.46, theta=0.008, rho=-0.82, sigma=0.14 (Heston), jump correlation -0.38, jump intensity 0.47, jump vol 0.0001, jump mean 0.05, jump drift -0.1.</p>
-<p>The Rough Heston with H=0.1 is much &ldquo;noisier&rdquo;. There is not apparent difference between SVCJ and Heston in the path of the variance.</p>
-<p>The estimator of Cont and Das (on a subsampled path) leads to a Hurst exponent H=0.503, in line with a standard Brownian motion.
-<figure><img src="/post/svcj_estimate.png"/><figcaption>
-            <h4>Cont-Das estimate H=0.503.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The estimator from Rosenbaum and Gatheral leads to a Hurst exponent (slope of the regression) H=0.520 with well behaved regressions:
-<figure><img src="/post/svcj_estimate_gatheral_1.png"/><figcaption>
-            <h4>Regressions for each q.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/svcj_estimate_gatheral_2.png"/><figcaption>
-            <h4>Regression over all qs which leads to the estimate of H.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>On this example, there are relatively few jumps during the 1 year duration. If we multiply the jump intensity by 1000 and reduce the jump mean accordingly, the conclusions are the same. Jumps and roughness are fundamentally different.</p>
-<p>Of course this does not mean that the short term realized volatility does not look rough as evidenced in Cont and Das paper:
-<figure><img src="/post/svcj_rv.png"/><figcaption>
-            <h4>The 1 hour realized volatility looks rough.</h4>
-        </figcaption>
-</figure>
-
-I computed the realized volatility on a subsampled path, using disjoint windows of 1h of length.</p>
-<p>It is not really rough, estimators will have a tough time leading to stable estimates on it.
-<figure><img src="/post/svcj_rv_estimate.png"/><figcaption>
-            <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>This is very visible with the Rosenbaum-Gatheral way of estimating H, we see that the observations do not fall on a line at all but flatten:
-<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"/><figcaption>
-            <h4>Regressions for each q based on the 1h realized variance.</h4>
-        </figcaption>
-</figure>
-</p>
-<p>The pure Heston model leads to similar observations.</p>
 
   
 </article>
@@ -319,6 +282,9 @@ I computed the realized volatility on a subsampled path, using disjoint windows 
 
     
       
+  
+
+
     
   </body>
 </html>
