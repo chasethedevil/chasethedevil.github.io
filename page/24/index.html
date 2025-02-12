@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.131.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,16 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/gnome-3-unity-crap/">Gnome 3, Unity, Crap</a>
+  </h1>
+  <time datetime="2011-08-17T19:09:00Z" class="post-date">Wed, Aug 17, 2011</time>
+  <p>After the upgrate to Ubuntu 11.04 I was directly on Unity. Having a dock on the left side is nice, but unfortunately, it has various bugs which makes it sometimes annoying. Also the menu on top like Mac Os X is not a bad idea, but it breaks many apps (for example Picasa). Then there is the scrollbar insanity, it&rsquo;s almost impossible to click on to scroll, and again breaks in some apps (for example Eclipse). Fortunately one can disable all of that and go back to the old Gnome 2.</p>
+<p>Then I decided to try Gnome 3 the past 2 weeks. I was curious that Linus found it so bad. At first it looked nice, probably because it&rsquo;s different. But very quickly, it becomes annoying: the full screen changed just to switch window with the mouse is a stupid idea. And then installing Gnome 3 in Ubuntu is not such a great idea: Rhythmbox does not work well anymore with it, all my &ldquo;file open&rdquo; mapping was gone and replaced with garbage: why does it propose GIMP to open a PDF is beyond me.</p>
+<p>Gnome 2 + a nice standard dock + widgets (or the nice unity indicators) + an indexer would have been perfect. Now I am back to KDE 4 which provides all of that, even if it feels a bit bloated.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/carmack--gpgpu-programming/">Carmack &amp; GPGPU programming</a>
   </h1>
@@ -165,18 +175,6 @@ This is a problem where one needs to do a few matrix multiplications and inverse
    
 
 Before Java 1.5, I never really complained about the lack of <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> keyword. Sure the <a href="http://java.sun.com/developer/Books/shiftintojava/page1.html">old enum via class pattern</a> was a bit verbose at first (N.B.: Java 1.5 enums can also be verbose once you start adding methods to them). But more importantly, you would often use the table lookup pattern in combination.<br /><br />The problem with Java 1.5 <b><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><span class="Apple-style-span" style="color: purple;">enum</span></span></b> is that it is not Object-Oriented. You <u>can't extend</u> an <b><span class="Apple-style-span" style="color: purple;"><span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">enum</span></span></b>, you can't add an element in an existing enum. Many will say "but that's what enum is for, a static list of things". In my experience, &nbsp;the list of things often changes with time, or needs to be extended at one point. Furthermore, most people (including me when I am very lazy) end up writing switch statements on enum values. Enum promotes bad programming practices.<br /><br />Think twice about using enum, this is often not what you want.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/">A Very Interesting Feature of Scala</a>
-  </h1>
-  <time datetime="2010-08-07T12:35:00Z" class="post-date">Sat, Aug 7, 2010</time>
-   
-
-I tried Scala <a href="http://chasethedevil.blogspot.com/2007/09/fast-web-development-with-scala.html">a few years ago</a>. There are several good ideas in it, but I found the language to be a bit too complicated to master. But I recently stubbled upon <a href="http://lamp.epfl.ch/~dragos/files/scala-spec.pdf">a paper on Scala generics</a>&nbsp;that might change my mind about using Scala.<br /><br />Scala Generics used to work in a similar way as Java Generics: via type erasure. One main reason is compatibility with Java, another is that C++ like templates make the code base blow up. Scala Generics offered some additional behavior (the variance/covariance notion).&nbsp;C++ templates, however, have some very interesting aspects: one is that everything is done at compile time, the other is &nbsp;performance. If the generics are involved in any kind of computation intensive task, all the Java type conversion will create a significant overhead.<br /><br />Now Scala has <b><a href="http://www.scala-lang.org/api/current/scala/specialized.html">@specialized</a></b>&nbsp;(since Scala 2.8). Annotating a generic type with @specialized will generate code. One has the choice to accept the performance penalty or to get all the performance but accept the code blow up. I think this is very useful.<br /><br />If you read the paper you will see that the performance implications of this are not always small.<br /><br />UPDATE: I thank the readers for pointing that this work only with primitive types to avoid autoboxing. It is still valuable but less than I first thought.
 
 
 

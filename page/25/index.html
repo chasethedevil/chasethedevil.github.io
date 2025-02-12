@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.131.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,18 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-very-interesting-feature-of-scala/">A Very Interesting Feature of Scala</a>
+  </h1>
+  <time datetime="2010-08-07T12:35:00Z" class="post-date">Sat, Aug 7, 2010</time>
+   
+
+I tried Scala <a href="http://chasethedevil.blogspot.com/2007/09/fast-web-development-with-scala.html">a few years ago</a>. There are several good ideas in it, but I found the language to be a bit too complicated to master. But I recently stubbled upon <a href="http://lamp.epfl.ch/~dragos/files/scala-spec.pdf">a paper on Scala generics</a>&nbsp;that might change my mind about using Scala.<br /><br />Scala Generics used to work in a similar way as Java Generics: via type erasure. One main reason is compatibility with Java, another is that C++ like templates make the code base blow up. Scala Generics offered some additional behavior (the variance/covariance notion).&nbsp;C++ templates, however, have some very interesting aspects: one is that everything is done at compile time, the other is &nbsp;performance. If the generics are involved in any kind of computation intensive task, all the Java type conversion will create a significant overhead.<br /><br />Now Scala has <b><a href="http://www.scala-lang.org/api/current/scala/specialized.html">@specialized</a></b>&nbsp;(since Scala 2.8). Annotating a generic type with @specialized will generate code. One has the choice to accept the performance penalty or to get all the performance but accept the code blow up. I think this is very useful.<br /><br />If you read the paper you will see that the performance implications of this are not always small.<br /><br />UPDATE: I thank the readers for pointing that this work only with primitive types to avoid autoboxing. It is still valuable but less than I first thought.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/street-fighting-mathematics-book/">Street Fighting Mathematics Book</a>
   </h1>
@@ -175,22 +187,6 @@ We ran into an interesting issue with TimeZone and Dates. If you print the same 
 In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on my hardware (intel HDA with digital SPDIF out). I upgraded to 9.10 and had even more problems. Sound always worked on boot, but often broke down after a while. And I could not find easy ways to make it work other than rebooting... Killing/restarting pulseaudio, looking at the processes using snd did not work.<br /><br />One thing works wonderfully, pure ALSA. To have multilple apps sharing ALSA, I just use dmix. As I use digital out, there is no mixer, but ALSA can provide one through softvol. It works really well. ALSA is already not that simple to configure/setup properly, but with pulseaudio on top, welcome to your worst configuration nightmares.<br /><br />Here is the .asoundrc I use:<br /><pre> <br />pcm.amix {<br />   type dmix<br />   ipc_key 50557<br />   slave {<br />       pcm "hw:0,1"<br />       period_time 0<br />       period_size 1024<br />       buffer_size 8192<br />   }<br />   bindings {<br />       0 0<br />       1 1<br />   }<br />}<br /><br />pcm.softvol {<br />    type            softvol<br />    slave {<br />        pcm         "amix"      #redirect the output to dmix (instead of "hw:0,0")<br />    }<br />    control {<br />        name        "PCM"       #override the PCM slider to set the softvol volume level globally<br />        card        0<br />    }<br />}<br /><br /><br />pcm.!default {<br />    type            plug<br />    slave.pcm       "softvol"   #make use of softvol<br />}<br /></pre>
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/java-int-overflow-behavior/">Java int Overflow Behavior</a>
-  </h1>
-  <time datetime="2009-06-15T16:15:00Z" class="post-date">Mon, Jun 15, 2009</time>
-  <p>A coworker recently asked me if there was a guaranteed behavior in the case of int overflow. He gave the specific example on:</p>
-<p>can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?</p>
-<p>I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.</p>
-<p>I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#902000">long</span><span style="color:#bbb"> </span>l<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Integer.<span style="color:#4070a0">MAX_VALUE</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>l<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>l<span style="color:#bbb"> </span><span style="color:#666">+</span>1;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>x<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>(<span style="color:#902000">int</span>)l;</span></span></code></pre></div></p>
-<p>x has a guaranteed value.
-<a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a> paragraph 5.1.3.</p>
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.131.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,68 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/implied_volatility_roughness/">Roughness of the Implied Volatility</a>
+  </h1>
+  <time datetime="2022-07-09T07:56:42&#43;0100" class="post-date">Sat, Jul 9, 2022</time>
+  <p>This is a follow up of my <a href="/post/rough-volatility-or-not-a-review/">previous post</a> on rough volatility. I recently tried to reproduce the results of the paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4065951">Rough Volatility: Fact or Artefact?</a> as I was curious to apply the technique using different inputs. The 5-minutes SPX realized volatility is freely available in CSV format at the <a href="https://realized.oxford-man.ox.ac.uk/data">
+Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
+<p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
+It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
+<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
+      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
+      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+    </figcaption>
+</figure>
+</p>
+<p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
+<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
+      <h4>SPX roughness index sliding estimate with K=50.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
+      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+    </figcaption>
+</figure>
+</p>
+<p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
+<p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
+<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+    </figcaption>
+</figure>
+</p>
+<p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
+<p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
+<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
+      <h4>VIX roughness index sliding estimate with K=51.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
+      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+    </figcaption>
+</figure>
+</p>
+<p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
+<p>To conclude, the Hurst index H of the implied volatility, and of the VIX index appear to be not as low as the one of the 5 minutes historical volatility. The estimated roughness H=0.35 is much closer to the standard Brownian motion roughness. In fact, for the 30-day implied volatility (with daily quotes), the measure is even closer to 0.5.</p>
+<p>Looking at the 5 minutes historical volatility may make sense to price intraday options, but it is not clear what is the importance of it for traditional derivatives pricing (with maturities longer than a week). Does the historical micro-structure really matter there?</p>
+<p>After writing all that, I found out Livieri et al. (2017) paper titled <a href="https://arxiv.org/abs/1702.02777">Rough volatility: evidence from
+option prices</a> which also measures the roughness of the implied volatilities. Interestingly, I did not reproduce some of the claims in that paper: I find a large bias in the implied volatility proxy even for a low H value. The large bias, combined to the uncertainty in the measurement makes the implied volatility proxy not very practical to estimate the true Hurst index of the underlying volatility process. Another discrepancy with the paper is around the Heston model: I do not find any apparent roughness at all in the Heston model.</p>
+<p>I added this post, with more details, as <a href="https://arxiv.org/abs/2207.04930">a note on arxiv</a>, just in case someone needs to reference this. I intend to place some the Julia code I wrote in the context of the paper on github, although I did not find the time yet.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/rough-volatility-or-not-a-review/">Volatility: Rough or Not? A Short Review</a>
   </h1>
@@ -308,43 +370,6 @@ This means the observed number of deaths is lower than expected compared with mo
 <p>My mother became so paranoid that she does not recognize a valid message from the bank as a normal, standard communication from the bank anymore.
 And we are left me with a bank advisor who is not far of being a fraudster him/herself. One may wonder if things would really be much worse with a bitcoin wallet.</p>
 <p>By the time I am writing this, my parents were fully reimbursed by the bank, the phishing e-mail was really all they needed.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/yesterday-pirates-took-over-my-parents-bank-account/">Yesterday, Pirates Took Over My Parents Bank Account</a>
-  </h1>
-  <time datetime="2021-03-10T07:56:42&#43;0100" class="post-date">Wed, Mar 10, 2021</time>
-  <p>This is the story of their hack.</p>
-<p>Yesterday evening, I received a call from my mother, frantic over the phone. She says she sees alerts of withdrawals from her bank account on her phone, with new alerts every 5 minutes or so. I try to ask her if she clicked recently on some e-mail related to her bank. She is so panicked that I don&rsquo;t manage to have an answer. While trying to understand if those alerts are real or not, my wife suggests immediately that my mother should call her bank. On the phone, I ask</p>
-<ul>
-<li>did you call the bank? You should really call the bank right now if you did not.</li>
-<li>I don&rsquo;t have any number to call them, she replies.</li>
-</ul>
-<p>After a 5 seconds Google search, my wife finds a number to call in case of phishing at this bank. I start spelling the number to my mother. Before I finish my mother replies</p>
-<ul>
-<li>ah this number does not work.</li>
-<li>so you had already this number and tried to call it? I ask</li>
-<li>yes, it does not work.</li>
-</ul>
-<p>She starts shouting and asks me to come over. I hang up and tell her I will call back shortly, when she is calmer. I call her back 1 minute later and tell her I will come over.</p>
-<p>In the meantime, my wife attempts to call the number. She stumbles upon some bot asking for bank credentials or alternatively if she wants to speak to a person. She opts for a person, and indeed, ends up with someone hanging up the phone without having the chance to say a word. She then calls the international number, just below that first number. Bingo, someone helpful is here. She asks the person to call my parents.</p>
-<p>When I arrive at my parents place, the person from the bank had reached to my mother, and closed internet access to her bank account to the great relief of everyone. Then, I search the computer, her phone, her tablet, for any text message or e-mail that was suspicious that day. I could not find any. She did receive some legitimate emails from the bank, but only alerts around what was happening in the evening. It started with a message of a new device being allowed to access the bank account website.</p>
-<p>I then have the idea to look into the browser history. What is the first page of the day being consulted, around noon?</p>
-<p>A phishing website with my mother&rsquo;s bank name as title.</p>
-<p>Then I try to find out how she managed to stumble upon that site. I don&rsquo;t find anything. And when I ask her, it&rsquo;s not entirely clear at first, there may have been another email she received. She may have clicked on that email. And she may have given various personal information on, what she believed to be, the bank website. Ok, the classic phishing story then. I tell my parents that they know they should never click on a link in an e-mail. My father then asks &ldquo;but what do you mean exactly by a link?&rdquo;. I fail to understand the true meaning of the question at the time, and show him what is a link exactly and elaborate further.</p>
-<p>It does not stop there. Out of curiosity, I look at the whois information for this phishing web site. It&rsquo;s on godaddy, there is not much information, except
-some arab name servers, and the country of registration is Saudi Arabia. When I mention this to my father later on, he says:</p>
-<ul>
-<li>This might be a coincidence, but yesterday, I gave two checks (of the same bank) to the guy in charge of the repairs (or replacement?) of the water softener I had contacted. He has an arabic name.</li>
-</ul>
-<p>I know his tendencies to be &ldquo;racist&rdquo;, and tell him it probably does not have any relation. And then we think a bit more about the situation, and there is indeed a strange coincidence, as the phishing e-mail (which I never saw since my mother may have deleted it on purpose) was &ldquo;from&rdquo; the same bank, only 1 day later. How could the hackers know my parents bank? They did not receive any phishing e-mail for any other bank. The time and place point towards some sort of targeting.</p>
-<p>I go back home, and we further discuss with my wife about all this. And she asks me:</p>
-<ul>
-<li>If the two are related, how could the water softener guys have the e-mail address of your parents?</li>
-</ul>
-<p>Good question. I call my father and ask him. It turns out he had received an e-mail (a SPAM) from the water softener company and replied to it. This is how he contacted them. And perhaps, this explains why he wanted to know more about what &ldquo;clicking on a link&rdquo; means. I guess he knows now.</p>
-<p>Although I have no real proof, I am quite confident the water softener SPAM and the bank hack are very closely related. I did not think phishing was so &ldquo;targeted&rdquo;, and again it is my wife, who told me that targeting is apparently common in phishing. All this targeting makes me think of another story, involving an 80-years old member of the family, where the special forces broke into his house around 3 a.m. a few months back, shouting &ldquo;target, target&rdquo;, pointing their big guns, and arresting everybody in the house. But that&rsquo;s a story for another time.</p>
 
   
 </article>

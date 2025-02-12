@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.131.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calibrating Heston to Variance Swaps - a bad idea? &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Calibrating Heston to Variance Swaps - a bad idea?</h1>
+  <time datetime=2025-02-11T12:56:42&#43;0100 class="post-date">Tue, Feb 11, 2025</time>
+  <p>An interesting idea to calibrate the Heston model in a more stable manner and reduce the calibration time is to make use of variance swap prices. Indeed, there is a simple formula for the theoretical price of a variance swap in the Heston model.
+<figure><img src="/post/heston_varswap_formula.png">
+</figure>
+
+It is not perfect since it approximates the variance swap price by the expectation of the integrated variance process over time. In particular it does not take into account eventual jumps (obviously), finiteness of replication, and discreteness of observations. But it may be good enough. Thanks to this formula, we can calibrate three parameters of the Heston model: the initial variance, the long-term mean variance, and the speed of mean reversion to the term-structure of variance swaps. We do not need market prices of variance swaps, we may simply use a replication based on market vanilla options prices, such as the model-free replication of Fukasawa.</p>
+<p>The idea was studied in the paper <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=2255550">Heston model: the variance swap calibration</a> by F. Guillaume and W. Schoutens back in 2014. The authors however only used the variance swap calibration as an initial guess. How bad would it be to fix the parameters altogether, as in a variance curve approach?</p>
+<p>It turns out it can be quite bad since the Heston model does not allow to represent many shapes of the variance swap term structure. Below is an example of term-structure calibration on SPX as of October 2024.</p>
+<figure><img src="/post/heston_varswap_ts.png"><figcaption>
+      <h4>Term-structure of variance swap prices.</h4>
+    </figcaption>
+</figure>
+
+<p>The term-structure is V-shaped, and Heston can not fit well to this. The best fit leads to non-sensical parameters with a nearly zero kappa (mean reversion speed) and an exploding long-term mean theta. The next figure shows why it is non-sensical: because the kappa is very small, the variance will very often reach zero.</p>
+<figure><img src="/post/heston_smallkappa_vol_path.png"><figcaption>
+      <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
+    </figcaption>
+</figure>
+
+<p>The calibration using inverse vega weights on vanilla option prices leads a not much worse fit of the variance swap term structure, but exhibits a much to high, unrealistic vol-of-vol of 184%, while a calibration on equally weighted option prices does not fit the term structure well at all.</p>
+<p>Somewhat interestingly, the Double-Heston model allows to fit the term-structure much better, but it is far from obvious that the resulting calibrated parameters are much more realistic as it typically leads to process with very small kappa or a process with very small theta (but as there are two processes, it may be more acceptable).</p>
+<p>Previously, <a href="/post/unrealistic_variance_swaps_under_schobel_zhu/">I had explored</a> a similar subject for the Schobel-Zhu model. It turns out that Heston is not much more practical either.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+  
+
+
+    
+  </body>
+</html>

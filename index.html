@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.131.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,34 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/heston_variance_swap_calibration/">Calibrating Heston to Variance Swaps - a bad idea?</a>
+  </h1>
+  <time datetime="2025-02-11T12:56:42&#43;0100" class="post-date">Tue, Feb 11, 2025</time>
+  <p>An interesting idea to calibrate the Heston model in a more stable manner and reduce the calibration time is to make use of variance swap prices. Indeed, there is a simple formula for the theoretical price of a variance swap in the Heston model.
+<figure><img src="/post/heston_varswap_formula.png">
+</figure>
+
+It is not perfect since it approximates the variance swap price by the expectation of the integrated variance process over time. In particular it does not take into account eventual jumps (obviously), finiteness of replication, and discreteness of observations. But it may be good enough. Thanks to this formula, we can calibrate three parameters of the Heston model: the initial variance, the long-term mean variance, and the speed of mean reversion to the term-structure of variance swaps. We do not need market prices of variance swaps, we may simply use a replication based on market vanilla options prices, such as the model-free replication of Fukasawa.</p>
+<p>The idea was studied in the paper <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=2255550">Heston model: the variance swap calibration</a> by F. Guillaume and W. Schoutens back in 2014. The authors however only used the variance swap calibration as an initial guess. How bad would it be to fix the parameters altogether, as in a variance curve approach?</p>
+<p>It turns out it can be quite bad since the Heston model does not allow to represent many shapes of the variance swap term structure. Below is an example of term-structure calibration on SPX as of October 2024.</p>
+<figure><img src="/post/heston_varswap_ts.png"><figcaption>
+      <h4>Term-structure of variance swap prices.</h4>
+    </figcaption>
+</figure>
+
+<p>The term-structure is V-shaped, and Heston can not fit well to this. The best fit leads to non-sensical parameters with a nearly zero kappa (mean reversion speed) and an exploding long-term mean theta. The next figure shows why it is non-sensical: because the kappa is very small, the variance will very often reach zero.</p>
+<figure><img src="/post/heston_smallkappa_vol_path.png"><figcaption>
+      <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
+    </figcaption>
+</figure>
+
+<p>The calibration using inverse vega weights on vanilla option prices leads a not much worse fit of the variance swap term structure, but exhibits a much to high, unrealistic vol-of-vol of 184%, while a calibration on equally weighted option prices does not fit the term structure well at all.</p>
+<p>Somewhat interestingly, the Double-Heston model allows to fit the term-structure much better, but it is far from obvious that the resulting calibrated parameters are much more realistic as it typically leads to process with very small kappa or a process with very small theta (but as there are two processes, it may be more acceptable).</p>
+<p>Previously, <a href="/post/unrealistic_variance_swaps_under_schobel_zhu/">I had explored</a> a similar subject for the Schobel-Zhu model. It turns out that Heston is not much more practical either.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/opensuse_tumbleweed/">OpenSuse Tumbleweed to the Rescue</a>
   </h1>
@@ -254,24 +282,6 @@ $$ \bar{\sigma}_i^2(t_0)(t_1-t_0) = \int_{t_0}^{t_1} \sigma_i^2(s) ds.$$</p>
 <p>As such the covariance of the log-Euler scheme does not match the covariance from the Ito isometry unless the volatilities are constant in time. This means that the prices of European vanilla basket options is going to be slightly off, even though they are not path dependent.</p>
 <p>The fix is of course to use the true covariance matrix between \(t_0\) and \(t_1\).</p>
 <p>The issue may also happen if instead of using the square root of the covariance matrix in the Monte-Carlo discretization, the square root of the correlation matrix is used.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/roughness_of_jumps/">Roughness of Pure Jumps</a>
-  </h1>
-  <time datetime="2023-12-18T20:56:42&#43;0100" class="post-date">Mon, Dec 18, 2023</time>
-  <p>In my previous <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">blog post</a>, I looked at the roughness of the SVCJ stochastic volatility model with jumps (in the volatility). In this model, the jumps occur randomly, but at discrete times. And with typical parameters used in the litterature, the jumps are not so frequent. It is thus more interesting to look at the roughness of pure jump processes, such as the <a href="https://engineering.nyu.edu/sites/default/files/2018-09/CarrJournalofBusiness2002.pdf">CGMY process</a>.</p>
-<p>The CGMY process is more challenging to simulate. I used the approach based on the characteristic function described in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1983134">Simulating Levy Processes from Their Characteristic Functions and Financial Applications</a>. Ballota and Kyriakou add some variations based on FFT pricing of the characteristic function in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1951537">Monte Carlo simulation of the CGMY process and option pricing</a> and pay much care about a proper truncation range. Indeed, I found that the truncation range was key to simulate the process properly and not always trivial to set up especially for \(Y \in (0,1) \). I however did not  implement any automated range guess as I am merely interested in very specific use cases, and I used the COS method instead of FFT.</p>
-<p>I also directly analyze the roughness of a sub-sampled asset path (the exponential of the CGMY process), and not of some volatility path as I was curious if pure jump processes would mislead roughness estimators. I simulated the paths corresponding to parameters given in Fang thesis <a href="https://repository.tudelft.nl/islandora/object/uuid%3A9aa17357-af21-4c09-86a2-3904ced4b873">The COS Method - An Efficient Fourier Method for Pricing Financial Derivatives</a>: C = 1, G = 5, M = 5, Y = 0.5 or Y = 1.5.</p>
-<figure><img src="/post/cgmy_path.png">
-</figure>
-
-<p>And the corresponding Hurst index estimate via the Cont-Das method:
-<figure><img src="/post/cgmy_estimate.png">
-</figure>
-</p>
-<p>Similarly the Gatheral-Rosenbaum estimate has no issue finding H=0.5.</p>
 
   
 </article>
