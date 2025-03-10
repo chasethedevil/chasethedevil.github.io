@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.131.0">
+  <meta name="generator" content="Hugo 0.126.2">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,34 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/svi-and-long-maturities-issues/">SVI and long maturities issues</a>
+  </h1>
+  <time datetime="2014-08-01T12:51:00Z" class="post-date">Fri, Aug 1, 2014</time>
+  <p>On long maturities equity options, the smile is usually very much like a skew: very little curvature. This usually means that the SVI rho will be very close to -1, in a similar fashion as what can happen for the the correlation parameter of a real stochastic volatility model (Heston, SABR).</p>
+<p>In terms of initial guess, <a href="/post/another-svi-initial-guess">I looked</a> at the more usual use cases and showed that matching a parabola at the minimum variance point often leads to a decent initial guess if one has an ok estimate of the wings. We will see here that we can do also something a bit better than just a flat slice at-the-money in the case where rho is close to -1.</p>
+<p>In general when the asymptotes lead to rho &lt; -1, it means that we can&rsquo;t compute b from the asymptotes as there is in reality only one usable asymptote, the other one having a slope of 0 (rho=-1). The right way is to just recompute b by matching the ATM slope (which can be estimated by fitting a parabola at the money). Then we can try to match the ATM curvature, there are two possibilities to simplify the problem: s &raquo; m or m &raquo; s.</p>
+<p>Interestingly, there is some kind of discontinuity at m = 0:</p>
+<ul>
+<li>when m = 0, the at-the-money slope is just b*rho.</li>
+<li>when m != 0 and m &raquo; s, the at-the-money slope is b*(rho-1).</li>
+</ul>
+<p>In general it is therefore a bad idea to use m=0 in the initial guess. It appears then that assuming m &raquo; s is better. However, in practice, with this choice, the curvature at the money is matched for a tiny m, even though actually the curvature explodes (sigma=5e-4) at m (so very close to the money). This produces this kind of graph:</p>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2010%2056.png">
+</figure>
+
+<p>This apparently simple issue is actually a core problem with SVI. Looking back at our slopes but this time in the moneyness coordinate, the slope at m is \(b \rho\) while the slope at the money is \(b(\rho-1)\) if m != 0. If s is small, as the curvature at m is just b/s this means that our there will always be this funny shape if s is small. It seems then that the best we can do is hide it: let m &gt; max(moneyness) and compute the sigma to match the ATM curvature. This leads to the following:</p>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2032%2018.png">
+</figure>
+
+<p>This is all good so far. Unfortunately running a minimizer on it will lead to a solution with a small s. And the bigger picture looks like this (QE is Zeliade Quasi-Explicit, Levenberg-Marquardt would give the same result):</p>
+<figure><img src="/post/Screenshot%20from%202014-08-01%2012%2043%2016.png">
+</figure>
+
+<p>Of course a simple fix is to not let s to be too small, but how do we defined what is too small? I have found that a simple rule is too always ensure that s is increasing with the maturity supposing that we have to fit a surface. This rule has also a very nice side effect that spurious arbitrages will tend to disappear as well. On the figure above, I can bet that there is a big arbitrage at k=m for the QE result.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/more-svi-initial-guesses/">More SVI Initial Guesses</a>
   </h1>
@@ -176,18 +204,6 @@ I have found a particularly nice initial guess to calibrate SABR. As it is quite
    
 
 There was a big debate at work around Exception declaration in a Java API. I was quite surprised that such an apparently simple subject could end up being so controversial. The controversy was around the choice of declaring in the interfaces:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">void myMethod() throws Exception</span></span><br /><br />instead of<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIRuntimeException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() </span></span><br /><br />where MyAPI represents either a generic API related exception or a specific exception related to the method in question.<br /><br />The choice of "throws Exception" did not even occur to me as a possibility, but after some digging, I found that some relatively famous libraries actually followed that principle at one point, for example Apache Struts 1.x or Spring MVC. <br /><br />More modern libraries, like Google Guava, commons-math 3.x, Struts 2.x generally favor MyAPIRuntimeException where MyAPI is actually context-specific. Some old popular libraries declare a checked Exception, for example the HibernateException in Hibernate.<br /><br />This seems to be a recurring subject on Stackoverflow:<br /><a href="http://stackoverflow.com/questions/20530221/java-interface-throws-exception-best-practice" target="_blank">Stackoverflow - Java interface throws Exception best practice</a><br /><a href="http://stackoverflow.com/questions/4283634/what-to-put-in-the-throws-clause-of-an-interface-method" target="_blank">Stackoverflow - What to put in the throws clause of an interface method</a><br /><br />But those are quite poor in terms of explanations. The best comments on this subjects are from:<br /><a href="http://www.artima.com/intv/handcuffs.html"><span class="ts">Anders         Hejlsberg (C#, Delphi, Turbo Pascal creator) - The Trouble with         Checked Exceptions</span></a><br />    <a href="http://www.artima.com/intv/solid2.html"><span class="ts">James         Gosling (Java creator) - Failure and Exceptions</span></a><br /><br />    <br />This comment from Anders is particularly acute:<br />    "<b>To work around this requirement, people do ridiculous things.       For example, they decorate every method with, "</b><b><code>throws         Exception</code></b><b>." That just completely defeats the       feature, and you just made the programmer write more gobbledy       gunk. That doesn't help anybody.</b>    "<br />    <br /><br />         <br />Today I believe the API in question declares "throws Exception"... <br />         <br /><br />
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/kde-xfce-gnome-shell-in-2014/">KDE, XFCE, Gnome-Shell in 2014</a>
-  </h1>
-  <time datetime="2014-05-25T09:26:00Z" class="post-date">Sun, May 25, 2014</time>
-   
-
-Many people (and notoriously, Linus Torvald) complained about Gnome-shell, especially the early iterations. Similarly KDE 4 was a nightmare of instability and inflexibility when it came out. And XFCE has always sounded a bit too basic. the moves of Gnome and KDE were particularly shocking as the earlier iteration: Gnome 2 and KDE 3 were well appreciated, productive environments.<br /><br /><span style="font-size: large;">Gnome Shell 3.10</span><br /><br />It took me a bit of time to get used to it, and in the early stages I went to KDE 4 for a while, only to come back to it later.<br /><br /><ul><li><i>Positive aspects:</i> lots of space on the desktop, things don't get in the way, looks good,very good desktop overview (fast and well presented), a dock by default, great external monitor support (plug and play, remembers settings automatically), best OSD (volume) of all.</li><li><i>Negative aspects:</i> the notifications bar looks awkward and badly integrated (better with an extension), still unstable and big memory leaks (on Fedora 20, where the integration should be the best, it regularly crashes, starts with 300Mb and goes up to 1Gb in a couple of days), fallback-session completely useless as one can not customize it at all. But the killer for my work was&nbsp; inability to share the desktop with Webex, while XFCE could.</li></ul><br /><span style="font-size: large;">KDE</span> <br /><br />I gave it a long try especially in 2012, it has not changed much in 2014. My opinion of it fell when I tried it a very short time after months of Gnome Shell, and even more so after seeing the trouble my parents had with it, compared to Gnome 2.<br /><br /><ul><li><i>Positive aspects:</i> desktop search (needs to be configured in order to scan only the relevant folders, used to be slow and resource intensive, not so much in 2014)<i>&nbsp;</i></li><li><i>Negative aspects:</i> resource hog, awful start menu, too many shiny effects by default that only distract the user from his task, silly concepts like activities, every aspect of the desktop seems to require tweaking in non obvious ways for it to be more usable, looks ok but not great.</li></ul><br /><span style="font-size: large;">XFCE</span><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-nw0i5RiPfz0/U4RIv9aY2pI/AAAAAAAAHTQ/xF9ZwyRtXZk/s1600/Screenshot+-+05272014+-+10:06:57+AM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-nw0i5RiPfz0/U4RIv9aY2pI/AAAAAAAAHTQ/xF9ZwyRtXZk/s1600/Screenshot+-+05272014+-+10:06:57+AM.png" height="223" width="400" /></a></div><br />On Fedora, the default XFCE is very very basic, so much that I could hardly see a difference with one from 10 years ago. On Xubuntu, it's much much better. When I came to it from Gnome-Shell, I was surprised at how good was the "old" desktop paradigm for productivity. I also surprisingly found multiple desktops more natural to use than on Gnome Shell/KDE.<br />On Fedora the way to make it like Xubuntu is to install elementary icons, the whisker menu and choose the greybird/bluebird themes.<br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><br /></span></span><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">yum groups install "Xfce Desktop"<br />yum install xfce4-mixer.x86_64 xfce4-whiskermenu-plugin.x86_64 xfce4-cpugraph-plugin.x86_64 xfce4-mount-plugin.x86_64 xfce4-icon-theme.noarch google-droid* elementary-xfce-icon-theme.noarch xfce4-volumed.x86_64 pavucontrol.x86_64</span></span><br /><br /><ul><li><i>Positive aspects:</i> fast and lean, great start menu. </li><li><i>Negative aspects:</i> external monitor support could be more automatic like Gnome-Shell, no nice overview of all windows, default installation can be a bit too bare, sometimes not sexy (volume applet is ugly, xubuntu provides the unity indicators in xfce as a remedy), primitive OSD.</li></ul><span style="font-size: large;"><br /></span><span style="font-size: large;">Cinnamon, Unity, Conclusion</span><br /><br />I gave a short try to cinnamon as well, in hopes that it was more stable than gnome shell. In short, it was not. It's certainly less of a memory hog, but I had some strange behavior with an additional phantom panel sometimes appearing at the bottom at the screen. And overall it looks a lot less polished.<br /><br />Unity is more interesting, but it's too Ubuntu centric, I don't like the start button equivalent (slow, badly presented, don't care about HUD), the windows overview is not as useful as Gnome shell, the dock, something I usually like, is strangely annoying.<br /><br />This is a very subjective review, my feeling is that in 2014, people should not waste their time with KDE or Cinnamon. Gnome shell could be worth a try if you don't care so much about memory leaks and slight instability but value a distraction free desktop. Otherwise go for XFCE or Unity on (X)ubuntu.
 
 
 
