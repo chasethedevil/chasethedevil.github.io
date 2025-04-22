@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,14 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/moved-from-dropbox-to-ubuntu-one/">Moved From Dropbox to Ubuntu One</a>
+  </h1>
+  <time datetime="2013-04-23T20:44:00Z" class="post-date">Tue, Apr 23, 2013</time>
+  <p>Dropbox worked well, but the company decided to blacklist it. I suppose some people abused it. While looking for an alternative, I found <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDMQFjAA&amp;url=https%3A%2F%2Fone.ubuntu.com%2F&amp;ei=QtZ2UY3NO83GPePRgOgF&amp;usg=AFQjCNFS8gIGpHCkBTGRPbT7qLVFzb584g&amp;sig2=z3LX3TTwx8lLoS41AJCgaA&amp;bvm=bv.45580626,d.ZWU">Ubuntu One</a>. It&rsquo;s funny I never tried it before even though I use Ubuntu. I did not think it was a dropbox replacement, but it is. And you get 5GB instead of Dropbox 2GB limit, which is enough for me (I was a bit above the 2GB limit). It works well under Linux but as well on Android and there is an iOS app I have not yet tried. It also works on Windows and Mac.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/quasi-monte-carlo--longstaff-schwartz-american-option-price/">Quasi Monte-Carlo &amp; Longstaff-Schwartz American Option price</a>
   </h1>
   <time datetime="2013-04-22T18:00:00Z" class="post-date">Mon, Apr 22, 2013</time>
@@ -105,167 +113,167 @@ In finance, because one often dicretize the log process instead of the direct pr
 <li>Scaling: scaling the call price appropriately allows to increase the maximum precision significantly, because the <a href="http://portal.tugraz.at/portal/page/portal/Files/i5060/files/staff/mueller/FinanzSeminar2012/CarrMadan_OptionValuationUsingtheFastFourierTransform_1999.pdf">Carr-Madan</a> formula operates on log(Forward) and log(Strike) directly, but not the ratio, and alpha is multiplied by the log(Forward). I simply scale by the spot, the call price is (S_0*max(S/S_0-K/S0)). Here are the results for <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl</a>, <a href="http://pjaeckel.webspace.virginmedia.com/NotSoComplexLogarithmsInTheHestonModel.pdf">Kahl-Jaeckel</a> (the more usual way limited to machine epsilon accuracy), <a href="http://epubs.siam.org/doi/abs/10.1137/110830241">Forde-Jacquier-Lee</a> ATM implied volatility without scaling for a maturity of 1 day:</li>
 </ul>
 <table>
-<thead>
-<tr>
-<th>Strike</th>
-<th>Lord-Kahl</th>
-<th>Kahl-Jaeckel</th>
-<th>Forde-Jacquier-Lee</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>62.5</td>
-<td>2.919316809400033E-34</td>
-<td>8.405720564041985E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>68.75</td>
-<td>-8.923683388191852E-28</td>
-<td>1.000266536266281E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>75.0</td>
-<td>-3.2319611910032E-22</td>
-<td>2.454925152051146E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>81.25</td>
-<td>1.9401743410877718E-16</td>
-<td>2.104982854689297E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>87.5</td>
-<td>-Infinity</td>
-<td>-1.6480150577535824E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>93.75</td>
-<td>Infinity</td>
-<td>1.8277663826893331E-9</td>
-<td>1.948392142070432E-9</td>
-</tr>
-<tr>
-<td>100.0</td>
-<td>0.4174318393886519</td>
-<td>0.41743183938679845</td>
-<td>0.4174314959743768</td>
-</tr>
-<tr>
-<td>106.25</td>
-<td>1.326968012594355E-11</td>
-<td>7.575717830832218E-11</td>
-<td>1.1186618909114702E-11</td>
-</tr>
-<tr>
-<td>112.5</td>
-<td>-5.205783145942609E-21</td>
-<td>2.5307755890935368E-11</td>
-<td>6.719872683111381E-45</td>
-</tr>
-<tr>
-<td>118.75</td>
-<td>4.537094156599318E-25</td>
-<td>1.8911094912255066E-11</td>
-<td>3.615356241778357E-114</td>
-</tr>
-<tr>
-<td>125.0</td>
-<td>1.006555799739525E-27</td>
-<td>3.2365221613872563E-12</td>
-<td>2.3126009701775733E-240</td>
-</tr>
-<tr>
-<td>131.25</td>
-<td>4.4339539263484925E-31</td>
-<td>2.4794388764348696E-11</td>
-<td>0.0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Strike</th>
+          <th>Lord-Kahl</th>
+          <th>Kahl-Jaeckel</th>
+          <th>Forde-Jacquier-Lee</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>62.5</td>
+          <td>2.919316809400033E-34</td>
+          <td>8.405720564041985E-12</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>68.75</td>
+          <td>-8.923683388191852E-28</td>
+          <td>1.000266536266281E-11</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>75.0</td>
+          <td>-3.2319611910032E-22</td>
+          <td>2.454925152051146E-12</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>81.25</td>
+          <td>1.9401743410877718E-16</td>
+          <td>2.104982854689297E-12</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>87.5</td>
+          <td>-Infinity</td>
+          <td>-1.6480150577535824E-11</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>93.75</td>
+          <td>Infinity</td>
+          <td>1.8277663826893331E-9</td>
+          <td>1.948392142070432E-9</td>
+      </tr>
+      <tr>
+          <td>100.0</td>
+          <td>0.4174318393886519</td>
+          <td>0.41743183938679845</td>
+          <td>0.4174314959743768</td>
+      </tr>
+      <tr>
+          <td>106.25</td>
+          <td>1.326968012594355E-11</td>
+          <td>7.575717830832218E-11</td>
+          <td>1.1186618909114702E-11</td>
+      </tr>
+      <tr>
+          <td>112.5</td>
+          <td>-5.205783145942609E-21</td>
+          <td>2.5307755890935368E-11</td>
+          <td>6.719872683111381E-45</td>
+      </tr>
+      <tr>
+          <td>118.75</td>
+          <td>4.537094156599318E-25</td>
+          <td>1.8911094912255066E-11</td>
+          <td>3.615356241778357E-114</td>
+      </tr>
+      <tr>
+          <td>125.0</td>
+          <td>1.006555799739525E-27</td>
+          <td>3.2365221613872563E-12</td>
+          <td>2.3126009701775733E-240</td>
+      </tr>
+      <tr>
+          <td>131.25</td>
+          <td>4.4339539263484925E-31</td>
+          <td>2.4794388764348696E-11</td>
+          <td>0.0</td>
+      </tr>
+  </tbody>
 </table>
 <p>One can see negative prices and meaningless prices outside ATM. With scaling it changes to:</p>
 <table>
-<thead>
-<tr>
-<th>Strike</th>
-<th>Lord-Kahl</th>
-<th>Kahl-Jaeckel</th>
-<th>Forde-Jacquier-Lee</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>62.5</td>
-<td>2.6668642552659466E-182</td>
-<td>8.405720564041985E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>68.75</td>
-<td>7.156278101597845E-132</td>
-<td>1.000266536266281E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>81.25</td>
-<td>7.863105641534119E-55</td>
-<td>2.104982854689297E-12</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>87.5</td>
-<td>7.073641308465115E-28</td>
-<td>-1.6480150577535824E-11</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td>93.75</td>
-<td>1.8375145950924849E-9</td>
-<td>1.8277663826893331E-9</td>
-<td>1.948392142070432E-9</td>
-</tr>
-<tr>
-<td>100.0</td>
-<td>0.41743183938755385</td>
-<td>0.41743183938679845</td>
-<td>0.4174314959743768</td>
-</tr>
-<tr>
-<td>106.25</td>
-<td>1.3269785342953315E-11</td>
-<td>7.575717830832218E-11</td>
-<td>1.1186618909114702E-11</td>
-</tr>
-<tr>
-<td>112.5</td>
-<td>8.803247187972696E-42</td>
-<td>2.5307755890935368E-11</td>
-<td>6.719872683111381E-45</td>
-</tr>
-<tr>
-<td>118.75</td>
-<td>5.594342441346233E-90</td>
-<td>1.8911094912255066E-11</td>
-<td>3.615356241778357E-114</td>
-</tr>
-<tr>
-<td>125.0</td>
-<td>7.6539757567179276E-149</td>
-<td>3.2365221613872563E-12</td>
-<td>2.3126009701775733E-240</td>
-</tr>
-<tr>
-<td>131.25</td>
-<td>0.0</td>
-<td>2.4794388764348696E-11</td>
-<td>0.0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Strike</th>
+          <th>Lord-Kahl</th>
+          <th>Kahl-Jaeckel</th>
+          <th>Forde-Jacquier-Lee</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>62.5</td>
+          <td>2.6668642552659466E-182</td>
+          <td>8.405720564041985E-12</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>68.75</td>
+          <td>7.156278101597845E-132</td>
+          <td>1.000266536266281E-11</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>81.25</td>
+          <td>7.863105641534119E-55</td>
+          <td>2.104982854689297E-12</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>87.5</td>
+          <td>7.073641308465115E-28</td>
+          <td>-1.6480150577535824E-11</td>
+          <td>0.0</td>
+      </tr>
+      <tr>
+          <td>93.75</td>
+          <td>1.8375145950924849E-9</td>
+          <td>1.8277663826893331E-9</td>
+          <td>1.948392142070432E-9</td>
+      </tr>
+      <tr>
+          <td>100.0</td>
+          <td>0.41743183938755385</td>
+          <td>0.41743183938679845</td>
+          <td>0.4174314959743768</td>
+      </tr>
+      <tr>
+          <td>106.25</td>
+          <td>1.3269785342953315E-11</td>
+          <td>7.575717830832218E-11</td>
+          <td>1.1186618909114702E-11</td>
+      </tr>
+      <tr>
+          <td>112.5</td>
+          <td>8.803247187972696E-42</td>
+          <td>2.5307755890935368E-11</td>
+          <td>6.719872683111381E-45</td>
+      </tr>
+      <tr>
+          <td>118.75</td>
+          <td>5.594342441346233E-90</td>
+          <td>1.8911094912255066E-11</td>
+          <td>3.615356241778357E-114</td>
+      </tr>
+      <tr>
+          <td>125.0</td>
+          <td>7.6539757567179276E-149</td>
+          <td>3.2365221613872563E-12</td>
+          <td>2.3126009701775733E-240</td>
+      </tr>
+      <tr>
+          <td>131.25</td>
+          <td>0.0</td>
+          <td>2.4794388764348696E-11</td>
+          <td>0.0</td>
+      </tr>
+  </tbody>
 </table>
 <p>One can now now see that the Jacquier-Lee approximation is quickly not very good.</p>
 <ul>
@@ -389,22 +397,6 @@ This is very much what's in the Carr-Lee paper "Robust Replication of Volatility
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
-  </h1>
-  <time datetime="2013-03-12T21:36:00Z" class="post-date">Tue, Mar 12, 2013</time>
-  <p>A <a href="https://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<em>robust replication of volatility derivatives</em>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.</p>
-<p><figure><img src="/post/Screenshot%20from%202013-03-12%2018%2014%2034.png">
-</figure>
-
-Those are very close payoffs!</p>
-<p>I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.The real payoff (very easy to obtain through Carr-Lee Bessel formula):
-<figure><img src="/post/Screenshot%20from%202013-03-14%2019%2046%2016.png">
-</figure>
-</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/19/">Previous</a></p>
@@ -413,9 +405,6 @@ Those are very close payoffs!</p>
 
     
       
-  
-
-
     
   </body>
 </html>

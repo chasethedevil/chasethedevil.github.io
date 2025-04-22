@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,29 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/princeton_fintech_conference/">Princeton Fintech and Quant conference of December 2022</a>
+  </h1>
+  <time datetime="2022-12-04T07:56:42&#43;0100" class="post-date">Sun, Dec 4, 2022</time>
+  <p>I recently presented my latest published paper <a href="https://wilmott.com/wilmott-magazine-november-2022-issue/">On the Bachelier implied volatility at extreme strikes</a> at the Princeton Fintech and Quant conference.
+The presenters were of quite various backgrounds. The first presentations were much more business oriented with lots of AI keywords, but relatively little technical content while the last presentation was
+about parallel programming. Many were a pitch to recruit to employees.</p>
+<p>The diversity was interesting: it was refreshing to hear about quantitative finance from vastly different perspectives. The presentation from Morgan Stanley about <a href="https://github.com/morganstanley/optimus-cirrus">their scala annotation framework</a> to ease up
+parallel programming was enlightening. The main issue they were trying to solve is the necessity for all the boilerplate code to handle concurrency, caching, robustness, which obfuscates significantly the business logic in the code.
+This is an old problem. Decades ago, rule engines were the trend for similar reasons. Using the example of pricing bonds, the presenters put very well forward the issues in evidence, issues that I found
+very relevant.</p>
+<p>While writing my own presentation, I realized I had not tried to plot the Bachelier implied volatility fractals. The one corresponding to the Householder method is pretty, and not too far off from
+the Black-Scholes case, possibly because the first, second and third derivatives towards the vol are similar between the two models.</p>
+<figure><img src="/post/bachelier_householder_factor2_5.png"><figcaption>
+      <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
+    </figcaption>
+</figure>
+
+<p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
+<p><a href="/post/lefloch_bachelier_slides.pdf">Slides of the presentation</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/linux-in-2022/">Desktop Linux in 2022</a>
   </h1>
@@ -236,30 +259,30 @@ constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional rea
 <p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
 <p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the <a href="https://oxfordcontrol.github.io/COSMO.jl/stable/">COSMO solver</a> on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Solver</th>
-<th style="text-align:right">RMSE</th>
-<th style="text-align:right">Time (ms)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">GoldfarbIdnaniSolver</td>
-<td style="text-align:right">0.0031130349998388157</td>
-<td style="text-align:right">0.205</td>
-</tr>
-<tr>
-<td style="text-align:left">COSMO</td>
-<td style="text-align:right">0.0031130309597602370</td>
-<td style="text-align:right">21.485</td>
-</tr>
-<tr>
-<td style="text-align:left">SCS</td>
-<td style="text-align:right">0.0031130429769795193</td>
-<td style="text-align:right">8.381</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Solver</th>
+          <th style="text-align: right">RMSE</th>
+          <th style="text-align: right">Time (ms)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">GoldfarbIdnaniSolver</td>
+          <td style="text-align: right">0.0031130349998388157</td>
+          <td style="text-align: right">0.205</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">COSMO</td>
+          <td style="text-align: right">0.0031130309597602370</td>
+          <td style="text-align: right">21.485</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">SCS</td>
+          <td style="text-align: right">0.0031130429769795193</td>
+          <td style="text-align: right">8.381</td>
+      </tr>
+  </tbody>
 </table>
 
   
@@ -328,48 +351,6 @@ A recurring theme is plots presented without context/with the wrong context. Man
 <div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</span></span></code></pre></div>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/covid19-fake-news/">Covid-19 Fake News</a>
-  </h1>
-  <time datetime="2021-08-10T07:56:42&#43;0100" class="post-date">Tue, Aug 10, 2021</time>
-  <p>One thing that motivated me for vaccination is the fake news propaganda against the Covid-19 vaccines.</p>
-<p>A mild example relates to the data from Israel about the delta variant. <a href="https://trialsitenews.com/covid-19-case-data-in-israel-a-troubling-trend/">This kind of article</a>, with the title &ldquo;Covid 19 Case Data in Israel, a Troubling Trend&rdquo;, puts emphasis on the doubts on the effectivness of the vaccine:</p>
-<blockquote>
-<p>the vaccine appears to have a negligible effect on an individual as to whether he/she catches the current strain. Moreover, the data indicates that the current vaccines used (Moderna, Pfizer-BioNTech, AstraZeneca) may have a decreasing effect on reduced hospitalizations and death if one does get infected with the Delta variant.</p>
-</blockquote>
-<p>CNBC (far from the best news site) is much more balanced and precise in contrast:</p>
-<blockquote>
-<p>However, the two-dose vaccine still works very well in preventing people from getting seriously sick, demonstrating 88% effectiveness against hospitalization and 91% effectiveness against severe illness, according to the Israeli data published Thursday.</p>
-</blockquote>
-<p>Much more shocking is a <a href="https://twitter.com/pbhushan1/status/1417842166366236679">tweet from Prashant Bhushan</a> (whoever that is) which was relayed widely enough that I got to see it</p>
-<blockquote>
-<p>Public Health Scotland have revealed that 5,522 people have died within twenty-eight days of having a Covid-19 vaccine within the past 6 months in Scotland alone! This is 9 times the people who died due to Covid from March 2020 till Jan 2021 in Scotland!</p>
-</blockquote>
-<p>It points to <a href="https://dailyexpose.co.uk/2021/07/18/5522-people-have-died-within-28-days-of-having-a-covid-19-vaccine-in-scotland-according-to-public-health-scotland/">an article</a> in the Daily Expose (worse than a tabloid?) with <a href="https://beta.publichealthscotland.scot/media/8183/21-06-23-covid19-publication_report.pdf">a link to the actual study</a>. Giving an actual link to the source is a very good practice, even if in this case, the authors of the news article write a lengthy text which says the opposite as the paper they cite as being the source. Indeed, p.27 of the paper says</p>
-<blockquote>
-<p>Using the 5-year average monthly death rate (by age band and gender) from 2015 to 2019 for comparison, 8,718 deaths would have been expected among the vaccinated population within 28 days of receiving their COVID-19 vaccination.
-This means the observed number of deaths is lower than expected compared with mortality rates for the same time period in previous years&hellip;</p>
-</blockquote>
-<p><strong>Why do people write such fake news articles?</strong></p>
-<p>I can imagine 3 kinds of motivations:</p>
-<ol>
-<li>The author wants to make money/be famous. Writing controversial things, even if completely false, seems to work wonder to attract readership, as long as there is a trend of readers curious about this controverse. The author will gather page views and followers easily, which he may then monetize.</li>
-<li>The author is just someone so convinced in his beliefs that everything is interpreted through a very narrow band-pass filter. They will read and pay attention only to the words in the text that will validate their beliefs and forget everything else. I know examples (not on this particular subject) in my own family.</li>
-<li>Farm trolls. There are many farm trolls (we always hear of the Russian farm trolls, but they really exist in most countries), where people are paid to spread disinformation on social media. A simple example is the fake reviews on Amazon. Sometimes the goal is to promote a particular political party ideas. Sometimes this political party is financed by a foreign country with specific interests.</li>
-</ol>
-<p>The third motivation may act as an amplifier of the first two.</p>
-<p><strong>Why are fake news successful?</strong></p>
-<ul>
-<li>People do not trust the official government message. On the coronavirus, the French government was initially quite bad at presenting the situation, with the famous &ldquo;masks are useless&rdquo; (because they did not have any stock), a couple of months before enforcing masks everywhere. Too many decisions are purely political. A good example is the policy to close a school class on a single positive test when the full school is being tested for coronavirus. The false positive rate guarantees that at least 1/3 of the classes will close. Initially the policy was 3 positive tests, which was much more rational, but not as obvious to understand for the masses. My son ended up being one of those false positives, and it wasn&rsquo;t a particularly nice experience.</li>
-<li>People do not trust traditional media anymore. As the quality of standard newspapers dwindled with the rise of the internet, people do not trust those much anymore. Also, perhaps fairly, it is not clear if classic tradional media present better news than free modern social media. There are exceptions of course (typically with monthly publications).</li>
-<li>Social media bias: almost all social networks act as narrow band-pass filter. If you look at one video of cat on youtube, you will end up with videos of cats in your youtube frontpage every day. Controversial subjects/videos are given a considerable space. A main reason for this behavior is that they are optimized for page views/to attract your attention.</li>
-<li>Generalized attention deficit disorder due to the ubiquity of smart phones. Twitter got famous because of the 127 characters message limit. Newspaper articles are perhaps five times shorter than they used to be in the early 1990s. The time we have is limited and a lot of it is spent reading/writing short updates to various Whatsapp groups or other social network apps.</li>
-</ul>
-<p><strong>Conclusion</strong></p>
-<p>This was not the only motivator, another strong one is a Russian friend who caught the Covid-19 in July 2021, who was not very pro-vaccination, but thought, once it was too late, &ldquo;I really should have applied for the vaccine&rdquo;, as he realized it impacted the whole circle of relations around him. Then, one by one, his whole family caught the Covid. Fortunately, no-one died.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/2/">Previous</a></p>
@@ -378,9 +359,6 @@ This means the observed number of deaths is lower than expected compared with mo
 
     
       
-  
-
-
     
   </body>
 </html>

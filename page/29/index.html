@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,26 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/trying-google-appengine/">Trying Google AppEngine</a>
+  </h1>
+  <time datetime="2008-06-17T19:26:00Z" class="post-date">Tue, Jun 17, 2008</time>
+  <p>I finally took some time to try <a href="http://code.google.com/appengine/">Google AppEngine</a>. It used to be easy to find free PHP hosting around 2000. It became a rarity. So writing small experiments for free on the web was difficult. Experiments are back thanks to Google with their AppEngine. Many aspects of it are quite interesting and show where they focus.</p>
+<p>First it is all Python. It makes sense as I believe Guido v Rossum, Python creator, works for Google. Some people believe in a future Java application hosting. I don&rsquo;t see any reason why it could not become a reality. Making something like AppEngine is a big task, changing implementation language is not. In the meantime, it is not an excuse not to try it, as the Python standard library is fairly rich and Google provides additional libraries on top of it.</p>
+<p>AppEngine offers the basic bricks for building web apps:</p>
+<ul>
+<li>Persistence: they rolled out their own persistence layer. Is it because it is stored in BigTable? It is quite basic (no join), maybe again for the same reason. Still it is enough to write prototypes or do fun stuff.</li>
+<li>View: one can use Django templates. They are not perfect but better done than what we have in the java world for templating.</li>
+<li>Authentication: Google provide their authentication system transparently. It is amazingly simple to setup authenticated sites/pages.</li>
+<li>URL Fetch: points toward service oriented architecture. Without it, making services and calling them would not be possible.</li>
+<li>Other useful stuff like Mail, cache.</li>
+</ul>
+<p>With such a list of libraries, one can easily imagine the server side of future apps for Android running on AppEngine.</p>
+<p>The way code updates are pushed to the google servers is a bit reminiscent of Java web application deployment. However it is done with much finer granularity (file).</p>
+<p>Overall I am happy with AppEngine. Yes it is similar to old PHP hosting, but  it adds a lot of value by bringing few easy to use libraries, and natural integration with Google infrastructure. Compared to a PHP hosting, I think the biggest improvement is the database (dev use and admin use). For the dev it is integrated to the code. For the admin, it can be done transparently on the web. The most interesting is that it&rsquo;s FREE.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/option-futures-and-other-derivatives-book-review/">Option, Futures and Other Derivatives Book Review</a>
   </h1>
@@ -176,24 +196,6 @@ It has been a while since I have looked at the different options for building GU
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/fedora-8-vs.-ubuntu-8/">Fedora 8 vs. Ubuntu 8</a>
-  </h1>
-  <time datetime="2008-02-28T14:23:00Z" class="post-date">Thu, Feb 28, 2008</time>
-  <p>I had the bad idea of trying (K)ubuntu 8.04 on my home computer. It worked for a few days, but as Ubuntu 8 is still in alpha, changes tend to break everything easily. At one point Wine stopped working, then the DVD, then the sound. I had crashes with USB plug/unplug. It was time to go back to a stable distro. I went back to Fedora 8.</p>
-<p>I found out that I had missed some positive sides of Fedora 8 before. It compares quite well with the future Ubuntu 8. Both include pulseaudio. Pulseaudio in Fedora 8 is very well integrated, works well by default. I had to manually tweak things with Ubuntu, probably because it is an alpha.</p>
-<p>Both have a relatively new kernel (2.6.23 for Fedora 8, 2.6.24 for Ubuntu 8).<!-- raw HTML omitted -->Packages I use everyday are as new in both Fedora 8 and Ubuntu 8.</p>
-<p>Fedora 8 is also more stable than it used to be on my machine. Fedora people do their job very well at fixing various bugs after a release.</p>
-<p>2 drawbacks of Fedora:</p>
-<ul>
-<li>the package management. I know by experience that rpm+yum is more problematic with dependencies than apt.</li>
-<li>Sun Java not installed by default (IcedTea instead). Being a Java developer, the reference is Sun JDK. Plus Sun JDK is open enough for me.</li>
-</ul>
-<p>Other than that, Fedora 8 is excellent. I feel it has more features than Ubuntu: pulseaudio already well integrated, SELinux, Firewall by default.</p>
-<p>Don&rsquo;t make the same mistake, don&rsquo;t install an alpha linux distro. It used to work without problems back in the days. I have used Gentoo, Slackware with custom kernel without troubles. Nowadays it seems quite risky to go without a distro that has not been well tested.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/28/">Previous</a></p>
@@ -202,9 +204,6 @@ It has been a while since I have looked at the different options for building GU
 
     
       
-  
-
-
     
   </body>
 </html>

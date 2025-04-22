@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,12 +73,26 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/heston-schobel-zhu-bates-double-heston-fit/">Heston, Schobel-Zhu, Bates, Double-Heston Fit</a>
+  </h1>
+  <time datetime="2013-10-07T19:35:00Z" class="post-date">Mon, Oct 7, 2013</time>
+   
+
+I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a real world equity index implied volatility surface. I used a global optimizer (differential evolution).<br /><br />To my surprise, the Heston fit is quite good: the implied volatility error is less than 0.42% on average. Schobel-Zhu fit is also good (0.47% RMSE), but a bit worse than Heston. Bates improves quite a bit on Heston although it has 3 more parameters, we can see the fit is better for short maturities (0.33% RMSE). Double-Heston has the best fit overall but it is not that much better than simple Heston while it has twice the number of parameters, that is 10 (0.24 RMSE). Going beyond, for example Triple-Heston, does not improve anything, and the optimization becomes very challenging. With Double-Heston, I already noticed that kappa is very low (and theta high) for one of the processes, and kappa is very high (and theta low) for the other process: so much that I had to add a penalty to enforce constraints in my local optimizer. The best fit is at the boundary for kappa and theta. So double Heston already feels over-parameterized.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s1600/heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s640/heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s1600/schobelzhu_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s640/schobelzhu_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu  volatility error</td></tr></tbody></table><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s1600/bates_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s640/bates_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Bates  volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s1600/double_heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s640/double_heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Double Heston  volatility error</td></tr></tbody></table><br /><br />Another advantage of Heston is that one can find tricks to find a good initial guess for a local optimizer.<br /><br /><b>Update October 7: </b>My initial fit relied only on differential evolution and was not the most stable as a result. Adding Levenberg-Marquardt at the end stabilizes the fit, and improves the fit a lot, especially for Bates and Double Heston. I updated the graphs and conclusions accordingly. Bates fit is not so bad at all.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/second-cumulant-of-heston/">Second Cumulant of Heston</a>
   </h1>
   <time datetime="2013-10-03T17:27:00Z" class="post-date">Thu, Oct 3, 2013</time>
   <p>I recently stumbled upon an error in the various papers related to the Heston <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;ved=0CEEQFjAC&amp;url=http%3A%2F%2Fta.twi.tudelft.nl%2Fmf%2Fusers%2Foosterle%2Foosterlee%2FCOS.pdf&amp;ei=qYxNUqryFqXJ0QW5u4HYDA&amp;usg=AFQjCNGaMK8Lotud1DP5qReeLWgpoCA0aA&amp;sig2=fljLmTq0WhG8SCgzaOxXxA&amp;bvm=bv.53537100,d.d2k">Cos method</a> regarding the second cumulant. It is used to define the boundaries of the Cos method. Letting phi be Heston characteristic function, the cumulant generating function is:
 $$g(u) = \log(\phi(-iu))$$</p>
-<p>And the second cumulant is defined a: <!-- raw HTML omitted -->$$c_2 = g&rsquo;&rsquo;(0)$$<!-- raw HTML omitted --><!-- raw HTML omitted -->Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.</p>
+<p>And the second cumulant is defined a:
+$$c_2 = g&rsquo;&rsquo;(0)$$</p>
+<p>Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.</p>
 <p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
 $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
 <p>In contrast, the paper formula was:
@@ -88,26 +102,26 @@ $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}
 <p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
 <p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
 <table>
-<thead>
-<tr>
-<th>Formula</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>New</td>
-<td>0.1640581405</td>
-</tr>
-<tr>
-<td>Paper</td>
-<td>0.1743425406</td>
-</tr>
-<tr>
-<td>N=30 with 10000 points</td>
-<td>0.1640581423</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Formula</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>New</td>
+          <td>0.1640581405</td>
+      </tr>
+      <tr>
+          <td>Paper</td>
+          <td>0.1743425406</td>
+      </tr>
+      <tr>
+          <td>N=30 with 10000 points</td>
+          <td>0.1640581423</td>
+      </tr>
+  </tbody>
 </table>
 <p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
 
@@ -188,26 +202,26 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
 </p>
 <p>I had to push to 512 points for the Cos method and L=24 (truncation) in order to have a similar accuracy as Attari and Andersen-Piterbarg with 200 points and a control variate. For 1000 options here are the computation times (the difference is smaller for 10 options, around 30%):</p>
 <table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Attari</td>
-<td>0.023s</td>
-</tr>
-<tr>
-<td>Andersen-Piterbarg</td>
-<td>0.024s</td>
-</tr>
-<tr>
-<td>Cos</td>
-<td>0.05s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Method</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Attari</td>
+          <td>0.023s</td>
+      </tr>
+      <tr>
+          <td>Andersen-Piterbarg</td>
+          <td>0.024s</td>
+      </tr>
+      <tr>
+          <td>Cos</td>
+          <td>0.05s</td>
+      </tr>
+  </tbody>
 </table>
 <p>Here is the accuracy on put options with a maturity of 2 days:
 <figure><img src="/post/cos_a_p_2d.png">
@@ -249,30 +263,30 @@ Well here are the results in terms of accuracy:
 <p>The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price">optimal alpha</a> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.</p>
 <p>What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.</p>
 <table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Cos</td>
-<td>0.012s</td>
-</tr>
-<tr>
-<td>Lord-Kahl</td>
-<td>0.099s</td>
-</tr>
-<tr>
-<td>Attari</td>
-<td>0.086s</td>
-</tr>
-<tr>
-<td>Reference</td>
-<td>0.682s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Method</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cos</td>
+          <td>0.012s</td>
+      </tr>
+      <tr>
+          <td>Lord-Kahl</td>
+          <td>0.099s</td>
+      </tr>
+      <tr>
+          <td>Attari</td>
+          <td>0.086s</td>
+      </tr>
+      <tr>
+          <td>Reference</td>
+          <td>0.682s</td>
+      </tr>
+  </tbody>
 </table>
 <p>The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.</p>
 <p>It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.</p>
@@ -296,32 +310,6 @@ Well here are the results in terms of accuracy:
   <p>I just stumbled upon <!-- raw HTML omitted -->Julia<!-- raw HTML omitted -->, a new programming language aimed at numerical computation. It&rsquo;s quite new but it looks very interesting, with the promise of C like performance (thanks to LLVM compilation) with a much nicer syntax and parallelization features.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity, I looked at their cumulative normal distribution implementation. I found that the (complimentary) error function (directly related to the cumulative normal distribution) algorithm relies on an algorithm that can be found in the Faddeeva library. I had not heard of this algorithm or this library before, but the author, <!-- raw HTML omitted -->Steven G. Johnson<!-- raw HTML omitted -->, claims it is faster and as precise as Cody &amp; SLATEC implementations. As <!-- raw HTML omitted -->I previously had a look at those algorithms<!-- raw HTML omitted --> and was quite impressed by Cody&rsquo;s implementation.<!-- raw HTML omitted --><!-- raw HTML omitted -->The <!-- raw HTML omitted -->source of Faddeeva<!-- raw HTML omitted --> shows a big list (100) of Chebychev expansions for various ranges of a normalized error function. I slightly modified the Faddeva code to compute directly the cumulative normal distribution, avoiding some exp(-x<em>x)<em>exp(x</em>x) calls on the way.<!-- raw HTML omitted --><!-- raw HTML omitted -->Is it as accurate? I compared against a high precision implementation as in my previous test of cumulative normal distribution algorithms. And after replacing the exp(-x</em>x) with <!-- raw HTML omitted -->Cody&rsquo;s trick<!-- raw HTML omitted --> to compute it with higher accuracy, here is how it looks (referenced as &ldquo;Johnson&rdquo;).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I also measured performance on various ranges, and found out that this Johnson algorithm is around 2x faster than Cody (in Scala) and 30% faster than my optimization of Cody (using a table of exponentials for Cody&rsquo;s trick).<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/the-cos-method-for-heston/">The COS method for Heston</a>
-  </h1>
-  <time datetime="2013-08-02T14:19:00Z" class="post-date">Fri, Aug 2, 2013</time>
-  <p>Fang, in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC4QFjAA&amp;url=http%3A%2F%2Frepository.tudelft.nl%2Fassets%2Fuuid%3A9aa17357-af21-4c09-86a2-3904ced4b873%2Fthesis.pdf&amp;ei=Epf7Uam8CYWChQeCroCgCw&amp;usg=AFQjCNGyjjlwi-ylN6cl2xoUp5A32wwePA&amp;sig2=m-qvIkWMgVH-qw4hq_Y5Ow&amp;bvm=bv.50165853,d.ZG4%22">her thesis</a>, has the idea of the COS method and applies it to Heston. There are several published papers around it to price options under various models that have a known characteristic function, as well as to price more exotic options like barriers or bermudans.</p>
-<p>The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple <a href="http://en.wikipedia.org/wiki/Fourier_series">Fourier series</a> are used instead of the standard Fourier transform. As a consequence there are a few more approximations that are done related to the truncation of the domain of integration and the result is already discrete, so no need for a Gaussian quadrature.</p>
-<p>In practice, the promise is to be faster. I was wondering how stable it was, especially with regards to short maturities/large strikes.</p>
-<p>It&rsquo;s quite easy to code, I made only one mistake initially: I forgot to handle the first element of the sum differently. It is however very unstable for call options prices, because the upper integration boundary is then used in an exponential, which explodes in most cases I have tried, while for put options, the lower boundary is used in an exponential, and the lower boundary is negative.</p>
-<figure><img src="/post/snapshot33.png"><figcaption>
-      <h4>Price is too low at high strikes</h4>
-    </figcaption>
-</figure>
-
-<p>So one has to rely on the put-call parity formula to compute call prices. This means that we are limited to something around machine epsilon accuracy and can&rsquo;t compute a very out-of-the-money call price, contrary to the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii">Lord-Kahl</a> method. However it seemed stable for the various Heston parameters I have tried and accurate as long as the resulting price is not too small as the following graph shows.
-<figure><img src="/post/snapshot34.png"><figcaption>
-      <h4>Price is way too high at low strikes</h4>
-    </figcaption>
-</figure>
-</p>
-<p>I was surprised to see that the more in-the-money put options also have inaccuracy: the price given is actually less than the final payoff. This is related to the domain of truncation. If I double it (L=24 instead of L=12), those disappear, what remains is that OTM puts can&rsquo;t go beyond 1e-12 for the COS method.</p>
-<p>In practice the COS method was effectively 2x to 3x faster than my Lord-Kahl implementation. As a side note, on this problem, Java is only 2x faster than Octave.</p>
-<p>As long as we don&rsquo;t care about very small option prices, it is an interesting alternative, especially because it is simple.</p>
-<p><strong>Update April 2014</strong> - There is more information on the subject in my paper at <a href="http://papers.ssrn.com/abstract=2362968">http://papers.ssrn.com/abstract=2362968</a></p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/16/">Previous</a></p>
@@ -330,9 +318,6 @@ Well here are the results in terms of accuracy:
 
     
       
-  
-
-
     
   </body>
 </html>

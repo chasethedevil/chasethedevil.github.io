@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,16 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/bad-jdk-design-example/">Bad JDK Design Example</a>
+  </h1>
+  <time datetime="2006-03-16T15:02:00Z" class="post-date">Thu, Mar 16, 2006</time>
+  <p>Have you ever used the Authenticator class? It is standard since JDK 1.2. This allows you to establish authenticated HTTP requests. OnJava has an in-depth <a href="http://www.onjava.com/pub/a/onjava/excerpt/jvntwkprg_3e/?page=4">article presenting it</a>. Now here is my story about it.<!-- raw HTML omitted --><!-- raw HTML omitted -->The other day I just wanted to do that a simple authenticated HTTP request. You would expect it to be very simple to do in the modern internet world. <!-- raw HTML omitted --><!-- raw HTML omitted --> It is actually not very difficult to do, by hand, a <a href="http://www.javaworld.com/javaworld/javatips/jw-javatip47.html">JavaWorld article</a>  presents this way. Unfortunately it uses internal JDK sun classes for Digest and I am uncomfortable to use that since it is not guaranteed to work on any JVM. So I have to download jakarta commons-codec to just do a simple authenticated HTTP request. I really wonder why some of those codecs are not in the JDK (not as sun.* classes but as java.* classes).</p>
+<p>When I read that it was possible to do it a standard way in JDK 1.2, I was excited. I was wrong. Not only you have to extend a class (ok, implementation is faily simple) that adds in my mind unnecessary clutter, but you are forced to have only 1  <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/net/Authenticator.html">Authenticator</a> at a given time (and this Authenticator scope seems much wider than just securing HTTP connection). What about server programs dealing with different credentials?</p>
+<p>So I am left downloading jarkata httpclient library that is more powerful and easier to use than hand coded digest authentication (that anyway needs common codecs) just to have HTTP authentication the way it should be done.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/current-popular-subjects-in-java-blogs/">Current Popular Subjects In Java Blogs</a>
   </h1>
@@ -198,18 +208,6 @@ These days we tried to make Websphere and <a href="http://jonas.objectweb.org">J
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
-  </h1>
-  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
-  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
-<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
-<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
-<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
-<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/37/">Previous</a></p>
@@ -218,9 +216,6 @@ These days we tried to make Websphere and <a href="http://jonas.objectweb.org">J
 
     
       
-  
-
-
     
   </body>
 </html>

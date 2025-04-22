@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,18 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/brownian-bridge-or-not-with-heston-quadratic-exponential-qmc/">Brownian Bridge or Not with Heston Quadratic Exponential QMC</a>
+  </h1>
+  <time datetime="2014-01-24T19:35:00Z" class="post-date">Fri, Jan 24, 2014</time>
+   
+
+At first I did not make use of the Brownian Bridge technique in Heston QMC, because the variance process is not simulated like a Brownian Motion under the <a href="http://www.google.com/url?q=http://www.javaquant.net/papers/LeifAndersenHeston.pdf&amp;sa=U&amp;ei=p9jjUtPJK8uUhQfb_YGgAw&amp;ved=0CB4QFjAA&amp;sig2=EjKPr39tR0ni1vq5gK9mkA&amp;usg=AFQjCNGQyqSaDu2kl6_KpP-s-KwMvJ6hPg">Quadratic Exponential algorithm from Andersen</a>.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" /></a></div><br />It is, however, perfectly possible to use the Brownian Bridge on the asset process. Does it make a difference? In my small test, it does not seem to make a difference. An additional question would be, is it better to take first N for the asset and next N for the variance or vice versa or intertwined? Intertwined would seem the most natural (this is what I used without Brownian Bridge, but for simplicity I did Brownian bridge on first N).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" height="222" width="320" /></a></div><br /><br />By contrast, Schobel-Zhu QE scheme can make full use of the Brownian Bridge technique, in the asset process as well as in the variance process. Here is a summary of the volatility process under the QE scheme from <a href="http://www.google.com/url?q=http://arno.uvt.nl/show.cgi%3Ffid%3D99534&amp;sa=U&amp;ei=itjjUo2jD6Wa0AXqzYHgCQ&amp;ved=0CB4QFjAA&amp;sig2=KdYdo3sAFjV6fwPS4Gak0A&amp;usg=AFQjCNEZ8DRGCf4EXOxCXs3oPc_98628hA">van Haastrecht</a>:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" /></a></div><br />Another nice property of Schobel-Zhu is that the QE simulation is as fast as Euler, and therefore 2.5x faster than the Heston QE.<br /><br />I calibrated the model to the same surface, and the QMC price of a ATM call option seems to have a similar accuracy as Heston QMC. But we can see that the Brownian Bridge does increase accuracy in this case. I was surprised that accuracy was not much better than Heston, but maybe it is because I did yet not implement the Martingale correction, while I did so in the Heston case.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" height="222" width="320" /></a></div><br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/adjoint-algorithmic-differentiation-for-black-scholes/">Adjoint Algorithmic Differentiation for Black-Scholes</a>
   </h1>
@@ -240,18 +252,6 @@ I always imagined local stochastic volatility to be complicated, and thought it 
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/heston-schobel-zhu-bates-double-heston-fit/">Heston, Schobel-Zhu, Bates, Double-Heston Fit</a>
-  </h1>
-  <time datetime="2013-10-07T19:35:00Z" class="post-date">Mon, Oct 7, 2013</time>
-   
-
-I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a real world equity index implied volatility surface. I used a global optimizer (differential evolution).<br /><br />To my surprise, the Heston fit is quite good: the implied volatility error is less than 0.42% on average. Schobel-Zhu fit is also good (0.47% RMSE), but a bit worse than Heston. Bates improves quite a bit on Heston although it has 3 more parameters, we can see the fit is better for short maturities (0.33% RMSE). Double-Heston has the best fit overall but it is not that much better than simple Heston while it has twice the number of parameters, that is 10 (0.24 RMSE). Going beyond, for example Triple-Heston, does not improve anything, and the optimization becomes very challenging. With Double-Heston, I already noticed that kappa is very low (and theta high) for one of the processes, and kappa is very high (and theta low) for the other process: so much that I had to add a penalty to enforce constraints in my local optimizer. The best fit is at the boundary for kappa and theta. So double Heston already feels over-parameterized.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s1600/heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-C_IidKxPcx4/UlKmCDJFLmI/AAAAAAAAG0o/PxOjIyGqdQQ/s640/heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Heston volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s1600/schobelzhu_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://3.bp.blogspot.com/-rvjEFAbCS_o/UlKmXZc--7I/AAAAAAAAG0s/yomyHTMJU18/s640/schobelzhu_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Schobel-Zhu  volatility error</td></tr></tbody></table><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s1600/bates_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-_628A9dt_nU/UlKmf4oWujI/AAAAAAAAG00/b8fU_hw_oOY/s640/bates_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Bates  volatility error</td></tr></tbody></table><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"></div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s1600/double_heston_cos3d.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="480" src="http://4.bp.blogspot.com/-ioz8CuCWNmU/UlKmonoZozI/AAAAAAAAG08/eOTk8KiqxD0/s640/double_heston_cos3d.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Double Heston  volatility error</td></tr></tbody></table><br /><br />Another advantage of Heston is that one can find tricks to find a good initial guess for a local optimizer.<br /><br /><b>Update October 7: </b>My initial fit relied only on differential evolution and was not the most stable as a result. Adding Levenberg-Marquardt at the end stabilizes the fit, and improves the fit a lot, especially for Bates and Double Heston. I updated the graphs and conclusions accordingly. Bates fit is not so bad at all.
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/15/">Previous</a></p>
@@ -260,9 +260,6 @@ I did some experiments fitting Heston, Schobel-Zhu, Bates and Double-Heston to a
 
     
       
-  
-
-
     
   </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,22 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
+  </h1>
+  <time datetime="2013-03-12T21:36:00Z" class="post-date">Tue, Mar 12, 2013</time>
+  <p>A <a href="https://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<em>robust replication of volatility derivatives</em>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.</p>
+<p><figure><img src="/post/Screenshot%20from%202013-03-12%2018%2014%2034.png">
+</figure>
+
+Those are very close payoffs!</p>
+<p>I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.The real payoff (very easy to obtain through Carr-Lee Bessel formula):
+<figure><img src="/post/Screenshot%20from%202013-03-14%2019%2046%2016.png">
+</figure>
+</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/parallel-can-be-slower/">Parallel Can Be Slower</a>
   </h1>
@@ -193,18 +209,6 @@ I spent quick a bit of time to figure out why something that is usually simple t
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/local-volatility-delta--dynamic/">Local Volatility Delta &amp; Dynamic</a>
-  </h1>
-  <time datetime="2012-11-29T12:30:00Z" class="post-date">Thu, Nov 29, 2012</time>
-   
-
-This will be a very technical post, I am not sure that it will be very understandable by people not familiar with the implied volatility surface.<br /><div><br /></div><div>Something one notices when computing an option price under local volatility using a PDE solver, is how different is the Delta from the standard Black-Scholes Delta, even though the price will be very close for a Vanilla option. In deed, the Finite difference grid will have a different local volatility at each point and the Delta will take into account a change in local volatility as well.</div><div><br /></div><div>But this finite-difference grid Delta is also different from a standard numerical Delta where one just move the initial spot up and down, and takes the difference of computed prices. The numerical Delta will eventually include a change in implied volatility, depending if the surface is sticky-strike (vol will stay constant) or sticky-delta (vol will change). So the numerical Delta produced with a sticky-strike surface will be the same as the standard Black-Scholes Delta. In reality, what happens is that the local volatility is different when the spot moves up, if we recompute it: it is not static. The finite difference solver computes Delta with a static local volatility. If we call twice the finite difference solver with a different initial spot, we will reproduce the correct Delta, that takes into account the dynamic of the implied volatility surface.</div><div><br /></div><div>Here how different it can be if the delta is computed from the grid (static local volatility) or numerically (dynamic local volatility) on an exotic trade:</div><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s1600/static_localvol.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="235" src="http://3.bp.blogspot.com/-WW8ZE7urDGE/ULdHKNe_VXI/AAAAAAAAGKQ/JQ5Rd7wQYkk/s320/static_localvol.png" width="320" /></a></div><div><br /><br />This is often why people assume the local volatility model is wrong, not consistent. It is wrong if we consider the local volatility surface as static to compute hedges.</div>
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/20/">Previous</a></p>
@@ -213,9 +217,6 @@ This will be a very technical post, I am not sure that it will be very understan
 
     
       
-  
-
-
     
   </body>
 </html>

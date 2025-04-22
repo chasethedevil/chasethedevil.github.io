@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
+  </h1>
+  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
+  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
+<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
+<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
+<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
+<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/my-dream-job/">My Dream Job</a>
   </h1>
   <time datetime="2006-01-12T11:42:00Z" class="post-date">Thu, Jan 12, 2006</time>
@@ -104,7 +116,7 @@
 </blockquote>
 <p>I was first surprised at the question. Usually a design pattern is about solving a problem not about a personal preference. I wondered if it was a trick question of some sorts. I was hesitating with my answer and asked more about the meaning of the question. I just had to really give the pattern I liked the most! I really should not have but I ended up pleasing my interviewer and said &ldquo;the decorator pattern&rdquo;. At least its name is somehow related to arts.</p>
 <p>Then he said his favorite one was &ldquo;the template pattern&rdquo;. He was really into it because he could use it anywhere. For him it was like the best thing since sliced bread.</p>
-<p>Sheesh! just an abstract class. What kind of pattern is that!?! Design Patterns discussions can be really dull.<!-- raw HTML omitted --></p>
+<p>Sheesh! just an abstract class. What kind of pattern is that!?! Design Patterns discussions can be really dull.</p>
 
   
 </article><article class="post">
@@ -194,27 +206,6 @@ In 1998, a student of my school had a project with Sun about EJBs. This was the 
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/job-hunting-interview-madness/">Job Hunting: Interview Madness</a>
-  </h1>
-  <time datetime="2005-11-04T10:40:00Z" class="post-date">Fri, Nov 4, 2005</time>
-  <p>I have been doing interviews those past weeks. Today I had to present my resume for the N time where N is big. It is very boring. In France, it is common to have 5 interviews for a small company (that says a bit about how people trust each other and makes me envy Germany where the practice is to select very strictly on the resume and be more relax about interviews). But all those interviews give a valuable insight on the current market, and on some companies.</p>
-<p><strong>0. The Monster Rage</strong></p>
-<p>The first 2 days after I put my resume on Monster France, I got more than 15 calls from consulting companies. The following day, I removed my resume from Monster</p>
-<p><strong>1. Interviewing People</strong></p>
-<p>When I started working, I was very bad at interviews, I had a good academic record and thought companies ringing me would have been interested automatically. I supposed most people were dedicated to their work and did not bother doing a show, I was passive. So I often failed the interview process at the HR level.</p>
-<p>Now I am doing the show everybody expects and it always works. Only one person asked me an unusual, clever question: &ldquo;Do you write?&rdquo; or</p>
-<p><em><strong>&ldquo;Do you like to write?&rdquo;</strong></em></p>
-<p>I am often more stressed by technical interviews as I find technical interviews can more easily be very badly done. Even specialists don&rsquo;t agree on a good method, cf the artima article on <a href="http://www.artima.com/wbc/interprogP.html">How to Interview a Programmer</a>. If someone asks you about some intricate details he knows lots about and you don&rsquo;t, or you used to but you don&rsquo;t remember, then that person can have a bad impression of you. In Java, this can be the supposedly trivial ,&ldquo;what classes do you have to implement for an EJB ?&rdquo;. I have done many EJBs in the past, but that was a long time enough that I need to look up somewhere to find the exact and precise answer. It is much better to ask someone about what he recently did, or about someone&rsquo;s view on general subjects, especially subjects he knows about.</p>
-<p><strong>2. Interviewing Companies</strong></p>
-<p>As a junior in the business world, I had a very angelic view of companies. I had been lucky enough to do internships around very good people. But nowadays, I am starting to find difficult to pick a good company to work for. I found one question especially useful to find out more about your future mates:</p>
-<p><em><strong>&ldquo;What do you like in this company?</strong></em></p>
-<p>and try to get to know the answer of <em>&ldquo;Why did you go there?&rdquo;</em></p>
-<p><strong>3. The $$$ in Current Market</strong></p>
-<p>There seem to be huge disparities in salaries in France. I found consulting companies were very reticent to offer a market salary. More regular companies can either offer a much lower salary than the market one, a market salary, or a much higher one, for the same job!</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/38/">Previous</a></p>
@@ -223,9 +214,6 @@ In 1998, a student of my school had a project with Sun about EJBs. This was the 
 
     
       
-  
-
-
     
   </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,18 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/asymptotic-behavior-of-svi-vs-sabr/">Asymptotic Behavior of SVI vs SABR</a>
+  </h1>
+  <time datetime="2014-09-23T12:06:00Z" class="post-date">Tue, Sep 23, 2014</time>
+   
+
+The variance under SVI becomes linear when the log-moneyness is very large in absolute terms. The lognormal SABR formula with beta=0 or beta=1 has a very different behavior. Of course, the theoretical SABR model has actually a different asymptotic behavior.<br /><br />As an illustration, we calibrate SABR (with two different values of beta) and SVI against the same implied volatility slice and look at the wings behavior. <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-1w0jjvR9-Mk/VCFFhSiOcdI/AAAAAAAAHg4/E3yP_m3vhKA/s1600/Screenshot%2Bfrom%2B2014-09-23%2B11%3A52%3A07.png" height="497" width="640" /></a></div><br />While the Lee moments formula implies that the variance should be at most linear, something that the SABR formula does not respect. It is in practice not the problem with SABR as the actual Lee boundary: V(x) &lt; 2|x|/T (where V is the square of the implied volatility and x the log-moneyness) is attained for extremely low strikes only with SABR, except maybe for very long maturities.<br /><br />A related behavior is the fact that the lognormal SABR formula can actually match steeper curvatures at the money than SVI for given asymptotes.
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/svi-and-long-maturities-issues/">SVI and long maturities issues</a>
   </h1>
@@ -196,18 +208,6 @@ I have found a particularly nice initial guess to calibrate SABR. As it is quite
 </p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/throws-exception/">throws Exception</a>
-  </h1>
-  <time datetime="2014-05-27T10:49:00Z" class="post-date">Tue, May 27, 2014</time>
-   
-
-There was a big debate at work around Exception declaration in a Java API. I was quite surprised that such an apparently simple subject could end up being so controversial. The controversy was around the choice of declaring in the interfaces:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">void myMethod() throws Exception</span></span><br /><br />instead of<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIRuntimeException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() </span></span><br /><br />where MyAPI represents either a generic API related exception or a specific exception related to the method in question.<br /><br />The choice of "throws Exception" did not even occur to me as a possibility, but after some digging, I found that some relatively famous libraries actually followed that principle at one point, for example Apache Struts 1.x or Spring MVC. <br /><br />More modern libraries, like Google Guava, commons-math 3.x, Struts 2.x generally favor MyAPIRuntimeException where MyAPI is actually context-specific. Some old popular libraries declare a checked Exception, for example the HibernateException in Hibernate.<br /><br />This seems to be a recurring subject on Stackoverflow:<br /><a href="http://stackoverflow.com/questions/20530221/java-interface-throws-exception-best-practice" target="_blank">Stackoverflow - Java interface throws Exception best practice</a><br /><a href="http://stackoverflow.com/questions/4283634/what-to-put-in-the-throws-clause-of-an-interface-method" target="_blank">Stackoverflow - What to put in the throws clause of an interface method</a><br /><br />But those are quite poor in terms of explanations. The best comments on this subjects are from:<br /><a href="http://www.artima.com/intv/handcuffs.html"><span class="ts">Anders         Hejlsberg (C#, Delphi, Turbo Pascal creator) - The Trouble with         Checked Exceptions</span></a><br />    <a href="http://www.artima.com/intv/solid2.html"><span class="ts">James         Gosling (Java creator) - Failure and Exceptions</span></a><br /><br />    <br />This comment from Anders is particularly acute:<br />    "<b>To work around this requirement, people do ridiculous things.       For example, they decorate every method with, "</b><b><code>throws         Exception</code></b><b>." That just completely defeats the       feature, and you just made the programmer write more gobbledy       gunk. That doesn't help anybody.</b>    "<br />    <br /><br />         <br />Today I believe the API in question declares "throws Exception"... <br />         <br /><br />
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/12/">Previous</a></p>
@@ -216,9 +216,6 @@ There was a big debate at work around Exception declaration in a Java API. I was
 
     
       
-  
-
-
     
   </body>
 </html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.142.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>A New Asian Basket Spread Option Approximation &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>A New Asian Basket Spread Option Approximation</h1>
+  <time datetime=2025-04-22T12:56:42&#43;0100 class="post-date">Tue, Apr 22, 2025</time>
+  <p>Around 10 years ago, while reading the excellent paper of Etore and Gobet on <a href="https://hal.science/hal-00507787v1/document">stochastic Taylor expansions for the pricing of vanilla options with discrete (cash) dividends</a>, I had the idea of a small improvement, by using <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">a more precise proxy</a> for the Taylor expansion.</p>
+<p>More recently, I applied the idea to <a href="https://arxiv.org/abs/2402.17684v1">approximate arithmetic Asian options prices</a> by using the geometric Asian option price as a proxy (with some adjustments). This worked surprisingly well, and is competitive with the best implementations of Curran approach to Asian options pricing. I quickly noticed that I could apply the same idea to <a href="https://arxiv.org/abs/2402.17684">approximate Basket option prices</a>, and from it obtain another approximation for vanilla options with cash dividends through the <a href="https://arxiv.org/abs/2106.12971">mapping described by J. Healy</a>. Interestingly the resulting approximation is the most accurate amongst all other approximations for cash dividends.</p>
+<p>During my Easter holidays, I took the time to further extend the idea <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5226303">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
+Somewhat interestingly, I noticed that the first order expansion (which is not much more accurate than the proxy itself) seemed to correspond to a previously published approximation from <a href="https://www.scirp.org/journal/paperinformation?paperid=72439">Tommaso Pellegrino</a>, an extension of Bjerksund-Stensland approximation for spread options, although my derivation is very different and allows for higher-order formulae.</p>
+<p>Below is an excerpt of some of the results</p>
+<figure><img src="/post/deelstra_table_basket_spread.png"><figcaption>
+      <h4>Original example from Deelstra et al. for an Basket spread option.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/deelstra_table_asian_basket.png"><figcaption>
+      <h4>Original example from Deelstra et al. for an Asian Basket spread option. The Taylor approximation perform even better due to the Asianing.</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/post/krekel_table_asian_spread.png"><figcaption>
+      <h4>Original example from Martin Krekel for an Asian spread option. It was actually challenging to compute accurate Quasi Monte-Carlo prices.</h4>
+    </figcaption>
+</figure>
+
+<p>The MM of Martin Krekel consists in a one-dimensional integration of two lognormal moment-mached distributions. It seems that the one-dimensional integration (which is exact for simple spread options) does not really improve the accuracy for the more general asian spread option case: the loss of accuracy due to moment matching dominates the error.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

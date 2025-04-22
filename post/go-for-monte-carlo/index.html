@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,35 +78,35 @@
 <p>So what about my small Monte-Carlo test?</p>
 <p>Well it turns out that Go is quite fast on it:</p>
 <table>
-<thead>
-<tr>
-<th>Multipl.</th>
-<th>Rust</th>
-<th>Go</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>0.005</td>
-<td>0.007</td>
-</tr>
-<tr>
-<td>10</td>
-<td>0.03</td>
-<td>0.03</td>
-</tr>
-<tr>
-<td>100</td>
-<td>0.21</td>
-<td>0.29</td>
-</tr>
-<tr>
-<td>1000</td>
-<td>2.01</td>
-<td>2.88</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Multipl.</th>
+          <th>Rust</th>
+          <th>Go</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>0.005</td>
+          <td>0.007</td>
+      </tr>
+      <tr>
+          <td>10</td>
+          <td>0.03</td>
+          <td>0.03</td>
+      </tr>
+      <tr>
+          <td>100</td>
+          <td>0.21</td>
+          <td>0.29</td>
+      </tr>
+      <tr>
+          <td>1000</td>
+          <td>2.01</td>
+          <td>2.88</td>
+      </tr>
+  </tbody>
 </table>
 <p>It is faster than Java/Scala and not too far off Rust, except if one uses FastMath in Scala, then the longest test is slighly faster with Java (not the other ones).</p>
 <p>There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.</p>
@@ -151,9 +151,6 @@ The reasoning behind this later code is that the mantissa is 52 bits, and this i
 
     
       
-  
-
-
     
   </body>
 </html>

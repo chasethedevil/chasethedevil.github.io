@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,47 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/">March 9, 2020 crash - where will CAC40 go?</a>
+  </h1>
+  <time datetime="2020-03-09T21:56:42&#43;0100" class="post-date">Mon, Mar 9, 2020</time>
+  <p>The stock market crashed by more than 7% on March 9, 2020. It is one of the most important drop since September 2001.
+I looked at BNP warrant prices on the CAC40 French index, with a maturity of March 20, 2020 , to see what they would tell about the market direction on the day of the crash. This is really a not-so-scientific experiment.</p>
+<p>The quotes I got were quite noisy. I applied a few different techniques to imply the probability density from the option prices:</p>
+<ul>
+<li>The one-step Andreasen-Huge with some regularization. The regularization is a bit too mild, although, in terms of implied vol, this was the worst fit  among the techniques.</li>
+<li>The stochastic collocation towards a septic polynomial, no regularization needed here. The error in implied volatilities is similar to Andreasen-Huge, even though the implied density is much smoother. I however discovered a small issue with the default optimal monotonic fit, and had to tweak a little bit the optimal polynomial, more on this later in this post.</li>
+<li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
+<li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
+</ul>
+<figure><img src="/post/cac40_mar9_dens.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+    </figcaption>
+</figure>
+
+<p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
+is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
+<p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
+<figure><img src="/post/cac40_mar9_dens_0.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
+<figure><img src="/post/cac40_mar9_collo.png"><figcaption>
+      <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
+    </figcaption>
+</figure>
+
+<p>And for the curious, here are the implied vol plots:</p>
+<figure><img src="/post/cac40_mar9_vol.png"><figcaption>
+      <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
+    </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/42/">42</a>
   </h1>
@@ -186,26 +227,26 @@ include an inverse relative bid-ask spread weighting in the calibration.</p>
 
 <p>More explicitely, we obtain</p>
 <table>
-<thead>
-<tr>
-<th>Model</th>
-<th>probability of NFLX &lt; 130</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Collocation</td>
-<td>3.3%</td>
-</tr>
-<tr>
-<td>Lognormal Mixture</td>
-<td>3.6%</td>
-</tr>
-<tr>
-<td>Andreasen-Huge regularized</td>
-<td>3.7%</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Model</th>
+          <th>probability of NFLX &lt; 130</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Collocation</td>
+          <td>3.3%</td>
+      </tr>
+      <tr>
+          <td>Lognormal Mixture</td>
+          <td>3.6%</td>
+      </tr>
+      <tr>
+          <td>Andreasen-Huge regularized</td>
+          <td>3.7%</td>
+      </tr>
+  </tbody>
 </table>
 <p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
 <p>For completeness, the implied probability density is</p>
@@ -256,30 +297,30 @@ removed the quote for strike 30, as the bid-ask spread was, unusually extremely 
 
 <p>More explicitely, we obtain</p>
 <table>
-<thead>
-<tr>
-<th>Model</th>
-<th>probability of TSLA &lt; 100</th>
-<th>probability of TSLA &lt; 15</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Collocation</td>
-<td>15.4%</td>
-<td>7.2%</td>
-</tr>
-<tr>
-<td>Lognormal Mixture</td>
-<td>15.2%</td>
-<td>8.0%</td>
-</tr>
-<tr>
-<td>Andreasen-Huge regularized</td>
-<td>15.0%</td>
-<td>7.7%</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Model</th>
+          <th>probability of TSLA &lt; 100</th>
+          <th>probability of TSLA &lt; 15</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Collocation</td>
+          <td>15.4%</td>
+          <td>7.2%</td>
+      </tr>
+      <tr>
+          <td>Lognormal Mixture</td>
+          <td>15.2%</td>
+          <td>8.0%</td>
+      </tr>
+      <tr>
+          <td>Andreasen-Huge regularized</td>
+          <td>15.0%</td>
+          <td>7.7%</td>
+      </tr>
+  </tbody>
 </table>
 <p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
 <figure><img src="/post/tsla2020_rnd.png"><figcaption>
@@ -293,26 +334,26 @@ the constant of the Tikhonov regularization, at the cost of a slightly worse fit
 <p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
 and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
 <table>
-<thead>
-<tr>
-<th>Model</th>
-<th>weighted root mean square error in vols</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Collocation</td>
-<td>0.00484</td>
-</tr>
-<tr>
-<td>Lognormal Mixture</td>
-<td>0.00432</td>
-</tr>
-<tr>
-<td>Andreasen-Huge regularized</td>
-<td>0.00435</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Model</th>
+          <th>weighted root mean square error in vols</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Collocation</td>
+          <td>0.00484</td>
+      </tr>
+      <tr>
+          <td>Lognormal Mixture</td>
+          <td>0.00432</td>
+      </tr>
+      <tr>
+          <td>Andreasen-Huge regularized</td>
+          <td>0.00435</td>
+      </tr>
+  </tbody>
 </table>
 <p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
 It is expected that the probability of going under $100 will be larger when the stock price moves down,
@@ -417,103 +458,6 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
 <p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/implying-the-probability-density-from-market-option-prices/">Implying the Probability Density from Market Option Prices</a>
-  </h1>
-  <time datetime="2018-02-13T20:56:42&#43;0100" class="post-date">Tue, Feb 13, 2018</time>
-  <p>In the <a href="/post/spx500_bets_after_rates_hike/">previous post</a>, I showed a plot of the probability implied from SPW options before and after the big volatility change of last week.
-I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
-technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
-<p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
-<figure><img src="/post/spw_density_spline_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
-    </figcaption>
-</figure>
-
-<p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
-obvious which value of N is the most appropriate.</p>
-<p>Another technique is to fit directly a weighted sum of Gaussian densities, of fixed standard deviation, where the weights are calibrated to the market option prices. This is
-described in various papers and books from Wystup such as <a href="https://mathfinance.com/wp-content/uploads/2017/06/FXSmileModelling.pdf">this one</a>. He calls it the kernel slice approach.
-If we impose that the weights are positive and sum to one, the resulting model density will integrate to one and be positive.</p>
-<p>It turns out that the price of a Vanilla option under this model is just the sum of vanilla options prices under the Bachelier model with shifted forwards (each &ldquo;optionlet&rdquo;
-forward corresponds to a peak on the market strike axis). So it is easy and fast to compute. But more importantly, the problem of finding the weights is linear. In deed, the typical
-measure to minimize is:
-$$ \sum_{i=0}^{n} w_i^2 \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right)^2 $$
-where \( w_i \) is a market weight related to the bid-ask spread,  \(  C_i^M \) is the market option price with strike \( K_i \), \( C_j^B(K_i) \) is the j-th Bachelier
-optionlet price with strike \( K_i \) and \( Q_j \) is the optionlet weight we want to optimize.</p>
-<p>The minimum is located where the gradient is zero.
-$$  \sum_{i=0}^{n} 2 w_i^2 C_k^B(K_i)  \left( C_i^M -\sum_{j=1}^m Q_j C_j^B(K_i) \right) = 0 \text{ for } k=1,&hellip;,m $$
-It is a linear and can be rewritten in term of matrices as \(A Q = B\) but we have the additional constraints
-$$ Q_j \geq 0 $$
-$$ \sum_j Q_j = 1 $$</p>
-<p>The last constraint can be easily added with a Lagrange multiplier (or manually by elimination). The positivity constraint requires more work. As the problem is convex,
-the solution must lie either inside or on a boundary. So we need to explore each case where \(Q_k = 0\) for one or several k in 1,&hellip;m.
-In total we have \(2^{m-1}-1\) subsets to explore.</p>
-<p><em>How to list all the subsets of \( \{1,&hellip;,m\} \)?</em> It turns out it is very easy by using a <a href="https://www.quora.com/Given-an-array-of-size-n-how-do-you-find-all-the-possible-subsets-of-the-array-of-size-k">bijection of each subset with the binary representation</a> of \( {0,&hellip;,2^m} \). We then just need
-to increment a counter for 1 to \( 2^m \) and transform the binary representation to our original set elements. Each element of the subset corresponds to a 1 in the binary representation.</p>
-<p>Now this works well if m is not too large as we need to solve \(2^{m-1}-1\) linear systems.
-I actually found amazing, it took only a few minutes for m as high as 26 without any particular optimization. For m larger we need to be more clever.
-One possibility is to solve the unconstrained problem, and put all the negative quantities to 0  in the result, then solve again this new problem on those boundaries and repeat
-until we find a solution. This simple algorithm works often well, but not always. There exists specialized algorithms that are much better and nearly as fast.
-Unfortunately I was too lazy to code them. So I improvised on the <a href="http://en.wikipedia.org/Simplex">Simplex</a>. The problem can be transformed into something solvable by the Simplex algorithm.
-We maximize the function \( -\sum_j Z_j \) with the constraints
-$$ A Q - I Z = B $$
-$$ Q_j \geq 0 $$
-$$ Z_j \geq 0 $$
-where I is the identity matrix. The additonal Z variables are slack variables, just here to help transform the problem. This is a trick I found on a <a href="https://www.researchgate.net/post/How_to_get_the_positive_solution_x_of_a_linear_equation_Axb_if_A_is_a_non-negative_rectangular_matrix">researchgate forum</a>. The two problems
-are not fully equivalent, but they are close enough that the Simplex solution is quite good.</p>
-<p>With the spline, we minimize directly bid-ask weighted volatilities. With the kernel slice approach, the problem is linear only terms of call prices. We could use a non-linear solver
-with a good initial guess. Instead, I prefer to transform the weights so that the optimal solution on weighted prices is similar to the optimal solution on weighted volatilities.
-For this, we can just compare the gradients of the two problems:
-$$ \sum_{i=0}^{n} 2 {w}_i^2  \frac{\partial C}{\partial \xi}(\xi, K_i)   \left( C_i^M - C(\xi, K_i) \right) $$
-with
-$$ \sum_{i=0}^{n} 2 {w^\sigma_i}^2\frac{\partial \sigma}{\partial \xi}(\xi, K_i)  \left( \sigma_i^M - \sigma(\xi, K_i)\right) $$
-As we know that
-$$ \frac{\partial C}{\partial \xi} =  \frac{\partial \sigma}{\partial \xi} \frac{\partial C}{\partial \sigma} $$
-we approximate \( \frac{\partial C}{\partial \sigma} \) by the market Black-Scholes Vega and
-\( \left( C_i^M - C(\xi, K_i) \right) \) by \( \frac{\partial C}{\partial \xi} (\xi_{opt}-\xi) \),
-\( \left( \sigma_i^M - \sigma(\xi, K_i) \right) \) by \( \frac{\partial \sigma}{\partial \xi} (\xi_{opt}-\xi) \)
-to obtain
-$$ {w}_i \approx \frac{1}{ \frac{\partial C_i^M}{\partial \sigma_i^M} } {w^\sigma_i}  $$</p>
-<p>Now it turns out that the kernel slice approach is quite sensitive to the choice of nodes (strikes), but not as much as to the choice of number of nodes. Below is
-the same plot as with the spline approach, that is we choose every N market strike as node. For N=4, the density is composed of the sum of m/4 Gaussian densities. We
-optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
-in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
-narrower peaks.</p>
-<figure><img src="/post/spw_density_kernel_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
-    </figcaption>
-</figure>
-
-<p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
-The fit can be much better by adding nodes at
-f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
-will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
-<figure><img src="/post/spw_vol_kernel2.png"><figcaption>
-      <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
-</figure>
-
-<p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
-<figure><img src="/post/spw_density_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
-</figure>
-
-<p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
-then we impose where the peaks will be located eventually.</p>
-<p>It is interesting to compare the graph with the one before the volatility jump:</p>
-<figure><img src="/post/spw_density_janfeb_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
-</figure>
-
-<p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>
-<p>It is possible to use other kernels than the Gaussian kernel. The problem to solve would be exactly the same. It is not clear what would be the advantages
-of another kernel, except, possibly, speed to solve the linear system in O(n) operations for a compact kernel spanning at most 3 nodes (which would translate to a tridiagonal system).</p>
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/4/">Previous</a></p>
@@ -522,9 +466,6 @@ of another kernel, except, possibly, speed to solve the linear system in O(n) op
 
     
       
-  
-
-
     
   </body>
 </html>

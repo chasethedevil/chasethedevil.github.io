@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.126.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,24 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/another-look-at-java-matrix-libraries/">Another Look at Java Matrix Libraries</a>
+  </h1>
+  <time datetime="2010-11-29T12:45:00Z" class="post-date">Mon, Nov 29, 2010</time>
+  <p>A while ago, <a href="/post/the-pain-of-java-matrix-libraries">I was already looking</a> for a good Java Matrix library, complaining that there does not seem any real good one where development is still active: the 2 best ones are in my opinion <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> and <a href="http://dsd.lbl.gov/~hoschek/colt/">Colt</a>.</p>
+<p>Recently I tried to <a href="http://www.wilmott.com/detail.cfm?articleID=345">price options via RBF</a> (radial basis functions) based on <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1648878">TR-BDF2</a> time stepping.
+This is a problem where one needs to do a few matrix multiplications and inverses (or better, LU solve) in a loop. The size of the matrix is typically 50x50 to 100x100, and one can loop between 10 and 1000 times.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity I decided to give <a href="http://ojalgo.org/">ojalgo</a> and <a href="http://code.google.com/p/matrix-toolkits-java">MTJ</a> a chance. I had read benchmarks (<a href="http://blog.mikiobraun.de/2009/04/some-benchmark-numbers-for-jblas.html">here about jblas</a> and <a href="http://code.google.com/p/java-matrix-benchmark/wiki/Runtime_2xXeon_2010_08">here the java matrix benchmark</a>) where those libraries performed really well.<!-- raw HTML omitted --><!-- raw HTML omitted -->On my core i5 laptop under the latest 64bit JVM (Windows 7), I found out that for the 100x100 case, <em>Jama was actually 30% faster than MTJ</em>, and ojalgo was more than 50% slower. I also found out that I did not like ojalgo API at all. I was quite disappointed by those results.</p>
+<p>So I tried the same test on a 6-core Phenom II (ubuntu 64bit), Jama was faster than MTJ by 0-10%. Ojalgo and ParallelColt were slower than Jama by more than 50% and 30%.</p>
+<p>This does not mean that ojalgo and ParallelColt are so bad, maybe they behave much better than the simple Jama on large matrices. They also have more features, including sparse matrices. But Jama is quite a good choice for a default library, MTJ can also be a good choice, it can be faster and use less memory because most methods take the output matrix/vector as a parameter. Furthermore MTJ can use the native lapack and blas libraries for improved performance. The bigger the matrices, the most difference it will make.</p>
+ 
+
+<table border=1><tbody><tr><td>Run</td><td>Jama</td><td>MTJ</td><td>MTJ native</td></tr><tr><td>1</td><td>0.160</td><td>0.240</td><td>0.140</td></tr><tr><td>2</td><td>0.086</td><td>0.200</td><td>0.220</td></tr><tr><td>10</td><td>0.083</td><td>0.089</td><td>0.056</td></tr></tbody></table>
+
+
+<p>(On a Phenom II under Ubuntu 10.10 64-bit)</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/java-enum-is-evil/">Java enum Is Evil</a>
   </h1>
@@ -177,18 +195,6 @@ We ran into an interesting issue with TimeZone and Dates. If you print the same 
 
 
   
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/implicit-finite-differences-method-for-pricing-barrier-option/">Implicit Finite Differences Method For Pricing Barrier Option</a>
-  </h1>
-  <time datetime="2009-08-17T12:04:00Z" class="post-date">Mon, Aug 17, 2009</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s1600-h/implicit_method_barrier_option_html_m531cf9ea.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;width: 320px; height: 74px;" src="http://3.bp.blogspot.com/_9RyqGT46Fbk/Sokrd-84xhI/AAAAAAAAERE/-gs3_MMw0oo/s320/implicit_method_barrier_option_html_m531cf9ea.jpg" border="0" alt=""id="BLOGGER_PHOTO_ID_5370871824730605074" /></a><br />While trying to price a simple knock down and out barrier option, I encountered several difficulties I did not expect with the implicit finite differences method. The explicit method has less issues with barrier options pricing. I will show here what the tricky parts are and why explicit seems simpler in this case.<br /><br />The full article is <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.pdf">here (pdf)</a> or <a href="http://www.31416.org/static/implicitbarrier/implicit_method_barrier_option.html">here (html)</a> (the later is not very well formatted).<br /><br />Algorithms used in this article can be found at <a href="http://code.google.com/p/javamc/">http://code.google.com/p/javamc/</a>
-
-
-
-  
 </article>
 </div>
 <p style="text-align:left; width:49%; display: inline-block;"><a href="/page/24/">Previous</a></p>
@@ -197,9 +203,6 @@ We ran into an interesting issue with TimeZone and Dates. If you print the same 
 
     
       
-  
-
-
     
   </body>
 </html>
