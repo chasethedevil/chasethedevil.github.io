@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.146.6">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,95 +73,6 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/bad-jdk-design-example/">Bad JDK Design Example</a>
-  </h1>
-  <time datetime="2006-03-16T15:02:00Z" class="post-date">Thu, Mar 16, 2006</time>
-  <p>Have you ever used the Authenticator class? It is standard since JDK 1.2. This allows you to establish authenticated HTTP requests. OnJava has an in-depth <a href="http://www.onjava.com/pub/a/onjava/excerpt/jvntwkprg_3e/?page=4">article presenting it</a>. Now here is my story about it.<!-- raw HTML omitted --><!-- raw HTML omitted -->The other day I just wanted to do that a simple authenticated HTTP request. You would expect it to be very simple to do in the modern internet world. <!-- raw HTML omitted --><!-- raw HTML omitted --> It is actually not very difficult to do, by hand, a <a href="http://www.javaworld.com/javaworld/javatips/jw-javatip47.html">JavaWorld article</a>  presents this way. Unfortunately it uses internal JDK sun classes for Digest and I am uncomfortable to use that since it is not guaranteed to work on any JVM. So I have to download jakarta commons-codec to just do a simple authenticated HTTP request. I really wonder why some of those codecs are not in the JDK (not as sun.* classes but as java.* classes).</p>
-<p>When I read that it was possible to do it a standard way in JDK 1.2, I was excited. I was wrong. Not only you have to extend a class (ok, implementation is faily simple) that adds in my mind unnecessary clutter, but you are forced to have only 1  <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/net/Authenticator.html">Authenticator</a> at a given time (and this Authenticator scope seems much wider than just securing HTTP connection). What about server programs dealing with different credentials?</p>
-<p>So I am left downloading jarkata httpclient library that is more powerful and easier to use than hand coded digest authentication (that anyway needs common codecs) just to have HTTP authentication the way it should be done.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/current-popular-subjects-in-java-blogs/">Current Popular Subjects In Java Blogs</a>
-  </h1>
-  <time datetime="2006-03-15T20:00:00Z" class="post-date">Wed, Mar 15, 2006</time>
-  <p>Based on my blogs entries and success of other blog entries, I present the current trendy subjects and the not trendy ones:</p>
-<p>In:</p>
-<ul>
-<li>Design Patterns</li>
-<li>Ruby on Rails</li>
-<li>EJB (bashing)</li>
-<li>RSS</li>
-<li>Spring</li>
-<li>Hibernate</li>
-<li>Javascript and AJAX</li>
-<li>Java Virtual Machine</li>
-</ul>
-<p>Out:</p>
-<ul>
-<li>RMI</li>
-<li>Portal</li>
-<li>Jini</li>
-</ul>
-<p>Neutral</p>
-<ul>
-<li>JDK 5 features</li>
-</ul>
-<p>As you can see most of the popular stuff is fairly common, not that new. I will do a finer, less common, analysis later if I have time.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/non-fiction-books-mostly-software-programming-before-2003/">Non Fiction Books (Mostly Software Programming) Before 2003</a>
-  </h1>
-  <time datetime="2006-03-15T15:03:00Z" class="post-date">Wed, Mar 15, 2006</time>
-   
-
-A page with useful reference for me as I don't own each one of these books. It can provides you a very short review non-commercial biased.<br /><p class="dateheader"><span style="color: rgb(0, 153, 0);">2003</span><br /></p><ul><li><span style="font-style: italic;"><span style="font-weight: bold;">Programming Jakarta Struts</span> </span>(O'Reilly - Chuck Cavaness) much better than Manning book. Explains struts very clearly with a more interesting example. Not enough  on how to design your application for use with the evil ActionForm. Almost nothing on Struts 1.1 features. Nothing on common problems encountered while building web applications, or even about on how to design them using struts.</li> <li><span style="font-style: italic; font-weight: bold;">Struts In Action</span> (Manning) not much more about struts than what's available on struts website. Their example throughout the book is the same login example. Struts 1.1 features, esp DynaForm are mentioned but not really presented. On the positive side, there is a very useful Validator reference at the end and a too short mention of different strategies for the ActionForm.</li><li><span style="font-style: italic; font-weight: bold;">Contributing to Eclipse</span> (Kent Beck - Erich Gamma) funny little drawings inside to make some good points.</li><li><span style="font-style: italic; font-weight: bold;">The Design Patterns Java Companion</span>(Adison Wesley - James W. Cooper) A must read for clean swing development. Essencial design patterns inside. Nice tip about doing deep cloning in java.</li><li><span style="font-style: italic; font-weight: bold;">Java Threads</span> (O'Reilly - Scott Oaks and Henry Wong) very clear presentation of multithreading programming in Java. Explain how to write your own thread scheduler.</li><li><span style="font-style: italic; font-weight: bold;">J2EE expert one on one </span>(Wrox) pragmatic view of J2EE. Many interesting comments like why avoiding stateful session bean if you are a little bit concerned with performance. Some strange benchmarks at the end of the book showing velocity templates being 10x faster than JSPs.<br /></li><li><span style="font-style: italic; font-weight: bold;">Java Distributed Computing</span>(O'Reilly - Jim Farley) very good to learn more about RMI because it starts with a custom distributed object system.</li> <li><a name="Java Enterprise in a Nutshell"></a> <div class="booktitle"><span style="font-weight: bold; font-style: italic;">Java Enterprise in a Nutshell </span>(O' Reilly - David Flanagan, Jim Farley, William Crawford, and Kris Magnusson) good complementary book, provides a good basis. I liked how RMI use in EJBs was detailed, Servlet chapter is also excellent (but don't look for design tips/help in it - it is a book on the BASICS).</div></li><li><div class="booktitle"><span style="font-style: italic; font-weight: bold;">Enterprise Javabeans, second edition</span> (O'Reilly - Richard Monson-Haefel) second lecture made me better appreciate that book, contains a lot of fundamental concepts to know. Very detailed on transaction management. However there is nothing I remember in it about EJB restrictions. In short incomplete but not bad.</div></li><li><div class="booktitle"><span style="font-style: italic; font-weight: bold;">Structure And Interpretation Of Computer Programs</span> (MIT Press)<br /></div></li></ul><p class="dateheader"><span style="color: rgb(0, 153, 0);">2002</span><br /></p><ul><li><span style="font-style: italic; font-weight: bold;">A New Kind Of Science </span>(S. Wolfram)</li><li><span style="font-style: italic; font-weight: bold;">Programming C# </span>(O'Reilly) contains good and detailed information, is a nice lookup book when we want some information on a particular C# subject, and contains a nice example about programming Windows Forms without Visual Studio.</li><li><span style="font-weight: bold; font-style: italic;">C# Language Reference</span> (Microsoft, june 2000) ok to lookup information but O'Reilly is usually better.</li><li><span style="font-style: italic; font-weight: bold;">C# .NET Web Developer's Guide</span> (Syngress) useful, good data on the CLI and on the C# compiled format. It is a nice book to learn C#.</li><li><span style="font-style: italic; font-weight: bold;">C#, Your visual blueprint for building .NET application</span> ( ) not good, very Visual Studio centric.Filling up pages with obvious data.</li><li><span style="font-weight: bold; font-style: italic;">Thinking in Pattern</span> (Bruce Eickel) essencial oo design patterns</li><li><span style="font-style: italic; font-weight: bold;">The Zope Book </span>( ) good book to familiarize yourself with Zope</li><li><span style="font-style: italic; font-weight: bold;">Fractal Geometry of Nature </span>(B. Mandelbrot) the spirit of Fractals, maybe good for people that already know a lot about fractals, otherwise kind of difficult to read sometimes because it does not detail ideas that much focusing more on the spirit.</li><li><span style="font-style: italic; font-weight: bold;">Complete Java 2 Certification</span> (SYBEX) do you know that a byte is signed and a char is 16 bits?</li><li><span style="font-style: italic; font-weight: bold;">Chaos and Fractals</span> (German authors) makes fractals accessible to everyone including non graduates, while still being ambitious (Fractal dimension details, Julia set details...). It is based on relatively classic mathematical approachs.</li></ul><p style="color: rgb(0, 153, 0);" class="dateheader">2001</p><ul><li><span style="font-weight: bold; font-style: italic;">Java Security </span>(O'Reilly) repetitive but very good overview of overall Java Security. In September 2001, it was the only book with a chapter on JAAS.</li><li><span style="font-weight: bold; font-style: italic;">Learning Python </span>(O'Reilly) ok to learn python.</li><li><span style="font-weight: bold; font-style: italic;">Bluetooth demystified</span> (N.J. Muller) first chapters are interesting to get an overview of bluetooth and its market potential. Then it describes the telecom technology behind bluetooth from scratch. A must read for people who have to program embedded bluetooth devices. It reminded me a little bit the GSM book. I would have liked a detailed technology comparison with its competitors (not only the spec comparison).</li><li><span style="font-weight: bold; font-style: italic;">J2EE </span>( ) just another rewriting of Sun specs...</li><li><span style="font-style: italic; font-weight: bold;">Programming Ruby, the pragmatic programmer's guide </span>( ) Excellent overview of Ruby but a little bit too much pro-Ruby. The first book on Ruby. In 2002, Ruby is now a bad choice of programming language because Python does everything as simply as Ruby does and has a much larger community.</li><li><span style="font-style: italic; font-weight: bold;">Python Essencial Reference</span> (New Riders) good because the python hypertext documentation has a really bad index and is not well organized.</li><li><span style="font-style: italic; font-weight: bold;">Programming Python</span> (O'Reilly) that book sucks.</li><li><span style="font-style: italic; font-weight: bold;">Genetic Programming III, Darwinian Invention and problem solving</span> (Koza) very good approach, nice comparison with evolutionnary theory + good introduction to LISP. First chapters must be read, then repetitive.</li><li><span style="font-style: italic; font-weight: bold;">How to solve it: Modern Heuristics</span> (Springer) AI techniques overview. Not very useful because it describes the obvious with a lot of details and the difficult in a few words. Furthermore some very stupid comments like p358 "some have suggested (e.g. Walter Freeman) that digital implementation of neural network may fail to emulate the biological reality because real brain are chaotic analog devices. Digital computers can only approximate the behaviour of analog devices to a given degree of precision. This precision may not be sufficient to capture the chaotic dynamics that exist in the real brain". 3 sentences to express a not-so-interesting remark, none of them add any details. Koza is much more interesting.</li><li><span style="font-style: italic; font-weight: bold;">Professional JMS</span> (Wrox) good overview of JMS, everything I needed to know about it.</li><li><a name="Professional J2EE"></a> <div class="booktitle"><span style="font-style: italic; font-weight: bold;">Professional J2EE </span>(Wrox) really good on custom JSP tags. Some interesting design issues. Explicitely mention the restrictions of J2EE (even if he does not explicitely tell you how to avoid them). Unfortunaly their examples are not always very good and sometimes just too long (especially the XML/JSP part is crap).</div></li><li><div class="booktitle"><span style="font-style: italic; font-weight: bold;">Applied Cryptography</span> (B. Schneier) The basis of cryptography, very detailed. Could be used as a reference manual.<br /></div></li><li><div class="booktitle"><span style="font-weight: bold; font-style: italic;">Fast Food Nation</span> (E. Schlosser) 1000 reasons not to eat cheap food. A social part and a chemical part, but mainly social. I found interesting to read "Americans with German ancestors far outnumber those with English ancestors", (of course Schlosser is from German origin). A shame he did not specify any reference probing this fact.</div></li><li><div class="booktitle"><span style="font-weight: bold; font-style: italic;">The Codebook</span> ( ) history of cryptography describing the diverse techniques to encrypt or crack.</div></li></ul><p class="dateheader"><span style="color: rgb(0, 153, 0);">2000</span><br /></p><ul><li><span style="font-style: italic; font-weight: bold;">Web security</span> ( ) some interesting parts but a lot of nothing.</li><li><span style="font-style: italic; font-weight: bold;">Database Nation</span> ( ) why worry about your private data? Authentification problems on social life.<br /></li><li><span style="font-style: italic; font-weight: bold;">CCTV</span>( ) first chapters interesting on the history of prisons and criminals. Then a lot of repetitive data on CCTV in England. CCTV means Closed Circuit TV i.e. surveillance systems for public areas.</li><li><span style="font-style: italic; font-weight: bold;">In Code</span>(S. Flannery) nice introduction to cryptography and mathematics. At 16, she proposed a new authentification scheme quicker than RSA. My first slightly technical purchased book for my pleasure.</li><li><span style="font-weight: bold; font-style: italic;">Java Server Pages</span>, chapter 8 a must read for clean servlet/jsp programming: a nice presentation of MVC adapted to a web client through the command pattern. The rest of the book is much less interesting and much more entry-level. Professional JSP from Wrox is probably a much better book now.<br /></li></ul><p style="color: rgb(0, 153, 0);" class="dateheader">1999</p><ul><li><span style="font-style: italic; font-weight: bold;">GSM</span> (don't remember the title but it's red and from the ENST)  everything about GSM technology, very well described and explained.<br /></li><li><span style="font-weight: bold; font-style: italic;">Lamps</span> ( ) a lot of books on light/optics/lamp technology.</li></ul><p style="color: rgb(0, 153, 0);" class="dateheader">1998</p><ul><li><span style="font-style: italic; font-weight: bold;">Thinking in Java</span> (Bruce Eickel) free and good to learn Java. Good chapters on Swing programmation. Swing was new at this time.</li></ul><p class="dateheader"><span style="color: rgb(0, 153, 0);">1997</span><br /></p><ul><li><span style="font-weight: bold; font-style: italic;">Java in a Nutshell</span> (O'Reilly) my first Java book. Was ok to learn java but not that great. JDK API documentation should be removed from the book and replaced by a chapter on the Javadoc system.</li></ul><br /><span class="technoratitag">Tags: <a target=_top href="http://del.icio.us/tag/book" rel="tag">book</a>, <a target=_top href="http://del.icio.us/tag/review" rel="tag">review</a></span>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/how-mac-os-x-made-me-discover-a-bug-in-my-java-prog/">How Mac Os X Made Me Discover a Bug in my Java Prog</a>
-  </h1>
-  <time datetime="2006-03-14T20:15:00Z" class="post-date">Tue, Mar 14, 2006</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/Image%201.jpg"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/400/Image%201.jpg" border="0" alt="benham disc screenshot" /></a><br />Yesterday I had some free time to finally find out why MacOs X would not display my little applet properly. I checked various JDKs for MacOs, no difference. I checked if it was due to antialiasing use, no luck. I actually found out there was an error in the way I displayed images. I did not call repaint() between each image change. Strangely, it worked fine on Windows with many JDKs. Anyway now my  <a href="http://31416.org/info/benham.html" target="_blank" onclick="return top.js.OpenExtLink(window,event,this)">Benham Disc Applet</a> is working on Apple computers as well.<br><br>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/del.icio.us-firefox-toolbar-update/">Del.icio.us Firefox Toolbar Update</a>
-  </h1>
-  <time datetime="2006-03-13T19:45:00Z" class="post-date">Mon, Mar 13, 2006</time>
-   
-
-
-I updated my little <a href="http://31416.org/deltoolbar.html">delicious toolbar</a> that provides autosave feature for me. I did not bother reworking the new <a href="http://del.icio.us">delicious</a> extension as I don't use its new functionalities. However people are free to do so if they want with the code from this toolbar.<br /><br /><img alt="deltoolbar screenshot" src="http://photos1.blogger.com/blogger/6384/1303/320/deltoolbar_.jpg" height="403" width="486" /><br /><br />With Firefox 1.5, display of saved documents was not working properly anymore due to a change in Firefox handling of security permissions to view local files. It is fixed now.<br /><span class="technoratitag">Tags: <a href="http://del.icio.us/tag/delicious" rel="tag">delicious</a>, <a href="http://del.icio.us/tag/toolbar" rel="tag">toolbar</a>, <a href="http://del.icio.us/tag/extension" rel="tag">extension</a>, <a href="http://del.icio.us/tag/firefox" rel="tag">firefox</a></span>
-
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/why-did-netscape-choose-javascript/">Why did Netscape choose Javascript?!?</a>
-  </h1>
-  <time datetime="2006-03-09T17:10:00Z" class="post-date">Thu, Mar 9, 2006</time>
-  <p>Last year, I have helped building an AJAX web application, where the web client was composed of only one web page and tons of javascript. The 1 web page for a site approach is similar to Gmail and many full AJAX sites. This approach looks quite elegant. Using JSON (and JSON templates) we were able to separated fully presentation logic and business logic and componentization seemed to occur naturally.</p>
-<p>But I remember how often I complained on how bad Javascript was to code. I find it does not encourage good practices at all. The object orientation of Javascript is really a pain to use. If I had not a small experience with  <a href="http://python.org">Python</a> before, I would have thought scripting languages were really bad at building applications, even not so big ones. I find that even for good programmers, Javascript is a challenge, as it seems to always be a struggle to organize properly your code with it.</p>
-<p>I was recently relieved to see that around me, almost nobody likes Javascript either. It is very sad that Netscape chosed such a bad language in 1995. Firefox appears like a miraculous program to me as a lot of the UI is done in Javascript.</p>
-<p>Ah! If ever it had been Python all the way.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/new-mac-mini/">New Mac Mini</a>
   </h1>
   <time datetime="2006-03-07T20:51:00Z" class="post-date">Tue, Mar 7, 2006</time>
@@ -206,6 +117,87 @@ Bertrand Meyer describes in his book <a href="http://www.amazon.com/exec/obidos/
 These days we tried to make Websphere and <a href="http://jonas.objectweb.org">Jonas</a> interoperate. Some EJBs are deployed in Jonas and we just try to call them from Websphere. The most natural way is to use RMI (with JRMP) for that. Jonas uses  JDK1.4.2 (conforms to J2EE 1.4) and Websphere IBM JVM 1.3.1 (conforms to J2EE 1.3). Because of RMI serialization, an EJB from Jonas will not work on Websphere, because this EJB has references to J2EE 1.4 classes which are different from J2EE  1.3. The exact root cause is not exactly clear to me, it probably has to do with the Naming Factory and the EJB Stub, but we tried every possible thing here without success.<br /><span style="font-weight: bold;">Update: </span>JRMP worked between JBoss 3.X on JDK 1.4 and Websphere 5.X (IBM JDK 1.3) using JBoss NamingFactory. So RMI interoperation seems quite unpredictable. One thing is that you have to pay attention to the naming factory you use. If it is a special library like in JBoss case, make sure it is compatible with your JDK.<br /><br />One solution is to use RMI-IIOP, as it does not rely on serialization. It almost works. In our case we use Websphere Portal that needs to have security enabled. You might ask what security has to do with all that. Well, enabling security on websphere means that CORBA exchange will also be secured (using CSIv2). Tuning Jonas to understand what websphere asks is something we did not manage to do (and we don't know if it is possible at all).<br /><span style="font-weight: bold;">Update: </span>We did manage to make it work by disabling Jonas CSIv2 support.<br /><br />So there we are using Axis to do the communication!<br /><span style="font-weight: bold;">Update: </span>Axis is not needed anymore  as RMI-IIOP works as advertised.<br /><br />There is an interesting <a href="http://www.lifl.fr/%7Emerle/benchmarking.pdf">benchmark of Axis vs JRMP vs RMI-IIOP (pdf)</a>. Axis is more than 10x slower than pure JRMP. Application servers use of JRMP seems to matter a lot, JBoss looks bad.
 
 
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
+  </h1>
+  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
+  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
+<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
+<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
+<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
+<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/my-dream-job/">My Dream Job</a>
+  </h1>
+  <time datetime="2006-01-12T11:42:00Z" class="post-date">Thu, Jan 12, 2006</time>
+   
+
+<img src="file:///C:/Documents%20and%20Settings/flh/Mes%20documents/MSwanson%20-%20Leaf%2002.png" alt=""><br> In my dream job, I would have <span style="font-weight: bold;">freedom </span>to play with and build software based on new ideas I have.<br>  In my dream job, I would work with <span style="font-weight: bold;">creative </span>people, luminaries.<br>  In my dream job, I would have a good enough salary.<br>  In my dream job, I would not have to worry about the company <span style="font-weight: bold;">stability</span>.<br>  In my dream job, I would have freedom in my work schedule.<br>  <br>  Get <span style="font-weight: bold;">paid </span>for doing what you really want (i.e. your ideas) is possible. But without worrying about the next 6 months, I have not seen that. 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ogg-better-than-mpc-and-mp3---aac-crap/">Ogg better than MPC and MP3 - AAC crap</a>
+  </h1>
+  <time datetime="2006-01-04T11:47:00Z" class="post-date">Wed, Jan 4, 2006</time>
+  <p>The <a href="http://www.hydrogenaudio.org/forums/index.php?showtopic=36465">latest well done (e.g. blind) listening test</a> comparing Ogg, MPC, MP3, AAC at about 180kbps shows that Ogg is superior to all other compressing formats. It&rsquo;s not that easy to find relevant tests. Many people claim to be able to notice huge differences between CD and MP3 and yet, but confronted to a blind listening test, they are very surprised how difficult it actually is. Hydrogenaudio has a good community of audiophiles.</p>
+<p>Unfortunately Ogg is not supported officially in iTunes and not supported in the most popular hardware (iPod). It&rsquo;s been a while now Ogg is out, and even if it is a superior format, unless Apple embraces it, I don&rsquo;t see it succeeding. I wish Apple would make a tiny effort.</p>
+<p>In Java it is possible to play ogg files using <a href="http://www.jcraft.com/jorbis/">Jorbis</a> but I did not find any useable Java player compared to Windows foobar2000 or Linux XMMS or Apple iTunes.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/whats-your-favorite-design-pattern/">What&#39;s Your Favorite Design Pattern</a>
+  </h1>
+  <time datetime="2005-12-27T12:18:00Z" class="post-date">Tue, Dec 27, 2005</time>
+  <p>Once in a job interview, someone asked me</p>
+<blockquote>
+<p>What&rsquo;s your favorite design pattern?</p></blockquote>
+<p>I was first surprised at the question. Usually a design pattern is about solving a problem not about a personal preference. I wondered if it was a trick question of some sorts. I was hesitating with my answer and asked more about the meaning of the question. I just had to really give the pattern I liked the most! I really should not have but I ended up pleasing my interviewer and said &ldquo;the decorator pattern&rdquo;. At least its name is somehow related to arts.</p>
+<p>Then he said his favorite one was &ldquo;the template pattern&rdquo;. He was really into it because he could use it anywhere. For him it was like the best thing since sliced bread.</p>
+<p>Sheesh! just an abstract class. What kind of pattern is that!?! Design Patterns discussions can be really dull.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/professional-portal-development-book-review/">Professional Portal Development Book Review</a>
+  </h1>
+  <time datetime="2005-12-27T12:08:00Z" class="post-date">Tue, Dec 27, 2005</time>
+  <p>I just finished reading <em>Professional Portal Development With Open Source Tools</em> (Wiley).</p>
+<p><strong>The Good:</strong></p>
+<p>I enjoyed Chapter 1, it gives a good presentation of Portlets for someone who does not know much about it. It is a chapter one can use as a reference to verify some specific details of how Portlets are working. It is a bit similar to JSR 168 specifications, but I found it more detailed and well written.</p>
+<p>Beside Chapter 1, there are here and there useful information:</p>
+<ul>
+<li>A presentation of Model 1 and 2(X) Architectures in relation with Portals. It could have been more detailed.</li>
+<li>Example use of some Design Patterns in a Portal although the example use is really just one sentence and some Patterns uses are too obvious and not related to Portal (Singleton, Template Method).</li>
+<li>Web Services for Remote Portlets</li>
+</ul>
+<p><strong>The Bad And Ugly:</strong></p>
+<p>I was disappointed by the remaining of the book. While it is good to mention Lucene, Apache James, OJB, Jakarta Slide, as those can be useful in Portal development, the book does not provide any useful information on those products. It would be difficult to put all that in just one book. The author merely gives kind of hello world examples for each technology, which I find quite useless.</p>
+<p>A quick presentation of software methodologies is again quite useless, and not what we expect from that kind of book. If I want to learn about software methodologies, I buy a book about it, I don&rsquo;t buy a Portal Development book.</p>
+<p>The rest of the book really looks like a list of disconnected subjects, the important ones are not given more attention to the non-relevant ones. Portal Navigation is a problem you will encounter in any Portal development, but you won&rsquo;t find much in the book except a short example. The author also writes with way too many words for the content about CVS, Subversion, JUnit, AntHill, Scarab. And then he goes on about Java Web Start, woohoo! Yes, it almost reads as well as a resume full of keywords.</p>
+<p><strong>Summary:</strong></p>
+<p>Don&rsquo;t buy this book.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ibm-websphere-portal-strategy/">IBM Websphere Portal Strategy</a>
+  </h1>
+  <time datetime="2005-12-07T17:48:00Z" class="post-date">Wed, Dec 7, 2005</time>
+  <p>I digged a bit deeper in a current project where they use IBM Websphere Portal Server (WPS) with IBM Web Content Management (WCM). I found out that both products collide and disintegrate.</p>
+<p>WCM is like a regular content management system, quite flexible and performant on its own. It has a nice way to separate layout concern from content concern. It has a flexible cache. It has a user repository to set different permissions. Its architecture is even so well done (very modular) that you can tailor it to your needs to do things a content management system is not supposed to do. It could do most of what you would do with a Portal system. And that&rsquo;s the problem.</p>
+<p>WPS is a Porlet server, now compatible with JSR 168. You can again do the layout of your portlets, you have an administrative interface to handle them and one to handle user permissions. There is a caching system although it&rsquo;s not very clear how that works. Standard administration Portlets seem awfully slow to use any cache. To be integrate WCM content in the Portal Server, they ship a WCM Portlet. While JSR 168 API is recommended by IBM, the WCM Portlet is not a JSR 168 one.</p>
+<p>So you have 2 products where you can layout your pages, and have dynamic behaviour in them, locally as components, easily manageable. One can be embedded in the other, but it does not make much sense, because you would then just use a tiny part of its possibilities, and its flexibility will be more a burden (extra abstraction layer) than anything. The integration of the 2 products is very superficial. Although recently they can share a common user repository, the WCM portlet does not do any caching of WCM content, linking between content and portlets is a very cumbersome task. IBM provides tips to build a framework that does just that. All that for not using most of the WCM possibilities and always having difficulties in defining their roles and using them collaboratively.</p>
+<p>Now, if you look at how JBoss Portal works, and what features they focused on, you will see a well designed solution whose aim is to build pragmatically a Portal using Portlets. They have a very simple content management system used to administrate HTML snippets. Content is put inside the Portal page using CMS Portlets, the layout is the one you specified in the Portal page. They provide automatic caching of CMS content and easy to use links. Integration with their CMS is already using JSR 170 standard. You can plugin other CMS systems easily.<!-- raw HTML omitted --> <!-- raw HTML omitted --> IBM strategy with their WPS+CMS does not look very good, and their version is currently 5.1, soon 6.</p>
 
   
 </article>

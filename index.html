@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.146.6">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +78,7 @@
   <time datetime="2025-04-22T12:56:42&#43;0100" class="post-date">Tue, Apr 22, 2025</time>
   <p>Around 10 years ago, while reading the excellent paper of Etore and Gobet on <a href="https://hal.science/hal-00507787v1/document">stochastic Taylor expansions for the pricing of vanilla options with discrete (cash) dividends</a>, I had the idea of a small improvement, by using <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">a more precise proxy</a> for the Taylor expansion.</p>
 <p>More recently, I applied the idea to <a href="https://arxiv.org/abs/2402.17684v1">approximate arithmetic Asian options prices</a> by using the geometric Asian option price as a proxy (with some adjustments). This worked surprisingly well, and is competitive with the best implementations of Curran approach to Asian options pricing. I quickly noticed that I could apply the same idea to <a href="https://arxiv.org/abs/2402.17684">approximate Basket option prices</a>, and from it obtain another approximation for vanilla options with cash dividends through the <a href="https://arxiv.org/abs/2106.12971">mapping described by J. Healy</a>. Interestingly the resulting approximation is the most accurate amongst all other approximations for cash dividends.</p>
-<p>During my Easter holidays, I took the time to further extend the idea <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5226303">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
+<p>During my Easter holidays, I took the time to further extend the idea <a href="https://arxiv.org/abs/2504.16011">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
 Somewhat interestingly, I noticed that the first order expansion (which is not much more accurate than the proxy itself) seemed to correspond to a previously published approximation from <a href="https://www.scirp.org/journal/paperinformation?paperid=72439">Tommaso Pellegrino</a>, an extension of Bjerksund-Stensland approximation for spread options, although my derivation is very different and allows for higher-order formulae.</p>
 <p>Below is an excerpt of some of the results</p>
 <figure><img src="/post/deelstra_table_basket_spread.png"><figcaption>
@@ -97,6 +97,7 @@ Somewhat interestingly, I noticed that the first order expansion (which is not m
 </figure>
 
 <p>The MM of Martin Krekel consists in a one-dimensional integration of two lognormal moment-mached distributions. It seems that the one-dimensional integration (which is exact for simple spread options) does not really improve the accuracy for the more general asian spread option case: the loss of accuracy due to moment matching dominates the error.</p>
+<p>The preprint is <a href="https://arxiv.org/abs/2504.16011">available on Arxiv</a>.</p>
 
   
 </article><article class="post">
@@ -127,8 +128,7 @@ différents car ils nécessitent plus d&rsquo;énergie pour maintenir leur nivea
 répondre à leurs besoins énergétiques supérieurs, ce qui peut inclure des aliments riches en protéines, vitamines et minéraux.</p>
 <p>En bref, les besoins alimentaires de chaque individu peuvent être influencés par différents facteurs tels que son âge, son genre, sa taille, son poids, son
 niveau d&rsquo;activité physique et son état de santé. Il est donc important de comprendre ces facteurs pour assurer que nous consommons une alimentation adaptée à
-nos besoins nutritifs uniques.</p>
-</blockquote>
+nos besoins nutritifs uniques.</p></blockquote>
 <p>The introduction and the conclusion are the same. Closely repeated words are another issue: spécifiquement. Furthermore, this word is likely a bad translation from English in the sentence.
 &ldquo;spécifiquement importants&rdquo; does not sound quite correct in French. Finally, it&rsquo;s funny that they always produce the same structure of answer, small intro, a few points, and &ldquo;En bref&hellip;&rdquo;. At first it looks good, but very quickly, you
 understand it as noise. In fact if we analyze the points given as answer by LLMs, we start to notice that they are not as distinct as their presentation and wording suggest. It is not uncommon to see very similar sentences in distincts enumerated points.</p>
@@ -245,8 +245,7 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
   <p>When computing the derivative of a function by finite difference, which step size is optimal? The answer depends on the kind of difference (forward, backward or central), and the degree of the derivative (first or second typically for finance).</p>
 <p>For the first derivative, the result is very quick to find (it&rsquo;s on <a href="https://en.wikipedia.org/wiki/Numerical_differentiation">wikipedia</a>). For the second derivative, it&rsquo;s more challenging. The <a href="https://paulklein.ca/newsite/teaching/Notes_NumericalDifferentiation.pdf">Lecture Notes</a> of Karen Kopecky provide an answer. I wonder if Copilot or ChatGPT would find a good solution to the question:</p>
 <blockquote>
-<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p>
-</blockquote>
+<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p></blockquote>
 <p>Here is the answer of copilot:
 <figure><img src="/post/step_size_copilot.png">
 </figure>

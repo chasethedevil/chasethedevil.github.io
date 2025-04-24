@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.146.6">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,20 +73,6 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/2-months-of-ubuntu-on-mac-mini/">2 Months of Ubuntu on Mac Mini</a>
-  </h1>
-  <time datetime="2007-08-27T23:48:00Z" class="post-date">Mon, Aug 27, 2007</time>
-  <p>I am finally happy with my OS. I had previously [some complaints]({{ relref . &ldquo;1-year-of-mac-mini&ndash;the-deception-point.md&rdquo; }}) about MacOs X and the Mac Mini. It is now over, with <a href="https://www.ubuntu.org">Ubuntu</a>, I am very happy of my quiet system.</p>
-<p>I use Quod Libet for Audio, it has similar interface as iTunes, with more features (ability to play most audio formats). I chose Quod Libet instead of the standard Rhythmbox because of its practical mp3 tags handling. This also means that unlike iTunes, when I reimport my full library with another player, or on another computer, I have it all organized the right way, because the right meta data is in the audio files and not in a xml file that sometimes gets corrupted.</p>
-<p>I can use Open Office (not yet available in non alpha version for Mac Os X).</p>
-<p>I can use Picasa or other more standard alternatives instead of iPhoto.</p>
-<p>I can use free guitar tuners, plenty of esoteric software.</p>
-<p>Remote control, fancy bluetooth apple keyboard, cd burning, dvd player, printer work flawlessly. And it&rsquo;s all free software (except Picasa which is only gratis).</p>
-<p>I am happy with my Ubuntu system :).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/spring-web-services-finally/">Spring Web Services, Finally!</a>
   </h1>
   <time datetime="2007-08-23T11:22:00Z" class="post-date">Thu, Aug 23, 2007</time>
@@ -116,8 +102,7 @@
 <p>I had not seen that before, and was wondering why one would do such a thing. It seems to be unintuitive. I found my answer through&hellip; GWT widgets. In <a href="http://gwt-widget.sourceforge.net/?q=node/39">this page</a>, the author explain motivations behind doing such a thing:</p>
 <blockquote>
 <p>While not 100% in tune with the MVC pattern, it is often convenient to access the servlet container, the HTTP session or the current HTTP request from the business layer. The GWT-SL provides several strategies to achieve this which pose a compromise in the amount of configuration  required to set up and the class dependencies introduced to the business code.
-The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class which provides convenience methods for accessing the <code>HttpServletRequest</code> and <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables  and will obviously not return correct values if used in any other than the invoking thread.</p>
-</blockquote>
+The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class which provides convenience methods for accessing the <code>HttpServletRequest</code> and <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables  and will obviously not return correct values if used in any other than the invoking thread.</p></blockquote>
 <p>Still one can doubt if this is good design. In my long experience of web apps in Java I never had the need to do such a thing. Have you seen that pattern before?</p>
 
   
@@ -156,7 +141,7 @@ Getting started with <a href="http://tapestry.apache.org/tapestry5/">Tapestry 5<
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/netbeans-6.0m10-out-without-announcement-yet/">NetBeans 6.0M10 out without announcement yet!</a>
+    <a href="https://chasethedevil.github.io/post/netbeans-6/">NetBeans 6.0M10 out without announcement yet!</a>
   </h1>
   <time datetime="2007-06-30T07:15:00Z" class="post-date">Sat, Jun 30, 2007</time>
   <p>I just found it while browsing netbeans website, here is the <a href="http://dlc.sun.com.edgesuite.net/netbeans/download/6.0/milestones/m10/">link</a>. Netbeans is starting to be much more interesting that it used to be before  5.5, even though shortcuts are a pain, because so different from most other editors, and not always defined for important tasks. I like the all integrated feeling without plugin and slugishness by default.</p>
@@ -199,6 +184,18 @@ This is not something I would have though a few years ago. It is something I lea
 <p>In RAD, there is even a wizard to help you create a JSP. What does it do? Well, for example it generates those 2-3 lines of tag libraries include. The first time you write a JSP, it might help you, but the second time, it&rsquo;s much faster to copy/paste. Generally, when you have to do an wizard operation many times, it is much slower than doing it via copy/paste and few modifications here and there, or to use a more configurable alternative like XDoclets.</p>
 <p>The other complaint I have about wizards, is that they hide too much how things are working. As anybody can use them, it makes you think the operation it does and technologies behind are simple.</p>
 <p>More generally it feels to me like wizards are only there because of some over-complicated design somewhere. EJB 3.0 are much nicer to work with than EJB 2, a wizard will help you much less with EJB 3.0, and yet EJB 3.0 are more powerful.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/less-productive-with-maven2/">Less Productive With Maven2.</a>
+  </h1>
+  <time datetime="2007-04-29T17:10:00Z" class="post-date">Sun, Apr 29, 2007</time>
+  <p>My <a href="/post/maven-game-over-try-again">first trials</a> of Maven were failures. As I am stubborn, I tried again, on a new project, a quite simple one. It works, but it makes some easy things overkill. And the default way of using it makes a developer lose lots of time.</p>
+<p>If I have a project with common classes, a standalone app, and a web app, then logically you do 3 projects, 2 of them depending on the common one. That&rsquo;s how the default maven setup works, and that&rsquo;s what their documentation presents. Now when using maven eclipse, this will create 3 project, none depending on each other. If you modify something in the common code, it won&rsquo;t be seen by any of the other code, you have to publish it with maven first, this takes way too much time. Furthermore I did not see any way to force rebuild the common automatically from one of the other project. If you modify code in common and web app project, you need to call maven twice. I find all this very counterproductive, because you do those steps extremely often. Now there are probably some ways to do that with Maven2, but it is not the default behavior. I could add project dependencies in eclipse manually, and forget about maven while working in eclipse, but then the maven eclipse plugin is really useless. And you&rsquo;ll face the same issues when you want to use maven tomcat deploy.</p>
+<p>Even more worrying, after moving back to Ant, I saw a strange bug with Spring context loading disappear. Maven is hiding so much, that it becomes not obvious how your app is deployed.</p>
+<p>Developers lose power with Maven. It&rsquo;s a pain to do something a bit differently that the default Maven way. With Ant, people gain power. I see both as being the distinction between a framework approach (Maven) and a library API approach (Ant). By default, Maven tries to do a lot, while Ant tries to do nothing. It&rsquo;s very easy to build exactly what you need with Ant, while it is of course difficult with Maven.</p>
+<p>Some parts of Spring have a similar disadvantage to Maven. If you do everything in XML with the most Spring magic, you&rsquo;ll spend hours trying to figure out how to do things and why it does not seem to work like you think it should. If you use Spring as an API, like the wonderful Spring JDBC, development will be fast (faster than with straight JDBC for example), and your program flow is easy to follow.</p>
 
   
 </article>

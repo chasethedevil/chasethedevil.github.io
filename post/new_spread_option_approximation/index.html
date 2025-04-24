@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.146.6">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +74,7 @@
   <time datetime=2025-04-22T12:56:42&#43;0100 class="post-date">Tue, Apr 22, 2025</time>
   <p>Around 10 years ago, while reading the excellent paper of Etore and Gobet on <a href="https://hal.science/hal-00507787v1/document">stochastic Taylor expansions for the pricing of vanilla options with discrete (cash) dividends</a>, I had the idea of a small improvement, by using <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">a more precise proxy</a> for the Taylor expansion.</p>
 <p>More recently, I applied the idea to <a href="https://arxiv.org/abs/2402.17684v1">approximate arithmetic Asian options prices</a> by using the geometric Asian option price as a proxy (with some adjustments). This worked surprisingly well, and is competitive with the best implementations of Curran approach to Asian options pricing. I quickly noticed that I could apply the same idea to <a href="https://arxiv.org/abs/2402.17684">approximate Basket option prices</a>, and from it obtain another approximation for vanilla options with cash dividends through the <a href="https://arxiv.org/abs/2106.12971">mapping described by J. Healy</a>. Interestingly the resulting approximation is the most accurate amongst all other approximations for cash dividends.</p>
-<p>During my Easter holidays, I took the time to further extend the idea <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5226303">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
+<p>During my Easter holidays, I took the time to further extend the idea <a href="https://arxiv.org/abs/2504.16011">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
 Somewhat interestingly, I noticed that the first order expansion (which is not much more accurate than the proxy itself) seemed to correspond to a previously published approximation from <a href="https://www.scirp.org/journal/paperinformation?paperid=72439">Tommaso Pellegrino</a>, an extension of Bjerksund-Stensland approximation for spread options, although my derivation is very different and allows for higher-order formulae.</p>
 <p>Below is an excerpt of some of the results</p>
 <figure><img src="/post/deelstra_table_basket_spread.png"><figcaption>
@@ -93,6 +93,7 @@ Somewhat interestingly, I noticed that the first order expansion (which is not m
 </figure>
 
 <p>The MM of Martin Krekel consists in a one-dimensional integration of two lognormal moment-mached distributions. It seems that the one-dimensional integration (which is exact for simple spread options) does not really improve the accuracy for the more general asian spread option case: the loss of accuracy due to moment matching dominates the error.</p>
+<p>The preprint is <a href="https://arxiv.org/abs/2504.16011">available on Arxiv</a>.</p>
 
 </div>
 
