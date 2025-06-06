@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.147.7">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Fedora 17 vs Ubuntu 12.04 &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Fedora 17 vs Ubuntu 12.04</h1>
+  <time datetime=2012-09-12T18:03:00Z class="post-date">Wed, Sep 12, 2012</time>
+   
+
+I had the bad idea to upgrade to the beta Ubuntu 12.10. Something awfully broke in the upgrade. After too much struggling with apt-get &amp; dpkg, I decided to install Fedora 17.<br /><br />Strangely Fedora feels much faster than Ubuntu 12.04 (the boot time especially). Yum seems also faster than apt-get, especially the update part. Also while the Unity dock is not bad (better than gnome shell dock), the Unity dash thing just makes me crazy, the gnome shell activities, while close, are much easier to use.<br /><br />But it needs a bit more steps to install, although I had no problem to install <a href="http://www.if-not-true-then-false.com/2012/fedora-17-nvidia-guide/">nvidia drivers</a>,&nbsp;<a href="http://obiee2go.blogspot.fr/2012/06/oracle-11g-oracle-database-11g.html">Oracle 11g xe</a>, Java, MP3, nice fonts, nice icons thanks to the guides <a href="http://www.mjmwired.net/resources/mjm-fedora-f17.html">here</a> and <a href="http://smashingweb.info/fedora-17-post-installation-guide-things-to-do-after-installing-fedora-17/">there</a>. SSD Trim instructions are the same (basically use "discard" instead of "default" in /etc/fstab). I have the most troubles with Oracle: somehow the start script does not work and I currently log in as "oracle" and start&nbsp;/u01/app/oracle/product/11.2.0/xe/config/scripts/startdb.sh from there (after having added the proper .bashrc for this user)<br /><br />I even managed the peculiarities of my laptop a similar way as ubuntu: I want Nvidia card when plugged in to a monitor (to be able to use it) and Intel card when not (to be able to use the LCD screen). My solution is to use the boot screen (in reality one just need to restart X11): this amounted to add a "hdmi" in "/etc/grub.d/40_custom" and creating a link to "/etc/rc3.d/S10DriverSelect" the following script (a dirty hack):<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">#!/bin/sh</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">if grep -q hdmi /proc/cmdline</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules.bak/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.hdmi /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules.bak/extensions/nvidia /usr/lib64/xorg/modules/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">else</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.intel /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules/extensions/nvidia /usr/lib64/xorg/modules.bak/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">fi</span><br /><br />Linux distros are really becoming closer in terms of configuration, LSB has made great progress.<br /><div><br />Edit from November 29: After a few weeks, I noticed that the system was quite unstable unfortunately. As a result, I moved back to Ubuntu on my laptop. I am running OpenSuse on my home computer. 1 year later, I am back to Fedora 19, 20 on my desktop - no stability issue, I prefer Gnome over KDE. </div>
+
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

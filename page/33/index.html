@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,27 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-talk-to-people-especially-the-ones-you-dont-know-well./">How to Build Good Software? Talk to people, especially the ones you don&#39;t know well.</a>
+  </h1>
+  <time datetime="2007-04-06T17:02:00Z" class="post-date">Fri, Apr 6, 2007</time>
+  <p>Someone modified a simple launch script on a integration machine. This pissed off the author of the script. Why?</p>
+<p>Just because the guy who modified the script never worked before with the author of the script. If only the author had been notified verbally or by mail of the modification, he would have been happy. Furthermore this would increase the quality of the change since the new guy might have made a change that has other impacts, that the author will best evaluate quickly.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/">Find Grep And Vi Keys Small Memo</a>
+  </h1>
+  <time datetime="2007-04-05T18:48:00Z" class="post-date">Thu, Apr 5, 2007</time>
+   
+
+I tend to forget this now and then to grep on a specific list of files:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; font-weight: bold;" class="gmail_quote"> find . -name "*.xml" | xargs grep "iwantthis"</blockquote><div><br />And I also tend to forget the <a href="http://www.mathlab.cornell.edu/local_help/vi.html">vi keys</a>. Small extract:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>h</b> - move left one character<br /><b>j</b> - move down one line<br /><b>k</b> - move up<br /><b>l</b> - move right<br /><b>$</b> - go to the end of the current line<br /><b>0</b> - go to the beginning of the current line<br /><b>G</b> - go to the last line in the file<br /><b>15G</b> - go to line 15<br /><b>control-F</b> - forward one page<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b>control-B</b> - backwards one page </blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div><b>n (N)</b> - next (previous) in search mode (/ or ? forward or backward)  </div></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"></span>s/OLD/NEW/g</b> - replace on current line<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"><span style="font-weight: bold;"></span> %</span>s/OLD/NEW/g</b> - replace every occurence in file (or use 0,$ instead of %)<br /></blockquote><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>x</b> - delete one character</blockquote><br /><div><span style="font-weight: bold;">Update </span>I have to add the standard replace in multiple files via sed command. Here is an example of how to move your eclipse workspace to another directory:<br /><blockquote></blockquote><ul><li>find . -name "*.xml" | xargs sed -i "s,c:[/\\]java[/\\]eclipse,d:/eclipse302,gi"</li></ul> </div></div>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/how-to-build-good-software-ms-press-code-complete-says-measure-twice-cut-once/">How to Build Good Software? MS Press Code Complete says Measure twice, cut once</a>
   </h1>
   <time datetime="2007-04-05T14:14:00Z" class="post-date">Thu, Apr 5, 2007</time>
@@ -96,7 +117,7 @@ My reference book on Java concurrency is Doug Lea&#39;s <span style="font-style:
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/why-are-you-not-using-entity-ejb-1/">Why are you not using Entity EJB 1.1?</a>
+    <a href="https://chasethedevil.github.io/post/why-are-you-not-using-entity-ejb-1.1/">Why are you not using Entity EJB 1.1?</a>
   </h1>
   <time datetime="2007-02-07T16:38:00Z" class="post-date">Wed, Feb 7, 2007</time>
   <p>I am currently quite busy learning about Websphere Commerce. I was surprised to notice that they still use Entity EJBs 1.1. My experience was that many companies turned away from Entity EJBs, sometimes from the beginning, preferring TopLink or Hibernate (later).</p>
@@ -168,35 +189,6 @@ While looking through some code for a project, I saw that:<br><br><blockquote st
 <p>With modern IDEs, most people just create a template for the logger declaration line. Also, renaming MyClass to MyClass2 will rename MyClass.class to MyClass2.class automatically. Here is my template for Eclipse to which I assigned the short name log4j:</p>
 <blockquote>
 <p>private static final Logger LOG = Logger.getLogger(${enclosing_type}.class);</p></blockquote>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/very-quick-django-trial---bye-bye-django/">Very Quick Django Trial -&gt; Bye Bye Django</a>
-  </h1>
-  <time datetime="2006-12-21T17:48:00Z" class="post-date">Thu, Dec 21, 2006</time>
-   
-
-I tried a bit <a href="http://djangoproject.com">django</a> for one very simple thing, where django is not of much use, but it was a way to try it with something else than examples on the site. <br><br>Even if django templates features seem very good and very convenient when reading the docs (for example the extends keyword), I found out that the template system is very annoying. Firstly one has to learn another templating system. Secondly, and much more importantly, the debug facilities for templates are close to non existent. I have a better memory using ruby on rails templates (which are not the best either). <br><br>Java templates, based on Velocity, JSPs or JSF are much nicer to debug. PHP (which I consider an ugly language that can unfortunately often gets the job done) used to be crap at debugging, but with eclipse plugin phpeclipse it is much better these days. <br><br>I think templates play a very important role in web application development, and I am surprised that a framework with so many good ideas fails in reality (at least for me) because debugging templates is a pain. Hopefully it will become better one day, but until then bye bye Django. <br> 
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-proof-that-javascript-sucks/">A Proof That JavaScript Sucks.</a>
-  </h1>
-  <time datetime="2006-12-15T16:51:00Z" class="post-date">Fri, Dec 15, 2006</time>
-  <p>Google developed <a href="http://code.google.com/webtoolkit">GWT</a>.</p>
-<p>Why would GWT be so well acclaimed if JavaScript was a good language. When you talk about GWT to someone (a developer preferably), the first reaction is often</p>
-<blockquote>
-<p>great I don&rsquo;t need to do any JavaScript</p></blockquote>
-<p>I recently discovered another similar open source project, <a href="http://www.zkoss.org">ZK</a>. The
-first thing you can read on the website is</p>
-<blockquote>
-<p>ZK is an open source Ajax Web framework that enables rich user interface for web applications  <em>with no JavaScript</em> and little programming.</p></blockquote>
-<p>If you compare that with how JRuby is (or Jython used to be) trendy, you will agree there must be a problem with JavaScript.</p>
-<p>JavaScript is not bad at everything, for very simple scripting, it is quite decent, the recent inclusion of Rhino in the JDK 1.6 is useful anywhere you need simple dynamic behavior. But most developers obviously don&rsquo;t want to deal with it.</p>
 
   
 </article>

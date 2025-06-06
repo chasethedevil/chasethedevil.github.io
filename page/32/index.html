@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,35 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/wizards-bad-for-productivity/">Wizards Bad For Productivity</a>
+  </h1>
+  <time datetime="2007-05-16T14:56:00Z" class="post-date">Wed, May 16, 2007</time>
+  <p>IBM RAD comes with many wizards, to create EJBs, to create Web Services, do struts mapping&hellip; They are quite well done, making EJB &lt; 3.0 usable, and Web Services look simple.</p>
+<p>But wizards sucks at:</p>
+<ul>
+<li>typos correction</li>
+<li>repetition</li>
+</ul>
+<p>But when you do a typo in your wizards, then all the files generated/changed are wrong, and you don&rsquo;t necessarily know if you can just do a search and replace. Plus you don&rsquo;t necessarily know all the files that were affected by the typo.</p>
+<p>In RAD, there is even a wizard to help you create a JSP. What does it do? Well, for example it generates those 2-3 lines of tag libraries include. The first time you write a JSP, it might help you, but the second time, it&rsquo;s much faster to copy/paste. Generally, when you have to do an wizard operation many times, it is much slower than doing it via copy/paste and few modifications here and there, or to use a more configurable alternative like XDoclets.</p>
+<p>The other complaint I have about wizards, is that they hide too much how things are working. As anybody can use them, it makes you think the operation it does and technologies behind are simple.</p>
+<p>More generally it feels to me like wizards are only there because of some over-complicated design somewhere. EJB 3.0 are much nicer to work with than EJB 2, a wizard will help you much less with EJB 3.0, and yet EJB 3.0 are more powerful.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/less-productive-with-maven2./">Less Productive With Maven2.</a>
+  </h1>
+  <time datetime="2007-04-29T17:10:00Z" class="post-date">Sun, Apr 29, 2007</time>
+  <p>My <a href="/post/maven-game-over-try-again">first trials</a> of Maven were failures. As I am stubborn, I tried again, on a new project, a quite simple one. It works, but it makes some easy things overkill. And the default way of using it makes a developer lose lots of time.</p>
+<p>If I have a project with common classes, a standalone app, and a web app, then logically you do 3 projects, 2 of them depending on the common one. That&rsquo;s how the default maven setup works, and that&rsquo;s what their documentation presents. Now when using maven eclipse, this will create 3 project, none depending on each other. If you modify something in the common code, it won&rsquo;t be seen by any of the other code, you have to publish it with maven first, this takes way too much time. Furthermore I did not see any way to force rebuild the common automatically from one of the other project. If you modify code in common and web app project, you need to call maven twice. I find all this very counterproductive, because you do those steps extremely often. Now there are probably some ways to do that with Maven2, but it is not the default behavior. I could add project dependencies in eclipse manually, and forget about maven while working in eclipse, but then the maven eclipse plugin is really useless. And you&rsquo;ll face the same issues when you want to use maven tomcat deploy.</p>
+<p>Even more worrying, after moving back to Ant, I saw a strange bug with Spring context loading disappear. Maven is hiding so much, that it becomes not obvious how your app is deployed.</p>
+<p>Developers lose power with Maven. It&rsquo;s a pain to do something a bit differently that the default Maven way. With Ant, people gain power. I see both as being the distinction between a framework approach (Maven) and a library API approach (Ant). By default, Maven tries to do a lot, while Ant tries to do nothing. It&rsquo;s very easy to build exactly what you need with Ant, while it is of course difficult with Maven.</p>
+<p>Some parts of Spring have a similar disadvantage to Maven. If you do everything in XML with the most Spring magic, you&rsquo;ll spend hours trying to figure out how to do things and why it does not seem to work like you think it should. If you use Spring as an API, like the wonderful Spring JDBC, development will be fast (faster than with straight JDBC for example), and your program flow is easy to follow.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/how-to-build-good-software-good-network-connection/">How to Build Good Software? Good network connection</a>
   </h1>
   <time datetime="2007-04-27T12:40:00Z" class="post-date">Fri, Apr 27, 2007</time>
@@ -104,7 +133,7 @@
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/project-estimations-and-fibonacci-sequence/">Project Estimations And Fibonacci Sequence.</a>
+    <a href="https://chasethedevil.github.io/post/project-estimations-and-fibonacci-sequence./">Project Estimations And Fibonacci Sequence.</a>
   </h1>
   <time datetime="2007-04-13T13:01:00Z" class="post-date">Fri, Apr 13, 2007</time>
   <p>I was recently in a meeting where use case complexity was estimated using numbers in the <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci sequence</a>. I was surprised by the choice of the Fibonacci sequence. Why not any sequence? Why a particular one? I googled and found the culprit,  <a href="http://www.mountaingoatsoftware.com/system/hidden_asset/file/15/aep_sample.pdf">Mr Mike Cohn</a>  in his book Agile Estimating and Planning. It&rsquo;s actually not a bad sequence to choose, since the scale is increasing constantly, so by picking up numbers in this sequence, you can quite accurately describe estimation. If you have defined complexities of 1,2,3,16,17 corresponding to 5 different use cases then obviously 16 or 17 denotes the same complexity, and it would be surprising that you can really distinguish both. You need an ever increasing scale. But a power of 2 scale might not be precise enough (steps are growing too fast).</p>
@@ -113,7 +142,7 @@
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-use-a-bug-management-software-really/">How to Build Good Software? Use a bug management software, really.</a>
+    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-use-a-bug-management-software-really./">How to Build Good Software? Use a bug management software, really.</a>
   </h1>
   <time datetime="2007-04-13T10:56:00Z" class="post-date">Fri, Apr 13, 2007</time>
   <p>This will seem obvious, unfortunately, when people are involved, nothing is that obvious. It&rsquo;s not because you setup a bug/feature management software that people will use it. You have to force people to go through the bug management software each time they want something fixed. If you don&rsquo;t do that some people will keep sending incomplete mails, or worse call you to get something fixed, that will be forgotten in a week. It is also very useful to avoid receiving 10x the same request from the same person.</p>
@@ -141,31 +170,10 @@
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-lay-off-quickly/">How to Build Good Software? Lay Off Quickly.</a>
+    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-lay-off-quickly./">How to Build Good Software? Lay Off Quickly.</a>
   </h1>
   <time datetime="2007-04-10T11:12:00Z" class="post-date">Tue, Apr 10, 2007</time>
   <p>If you have to lay off in your job, do it quickly. I don&rsquo;t understand companies that want to keep someone as long as legally possible when this someone wants to leave. First the employee won&rsquo;t be as motivated, but more importantly, you will continue to train that person to your company&rsquo;s software and ways of work. This would be much better used on another person, that will stay in the company. Time for layoffs should exclusively be used for knowledge transfer.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/how-to-build-good-software-talk-to-people-especially-the-ones-you-dont-know-well/">How to Build Good Software? Talk to people, especially the ones you don&#39;t know well.</a>
-  </h1>
-  <time datetime="2007-04-06T17:02:00Z" class="post-date">Fri, Apr 6, 2007</time>
-  <p>Someone modified a simple launch script on a integration machine. This pissed off the author of the script. Why?</p>
-<p>Just because the guy who modified the script never worked before with the author of the script. If only the author had been notified verbally or by mail of the modification, he would have been happy. Furthermore this would increase the quality of the change since the new guy might have made a change that has other impacts, that the author will best evaluate quickly.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/find-grep-and-vi-keys-small-memo/">Find Grep And Vi Keys Small Memo</a>
-  </h1>
-  <time datetime="2007-04-05T18:48:00Z" class="post-date">Thu, Apr 5, 2007</time>
-   
-
-I tend to forget this now and then to grep on a specific list of files:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; font-weight: bold;" class="gmail_quote"> find . -name "*.xml" | xargs grep "iwantthis"</blockquote><div><br />And I also tend to forget the <a href="http://www.mathlab.cornell.edu/local_help/vi.html">vi keys</a>. Small extract:<br /><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>h</b> - move left one character<br /><b>j</b> - move down one line<br /><b>k</b> - move up<br /><b>l</b> - move right<br /><b>$</b> - go to the end of the current line<br /><b>0</b> - go to the beginning of the current line<br /><b>G</b> - go to the last line in the file<br /><b>15G</b> - go to line 15<br /><b>control-F</b> - forward one page<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b>control-B</b> - backwards one page </blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><div><b>n (N)</b> - next (previous) in search mode (/ or ? forward or backward)  </div></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"></span>s/OLD/NEW/g</b> - replace on current line<br /></blockquote><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"><b><span style="font-weight: bold;"><span style="font-weight: bold;"></span> %</span>s/OLD/NEW/g</b> - replace every occurence in file (or use 0,$ instead of %)<br /></blockquote><br /><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> <b>x</b> - delete one character</blockquote><br /><div><span style="font-weight: bold;">Update </span>I have to add the standard replace in multiple files via sed command. Here is an example of how to move your eclipse workspace to another directory:<br /><blockquote></blockquote><ul><li>find . -name "*.xml" | xargs sed -i "s,c:[/\\]java[/\\]eclipse,d:/eclipse302,gi"</li></ul> </div></div>
-
-
 
   
 </article>

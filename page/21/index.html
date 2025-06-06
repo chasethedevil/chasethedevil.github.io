@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,18 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-seasoned-volatility-swap/">A Seasoned Volatility Swap</a>
+  </h1>
+  <time datetime="2013-03-14T19:55:00Z" class="post-date">Thu, Mar 14, 2013</time>
+   
+
+This is very much what's in the Carr-Lee paper "Robust Replication of Volatility Derivatives", but it wasn't so easy to obtain in practice:<br /><ul><li>The formulas as written in the paper are not usable as is: they can be simplified (not too difficult, but intimidating at first)</li><li>The numerical integration is not trivial: a simple Gauss-Laguerre is not precise enough (maybe if I had an implementation with more points), a Gauss-Kronrod is not either (maybe if we split it in different regions). Funnily a simple adaptive Simpson works ok (but my boundaries are very basic: 1e-5 to 1e5).</li></ul><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s1600/Screenshot+from+2013-03-14+19:33:04.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="254" src="http://4.bp.blogspot.com/-UbYc6dfh8Yw/UUIc6V2Mg8I/AAAAAAAAGSI/25Rdvjzk-xk/s320/Screenshot+from+2013-03-14+19:33:04.png" width="320" /></a></div>
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-volatility-swap-and-a-straddle/">A Volatility Swap and a Straddle</a>
   </h1>
   <time datetime="2013-03-12T21:36:00Z" class="post-date">Tue, Mar 12, 2013</time>
@@ -107,7 +119,7 @@ Those are very close payoffs!</p>
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/from-opensuse-to-ubuntu-13/">From OpenSuse to Ubuntu 13.04</a>
+    <a href="https://chasethedevil.github.io/post/from-opensuse-to-ubuntu-13.04/">From OpenSuse to Ubuntu 13.04</a>
   </h1>
   <time datetime="2013-02-01T18:22:00Z" class="post-date">Fri, Feb 1, 2013</time>
   <p>In my Linux quest, I changed distribution again on my home desktop, from OpenSuse 11.1 with KDE to Ubuntu 13.04 (not yet released - so alpha) with Unity. Why?</p>
@@ -193,18 +205,6 @@ $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \lef
    
 
 I am comparing various finite difference schemes on simple problems and am currently stumbling upon a strange discontinuity at the boundary for some of the schemes (Crank-Nicolson, Rannacher, and TR-BDF2) when I plot an American Put Option Gamma using a log grid. It actually is more pronounced with some values of the strike, not all. The amplitude oscillates with the strike. And it does not happen on a European Put, so it's not a boundary approximation error in the code. It might well be due to the nature of the scheme as schemes based on implicit Euler work (maybe monotonicity preservation is important). This appears on this graph around S=350.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s1600/gamma_american_boundary.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="160" src="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s640/gamma_american_boundary.png" width="640" /></a></div><br /><b>Update December 13, 2012</b>: after a close look at what was happening. It was after all a boundary issue. It's more visible on the American because the Gamma is more spread out. But I reproduced it on a European as well.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/scala-is-mad/">Scala is Mad</a>
-  </h1>
-  <time datetime="2012-12-12T16:07:00Z" class="post-date">Wed, Dec 12, 2012</time>
-   
-
-I spent quick a bit of time to figure out why something that is usually simple to do in Java did not work in Scala: Arrays and ArrayLists with generics.<br /><br />For some technical reason (type erasure at the JVM level), Array sometimes need a parameter with a ClassManifest !?! a generic type like [T :&lt; Point : ClassManifest] need to be declared instead of simply [T :&lt; Point].<br /><br />And then the quickSort method somehow does not work if invoked on a generic... like quickSort(points) where points: Array[T]. I could not figure out yet how to do this one, I just casted to points.asInstanceOf[Array[Point]], quite ugly.<br /><br />In contrast I did not even have to think much to write the Java equivalent. Generics in Scala, while having a nice syntax, are just crazy. This is something that goes beyond generics. Some of the Scala library and syntax is nice, but overall, the IDE integration is still very buggy, and productivity is not higher.<br /><br /><b>Update Dec 12 2012</b>: here is the actual code (this is kept close to the Java equivalent on purpose):<br /><pre>object Point {<br />  def sortAndRemoveIdenticalPoints[T <: Point : ClassManifest](points : Array[T]) : Array[T] = {<br />      Sorting.quickSort(points.asInstanceOf[Array[Point]])<br />      val l = new ArrayBuffer[T](points.length)<br />      var previous = points(0)<br />      l += points(0)<br />      for (i <- 1 until points.length) {<br />        if(math.abs(points(i).value - previous.value)< Epsilon.MACHINE_EPSILON_SQRT) {<br />          l += points(i)<br />        }<br />      }<br />      return l.toArray<br />    }<br />    return points<br />  }<br />}<br /><br />class Point(val value: Double, val isMiddle: Boolean) extends Ordered[Point] {<br />  def compare(that: Point): Int = {<br />    return math.signum(this.value - that.value).toInt<br />  }<br />}<br /><!-----><!--:--></-></:></pre>In Java one can just use Arrays.sort(points) if points is a T[]. And the method can work with a subclass of Point. 
 
 
 

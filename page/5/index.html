@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,16 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/intel-failures-and-the-future/">Intel failure and the future of computing</a>
+  </h1>
+  <time datetime="2020-07-24T20:56:42&#43;0100" class="post-date">Fri, Jul 24, 2020</time>
+  <p>What has been happening to the INTC stock today may be revealing of the future. The stock dropped more than 16%, mainly because they announced that their 7nm process does not work (well) and they may rely on an external foundry for their processors. Initially, in 2015, they thought they would have 8nm process by 2017, and 7nm by 2018. They are more than 3 years late.</p>
+<p>Intel used to be a leader in the manufacturing process for microprocessor. While the company has its share of internal problems, it may also be that we are starting to hit the barrier, where it becomes very difficult to improve on the existing. The end of Moore’s law has been announced many times, it was already a subject 20 years ago. Today, it may be real, if there is only a single company capable of manufacturing processor using a 5nm process (TSMC).</p>
+<p>It will be interesting to see what this means for software in general. I suppose clever optimizations and good parallelization may start playing a much more important role. Perhaps we will see also more enthusiasm towards specialized processors, somewhat similar to GPUs and neural network processors.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/mar9-cac40-crash/">March 9, 2020 crash - where will CAC40 go?</a>
   </h1>
@@ -435,25 +445,6 @@ the L2 norm of the objective against the L2 norm of the penalty term (without th
 Furthermore, from a risk perspective, it will also be challenging to deal with changes in the penalty factor.</p>
 <p>The error of model versus market implied volatilies is similar to the nonic collocation (not better) even though the shape is less smooth and, a priori, less constrained as,
 on this example, the Andreasen-Huge method has 75 free-parameters while the nonic collocation has 9.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/senior-developers-dont-know-oo-anymore/">Senior Developers Don&#39;t Know OO Anymore</a>
-  </h1>
-  <time datetime="2018-03-08T20:56:42&#43;0100" class="post-date">Thu, Mar 8, 2018</time>
-  <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
-<p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span><span style="color:#06287e">isHappy</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#902000">void</span><span style="color:#bbb"> </span><span style="color:#06287e">setHappy</span>(<span style="color:#902000">boolean</span><span style="color:#bbb"> </span>isHappy)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}</span></span></code></pre></div>
-<p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span><span style="color:#06287e">isHappy</span>(Dog<span style="color:#bbb"> </span>dog)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#902000">void</span><span style="color:#bbb"> </span><span style="color:#06287e">setHappy</span>(Dog<span style="color:#bbb"> </span>dog,<span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span>isHappy)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}</span></span></code></pre></div>
-<p>This is really breaking OO and moving back to procedural programming.</p>
-<p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
-<p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
 
   
 </article>

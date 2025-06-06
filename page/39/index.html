@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +73,99 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/rmi-nightmares---non-interoperability/">RMI Nightmares - Non Interoperability</a>
+  </h1>
+  <time datetime="2006-01-31T18:39:00Z" class="post-date">Tue, Jan 31, 2006</time>
+   
+
+These days we tried to make Websphere and <a href="http://jonas.objectweb.org">Jonas</a> interoperate. Some EJBs are deployed in Jonas and we just try to call them from Websphere. The most natural way is to use RMI (with JRMP) for that. Jonas uses  JDK1.4.2 (conforms to J2EE 1.4) and Websphere IBM JVM 1.3.1 (conforms to J2EE 1.3). Because of RMI serialization, an EJB from Jonas will not work on Websphere, because this EJB has references to J2EE 1.4 classes which are different from J2EE  1.3. The exact root cause is not exactly clear to me, it probably has to do with the Naming Factory and the EJB Stub, but we tried every possible thing here without success.<br /><span style="font-weight: bold;">Update: </span>JRMP worked between JBoss 3.X on JDK 1.4 and Websphere 5.X (IBM JDK 1.3) using JBoss NamingFactory. So RMI interoperation seems quite unpredictable. One thing is that you have to pay attention to the naming factory you use. If it is a special library like in JBoss case, make sure it is compatible with your JDK.<br /><br />One solution is to use RMI-IIOP, as it does not rely on serialization. It almost works. In our case we use Websphere Portal that needs to have security enabled. You might ask what security has to do with all that. Well, enabling security on websphere means that CORBA exchange will also be secured (using CSIv2). Tuning Jonas to understand what websphere asks is something we did not manage to do (and we don't know if it is possible at all).<br /><span style="font-weight: bold;">Update: </span>We did manage to make it work by disabling Jonas CSIv2 support.<br /><br />So there we are using Axis to do the communication!<br /><span style="font-weight: bold;">Update: </span>Axis is not needed anymore  as RMI-IIOP works as advertised.<br /><br />There is an interesting <a href="http://www.lifl.fr/%7Emerle/benchmarking.pdf">benchmark of Axis vs JRMP vs RMI-IIOP (pdf)</a>. Axis is more than 10x slower than pure JRMP. Application servers use of JRMP seems to matter a lot, JBoss looks bad.
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/what-is-clustering-about--an-answer-to-spring-is-not-designed-for-scalability/">What Is Clustering About – An answer to Spring is not designed for scalability</a>
+  </h1>
+  <time datetime="2006-01-16T16:57:00Z" class="post-date">Mon, Jan 16, 2006</time>
+  <p>I wanted to reply to <a href="http://www.diegoparrilla.com/2006/01/spring-is-not-designed-for-scalability.html">Diego Parilla post about scalability</a>, but my reply ended up being too long not to post it over here. I don&rsquo;t know if I am the only one here but I don&rsquo;t fully understand his post and arguments.</p>
+<p>Clustering the web server and clustering the model are just two parts of clustering, not exclusive.</p>
+<p>In a LAMP application, clustering the model is traditionally done by clustering the DB (MySQL) which is a no brainer. Clustering the web server does not always implies sharing the &ldquo;HTTP session&rdquo;. For example you can limit yourself to use cookies. For many web apps this works well.</p>
+<p>For more stateful web apps, there are strategies to avoid clustering the session, you can make one client attack one server only for his whole session duration. Another strategy is to use DB where you would use a session. This is actually reported to work quite well. If my memory is right, this is how Friendster rewrote its app (used to be Java and session based, moved to PHP+DB).</p>
+<p>EJBs are not about clustering the model more than Spring, they are about clustering the business logic. And I don&rsquo;t see how EJB3 is more scalable than Hibernate.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/my-dream-job/">My Dream Job</a>
+  </h1>
+  <time datetime="2006-01-12T11:42:00Z" class="post-date">Thu, Jan 12, 2006</time>
+   
+
+<img src="file:///C:/Documents%20and%20Settings/flh/Mes%20documents/MSwanson%20-%20Leaf%2002.png" alt=""><br> In my dream job, I would have <span style="font-weight: bold;">freedom </span>to play with and build software based on new ideas I have.<br>  In my dream job, I would work with <span style="font-weight: bold;">creative </span>people, luminaries.<br>  In my dream job, I would have a good enough salary.<br>  In my dream job, I would not have to worry about the company <span style="font-weight: bold;">stability</span>.<br>  In my dream job, I would have freedom in my work schedule.<br>  <br>  Get <span style="font-weight: bold;">paid </span>for doing what you really want (i.e. your ideas) is possible. But without worrying about the next 6 months, I have not seen that. 
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ogg-better-than-mpc-and-mp3---aac-crap/">Ogg better than MPC and MP3 - AAC crap</a>
+  </h1>
+  <time datetime="2006-01-04T11:47:00Z" class="post-date">Wed, Jan 4, 2006</time>
+  <p>The <a href="http://www.hydrogenaudio.org/forums/index.php?showtopic=36465">latest well done (e.g. blind) listening test</a> comparing Ogg, MPC, MP3, AAC at about 180kbps shows that Ogg is superior to all other compressing formats. It&rsquo;s not that easy to find relevant tests. Many people claim to be able to notice huge differences between CD and MP3 and yet, but confronted to a blind listening test, they are very surprised how difficult it actually is. Hydrogenaudio has a good community of audiophiles.</p>
+<p>Unfortunately Ogg is not supported officially in iTunes and not supported in the most popular hardware (iPod). It&rsquo;s been a while now Ogg is out, and even if it is a superior format, unless Apple embraces it, I don&rsquo;t see it succeeding. I wish Apple would make a tiny effort.</p>
+<p>In Java it is possible to play ogg files using <a href="http://www.jcraft.com/jorbis/">Jorbis</a> but I did not find any useable Java player compared to Windows foobar2000 or Linux XMMS or Apple iTunes.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/whats-your-favorite-design-pattern/">What&#39;s Your Favorite Design Pattern</a>
+  </h1>
+  <time datetime="2005-12-27T12:18:00Z" class="post-date">Tue, Dec 27, 2005</time>
+  <p>Once in a job interview, someone asked me</p>
+<blockquote>
+<p>What&rsquo;s your favorite design pattern?</p></blockquote>
+<p>I was first surprised at the question. Usually a design pattern is about solving a problem not about a personal preference. I wondered if it was a trick question of some sorts. I was hesitating with my answer and asked more about the meaning of the question. I just had to really give the pattern I liked the most! I really should not have but I ended up pleasing my interviewer and said &ldquo;the decorator pattern&rdquo;. At least its name is somehow related to arts.</p>
+<p>Then he said his favorite one was &ldquo;the template pattern&rdquo;. He was really into it because he could use it anywhere. For him it was like the best thing since sliced bread.</p>
+<p>Sheesh! just an abstract class. What kind of pattern is that!?! Design Patterns discussions can be really dull.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/professional-portal-development-book-review/">Professional Portal Development Book Review</a>
+  </h1>
+  <time datetime="2005-12-27T12:08:00Z" class="post-date">Tue, Dec 27, 2005</time>
+  <p>I just finished reading <em>Professional Portal Development With Open Source Tools</em> (Wiley).</p>
+<p><strong>The Good:</strong></p>
+<p>I enjoyed Chapter 1, it gives a good presentation of Portlets for someone who does not know much about it. It is a chapter one can use as a reference to verify some specific details of how Portlets are working. It is a bit similar to JSR 168 specifications, but I found it more detailed and well written.</p>
+<p>Beside Chapter 1, there are here and there useful information:</p>
+<ul>
+<li>A presentation of Model 1 and 2(X) Architectures in relation with Portals. It could have been more detailed.</li>
+<li>Example use of some Design Patterns in a Portal although the example use is really just one sentence and some Patterns uses are too obvious and not related to Portal (Singleton, Template Method).</li>
+<li>Web Services for Remote Portlets</li>
+</ul>
+<p><strong>The Bad And Ugly:</strong></p>
+<p>I was disappointed by the remaining of the book. While it is good to mention Lucene, Apache James, OJB, Jakarta Slide, as those can be useful in Portal development, the book does not provide any useful information on those products. It would be difficult to put all that in just one book. The author merely gives kind of hello world examples for each technology, which I find quite useless.</p>
+<p>A quick presentation of software methodologies is again quite useless, and not what we expect from that kind of book. If I want to learn about software methodologies, I buy a book about it, I don&rsquo;t buy a Portal Development book.</p>
+<p>The rest of the book really looks like a list of disconnected subjects, the important ones are not given more attention to the non-relevant ones. Portal Navigation is a problem you will encounter in any Portal development, but you won&rsquo;t find much in the book except a short example. The author also writes with way too many words for the content about CVS, Subversion, JUnit, AntHill, Scarab. And then he goes on about Java Web Start, woohoo! Yes, it almost reads as well as a resume full of keywords.</p>
+<p><strong>Summary:</strong></p>
+<p>Don&rsquo;t buy this book.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ibm-websphere-portal-strategy/">IBM Websphere Portal Strategy</a>
+  </h1>
+  <time datetime="2005-12-07T17:48:00Z" class="post-date">Wed, Dec 7, 2005</time>
+  <p>I digged a bit deeper in a current project where they use IBM Websphere Portal Server (WPS) with IBM Web Content Management (WCM). I found out that both products collide and disintegrate.</p>
+<p>WCM is like a regular content management system, quite flexible and performant on its own. It has a nice way to separate layout concern from content concern. It has a flexible cache. It has a user repository to set different permissions. Its architecture is even so well done (very modular) that you can tailor it to your needs to do things a content management system is not supposed to do. It could do most of what you would do with a Portal system. And that&rsquo;s the problem.</p>
+<p>WPS is a Porlet server, now compatible with JSR 168. You can again do the layout of your portlets, you have an administrative interface to handle them and one to handle user permissions. There is a caching system although it&rsquo;s not very clear how that works. Standard administration Portlets seem awfully slow to use any cache. To be integrate WCM content in the Portal Server, they ship a WCM Portlet. While JSR 168 API is recommended by IBM, the WCM Portlet is not a JSR 168 one.</p>
+<p>So you have 2 products where you can layout your pages, and have dynamic behaviour in them, locally as components, easily manageable. One can be embedded in the other, but it does not make much sense, because you would then just use a tiny part of its possibilities, and its flexibility will be more a burden (extra abstraction layer) than anything. The integration of the 2 products is very superficial. Although recently they can share a common user repository, the WCM portlet does not do any caching of WCM content, linking between content and portlets is a very cumbersome task. IBM provides tips to build a framework that does just that. All that for not using most of the WCM possibilities and always having difficulties in defining their roles and using them collaboratively.</p>
+<p>Now, if you look at how JBoss Portal works, and what features they focused on, you will see a well designed solution whose aim is to build pragmatically a Portal using Portlets. They have a very simple content management system used to administrate HTML snippets. Content is put inside the Portal page using CMS Portlets, the layout is the one you specified in the Portal page. They provide automatic caching of CMS content and easy to use links. Integration with their CMS is already using JSR 170 standard. You can plugin other CMS systems easily.<!-- raw HTML omitted --> <!-- raw HTML omitted --> IBM strategy with their WPS+CMS does not look very good, and their version is currently 5.1, soon 6.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/portlets-in-an-ajax-world/">Portlets in an AJAX World</a>
   </h1>
   <time datetime="2005-11-29T16:29:00Z" class="post-date">Tue, Nov 29, 2005</time>
@@ -110,128 +203,6 @@ A friend asked me for a list, here is it. I found those books the most interesti
 <li>XBox 360 has almost arrived. While not a direct competitor, it can be used as media center, it is cheap and powerful. Unfortunately it&rsquo;s not customizable enough.</li>
 <li>Powerbooks got a recent update. They are advertised heavily on apple websites, while the mac mini had just a silent and minor upgrade and is not advertised anymore.</li>
 </ul>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/7-years-later-still-ejbs/">7 Years Later: Still EJBs</a>
-  </h1>
-  <time datetime="2005-11-07T16:29:00Z" class="post-date">Mon, Nov 7, 2005</time>
-   
-
-In 1998, a student of my school had a project with Sun about EJBs. This was the beginning of EJBs, they were not public, and there was no J2EE. At that time he found it utterly complicated, and had difficulties to understand why they made it so complicated.<br /><br />In 2000, I worked for a company who had built in-house most components of a today J2EE application server. For example, they had their own unified messaging system, on the JSP side, they were already using custom tags, etc.. Their problem is that they took lots of time to develop in-house, all what later became standard, and almost freely available.<br /><br />Today, 7 years later, the big talk, new Java products, be it Spring, or JBoss Seam, are still all about the same ideas as in the first J2EE. Spring has the freedom to include whatever technology, but in the end, their scope closely matches J2EE scope. Service Oriented Architecture (SOA), the current buzzword, will come out relatively naturally with J2EE, session EJBs being natural candidate to expose functionalities to the outer world. JBoss (or Geronimo) architecture is fully SOA: a small kernel managing services, that are exposed for other to use.<br /><br />To learn about EJBs, I still find <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/059600530X&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Enterprise JavaBeans</a> by Richard Monson-Haefel, the best book. The chapter (in the 2nd Edition of the book, not in the 4th unfortunately) where he rolls his own distributed objects system is for me a testimony on how well he wants you to understand what's behind EJBs. And if you want to better understand what's behind RMI, <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/1565922069&link_code=as2&amp;amp;camp=1789&tag=michelin-20&amp;creative=9325">Java Distributed Computing (O'Reilly)</a><img src="http://www.assoc-amazon.com/e/ir?t=michelin-20&amp;l=as2&amp;o=1&amp;a=1565922069" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /> has a chapter where the author rolls his own RMI.<br /><br />To conclude, Sun was really clever in defining J2EE scope and branding several Java technologies as J2EE (despite the awful version naming). While the ideas were very good, the developer's life was forgotten. It was too much a pain in the a** and not flexible enough (especially the ORM side). JBoss gets it right, what people need is a way to use pieces of J2EE, without imposing too much unnecessary hurdle on development.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/job-hunting-interview-madness/">Job Hunting: Interview Madness</a>
-  </h1>
-  <time datetime="2005-11-04T10:40:00Z" class="post-date">Fri, Nov 4, 2005</time>
-  <p>I have been doing interviews those past weeks. Today I had to present my resume for the N time where N is big. It is very boring. In France, it is common to have 5 interviews for a small company (that says a bit about how people trust each other and makes me envy Germany where the practice is to select very strictly on the resume and be more relax about interviews). But all those interviews give a valuable insight on the current market, and on some companies.</p>
-<p><strong>0. The Monster Rage</strong></p>
-<p>The first 2 days after I put my resume on Monster France, I got more than 15 calls from consulting companies. The following day, I removed my resume from Monster</p>
-<p><strong>1. Interviewing People</strong></p>
-<p>When I started working, I was very bad at interviews, I had a good academic record and thought companies ringing me would have been interested automatically. I supposed most people were dedicated to their work and did not bother doing a show, I was passive. So I often failed the interview process at the HR level.</p>
-<p>Now I am doing the show everybody expects and it always works. Only one person asked me an unusual, clever question: &ldquo;Do you write?&rdquo; or</p>
-<p><em><strong>&ldquo;Do you like to write?&rdquo;</strong></em></p>
-<p>I am often more stressed by technical interviews as I find technical interviews can more easily be very badly done. Even specialists don&rsquo;t agree on a good method, cf the artima article on <a href="http://www.artima.com/wbc/interprogP.html">How to Interview a Programmer</a>. If someone asks you about some intricate details he knows lots about and you don&rsquo;t, or you used to but you don&rsquo;t remember, then that person can have a bad impression of you. In Java, this can be the supposedly trivial ,&ldquo;what classes do you have to implement for an EJB ?&rdquo;. I have done many EJBs in the past, but that was a long time enough that I need to look up somewhere to find the exact and precise answer. It is much better to ask someone about what he recently did, or about someone&rsquo;s view on general subjects, especially subjects he knows about.</p>
-<p><strong>2. Interviewing Companies</strong></p>
-<p>As a junior in the business world, I had a very angelic view of companies. I had been lucky enough to do internships around very good people. But nowadays, I am starting to find difficult to pick a good company to work for. I found one question especially useful to find out more about your future mates:</p>
-<p><em><strong>&ldquo;What do you like in this company?</strong></em></p>
-<p>and try to get to know the answer of <em>&ldquo;Why did you go there?&rdquo;</em></p>
-<p><strong>3. The $$$ in Current Market</strong></p>
-<p>There seem to be huge disparities in salaries in France. I found consulting companies were very reticent to offer a market salary. More regular companies can either offer a much lower salary than the market one, a market salary, or a much higher one, for the same job!</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/does-eclipse-rot-the-brain/">Does Eclipse Rot The Brain?</a>
-  </h1>
-  <time datetime="2005-10-27T17:42:00Z" class="post-date">Thu, Oct 27, 2005</time>
-  <p>Slashdot presented a really insightful article on Visual Studio by Charles Petzold called <a href="http://charlespetzold.com/etc/DoesVisualStudioRotTheMind.html">Does Visual Studio Rot the Mind</a>. Interestingly it seems that Eclipse does things better than the future Visual Studio.</p>
-<ul>
-<li>Autocomplete in Eclipse is really good and does not suffer of the bottom-up problem M. Petzold mentioned, nor from the forced CTRL-Z.</li>
-<li>There is no Form designer, and in Java it has been the practice to lay out forms programmatically. The Java Layouts have always been scalable, and Java programs very rarely rely on pixels.</li>
-<li>There is no unnecessary import statements.</li>
-</ul>
-<p>His positive feedback on XAML is interesting, especially since he thinks this allows for a better automatic UI.</p>
-<p>More importantly, he makes a good point on the exponential increase of method/classes/properties names to use for a regular programmer. This raises a serious question about how viable are the current tools.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/orkut-statistics-and-blog-evolution/">Orkut Statistics and Blog Evolution</a>
-  </h1>
-  <time datetime="2005-10-18T13:03:00Z" class="post-date">Tue, Oct 18, 2005</time>
-  <p>I was just having a look at orkut again. As in my last look in the past year, there is not much new or interesting. The technical forums are mostly uninteresting and it almost looks like nothing is going on. Take a look at the orkut java forums, in 1 year, very few messages are good.</p>
-<p>Compare that to <a href="http://javablogs.com">javablogs.com</a> blogs aggregation, every week there are many interesting posts. The blog model is good because it is targeted at people who want to write. When you blog, you build a history. Forums don&rsquo;t let you do that. You could have a social model on top of blogs, and I am sure this will be one of their next evolution.</p>
-<p>I found one good page, the <a href="http://www.orkut.com/MembersAll.aspx">orkut statistics</a>:</p>
-<ul>
-<li>Brasil is number one country with almost <em>75%</em> of the people from there. I wonder why they find it that much better than alternatives. It&rsquo;s strange how something can be successful somewhere and not somewhere else.</li>
-<li>US represent only <em>7.8%</em>.</li>
-<li>Iran and Pakistan represent <em>6%</em>, that is almost the equivalent of the US. I was very surprised by that.</li>
-<li>Europe does not exist there.</li>
-</ul>
-<p>More than 50% of the orkutians are under 25, which probably explains why not much is going on there.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/spring-books-roundup-updated/">Spring Books Roundup Updated</a>
-  </h1>
-  <time datetime="2005-10-10T16:27:00Z" class="post-date">Mon, Oct 10, 2005</time>
-  <p>I am completing my <a href="/post/spring-books-roundup">Spring Books Roundup</a> with 2 new books:</p>
-<ul>
-<li><em>Pro Spring</em>, by Apress: a lengthy book, with some unnecessary information, but good overall. I did not like the Part 1, there is not much content in it. Fortunately, Part 2 is much better, dependency injection is very well described, almost on par, with the Fowler article of reference. Other Spring areas are well covered, in a similar manner as in Wrox book, except Java Server Faces, absent from the book, and nothing on Swing as well</li>
-<li><em>Spring Reference Documentation</em>, from the <a href="http://www.springframework.org/documentation">springframework.org</a> website: I should have started with this one, it is of very good quality, and more up-to-date. There is notably a very good chapter on &ldquo;Source Level Metadata Support&rdquo; even if I don&rsquo;t find particularly compelling that they chose yet another abstraction behind Java 5 annotations, partly to support older JDKs. Another plus is a chapter on JMX support, this was lacking in other books.</li>
-</ul>
-<p>Interestingly most other books are very similar to the reference documentation, in their presentation and content. The reference documentation is extremely well written. Each time the author carefully explains what are the advantages of the Spring solution, or what does a particular feature solve. Only dependency injection and swing are not treated properly.</p>
-<p>To conclude, to best learn Spring I would advise:</p>
-<ul>
-<li>Read <a href="http://www.martinfowler.com/articles/injection.html">Fowler article</a> about dependency injection.</li>
-<li>Read O&rsquo;Reilly&rsquo;s <a href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;camp=1789&amp;tag=michelin-20&amp;creative=9325&amp;path=http://www.amazon.com/gp/product/0596009100?v=glance%26n=283155%26n=507846%26s=books%26v=glance">A Developer Notebook</a>. It is the most appropriate book, because the presentation is a bit different, focusing on quickly understanding Spring and using it in your project, and it is the only one mentioning Swing Spring features.</li>
-<li>Read the reference manual to find out about the details you need for a specific feature.</li>
-</ul>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/spring-books-roundup/">Spring Books Roundup</a>
-  </h1>
-  <time datetime="2005-10-10T11:15:00Z" class="post-date">Mon, Oct 10, 2005</time>
-  <p>Spring is hip these days, so I decided to learn a bit more about it. I had used Avalon a while ago, I was attracted by its design by component and the way it seemed to lay out a proper infrastructure to build a server application. In the end, I was a bit disappointed, it required a bit too much glue code for my taste and did not provide that much in exchange. I don&rsquo;t remember if, at that time, it was advertised as IoC (Inversion Of Control) container. This experience is one of the reasons why I did not jump on the Spring ship.</p>
-<p>I have read 3 books, here is what I thought of them, briefly:</p>
-<ul>
-<li><em>Spring: A Developer&rsquo;s Notebook</em>, by O&rsquo;Reilly: I enjoyed reading that book, because it is well written and has a good structure. It explains what is dependency injection by doing it without Spring, with Spring. But for a more complete understanding, I would recommend  <a href="http://www.martinfowler.com/articles/injection.html">Fowler article</a>. There is an interesting chapter on Swing with Spring. Minor drawbacks is that it does not talk about Spring Timers and has very little on Remoting. But I would recommend that book.</li>
-<li><em>Spring In Action, by Manning</em>: I was disappointed by that one, because there is not much more information than in O&rsquo;Reilly, it is a bit less practical to use. While it is a bit more detailed than O&rsquo;Reilly, I did not find the extra information very useful in general. Remoting is better covered here than in O&rsquo;Reilly, but there is nothing on Swing.</li>
-<li><em>Professional Java Development With The Sring Framework</em>, by Wrox: I liked that one better than Manning, but again information inside is very similar. I find the explanations more complete. Inversion Of Control is well presented (it is even comparing constructor injection with method injection). It gives examples of alternatives to XML configuration. Remoting is covered in greater details than Manning. I would recommend it over Manning anytime, and if it included a Swing chapter, I would recommend it over O&rsquo;Reilly as well.</li>
-</ul>
-<p>You can wonder a bit why there are 3 books on Spring, that similar. I believe there is space for other intelligent presentations of Spring. Subjects are often treated superficially. For example, look at the <a href="http://www.martinfowler.com/articles/injection.html">Fowler article</a> versus the best chapter about IoC, the one from Wrox, and you&rsquo;ll see how much more detailed it could have been. I find it a bit shocking since IoC is the basis of Spring. It would have been good to see a book explaining why Spring chose that particular design over another, for the main features, and presenting alternatives better. I would also have welcomed a book explaining the use of maybe just a few Spring aspects, but in the frame of a big, commercial application. For example after reading those books, it is not immediately clear to me what are Spring benefits when using Swing support versus other solutions. Another critic is that all those books were written around the same time, and are sometimes already obsolete. None of them describes Spring JDK 1.5 support  (for transactions or JMX or metadata). The official free Spring reference book seems better in many ways.</p>
-<p>Those books showed me Spring could be useful in some projects:</p>
-<ul>
-<li>if you want remoting</li>
-<li>if you want to promote clean code, then you can promote the &ldquo;Spring way&rdquo;. It is a good one.</li>
-<li>if you want to use JSF. Spring makes JSF easy and natural to use.</li>
-</ul>
-<p>On top of it you get AOP for easy debugging or profiling, which is always useful at some point.</p>
-<p>I am not convinced about Spring when it comes to:</p>
-<ul>
-<li>JDBC or database use: while Spring has a well done framework, Hibernate or iBatis have a very good API that makes Spring abstraction useless.</li>
-<li>MVC: it is does seem that much better than alternatives, nor much less intrusive (OK you can test it easily). Anyway I am not that big a fan of web MVC after having seen real world .NET projects without strict MVC well maintainable. I find the JSF backing beans at least as good and more flexible. Continuation frameworks are interesting too, but I am worried of their performance impact and scalability.</li>
-<li>Transactions: I just don&rsquo;t think manual transactions are that bad or ugly or less maintainable. But using Spring for them is not necessarily a bad idea either.</li>
-</ul>
-<p>To me, the main alternative to Spring, and a very good one, is <a href="http://www.jboss.com/">JBoss</a>. I will elaborate on that subject later in another post.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/interesting-plug-in-framework---dpml-transit/">Interesting Plug-In Framework - DPML Transit</a>
-  </h1>
-  <time datetime="2005-09-29T15:20:00Z" class="post-date">Thu, Sep 29, 2005</time>
-  <p>Today, I just found out about  <a href="http://dpml.net/transit/latest/overview.html">DPML Transit</a>, it is a small framework that helps you build plug-ins based software. It seems to work a bit with <a href="http://dpml.net/magic/latest/index.html">DPML Magic</a>, their build system based upon Ant. Both are quite interesting, since in big projects, you often end up with a packaging per component (which DPML Magic seems to make very simple) and a versioning of those components. DPML Transit allows then for an efficient way to look up a particular version of one component.</p>
-<p>I have not heard of DPML before, they seem to write useful software. Has anybody used those frameworks already?</p>
 
   
 </article>

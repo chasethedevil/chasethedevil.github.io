@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,14 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/julia-and-the-cumulative-normal-distribution/">Julia and the Cumulative Normal Distribution</a>
+  </h1>
+  <time datetime="2013-08-13T15:52:00Z" class="post-date">Tue, Aug 13, 2013</time>
+  <p>I just stumbled upon <!-- raw HTML omitted -->Julia<!-- raw HTML omitted -->, a new programming language aimed at numerical computation. It&rsquo;s quite new but it looks very interesting, with the promise of C like performance (thanks to LLVM compilation) with a much nicer syntax and parallelization features.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity, I looked at their cumulative normal distribution implementation. I found that the (complimentary) error function (directly related to the cumulative normal distribution) algorithm relies on an algorithm that can be found in the Faddeeva library. I had not heard of this algorithm or this library before, but the author, <!-- raw HTML omitted -->Steven G. Johnson<!-- raw HTML omitted -->, claims it is faster and as precise as Cody &amp; SLATEC implementations. As <!-- raw HTML omitted -->I previously had a look at those algorithms<!-- raw HTML omitted --> and was quite impressed by Cody&rsquo;s implementation.<!-- raw HTML omitted --><!-- raw HTML omitted -->The <!-- raw HTML omitted -->source of Faddeeva<!-- raw HTML omitted --> shows a big list (100) of Chebychev expansions for various ranges of a normalized error function. I slightly modified the Faddeva code to compute directly the cumulative normal distribution, avoiding some exp(-x<em>x)<em>exp(x</em>x) calls on the way.<!-- raw HTML omitted --><!-- raw HTML omitted -->Is it as accurate? I compared against a high precision implementation as in my previous test of cumulative normal distribution algorithms. And after replacing the exp(-x</em>x) with <!-- raw HTML omitted -->Cody&rsquo;s trick<!-- raw HTML omitted --> to compute it with higher accuracy, here is how it looks (referenced as &ldquo;Johnson&rdquo;).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->I also measured performance on various ranges, and found out that this Johnson algorithm is around 2x faster than Cody (in Scala) and 30% faster than my optimization of Cody (using a table of exponentials for Cody&rsquo;s trick).<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/the-cos-method-for-heston/">The COS method for Heston</a>
   </h1>
@@ -211,27 +219,6 @@ $$b \frac{\Delta t}{(\Delta x)^2} \geq \frac{1}{6}$$</p>
 </figure>
 
 The advantages of such a scheme are then not clear compared to a simpler explicit scheme (eventually predictor corrector), that will have a similar constraint on the ratio \( \frac{\Delta t}{(\Delta x)^2} \).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/simple-can-scala-do-this-questions/">Simple &#39;Can Scala Do This?&#39; Questions</a>
-  </h1>
-  <time datetime="2013-06-11T00:28:00Z" class="post-date">Tue, Jun 11, 2013</time>
-  <p>Today, a friend asked me if Scala could pass primitives (such as Double) by reference. It can be useful sometimes instead of creating a full blown object. In Java there is commons lang MutableDouble. It could be interesting if there was some optimized way to do that.</p>
-<p>One answer could be: it&rsquo;s not functional programming oriented and therefore not too surprising this is not encouraged in Scala.</p>
-<p>Then he wondered if we could use it for C#.</p>
-<p>I know this used to be possible in Scala 1.0, I believe it&rsquo;s not anymore since 2.x. This was a cool feature, especially if they had managed to develop strong libraries around it. I think it was abandoned to focus on other things, because of lack of resources, but it&rsquo;s sad.</p>
-<p>Later today, I tried to use the nice syntax to return multiple values from a method:
-<code>var (a,b) = mymethod(1)</code></p>
-<p>I noticed you then could not do:
-<code>(a,b) = mymethod(2)</code></p>
-<p>So declaring a var seems pointless in this case.</p>
-<p>One way to achieve this is to:</p>
-<p><code>var tuple = mymethod(1)</code>
-<code>var a = tuple._1</code>
-<code>var b = tuple._2</code></p>
-<p>This does not look so nice.</p>
 
   
 </article>

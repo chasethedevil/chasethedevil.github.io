@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,59 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the_return_of_the_arbitrage/">The Return of the Arbitrage in the Perfect Volatility Surface</a>
+  </h1>
+  <time datetime="2023-03-29T23:56:42&#43;0100" class="post-date">Wed, Mar 29, 2023</time>
+  <p>In a Wilmott article from 2018 (Wilmott magazine no. 97) titled &ldquo;Arbitrage in the perfect volatility surface&rdquo;, Uwe Wystup points out some interesting issues on seemingly innocuous FX volatility surfaces:</p>
+<ul>
+<li>a cubic spline tends to produce artificial peaks/modes in the density.</li>
+<li>SVI not arbitrage-free even on seemingly trivial input.</li>
+</ul>
+<p>The examples provided are indeed great and the remarks very valid. There is more to it however:</p>
+<ul>
+<li>a cubic spline on strikes or log-moneyness does not produce the artificial peak.</li>
+<li>SVI with a=0 is arbitrage-free on this example.</li>
+</ul>
+<p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
+with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
+In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
+<figure><img src="/post/audnzd_delta_spline_dens.png"><figcaption>
+      <h4>Splines on AUD/NZD 1w options.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
+nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
+Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
+<figure><img src="/post/audnzd_delta_svi.png"><figcaption>
+      <h4>SVI on AUD/NZD 1w options.</h4>
+    </figcaption>
+</figure>
+</p>
+<figure><img src="/post/audnzd_delta_svi_denom.png"><figcaption>
+      <h4>SVI on AUD/NZD 1w options.</h4>
+    </figcaption>
+</figure>
+
+<p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
+<p><figure><img src="/post/wilmott_wystup_delta.png"><figcaption>
+      <h4>extract of the Wilmott article.</h4>
+    </figcaption>
+</figure>
+
+There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
+For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
+One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
+<figure><img src="/post/omg-oh-my-god.gif"><figcaption>
+      <h4>Ooohhhh!</h4>
+    </figcaption>
+</figure>
+
+<p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/princeton_fintech_conference/">Princeton Fintech and Quant conference of December 2022</a>
   </h1>
@@ -325,28 +378,6 @@ A recurring theme is plots presented without context/with the wrong context. Man
 <p>I found the second half to be in contradiction with the first half, although it is clearly not the author&rsquo;s intent: the second half focuses on how to address humans influence on the climate, and several times, suggests a strong influence of humans emissions on the climate, while the first half of the book was all about minimizing that aspect. This is especially true for carbon emissions, where it is suggested in the first half that additional emisssions will have a comparatively small impact.</p>
 <p>The overall message is relatively simple: reducing emissions won&rsquo;t help much as concentration will only increase in the coming decades (but then wouldn&rsquo;t it perhaps be so bad to think beyond the coming decades?). Also the scales of emission reductions necessary for a minimum increase (2 degrees)  is not realistic at all in the world we live in. Instead, we&rsquo;d be better off trying to adapt.</p>
 <p>Overall, the author denounce the issue of scientific integrity, which is too often absent or not strongly present enough. Having reviewed many papers, and published some in specialized journals, I can&rsquo;t say I am surprised. Peer review is important, but perhaps not good enough by itself, especially in the short run. Over decades, I think the system may autocorrect itself however.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/github-and-ssh/">Github and SSH setup</a>
-  </h1>
-  <time datetime="2021-08-16T07:56:42&#43;0100" class="post-date">Mon, Aug 16, 2021</time>
-  <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
-<p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
-<p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></span></span></code></pre></div>
-<p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
-</span></span><span style="display:flex;"><span>ssh-add ~/.ssh/id_customrepo_ed25519</span></span></code></pre></div>
-<p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Host github-as-customrepo
-</span></span><span style="display:flex;"><span>        HostName github.com
-</span></span><span style="display:flex;"><span>        User git
-</span></span><span style="display:flex;"><span>        IdentityFile ~/.ssh/id_customrepo_ed25519
-</span></span><span style="display:flex;"><span>        IdentitiesOnly yes</span></span></code></pre></div></p>
-<p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git URL via</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</span></span></code></pre></div>
 
   
 </article>

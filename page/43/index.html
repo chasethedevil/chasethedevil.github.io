@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.147.7">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chase the Devil</title>
+  <meta name="description" content="A personal, independent, technical blog" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://chasethedevil.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chase the Devil" />
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/java-development-without-ant/">Java development without Ant</a>
+  </h1>
+  <time datetime="2005-07-12T16:16:00Z" class="post-date">Tue, Jul 12, 2005</time>
+  <p>When <a href="http://jakarta.apache.org/ant">Ant</a> came out, I welcomed it. It was better than Makefiles for Java, it solved the path and classpath format difference between Windows and Linux, did not rely on shell programs. It did provide a platform independent way for building Java software. At that time, there was another alternative, <a href="http://jmk.sourceforge.net">JMK</a> which had a lisp like syntax, and solved the same problems as Ant. But Ant was backed by apache, and this were the times of XML everywhere.<!-- raw HTML omitted --> I got more and more fed up with ant scripts over the years. During a long time you had to resort to an XML trick just to include other ant file, you did not have conditionals, but more importantly, it is quite a pain to write long ant scripts in XML. XML is not that good to write logic with, XSLT did not become as big as it could have been partly for this reason.</p>
+<p>Recently, Java IDEs (<a href="http://www.eclipse.org">Eclipse</a>) have made Java coding really comfortable, but why is it that for each project, you need to have to setup your project classpath, build, and write an ant script that does the same? In many companies I have seen ant scripts taking minutes to do a build in order to test your latest modification. This is crazy when it took a few seconds to eclipse to compile it, and it&rsquo;s already compiled, so why not using that output for testing your development? Ant, despite its codebase and age, does not do much: it does not calculate dependencies, it leaves that to the java compiler, it does not keep checksums of files to check if one has changed, it just uses file system dates (which can be a problem if you retrieve an older version of some file).</p>
+<p>Now I am using a <a href="http://www.jython.org">Jython</a> script that justs copies my eclipse build and packages it appropriately, it works well, it is fast, it is flexible (all the power of python), and platform independent. You need to be a bit careful how you choose to design your Jython script, but hey, even with Ant limitations on messing everything around, I have seen so many awful Ant scripts.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/lion/">lion</a>
+  </h1>
+  <time datetime="2005-06-28T17:00:00Z" class="post-date">Tue, Jun 28, 2005</time>
+   
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/top_lion.1.jpg"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer;" src="http://photos1.blogger.com/blogger/6384/1303/400/top_lion.1.jpg" alt="" border="0" /></a><br /><br />test
+
+
+
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/this-is-who-i-am/">This is who I am</a>
+  </h1>
+  <time datetime="2005-06-19T18:20:00Z" class="post-date">Sun, Jun 19, 2005</time>
+   
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://photos1.blogger.com/blogger/6384/1303/1600/IMG_3839-1.jpg"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://photos1.blogger.com/blogger/6384/1303/200/IMG_3839-1.jpg" border="0" alt="" /></a>
+
+
+
+  
+</article>
+</div>
+<p style="text-align:left; width:49%; display: inline-block;"><a href="/page/42/">Previous</a></p>
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

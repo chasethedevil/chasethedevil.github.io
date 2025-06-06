@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.146.6">
+  <meta name="generator" content="Hugo 0.147.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,27 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/typo-in-hyman-non-negative-constraint/">Typo in Hyman non-negative constraint - 28 years later</a>
+  </h1>
+  <time datetime="2017-05-23T23:56:42&#43;0100" class="post-date">Tue, May 23, 2017</time>
+  <p>In their paper <a href="http://www.ams.org/journals/mcom/1989-52-186/S0025-5718-1989-0962209-1/S0025-5718-1989-0962209-1.pdf">&ldquo;Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation&rdquo;</a>, Dougherty, Edelman and Hyman present a simple filter on the first derivatives to maintain positivity of a cubic spline interpolant.</p>
+<p>Unfortunately, in their main formula for non-negativity, they made a typo: the equation (3.3) is not consistent with the equation (3.1): the  \( \Delta x_{i-1/2} \)  is interverted with  \( \Delta x_{i+1/2} \).</p>
+<p>It was not obvious to find out which equation was wrong since there is no proof in the paper. Fortunately, the proof is in the reference paper <a href="http://epubs.siam.org/doi/abs/10.1137/0722023">&ldquo;Monotone piecewise bicubic interpolation&rdquo;</a> from Carlson and Fritsch and it is clear then that equation (3.1) is the correct one.</p>
+<p>Here is a counter example for equation (3.3) for a Hermite cubic spline with natural boundary conditions
+ 
+
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>	x <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #666666">-</span><span style="color: #40a070">2.427680355823974</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.3481443181227126</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.268608280421452</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.189072242720191</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.1095362050189297</span>, <span style="color: #666666">-</span><span style="color: #40a070">2.0300001673176684</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.9504641296164076</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.8709280919151465</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7913920542138855</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.7118560165126244</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.6323199788113634</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.5527839411101023</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.4732479034088413</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3937118657075802</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.3141758280063192</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.234639790305058</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.155103752603797</span>, <span style="color: #666666">-</span><span style="color: #40a070">1.075567714902536</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.996031677201275</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.9164956395000139</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.8369596017987528</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.7574235640974918</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.6778875263962307</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5983514886949697</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.5188154509937086</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.4392794132924476</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.3597433755911865</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.28020733788992525</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.20067130018866441</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.12113526248740358</span>, <span style="color: #666666">-</span><span style="color: #40a070">0.04159922478614231</span>, <span style="color: #40a070">0.03793681291511897</span>, <span style="color: #40a070">0.1174728506163798</span>, <span style="color: #40a070">0.19700888831764063</span>, <span style="color: #40a070">0.2765449260189019</span>, <span style="color: #40a070">0.3560809637201632</span>, <span style="color: #40a070">0.435617001421424</span>, <span style="color: #40a070">0.5151530391226848</span>, <span style="color: #40a070">0.5946890768239461</span>, <span style="color: #40a070">0.6742251145252074</span>, <span style="color: #40a070">0.7537611522264682</span>}
+y <span style="color: #666666">:=</span> []<span style="color: #902000">float64</span>{<span style="color: #40a070">0.22303659708933243</span>, <span style="color: #40a070">0.22655584607177778</span>, <span style="color: #40a070">0.16305913092318047</span>, <span style="color: #40a070">0.10448859033589929</span>, <span style="color: #40a070">0.16002349837315494</span>, <span style="color: #40a070">0.15632461201014838</span>, <span style="color: #40a070">0.20216975718723287</span>, <span style="color: #40a070">0.15780097999496998</span>, <span style="color: #40a070">0.1293436080647528</span>, <span style="color: #40a070">0.13101037880853464</span>, <span style="color: #40a070">0.13496819587884762</span>, <span style="color: #40a070">0.1241082758487616</span>, <span style="color: #40a070">0.13677319399415233</span>, <span style="color: #40a070">0.11493379360854317</span>, <span style="color: #40a070">0.10181073092072719</span>, <span style="color: #40a070">0.10390553149978735</span>, <span style="color: #40a070">0.09705141597989163</span>, <span style="color: #40a070">0.09469310717587004</span>, <span style="color: #40a070">0.09397968424452849</span>, <span style="color: #40a070">0.08115526370674754</span>, <span style="color: #40a070">0.07021707117654993</span>, <span style="color: #40a070">0.07896827656600293</span>, <span style="color: #40a070">0.0733165278111029</span>, <span style="color: #40a070">0.06626131630031683</span>, <span style="color: #40a070">0.06036157053511007</span>, <span style="color: #40a070">0.05598416466538939</span>, <span style="color: #40a070">0.049613807117723785</span>, <span style="color: #40a070">0.04821691404672292</span>, <span style="color: #40a070">0.04274830629369516</span>, <span style="color: #40a070">0.04053002586588819</span>, <span style="color: #40a070">0.03690680495068648</span>, <span style="color: #40a070">0.03232925805830648</span>, <span style="color: #40a070">0.02686034599416645</span>, <span style="color: #40a070">0.02152456554605186</span>, <span style="color: #40a070">0.01281016667726421</span>, <span style="color: #40a070">0.005672278716525797</span>, <span style="color: #40a070">0.0021938540693167367</span>, <span style="color: #40a070">0.0015582304062002356</span>, <span style="color: #40a070">0.0002050615897307207</span>, <span style="color: #40a070">3.232807285235909e-07</span>, <span style="color: #40a070">4.059553937573009e-06</span>}
+z <span style="color: #666666">:=</span> <span style="color: #40a070">0.7410184269884271</span>
+</pre></div>
+
+</p>
+<p>In the above example, even though the step size \(\Delta x\) is constant, the error is visible at the last node since then only one inequation apply, and it will be different with the typo.</p>
+<p>It is quite annoying to stumble upon such typos, especially when the equations stem from a derived correct paper. We wonder then where are the other typos in the paper and our trust in the equations is greatly weakened. Unfortunately, such mistakes happen to everybody, including myself, and they are rarely caught by reviewers.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/implied-volatility-from-black-scholes-price/">Implied Volatility from Black-Scholes price</a>
   </h1>
@@ -441,34 +462,6 @@ It can be shown that any number larger than the factor 2 in the denominator will
 The boundary could even be made tighter with, I suspect, additional terms in \( \ln \ln K \), but there is no
 simple exact formula for the limit as in the Black-Scholes world.</p>
 <p>This is all summarized my note <a href="/lefloch_volatility_asymptotics.pdf">&ldquo;Asymptotic bounds of the normal volatility&rdquo;</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-new-scheme-for-heston/">A new scheme for Heston</a>
-  </h1>
-  <time datetime="2017-01-06T07:55:32&#43;0100" class="post-date">Fri, Jan 6, 2017</time>
-  <p>I stumbled recently upon a new Heston discretisation scheme, in the spirit of Alfonsi, not more complex and more accurate.</p>
-<p>My first attempt at coding the scheme resulted in a miserable failure even though the described algorithm looked
-not too difficult. I started wondering if <a href="http://gs.elaba.lt/object/elaba:18270166/18270166.pdf">the paper</a>, from a little known Lithuanian mathematical journal, was any good.
-Still, the math in it is very well written, with a great emphasis on the settings for each proposition.</p>
-<p>I decided to simply send an email to Prof. Mackevicius, and got a reply the next day (the internet is wonderful sometimes).
-The exchange helped me to find out that the error was not where I was looking. After spending a bit more time on the paper, I discovered there was simply a missing step
-in the algorithm.</p>
-<p>In between step 3 and step 4, we should have
-$$ \bar{x} = \frac{\bar{x}\sigma - \bar{y}\rho}{\sigma^2 \sqrt{1-\rho^2}}$$
-$$ \bar{y} = \frac{\bar{y}}{\sigma^2}$$</p>
-<p>corresponding to the transformation between equations 4.2 and 4.3 of the 2015 paper.</p>
-<p>With the added step, the scheme works well. Even if there is clearly an effort from the authors to make their
-very mathematically detailed paper more practical with a description of an algorithm, it looks like I have been the first person
-to actually try it.
-<figure><img src="/post/heston_case3.png"><figcaption>
-      <h4>Error on Leif Andersen Case III.</h4>
-    </figcaption>
-</figure>
-</p>
-<p><em>Update January 23rd</em>
-The scheme <a href="/post/a-new-scheme-for-heston_part2">does not behave very well</a> on Vanilla forward start options.</p>
 
   
 </article>
