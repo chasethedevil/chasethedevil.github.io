@@ -75,7 +75,7 @@
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/not-so-great-new-scheme-heston/">A Not So Great New Simulation Scheme for the Heston Model</a>
   </h1>
-  <time datetime="2025-06-18T20:27:00Z" class="post-date">Wed, Jun 18, 2025</time>
+  <time datetime="2025-06-18T22:27:00Z" class="post-date">Wed, Jun 18, 2025</time>
   <p>I recently saw a news about a great <a href="https://arxiv.org/pdf/2412.11264">new simulation scheme for the Heston model by Abi Jaber</a>.
 The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
 <p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
@@ -182,7 +182,6 @@ Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for
           <th style="text-align: left">Scheme</th>
           <th style="text-align: left">Steps/Year</th>
           <th style="text-align: right">Price</th>
-          <th></th>
       </tr>
   </thead>
   <tbody>
@@ -190,47 +189,40 @@ Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for
           <td style="text-align: left">DVSS2X</td>
           <td style="text-align: left">4+1</td>
           <td style="text-align: right">0.0184</td>
-          <td></td>
       </tr>
       <tr>
+          <td style="text-align: left"></td>
           <td style="text-align: left">80</td>
-          <td style="text-align: left">0.0196</td>
-          <td></td>
-          <td></td>
+          <td style="text-align: right">0.0196</td>
       </tr>
       <tr>
           <td style="text-align: left">QE</td>
           <td style="text-align: left">4+1</td>
           <td style="text-align: right">0.0190</td>
-          <td></td>
       </tr>
       <tr>
+          <td style="text-align: left"></td>
           <td style="text-align: left">160</td>
-          <td style="text-align: left">0.0196</td>
-          <td></td>
-          <td></td>
+          <td style="text-align: right">0.0196</td>
       </tr>
       <tr>
           <td style="text-align: left">IVI</td>
           <td style="text-align: left">4+1</td>
           <td style="text-align: right">0.0116</td>
-          <td></td>
       </tr>
       <tr>
+          <td style="text-align: left"></td>
           <td style="text-align: left">80</td>
-          <td style="text-align: left">0.0185</td>
-          <td></td>
-          <td></td>
+          <td style="text-align: right">0.0185</td>
       </tr>
       <tr>
+          <td style="text-align: left"></td>
           <td style="text-align: left">160</td>
-          <td style="text-align: left">0.0191</td>
-          <td></td>
-          <td></td>
+          <td style="text-align: right">0.0191</td>
       </tr>
   </tbody>
 </table>
-<p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
+<p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The price with 4+1 steps is very off, especially compared to the other schemes. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 
   
 </article><article class="post">
