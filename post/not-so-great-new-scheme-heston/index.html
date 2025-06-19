@@ -74,7 +74,7 @@
   <time datetime=2025-06-18T20:27:00Z class="post-date">Wed, Jun 18, 2025</time>
   <p>I recently saw a news about a great <a href="https://arxiv.org/pdf/2412.11264">new simulation scheme for the Heston model by Abi Jaber</a>.
 The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
-<p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the DVSS2X scheme pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
+<p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
 <table>
   <thead>
       <tr>
@@ -111,7 +111,7 @@ The paper suggests it is better than the popular alternatives such as the QE sch
       </tr>
   </tbody>
 </table>
-<p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.1 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
+<p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.01 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
 <p>It is not only less accurate, but also slower, because it requires 3 random numbers per time-step, compared to 2 random numbers for QE or DVSS2X. The paper is very well written, and this small example may not be representative but it does cast some doubts about how great is this new scheme in practice.</p>
 <p>While writing this, I noticed that the paper actually uses this same example, it corresponds to their Case 3 and it is indeed not obvious from the plots in the paper that this new IVI scheme is significanly better. There is one case, deep in the money (strike=60%), and very few time-steps (2 per year for example):</p>
 <table>
@@ -164,7 +164,7 @@ The paper suggests it is better than the popular alternatives such as the QE sch
           <td style="text-align: left"></td>
           <td style="text-align: left"></td>
           <td style="text-align: left">IVI</td>
-          <td style="text-align: right">44.32386</td>
+          <td style="text-align: right">44.3239</td>
           <td style="text-align: right">-0.0061</td>
       </tr>
   </tbody>
