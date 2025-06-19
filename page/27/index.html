@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.7">
+  <meta name="generator" content="Hugo 0.147.8">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,21 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/java-logging-still-crap-in-2009/">Java Logging Still Crap in 2009</a>
+  </h1>
+  <time datetime="2009-04-24T15:01:00Z" class="post-date">Fri, Apr 24, 2009</time>
+  <p>When java logging API was first introduced in JDK 1.4 in 2002, it caused quite a lot a fuss around, with everybody asking &ldquo;Why did not they just include Log4j instead of creating their own bastard child?&rdquo;.</p>
+<p>I remember having looked at it very shortly before continuing using Log4j on all projects I have been involved with.</p>
+<p>Today, while doing a very small project, I tried once more to use <a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html">java logging</a>. The main reason is that I was lazy to add a dependency to one more jar for this small project. While trying I found out that:</p>
+<ul>
+<li>you still need to use a damned JVM parameter to point to your configuration file</li>
+<li>you can not change the formatting without writing a formatter class!</li>
+</ul>
+<p>It&rsquo;s 2009! What has Sun done? I am amazed the most elementary things you expect from a Logger are still not included by default in the JDK.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/bachelier-vs.-black/">Bachelier vs. Black</a>
   </h1>
@@ -467,18 +482,6 @@ We saw in a previous entry how one has to be careful with <a href="http://chaset
 <p>If you want a VCS that is written in C++, go play with Monotone. Really.They use a &ldquo;real database&rdquo;. They use &ldquo;nice object-oriented libraries&rdquo;. They use &ldquo;nice C++ abstractions&rdquo;. And quite frankly, as a result of all these design decisions that sound so appealing to some CS people, the end result is a horrible and unmaintainable mess.</p></blockquote>
 <p>This however is quite interesting since I am probably not the only one to have seen the disastrous effects of too enthusiastic abstraction professionals in Java. This is why many Java projects are utter crap. But again, not everybody makes this mistake. Some people know how to build good things. As the result of Java being popular, we have many crap programmers with pseudo genius theories you don&rsquo;t find in C or Haskell.</p>
 <p>On another subject, I seriously wonder why we don&rsquo;t have more distributed compilation in Java as in C/C++. I am tired of seing those core doing nothing while compiling.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/double.nan-is-evil/">Double.NaN Is Evil</a>
-  </h1>
-  <time datetime="2008-12-09T16:23:00Z" class="post-date">Tue, Dec 9, 2008</time>
-   
-
-I <span class="blsp-spelling-error" id="SPELLING_ERROR_0">don't</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_1">know</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_2">what</span> Sun <span class="blsp-spelling-error" id="SPELLING_ERROR_3">had</span> in <span class="blsp-spelling-error" id="SPELLING_ERROR_4">mind</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_5">when</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_6">creating</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_7">Double.NaN</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_8">number</span>. <span class="blsp-spelling-error" id="SPELLING_ERROR_9">It</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_10">is</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_11">very</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_12">inintuitive</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_13">to</span> use. I <span class="blsp-spelling-error" id="SPELLING_ERROR_14">am</span> sure <span class="blsp-spelling-error" id="SPELLING_ERROR_15">every</span> single <span class="blsp-spelling-error" id="SPELLING_ERROR_16">developer</span> out <span class="blsp-spelling-error" id="SPELLING_ERROR_17">there</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_18">fell</span> in <span class="blsp-spelling-error" id="SPELLING_ERROR_19">the</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_20">trap</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_21">of</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_22">trying</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_23">to</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_24">find</span> out if a double <span class="blsp-spelling-error" id="SPELLING_ERROR_25">was</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_26">NaN</span> or <span class="blsp-spelling-error" id="SPELLING_ERROR_27">not</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_28">using</span>:<br /><span class="blsp-spelling-error" id="SPELLING_ERROR_29"></span><blockquote style="font-weight: bold; font-family: courier new;"><span class="blsp-spelling-error" id="SPELLING_ERROR_29">Double.NaN</span> == <span class="blsp-spelling-error" id="SPELLING_ERROR_30">myDouble</span></blockquote><span class="blsp-spelling-error" id="SPELLING_ERROR_30"></span><br /><br /><span class="blsp-spelling-error" id="SPELLING_ERROR_31">This</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_32">does</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_33">not</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_34">work</span> (I <span class="blsp-spelling-error" id="SPELLING_ERROR_35">don't</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_36">know</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_37">the</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_38">real</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_39">reason</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_40">why</span>), <span class="blsp-spelling-error" id="SPELLING_ERROR_41">one</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_42">has</span> <span class="blsp-spelling-error" id="SPELLING_ERROR_43">to</span> use:<br /><blockquote style="font-weight: bold; font-family: courier new;"><span class="blsp-spelling-error" id="SPELLING_ERROR_44">Double.isNaN</span>(<span class="blsp-spelling-error" id="SPELLING_ERROR_45">myDouble</span>)</blockquote><br /><span class="blsp-spelling-error" id="SPELLING_ERROR_46">Not</span> intuitive!
-
-
 
   
 </article>

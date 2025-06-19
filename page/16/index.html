@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.7">
+  <meta name="generator" content="Hugo 0.147.8">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,30 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-small-time-schobel-zhu-expansion/">A Small-Time Schobel-Zhu Expansion</a>
+  </h1>
+  <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
+  <p>The paper <a href="http://arxiv.org/abs/1306.5447">implied vol for any local stochastic vol model</a> from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).</p>
+<p>I tried it on the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDIQFjAB&amp;url=http%3A%2F%2Fssrn.com%2Fabstract%3D100831&amp;ei=3gr5UtzkOYm90QWD7IDwBA&amp;usg=AFQjCNFY9anH_AU0A5pWRX4Qdo6Kp2CjEg&amp;sig2=teGVgsV4uneROlzZCuUFBw&amp;bvm=bv.60983673,d.d2k">Schobel-Zhu</a> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <a href="/post/heston-schobel-zhu-bates-double-heston-fit">fit was as good</a>, while the <a href="/post/brownian-bridge-or-not-with-heston">simulation under the QE scheme</a> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:</p>
+<figure><img src="/post/SZ_EXP1.png">
+</figure>
+
+<p>And this is how it behaves on some realistic input:</p>
+<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"><figcaption>
+      <h4>T=0.1</h4>
+    </figcaption>
+</figure>
+ <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"><figcaption>
+       <h4>T=0.5</h4>
+     </figcaption>
+ </figure>
+</p>
+<p>In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.</p>
+<p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/an-ssd-instead-of-a-laptop/">An SSD instead of a laptop</a>
   </h1>
@@ -230,25 +254,6 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
   <p>Prices of a Future contract and a Forward contract are the same under the Black-Scholes assumptions (deterministic rates) but the price of options on Futures or options on Forwards might still differ. I did not find this obvious at first.</p>
 <p>For example, when the underlying contract expiration date (Futures, Forward) is different from the option expiration date. For a Future Option, the Black-76 formula can be used, the discounting is done from the option expiry date, because one receives the cash on expiration due to the margin account. For a Forward Option, the discounting need to be done from the Forward contract expiry date.</p>
 <p>European options prices will be the same when the underlying contract expiration date is the same as the option expiration date. However, this is not true for American options: the immediate exercise will need to be discounted to the Forward expiration date for a Forward underlying, not for a Future.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/spikes-in-hestonschobel-zhu-local-volatility/">Spikes in Heston/Schobel-Zhu Local Volatility</a>
-  </h1>
-  <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
-  <p>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).</p>
-<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"><figcaption>
-      <h4>Local volatility</h4>
-    </figcaption>
-</figure>
- <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"><figcaption>
-       <h4>Implied volatility</h4>
-     </figcaption>
- </figure>
-</p>
-<p>The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</p>
-<p>After wondering about possible solutions (using a spline on the implied volatilities), the root of the error was much simpler: I used a too small difference to compute the numerical derivatives (1E-6). Moving to 1E-4 was enough to restore a smooth local volatility surface.</p>
 
   
 </article>

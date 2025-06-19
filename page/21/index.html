@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.7">
+  <meta name="generator" content="Hugo 0.147.8">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,20 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
+  </h1>
+  <time datetime="2013-03-20T17:50:00Z" class="post-date">Wed, Mar 20, 2013</time>
+  <p>Some library computes the Gaussian density function $$e^{-\frac{x^2}{2}}$$ the following way:
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span>xsq <span style="color:#666">=</span> <span style="color:#06287e">fint</span>(x <span style="color:#666">*</span> <span style="color:#40a070">1.6</span>) <span style="color:#666">/</span> <span style="color:#40a070">1.6</span>;
+</span></span><span style="display:flex;"><span>del <span style="color:#666">=</span> (x <span style="color:#666">-</span> xsq) <span style="color:#666">*</span> (x <span style="color:#666">+</span> xsq);
+</span></span><span style="display:flex;"><span>result <span style="color:#666">=</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>xsq <span style="color:#666">*</span> xsq <span style="color:#666">*</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>del <span style="color:#666">*</span><span style="color:#40a070">0.5</span>);</span></span></code></pre></div></p>
+<p>where <code class="code-inline language-C"><span style="color:#06287e">fint</span>(z)</code> computes the floor of z.</p>
+<p>Basically, <code class="code-inline language-C">x<span style="color:#666">*</span>x</code> is rewritten as <code class="code-inline language-C">xsq<span style="color:#666">*</span>xsq<span style="color:#666">+</span>del</code>. I have seen that trick once before, but I just can&rsquo;t figure out where and why (except that it is probably related to high accuracy issues).</p>
+<p>The answer is in the <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/">next post</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-seasoned-volatility-swap/">A Seasoned Volatility Swap</a>
   </h1>
@@ -195,18 +209,6 @@ I was looking for an implementation of the non central chi squared distribution 
 $$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \left(\frac{1}{h_{i-1}}+\frac{1}{h_i}\right) f(x_{i-1})+ \left(\frac{1}{h_{i-1}} - \frac{1}{h_i+h_{i-1}} \right) f(x_{i-2}) + &hellip;$$</p>
 <p>Incidently while writing this post I found out it was a pain to write Math in HTML (I initially used a picture). MathML seems a bit crazy, I wonder why they couldn&rsquo;t just use the LaTeX standard.</p>
 <p><strong>Update January 3rd 2013</strong> - I now use <a href="http://mathjax.org">Mathjax</a>. It&rsquo;s not very good solution as I think this should typically be handled by the browser directly instead of huge javascript library, but it looks a bit better</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/a-discontinuity/">A Discontinuity</a>
-  </h1>
-  <time datetime="2012-12-12T20:59:00Z" class="post-date">Wed, Dec 12, 2012</time>
-   
-
-I am comparing various finite difference schemes on simple problems and am currently stumbling upon a strange discontinuity at the boundary for some of the schemes (Crank-Nicolson, Rannacher, and TR-BDF2) when I plot an American Put Option Gamma using a log grid. It actually is more pronounced with some values of the strike, not all. The amplitude oscillates with the strike. And it does not happen on a European Put, so it's not a boundary approximation error in the code. It might well be due to the nature of the scheme as schemes based on implicit Euler work (maybe monotonicity preservation is important). This appears on this graph around S=350.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s1600/gamma_american_boundary.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="160" src="http://1.bp.blogspot.com/-ugmThxi_c_g/UMjh4M8JKAI/AAAAAAAAGKg/Oj-p9_AaNzM/s640/gamma_american_boundary.png" width="640" /></a></div><br /><b>Update December 13, 2012</b>: after a close look at what was happening. It was after all a boundary issue. It's more visible on the American because the Gamma is more spread out. But I reproduced it on a European as well.
-
-
 
   
 </article>
