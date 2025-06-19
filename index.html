@@ -174,6 +174,63 @@ The paper suggests it is better than the popular alternatives such as the QE sch
   </tbody>
 </table>
 <p>So the new scheme works reasonably well for (very) large time-steps, better than DVSS2 and likely better than QE (although, again, it is around 1.5x more costly). For smaller steps (but not that small), it may not be as accurate as QE and DVSS2. This is why QE was such a big deal at the time, it was significantly more accurate than a Euler discretization and allowed to use much less time-steps: from 100 or more to 10 (a factor larger than 10). IVI may be an improvement for very large step sizes, but it will matter much less for typical exotics pricing where observation dates are at worst yearly.</p>
+<p><strong>Update June 19, 2025</strong>
+Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for-heston_part2/">forward start option test</a>. In the Table below I use 4M paths.</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: right">Price</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0184</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">80</td>
+          <td style="text-align: left">0.0196</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QE</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0190</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">160</td>
+          <td style="text-align: left">0.0196</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0116</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">80</td>
+          <td style="text-align: left">0.0185</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">160</td>
+          <td style="text-align: left">0.0191</td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 
   
 </article><article class="post">
