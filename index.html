@@ -73,6 +73,27 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/forward-variance-models-and-calibration/">Forward Variance Models and Calibration</a>
+  </h1>
+  <time datetime="2025-06-21T17:27:00Z" class="post-date">Sat, Jun 21, 2025</time>
+  <p>The modern rough volatility models adopt a forward variance curve terminology (see for example <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=3191578">this paper on a rational approximation for the rough Heston</a>, or <a href="https://mfe.baruch.cuny.edu/wp-content/uploads/2024/03/AFVPricingDevelopmentsQuantminds2022.pdf">this presentation on affine forward variance models</a> or <a href="https://arxiv.org/pdf/1801.06416">this paper on affine forward variance models</a>). In this form, the rough Heston model reads:</p>
+<figure><img src="/post/rough_heston_eqn.png">
+</figure>
+
+<p>According to the litterature, the initial forward variance curve is typically built from the implied volatilities through the variance swap replication: for each maturity, the price of a newly issued variance swap is computed to this maturity, using the implied volatilities for this maturity. Then we may compute the forward variance by interpolating linearly the variance swap prices and differentiating. This leads to the plot below.</p>
+<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"><figcaption>
+      <h4>Forward variance curves for SPX500 as of October 2024.</h4>
+    </figcaption>
+</figure>
+
+<p>One immediate question is how much does the truncation range play a role in this forward variance curve? Above, we plot the replications prices based on filtering the input data up to 10 Delta / 90 Delta for each maturity. Beyond this range, liquidity is usually much lower and the reliability of the input quotes may not be as good.  The short end, and not so short forward variance up to 4 years is quite different. The long end is more aligned with something that looks like a basis spread between the two curves.</p>
+<p>We may also calibrate the forward variance curve model directly to the implied volatilities during the model calibration, at the same time as the other stochastic volatility parameters (using a time-dependent correlation and vol-of-vol). This time-dependent Heston parameterization has effectively 3 parameters per expiry. In this case, we may want to also filter the input data to focus on  the 10 Delta / 90 Delta range as we expect the stochastic volatility model to fit well where it matters the most - where the vanillas are liquid.</p>
+<p>In the figure above, we also plot the forward variance curve implied by the model, through a calibration against vanilla options. We can see it is again quite different.
+If we were to use the true replication based forward variance curve, we would effectively attempt to fit far away vols in the wings, which somehow seems wrong. Now if the model was able to fit everything well there would be no issue, but with 3 parameters per maturity, a choice has to be made. And the choice of the full replication does not look particularly great, as we fit exactly something that is not liquid.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/not-so-great-new-scheme-heston/">A Not So Great New Simulation Scheme for the Heston Model</a>
   </h1>
   <time datetime="2025-06-18T22:27:00Z" class="post-date">Wed, Jun 18, 2025</time>
@@ -505,19 +526,6 @@ and a second answer from chatGPT:
 </p>
 <p>Copilot always fails to provide a valid answer. ChatGPT v4 proves to be quite impressive: it is able to reproduce some of the reasoning presented in the lecture notes.</p>
 <p>Interestingly, with centered difference, for a given accuracy, the optimal step size is different for the first and for the second derivative. It may, at first, seem like a good idea to use a different size for each. In reality, when both the first and second derivative of the function are needed (for example the Delta and Gamma greeks of a financial product), it is rarely a good idea to use a different step size for each. Firstly, it will be slower since more the function will be evaluated at more points. Secondly, if there is a discontinuity in the function or in its derivatives, the first derivative may be estimated without going over the discontinuity while the second derivative may be estimated going over the discontinuity, leading to puzzling results.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/cos_method_truncation/">News on the COS Method Truncation</a>
-  </h1>
-  <time datetime="2024-05-13T20:56:42&#43;0100" class="post-date">Mon, May 13, 2024</time>
-  <p>The COS method is a fast way to price vanilla European options under stochastic volatility models with a known characteristic function. There are alternatives, explored in <a href="/post/the-cos-method-for-heston/">previous</a> <a href="/post/attari-lord-kahl--cos-methods-comparison-on-heston/">blog</a> <a href="/post/making-classic-heston-integration-faster-than-the-cos-method/">posts</a>. A main advantage of the COS method is its simplicity. But this comes at the expense of finding the correct values for the truncation level and the (associated) number of terms.</p>
-<p>A related issue of the COS method, or its more fancy wavelet cousin the SWIFT method, is to require a huge (&gt;65K) number of points to reach a reasonable accuracy for some somewhat extreme choices of Heston parameters. I provide an example in <a href="https://arxiv.org/abs/2401.01758">a recent paper</a> (see Section 5).</p>
-<p>Gero Junike recently wrote <a href="https://arxiv.org/abs/2109.01030">several</a> <a href="https://arxiv.org/abs/2303.16012">papers</a> on how to find good estimates for those two parameters. Gero derives a slightly different formula for the put option, by centering the distribution on \( \mathbb{E}[\ln S] \). It is closer to my own <a href="https://arxiv.org/abs/2005.13248">improved COS formula</a>, where I center the integration on the forward. The estimate for the truncation is larger than the one we are used to (for example using the estimate based on 4 cumulants of Mike Staunton), and the number of points is very conservative.</p>
-<p>The bigger issue with this new estimate, is that it relies on an integration of a function of the characteristic function, very much like the original problem we are trying to solve (the price of a vanilla option). This is in order to estimate the \( ||f^{(20)}||_{\infty} \). Interestingly, evaluating this integral is not always trivial, the <a href="https://github.com/machakann/DoubleExponentialFormulas.jl">double exponential quadrature in Julia</a> fails. I found that reusing the transform from \( (0,\infty) \) to (-1,1) of Andersen and Lake along with a Gauss-Legendre quadrature on 128 points seemed to be ok (at least for some values of the Heston parameters, it may be fragile, not sure).</p>
-<p>While very conservative, it seems to produce the desired accuracy on the extreme example mentioned in the paper, it leads to N=756467 points and a upper truncation at b=402.6 for a relative tolerance of 1E-4. Of course, on such examples the COS method is not fast anymore. For comparison, the <a href="https://fbe.unimelb.edu.au/__data/assets/pdf_file/0008/2591783/223.pdf">Joshi-Yang technique</a> with 128 points produces the same accuracy in 235 μs as the COS method in 395 ms on this example, that is a factor of 1000 (on many other examples the COS method behaves significantly better of course).</p>
-<p>Furthermore, as stated in Gero Junike&rsquo;s paper, the estimate fails for less smooth distributions such as the one of the Variance Gamma (VG) model.</p>
 
   
 </article>

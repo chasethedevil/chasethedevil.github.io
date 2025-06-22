@@ -73,6 +73,52 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/cracking-the-double-precision-gaussian-puzzle/">Cracking the Double Precision Gaussian Puzzle</a>
+  </h1>
+  <time datetime="2013-03-22T12:20:00Z" class="post-date">Fri, Mar 22, 2013</time>
+  <p>In my <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">previous post</a>, I stated that some library (SPECFUN by W.D. Cody) computes \(e^{-\frac{x^2}{2}}\) the following way:
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span>xsq <span style="color:#666">=</span> <span style="color:#06287e">fint</span>(x <span style="color:#666">*</span> <span style="color:#40a070">1.6</span>) <span style="color:#666">/</span> <span style="color:#40a070">1.6</span>;
+</span></span><span style="display:flex;"><span>del <span style="color:#666">=</span> (x <span style="color:#666">-</span> xsq) <span style="color:#666">*</span> (x <span style="color:#666">+</span> xsq);
+</span></span><span style="display:flex;"><span>result <span style="color:#666">=</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>xsq <span style="color:#666">*</span> xsq <span style="color:#666">*</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> <span style="color:#06287e">exp</span>(<span style="color:#666">-</span>del <span style="color:#666">*</span><span style="color:#40a070">0.5</span>);</span></span></code></pre></div></p>
+<p>where <code class="code-inline language-C"><span style="color:#06287e">fint</span>(z)</code> computes the floor of z.</p>
+<ol>
+<li>Why 1.6?</li>
+</ol>
+<p>An integer divided by 1.6 will be an exact representation of the corresponding number in double: 1.6 because of 16 (dividing by 1.6 is equivalent to multiplying by 10 and dividing by 16 which is an exact operation). It also allows to have something very close to a rounding function: x=2.6 will make xsq=2.5, x=2.4 will make xsq=1.875, x=2.5 will make xsq=2.5. The maximum difference between x and xsq will be 0.625.</p>
+<ol start="2">
+<li><code class="code-inline language-C">(a<span style="color:#666">-</span>b) <span style="color:#666">*</span> (a<span style="color:#666">+</span>b)</code> decomposition</li>
+</ol>
+<p>del is of the order of <code class="code-inline language-C"><span style="color:#40a070">2</span> <span style="color:#666">*</span> x <span style="color:#666">*</span> (x<span style="color:#666">-</span>xsq)</code>. When <code class="code-inline language-C">(x<span style="color:#666">-</span>xsq)</code> is very small, <code class="code-inline language-C">del</code> will, most of the cases be small as well: when x is too high (beyond 39), the result will always be 0, because there is no small enough number to represent <code class="code-inline language-C"><span style="color:#06287e">exp</span>(<span style="color:#666">-</span><span style="color:#40a070">0.5</span> <span style="color:#666">*</span> <span style="color:#40a070">39</span> <span style="color:#666">*</span> <span style="color:#40a070">39</span>)</code> in double precision, while <code class="code-inline language-C">(x<span style="color:#666">-</span>xsq)</code> can be as small as machine epsilon (around 2E-16). By splitting <code class="code-inline language-C">x <span style="color:#666">*</span> x</code> into <code class="code-inline language-C">xsq <span style="color:#666">*</span> xsq</code> and <code class="code-inline language-C">del</code>, the exp function works on a more refined value of the remainder <code class="code-inline language-C">del</code>, which in turn should lead to an increase of accuracy.</p>
+<ol start="3">
+<li>Real world effect</li>
+</ol>
+<p>Let&rsquo;s make x move by machine epsilon and see how the result varies using the naive implementation <code class="code-inline language-C"><span style="color:#06287e">exp</span>(<span style="color:#666">-</span><span style="color:#40a070">0.5</span><span style="color:#666">*</span>x<span style="color:#666">*</span>x)</code> and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac).
+<figure><img src="/post/snapshot1.png"><figcaption>
+      <h4>PDF</h4>
+    </figcaption>
+</figure>
+
+The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what&rsquo;s interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.</p>
+<p>To calculate the actual error, we must rely on higher precision arithmetic.
+<strong>Update March 22, 2013</strong>
+I thus looked for a higher precision exp implementation, that can go beyond double precision. I initially found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library. I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.</p>
+<p>Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.
+<figure><img src="/post/snapshot5.png"><figcaption>
+      <h4>PDF relative error around x=20</h4>
+    </figcaption>
+</figure>
+
+We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7:
+<figure><img src="/post/snapshot7.png"><figcaption>
+      <h4>PDF relative error around x=-5.7</h4>
+    </figcaption>
+</figure>
+</p>
+<p>Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks. The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary Kennedy commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-double-precision-puzzle-with-the-gaussian/">A Double Precision Puzzle with the Gaussian</a>
   </h1>
   <time datetime="2013-03-20T17:50:00Z" class="post-date">Wed, Mar 20, 2013</time>
@@ -190,25 +236,6 @@ Those are very close payoffs!</p>
 I was looking for an implementation of the non central chi squared distribution function in Java, in order to price bond options under the Cox Ingersoll Ross (CIR) model and compare to a finite difference implementation. It turned out it was not so easy to find existing code for that in a library. I would have imagined that Apache common maths would do this but it does not.<br /><br />OpenGamma has a not too bad <a href="http://docs-static.opengamma.com/1.2.0/java/javadocs/com/opengamma/analytics/math/statistics/distribution/NonCentralChiSquaredDistribution.html">implementation</a>. It relies on Apache commons maths for the Gamma function implementation. I looked at what was there in C/C++. There is some old fortran based ports with plenty of goto statements. There is also a nice <a href="http://www.boost.org/doc/libs/1_36_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">implementation in the Boost library</a>. It turns out it is quite easy to port it to Java. One still needs a Gamma function implementation, I looked at Boost implementation of it and it turns out to be very similar to the Apache commons maths one (which is surprisingly not too object oriented and therefore quite fast - maybe they ported it from Boost or from a common source).<br /><br />The Boost implementation seems much more robust in general thanks to:<br /><ul><li>The use of complimentary distribution function when the value is over 0.5. One drawback is that there is only one implementation of this, the Benton and Krishnamoorthy one, which is a bit slower than Ding's method.</li><li>Reverts to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDEQFjAA&amp;url=http%3A%2F%2Fwww.ucs.louisiana.edu%2F~kxk4695%2FCSDA-03.pdf&amp;ei=LKzlUKWvL_K00QX_t4CYBA&amp;usg=AFQjCNFgkeariqMPXVH4LLrO5RRi3nIc0Q">Benton and Krishnamoorthy</a> method in high non-centrality cases. Benton and Krishnamoorthy is always very accurate, while Fraser (used by OpenGamma) is <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;ved=0CEIQFjAC&amp;url=http%3A%2F%2Fdspace.uevora.pt%2Frdpc%2Fbitstream%2F10174%2F4635%2F1%2FSpeedAccuracyCEV_FFM%255B1%255D.pdf&amp;ei=Ea3lULLsBaPL0QXKuoHYAw&amp;usg=AFQjCNGkqkA5e_-0n_DATE9BTQVoL9NTkg&amp;cad=rja">not very precise in general</a>.</li></ul>It is interesting to note that both implementations of Ding method are wildly different, Boost implementation has better performance and is simpler (I measured that my Java port is around 50% faster than OpenGamma implementation).<br /><br />If only it was simple to commit to open-source projects while working for a software company...
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/finite-difference-approximation-of-derivatives/">Finite Difference Approximation of Derivatives</a>
-  </h1>
-  <time datetime="2012-12-21T12:12:00Z" class="post-date">Fri, Dec 21, 2012</time>
-  <p>A while ago, someone asked me to reference him in a paper of mine because I used formulas of a finite difference approximation of a derivative on a non uniform grid. I was shocked as those formula are very widespread (in countless papers, courses and books) and not far off elementary mathematics.</p>
-<p>There are however some interesting old papers on the technique. Usually people approximate the first derivative by the central approximation of second order:</p>
-<p>$$ f&rsquo;(x) = \frac{f(x_{i+1})-f(x_{i-1})}{x_{i+1} - x_{i-1}} $$</p>
-<p>However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \(f(x_{i+1})\) and \(f(x_{i-1})\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).</p>
-<p>This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0, 0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.</p>
-<figure><img src="/post/cir_bond_euler_discretizations.png">
-</figure>
-
-<p>I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:<!-- raw HTML omitted -->
-$$ f&rsquo;(x_i) = \left(\frac{1}{h_i}+\frac{1}{h_i+h_{i-1}}\right) f(x_i)- \left(\frac{1}{h_{i-1}}+\frac{1}{h_i}\right) f(x_{i-1})+ \left(\frac{1}{h_{i-1}} - \frac{1}{h_i+h_{i-1}} \right) f(x_{i-2}) + &hellip;$$</p>
-<p>Incidently while writing this post I found out it was a pain to write Math in HTML (I initially used a picture). MathML seems a bit crazy, I wonder why they couldn&rsquo;t just use the LaTeX standard.</p>
-<p><strong>Update January 3rd 2013</strong> - I now use <a href="http://mathjax.org">Mathjax</a>. It&rsquo;s not very good solution as I think this should typically be handled by the browser directly instead of huge javascript library, but it looks a bit better</p>
 
   
 </article>

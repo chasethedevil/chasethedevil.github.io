@@ -73,6 +73,19 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/cos_method_truncation/">News on the COS Method Truncation</a>
+  </h1>
+  <time datetime="2024-05-13T20:56:42&#43;0100" class="post-date">Mon, May 13, 2024</time>
+  <p>The COS method is a fast way to price vanilla European options under stochastic volatility models with a known characteristic function. There are alternatives, explored in <a href="/post/the-cos-method-for-heston/">previous</a> <a href="/post/attari-lord-kahl--cos-methods-comparison-on-heston/">blog</a> <a href="/post/making-classic-heston-integration-faster-than-the-cos-method/">posts</a>. A main advantage of the COS method is its simplicity. But this comes at the expense of finding the correct values for the truncation level and the (associated) number of terms.</p>
+<p>A related issue of the COS method, or its more fancy wavelet cousin the SWIFT method, is to require a huge (&gt;65K) number of points to reach a reasonable accuracy for some somewhat extreme choices of Heston parameters. I provide an example in <a href="https://arxiv.org/abs/2401.01758">a recent paper</a> (see Section 5).</p>
+<p>Gero Junike recently wrote <a href="https://arxiv.org/abs/2109.01030">several</a> <a href="https://arxiv.org/abs/2303.16012">papers</a> on how to find good estimates for those two parameters. Gero derives a slightly different formula for the put option, by centering the distribution on \( \mathbb{E}[\ln S] \). It is closer to my own <a href="https://arxiv.org/abs/2005.13248">improved COS formula</a>, where I center the integration on the forward. The estimate for the truncation is larger than the one we are used to (for example using the estimate based on 4 cumulants of Mike Staunton), and the number of points is very conservative.</p>
+<p>The bigger issue with this new estimate, is that it relies on an integration of a function of the characteristic function, very much like the original problem we are trying to solve (the price of a vanilla option). This is in order to estimate the \( ||f^{(20)}||_{\infty} \). Interestingly, evaluating this integral is not always trivial, the <a href="https://github.com/machakann/DoubleExponentialFormulas.jl">double exponential quadrature in Julia</a> fails. I found that reusing the transform from \( (0,\infty) \) to (-1,1) of Andersen and Lake along with a Gauss-Legendre quadrature on 128 points seemed to be ok (at least for some values of the Heston parameters, it may be fragile, not sure).</p>
+<p>While very conservative, it seems to produce the desired accuracy on the extreme example mentioned in the paper, it leads to N=756467 points and a upper truncation at b=402.6 for a relative tolerance of 1E-4. Of course, on such examples the COS method is not fast anymore. For comparison, the <a href="https://fbe.unimelb.edu.au/__data/assets/pdf_file/0008/2591783/223.pdf">Joshi-Yang technique</a> with 128 points produces the same accuracy in 235 μs as the COS method in 395 ms on this example, that is a factor of 1000 (on many other examples the COS method behaves significantly better of course).</p>
+<p>Furthermore, as stated in Gero Junike&rsquo;s paper, the estimate fails for less smooth distributions such as the one of the Variance Gamma (VG) model.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/unrealistic_variance_swaps_under_schobel_zhu/">Variance Swap Term-Structure under Schobel-Zhu</a>
   </h1>
   <time datetime="2024-03-26T12:56:42&#43;0100" class="post-date">Tue, Mar 26, 2024</time>
@@ -328,33 +341,6 @@ for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier op
 <p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
 <figure><img src="/post/quad_rho_all.png"><figcaption>
       <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
-    </figcaption>
-</figure>
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/ghost_vacations/">Ghost Vacations</a>
-  </h1>
-  <time datetime="2023-08-20T20:56:42&#43;0100" class="post-date">Sun, Aug 20, 2023</time>
-  <p>During my vacation, I don&rsquo;t know why, but I looked at some stability issue with ghost points and the explicit method. I was initially trying out ghost points with the explicit runge kutta Chebyshev/Legendre/Gegenbauer technique and noticed some explosion in some cases.</p>
-<p>I cornered it down to a stability issue of the standard explicit Euler method with ghost (or fictitious) points. The technique is described in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo; (also in Paul Wilmott introduces quantitative finance), which I find quite good, although I have some friends who are not much fond of it. The technique may be used to compute the price of a continuously monitored barrier option when the barrier does not fall on the grid, or more generally for time-dependent barriers. I however look at it in the simple context of a constant barrier in time.</p>
-<figure><img src="/post/ghost_wilmott.png"><figcaption>
-      <h4>The ghost point technique (from Paul Wilmott on Quantitative Finance).</h4>
-    </figcaption>
-</figure>
-
-<p>I found out that the explicit Euler scheme is unstable if we let the grid boundaries be random. In practice, for more exotic derivatives, the grid upper bound will typically be based on a number of standard deviations from the spot or from the strike price. The spot price moves continually, and the strike price is fairly flexible for OTC options. So the upper bound can really be anything and the explicit Euler may require way too many time-steps to be practical with the ghost point technique. This is all described in the preprint <a href="https://arxiv.org/abs/2308.04629">Instabilities of explicit finite difference schemes with ghost points on the diffusion equation</a>.</p>
-<p>What does this mean?</p>
-<p>The ghost point technique is not appropriate for the explicit Euler scheme (and thus for the Runge-Kutta explicit schemes as well), unless the ghost point is fixed to be in the middle of the grid, or on the grid outside by one space-step. This means the grid needs to be setup in a particular fashion. But if we need to setup the grid such that the barrier falls exactly somewhere then, for a constant barrier option, no ghost point is needed, one just need to place the barrier on the grid and use a Dirichlet boundary condition.</p>
-<figure><img src="/post/ghost_unstable_euler.png"><figcaption>
-      <h4>Explicit scheme requires a very large number of time-steps.</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/post/ghost_unstable_cn.png"><figcaption>
-      <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
     </figcaption>
 </figure>
 

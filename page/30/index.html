@@ -73,6 +73,21 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-9-already-stable/">Fedora 9 Already Stable</a>
+  </h1>
+  <time datetime="2008-04-25T11:33:00Z" class="post-date">Fri, Apr 25, 2008</time>
+  <figure><img src="/post/Fedora9.png"><figcaption>
+      <h4>Fedora 9</h4>
+    </figcaption>
+</figure>
+
+<p>I &ldquo;upgraded&rdquo; my home computer to Fedora 9. &ldquo;upgraded&rdquo; because I reinstalled the OS instead of using the upgrade procedure. I have had so many issues with &ldquo;partial&rdquo; upgrades in the past (with any distro).</p>
+<p>Although it is the preview/RC1 version, Fedora 9 is already as stable as a release IMHO. No issues so far, it feels more polished than Fedora 8. OpenJDK 1.6 is there. Firefox 3 is there. Not a single problem with kernel 2.6.25 (while I had plenty with the 2.6.24 ones).</p>
+<p>Even <a href="https://bugzilla.redhat.com/show_bug.cgi?id=439858">Linus&rsquo;s wife</a> uses it!</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/swixml-review/">SwiXml Review</a>
   </h1>
   <time datetime="2008-04-24T12:19:00Z" class="post-date">Thu, Apr 24, 2008</time>
@@ -198,18 +213,6 @@ Recently, there was an <a href="http://cgi.cse.unsw.edu.au/~dons/blog/2007/11/29
 <li>It is also a general impression when interacting with the system.</li>
 </ul>
 <p>One can wonder why Fedora 8 does not install OpenOffice by default.<!-- raw HTML omitted -->Ubuntu is IMHO still the king of distros.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/apache-dbutils-completely-useless/">Apache DbUtils Completely Useless</a>
-  </h1>
-  <time datetime="2007-11-02T17:17:00Z" class="post-date">Fri, Nov 2, 2007</time>
-  <p>I am disappointed about the Jarkarta Commons DbUtils project. I give a link to it, because it&rsquo;s a bad project (even if written in clean code). It is very simple, but it really does not do much for you.</p>
-<p>I was looking for a very simple abstraction of JDBC. I thought bringing Spring in my project would be overkill. After trying DbUtils, I think again. It does not help. It does not handle frequent cases well, and it does not save many lines of code.</p>
-<p>I am a bit angry about it as I noticed that by using it, my test program that was taking 2s with straight JDBC before is now using 1 minute!</p>
-<p>The reason behind this huge performance penalty is that there is no way to just reuse a PreparedStatement with the existing classes. For each query with a same sql, it will create a new PreparedStatement object, even if you reuse the connection. I am surprised since this is probably why PreparedStatement is used in the first place. How can such a project be part of Jakarta repository?</p>
-<p>Now I just wish Spring was more Guice like, maybe I should write a Spring JDBC like layer for Guice.</p>
 
   
 </article>
