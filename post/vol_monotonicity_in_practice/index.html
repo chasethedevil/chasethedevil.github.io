@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,10 +76,10 @@
 <p>It can be quite challenging to evaluate the accuracy. For example, one potential error that the author makes is to use numbers that are not exactly representable in IEEE 754 standard such as 4.45 or 0.04. In Julia, and I believe in Python mpmath as well, there is a difference between a BigFloat(4.45) and a BigFloat(&ldquo;4.45&rdquo;):</p>
 <p><code>BigFloat(4.45)  = 4.45000000000000017763568394002504646778106689453125 BigFloat(&quot;4.45&quot;)= 4.449999999999999999999999999999999999999999999999999999999999999999999999999972</code></p>
 <p>If we work only on usual 64-bit floats, we likely want to estimate the accuracy of an implementation using BigFloat(4.45) as input rather than BigFloat(&ldquo;4.45&rdquo;). To compute a vanilla option price, the naive way would be through the cumulative normal distribution function (the textbook way), which looks like</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> bs(strike, forward, voltte)
-</span></span><span style="display:flex;"><span>    d1 <span style="color:#666">=</span> (log(forward<span style="color:#666">/</span>strike)<span style="color:#666">+</span>voltte<span style="color:#666">^</span><span style="color:#40a070">2</span> <span style="color:#666">/</span> <span style="color:#40a070">2</span>)<span style="color:#666">/</span>voltte
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> bs(strike, forward, voltte)
+</span></span><span style="display:flex;"><span>    d1 <span style="color:#f92672">=</span> (log(forward<span style="color:#f92672">/</span>strike)<span style="color:#f92672">+</span>voltte<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)<span style="color:#f92672">/</span>voltte
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> forward<span style="color:#f92672">*</span>cdf(Normal(),d1)<span style="color:#f92672">-</span>strike<span style="color:#f92672">*</span>cdf(Normal(),d1<span style="color:#f92672">-</span>voltte)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
 <figure><img src="/post/bs_price.png">
 </figure>

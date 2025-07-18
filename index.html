@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,32 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/nufft_and_cos/">NUFFT and COS</a>
+  </h1>
+  <time datetime="2025-07-14T17:27:00Z" class="post-date">Mon, Jul 14, 2025</time>
+  <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4335916">Leif Andersen and Mark Lake</a> recently proposed the use of Non-Uniform Fast Fourier Transform for option pricing via the characteristic function. Fourier techniques are most commonly used for pricing vanilla options under the Heston model, in order to calibrate the model. They can be applied to other models, typically with known characteristic function, but also with numerically solved characteristic function as in the rough Heston model, and to different kind of payoffs, for example variance/volatility swaps, options. The subject has been vastly explored already so what&rsquo;s new with this paper?</p>
+<p>At first, it was not obvious to me. The paper presents 3 different approaches, two where the probability density and cumulative density is first computed at a (not so sparse) set of knots and the payoff is integrated over it. The remaining approach is the classic one presented in the <a href="https://www.researchgate.net/profile/Dilip-Madan-2/publication/2519144_Option_Valuation_Using_the_Fast_Fourier_Transform/links/55235a820cf2a2d9e146f0bf/Option-Valuation-Using-the-Fast-Fourier-Transform.pdf">Carr and Madan paper from 1999</a> as well as in most of the litterature on the subject. The only additional trick is really the use of NUFFT along with some clever adaptive quadrature to compute the integral.</p>
+<p>I thought the main cost in the standard Fourier techniques was the evaluation of the characteristic function at many points, because the characteristic function is usually relatively complicated. And, in practice, it mainly is. So what does the new NUFFT algorithm bring? Surely the characteristic function must still be evaluated at the same points.</p>
+<p>The NUFFT becomes interesting to compute the option price at many many strikes at the same time. The strikes do not need to be equidistant and can be (almost) arbitrarily chosen. In Andersen and Lake paper, even a very fast technique such as the COS method reaches a threshold of option per second throughput, as the number of strikes is increased, mainly because of the repeated evaluation of the sum over different strikes, so the cost becomes proportional to the number of strikes.</p>
+<p>Evaluating at many many points becomes not much more expensive than evaluating at a few points only. This is what opens up the possibilities for the first 2 approaches based on the density.</p>
+<p>It turns out that it is not very difficult to rewrite the COS method so that it can make use of the NUFFT as well. I explain how to do it <a href="https://arxiv.org/abs/2507.13186v1">here</a>. Below is the throughput using NFFT.jl Julia package:
+<figure><img src="/post/heston_nufft.png"><figcaption>
+      <h4>Throughput on the Heston model with M=256 points.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>While a neat trick, it is however not 100% clear to me at this point where this is really useful: calibration typically involve a small number of strikes per maturity.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/forward-variance-models-and-calibration/">Forward Variance Models and Calibration</a>
   </h1>
@@ -259,13 +278,13 @@ Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for
 <li>The expansion is not really good in practice.</li>
 </ul>
 <p>There are two errors in the code: one in the cross derivative of PHIgxy2 (first order on x and second order on y), and one in the second order cross derivative of the Black-Scholes price dPdx2dy2.</p>
-<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>(phigx<span style="color:#666">*</span>(f<span style="color:#666">+</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span>) <span style="color:#666">+</span> phig<span style="color:#666">*</span>(fx<span style="color:#666">+</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f<span style="color:#666">*</span>fx<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span>));</span></span></code></pre></div>
+<p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>(phigx<span style="color:#f92672">*</span>(f<span style="color:#f92672">+</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f^<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> phig<span style="color:#f92672">*</span>(fx<span style="color:#f92672">+</span>gx<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>fx<span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f^<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>gx<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>));</span></span></code></pre></div>
 should be
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#666">-</span>(<span style="color:#40a070">3</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">+</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phigy<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>fy<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>f<span style="color:#666">*</span>gy<span style="color:#666">/</span><span style="color:#40a070">2</span>;</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#f92672">-</span>(<span style="color:#ae81ff">3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>g)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phigy<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>g)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>fy<span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>f<span style="color:#f92672">*</span>gy<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>;</span></span></code></pre></div></p>
 <p>and</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy <span style="color:#666">+</span> PHIgx2y <span style="color:#666">+</span> PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#f92672">*</span>exp(<span style="color:#f92672">-</span>rf<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>PHIfx2y2 <span style="color:#f92672">-</span> exp(<span style="color:#f92672">-</span>q<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>S<span style="color:#f92672">*</span>(PHIgy <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy <span style="color:#f92672">+</span> PHIgx2y <span style="color:#f92672">+</span> PHIgy2 <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy2 <span style="color:#f92672">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>should be</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#f92672">*</span>exp(<span style="color:#f92672">-</span>rf<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>PHIfx2y2<span style="color:#f92672">*</span>PHIfx2y2 <span style="color:#f92672">-</span> exp(<span style="color:#f92672">-</span>q<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>S<span style="color:#f92672">*</span>(PHIgy2 <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy2 <span style="color:#f92672">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>The formula for the piecewise-constant coefficients also contains errors: for example, the total variance variable wT is wrong. It should be a double sum instead of the standard constant Heston like formula. Finally, the many sums are rederived in the book, differently from the paper and are not simplified (unlike in the paper where they are all single sums).</p>
 <p>Indeed, with the original code from Rouah, the prices in the table of the paper from Benhamou Gobet and Miri are not reproduced to the last digit. With the above changes, they are.</p>
 <p>On the second point, it is surprising that the book does not mention that the approximation is not great. In particular, it does not mention that the calibrated parameters between Table 9.6 and Table 9.3 are vastly different (except for v0). The calibrated smile is plotted, which is great, but it is only plotted with the approximation formula. Plotting the same using the nearly exact semi-analytical representation of vanlla option prices would have been enlightening. We do it below, as Fabrice Rouah gives all the inputs (a very good thing):</p>
@@ -471,10 +490,10 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 <p>It can be quite challenging to evaluate the accuracy. For example, one potential error that the author makes is to use numbers that are not exactly representable in IEEE 754 standard such as 4.45 or 0.04. In Julia, and I believe in Python mpmath as well, there is a difference between a BigFloat(4.45) and a BigFloat(&ldquo;4.45&rdquo;):</p>
 <p><code>BigFloat(4.45)  = 4.45000000000000017763568394002504646778106689453125 BigFloat(&quot;4.45&quot;)= 4.449999999999999999999999999999999999999999999999999999999999999999999999999972</code></p>
 <p>If we work only on usual 64-bit floats, we likely want to estimate the accuracy of an implementation using BigFloat(4.45) as input rather than BigFloat(&ldquo;4.45&rdquo;). To compute a vanilla option price, the naive way would be through the cumulative normal distribution function (the textbook way), which looks like</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> bs(strike, forward, voltte)
-</span></span><span style="display:flex;"><span>    d1 <span style="color:#666">=</span> (log(forward<span style="color:#666">/</span>strike)<span style="color:#666">+</span>voltte<span style="color:#666">^</span><span style="color:#40a070">2</span> <span style="color:#666">/</span> <span style="color:#40a070">2</span>)<span style="color:#666">/</span>voltte
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> bs(strike, forward, voltte)
+</span></span><span style="display:flex;"><span>    d1 <span style="color:#f92672">=</span> (log(forward<span style="color:#f92672">/</span>strike)<span style="color:#f92672">+</span>voltte<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)<span style="color:#f92672">/</span>voltte
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> forward<span style="color:#f92672">*</span>cdf(Normal(),d1)<span style="color:#f92672">-</span>strike<span style="color:#f92672">*</span>cdf(Normal(),d1<span style="color:#f92672">-</span>voltte)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
 <figure><img src="/post/bs_price.png">
 </figure>
@@ -501,31 +520,6 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 </figure>
 
 <p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/copilot_vs_chatgpt_optimal_step_size/">Copilot vs ChatGPT on the Optimal Finite Difference Step-Size</a>
-  </h1>
-  <time datetime="2024-07-25T12:56:42&#43;0100" class="post-date">Thu, Jul 25, 2024</time>
-  <p>When computing the derivative of a function by finite difference, which step size is optimal? The answer depends on the kind of difference (forward, backward or central), and the degree of the derivative (first or second typically for finance).</p>
-<p>For the first derivative, the result is very quick to find (it&rsquo;s on <a href="https://en.wikipedia.org/wiki/Numerical_differentiation">wikipedia</a>). For the second derivative, it&rsquo;s more challenging. The <a href="https://paulklein.ca/newsite/teaching/Notes_NumericalDifferentiation.pdf">Lecture Notes</a> of Karen Kopecky provide an answer. I wonder if Copilot or ChatGPT would find a good solution to the question:</p>
-<blockquote>
-<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p></blockquote>
-<p>Here is the answer of copilot:
-<figure><img src="/post/step_size_copilot.png">
-</figure>
-
-and the one of chatGPT:
-<figure><img src="/post/step_size_chatgpt1.png">
-</figure>
-
-and a second answer from chatGPT:
-<figure><img src="/post/step_size_chatgpt2.png">
-</figure>
-</p>
-<p>Copilot always fails to provide a valid answer. ChatGPT v4 proves to be quite impressive: it is able to reproduce some of the reasoning presented in the lecture notes.</p>
-<p>Interestingly, with centered difference, for a given accuracy, the optimal step size is different for the first and for the second derivative. It may, at first, seem like a good idea to use a different size for each. In reality, when both the first and second derivative of the function are needed (for example the Delta and Gamma greeks of a financial product), it is rarely a good idea to use a different step size for each. Firstly, it will be slower since more the function will be evaluated at more points. Secondly, if there is a discontinuity in the function or in its derivatives, the first derivative may be estimated without going over the discontinuity while the second derivative may be estimated going over the discontinuity, leading to puzzling results.</p>
 
   
 </article>

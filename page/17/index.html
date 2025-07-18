@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,50 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">Arbitrage Free SABR - Another View on Hagan Approach</a>
+  </h1>
+  <time datetime="2013-12-14T00:56:00Z" class="post-date">Sat, Dec 14, 2013</time>
+  <p>Several months ago, I took a look at <a href="/post/sabr-with-the-new-hagan-pde-approach">two interesting recent ways</a> to price under SABR with no arbitrage:</p>
+<ul>
+<li>One way is due to <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1980726&amp;ei=F4yrUoL7Kq2M7AasuIFg&amp;usg=AFQjCNHDopVl4pLOYEqepVK8Odhk9Td3iA&amp;sig2=-fFTrJR1wY1elyXBC1EC0A&amp;bvm=bv.57967247,d.ZGU">Andreasen and Huge</a>, where they find an equivalent local volatility expansion, and then use a one-step finite difference technique to price.</li>
+<li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li>
+</ul>
+<p>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the <a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation">Fokker-Planck</a> (forward) equation.
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png">
+</figure>
+
+The \(\alpha D(F)\) is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png">
+</figure>
+
+A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a> of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:
+<figure><img src="/post/hagan_dens1.png">
+</figure>
+
+<figure><img src="/post/hagan_iv.png">
+</figure>
+
+The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:
+<figure><img src="/post/ah_dens1.png">
+</figure>
+
+<figure><img src="/post/ah_iv1.png">
+</figure>
+</p>
+<p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>
+<p>Hagan managed to derive a slightly more precise local volatility by going through the probability density route, and his paper formalizes his model in a clearer way: the probability density accumulates at the boundaries. But in practice, this formalism does not seem to matter. The forward Dupire way is more direct and slightly faster. This later way also allows to use alternative boundaries, like Andreasen-Huge did.</p>
+<p><strong>Update March 2014</strong> - I have now a paper around this &ldquo;<a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a>&rdquo;</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/american-option-on-forwardfutures/">American Option on Forward/Futures</a>
   </h1>
@@ -173,7 +210,7 @@ $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}
   </h1>
   <time datetime="2013-10-02T15:06:00Z" class="post-date">Wed, Oct 2, 2013</time>
   <p>A few years ago, I found an interesting open source symbolic calculus software called <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html%E2%80%8E">Xcas</a>. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions. Google pointed me to another popular open source package, <a href="http://maxima.sourceforge.net/">Maxima</a>. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
 </span></span><span style="display:flex;"><span>(%i15) G(x) := (lambda - rho*eta*x - D(x))/(lambda - rho*eta*x +D(x));
 </span></span><span style="display:flex;"><span>(%i16) tex(taylor((1-exp(-t*D(x)))/(1-G(x)*exp(-t*D(x)))*(lambda - rho*eta*x - D(x)),x,0,3));</span></span></code></pre></div>
 <p>$$-{{\left(e^{t,\lambda}-1\right),\eta^2,x}\over{2,e^{t,\lambda},\lambda}}+{{\left(\left(4,e^{t,\lambda},t,\eta^3,\rho+\left(4,\left(e^{t,\lambda}\right)^2-4,e^{t,\lambda}\right),\eta^2\right),\lambda^2+\left(\left(-4,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),\eta^3,\rho-2,e^{t,\lambda},t,\eta^4\right),\lambda+\left(\left(e^{t,\lambda}\right)^2-1\right),\eta^4\right),x^2}\over{8,\left(e^{t,\lambda}\right)^2,\lambda^3}}+{{\left(\left(8,\left(e^{t,\lambda}\right)^2,t^2,\eta^4,\rho^2-16,\left(e^{t,\lambda}\right)^2,t,\eta^3,\rho\right),\lambda^4+\left(16,\left(e^{t,\lambda}\right)^2,t,\eta^4,\rho^2+\left(-8,\left(e^{t,\lambda}\right)^2,t^2,\eta^5+\left(16,\left(e^{t,\lambda}\right)^3-16,\left(e^{t,\lambda}\right)^2\right),\eta^3\right),\rho+16,\left(e^{t,\lambda}\right)^2,t,\eta^4\right),\lambda^3+\left(\left(-16,\left(e^{t,\lambda}\right)^3+16,\left(e^{t,\lambda}\right)^2\right),\eta^4,\rho^2+\left(-16,\left(e^{t,\lambda}\right)^2-8,e^{t,\lambda}\right),t,\eta^5,\rho+2,\left(e^{t,\lambda}\right)^2,t^2,\eta^6+\left(-8,\left(e^{t,\lambda}\right)^3+8,e^{t,\lambda}\right),\eta^4\right),\lambda^2+\left(\left(12,\left(e^{t,\lambda}\right)^3-12,e^{t,\lambda}\right),\eta^5,\rho+\left(2,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),t,\eta^6\right),\lambda+\left(-2,\left(e^{t,\lambda}\right)^3-\left(e^{t,\lambda}\right)^2+2,e^{t,\lambda}+1\right),\eta^6\right),x^3}\over{32,\left(e^{t,\lambda}\right)^3,\lambda^5}}+\cdots $$
@@ -271,18 +308,6 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
 <p>All methods used 200 points. The error is nearly the same for all. And the Cos method takes now only 0.02s. The results are similar with a maturity of 2 weeks.</p>
 <p><strong>Conclusion</strong></p>
 <p>The Cos method performs less well on longer maturities. Attari or Lewis formula with control variate and caching of the characteristic function are particularly attractive, especially with the simple Andersen-Piterbarg integration.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/better-fonts-in-fedora-than-in-ubuntu/">Better Fonts in Fedora than in Ubuntu</a>
-  </h1>
-  <time datetime="2013-08-31T13:36:00Z" class="post-date">Sat, Aug 31, 2013</time>
-   
-
-<div style="text-align: justify;"><div class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif; font-size: small;">By default, text in Fedora 19 looks ok but not great. There are good tips to improve fonts on http://fedorasolved.org/Members/khaytsus/improve-fonts</span></div><div class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif; font-size: small;"> </span></div><div class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif; font-size: small;">As <u>root</u> user here is what need to be done:</span></div></div><pre class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif;">&nbsp;</span></pre><pre class="TerminalCommand"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">cd /etc/fonts/conf.d</span></pre><pre class="TerminalCommand"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ln -s /usr/share/fontconfig/conf.avail/10-autohint.conf</span></pre><pre class="TerminalCommand"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf</span></pre><pre class="TerminalCommand"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">yum install freetype-freeworl<span class="highlightedSearchTerm">d</span></span></pre><div style="text-align: justify;"><pre class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif;">&nbsp;</span></pre><div class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif;">Reboot, then, in gnome-tweak-tool choose hinting = slight, and antialiasing = rgba. I also choose the liberation sans and liberation mono fonts.</span></div><div class="TerminalCommand"><br /></div><div class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif;">I am not sure which one did the trick, but it looks much better (even better than my laptop under Ubuntu, not sure why).</span></div><pre class="TerminalCommand"><span style="font-family: &quot;Helvetica Neue&quot;,Arial,Helvetica,sans-serif;">&nbsp;<div class="separator" style="clear: both; text-align: center;"><br /><a href="http://1.bp.blogspot.com/-cDwcj_QVjsQ/UiHVKJn7-fI/AAAAAAAAGuo/7seakYSZp7Q/s1600/Screenshot+from+2013-08-31+13:35:40.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-cDwcj_QVjsQ/UiHVKJn7-fI/AAAAAAAAGuo/7seakYSZp7Q/s1600/Screenshot+from+2013-08-31+13:35:40.png" /></a></div><br /></span></pre></div>
-
-
 
   
 </article>

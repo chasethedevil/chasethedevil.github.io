@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
@@ -112,15 +112,15 @@
 <p>There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.</p>
 <p>Still it was extremely quick to grasp and write code, because it&rsquo;s so simple, especially when compared to Rust. But then, contrary to Rust, there is not as much safety provided by the language. Rust is quite impressive on this side (but unfortunately that implies less readable code). I&rsquo;d say that Go could become a serious alternative to Java.</p>
 <p>I also found an interesting minor performance issue with the default Go <a href="https://golang.org/src/math/rand/rand.go">Rand.Float64</a>, the library convert an Int63 to a double precision number this way:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (r <span style="color:#666">*</span>Rand) <span style="color:#06287e">Float64</span>() <span style="color:#902000">float64</span> {
-</span></span><span style="display:flex;"><span>	f <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>()) <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> <span style="color:#40a070">63</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> f <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
-</span></span><span style="display:flex;"><span>		f = <span style="color:#40a070">0</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Rand</span>) <span style="color:#a6e22e">Float64</span>() <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> float64(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Int63</span>()) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">63</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">f</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">f</span> = <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> f
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">f</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 I was interested in having a number in (0,1) and not [0,1), so I just used the conversion pattern from MersenneTwister 64 code:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>f <span style="color:#666">:=</span> (<span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>() <span style="color:#666">&gt;&gt;</span> <span style="color:#40a070">11</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span><span style="color:#666">/</span><span style="color:#40a070">4503599627370496.0</span>)</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> (float64(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Int63</span>() <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">11</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">*</span> (<span style="color:#ae81ff">1.0</span><span style="color:#f92672">/</span><span style="color:#ae81ff">4503599627370496.0</span>)</span></span></code></pre></div>
 The reasoning behind this later code is that the mantissa is 52 bits, and this is the most accuracy we can have between 0 and 1. There is no need to go further, this also avoids the issue around 1. It&rsquo;s also straightforward that is will preserve the uniform property, while it&rsquo;s not so clear to me that r.Int63()/2^63 is going to preserve uniformity as double accuracy is higher around 0 (as the exponent part can be used there) and lesser around 1: there is going to be much more multiple identical results near 1 than near 0.</p>
 <p>It turns out that the if check adds 5% performance penalty on this test, likely because of processor caching issues. I was surprised by that since there are many other ifs afterwards in the code, for the inverse cumulative function, and for the payoff.</p>
 

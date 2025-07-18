@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/on-the-role-of-static-types-and-generic-types-on-productivity/">On the Role of Static Types and Generic Types on Productivity</a>
+  </h1>
+  <time datetime="2014-06-29T10:40:00Z" class="post-date">Sun, Jun 29, 2014</time>
+   
+
+Most developers have strong opinions on dynamic types programming languages vs static types programming languages. The former is often assumed to be good for small projects/prototyping while the later better for bigger projects. But there is a surprisingly small number of studies to back those claims.<br /><br />One such study is "<a href="http://diyhpl.us/~bryan/papers2/paperbot/7a01e5a892a6d7a9f408df01905f9359.pdf" target="_blank">An experiment about static and dynamic type systems: doubts about the positive impact of static type systems on development time</a>" and came to the conclusion that on a small project, static typing did not decrease programming time, and actually increased debugging time. However 4 years later, "<a href="http://users.dcc.uchile.cl/~rrobbes/p/ICPC2014-idetypes.pdf" target="_blank">An empirical comparison of static and dynamic type systems on API usage in the presence of an IDE: Java vs. groovy with eclipse</a>" shows that a developer is 2x more productive with Java than with Groovy using an unknown API. This contrasts a bit (but does not contradict) with their previous study "<a href="http://swp.dcc.uchile.cl/TR/2012/TR_DCC-20120418-005.pdf" target="_blank">Static Type Systems (Sometimes) have a Positive Impact on the Usability of Undocumented Software: An Empirical Evaluation</a>" that showed Groovy to be more productive on small projects. One problem is that all these studies stem from the same person.<br /><br />It's more interesting to look at generic types vs raw types use, where even less studies have been done. "<a href="http://dl.acm.org/citation.cfm?id=2509528" target="_blank">Do developers benefit from generic types?: an empirical comparison of generic and raw types in java</a>" concludes that generic types do not provide any advantages to fix typing errors, hardly surprising in my opinion. Generic types (especially with type erasure as in Java) is the typical idea that sounds good but that in practice does not really help: it makes the code actually more awkward to read and tend to make developers too lazy to create new classes that would often be more appropriate than a generic type (think Map&lt;String,List&lt;Map&lt;String, Date&gt;&gt;&gt;).
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/moore-penrose-inverse--gauss-newton-sabr-minimization/">Moore-Penrose Inverse &amp; Gauss-Newton SABR Minimization</a>
   </h1>
@@ -230,17 +242,6 @@ Of course the best overall fit is achieved with the classic SVI, because it has 
 <p>I also tried asking probability puzzles (requiring only basic maths knowledge). This gave even less clues towards the candidates in general, except for the exceptional one, where, again you feel a bit dumb for asking those.</p>
 <p>In the end, I noticed that the most interesting part of the interview was to discuss a subject the candidate knew well, with the idea of trying to extract knowledge from the candidate, to learn something from him.</p>
 <p>I believe this is might be what the interview should only be about. Furthermore, you don&rsquo;t feel like you are losing your time with such an approach.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/non-linear-option-pricing/">Non-linear Option Pricing</a>
-  </h1>
-  <time datetime="2014-04-18T22:18:00Z" class="post-date">Fri, Apr 18, 2014</time>
-  <p>I am currently reading the book &ldquo;<a href="http://www.amazon.co.uk/Nonlinear-Pricing-Chapman-Financial-Mathematics/dp/1466570334/ref=sr_1_1?ie=UTF8&amp;qid=1397852099&amp;sr=8-1&amp;keywords=nonlinear+option+pricing">Nonlinear Option Pricing</a>&rdquo; by J. Guyon and P. Henry-Labordère. It&rsquo;s quite interesting even if the first third is quite theoretical. For example they describe how to solve some not well defined non-linear parabolic PDE by relying on the parabolic envelope. They also explain why most problems lead to parabolic PDEs in finance.</p>
-<p>The rest is a bit more practical. I stumbled upon an good remark regarding Longstaff-Schwartz: the algorithm as Longstaff and Schwarz describe it does not necessary lead to a low-biased estimate as they use future information (the paths they regress on) in the Monte-Carlo estimate. It was actually <a href="/post/quasi-monte-carlo--longstaff-schwartz-american-option-price/">a subject of discussion</a> with colleagues, and I analyzed the numerical impact in a simple use case in <a href="http://papers.ssrn.com/abstract=2262259">http://papers.ssrn.com/abstract=2262259</a> In short: it&rsquo;s actually more precise to include the path, even if the estimate is not purely low biased anymore, but the bias is really small in practice.</p>
-<p>On the same subject I was a bit surprised that <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Farxiv.org%2Fabs%2F1404.1180&amp;ei=LYhRU_iZGqWO7Qb9x4HYDQ&amp;usg=AFQjCNGfwQQ-TumcT5nv8gk1BiUCoRn8Qw&amp;sig2=uqPbG7aLjmZ1crAxUYP_FA&amp;bvm=bv.65058239,d.ZGU">a recent paper</a> on American Monte-Carlo regressed systematically on all paths instead of just a subset. One interesting part of the paper is a way to do successive regressions on different blocks of paths.</p>
-<p>Those details are rarely discussed in papers and books. It was comforting to see that I am not alone to wonder about all this.</p>
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,7 +74,9 @@
   <time datetime=2010-11-29T12:45:00Z class="post-date">Mon, Nov 29, 2010</time>
   <p>A while ago, <a href="/post/the-pain-of-java-matrix-libraries">I was already looking</a> for a good Java Matrix library, complaining that there does not seem any real good one where development is still active: the 2 best ones are in my opinion <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> and <a href="http://dsd.lbl.gov/~hoschek/colt/">Colt</a>.</p>
 <p>Recently I tried to <a href="http://www.wilmott.com/detail.cfm?articleID=345">price options via RBF</a> (radial basis functions) based on <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1648878">TR-BDF2</a> time stepping.
-This is a problem where one needs to do a few matrix multiplications and inverses (or better, LU solve) in a loop. The size of the matrix is typically 50x50 to 100x100, and one can loop between 10 and 1000 times.<!-- raw HTML omitted --><!-- raw HTML omitted -->Out of curiosity I decided to give <a href="http://ojalgo.org/">ojalgo</a> and <a href="http://code.google.com/p/matrix-toolkits-java">MTJ</a> a chance. I had read benchmarks (<a href="http://blog.mikiobraun.de/2009/04/some-benchmark-numbers-for-jblas.html">here about jblas</a> and <a href="http://code.google.com/p/java-matrix-benchmark/wiki/Runtime_2xXeon_2010_08">here the java matrix benchmark</a>) where those libraries performed really well.<!-- raw HTML omitted --><!-- raw HTML omitted -->On my core i5 laptop under the latest 64bit JVM (Windows 7), I found out that for the 100x100 case, <em>Jama was actually 30% faster than MTJ</em>, and ojalgo was more than 50% slower. I also found out that I did not like ojalgo API at all. I was quite disappointed by those results.</p>
+This is a problem where one needs to do a few matrix multiplications and inverses (or better, LU solve) in a loop. The size of the matrix is typically 50x50 to 100x100, and one can loop between 10 and 1000 times.</p>
+<p>Out of curiosity I decided to give <a href="http://ojalgo.org/">ojalgo</a> and <a href="http://code.google.com/p/matrix-toolkits-java">MTJ</a> a chance. I had read benchmarks (<a href="http://blog.mikiobraun.de/2009/04/some-benchmark-numbers-for-jblas.html">here about jblas</a> and <a href="http://code.google.com/p/java-matrix-benchmark/wiki/Runtime_2xXeon_2010_08">here the java matrix benchmark</a>) where those libraries performed really well.</p>
+<p>On my core i5 laptop under the latest 64bit JVM (Windows 7), I found out that for the 100x100 case, <strong>Jama was actually 30% faster than MTJ</strong>, and ojalgo was more than 50% slower. I also found out that I did not like ojalgo API at all. I was quite disappointed by those results.</p>
 <p>So I tried the same test on a 6-core Phenom II (ubuntu 64bit), Jama was faster than MTJ by 0-10%. Ojalgo and ParallelColt were slower than Jama by more than 50% and 30%.</p>
 <p>This does not mean that ojalgo and ParallelColt are so bad, maybe they behave much better than the simple Jama on large matrices. They also have more features, including sparse matrices. But Jama is quite a good choice for a default library, MTJ can also be a good choice, it can be faster and use less memory because most methods take the output matrix/vector as a parameter. Furthermore MTJ can use the native lapack and blas libraries for improved performance. The bigger the matrices, the most difference it will make.</p>
  

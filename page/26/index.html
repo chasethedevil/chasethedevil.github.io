@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,22 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/java--3d-surface/">Java &amp; 3D Surface</a>
+  </h1>
+  <time datetime="2009-12-18T16:07:00Z" class="post-date">Fri, Dec 18, 2009</time>
+  <p>I have been looking all around the web for a Java library that can draw a simple 3D surface. And I did not find any. Most charting library, including the well known JFreeChart, can only draw 2D charts.</p>
+<p>I am quite shocked that something that has been in Excel for 15 years is still not available in Java. And it&rsquo;s not easy to make your own.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/double-is-fine/">double[][] Is Fine</a>
   </h1>
@@ -146,9 +155,9 @@ In the latest stable Ubuntu (9.04), pulseaudio still does not work reliably on m
 <p>can we rely that int x = Integer.MAX_VALUE + 1 is the same for every JVM on any platform?</p>
 <p>I thought the answer would be easy to find in the Java specifications document. But I was wrong. It is not clearly defined.</p>
 <p>I found a trick that suggests this behavior is indeed standard and will stay the same, it is related to type casting. Java guarantees that the cast of a long just truncates the long to int precision. Therefore if
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#902000">long</span><span style="color:#bbb"> </span>l<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Integer.<span style="color:#4070a0">MAX_VALUE</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>l<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>l<span style="color:#bbb"> </span><span style="color:#666">+</span>1;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>x<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>(<span style="color:#902000">int</span>)l;</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">long</span> l <span style="color:#f92672">=</span> Integer.<span style="color:#a6e22e">MAX_VALUE</span>;
+</span></span><span style="display:flex;"><span>l <span style="color:#f92672">=</span> l <span style="color:#f92672">+</span>1;
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span>)l;</span></span></code></pre></div></p>
 <p>x has a guaranteed value.
 <a href="http://java.sun.com/docs/books/jls/third_edition/html/conversions.html">http://java.sun.com/docs/books/jls/third_edition/html/conversions.html</a> paragraph 5.1.3.</p>
 
@@ -189,18 +198,6 @@ I often looked at the famous computer languages shootout for fun. Recently I not
 <li>cholesky BSD=37.1ms</li>
 </ul>
 <p>So BSD code is 7 times slower! Of course it can do a bit more and has many checks of validity, but still. It shows it is not easy to do Math libraries, because some people will care a lot about this performance difference, and some other people won&rsquo;t but will like the other &ldquo;features&rdquo;.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/hull-american-option-price-fallacies/">Hull American Option Price Fallacies</a>
-  </h1>
-  <time datetime="2009-05-15T16:01:00Z" class="post-date">Fri, May 15, 2009</time>
-   
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s1600-h/hull_american_r04_v20_q02_p49.png"><img style="margin: 0pt 10px 10px 0pt; float: left; cursor: pointer; width: 320px; height: 240px;" src="http://4.bp.blogspot.com/_9RyqGT46Fbk/Sg13q_LZDrI/AAAAAAAADNE/WHy0J8iNZoY/s320/hull_american_r04_v20_q02_p49.png" alt="" id="BLOGGER_PHOTO_ID_5336052713901330098" border="0" /></a><br />Hull says American put is best exercised immediately and american call is optimal at expiry like a european. Is this really true?<br /><br />At first it seems really clever and model show clearly this. But if we change the market assumptions only a tiny bit, everything falls down.<br /><br />I could not detail everything in a blog post so I created a <a href="http://31416.appspot.com/static/hullamerican/hull_american_price.html">static web page about it</a>. Everything was produced in Java using algorithm found in popular books and graphs through JFreeChart.
-
-
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,61 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/clenshaw_fft_implementation/">Clenshaw-Curtis Quadrature Implementation by FFT in Practice</a>
+  </h1>
+  <time datetime="2023-09-27T20:56:42&#43;0100" class="post-date">Wed, Sep 27, 2023</time>
+  <p>The <a href="https://en.wikipedia.org/wiki/Clenshaw%E2%80%93Curtis_quadrature">Clenshaw-Curtis quadrature</a> is known to be competitive with Gauss quadratures. It has several advantages:</p>
+<ul>
+<li>the weights are easy and fast to compute.</li>
+<li>adaptive / doubling quadratures are possible with when the Chebyshev polynomial of the second kind is used for the quadrature.</li>
+<li>the Chebyshev nodes may also be used to interpolate some costly function.</li>
+</ul>
+<p>The wikipedia article has a relatively detailed description on how to compute the quadrature weights corresponding to the Chebyshev polynomial of the second kind (where the points -1 and 1 are included), via a type-I DCT. It does not describe the weights corresponding to the Chebyshev polynomials of the first kind (where -1 and 1 are excluded, like the Gauss quadratures). <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">The numbersandshapes blog post</a> describes it very nicely. There are some publications around computation of Clenshaw-Curtis or Fejer rules, a recent one is <a href="https://www.sciencedirect.com/science/article/pii/S089812211200689X">Fast construction of Fejér and Clenshaw–Curtis rules for general weight functions</a>.</p>
+<p>I was looking for a simple implementation of the quadrature or its weights, leveraging some popular FFT library such as <a href="https://www.fftw.org/">fftw (The Fastest Fourier Transform in the West)</a>. I expected it to be a simple search. Instead, it was surprisingly difficult to find even though the code in Julia consists only in a few lines:</p>
+<ul>
+<li>
+<p>First kind (following the <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">numbersandshapes blog post</a>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>n) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>n))
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> chebnodes(<span style="color:#66d9ef">Float64</span>, N)
+</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> vcat(sqrt(<span style="color:#ae81ff">2</span>), <span style="color:#ae81ff">0.0</span>, [(<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">^</span>k) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> k<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> sqrt(<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> N) <span style="color:#f92672">*</span> idct(m)</span></span></code></pre></div></p>
+</li>
+<li>
+<p>Second kind (the classic Clenshaw-Curtis, following some article from Treffenden)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> (n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)))
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> cheb2nodes(<span style="color:#66d9ef">Float64</span>, N)
+</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(<span style="color:#ae81ff">2</span>, [<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> i<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)]) <span style="color:#75715e"># Standard Chebyshev moments</span>
+</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(c, c[<span style="color:#66d9ef">Int</span>(floor(N <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>))<span style="color:#f92672">:-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>])         <span style="color:#75715e"># Mirror for DCT via FFT </span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> real(ifft(c))                             <span style="color:#75715e"># Interior weight</span>
+</span></span><span style="display:flex;"><span>ws[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> vcat(ws, ws[<span style="color:#ae81ff">1</span>])                           <span style="color:#75715e"># Boundary weights</span></span></span></code></pre></div></p>
+</li>
+</ul>
+<p>There are some obvious possible improvements: the nodes are symmetric and only need to be computed up to N/2, but the above is quite fast already. The Julia package <a href="https://github.com/JuliaApproximation/FastTransforms.jl">FastTransforms.jl</a> provides the quadrature weights although the API is not all that intuitive:</p>
+<ul>
+<li>First kind:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+<li>Second kind:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+</ul>
+<p>Interestingly the first kind is twice faster with FastTransforms, which suggests a similar symetry use as for the second kind. But the second kind is nearly twice slower.</p>
+<p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
+<figure><img src="/post/quad_rho_all.png"><figcaption>
+      <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
+    </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/ghost_vacations/">Ghost Vacations</a>
   </h1>
@@ -293,15 +341,15 @@ a fractional Brownian motion is used. The idea of using a fractional Brownian mo
   <time datetime="2022-04-09T21:56:42&#43;0100" class="post-date">Sat, Apr 9, 2022</time>
   <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
 I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; numSimulations; i<span style="color:#666">++</span> {
-</span></span><span style="display:flex;"><span>	pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path) <span style="color:#60a0b0;font-style:italic">//path contains an array of n time-steps of float64.</span>
-</span></span><span style="display:flex;"><span>	pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path, output)
-</span></span><span style="display:flex;"><span>	statistics.<span style="color:#06287e">RecordValue</span>(output)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">numSimulations</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pathGenerator</span>.<span style="color:#a6e22e">ComputeNextPath</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">path</span>) <span style="color:#75715e">//path contains an array of n time-steps of float64.</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pathEvaluator</span>.<span style="color:#a6e22e">Evaluate</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">output</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">statistics</span>.<span style="color:#a6e22e">RecordValue</span>(<span style="color:#a6e22e">output</span>)
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths) <span style="color:#60a0b0;font-style:italic">//paths contains an array of n time-steps of vectors of size numSimulations </span>
-</span></span><span style="display:flex;"><span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths, output)
-</span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pathGenerator</span>.<span style="color:#a6e22e">ComputeAllPaths</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">paths</span>) <span style="color:#75715e">//paths contains an array of n time-steps of vectors of size numSimulations </span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pathEvaluator</span>.<span style="color:#a6e22e">EvaluateAll</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">paths</span>, <span style="color:#a6e22e">output</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">statistics</span>.<span style="color:#a6e22e">RecordValues</span>(<span style="color:#a6e22e">output</span>)</span></span></code></pre></div></p>
 <p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
 <p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
 <p>Which one is most appropriate?</p>
@@ -321,17 +369,17 @@ A python programmer would likely not write a simulation this way, as the python 
 into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number).
 This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</p>
 <p>I played myself with Julia&rsquo;s excellent ForwardDiff package, and found out a completely different example which illustrates a simple and easy trap with automatic differentiation. The example is a typical cubic spline evaluation routine:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
-</span></span><span style="display:flex;"><span>  i <span style="color:#666">=</span> searchsortedfirst(self<span style="color:#666">.</span>x, z)  <span style="color:#60a0b0;font-style:italic"># x[i-1]&lt;z&lt;=x[i]</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> z <span style="color:#666">==</span> self<span style="color:#666">.</span>x[i]
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> i <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span>
-</span></span><span style="display:flex;"><span>    i <span style="color:#666">-=</span> <span style="color:#40a070">1</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>  h <span style="color:#666">=</span> z <span style="color:#666">-</span> self<span style="color:#666">.</span>x[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>b[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>c[i] <span style="color:#666">+</span> h <span style="color:#666">*</span> (self<span style="color:#666">.</span>d[i])))
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> evaluate(self, z)
+</span></span><span style="display:flex;"><span>  i <span style="color:#f92672">=</span> searchsortedfirst(self<span style="color:#f92672">.</span>x, z)  <span style="color:#75715e"># x[i-1]&lt;z&lt;=x[i]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> z <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>x[i]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>a[i]
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> i <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  h <span style="color:#f92672">=</span> z <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>x[i]
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>a[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>b[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>c[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>d[i])))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>The ForwardDiff will lead to derivative = 0 at z = x[i], while, in reality, it is not - the derivative is b[i]. The case z = x[i] is just a (not so clever) optimization.
 Granted, it is wrong only at the spline knots, but if those correspond to key points we evaluate as part of a minimization, it might become very problematic.</p>
 <p>Another interesting remark to make on automatic differentiation is on the choice of backward (reverse) vs. forward (tangent) automatic differentiation: we often read that backward is more appropriate when the dimension of the output is low compared to the dimension of the input, and forward when the dimension of the output is large compared to the dimension of the input.
@@ -341,45 +389,6 @@ And thus, for least-squares, backward automatic differentiation will likely be s
 <p>Interestingly, the <a href="https://fr.mathworks.com/help/optim/ug/autodiff-background.html">Matlab documentation</a> mentions explicitly this use case:</p>
 <blockquote>
 <p>lsqnonlin defaults to forward AD when the number of elements in the objective vector is greater than or equal to the number of variables. Otherwise, lsqnonlin defaults to reverse AD.</p></blockquote>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/quadprog-in-julia/">Quadprog in Julia</a>
-  </h1>
-  <time datetime="2021-11-21T13:56:42&#43;0100" class="post-date">Sun, Nov 21, 2021</time>
-  <p>As described <a href="https://en.wikipedia.org/wiki/Quadratic_programming">on wikipedia</a>, a quadratic programming problem with <em>n</em> variables and <em>m</em> constraints is of the  form
-$$ \min(-d^T x + 1/2 x^T D x) $$ with the
-constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional real symmetric matrix, \(A\) is a \(n \times m\)-dimensional real matrix, \( b_0 \) is a \(m\)-dimensional vector of constraints, \( d \) is a \(n\)-dimensional vector, and the variable \(x\) is a \(n\)-dimensional vector.</p>
-<p>Solving convex quadratic programming problems happens to be useful in several areas of finance. One of the applications is to find the set of arbitrage-free option prices closest to a given set of market option prices as described in <a href="https://arxiv.org/abs/2004.08650">An arbitrage-free interpolation of class C2 for option prices</a> (also published in the <a href="https://jod.pm-research.com/content/28/4/64">Journal of Derivatives</a>). Another application is portfolio optimization.</p>
-<p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
-<p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the <a href="https://oxfordcontrol.github.io/COSMO.jl/stable/">COSMO solver</a> on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Solver</th>
-          <th style="text-align: right">RMSE</th>
-          <th style="text-align: right">Time (ms)</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">GoldfarbIdnaniSolver</td>
-          <td style="text-align: right">0.0031130349998388157</td>
-          <td style="text-align: right">0.205</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">COSMO</td>
-          <td style="text-align: right">0.0031130309597602370</td>
-          <td style="text-align: right">21.485</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SCS</td>
-          <td style="text-align: right">0.0031130429769795193</td>
-          <td style="text-align: right">8.381</td>
-      </tr>
-  </tbody>
-</table>
 
   
 </article>

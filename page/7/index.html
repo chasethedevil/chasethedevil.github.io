@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.147.8">
+  <meta name="generator" content="Hugo 0.148.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,35 @@
     </ul>
  </nav>
 
-    <p>&copy; 2025. All rights reserved. </p>
+    <p>&copy; 181842. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the_neural_network_in_your_cpu/">The Neural Network in Your CPU</a>
+  </h1>
+  <time datetime="2017-08-06T23:56:42&#43;0100" class="post-date">Sun, Aug 6, 2017</time>
+  <p>Machine learning and artificial intelligence are the current hype (again). In their new Ryzen processors, <a href="http://www.anandtech.com/Gallery/Album/5197#18">AMD advertises the Neural Net Prediction</a>. It turns out this is was already used in their older (2012) Piledriver architecture used for example in the <a href="http://www.anandtech.com/show/5831/amd-trinity-review-a10-4600m-a-new-hope">AMD A10-4600M</a>. It is also present in recent Samsung processors such as <a href="https://www.theregister.co.uk/2016/08/22/samsung_m1_core/">the one powering the Galaxy S7</a>. What is it really?</p>
+<p>The basic idea can be traced to a paper from Daniel Jimenez and Calvin Lin <a href="https://www.cs.utexas.edu/~lin/papers/hpca01.pdf">&ldquo;Dynamic Branch Prediction with Perceptrons&rdquo;</a>, more precisely described in the subsequent paper <a href="http://taco.cse.tamu.edu/pdfs/tocs02.pdf">&ldquo;Neural methods for dynamic branch prediction&rdquo;</a>. Branches typically occur  in <code>if-then-else</code> statements. <a href="https://en.wikipedia.org/wiki/Branch_predictor">Branch prediction</a> consists in guessing which code branch, the <code>then</code> or the <code>else</code>, the code will execute, thus allowing to precompute the branch in parallel for faster evaluation.</p>
+<p>Jimenez and Lin rely on a simple single-layer perceptron neural network whose input are the branch outcome (global or hybrid local and global) histories and the output predicts which branch will be taken. In reality, because there is a single layer, the output y is simply a weighted average of the input (x, and the constant 1):</p>
+<p>$$ y = w_0 + \sum_{i=1}^n x_i w_i $$</p>
+<p>\( x_i = \pm 1 \) for a taken or not taken. \( y &gt; 0 \) predicts to take the branch.</p>
+<p>Ideally, each static branch is allocated its own perceptron. In practice, a hash of the branch address is used.</p>
+<p>The training consists in updating each weight according to the actual branch outcome t : \( w_i = w_i + 1 \) if \( x_i = t \) otherwise \( w_i = w_i - 1 \). But this is done only if the predicted outcome is lower than the training (stopping) threshold or if the branch was mispredicted. The threshold keeps from overtraining and allow to adapt quickly to changing behavior.</p>
+<p>The perceptron is one of those algorithms created by a psychologist. In this case, the culprit is Frank Rosenblatt. Another more recent algorithm created by a psychologist is the <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">particle swarm optimization</a> from James Kennedy. As <a href="https://quantsrus.github.io/post/particle_swarm_optimization/">in the case of</a> particle swarm optimization, there is not a single well defined perceptron, but many variations around some key principles. A reference seems to be the perceptron from H.D. Block, probably because he describes the perceptron in terms closer to code, while Rosenblatt was really describing a perceptron machine.</p>
+<p>The perceptron from H.D. Block is slightly more general than the perceptron used for branch prediction:</p>
+<ul>
+<li>the output can be -1, 0 or 1. The output is zero if the weighted average is below a threshold (a different constant from the training threshold of the branch prediction perceptron).</li>
+<li>reinforcement is not done on inactive connections, that is for \( x_i = 0 \).</li>
+<li>a learning rate \( \alpha \) is used to update the weight: \( w_i += \alpha t x_i \)</li>
+</ul>
+<p>The perceptron used for branch prediction is quite different from the deep learning neural networks fad, which have many more layers, with some feedback loop. The challenge of those is the training: when many layers are added to the perceptron, the gradients of each layer activation function multiply in the backpropagation algorithm. This makes the &ldquo;effective&rdquo; gradient at the first layers to be very small, which translates to tiny changes in the weights, making training not only very slow but also likely stuck in a sub-optimal local minimum. Beside the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient</a> problem, there is also the <a href="https://en.wikipedia.org/wiki/Catastrophic_interference">catastrophic interference</a> problem to pay attention to. Those issues are today dealt with the use of <a href="http://neuralnetworksanddeeplearning.com/chap6.html">specific strategies to train / structure the network</a> combined with raw computational power that was unavailable in the 90s.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/benham_disc_in_web_canvas/">Benham disc in web canvas</a>
   </h1>
@@ -549,9 +571,9 @@ are available when generating a uniform random double precision number (as it is
 The game is then to find nodes so that the distribution with discrete probabilities in i/256 with some interger i
 match the moments of the normal distribution. It is a non linear problem unfortunately, but I found a solution
 for the probabilities
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">94</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">32</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span>, <span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">256</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">32</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">94</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">94</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">32</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span></span></span></code></pre></div>
 The nodes are:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#666">-</span><span style="color:#40a070">3.1348958252117543</span>, <span style="color:#666">-</span><span style="color:#40a070">2.6510063991157273</span>, <span style="color:#666">-</span><span style="color:#40a070">1.6397086267587215</span>, <span style="color:#666">-</span><span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">0.5168230803049496</span>, <span style="color:#40a070">1.6397086267587215</span>, <span style="color:#40a070">2.6510063991157273</span>, <span style="color:#40a070">3.1348958252117543</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#f92672">-</span><span style="color:#ae81ff">3.1348958252117543</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.6510063991157273</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.6397086267587215</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5168230803049496</span>, <span style="color:#ae81ff">0.5168230803049496</span>, <span style="color:#ae81ff">1.6397086267587215</span>, <span style="color:#ae81ff">2.6510063991157273</span>, <span style="color:#ae81ff">3.1348958252117543</span></span></span></code></pre></div>
 The probabilities approximate those given by the ideal solution on 8 nodes,
 that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="http://pubsonline.informs.org/doi/abs/10.1287/mnsc.29.3.352?journalCode=mnsc">Discrete Approximations of Probability Distributions</a>).</p>
 <p>While this helps a bit for small steps as shown on the following graph, it is far from good:
@@ -561,24 +583,6 @@ that is, the weights of the Gauss-Hermite polynomial (see Alan Miller <a href="h
 </figure>
 </p>
 
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/xfce_fedora25/">Power management and XFCE under Fedora 25</a>
-  </h1>
-  <time datetime="2017-01-19T09:55:32&#43;0100" class="post-date">Thu, Jan 19, 2017</time>
-  <p>The gnome shell has been crashing on me more regularly lately.
-XFCE is a good and fast more tradional desktop, but, from past experiences,
-it does not play well with power management if you only install it via</p>
-<pre tabindex="0"><code>dnf install @xfce-desktop-environment
-</code></pre><p>My typical experience is a black screen after resuming from suspend (sometimes, not always), or hibernate (always) and
-most of the time I end up just rebooting. It turns out this is all caused by the interaction between the gdm login daemon and xfce. Moving
-to the lightdm login daemon instead fixes those issues for Fedora 25:</p>
-<pre tabindex="0"><code>systemctl disable gdm
-systemctl enable lightdm
-systemctl stop gdm
-systemctl start lightdm
-</code></pre>
   
 </article>
 </div>
