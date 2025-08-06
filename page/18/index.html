@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,84 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/">Making Classic Heston Integration Faster than the Cos Method</a>
+  </h1>
+  <time datetime="2013-09-05T17:35:00Z" class="post-date">Thu, Sep 5, 2013</time>
+  <p>A coworker pointed to me that Andersen and Piterbarg book &ldquo;Interest Rate Modeling&rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston.
+<figure><img src="/post/lewis_formula.png"/><figcaption>
+            <h4>Lewis formula</h4>
+        </figcaption>
+</figure>
+</p>
+<p>More importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method. So I was a bit sceptical. I decided to add the control variate to <a href="/post/attari-lord-kahl--cos-methods-comparison-on-heston/">my Attari code</a>. The results were very encouraging. So I pursued on implementing the Lewis formula and their basic integration scheme (no change of variable).
+<figure><img src="/post/attari_formula.png"/><figcaption>
+            <h4>Attari formula</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/carrmadan_formula.png"/><figcaption>
+            <h4>Carr-Madan formula (used by Lord-Kahl)</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/heston_formula.png"/><figcaption>
+            <h4>Heston formula</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/cos_formula.png"/><figcaption>
+            <h4>Cos formula</h4>
+        </figcaption>
+</figure>
+</p>
+<p>My impression is that the Lewis formula is not so different from the Attari formula in practice: both have a quadratic denominator, and are of similar complexity. The Lewis formula makes the Black-Scholes control variate real (the imaginary part of the characteristic function is null). The Cos formula looks quite different, but it actually is not that much different as the Vk are quadratic in the denominator as well. I still have this idea of showing how close it is to Attari in spirit.</p>
+<p>My initial implementation of Attari relied on the log transform described by Kahl-Jaeckel to move from an infinite integration domain to a finite domain. As a result adaptive quadratures (for example based on Simpson) provide better performance/accuracy ratio than a very basic trapezoidal rule as used by Andersen and Piterbarg. If I remove the log transform and truncate the integration according by Andersen and Piterbarg criteria, pricing is faster by a factor of x2 to x3.</p>
+<p>This is one of the slightly surprising aspect of Andersen-Piterbarg method: using a very basic integration like the Trapezoidal rule is enough. A more sophisticated integration, be it a Simpson 3/8 rule or some fancy adaptive Newton-Cotes rule does not lead to any better accuracy. The Simpson 3/8 rule won&rsquo;t increase accuracy at all (although it does not cost more to compute) while the adaptive quadratures will often lead to a higher number of function evaluations or a lower overall accuracy.</p>
+<p>Here is the accuracy on put options with a maturity of 2 years:
+<figure><img src="/post/cos_a_p_2y.png"/>
+</figure>
+</p>
+<p>I had to push to 512 points for the Cos method and L=24 (truncation) in order to have a similar accuracy as Attari and Andersen-Piterbarg with 200 points and a control variate. For 1000 options here are the computation times (the difference is smaller for 10 options, around 30%):</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Attari</td>
+<td>0.023s</td>
+</tr>
+<tr>
+<td>Andersen-Piterbarg</td>
+<td>0.024s</td>
+</tr>
+<tr>
+<td>Cos</td>
+<td>0.05s</td>
+</tr>
+</tbody>
+</table>
+<p>Here is the accuracy on put options with a maturity of 2 days:
+<figure><img src="/post/cos_a_p_2d.png"/>
+</figure>
+</p>
+<p>All methods used 200 points. The error is nearly the same for all. And the Cos method takes now only 0.02s. The results are similar with a maturity of 2 weeks.</p>
+<p><strong>Conclusion</strong></p>
+<p>The Cos method performs less well on longer maturities. Attari or Lewis formula with control variate and caching of the characteristic function are particularly attractive, especially with the simple Andersen-Piterbarg integration.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/better-fonts-in-fedora-than-in-ubuntu/">Better Fonts in Fedora than in Ubuntu</a>
   </h1>
@@ -92,40 +163,40 @@
 <p>I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto). If the accuracy of the integration is 1e-6, Attari maximum accuracy will also be 1E-6, this means that very out of the money options will be completely mispriced (might even be negative). In a sense it is similar to what I observed on the Cos method.</p>
 <p>&ldquo;Lord-Kahl&rdquo; uses 1e-4 integration accuracy, &ldquo;Attari&rdquo; uses 1E-6, and &ldquo;Cos&rdquo; uses 128 points. The reference is computed using <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii">Lord-Kahl</a> with Newton-Cotes and 1E-10 integration accuracy.
 Well here are the results in terms of accuracy:
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png"/>
 </figure>
 </p>
 <p>As expected, Lord-Kahl absolute accuracy is only 1E-5 (a bit better than 1E-4 integration accuracy), while Attari is a bit better than 1E-6, and Cos is nearly 1E-7 (higher inaccuracy in the high strikes, probably because of the truncation inherent in the Cos method).
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png"/>
 </figure>
 </p>
 <p>The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price">optimal alpha</a> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.</p>
 <p>What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>Time</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Cos</td>
-          <td>0.012s</td>
-      </tr>
-      <tr>
-          <td>Lord-Kahl</td>
-          <td>0.099s</td>
-      </tr>
-      <tr>
-          <td>Attari</td>
-          <td>0.086s</td>
-      </tr>
-      <tr>
-          <td>Reference</td>
-          <td>0.682s</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cos</td>
+<td>0.012s</td>
+</tr>
+<tr>
+<td>Lord-Kahl</td>
+<td>0.099s</td>
+</tr>
+<tr>
+<td>Attari</td>
+<td>0.086s</td>
+</tr>
+<tr>
+<td>Reference</td>
+<td>0.682s</td>
+</tr>
+</tbody>
 </table>
 <p>The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.</p>
 <p>It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.</p>
@@ -158,15 +229,15 @@ Well here are the results in terms of accuracy:
 <p>The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple <a href="http://en.wikipedia.org/wiki/Fourier_series">Fourier series</a> are used instead of the standard Fourier transform. As a consequence there are a few more approximations that are done related to the truncation of the domain of integration and the result is already discrete, so no need for a Gaussian quadrature.</p>
 <p>In practice, the promise is to be faster. I was wondering how stable it was, especially with regards to short maturities/large strikes.</p>
 <p>It&rsquo;s quite easy to code, I made only one mistake initially: I forgot to handle the first element of the sum differently. It is however very unstable for call options prices, because the upper integration boundary is then used in an exponential, which explodes in most cases I have tried, while for put options, the lower boundary is used in an exponential, and the lower boundary is negative.</p>
-<figure><img src="/post/snapshot33.png"><figcaption>
-      <h4>Price is too low at high strikes</h4>
-    </figcaption>
+<figure><img src="/post/snapshot33.png"/><figcaption>
+            <h4>Price is too low at high strikes</h4>
+        </figcaption>
 </figure>
 
 <p>So one has to rely on the put-call parity formula to compute call prices. This means that we are limited to something around machine epsilon accuracy and can&rsquo;t compute a very out-of-the-money call price, contrary to the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii">Lord-Kahl</a> method. However it seemed stable for the various Heston parameters I have tried and accurate as long as the resulting price is not too small as the following graph shows.
-<figure><img src="/post/snapshot34.png"><figcaption>
-      <h4>Price is way too high at low strikes</h4>
-    </figcaption>
+<figure><img src="/post/snapshot34.png"/><figcaption>
+            <h4>Price is way too high at low strikes</h4>
+        </figcaption>
 </figure>
 </p>
 <p>I was surprised to see that the more in-the-money put options also have inaccuracy: the price given is actually less than the final payoff. This is related to the domain of truncation. If I double it (L=24 instead of L=12), those disappear, what remains is that OTM puts can&rsquo;t go beyond 1e-12 for the COS method.</p>
@@ -220,9 +291,9 @@ Well here are the results in terms of accuracy:
   <p>This is a kind of following to the <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/">CUDA performance myth</a>. There is a recent news on the java concurrent mailing list about <a href="http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/SplittableRandom.java?revision=1.7&amp;view=markup">SplittableRandom class</a> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.</p>
 <p>It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <a href="http://www.iro.umontreal.ca/~simardr/rng/MRG32k3a.c">MRG32k3a</a> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MTGP/">MTGP</a>, and even the less rigourous XorWow popularized by NVidia CUDA.</p>
 <p>The book <a href="http://my.safaribooksonline.com/book/-/9780123849885/chapter-16dot-parallelization-techniques-for-random-number-generators/232#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDEyMzg0OTg4NS8yNDQ=">GPU Computing Gems</a> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister)</p>
-<figure><img src="/post/snapshot32.png"><figcaption>
-      <h4>Excerpt from the book</h4>
-    </figcaption>
+<figure><img src="/post/snapshot32.png"/><figcaption>
+            <h4>Excerpt from the book</h4>
+        </figcaption>
 </figure>
 
 <p>A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.</p>
@@ -235,18 +306,6 @@ Well here are the results in terms of accuracy:
   <time datetime="2013-07-10T23:17:00Z" class="post-date">Wed, Jul 10, 2013</time>
   <p>The other day I installed the latest Ubuntu 13.04 under a VirtualBox virtual machine using Windows as host. To my surprise, unity failed to launch properly on the virtual machine reboot, with compiz complaining, something I have sometimes seen on my work laptop. It&rsquo;s more surprising in a VM since it is in a way much more standard (no strange graphic card, no strange driver, the same stuff for every VirtualBox user (maybe I&rsquo;m wrong there?)). I therefore installed KDE as a way to bypass this issue. Not only it worked, but the UI was much faster: there was some very noticeable lag in Unity, slow fade in fade out effects, when it worked before the reboot.</p>
 <p>I am no hater of Unity, it looks well polished, nice to the eye and I use it on a home computer. I find KDE looks a tiny bit less nice, although I prefer the standard scrollbars of KDE. I wonder if others have the same dreadful experience with Unity under VirtualBox.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/bessel-and-harmonic-kinks-in-the-forward/">Bessel and Harmonic Kinks in the Forward</a>
-  </h1>
-  <time datetime="2013-07-02T15:44:00Z" class="post-date">Tue, Jul 2, 2013</time>
-   
-
-As Bessel (sometimes called Hermite) spline interpolation is only <a href="http://en.wikipedia.org/wiki/Smooth_function#The_space_of_Ck_functions">C1</a>, like the Harmonic spline from Fritsch-Butland, the forward presents small kinks compared to a standard cubic spline. Hyman filtering also creates a kink where it fixes the monotonicity. Those are especially visible with a log scale in time. Here is how it looks on the Hagan-West difficult curve.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-xsT1uMr-S6c/UdLZE3SjlEI/AAAAAAAAGg0/lESF6PVyLkk/s942/snapshot30.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="369" src="http://4.bp.blogspot.com/-xsT1uMr-S6c/UdLZE3SjlEI/AAAAAAAAGg0/lESF6PVyLkk/s640/snapshot30.png" width="640" /></a></div><br />
-
-
 
   
 </article>

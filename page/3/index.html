@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,30 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/black_with_bachelier/">Black with Bachelier</a>
+  </h1>
+  <time datetime="2023-10-03T20:56:42&#43;0100" class="post-date">Tue, Oct 3, 2023</time>
+  <p>I was experimenting with the recent <a href="https://www.researchgate.net/publication/348192007_SABR_for_Baskets">SABR basket approximation</a> of Hagan. The approximation only works
+for the normal SABR model, meaning beta=0 in SABR combined with the Bachelier option formula.</p>
+<p>I was wondering how good the approximation would be for two flat smiles (in terms of Black volatilities). I then noticed something that escaped me before: the normal SABR model is able to fit the pure Black model (with constant vols) extremely well. A calibration near the money stays valid very out-of-the-money and the error in Black volatilities is very small.</p>
+<p>For very low strikes (25%) the error in vol is below one basis point. And in fact, for a 1 year option of vol 20%, the option value is extremely small: we are in deep extrapolation territory.</p>
+<p>It is remarkable that a Bachelier smile formula with 3 free parameters can fit so well the Black vols. Compared to stochastic collocation on a cubic polynomial (also 3 free parameters), the fit is 100x better with the normal SABR.</p>
+<figure><img src="/post/normal_sabr_black_fit_collo.png"/><figcaption>
+            <h4>Error in fit against 10 vanilla options of maturity 1 year and volatility 20% within strike range [0.89, 1.5] .</h4>
+        </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/clenshaw_fft_implementation/">Clenshaw-Curtis Quadrature Implementation by FFT in Practice</a>
   </h1>
@@ -87,34 +104,34 @@
 <ul>
 <li>
 <p>First kind (following the <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">numbersandshapes blog post</a>)
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>n) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>n))
-</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> chebnodes(<span style="color:#66d9ef">Float64</span>, N)
-</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> vcat(sqrt(<span style="color:#ae81ff">2</span>), <span style="color:#ae81ff">0.0</span>, [(<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">^</span>k) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> k<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> sqrt(<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> N) <span style="color:#f92672">*</span> idct(m)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span>n) <span style="color:#666">-</span> <span style="color:#40a070">1</span>) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> <span style="color:#40a070">2</span>n))
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> chebnodes(<span style="color:#902000">Float64</span>, N)
+</span></span><span style="display:flex;"><span>m <span style="color:#666">=</span> vcat(sqrt(<span style="color:#40a070">2</span>), <span style="color:#40a070">0.0</span>, [(<span style="color:#40a070">1</span> <span style="color:#666">+</span> (<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">^</span>k) <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> k<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span>N<span style="color:#666">-</span><span style="color:#40a070">1</span>])
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> sqrt(<span style="color:#40a070">2</span> <span style="color:#666">/</span> N) <span style="color:#666">*</span> idct(m)</span></span></code></pre></div></p>
 </li>
 <li>
 <p>Second kind (the classic Clenshaw-Curtis, following some article from Treffenden)
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> (n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)))
-</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> cheb2nodes(<span style="color:#66d9ef">Float64</span>, N)
-</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(<span style="color:#ae81ff">2</span>, [<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> i<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)]) <span style="color:#75715e"># Standard Chebyshev moments</span>
-</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(c, c[<span style="color:#66d9ef">Int</span>(floor(N <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>))<span style="color:#f92672">:-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>])         <span style="color:#75715e"># Mirror for DCT via FFT </span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> real(ifft(c))                             <span style="color:#75715e"># Interior weight</span>
-</span></span><span style="display:flex;"><span>ws[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> vcat(ws, ws[<span style="color:#ae81ff">1</span>])                           <span style="color:#75715e"># Boundary weights</span></span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">0</span><span style="color:#666">:</span>n<span style="color:#666">-</span><span style="color:#40a070">1</span>)) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> (n<span style="color:#666">-</span><span style="color:#40a070">1</span>)))
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> cheb2nodes(<span style="color:#902000">Float64</span>, N)
+</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(<span style="color:#40a070">2</span>, [<span style="color:#40a070">2</span> <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> i<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span>(N<span style="color:#666">-</span><span style="color:#40a070">1</span>)]) <span style="color:#60a0b0;font-style:italic"># Standard Chebyshev moments</span>
+</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(c, c[<span style="color:#902000">Int</span>(floor(N <span style="color:#666">/</span> <span style="color:#40a070">2</span>))<span style="color:#666">:-</span><span style="color:#40a070">1</span><span style="color:#666">:</span><span style="color:#40a070">2</span>])         <span style="color:#60a0b0;font-style:italic"># Mirror for DCT via FFT </span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> real(ifft(c))                             <span style="color:#60a0b0;font-style:italic"># Interior weight</span>
+</span></span><span style="display:flex;"><span>ws[<span style="color:#40a070">1</span>] <span style="color:#666">/=</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> vcat(ws, ws[<span style="color:#40a070">1</span>])                           <span style="color:#60a0b0;font-style:italic"># Boundary weights</span></span></span></code></pre></div></p>
 </li>
 </ul>
 <p>There are some obvious possible improvements: the nodes are symmetric and only need to be computed up to N/2, but the above is quite fast already. The Julia package <a href="https://github.com/JuliaApproximation/FastTransforms.jl">FastTransforms.jl</a> provides the quadrature weights although the API is not all that intuitive:</p>
 <ul>
 <li>First kind:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
 <li>Second kind:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
 </ul>
 <p>Interestingly the first kind is twice faster with FastTransforms, which suggests a similar symetry use as for the second kind. But the second kind is nearly twice slower.</p>
 <p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
-<figure><img src="/post/quad_rho_all.png"><figcaption>
-      <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
-    </figcaption>
+<figure><img src="/post/quad_rho_all.png"/><figcaption>
+            <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
+        </figcaption>
 </figure>
 
 
@@ -126,22 +143,22 @@
   <time datetime="2023-08-20T20:56:42&#43;0100" class="post-date">Sun, Aug 20, 2023</time>
   <p>During my vacation, I don&rsquo;t know why, but I looked at some stability issue with ghost points and the explicit method. I was initially trying out ghost points with the explicit runge kutta Chebyshev/Legendre/Gegenbauer technique and noticed some explosion in some cases.</p>
 <p>I cornered it down to a stability issue of the standard explicit Euler method with ghost (or fictitious) points. The technique is described in the book &ldquo;Paul Wilmott on Quantitative Finance&rdquo; (also in Paul Wilmott introduces quantitative finance), which I find quite good, although I have some friends who are not much fond of it. The technique may be used to compute the price of a continuously monitored barrier option when the barrier does not fall on the grid, or more generally for time-dependent barriers. I however look at it in the simple context of a constant barrier in time.</p>
-<figure><img src="/post/ghost_wilmott.png"><figcaption>
-      <h4>The ghost point technique (from Paul Wilmott on Quantitative Finance).</h4>
-    </figcaption>
+<figure><img src="/post/ghost_wilmott.png"/><figcaption>
+            <h4>The ghost point technique (from Paul Wilmott on Quantitative Finance).</h4>
+        </figcaption>
 </figure>
 
 <p>I found out that the explicit Euler scheme is unstable if we let the grid boundaries be random. In practice, for more exotic derivatives, the grid upper bound will typically be based on a number of standard deviations from the spot or from the strike price. The spot price moves continually, and the strike price is fairly flexible for OTC options. So the upper bound can really be anything and the explicit Euler may require way too many time-steps to be practical with the ghost point technique. This is all described in the preprint <a href="https://arxiv.org/abs/2308.04629">Instabilities of explicit finite difference schemes with ghost points on the diffusion equation</a>.</p>
 <p>What does this mean?</p>
 <p>The ghost point technique is not appropriate for the explicit Euler scheme (and thus for the Runge-Kutta explicit schemes as well), unless the ghost point is fixed to be in the middle of the grid, or on the grid outside by one space-step. This means the grid needs to be setup in a particular fashion. But if we need to setup the grid such that the barrier falls exactly somewhere then, for a constant barrier option, no ghost point is needed, one just need to place the barrier on the grid and use a Dirichlet boundary condition.</p>
-<figure><img src="/post/ghost_unstable_euler.png"><figcaption>
-      <h4>Explicit scheme requires a very large number of time-steps.</h4>
-    </figcaption>
+<figure><img src="/post/ghost_unstable_euler.png"/><figcaption>
+            <h4>Explicit scheme requires a very large number of time-steps.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/ghost_unstable_cn.png"><figcaption>
-      <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
-    </figcaption>
+<figure><img src="/post/ghost_unstable_cn.png"/><figcaption>
+            <h4>Crank_Nicolson oscillations near maturity with the ghost point.</h4>
+        </figcaption>
 </figure>
 
 
@@ -155,9 +172,9 @@
 <p>Shortly after, the SVI model of Jim Gatheral, with its linear wings, started to become popular.</p>
 <p>In a recent paper in collaboration with Winfried Koller, we show that the asymptotic bounds are usually overly optimistic. This is somewhat expected, as the bound only holds as the log-moneyness goes to infinity. What is less expected, is that, even at very large strikes (nearly up to the limit of what SVI allow numerically), we may happen to have arbitrages, even though the bounds are respected.</p>
 <p>In practice, this manifests by increasing call option prices far away in the wings (increasing call prices are an arbitrage opportunity), which could be problematic for any kind of replication based pricing, such as variance swap pricing.</p>
-<figure><img src="/post/maximum_slope_svi.png"><figcaption>
-      <h4>Increasing call prices for various calibrated SVI parameters respecting the asymptotic boundary constraints.</h4>
-    </figcaption>
+<figure><img src="/post/maximum_slope_svi.png"/><figcaption>
+            <h4>Increasing call prices for various calibrated SVI parameters respecting the asymptotic boundary constraints.</h4>
+        </figcaption>
 </figure>
 
 <p>The <a href="https://arxiv.org/abs/2304.13610">paper on arxiv</a>.</p>
@@ -181,36 +198,36 @@
 <p>For the first point, the denominator of the Dupire formula in terms of the representation of total variance as a function of logmoneyness gives some clues as it constitues a vega scaled version of the probability density
 with direct link to the total variance and its derivatives. In particular it is a  simple function of its value, first and second derivatives, without involving any non-linear function and the second derivative only appears as a linear term. As such a low order polynomial representation of the variance in log-moneyness may be adequate.
 In contrast, the delta based representation introduces a strong non-linearity with the cumulative normal distribution function.
-<figure><img src="/post/audnzd_delta_spline_dens.png"><figcaption>
-      <h4>Splines on AUD/NZD 1w options.</h4>
-    </figcaption>
+<figure><img src="/post/audnzd_delta_spline_dens.png"/><figcaption>
+            <h4>Splines on AUD/NZD 1w options.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>For the second point, it is more of a curiosity. Everybody knows that SVI is not always arbitrage-free and examples of arbitrages abound. Finding such a minimal example is
 nice. I noticed that many of the real life butterfly spread arbitrages are avoided if we follow Zeliade&rsquo;s recommendation to set a &gt;= 0, where a is the base ordinate parameter of SVI.
 Yes the fit is slightly worse, but the increased calibration robustness and decrease of the number of smiles with arbitrage is probably worth it.
-<figure><img src="/post/audnzd_delta_svi.png"><figcaption>
-      <h4>SVI on AUD/NZD 1w options.</h4>
-    </figcaption>
+<figure><img src="/post/audnzd_delta_svi.png"/><figcaption>
+            <h4>SVI on AUD/NZD 1w options.</h4>
+        </figcaption>
 </figure>
 </p>
-<figure><img src="/post/audnzd_delta_svi_denom.png"><figcaption>
-      <h4>SVI on AUD/NZD 1w options.</h4>
-    </figcaption>
+<figure><img src="/post/audnzd_delta_svi_denom.png"/><figcaption>
+            <h4>SVI on AUD/NZD 1w options.</h4>
+        </figcaption>
 </figure>
 
 <p>Even if I am no particular fan of SVI or of the cubic spline to represent implied volatilities, the subject merited some clarifications.</p>
-<p><figure><img src="/post/wilmott_wystup_delta.png"><figcaption>
-      <h4>extract of the Wilmott article.</h4>
-    </figcaption>
+<p><figure><img src="/post/wilmott_wystup_delta.png"/><figcaption>
+            <h4>extract of the Wilmott article.</h4>
+        </figcaption>
 </figure>
 
 There is a third point which I found quite surprising. The axis is inconsistent between the first two plots of Figure 1. 10 delta means that we are out of the money.
 For a call, the strike is thus larger than the forward, and thus the corresponding log-moneyness must be positive. But on the Figure, the 10 Delta call volatility of the first plot does not correspond to the highest log-moneyness point of the second plot.
 One of the axis is reversed. This is particularly surprising for an expert like Uwe.</p>
-<figure><img src="/post/omg-oh-my-god.gif"><figcaption>
-      <h4>Ooohhhh!</h4>
-    </figcaption>
+<figure><img src="/post/omg-oh-my-god.gif"/><figcaption>
+            <h4>Ooohhhh!</h4>
+        </figcaption>
 </figure>
 
 <p>It is reassuring that this kind of mistakes also happen to the best. Every FX quant has Uwe Wystup&rsquo;s book, next to the Clark and the Castagna.</p>
@@ -230,9 +247,9 @@ This is an old problem. Decades ago, rule engines were the trend for similar rea
 very relevant.</p>
 <p>While writing my own presentation, I realized I had not tried to plot the Bachelier implied volatility fractals. The one corresponding to the Householder method is pretty, and not too far off from
 the Black-Scholes case, possibly because the first, second and third derivatives towards the vol are similar between the two models.</p>
-<figure><img src="/post/bachelier_householder_factor2_5.png"><figcaption>
-      <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
-    </figcaption>
+<figure><img src="/post/bachelier_householder_factor2_5.png"/><figcaption>
+            <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
+        </figcaption>
 </figure>
 
 <p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
@@ -263,49 +280,49 @@ the Black-Scholes case, possibly because the first, second and third derivatives
 Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
 <p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
 It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
-      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
+            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
-      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
+            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
-      <h4>SPX roughness index sliding estimate with K=50.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
+            <h4>SPX roughness index sliding estimate with K=50.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
-      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
+            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+        </figcaption>
 </figure>
 </p>
 <p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
 <p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
-      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-    </figcaption>
+<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
+            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_msft.png"><figcaption>
-      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_msft.png"/><figcaption>
+            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
 <p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
-      <h4>VIX roughness index sliding estimate with K=51.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
+            <h4>VIX roughness index sliding estimate with K=51.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
-      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
+            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+        </figcaption>
 </figure>
 </p>
 <p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
@@ -341,15 +358,15 @@ a fractional Brownian motion is used. The idea of using a fractional Brownian mo
   <time datetime="2022-04-09T21:56:42&#43;0100" class="post-date">Sat, Apr 9, 2022</time>
   <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
 I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">numSimulations</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pathGenerator</span>.<span style="color:#a6e22e">ComputeNextPath</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">path</span>) <span style="color:#75715e">//path contains an array of n time-steps of float64.</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">pathEvaluator</span>.<span style="color:#a6e22e">Evaluate</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">output</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">statistics</span>.<span style="color:#a6e22e">RecordValue</span>(<span style="color:#a6e22e">output</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; numSimulations; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>	pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path) <span style="color:#60a0b0;font-style:italic">//path contains an array of n time-steps of float64.
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path, output)
+</span></span><span style="display:flex;"><span>	statistics.<span style="color:#06287e">RecordValue</span>(output)
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pathGenerator</span>.<span style="color:#a6e22e">ComputeAllPaths</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">paths</span>) <span style="color:#75715e">//paths contains an array of n time-steps of vectors of size numSimulations </span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pathEvaluator</span>.<span style="color:#a6e22e">EvaluateAll</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">paths</span>, <span style="color:#a6e22e">output</span>)
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">statistics</span>.<span style="color:#a6e22e">RecordValues</span>(<span style="color:#a6e22e">output</span>)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths) <span style="color:#60a0b0;font-style:italic">//paths contains an array of n time-steps of vectors of size numSimulations 
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths, output)
+</span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
 <p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
 <p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
 <p>Which one is most appropriate?</p>
@@ -358,37 +375,6 @@ A python programmer would likely not write a simulation this way, as the python 
 <p>Taking parallelization into account, (A) is not that the trivial approach anymore. In contrast, (B) or (C) would parallelize the payoff evaluation by design, making the implementation of the full simulation parallelization much easier. Arguably, the package of paths approach may consume less memory than (C), as (1) the path generation usually involves many intermediate time-steps which may be discarded (kept only in cache per core) while in a vectorized approach, the full vector of those intermediate time-steps may be needed (typically for a classical Brownian-Bridge variance reduction), (2) the payoff evaluates scalars (and its state is thus comprised of scalars). A clever vectorized payoff evaluation would however reuse most vectors. The memory reduction may not be real in practice.</p>
 <p>Now, if we include callability or particle method kind of evaluation,  full vectorization, but keeping only the payoff (vector) variables in memory and building up the path step by step may be the most effective as described in <a href="https://www.amazon.fr/Applied-Quantitative-Finance-Equity-Derivatives/dp/B08VCM9HBL">Jherek Healy&rsquo;s book</a>.</p>
 <p>To conclude, not vectorizing the path generation and payoff evaluation would be a design mistake nowadays.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/more-automatic-differentiation-awkwardness/">More Automatic Differentiation Awkwardness</a>
-  </h1>
-  <time datetime="2022-01-04T21:56:42&#43;0100" class="post-date">Tue, Jan 4, 2022</time>
-  <p><a href="https://quantsrus.github.io/post/exp_b_spline_collocation_autodiff/">This blog post</a> from Jherek Healy presents some not so obvious behavior of automatic differentiation, when a function is decomposed
-into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number).
-This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</p>
-<p>I played myself with Julia&rsquo;s excellent ForwardDiff package, and found out a completely different example which illustrates a simple and easy trap with automatic differentiation. The example is a typical cubic spline evaluation routine:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> evaluate(self, z)
-</span></span><span style="display:flex;"><span>  i <span style="color:#f92672">=</span> searchsortedfirst(self<span style="color:#f92672">.</span>x, z)  <span style="color:#75715e"># x[i-1]&lt;z&lt;=x[i]</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> z <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>x[i]
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>a[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> i <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>  h <span style="color:#f92672">=</span> z <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>x[i]
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>a[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>b[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>c[i] <span style="color:#f92672">+</span> h <span style="color:#f92672">*</span> (self<span style="color:#f92672">.</span>d[i])))
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>The ForwardDiff will lead to derivative = 0 at z = x[i], while, in reality, it is not - the derivative is b[i]. The case z = x[i] is just a (not so clever) optimization.
-Granted, it is wrong only at the spline knots, but if those correspond to key points we evaluate as part of a minimization, it might become very problematic.</p>
-<p>Another interesting remark to make on automatic differentiation is on the choice of backward (reverse) vs. forward (tangent) automatic differentiation: we often read that backward is more appropriate when the dimension of the output is low compared to the dimension of the input, and forward when the dimension of the output is large compared to the dimension of the input.
-This is however not strictly true. A good example is the case of a least-squares minimization. The objective could be seen as a one-dimensional output: the sum of squares of the values of an underlying function.
-But in reality, it is really N-dimensional, where N is the number of terms in the sum, as one sum involves N calculations of the underlying function.
-And thus, for least-squares, backward automatic differentiation will likely be slower than forward since the number of terms in the sum is typically larger than the number of input parameters we are trying to fit.</p>
-<p>Interestingly, the <a href="https://fr.mathworks.com/help/optim/ug/autodiff-background.html">Matlab documentation</a> mentions explicitly this use case:</p>
-<blockquote>
-<p>lsqnonlin defaults to forward AD when the number of elements in the objective vector is greater than or equal to the number of variables. Otherwise, lsqnonlin defaults to reverse AD.</p></blockquote>
 
   
 </article>

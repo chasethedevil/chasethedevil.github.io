@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,13 +78,13 @@
 $$f&rsquo;^2 + f&rsquo;&rsquo; \geq 0$$</p>
 <p>This condition makes the interpolation on the log prices arbitrage free. As a first draft experiment, I just ensured numerically that the condition was valid, the resulting algorithm was fast enough and worked reasonably well.</p>
 <p>Here is how the normalized density looks like with a simple harmonic spline on the call prices, a cubic spline in the logarithm of call prices, and an optimized tension spline in the logarithm of call prices.</p>
-<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"><figcaption>
-      <h4>logarithm of the curvature</h4>
-    </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"/><figcaption>
+            <h4>logarithm of the curvature</h4>
+        </figcaption>
 </figure>
 
 The blank spot for the Log curve (spline) corresponds to negative curvature, that is, arbitrage. Notice how the tension spline is fully continuous, with no real spikes.</p>
-<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png">
+<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png"/>
 </figure>
 
 <p>The implied volatility curve is very close to a more classic cubic spline interpolation on the implied variance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Of course, the same kind of algorithm can be applied directly to the variance with a slightly different numerical test to ensure it is arbitrage-free, it might however be easier to find a more robust and more clever algorithm in the log prices.</p>

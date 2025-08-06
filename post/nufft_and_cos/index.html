@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,9 +78,9 @@
 <p>The NUFFT becomes interesting to compute the option price at many many strikes at the same time. The strikes do not need to be equidistant and can be (almost) arbitrarily chosen. In Andersen and Lake paper, even a very fast technique such as the COS method reaches a threshold of option per second throughput, as the number of strikes is increased, mainly because of the repeated evaluation of the sum over different strikes, so the cost becomes proportional to the number of strikes.</p>
 <p>Evaluating at many many points becomes not much more expensive than evaluating at a few points only. This is what opens up the possibilities for the first 2 approaches based on the density.</p>
 <p>It turns out that it is not very difficult to rewrite the COS method so that it can make use of the NUFFT as well. I explain how to do it <a href="https://arxiv.org/abs/2507.13186v1">here</a>. Below is the throughput using NFFT.jl Julia package:
-<figure><img src="/post/heston_nufft.png"><figcaption>
-      <h4>Throughput on the Heston model with M=256 points.</h4>
-    </figcaption>
+<figure><img src="/post/heston_nufft.png"/><figcaption>
+            <h4>Throughput on the Heston model with M=256 points.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>While a neat trick, it is however not 100% clear to me at this point where this is really useful: calibration typically involve a small number of strikes per maturity.</p>

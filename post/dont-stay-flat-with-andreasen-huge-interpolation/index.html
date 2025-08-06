@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,24 +78,24 @@ To do so, they consider a piecewise constant representation of the local volatil
 where the number of constants matches the number of market option prices.</p>
 <p>An interesting example that shows some limits to the technique as described in Jesper Andreasen and Brian Huge paper comes from
 Nabil Kahale paper on <a href="https://www.researchgate.net/profile/Nabil_Kahale/publication/228872089_An_Arbitrage-free_Interpolation_of_Volatilities/links/0c96053b56097decd5000000.pdf">an arbitrage-free interpolation of volatilities</a>.
-<figure><img src="/post/kahale_spx500_1995.png"><figcaption>
-      <h4>option volatilities for the SPX500 in October 1995.</h4>
-    </figcaption>
+<figure><img src="/post/kahale_spx500_1995.png"/><figcaption>
+            <h4>option volatilities for the SPX500 in October 1995.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Yes, the data is quite old, and as a result, not of so great quality. But it will well illustrate the issue.
 The calibration of the piecewise constant volatilities on a uniform grid of 200 points (on the log-transformed problem) leads to a perfect fit:
 the market vols are exactly reproduced by the following piecewise constant vols:
-<figure><img src="/post/kahale_ah_constant200.png"><figcaption>
-      <h4>piecewise constant model on a grid of 200 points.</h4>
-    </figcaption>
+<figure><img src="/post/kahale_ah_constant200.png"/><figcaption>
+            <h4>piecewise constant model on a grid of 200 points.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>However, if we increase the number of points to 400 or even much more (to 2000 for example), the fit is not perfect anymore, and
 some of the piecewise constant vols explode (for the first two maturities), even though there is no arbitrage in the market option prices.
-<figure><img src="/post/kahale_ah_constant400.png"><figcaption>
-      <h4>piecewise constant model on a grid of 400 points.</h4>
-    </figcaption>
+<figure><img src="/post/kahale_ah_constant400.png"/><figcaption>
+            <h4>piecewise constant model on a grid of 400 points.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The single step continuous model can not represent the market implied volatilities, while for some reason,
@@ -103,9 +103,9 @@ the discrete model with 200 points can. Note that the model vols were capped, ot
 <p>If instead of using a piecewise constant representation, we consider a continuous piecewise linear interpolation
 (a linear spline with flat extrapolation), where each node falls on the grid point closest market strike, the calibration
 becomes stable regardless of the number of grid points.
-<figure><img src="/post/kahale_ah_linear.png"><figcaption>
-      <h4>piecewise linear model on a grid of 400 points.</h4>
-    </figcaption>
+<figure><img src="/post/kahale_ah_linear.png"/><figcaption>
+            <h4>piecewise linear model on a grid of 400 points.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The RMSE is back to be close to machine epsilon. As a side effect the Levenberg-Marquardt minimization takes much less iterations to converge, either with 200 or 400 points when compared to the piecewise constant model,

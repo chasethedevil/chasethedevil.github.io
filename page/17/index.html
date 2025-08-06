@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,24 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/levenberg-marquardt--constraints-by-domain-transformation/">Levenberg Marquardt &amp; Constraints by Domain Transformation</a>
+  </h1>
+  <time datetime="2013-12-17T15:27:00Z" class="post-date">Tue, Dec 17, 2013</time>
+   
+
+The Fortran <a href="http://www.netlib.org/minpack/">minpack</a> library has a good <a href="http://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm">Levenberg-Marquardt</a> minimizer, so good, that it has been ported to many programming languages. Unfortunately it does not support contraints, even simple bounds.<br /><br />One way to achieve this is to transform the domain via a bijective function. For example, \(a+\frac{b-a}{1+e^{-\alpha t}}\) will transform \(]-\infty, +\infty[\) to ]a,b[. Then how should one choose \(\alpha\)?<br /><br />A large \(\alpha\) will make tiny changes in \(t\) appear large. A simple rule is to ensure that \(t\) does not create large changes in the original range ]a,b[, for example we can make \(\alpha t \leq 1\), that is \( \alpha t= \frac{t-a}{b-a} \).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-TJiFg4K2fS4/UrBNcxg9wLI/AAAAAAAAG6Q/8BD0OHbxGhg/s1600/Screenshot+from+2013-12-17+13:02:22.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="293" src="http://4.bp.blogspot.com/-TJiFg4K2fS4/UrBNcxg9wLI/AAAAAAAAG6Q/8BD0OHbxGhg/s400/Screenshot+from+2013-12-17+13:02:22.png" width="400" /></a></div><br /><br />In practice, for example in the calibration of the<a href="http://en.wikipedia.org/wiki/Heston_model"> Double-Heston</a> model on real data, a naive \( \alpha=1 \) will converge to a RMSE of 0.79%, while our choice will converge to a RMSE of 0.50%. Both will however converge to the same solution if the initial guess is close enough to the real solution. Without any transform, the RMSE is also 0.50%. The difference in error might not seem large but this results in vastly different calibrated parameters. Introducing the transform can significantly change the calibration result, if not done carefully.<br /><br />Another simpler way would be to just impose a cap/floor on the inputs, thus ensuring that nothing is evaluated where it does not make sense. In practice, it however will not always converge as well as the unconstrained problem: the gradient is not defined at the boundary. On the same data, the Schobel-Zhu, unconstrained converges with RMSE 1.08% while the transform converges to 1.22% and the cap/floor to 1.26%. The Schobel-Zhu example is more surprising since the initial guess, as well as the results are not so far:<br />             <style>  <!--    BODY,DIV,TABLE,THEAD,TBODY,TFOOT,TR,TH,TD,P { font-family:"Liberation Sans"; font-size:x-small }    --> </style>     <br /><table border="0" cellspacing="0" cols="2"> <colgroup span="2" width="85"></colgroup> <tbody><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Initial volatility (v0)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">18.1961174789</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Long run volatility (theta)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">1</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Speed of mean reversion (kappa)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">101.2291161766</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Vol of vol (sigma)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">35.2221829015</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Correlation (rho)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">-73.7995231799</span></td> </tr><tr>  <td align="LEFT" height="17" style="border-bottom: 3px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">ERROR MEASURE</span></td>  <td align="RIGHT" style="border-bottom: 3px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">1.0614889526</span></td> </tr></tbody></table><br />             <style>  <!--    BODY,DIV,TABLE,THEAD,TBODY,TFOOT,TR,TH,TD,P { font-family:"Liberation Sans"; font-size:x-small }    --> </style>     <br /><table border="0" cellspacing="0" cols="2"> <colgroup span="2" width="85"></colgroup> <tbody><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Initial volatility (v0)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">17.1295934569</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Long run volatility (theta)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">1</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Speed of mean reversion (kappa)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">67.9818356373</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Vol of vol (sigma)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">30.8491256097</span></td> </tr><tr>  <td align="LEFT" height="16" style="border-bottom: 1px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">Correlation (rho)</span></td>  <td align="RIGHT" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">-74.614636128</span></td> </tr><tr>  <td align="LEFT" height="17" style="border-bottom: 3px solid #000000; border-left: 3px solid #000000; border-right: 1px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">ERROR MEASURE</span></td>  <td align="RIGHT" style="border-bottom: 3px solid #000000; border-left: 1px solid #000000; border-right: 3px solid #000000; border-top: 1px solid #000000;" valign="TOP"><span style="font-family: Liberation Serif;">1.2256421987</span></td> </tr></tbody></table><br />The initial guess is kappa=61% theta=11% sigma=26% v0=18% rho=-70%. Only the kappa is different in the two results, and the range on the kappa is (0,2000) (it is expressed in %), much larger than the result. In reality, theta is the issue (in (0,1000)). Forbidding a negative theta has an impact on how kappa is picked. The only way to be closer<br /><br />Finally, a third way is to rely on a simple penalty: returning an arbitrary large number away from the boundary. In our examples this was no better than the transform or the cap/floor.<br /><br />Trying out the various ways, it seemed that allowing meaningless parameters, as long as they work mathematically produced the best results with Levenberg-Marquardt, particularly, allowing for a negative theta in Schobel-Zhu made a difference.
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/arbitrage-free-sabr---another-view-on-hagan-approach/">Arbitrage Free SABR - Another View on Hagan Approach</a>
   </h1>
@@ -82,25 +93,25 @@
 <li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li>
 </ul>
 <p>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the <a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation">Fokker-Planck</a> (forward) equation.
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png">
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png"/>
 </figure>
 
 The \(\alpha D(F)\) is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png">
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png"/>
 </figure>
 
 A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a> of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:
-<figure><img src="/post/hagan_dens1.png">
+<figure><img src="/post/hagan_dens1.png"/>
 </figure>
 
-<figure><img src="/post/hagan_iv.png">
+<figure><img src="/post/hagan_iv.png"/>
 </figure>
 
 The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:
-<figure><img src="/post/ah_dens1.png">
+<figure><img src="/post/ah_dens1.png"/>
 </figure>
 
-<figure><img src="/post/ah_iv1.png">
+<figure><img src="/post/ah_iv1.png"/>
 </figure>
 </p>
 <p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>
@@ -124,13 +135,13 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
   </h1>
   <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
   <p>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).</p>
-<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"><figcaption>
-      <h4>Local volatility</h4>
-    </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"/><figcaption>
+            <h4>Local volatility</h4>
+        </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"><figcaption>
-       <h4>Implied volatility</h4>
-     </figcaption>
+ <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"/><figcaption>
+             <h4>Implied volatility</h4>
+         </figcaption>
  </figure>
 </p>
 <p>The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</p>
@@ -174,32 +185,32 @@ $$c_2 = g&rsquo;&rsquo;(0)$$</p>
 <p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
 $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
 <p>In contrast, the paper formula was:
-<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png">
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
 </figure>
 </p>
 <p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
 <p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Formula</th>
-          <th>Value</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>New</td>
-          <td>0.1640581405</td>
-      </tr>
-      <tr>
-          <td>Paper</td>
-          <td>0.1743425406</td>
-      </tr>
-      <tr>
-          <td>N=30 with 10000 points</td>
-          <td>0.1640581423</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New</td>
+<td>0.1640581405</td>
+</tr>
+<tr>
+<td>Paper</td>
+<td>0.1743425406</td>
+</tr>
+<tr>
+<td>N=30 with 10000 points</td>
+<td>0.1640581423</td>
+</tr>
+</tbody>
 </table>
 <p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
 
@@ -210,7 +221,7 @@ $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}
   </h1>
   <time datetime="2013-10-02T15:06:00Z" class="post-date">Wed, Oct 2, 2013</time>
   <p>A few years ago, I found an interesting open source symbolic calculus software called <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html%E2%80%8E">Xcas</a>. It can however be quickly limited, for example, it does not seem to work well to compute Taylor expansions with several embedded functions. Google pointed me to another popular open source package, <a href="http://maxima.sourceforge.net/">Maxima</a>. It looks a bit rudimentary (command like interface), but formulas can actually be very easily exported to latex with the tex command. Here is a simple example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(%i14) D(x):=sqrt((lambda-rho*eta*x)^2+(-x^2+x)*eta^2);
 </span></span><span style="display:flex;"><span>(%i15) G(x) := (lambda - rho*eta*x - D(x))/(lambda - rho*eta*x +D(x));
 </span></span><span style="display:flex;"><span>(%i16) tex(taylor((1-exp(-t*D(x)))/(1-G(x)*exp(-t*D(x)))*(lambda - rho*eta*x - D(x)),x,0,3));</span></span></code></pre></div>
 <p>$$-{{\left(e^{t,\lambda}-1\right),\eta^2,x}\over{2,e^{t,\lambda},\lambda}}+{{\left(\left(4,e^{t,\lambda},t,\eta^3,\rho+\left(4,\left(e^{t,\lambda}\right)^2-4,e^{t,\lambda}\right),\eta^2\right),\lambda^2+\left(\left(-4,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),\eta^3,\rho-2,e^{t,\lambda},t,\eta^4\right),\lambda+\left(\left(e^{t,\lambda}\right)^2-1\right),\eta^4\right),x^2}\over{8,\left(e^{t,\lambda}\right)^2,\lambda^3}}+{{\left(\left(8,\left(e^{t,\lambda}\right)^2,t^2,\eta^4,\rho^2-16,\left(e^{t,\lambda}\right)^2,t,\eta^3,\rho\right),\lambda^4+\left(16,\left(e^{t,\lambda}\right)^2,t,\eta^4,\rho^2+\left(-8,\left(e^{t,\lambda}\right)^2,t^2,\eta^5+\left(16,\left(e^{t,\lambda}\right)^3-16,\left(e^{t,\lambda}\right)^2\right),\eta^3\right),\rho+16,\left(e^{t,\lambda}\right)^2,t,\eta^4\right),\lambda^3+\left(\left(-16,\left(e^{t,\lambda}\right)^3+16,\left(e^{t,\lambda}\right)^2\right),\eta^4,\rho^2+\left(-16,\left(e^{t,\lambda}\right)^2-8,e^{t,\lambda}\right),t,\eta^5,\rho+2,\left(e^{t,\lambda}\right)^2,t^2,\eta^6+\left(-8,\left(e^{t,\lambda}\right)^3+8,e^{t,\lambda}\right),\eta^4\right),\lambda^2+\left(\left(12,\left(e^{t,\lambda}\right)^3-12,e^{t,\lambda}\right),\eta^5,\rho+\left(2,\left(e^{t,\lambda}\right)^2+4,e^{t,\lambda}\right),t,\eta^6\right),\lambda+\left(-2,\left(e^{t,\lambda}\right)^3-\left(e^{t,\lambda}\right)^2+2,e^{t,\lambda}+1\right),\eta^6\right),x^3}\over{32,\left(e^{t,\lambda}\right)^3,\lambda^5}}+\cdots $$
@@ -237,77 +248,6 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
 My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <a href="http://www.scala-lang.org/old/node/107">case classes</a> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<br /><br />I wrote an enum with a setter like:<br /><br />&nbsp;<span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; public static enum BlackVariateType {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V0,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZERO_DERIVATIVE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private double volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public double getBlackVolatilitySquare() {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void setBlackVolatilitySquare(double volSquare) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.volSquare = volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; }</span></span><br /><br />Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<br /><br />I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <br /><br />
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/making-classic-heston-integration-faster-than-the-cos-method/">Making Classic Heston Integration Faster than the Cos Method</a>
-  </h1>
-  <time datetime="2013-09-05T17:35:00Z" class="post-date">Thu, Sep 5, 2013</time>
-  <p>A coworker pointed to me that Andersen and Piterbarg book &ldquo;Interest Rate Modeling&rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston.
-<figure><img src="/post/lewis_formula.png"><figcaption>
-      <h4>Lewis formula</h4>
-    </figcaption>
-</figure>
-</p>
-<p>More importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method. So I was a bit sceptical. I decided to add the control variate to <a href="/post/attari-lord-kahl--cos-methods-comparison-on-heston/">my Attari code</a>. The results were very encouraging. So I pursued on implementing the Lewis formula and their basic integration scheme (no change of variable).
-<figure><img src="/post/attari_formula.png"><figcaption>
-      <h4>Attari formula</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/post/carrmadan_formula.png"><figcaption>
-      <h4>Carr-Madan formula (used by Lord-Kahl)</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/post/heston_formula.png"><figcaption>
-      <h4>Heston formula</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/post/cos_formula.png"><figcaption>
-      <h4>Cos formula</h4>
-    </figcaption>
-</figure>
-</p>
-<p>My impression is that the Lewis formula is not so different from the Attari formula in practice: both have a quadratic denominator, and are of similar complexity. The Lewis formula makes the Black-Scholes control variate real (the imaginary part of the characteristic function is null). The Cos formula looks quite different, but it actually is not that much different as the Vk are quadratic in the denominator as well. I still have this idea of showing how close it is to Attari in spirit.</p>
-<p>My initial implementation of Attari relied on the log transform described by Kahl-Jaeckel to move from an infinite integration domain to a finite domain. As a result adaptive quadratures (for example based on Simpson) provide better performance/accuracy ratio than a very basic trapezoidal rule as used by Andersen and Piterbarg. If I remove the log transform and truncate the integration according by Andersen and Piterbarg criteria, pricing is faster by a factor of x2 to x3.</p>
-<p>This is one of the slightly surprising aspect of Andersen-Piterbarg method: using a very basic integration like the Trapezoidal rule is enough. A more sophisticated integration, be it a Simpson 3/8 rule or some fancy adaptive Newton-Cotes rule does not lead to any better accuracy. The Simpson 3/8 rule won&rsquo;t increase accuracy at all (although it does not cost more to compute) while the adaptive quadratures will often lead to a higher number of function evaluations or a lower overall accuracy.</p>
-<p>Here is the accuracy on put options with a maturity of 2 years:
-<figure><img src="/post/cos_a_p_2y.png">
-</figure>
-</p>
-<p>I had to push to 512 points for the Cos method and L=24 (truncation) in order to have a similar accuracy as Attari and Andersen-Piterbarg with 200 points and a control variate. For 1000 options here are the computation times (the difference is smaller for 10 options, around 30%):</p>
-<table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>Time</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Attari</td>
-          <td>0.023s</td>
-      </tr>
-      <tr>
-          <td>Andersen-Piterbarg</td>
-          <td>0.024s</td>
-      </tr>
-      <tr>
-          <td>Cos</td>
-          <td>0.05s</td>
-      </tr>
-  </tbody>
-</table>
-<p>Here is the accuracy on put options with a maturity of 2 days:
-<figure><img src="/post/cos_a_p_2d.png">
-</figure>
-</p>
-<p>All methods used 200 points. The error is nearly the same for all. And the Cos method takes now only 0.02s. The results are similar with a maturity of 2 weeks.</p>
-<p><strong>Conclusion</strong></p>
-<p>The Cos method performs less well on longer maturities. Attari or Lewis formula with control variate and caching of the characteristic function are particularly attractive, especially with the simple Andersen-Piterbarg integration.</p>
 
   
 </article>

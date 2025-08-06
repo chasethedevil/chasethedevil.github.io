@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,83 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/nflx-stock-crash-probability/">On the Probability of a Netflix Stock Crash</a>
+  </h1>
+  <time datetime="2018-07-12T20:56:42&#43;0100" class="post-date">Thu, Jul 12, 2018</time>
+  <p>This is a follow up to my <a href="/post/tsla-stock-crash-probability">previous post</a> where I explore the probability
+of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/options-market-thinks-16-chance-tesla-exist-january-2020-klassen/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BaOfn2Xf6RIum6%2F9ddKS9fA%3D%3D">results of Timothy Klassen</a>.</p>
+<p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
+high compared to other stocks? or is it the interpretation of the data erroneous?</p>
+<p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
+<figure><img src="/post/nflx2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
+include an inverse relative bid-ask spread weighting in the calibration.</p>
+<p>The corresponding implied cumulative density is</p>
+<figure><img src="/post/nflx2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>More explicitely, we obtain</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
+</table>
+<p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
+<p>For completeness, the implied probability density is</p>
+<figure><img src="/post/nflx2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
+</figure>
+
+<p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
+too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
+<p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
+much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
+<figure><img src="/post/snap2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/post/snap2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
+</figure>
+
+<p>We find a probability of moving below 1/3 of the current price lower than with TSLA: around 12% SNAP vs 15% for TSLA.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/tsla-stock-crash-probability/">On the Probability of a TSLA Stock Crash</a>
   </h1>
@@ -80,51 +150,51 @@
 As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
 and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
 This results in the following graph</p>
-<figure><img src="/post/tsla2020_vol.png"><figcaption>
-      <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
 include an inverse relative bid-ask spread weighting in the calibration. Note that I
 removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
 <p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
-<figure><img src="/post/tsla2020_cum.png"><figcaption>
-      <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>More explicitely, we obtain</p>
 <table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>probability of TSLA &lt; 100</th>
-          <th>probability of TSLA &lt; 15</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Collocation</td>
-          <td>15.4%</td>
-          <td>7.2%</td>
-      </tr>
-      <tr>
-          <td>Lognormal Mixture</td>
-          <td>15.2%</td>
-          <td>8.0%</td>
-      </tr>
-      <tr>
-          <td>Andreasen-Huge regularized</td>
-          <td>15.0%</td>
-          <td>7.7%</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
 </table>
 <p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
-<figure><img src="/post/tsla2020_rnd.png"><figcaption>
-      <h4>Probability density implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
@@ -133,26 +203,26 @@ the constant of the Tikhonov regularization, at the cost of a slightly worse fit
 <p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
 and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
 <table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>weighted root mean square error in vols</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Collocation</td>
-          <td>0.00484</td>
-      </tr>
-      <tr>
-          <td>Lognormal Mixture</td>
-          <td>0.00432</td>
-      </tr>
-      <tr>
-          <td>Andreasen-Huge regularized</td>
-          <td>0.00435</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
 </table>
 <p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
 It is expected that the probability of going under $100 will be larger when the stock price moves down,
@@ -202,15 +272,15 @@ no error in their third moment.</p>
 Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
 for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
 <p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
-<figure><img src="/post/rnd_nonic_collocation.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_nonic_collocation.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 <p>There is now just one mode, and the fit in implied volatilities is much better.</p>
-<figure><img src="/post/nonic_collocation_vol.png"><figcaption>
-      <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-    </figcaption>
+<figure><img src="/post/nonic_collocation_vol.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 <p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
@@ -220,16 +290,16 @@ that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a 
 His Tikhonov regularization consists here in applying a roughness penalty consisting
 in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
 This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
-<figure><img src="/post/rnd_ah_tikhonov.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
 </figure>
 
 <p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
 the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
-<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
@@ -245,13 +315,13 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
   <time datetime="2018-03-08T20:56:42&#43;0100" class="post-date">Thu, Mar 8, 2018</time>
   <p>It has been a while since the good old object-oriented (OO) programming is not trendy anymore. Functional programming or more dynamic programming (Python-based) have been the trend, with an excursion in template based programming for C++ guys. Those are not strict categories: Python can be used in a very OO way, but it&rsquo;s not how it is marketed or considered by the community.</p>
 <p>Recently, I have seen some of the ugliest refactoring in my life as a programmer, done by someone with at least 10 years of experience programming in Java. It is a good illustration because the piece of code is particularly simple (although I won&rsquo;t bother with implementation details). The original code was a simple boolean method on an object such as</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Dog</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isHappy</span>() { ... }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setHappy</span>(<span style="color:#66d9ef">boolean</span> isHappy) { ... }</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">Dog</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span><span style="color:#06287e">isHappy</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#902000">void</span><span style="color:#bbb"> </span><span style="color:#06287e">setHappy</span>(<span style="color:#902000">boolean</span><span style="color:#bbb"> </span>isHappy)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}</span></span></code></pre></div>
 <p>The methods were marked deprecated, and instead, new &ldquo;utility&rdquo; methods replaced it:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DogUtil</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isHappy</span>(Dog dog) { ... }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setHappy</span>(Dog dog, <span style="color:#66d9ef">boolean</span> isHappy) { ... }</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">DogUtil</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span><span style="color:#06287e">isHappy</span>(Dog<span style="color:#bbb"> </span>dog)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#902000">void</span><span style="color:#bbb"> </span><span style="color:#06287e">setHappy</span>(Dog<span style="color:#bbb"> </span>dog,<span style="color:#bbb"> </span><span style="color:#902000">boolean</span><span style="color:#bbb"> </span>isHappy)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>...<span style="color:#bbb"> </span>}</span></span></code></pre></div>
 <p>This is really breaking OO and moving back to procedural programming.</p>
 <p>In a big (but not that big in reality) company, it is quite a challenge to avoid such code transformations. The code might be written by a team with a different manager, managers try to play nice to each other. And is it really worth fighting over such a trivial thing? if some low level (in the company hierarchy) programmer reports this, he is more likely to be labeled as a black sheep. Most managers prefer white sheeps.</p>
 <p>More generally software is like entropy: it can start from a simple and clean state, but eventually it will always grow complex and somewhat ugly. And you end up with the Cobol syndrome, where people don&rsquo;t really know anymore what the software is doing, can&rsquo;t replace it as it is used (but nobody can tell exactly which parts), and &ldquo;developers&rdquo; do only small fixes and evolutions (patches) in an obsolete language on a system they don&rsquo;t really understand.</p>
@@ -266,9 +336,9 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
 I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
 technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
 <p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
-<figure><img src="/post/spw_density_spline_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_spline_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+        </figcaption>
 </figure>
 
 <p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
@@ -321,32 +391,32 @@ the same plot as with the spline approach, that is we choose every N market stri
 optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
 in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
 narrower peaks.</p>
-<figure><img src="/post/spw_density_kernel_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_kernel_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+        </figcaption>
 </figure>
 
 <p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
 The fit can be much better by adding nodes at
 f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
 will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
-<figure><img src="/post/spw_vol_kernel2.png"><figcaption>
-      <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_vol_kernel2.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
-<figure><img src="/post/spw_density_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
 then we impose where the peaks will be located eventually.</p>
 <p>It is interesting to compare the graph with the one before the volatility jump:</p>
-<figure><img src="/post/spw_density_janfeb_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_janfeb_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>
@@ -363,17 +433,17 @@ of another kernel, except, possibly, speed to solve the linear system in O(n) op
 after stocks grew steadily for months in a low VIX environment.</p>
 <p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
 It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
-<figure><img src="/post/spw_density.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options.</h4>
+        </figcaption>
 </figure>
 
 <p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
 Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
 <p>Option traders like to look at the implied volatilities (below).</p>
-<figure><img src="/post/spw_vol.png"><figcaption>
-      <h4>implied volatilities of 1-month SPW options.</h4>
-    </figcaption>
+<figure><img src="/post/spw_vol.png"/><figcaption>
+            <h4>implied volatilities of 1-month SPW options.</h4>
+        </figcaption>
 </figure>
 
 <p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
@@ -429,91 +499,91 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 </ul>
 <p>And we have computed the coefficients with a single FFT of size N.</p>
 <p>In terms of Go language code, the classic type-2 sine Fourier transforms reads
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">DST2</span>(<span style="color:#a6e22e">vector</span> []<span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">vector</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">float64</span>, <span style="color:#a6e22e">n</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">vector</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0.0</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span>, <span style="color:#a6e22e">vj</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">vector</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sum</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Sin</span>((float64(<span style="color:#a6e22e">j</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">0.5</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Pi</span><span style="color:#f92672">*</span>float64(<span style="color:#a6e22e">k</span>)<span style="color:#f92672">/</span>float64(<span style="color:#a6e22e">n</span>)) <span style="color:#f92672">*</span> <span style="color:#a6e22e">vj</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">DST2</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	result <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>		sum <span style="color:#666">:=</span> <span style="color:#40a070">0.0</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> j, vj <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> vector {
+</span></span><span style="display:flex;"><span>			sum <span style="color:#666">+=</span> math.<span style="color:#06287e">Sin</span>((<span style="color:#007020">float64</span>(j)<span style="color:#666">+</span><span style="color:#40a070">0.5</span>)<span style="color:#666">*</span>math.Pi<span style="color:#666">*</span><span style="color:#007020">float64</span>(k)<span style="color:#666">/</span><span style="color:#007020">float64</span>(n)) <span style="color:#666">*</span> vj
 </span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">result</span>[<span style="color:#a6e22e">k</span>] = <span style="color:#a6e22e">sum</span>
+</span></span><span style="display:flex;"><span>		result[k] = sum
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	copy(<span style="color:#a6e22e">vector</span>, <span style="color:#a6e22e">result</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020">copy</span>(vector, result)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
 <p>And the Fast Type-2 Sine transform reads
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">FastDST2ByFFT</span>(<span style="color:#a6e22e">vector</span> []<span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">vector</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">halfLen</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">complex128</span>, <span style="color:#a6e22e">n</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">halfLen</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">i</span>] = complex(<span style="color:#a6e22e">vector</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>], <span style="color:#ae81ff">0</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">n</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">-</span><span style="color:#a6e22e">i</span>] = complex(<span style="color:#f92672">-</span><span style="color:#a6e22e">vector</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">0</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">FastDST2ByFFT</span>(vector []<span style="color:#902000">float64</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(vector)
+</span></span><span style="display:flex;"><span>	halfLen <span style="color:#666">:=</span> n <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>	z <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">complex128</span>, n)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; halfLen; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>		z[i] = <span style="color:#007020">complex</span>(vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span>], <span style="color:#40a070">0</span>)
+</span></span><span style="display:flex;"><span>		z[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#007020">complex</span>(<span style="color:#666">-</span>vector[i<span style="color:#666">*</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">n</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">halfLen</span>] = complex(<span style="color:#a6e22e">vector</span>[<span style="color:#a6e22e">n</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> n<span style="color:#666">&amp;</span><span style="color:#40a070">1</span> <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
+</span></span><span style="display:flex;"><span>		z[halfLen] = <span style="color:#007020">complex</span>(vector[n<span style="color:#666">-</span><span style="color:#40a070">1</span>], <span style="color:#40a070">0</span>)
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">TransformRadix2Complex</span>(<span style="color:#a6e22e">z</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">z</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">temp</span> <span style="color:#f92672">:=</span> float64(<span style="color:#a6e22e">i</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Pi</span> <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">n</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Sincos</span>(<span style="color:#a6e22e">temp</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">vector</span>[<span style="color:#a6e22e">i</span>] = real(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">i</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">s</span> <span style="color:#f92672">-</span> imag(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">i</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">c</span>
+</span></span><span style="display:flex;"><span>	err <span style="color:#666">:=</span> <span style="color:#06287e">TransformRadix2Complex</span>(z)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		temp <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">*</span> math.Pi <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n<span style="color:#666">*</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(temp)
+</span></span><span style="display:flex;"><span>		vector[i] = <span style="color:#007020">real</span>(z[i])<span style="color:#666">*</span>s <span style="color:#666">-</span> <span style="color:#007020">imag</span>(z[i])<span style="color:#666">*</span>c
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> err
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
 <p>The function TransformRadix2Complex, used above, steams from a standard implementation of the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector (The vector&rsquo;s length must be a power of 2. Uses the Cooley-Tukey decimation-in-time radix-2 algorithm).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TransformRadix2Complex</span>(<span style="color:#a6e22e">z</span> []<span style="color:#66d9ef">complex128</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">z</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">levels</span> <span style="color:#f92672">:=</span> uint(<span style="color:#ae81ff">31</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">bits</span>.<span style="color:#a6e22e">LeadingZeros32</span>(uint32(<span style="color:#a6e22e">n</span>))) <span style="color:#75715e">// Equal to floor(log2(n))</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">levels</span>) <span style="color:#f92672">!=</span> <span style="color:#a6e22e">n</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;Length is not a power of 2&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">TransformRadix2Complex</span>(z []<span style="color:#902000">complex128</span>) <span style="color:#902000">error</span> {
+</span></span><span style="display:flex;"><span>	n <span style="color:#666">:=</span> <span style="color:#007020">len</span>(z)
+</span></span><span style="display:flex;"><span>	levels <span style="color:#666">:=</span> <span style="color:#007020">uint</span>(<span style="color:#40a070">31</span> <span style="color:#666">-</span> bits.<span style="color:#06287e">LeadingZeros32</span>(<span style="color:#007020">uint32</span>(n))) <span style="color:#60a0b0;font-style:italic">// Equal to floor(log2(n))
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">if</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> levels) <span style="color:#666">!=</span> n {
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Length is not a power of 2&#34;</span>)
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Trigonometric tables</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cosTable</span>, <span style="color:#a6e22e">sinTable</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">MakeCosSinTable</span>(<span style="color:#a6e22e">n</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Trigonometric tables
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	cosTable, sinTable <span style="color:#666">:=</span> <span style="color:#06287e">MakeCosSinTable</span>(n)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Bit-reversed addressing permutation</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">z</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">bits</span>.<span style="color:#a6e22e">Reverse32</span>(uint32(<span style="color:#a6e22e">i</span>)) <span style="color:#f92672">&gt;&gt;</span> (<span style="color:#ae81ff">32</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">levels</span>))
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">j</span> &gt; <span style="color:#a6e22e">i</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Bit-reversed addressing permutation
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> z {
+</span></span><span style="display:flex;"><span>		j <span style="color:#666">:=</span> <span style="color:#007020">int</span>(bits.<span style="color:#06287e">Reverse32</span>(<span style="color:#007020">uint32</span>(i)) <span style="color:#666">&gt;&gt;</span> (<span style="color:#40a070">32</span> <span style="color:#666">-</span> levels))
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> j &gt; i {
+</span></span><span style="display:flex;"><span>			z[i], z[j] = z[j], z[i]
 </span></span><span style="display:flex;"><span>		}
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Cooley-Tukey decimation-in-time radix-2 FFT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>; <span style="color:#a6e22e">size</span> <span style="color:#f92672">&lt;=</span> <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">size</span> <span style="color:#f92672">*=</span> <span style="color:#ae81ff">2</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">halfsize</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">tablestep</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">size</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">size</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">i</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">k</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> ; <span style="color:#a6e22e">j</span> &lt; <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#a6e22e">halfsize</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">halfsize</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">tpre</span> <span style="color:#f92672">:=</span> real(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">l</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">cosTable</span>[<span style="color:#a6e22e">k</span>] <span style="color:#f92672">+</span> imag(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">l</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">sinTable</span>[<span style="color:#a6e22e">k</span>]
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">tpim</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">-</span>real(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">l</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">sinTable</span>[<span style="color:#a6e22e">k</span>] <span style="color:#f92672">+</span> imag(<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">l</span>])<span style="color:#f92672">*</span><span style="color:#a6e22e">cosTable</span>[<span style="color:#a6e22e">k</span>]
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">l</span>] = <span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">j</span>] <span style="color:#f92672">-</span> complex(<span style="color:#a6e22e">tpre</span>, <span style="color:#a6e22e">tpim</span>)
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">z</span>[<span style="color:#a6e22e">j</span>] <span style="color:#f92672">+=</span> complex(<span style="color:#a6e22e">tpre</span>, <span style="color:#a6e22e">tpim</span>)
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">k</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">tablestep</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#60a0b0;font-style:italic">// Cooley-Tukey decimation-in-time radix-2 FFT
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	<span style="color:#007020;font-weight:bold">for</span> size <span style="color:#666">:=</span> <span style="color:#40a070">2</span>; size <span style="color:#666">&lt;=</span> n; size <span style="color:#666">*=</span> <span style="color:#40a070">2</span> {
+</span></span><span style="display:flex;"><span>		halfsize <span style="color:#666">:=</span> size <span style="color:#666">/</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>		tablestep <span style="color:#666">:=</span> n <span style="color:#666">/</span> size
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n; i <span style="color:#666">+=</span> size {
+</span></span><span style="display:flex;"><span>			j <span style="color:#666">:=</span> i
+</span></span><span style="display:flex;"><span>			k <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#007020;font-weight:bold">for</span> ; j &lt; i<span style="color:#666">+</span>halfsize; j<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>				l <span style="color:#666">:=</span> j <span style="color:#666">+</span> halfsize
+</span></span><span style="display:flex;"><span>				tpre <span style="color:#666">:=</span> <span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>cosTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>sinTable[k]
+</span></span><span style="display:flex;"><span>				tpim <span style="color:#666">:=</span> <span style="color:#666">-</span><span style="color:#007020">real</span>(z[l])<span style="color:#666">*</span>sinTable[k] <span style="color:#666">+</span> <span style="color:#007020">imag</span>(z[l])<span style="color:#666">*</span>cosTable[k]
+</span></span><span style="display:flex;"><span>				z[l] = z[j] <span style="color:#666">-</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				z[j] <span style="color:#666">+=</span> <span style="color:#007020">complex</span>(tpre, tpim)
+</span></span><span style="display:flex;"><span>				k <span style="color:#666">+=</span> tablestep
 </span></span><span style="display:flex;"><span>			}
 </span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">size</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">n</span> { <span style="color:#75715e">// Prevent overflow in &#39;size *= 2&#39;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">if</span> size <span style="color:#666">==</span> n { <span style="color:#60a0b0;font-style:italic">// Prevent overflow in &#39;size *= 2&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>			<span style="color:#007020;font-weight:bold">break</span>
 </span></span><span style="display:flex;"><span>		}
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">MakeCosSinTable</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) ([]<span style="color:#66d9ef">float64</span>, []<span style="color:#66d9ef">float64</span>) {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cosTable</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">float64</span>, <span style="color:#a6e22e">n</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sinTable</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">float64</span>, <span style="color:#a6e22e">n</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">cosTable</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Sincos</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Pi</span> <span style="color:#f92672">*</span> float64(<span style="color:#a6e22e">i</span>) <span style="color:#f92672">/</span> float64(<span style="color:#a6e22e">n</span>))
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cosTable</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">c</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sinTable</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">s</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">MakeCosSinTable</span>(n <span style="color:#902000">int</span>) ([]<span style="color:#902000">float64</span>, []<span style="color:#902000">float64</span>) {
+</span></span><span style="display:flex;"><span>	cosTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	sinTable <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">float64</span>, n<span style="color:#666">/</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> cosTable {
+</span></span><span style="display:flex;"><span>		s, c <span style="color:#666">:=</span> math.<span style="color:#06287e">Sincos</span>(<span style="color:#40a070">2</span> <span style="color:#666">*</span> math.Pi <span style="color:#666">*</span> <span style="color:#007020">float64</span>(i) <span style="color:#666">/</span> <span style="color:#007020">float64</span>(n))
+</span></span><span style="display:flex;"><span>		cosTable[i] = c
+</span></span><span style="display:flex;"><span>		sinTable[i] = s
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cosTable</span>, <span style="color:#a6e22e">sinTable</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> cosTable, sinTable
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
   
@@ -546,28 +616,11 @@ $$V_k = \Re\left[ \hat{c}_j e^{-i \pi\frac{k}{2N}} \right],. $$</li>
 <p>The other myth is that Google phones will be updated for a longer time. Prior to the Nexus 6, I had a Galaxy Nexus, which Google stopped supporting after less than 2 years. The Nexus 6 received security update until this October, that is nearly 2 years for me and 2.5 years for early buyers.</p>
 <p>In comparison Apple updates its phones for much longer and a 4 years old iphone 5s still runs smoothly. Fortunately for Android phones, there are the alternative roms. Being desperate with the state of my Nexus phone, I installed <a href="http://get.aospa.co/">paranoid android</a>. I am surprised at how good it is. My phone feels like new again, and as good as any flagship I would purchase today. To my great surprise I did not find any clear step by step installation process for Paranoid Android. I just followed the <a href="https://wiki.lineageos.org/devices/shamu/install">detailed steps for LineageOS</a> (CyanogenMod descendent), but with the paranoid android zip file instead of the LineageOS one. I have some trouble to understand how some open source ROM can be much nicer than the pure Google Android ROM, but it is. I have had no crash/reboot (which became more common as well with the years), plus it&rsquo;s still updated regularly. Google does not set a good standard by not supporting its own devices better.</p>
 <p>There is however one thing that Google does well, it&rsquo;s the camera app. The HDR+ mode makes my Nexus 6 take great pictures, even compared to new android phones or iphones. I am often amazed at the pictures I manage to take, and others are also amazed at how good they look (especially since they look often better on the Nexus 6 screen than on a computer monitor). Initially I remember the camera to be not so great, but some update that came in 2016 transformed the phone into a fantastic shooter. It allowed me to take very nice pictures in difficult conditions, see for example <a href="https://photos.app.goo.gl/s2IHVtKMzRkxDY1q1">this google photo gallery</a>. Fortunately it&rsquo;s still possible to install the app in the Google Play store on Paranoid Android. They should really make it open-source and easier to adapt it to other android phones.</p>
-<figure><a href="https://photos.google.com/share/AF1QipOGPpDIYCAYJ_636MtjEGWQHj6da0EukBqwoAGMYvuMoWGGJ8EjCx4ADVNffqulPA?key=YjF4VnRGRGlqNlgtbS1Cb0U0WFo3djl5NEdUSk5R&amp;source=ctrlq.org"><img src="https://lh3.googleusercontent.com/JjEGDeF4uiw1FPFVVDotOPNeN-GPr_5s8-n0ud7Ioio8GvegtJqJ_C6AinmV0plNBnEINZEVr6LZvHb7I68HbGaZcTRUlldsxHoXZVGSLJAYZHqEM94JnDINlVVEWSOvP39Qwj4dWw"></a><figcaption>
-      <h4>A photo made with the Google camera app on the Nexus 6.</h4>
-    </figcaption>
+<figure><a href="https://photos.google.com/share/AF1QipOGPpDIYCAYJ_636MtjEGWQHj6da0EukBqwoAGMYvuMoWGGJ8EjCx4ADVNffqulPA?key=YjF4VnRGRGlqNlgtbS1Cb0U0WFo3djl5NEdUSk5R&amp;source=ctrlq.org"><img src="https://lh3.googleusercontent.com/JjEGDeF4uiw1FPFVVDotOPNeN-GPr_5s8-n0ud7Ioio8GvegtJqJ_C6AinmV0plNBnEINZEVr6LZvHb7I68HbGaZcTRUlldsxHoXZVGSLJAYZHqEM94JnDINlVVEWSOvP39Qwj4dWw"/></a><figcaption>
+            <h4>A photo made with the Google camera app on the Nexus 6.</h4>
+        </figcaption>
 </figure>
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/svn_is_dead/">SVN is dead</a>
-  </h1>
-  <time datetime="2017-09-26T23:56:42&#43;0100" class="post-date">Tue, Sep 26, 2017</time>
-  <p>A few years ago, when <a href="https://git-scm.com/">Git</a> was rising fast and <a href="https://subversion.apache.org/">SVN</a> was already not hype anymore, a friend thought that SVN was for many organizations better suited than Git, with the following classical arguments, which were sound at the time:</p>
-<ol>
-<li>Who needs decentralization for a small team or a small company working together?</li>
-<li>‎SVN is proven, works well and is simple to use and put in place.</li>
-</ol>
-<p>Each argument is in reality not so strong. It becomes clear now that Git is much more established.</p>
-<p>Regarding the first argument, a long time ago some people had trouble with CVS as it introduced the idea of merging instead of locking files. Git represents a similar paradigm shift between the centralized and the decentralized. It can scare people in not so rational ways. You could lock files with CVS as you did with visual sourcesafe or any other crappy old source control system. It&rsquo;s just that people favored merges as it was effectively more convenient and more productive. You can also use Git with a centralized workflow. Another more scary paradigm shift with Git is to move away from the idea that branches are separate folders. With Git you just switch branches as it is instantaneous even though, again, you could use it in the old fashioned SVN way.</p>
-<p>Now onto the second argument, SVN is proven to work well. But so is Cobol. Today it should be clear that SVN is essentially dead. Most big projects move or have moved to git. Tools work better with Git, even <a href="https://www.eclipse.org/">Eclipse</a> works natively with Git but requires buggy plugins for SVN. New developers don&rsquo;t know SVN.</p>
-<p>I heard other much worse arguments against Git since. For example, some people believed that, with Git, they could lose some of their code changes. This was partially due to sensational news article such as the <a href="https://www.theregister.co.uk/2017/02/01/gitlab_data_loss/">Gitlab.com data loss</a>, where in reality some administrator deleted some directory and had non-working backups. As a result, some Git repositories were deleted, but in reality it&rsquo;s a common data loss situation, unrelated to the use of Git as version control system. This Stackoverflow question gives a nice overview of <a href="https://stackoverflow.com/questions/21048765/what-can-cause-data-loss-in-git">data loss risks with Git</a>.</p>
-<p>What I feel is true however is that Git is more complex than SVN, because it is more powerful and more flexible. But if you adopt a simple workflow, it&rsquo;s not necessarily more complicated.</p>
 
   
 </article>

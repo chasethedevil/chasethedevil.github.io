@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,43 +74,43 @@
   <time datetime=2023-11-07T20:56:42&#43;0100 class="post-date">Tue, Nov 7, 2023</time>
   <p>I received a few e-mails asking me for the code I used to measure roughness in my preprint on the <a href="/post/implied_volatility_roughness">roughness of the implied volatility</a>. Unfortunately, the code I wrote for this paper is not in a <em>good</em> state, it&rsquo;s all in one long file line by line, not necessarily in order of execution, with comments that are only meaningful to myself.</p>
 <p>In this post I will present the code relevant to measuring the oxford man institute roughness with Julia. I won&rsquo;t go into generating Heston or rough volatility model implied volatilities, and focus only on the measure on roughness based on some CSV like input. I downloaded the oxfordmanrealizedvolatilityindices.csv from the Oxford Man Institute website (unfortunately now discontinued, data bought by Refinitiv but still available in some github repos) to my home directory</p>
-<p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones 
-</span></span><span style="display:flex;"><span>df <span style="color:#f92672">=</span> DataFrame(CSV<span style="color:#f92672">.</span>File(<span style="color:#e6db74">&#34;/home/fabien/Downloads/oxfordmanrealizedvolatilityindices.csv&#34;</span>))
-</span></span><span style="display:flex;"><span>df1 <span style="color:#f92672">=</span>  df[df<span style="color:#f92672">.</span><span style="color:#66d9ef">Symbol</span> <span style="color:#f92672">.==</span> <span style="color:#e6db74">&#34;.SPX&#34;</span>,<span style="color:#f92672">:</span>]
-</span></span><span style="display:flex;"><span>dsize <span style="color:#f92672">=</span>  trunc(<span style="color:#66d9ef">Int</span>,length(df1<span style="color:#f92672">.</span>close_time)<span style="color:#f92672">/</span><span style="color:#ae81ff">1.0</span>)
-</span></span><span style="display:flex;"><span>tm <span style="color:#f92672">=</span> [abs((Date(ZonedDateTime(<span style="color:#66d9ef">String</span>(d),<span style="color:#e6db74">&#34;y-m-d H:M:S+z&#34;</span>))<span style="color:#f92672">-</span>Date(ZonedDateTime(<span style="color:#66d9ef">String</span>(dfv<span style="color:#f92672">.</span>Column1[<span style="color:#ae81ff">1</span>]),<span style="color:#e6db74">&#34;y-m-d H:M:S+z&#34;</span>)))<span style="color:#f92672">.</span>value) <span style="color:#66d9ef">for</span> d <span style="color:#66d9ef">in</span> dfv<span style="color:#f92672">.</span>Column1[<span style="color:#f92672">:</span>]];
-</span></span><span style="display:flex;"><span>ivm <span style="color:#f92672">=</span> dfv<span style="color:#f92672">.</span>rv5[<span style="color:#f92672">:</span>]
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Roots, Statistics
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> wStatA(ts, vs, K0,L,step,p)
-</span></span><span style="display:flex;"><span>    bvs <span style="color:#f92672">=</span> vs <span style="color:#75715e"># big.(vs)</span>
-</span></span><span style="display:flex;"><span>    bts <span style="color:#f92672">=</span> ts <span style="color:#75715e"># big.(ts)</span>
-</span></span><span style="display:flex;"><span>    value <span style="color:#f92672">=</span> sum( abs(log(bvs[k<span style="color:#f92672">+</span>K0])<span style="color:#f92672">-</span>log(bvs[k]))<span style="color:#f92672">^</span>p <span style="color:#f92672">/</span> sum(abs(log(bvs[l<span style="color:#f92672">+</span>step])<span style="color:#f92672">-</span>log(bvs[l]))<span style="color:#f92672">^</span>p <span style="color:#66d9ef">for</span> l <span style="color:#66d9ef">in</span> k<span style="color:#f92672">:</span>step<span style="color:#e6db74">:k</span><span style="color:#f92672">+</span>K0<span style="color:#f92672">-</span>step) <span style="color:#f92672">*</span> abs((bts[k<span style="color:#f92672">+</span>K0]<span style="color:#f92672">-</span>bts[k])) <span style="color:#66d9ef">for</span> k<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>K0<span style="color:#f92672">:</span>L<span style="color:#f92672">-</span>K0<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> value
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> meanRoughness(tm, ivm, K0, L)
-</span></span><span style="display:flex;"><span>    cm <span style="color:#f92672">=</span> zeros(length(tm)<span style="color:#f92672">-</span>L);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>length(cm)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">local</span> ivi <span style="color:#f92672">=</span> ivm[i<span style="color:#f92672">:</span>i<span style="color:#f92672">+</span>L]
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">local</span> ti <span style="color:#f92672">=</span> tm[i<span style="color:#f92672">:</span>i<span style="color:#f92672">+</span>L]
-</span></span><span style="display:flex;"><span>        T <span style="color:#f92672">=</span> abs((ti[<span style="color:#66d9ef">end</span>]<span style="color:#f92672">-</span>ti[<span style="color:#ae81ff">1</span>]))
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>
-</span></span><span style="display:flex;"><span>            cm[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span>  find_zero(p <span style="color:#f92672">-&gt;</span> wStatA(ti, ivi, K0, L, <span style="color:#ae81ff">1</span>,p)<span style="color:#f92672">-</span>T,(<span style="color:#ae81ff">1.0</span>,<span style="color:#ae81ff">100.0</span>))
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">catch</span> e
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">isa</span>(e, <span style="color:#66d9ef">ArgumentError</span>)
-</span></span><span style="display:flex;"><span>                cm[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>
+<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones 
+</span></span><span style="display:flex;"><span>df <span style="color:#666">=</span> DataFrame(CSV<span style="color:#666">.</span>File(<span style="color:#4070a0">&#34;/home/fabien/Downloads/oxfordmanrealizedvolatilityindices.csv&#34;</span>))
+</span></span><span style="display:flex;"><span>df1 <span style="color:#666">=</span>  df[df<span style="color:#666">.</span><span style="color:#902000">Symbol</span> <span style="color:#666">.==</span> <span style="color:#4070a0">&#34;.SPX&#34;</span>,<span style="color:#666">:</span>]
+</span></span><span style="display:flex;"><span>dsize <span style="color:#666">=</span>  trunc(<span style="color:#902000">Int</span>,length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">/</span><span style="color:#40a070">1.0</span>)
+</span></span><span style="display:flex;"><span>tm <span style="color:#666">=</span> [abs((Date(ZonedDateTime(<span style="color:#902000">String</span>(d),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>))<span style="color:#666">-</span>Date(ZonedDateTime(<span style="color:#902000">String</span>(dfv<span style="color:#666">.</span>Column1[<span style="color:#40a070">1</span>]),<span style="color:#4070a0">&#34;y-m-d H:M:S+z&#34;</span>)))<span style="color:#666">.</span>value) <span style="color:#007020;font-weight:bold">for</span> d <span style="color:#007020;font-weight:bold">in</span> dfv<span style="color:#666">.</span>Column1[<span style="color:#666">:</span>]];
+</span></span><span style="display:flex;"><span>ivm <span style="color:#666">=</span> dfv<span style="color:#666">.</span>rv5[<span style="color:#666">:</span>]
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Roots, Statistics
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> wStatA(ts, vs, K0,L,step,p)
+</span></span><span style="display:flex;"><span>    bvs <span style="color:#666">=</span> vs <span style="color:#60a0b0;font-style:italic"># big.(vs)</span>
+</span></span><span style="display:flex;"><span>    bts <span style="color:#666">=</span> ts <span style="color:#60a0b0;font-style:italic"># big.(ts)</span>
+</span></span><span style="display:flex;"><span>    value <span style="color:#666">=</span> sum( abs(log(bvs[k<span style="color:#666">+</span>K0])<span style="color:#666">-</span>log(bvs[k]))<span style="color:#666">^</span>p <span style="color:#666">/</span> sum(abs(log(bvs[l<span style="color:#666">+</span>step])<span style="color:#666">-</span>log(bvs[l]))<span style="color:#666">^</span>p <span style="color:#007020;font-weight:bold">for</span> l <span style="color:#007020;font-weight:bold">in</span> k<span style="color:#666">:</span>step<span style="color:#517918">:k</span><span style="color:#666">+</span>K0<span style="color:#666">-</span>step) <span style="color:#666">*</span> abs((bts[k<span style="color:#666">+</span>K0]<span style="color:#666">-</span>bts[k])) <span style="color:#007020;font-weight:bold">for</span> k<span style="color:#666">=</span><span style="color:#40a070">1</span><span style="color:#666">:</span>K0<span style="color:#666">:</span>L<span style="color:#666">-</span>K0<span style="color:#666">+</span><span style="color:#40a070">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> value
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> meanRoughness(tm, ivm, K0, L)
+</span></span><span style="display:flex;"><span>    cm <span style="color:#666">=</span> zeros(length(tm)<span style="color:#666">-</span>L);
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">1</span><span style="color:#666">:</span>length(cm)
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">local</span> ivi <span style="color:#666">=</span> ivm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">local</span> ti <span style="color:#666">=</span> tm[i<span style="color:#666">:</span>i<span style="color:#666">+</span>L]
+</span></span><span style="display:flex;"><span>        T <span style="color:#666">=</span> abs((ti[<span style="color:#007020;font-weight:bold">end</span>]<span style="color:#666">-</span>ti[<span style="color:#40a070">1</span>]))
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">try</span>
+</span></span><span style="display:flex;"><span>            cm[i] <span style="color:#666">=</span> <span style="color:#40a070">1.0</span> <span style="color:#666">/</span>  find_zero(p <span style="color:#666">-&gt;</span> wStatA(ti, ivi, K0, L, <span style="color:#40a070">1</span>,p)<span style="color:#666">-</span>T,(<span style="color:#40a070">1.0</span>,<span style="color:#40a070">100.0</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">catch</span> e
+</span></span><span style="display:flex;"><span>            <span style="color:#007020;font-weight:bold">if</span> <span style="color:#007020;font-weight:bold">isa</span>(e, <span style="color:#902000">ArgumentError</span>)
+</span></span><span style="display:flex;"><span>                cm[i] <span style="color:#666">=</span> <span style="color:#40a070">0.0</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#007020;font-weight:bold">else</span>
 </span></span><span style="display:flex;"><span>                throw(e)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>    meanValue <span style="color:#f92672">=</span> mean(filter( <span style="color:#66d9ef">function</span>(x) x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">end</span>,cm))
-</span></span><span style="display:flex;"><span>    stdValue <span style="color:#f92672">=</span> std(filter( <span style="color:#66d9ef">function</span>(x) x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">end</span>,cm))
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> meanValue, stdValue, cm
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#f92672">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>)
-</span></span><span style="display:flex;"><span>density(cm,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;H&#34;</span>,ylabel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Density&#34;</span>)</span></span></code></pre></div>
+</span></span><span style="display:flex;"><span>            <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    meanValue <span style="color:#666">=</span> mean(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
+</span></span><span style="display:flex;"><span>    stdValue <span style="color:#666">=</span> std(filter( <span style="color:#007020;font-weight:bold">function</span>(x) x <span style="color:#666">&gt;</span> <span style="color:#40a070">0</span> <span style="color:#007020;font-weight:bold">end</span>,cm))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> meanValue, stdValue, cm
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#666">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#666">^</span><span style="color:#40a070">2</span>)
+</span></span><span style="display:flex;"><span>density(cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>,ylabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Density&#34;</span>)</span></span></code></pre></div>
 The last plot should look like
-<figure><img src="/post/oxford_spx500_roughness.png">
+<figure><img src="/post/oxford_spx500_roughness.png"/>
 </figure>
 
 It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>

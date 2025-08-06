@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -80,81 +80,81 @@
 <li>The expansion is not really good in practice.</li>
 </ul>
 <p>There are two errors in the code: one in the cross derivative of PHIgxy2 (first order on x and second order on y), and one in the second order cross derivative of the Black-Scholes price dPdx2dy2.</p>
-<p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>(phigx<span style="color:#f92672">*</span>(f<span style="color:#f92672">+</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f^<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> phig<span style="color:#f92672">*</span>(fx<span style="color:#f92672">+</span>gx<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>fx<span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span>f^<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>gx<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>));</span></span></code></pre></div>
+<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>(phigx<span style="color:#666">*</span>(f<span style="color:#666">+</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span>) <span style="color:#666">+</span> phig<span style="color:#666">*</span>(fx<span style="color:#666">+</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f<span style="color:#666">*</span>fx<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span>));</span></span></code></pre></div>
 should be
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#f92672">-</span>(<span style="color:#ae81ff">3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">*</span>y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>g)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phigy<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>f<span style="color:#f92672">*</span>g)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>fy<span style="color:#f92672">*</span>g<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> y^(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5</span>)<span style="color:#f92672">*</span>phig<span style="color:#f92672">*</span>f<span style="color:#f92672">*</span>gy<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>;</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#666">-</span>(<span style="color:#40a070">3</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">+</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phigy<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>fy<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>f<span style="color:#666">*</span>gy<span style="color:#666">/</span><span style="color:#40a070">2</span>;</span></span></code></pre></div></p>
 <p>and</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#f92672">*</span>exp(<span style="color:#f92672">-</span>rf<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>PHIfx2y2 <span style="color:#f92672">-</span> exp(<span style="color:#f92672">-</span>q<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>S<span style="color:#f92672">*</span>(PHIgy <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy <span style="color:#f92672">+</span> PHIgx2y <span style="color:#f92672">+</span> PHIgy2 <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy2 <span style="color:#f92672">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy <span style="color:#666">+</span> PHIgx2y <span style="color:#666">+</span> PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>should be</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#f92672">*</span>exp(<span style="color:#f92672">-</span>rf<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>PHIfx2y2<span style="color:#f92672">*</span>PHIfx2y2 <span style="color:#f92672">-</span> exp(<span style="color:#f92672">-</span>q<span style="color:#f92672">*</span>T(NT))<span style="color:#f92672">*</span>S<span style="color:#f92672">*</span>(PHIgy2 <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>PHIgxy2 <span style="color:#f92672">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>The formula for the piecewise-constant coefficients also contains errors: for example, the total variance variable wT is wrong. It should be a double sum instead of the standard constant Heston like formula. Finally, the many sums are rederived in the book, differently from the paper and are not simplified (unlike in the paper where they are all single sums).</p>
 <p>Indeed, with the original code from Rouah, the prices in the table of the paper from Benhamou Gobet and Miri are not reproduced to the last digit. With the above changes, they are.</p>
 <p>On the second point, it is surprising that the book does not mention that the approximation is not great. In particular, it does not mention that the calibrated parameters between Table 9.6 and Table 9.3 are vastly different (except for v0). The calibrated smile is plotted, which is great, but it is only plotted with the approximation formula. Plotting the same using the nearly exact semi-analytical representation of vanlla option prices would have been enlightening. We do it below, as Fabrice Rouah gives all the inputs (a very good thing):</p>
-<figure><img src="/post/hestonhagan_bgm_37d.png"><figcaption>
-      <h4>DJIA 37 days maturity.</h4>
-    </figcaption>
+<figure><img src="/post/hestonhagan_bgm_37d.png"/><figcaption>
+            <h4>DJIA 37 days maturity.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/hestonhagan_bgm_226d.png"><figcaption>
-      <h4>DJIA 226 days maturity.</h4>
-    </figcaption>
+<figure><img src="/post/hestonhagan_bgm_226d.png"/><figcaption>
+            <h4>DJIA 226 days maturity.</h4>
+        </figcaption>
 </figure>
 
 <p>It looks like in the range the calibration stays in the range of applicability of the formula, which is good, but not necessarily always true. The main issue is however that the calibrated parameters with the approximation are not necessarily a good guess for the parameters of the true time-dependent Heston model, precisely because the actual optimal parameters are way outside the range where the approximation is accurate. This is clear in the 226D plot, the best fit from the approx (which is great) ends up a not so good fit for the real time-dependent Heston model. Somewhat interestingly, the approx is actually not so bad on the actual optimal parameters, gotten from a calibration of the model with the Cos method - it is however a less good fit with the approx than the optimal parameters gotten from a calibration of the model with the approximation.</p>
 <p>More recently, Pat Hagan proposed a new approximation for the model, based on a SABR mapping. It seems a bit more precise than the approximation of Benhamou Gobet and Miri, but is not great either. And it is disappointing that the paper does not present any number, nor any plot to assess the quality of the approximation given. Van der Zwaard <a href="https://repository.tudelft.nl/file/File_bf06c85f-2c44-4fef-b94d-9d41e3e6704f">gives</a> some relatively realistic yet simple set of parameters for the Heston model (using Hagan&rsquo;s reparameterization with constant expected variance = 1) and on those, the approximated prices of <strong>at-the-money</strong> options are just not usable:</p>
 <p>If we consider his Table 5.9 (maturity = 1.75 year), we have the following</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: center">Method</th>
-          <th style="text-align: center">Price</th>
-          <th style="text-align: center">Error</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">BGM</td>
-          <td style="text-align: center">4.2206</td>
-          <td style="text-align: center">0.21</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Hagan</td>
-          <td style="text-align: center">3.3441</td>
-          <td style="text-align: center">0.66</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Reference</td>
-          <td style="text-align: center">4.0039</td>
-          <td style="text-align: center">0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:center">Method</th>
+<th style="text-align:center">Price</th>
+<th style="text-align:center">Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">BGM</td>
+<td style="text-align:center">4.2206</td>
+<td style="text-align:center">0.21</td>
+</tr>
+<tr>
+<td style="text-align:center">Hagan</td>
+<td style="text-align:center">3.3441</td>
+<td style="text-align:center">0.66</td>
+</tr>
+<tr>
+<td style="text-align:center">Reference</td>
+<td style="text-align:center">4.0039</td>
+<td style="text-align:center">0</td>
+</tr>
+</tbody>
 </table>
 <p>With Table 5.10 (maturity = 1.3 year), it is even worse:</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: center">Method</th>
-          <th style="text-align: center">Price</th>
-          <th style="text-align: center">Error</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">BGM</td>
-          <td style="text-align: center">0.6659</td>
-          <td style="text-align: center">1.17</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Hagan</td>
-          <td style="text-align: center">0.2263</td>
-          <td style="text-align: center">1.61</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Reference</td>
-          <td style="text-align: center">1.8407</td>
-          <td style="text-align: center">0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:center">Method</th>
+<th style="text-align:center">Price</th>
+<th style="text-align:center">Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">BGM</td>
+<td style="text-align:center">0.6659</td>
+<td style="text-align:center">1.17</td>
+</tr>
+<tr>
+<td style="text-align:center">Hagan</td>
+<td style="text-align:center">0.2263</td>
+<td style="text-align:center">1.61</td>
+</tr>
+<tr>
+<td style="text-align:center">Reference</td>
+<td style="text-align:center">1.8407</td>
+<td style="text-align:center">0</td>
+</tr>
+</tbody>
 </table>
 
 </div>

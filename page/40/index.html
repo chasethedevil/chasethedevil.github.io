@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/ibm-websphere-portal-strategy/">IBM Websphere Portal Strategy</a>
+  </h1>
+  <time datetime="2005-12-07T17:48:00Z" class="post-date">Wed, Dec 7, 2005</time>
+  <p>I digged a bit deeper in a current project where they use IBM Websphere Portal Server (WPS) with IBM Web Content Management (WCM). I found out that both products collide and disintegrate.</p>
+<p>WCM is like a regular content management system, quite flexible and performant on its own. It has a nice way to separate layout concern from content concern. It has a flexible cache. It has a user repository to set different permissions. Its architecture is even so well done (very modular) that you can tailor it to your needs to do things a content management system is not supposed to do. It could do most of what you would do with a Portal system. And that&rsquo;s the problem.</p>
+<p>WPS is a Porlet server, now compatible with JSR 168. You can again do the layout of your portlets, you have an administrative interface to handle them and one to handle user permissions. There is a caching system although it&rsquo;s not very clear how that works. Standard administration Portlets seem awfully slow to use any cache. To be integrate WCM content in the Portal Server, they ship a WCM Portlet. While JSR 168 API is recommended by IBM, the WCM Portlet is not a JSR 168 one.</p>
+<p>So you have 2 products where you can layout your pages, and have dynamic behaviour in them, locally as components, easily manageable. One can be embedded in the other, but it does not make much sense, because you would then just use a tiny part of its possibilities, and its flexibility will be more a burden (extra abstraction layer) than anything. The integration of the 2 products is very superficial. Although recently they can share a common user repository, the WCM portlet does not do any caching of WCM content, linking between content and portlets is a very cumbersome task. IBM provides tips to build a framework that does just that. All that for not using most of the WCM possibilities and always having difficulties in defining their roles and using them collaboratively.</p>
+<p>Now, if you look at how JBoss Portal works, and what features they focused on, you will see a well designed solution whose aim is to build pragmatically a Portal using Portlets. They have a very simple content management system used to administrate HTML snippets. Content is put inside the Portal page using CMS Portlets, the layout is the one you specified in the Portal page. They provide automatic caching of CMS content and easy to use links. Integration with their CMS is already using JSR 170 standard. You can plugin other CMS systems easily.<!-- raw HTML omitted --> <!-- raw HTML omitted --> IBM strategy with their WPS+CMS does not look very good, and their version is currently 5.1, soon 6.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/portlets-in-an-ajax-world/">Portlets in an AJAX World</a>
   </h1>
@@ -223,15 +235,6 @@ In 1998, a student of my school had a project with Sun about EJBs. This was the 
 <li>Transactions: I just don&rsquo;t think manual transactions are that bad or ugly or less maintainable. But using Spring for them is not necessarily a bad idea either.</li>
 </ul>
 <p>To me, the main alternative to Spring, and a very good one, is <a href="http://www.jboss.com/">JBoss</a>. I will elaborate on that subject later in another post.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/interesting-plug-in-framework---dpml-transit/">Interesting Plug-In Framework - DPML Transit</a>
-  </h1>
-  <time datetime="2005-09-29T15:20:00Z" class="post-date">Thu, Sep 29, 2005</time>
-  <p>Today, I just found out about  <a href="http://dpml.net/transit/latest/overview.html">DPML Transit</a>, it is a small framework that helps you build plug-ins based software. It seems to work a bit with <a href="http://dpml.net/magic/latest/index.html">DPML Magic</a>, their build system based upon Ant. Both are quite interesting, since in big projects, you often end up with a packaging per component (which DPML Magic seems to make very simple) and a versioning of those components. DPML Transit allows then for an efficient way to look up a particular version of one component.</p>
-<p>I have not heard of DPML before, they seem to write useful software. Has anybody used those frameworks already?</p>
 
   
 </article>

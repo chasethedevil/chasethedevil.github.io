@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,44 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/on-interviewing-candidates-for-a-job/">On Interviewing Candidates for a Job</a>
+  </h1>
+  <time datetime="2014-04-23T17:18:00Z" class="post-date">Wed, Apr 23, 2014</time>
+  <p>I am going to write a little about my experience and conclusions so far around interviewing a candidate for a software developer position or for a quant position, but it should be quite general.</p>
+<p>At first, I used to ask interview questions I liked when I was myself a candidate. On the technical side, it would stuff like:</p>
+<ul>
+<li>which design patterns do you know?</li>
+<li>what&rsquo;s your opinion on design patterns?&lt;</li>
+<li>what&rsquo;s a virtual method?</li>
+<li>any interesting algorithm you like?</li>
+<li>which libraries did you use?</li>
+</ul>
+<p>For a quant type I&rsquo;d ask more specific questions:</p>
+<ul>
+<li>what&rsquo;s a Brownian motion?&lt;</li>
+<li>what&rsquo;s the Stratanovitch integral?</li>
+<li>why do we use the Ito integral in finance?&lt;</li>
+<li>questions on numerical methods: Monte-Carlo and finite differences.</li>
+<li>questions on financial details.</li>
+</ul>
+<p>I found the approach mostly frustrating: very few people would give interesting (or even good) answers, because most people are not that well prepared for the interview. The exception goes to the academic kind of guy, who usually gives excellent answers, sometimes so good that you feel dumb asking those questions.</p>
+<p>People who don&rsquo;t give good answers could actually be good coworkers. When I was junior, I was particularly bad at job interviews. I did not necessarily know object orienting concepts that well, even if I started programming at an early age. After a few years, I did not know database theory well either because I had experience only with simple queries, having mostly worked on other stuff. A failed interview made me look more closely at the subject, and it turns out that you can sound like an expert after reading only 1 relatively short book (and the theory is actually quite interesting). I went later to the extreme of complex queries, and then realized <a href="/post/use-orm-for-better-performance/">why ORMs are truely important</a>. Similarly when I first interviewed for the &ldquo;finance&rdquo; industry, I sounded very dumb, barely knowing what options were. It&rsquo;s natural to make mistakes, and to not know much. I learnt all that through various mentor coworkers who indirectly encouraged me with their enthusiasm to read the right stuff. What&rsquo;s valuable is the ability to learn, and maybe, when you are very experienced, your past experiences (which might not match at all the interviewer knowledge).</p>
+<p>Similarly, I sometimes appeared extremely good to interviewers, because it turned out I had practiced similar tests as their own out of curiosity not much time before the interview.</p>
+<p>There is also a nasty aspect on asking precise pre-formatted technical questions, you will tend to think that everybody is dumb because they can&rsquo;t answer those basic questions you know so well, turning you into an arrogant asshole.</p>
+<p>I also tried asking probability puzzles (requiring only basic maths knowledge). This gave even less clues towards the candidates in general, except for the exceptional one, where, again you feel a bit dumb for asking those.</p>
+<p>In the end, I noticed that the most interesting part of the interview was to discuss a subject the candidate knew well, with the idea of trying to extract knowledge from the candidate, to learn something from him.</p>
+<p>I believe this is might be what the interview should only be about. Furthermore, you don&rsquo;t feel like you are losing your time with such an approach.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/non-linear-option-pricing/">Non-linear Option Pricing</a>
   </h1>
@@ -130,13 +161,13 @@ P. Jaeckel has defied the limits of accuracy with his<a href="http://www.pjaecke
 $$f&rsquo;^2 + f&rsquo;&rsquo; \geq 0$$</p>
 <p>This condition makes the interpolation on the log prices arbitrage free. As a first draft experiment, I just ensured numerically that the condition was valid, the resulting algorithm was fast enough and worked reasonably well.</p>
 <p>Here is how the normalized density looks like with a simple harmonic spline on the call prices, a cubic spline in the logarithm of call prices, and an optimized tension spline in the logarithm of call prices.</p>
-<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"><figcaption>
-      <h4>logarithm of the curvature</h4>
-    </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"/><figcaption>
+            <h4>logarithm of the curvature</h4>
+        </figcaption>
 </figure>
 
 The blank spot for the Log curve (spline) corresponds to negative curvature, that is, arbitrage. Notice how the tension spline is fully continuous, with no real spikes.</p>
-<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png">
+<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png"/>
 </figure>
 
 <p>The implied volatility curve is very close to a more classic cubic spline interpolation on the implied variance.<!-- raw HTML omitted --><!-- raw HTML omitted -->Of course, the same kind of algorithm can be applied directly to the variance with a slightly different numerical test to ensure it is arbitrage-free, it might however be easier to find a more robust and more clever algorithm in the log prices.</p>
@@ -175,18 +206,6 @@ Peter Jaeckel, in a <a href="http://www.pjaeckel.webspace.virginmedia.com/Clampi
 <p>I was a bit surprised that even on a single underlying, without any real optimization, adjoint delta was faster by a factor of nearly 40%. I suspect this is mostly due to exp evaluations being /2.</p>
 <p>On a basket of 4 assets, the adjoint method was 3.25x faster.</p>
 <p>It&rsquo;s quick to have such results on basic payoffs: it took me a few hours and worked on the first run, even though my Monte-Carlo is slightly different from the Capriotti paper. It is much more challenging to have it working across a wide variety of payoffs, and to automatize some of it.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/svi-on-top-of-sabr/">SVI on top of SABR</a>
-  </h1>
-  <time datetime="2014-02-20T18:36:00Z" class="post-date">Thu, Feb 20, 2014</time>
-   
-
-Several papers show that the limit for large strikes of <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDUQFjAB&amp;url=http%3A%2F%2Farxiv.org%2Fabs%2F1002.3633&amp;ei=GjUGU5uVIeu00wXEwoCwBw&amp;usg=AFQjCNHvnJ9xYAv60R4GSUbMORRI9_-7Zg&amp;sig2=iqplpcXauJBLJ9DIw71vWA&amp;bvm=bv.61725948,d.d2k">Heston is SVI</a>.<br /><br />Interestingly, I stumbled onto a surface where the Hagan SABR fit was perfect as well as the SVI fit, while the Heston fit was not.<br /><br />Originally, I knew that, on this data, the SVI fit was perfect. Until today, I just never tried to fit a lognormal SABR on the same data. I did a small test with random values of the SABR parameters alpha, rho, nu, and found out that in deed, the SVI fit is always perfect on SABR.<br /><br />Is this just because the Taylor expansion of SVI will match the Taylor expansion of SABR up to the fourth order? It seems that the wings are also not too far off in general so there could be more to it.<br /><br />Gatheral actually devised an SVI formula that uses SABR like variables <a href="http://mfe.baruch.cuny.edu/wp-content/uploads/2013/01/OsakaSVI2012.pdf">in a talk here</a>.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/-QNLwJnVGPUE/UwY9EwCkZ6I/AAAAAAAAHA4/DP6MstmUqg4/s1600/Screenshot+from+2014-02-20+18:36:06.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-QNLwJnVGPUE/UwY9EwCkZ6I/AAAAAAAAHA4/DP6MstmUqg4/s1600/Screenshot+from+2014-02-20+18:36:06.png" height="79" width="320" /></a></div><br /><br />Of course, the reverse is not true. SVI has more parameters and provides in general a better fit than SABR.
-
-
 
   
 </article>

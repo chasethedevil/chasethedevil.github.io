@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -79,7 +79,7 @@
 <p>We can avoid recomputing the paths by just caching them at each observation time. The problem is that the size of this cache can quickly become extremely large and blow up the memory. For example a 10y daily knock-out will require 10 * 252 * 8 * 2 * MB = 40 GB for 1 million paths.</p>
 <p>A side effect of the second simulation is that one can use a Quasi-Random number generator there, while for the first simulation, this is not easy as we compute all paths, dimension by dimension.</p>
 <p>In practice, both methods work well, particle or bins, single-pass or two-pass. Here is a graph of the error in volatility, SV is a not so well calibrated Heston to market data. LVSV are the local stochastic volatility simulations, using as Vanderstoep 100 steps per year and 500K simulations with 30 bins.</p>
-<figure><img src="/post/Screenshot%20from%202015-01-30%2009%2023%2031.png">
+<figure><img src="/post/Screenshot%20from%202015-01-30%2009%2023%2031.png"/>
 </figure>
 
 <p>The advantages of the particle do not show up in terms of accuracy on this example. I have also noticed that short expiries seem trickier, the error being larger. This might just be due to the time-step size, but interestingly the papers only show graphs of medium (min=6m) to large expiries.</p>

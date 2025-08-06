@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -83,34 +83,34 @@
 <ul>
 <li>
 <p>First kind (following the <a href="https://numbersandshapes.net/posts/high_precision_clenshaw_curtis/">numbersandshapes blog post</a>)
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>n) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>n))
-</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> chebnodes(<span style="color:#66d9ef">Float64</span>, N)
-</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> vcat(sqrt(<span style="color:#ae81ff">2</span>), <span style="color:#ae81ff">0.0</span>, [(<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">^</span>k) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> k<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> sqrt(<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> N) <span style="color:#f92672">*</span> idct(m)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>chebnodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span>n) <span style="color:#666">-</span> <span style="color:#40a070">1</span>) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> <span style="color:#40a070">2</span>n))
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> chebnodes(<span style="color:#902000">Float64</span>, N)
+</span></span><span style="display:flex;"><span>m <span style="color:#666">=</span> vcat(sqrt(<span style="color:#40a070">2</span>), <span style="color:#40a070">0.0</span>, [(<span style="color:#40a070">1</span> <span style="color:#666">+</span> (<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">^</span>k) <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> k<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> k <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span>N<span style="color:#666">-</span><span style="color:#40a070">1</span>])
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> sqrt(<span style="color:#40a070">2</span> <span style="color:#666">/</span> N) <span style="color:#666">*</span> idct(m)</span></span></code></pre></div></p>
 </li>
 <li>
 <p>Second kind (the classic Clenshaw-Curtis, following some article from Treffenden)
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">@.</span> (cos(((<span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) <span style="color:#f92672">*</span> T(pi) <span style="color:#f92672">/</span> (n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)))
-</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> cheb2nodes(<span style="color:#66d9ef">Float64</span>, N)
-</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(<span style="color:#ae81ff">2</span>, [<span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> i<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)]) <span style="color:#75715e"># Standard Chebyshev moments</span>
-</span></span><span style="display:flex;"><span>c <span style="color:#f92672">=</span> vcat(c, c[<span style="color:#66d9ef">Int</span>(floor(N <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>))<span style="color:#f92672">:-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>])         <span style="color:#75715e"># Mirror for DCT via FFT </span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> real(ifft(c))                             <span style="color:#75715e"># Interior weight</span>
-</span></span><span style="display:flex;"><span>ws[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>ws <span style="color:#f92672">=</span> vcat(ws, ws[<span style="color:#ae81ff">1</span>])                           <span style="color:#75715e"># Boundary weights</span></span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>cheb2nodes(T, n<span style="color:#666">::</span><span style="color:#902000">Int</span>) <span style="color:#666">=</span> <span style="color:#555;font-weight:bold">@.</span> (cos(((<span style="color:#40a070">0</span><span style="color:#666">:</span>n<span style="color:#666">-</span><span style="color:#40a070">1</span>)) <span style="color:#666">*</span> T(<span style="color:#007020">pi</span>) <span style="color:#666">/</span> (n<span style="color:#666">-</span><span style="color:#40a070">1</span>)))
+</span></span><span style="display:flex;"><span>x <span style="color:#666">=</span> cheb2nodes(<span style="color:#902000">Float64</span>, N)
+</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(<span style="color:#40a070">2</span>, [<span style="color:#40a070">2</span> <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">-</span> i<span style="color:#666">^</span><span style="color:#40a070">2</span>) <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">=</span> <span style="color:#40a070">2</span><span style="color:#666">:</span><span style="color:#40a070">2</span><span style="color:#666">:</span>(N<span style="color:#666">-</span><span style="color:#40a070">1</span>)]) <span style="color:#60a0b0;font-style:italic"># Standard Chebyshev moments</span>
+</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> vcat(c, c[<span style="color:#902000">Int</span>(floor(N <span style="color:#666">/</span> <span style="color:#40a070">2</span>))<span style="color:#666">:-</span><span style="color:#40a070">1</span><span style="color:#666">:</span><span style="color:#40a070">2</span>])         <span style="color:#60a0b0;font-style:italic"># Mirror for DCT via FFT </span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> real(ifft(c))                             <span style="color:#60a0b0;font-style:italic"># Interior weight</span>
+</span></span><span style="display:flex;"><span>ws[<span style="color:#40a070">1</span>] <span style="color:#666">/=</span> <span style="color:#40a070">2</span>
+</span></span><span style="display:flex;"><span>ws <span style="color:#666">=</span> vcat(ws, ws[<span style="color:#40a070">1</span>])                           <span style="color:#60a0b0;font-style:italic"># Boundary weights</span></span></span></code></pre></div></p>
 </li>
 </ul>
 <p>There are some obvious possible improvements: the nodes are symmetric and only need to be computed up to N/2, but the above is quite fast already. The Julia package <a href="https://github.com/JuliaApproximation/FastTransforms.jl">FastTransforms.jl</a> provides the quadrature weights although the API is not all that intuitive:</p>
 <ul>
 <li>First kind:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> fejer1weights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
 <li>Second kind:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#f92672">.</span>chebyshevmoments1(<span style="color:#66d9ef">Float64</span>,N))</span></span></code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span> clenshawcurtisweights(FastTransforms<span style="color:#666">.</span>chebyshevmoments1(<span style="color:#902000">Float64</span>,N))</span></span></code></pre></div></li>
 </ul>
 <p>Interestingly the first kind is twice faster with FastTransforms, which suggests a similar symetry use as for the second kind. But the second kind is nearly twice slower.</p>
 <p>Although Clenshaw-Curtis quadratures are appealing, the Gauss-Legendre quadrature is often slightly more accurate on many practical use cases and there exists also fast enough ways to compute its weights.  For example, in the context of a two-asset basket option price using a vol of 20%, strike=spot=100, maturity 1 year, and various correlations we have the below error plots</p>
-<figure><img src="/post/quad_rho_all.png"><figcaption>
-      <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
-    </figcaption>
+<figure><img src="/post/quad_rho_all.png"/><figcaption>
+            <h4>Correlation = -90%,-50%,50%,90% from top to bottom.</h4>
+        </figcaption>
 </figure>
 
 

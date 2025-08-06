@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -75,11 +75,11 @@
   <p>In my previous <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">blog post</a>, I looked at the roughness of the SVCJ stochastic volatility model with jumps (in the volatility). In this model, the jumps occur randomly, but at discrete times. And with typical parameters used in the litterature, the jumps are not so frequent. It is thus more interesting to look at the roughness of pure jump processes, such as the <a href="https://engineering.nyu.edu/sites/default/files/2018-09/CarrJournalofBusiness2002.pdf">CGMY process</a>.</p>
 <p>The CGMY process is more challenging to simulate. I used the approach based on the characteristic function described in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1983134">Simulating Levy Processes from Their Characteristic Functions and Financial Applications</a>. Ballota and Kyriakou add some variations based on FFT pricing of the characteristic function in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1951537">Monte Carlo simulation of the CGMY process and option pricing</a> and pay much care about a proper truncation range. Indeed, I found that the truncation range was key to simulate the process properly and not always trivial to set up especially for \(Y \in (0,1) \). I however did not  implement any automated range guess as I am merely interested in very specific use cases, and I used the COS method instead of FFT.</p>
 <p>I also directly analyze the roughness of a sub-sampled asset path (the exponential of the CGMY process), and not of some volatility path as I was curious if pure jump processes would mislead roughness estimators. I simulated the paths corresponding to parameters given in Fang thesis <a href="https://repository.tudelft.nl/islandora/object/uuid%3A9aa17357-af21-4c09-86a2-3904ced4b873">The COS Method - An Efficient Fourier Method for Pricing Financial Derivatives</a>: C = 1, G = 5, M = 5, Y = 0.5 or Y = 1.5.</p>
-<figure><img src="/post/cgmy_path.png">
+<figure><img src="/post/cgmy_path.png"/>
 </figure>
 
 <p>And the corresponding Hurst index estimate via the Cont-Das method:
-<figure><img src="/post/cgmy_estimate.png">
+<figure><img src="/post/cgmy_estimate.png"/>
 </figure>
 </p>
 <p>Similarly the Gatheral-Rosenbaum estimate has no issue finding H=0.5.</p>

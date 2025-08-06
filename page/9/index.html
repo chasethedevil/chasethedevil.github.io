@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,39 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/number_of_regressors_in_bdse/">Number of regressors in a BSDE</a>
+  </h1>
+  <time datetime="2016-07-26T09:55:32&#43;0100" class="post-date">Tue, Jul 26, 2016</time>
+  <p>Last year, I was kindly invited at the workshop on Models and Numerics in Financial Mathematics at the Lorentz center.
+It was surprinsgly interesting on many different levels. Beside the relatively large gap between academia and the industry, which this
+workshop was trying to address, one thing that struck me is how difficult it was for people of slightly different specialties to communicate.</p>
+<p>It seemed that mathematicians of different countries working on different subjects related to backward stochastic differential equations (BSDEs) would not truly understand each other. I know this is
+very subjective, and maybe those mathematicians did not feel this at all. One concrete example is related to the number of regressors needed to solve a BSDE on 10 different variables.
+Solving a BSDE on 10 variables for EDF was given as an illustration at the end of an otherwise excellent presentation.
+Someone in the audience asked how possibly they could do that in practice since it would involve \(10^{10}\) regression factors. The answer of the speaker was more or less that it was what they do, with no particular trick but with a large computing power, as if \(10^{10}\) was not so big.</p>
+<p>At this point I was really wondering why \(10^{10}\). Usually, when we do regressions in some BSDE like algorithm, for example Longstaff-Schwartz for American Monte-Carlo, we don&rsquo;t consider all the powers of each variables  from 0 to 10 as well as their cross products.
+We only consider polynomials of degree 10, that is all the cross-combinations that lead to a total degree of 10 or less. On two variables \(X\) and \(Y\), we care about \(1, X, Y, XY, X^2, Y^2\) but we dont care about \(X^2 Y, X Y^2, X^2 Y^2\).</p>
+<p>We can count then how many factors would be needed for 10 variables.
+We can proceed degree by degree and compute how many ordered ways we can add \(N\) non negative integers to produce the given degree \(D\) for each degree and \(N=10\).
+This number is simply \( C^{N+D-1}_{N-1} = C^{N+D-1}_D \) where \(C_k^n \) denotes the <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a>.</p>
+<p>If this number is not so obvious, we can proceed step by step as well: for degree 1, there is just \( N \) factors (we assign 1 to one of the variables).
+For degree 2, there is \(N\) factors to place the number 2 on each variable, plus \( C^N_2 \) to place (1,1) on the variables. From Pascal triangle, we have \( C^{N+1}_{2} = C^N_2 + C^N_1\).
+For degree 3, there is \(N\) factors to place the number 3 on each variable, plus \( C^N_3 \) to place the numbers (1,1,1) on the variables plus \(2C^N_2\) to place (1,2) and (2,1). Applying the Pascal identity twice, we have \( C^{N+2}_{3} = (C^N_1+ C^N_2) + (C^N_2 + C^N_3)\). etc.</p>
+<p>Thus the total number of factors for \(N\) variables is</p>
+<!-- raw HTML omitted -->
+<p>For \(N=10\), the total number of factors is 184756.
+Although, the total number of factors is large, it is much less than \(10^{10}\). The surprising fact of the workshop is that there were many very advanced mathematicians in the audience, specialists of BSDEs, and none made a comment to help the presenter.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/shooting_arbitrage2/">Shooting arbitrage - part II</a>
   </h1>
@@ -87,16 +113,16 @@ for \(t\leq T\). In particular, for \(t=0\), we have
 $$\sigma^{\star 2}\left(y, 0\right) = \frac{ v_T(y)}
 {1 - \frac{y}{v_T}\frac{\partial v_T}{\partial y}	+ \frac{1}{4}\left(\frac{y^2}{v_T^2}\right)\left(\frac{\partial v_T}{\partial y}\right)^2}$$
 But the first derivative is not continuous, and jumps at \(y=y_0\) and \(y=y_1\). The local volatility will jump as well around those points. Thus, in practice, the technique can not be used for pricing under local volatility.</p>
-<figure><img src="/post/svi_dearbitraging_lv_rk.png"><figcaption>
-      <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_lv_rk.png"/><figcaption>
+            <h4>jumping local volatility on Axel Vogt example fixed by shooting</h4>
+        </figcaption>
 </figure>
 
 <p>The local volatility stays very high in the original arbitrage region, very much like a capped local volatility would do. It should be then no surprise that in the equivalent implied volatility
 is nearly the same as the one stemming from a capped local variance (we imply the smile from the prices of the local volatility PDE).
-<figure><img src="/post/svi_dearbitraging_vol_rk_cap.png"><figcaption>
-      <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_vol_rk_cap.png"/><figcaption>
+            <h4>implied volatility on Axel Vogt example fixed by shooting or by capping</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The discontinuity renders the shooting technique useless.
@@ -111,15 +137,15 @@ The penalized spline does not have this issue as the resulting local volatility 
   <p>In my <a href="/post/damghani_dearbitraging_a_weak_smile_on_svi/">previous post</a>, I looked at de-arbitraging volatilities of options of a specific maturity with SVI (re-)calibration.
 The penalty method can be used beyond SVI. For example I interpolate here with a cubic spline on 11 equidistant nodes the original volatility slice that contains arbitrages and then minimize with Levenberg-Marquardt
 and the negative local variance denominator penalty on 51 equidistant points. This results in a quite small adjustment to the original volatilities:</p>
-<figure><img src="/post/svi_dearbitraging_variance_spline.png"><figcaption>
-      <h4>implied variance with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_variance_spline.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 
 <p>Interestingly the denominator looks almost constant, close to zero (in reality it is not constant, just close to zero, scales can be misleading):
-<figure><img src="/post/svi_dearbitraging_g_spline.png"><figcaption>
-      <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_g_spline.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The method does not work with too many nodes, for example 25 nodes was too much for the minimizer to do anything, maybe because there is too much interaction between nodes then.</p>
@@ -131,16 +157,16 @@ As the following figure will show, as the initial conditions are the variance an
 if we replace the whole right wing: not so nice.</p>
 <p>A simple idea is to adjust the initial slope so that the volatility is continuous at the next end-point. An ODE whose initial condition consists in the function values at two end-points is called a two-points boundary problem. A standard method to solve
 this kind of problem is just the basic simple idea and it is called the shooting method: we are shooting a projectile from point A so that it lands at point B. Any solver can be used so solve for the slope (secant, Newton, Brent, etc.).</p>
-<figure><img src="/post/svi_dearbitraging_variance_rk.png"><figcaption>
-      <h4>implied variance with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_variance_rk.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 
 <p>The volatility is only continuous, not C1 or C2 at A and B, but the local volatility is well defined and continuous, the denominator is just 1E-4 between A and B. The adjustments to the original volatilities
 is even smaller.</p>
-<figure><img src="/post/svi_dearbitraging_g_rk.png"><figcaption>
-      <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_g_rk.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 
 
@@ -164,15 +190,15 @@ on the first derivative:</p>
 <!-- raw HTML omitted -->
 <p>Now, it seems twisted to not enforce directly the real no arbitrage constraint in the minimization, which is actually not much more complex to evaluate, and to instead rely on some weak condition, that we make stronger by steps.
 There would be no loop over the minimization needed. Does this produce any good result?
-<figure><img src="/post/svi_dearbitraging_variance.png"><figcaption>
-      <h4>implied variance with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_variance.png"/><figcaption>
+            <h4>implied variance with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The graph is clear, the technique produces crap. This is the local variance denominator:
-<figure><img src="/post/svi_dearbitraging_g.png"><figcaption>
-      <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
-    </figcaption>
+<figure><img src="/post/svi_dearbitraging_g.png"/><figcaption>
+            <h4>local variance denominator g with Axel Vogt SVI parameters</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Maybe I misunderstood something big in this paper, but so far it was just a waste of time.</p>
@@ -187,48 +213,48 @@ There would be no loop over the minimization needed. Does this produce any good 
 that their example calibration actually contained strong calendar spread arbitrages. This is not too surprising if you look at the parameters,
 they vary wildly between the first and the second expiry.</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: center">T</th>
-          <th style="text-align: center">a</th>
-          <th style="text-align: center">b</th>
-          <th style="text-align: center">rho</th>
-          <th style="text-align: center">m</th>
-          <th style="text-align: center">s</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">0.082</td>
-          <td style="text-align: center">0.027</td>
-          <td style="text-align: center">0.234</td>
-          <td style="text-align: center">0.068</td>
-          <td style="text-align: center">0.100</td>
-          <td style="text-align: center">0.028</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">0.16</td>
-          <td style="text-align: center">0.030</td>
-          <td style="text-align: center">0.125</td>
-          <td style="text-align: center">-1.0</td>
-          <td style="text-align: center">0.074</td>
-          <td style="text-align: center">0.050</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">0.26</td>
-          <td style="text-align: center">0.032</td>
-          <td style="text-align: center">0.094</td>
-          <td style="text-align: center">-1.0</td>
-          <td style="text-align: center">0.093</td>
-          <td style="text-align: center">0.041</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:center">T</th>
+<th style="text-align:center">a</th>
+<th style="text-align:center">b</th>
+<th style="text-align:center">rho</th>
+<th style="text-align:center">m</th>
+<th style="text-align:center">s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0.082</td>
+<td style="text-align:center">0.027</td>
+<td style="text-align:center">0.234</td>
+<td style="text-align:center">0.068</td>
+<td style="text-align:center">0.100</td>
+<td style="text-align:center">0.028</td>
+</tr>
+<tr>
+<td style="text-align:center">0.16</td>
+<td style="text-align:center">0.030</td>
+<td style="text-align:center">0.125</td>
+<td style="text-align:center">-1.0</td>
+<td style="text-align:center">0.074</td>
+<td style="text-align:center">0.050</td>
+</tr>
+<tr>
+<td style="text-align:center">0.26</td>
+<td style="text-align:center">0.032</td>
+<td style="text-align:center">0.094</td>
+<td style="text-align:center">-1.0</td>
+<td style="text-align:center">0.093</td>
+<td style="text-align:center">0.041</td>
+</tr>
+</tbody>
 </table>
 <p>The calendar spread arbitrage is very visible in total variance versus log-moneyness graph:
 in those coordinates if lines crosses, there is an arbitrage. This is because the total variance should be increasing with the expiry time.
-<figure><img src="/post/svi_zeliade_arb.png"><figcaption>
-      <h4>Arbitrage in Zeliade&#39;s example</h4>
-    </figcaption>
+<figure><img src="/post/svi_zeliade_arb.png"/><figcaption>
+            <h4>Arbitrage in Zeliade&#39;s example</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Why does this happen?</p>
@@ -242,9 +268,9 @@ It is interesting to look at what happens to the implied volatility if we decide
 <li>search for the closest defined local volatility on the log-moneyness axis</li>
 <li>search for the closest positive local variance on the expiry axis and interpolate it linearly.</li>
 </ul>
-<figure><img src="/post/svi_zeliade_arb_zero.png"><figcaption>
-      <h4>Total variance after flooring the local variance at zero.</h4>
-    </figcaption>
+<figure><img src="/post/svi_zeliade_arb_zero.png"/><figcaption>
+            <h4>Total variance after flooring the local variance at zero.</h4>
+        </figcaption>
 </figure>
 
 <p>Setting the undefined local volatility to zero makes the second, third, fourth expiry wings higher: the total variance is close to constant between expiries. One could have expected
@@ -273,33 +299,33 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 <p>In this case the total implied variance corresponds to the Black volatility of the pure process (the process without dividend jumps), that is, the Black volatility corresponding to (shifted) market option prices. If the reference data consists of model volatilities for the spot model (with known jumps at dividend dates), the market prices can be obtained by using a good approximation of the spot model, for example <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">the improved Etore-Gobet expansion of this paper</a>, not with the Black formula directly.</p>
 <p>In theory, it should be more robust to work directly with implied variances as there is not the problem of dealing with a very small numerator and denominator of the option prices equivalent formula. In practice, if we rely on one of the Etore-Gobet expansions, it can be much faster to work directly with option prices if we are careful when computing the ratio, as this ratio can be obtained in closed form. In theory as well, we need to use a fine discretisation in time to represent the pure Black equivalent smile accurately. In practice, if we are not too bothered by a mismatch with the true theoretical model, introducing volatility slices just before/at the dividends is enough to reproduce the market prices exactly, as long as we make sure that those obey the option price continuity at the dividend \(C(S_0,K,t_{\alpha}^-) = C(S_0, K-\alpha,t_{\alpha}^+)\). The difference is that the interpolation in time (linear in total variance) is going to describe a slightly different dynamic from the true spot process. The advantage, is that then, it is much faster.</p>
 <p>I thought it would be interesting to have a look at the various volatilities. My initial spot volatility is a simple smile constant in time:
-<figure><img src="/post/dupire_labordere_ll3_modelvolraw.png"><figcaption>
-      <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3_modelvolraw.png"/><figcaption>
+            <h4>Model volatility. Before,At = before the dividend, at the dividend. Log scale for strikes.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Actually it&rsquo;s not all that constant since there is the need to introduce a shift at the dividend date to obey the option price continuity relationship. The pure process model volatility is however constant.
-<figure><img src="/post/dupire_labordere_ll3_modelvol.png"><figcaption>
-      <h4>Pure process model volatility.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3_modelvol.png"/><figcaption>
+            <h4>Pure process model volatility.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The equivalent pure process Black vols looks like this:
-<figure><img src="/post/dupire_labordere_ll3_blackvol.png"><figcaption>
-      <h4>Pure process Black volatility</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3_blackvol.png"/><figcaption>
+            <h4>Pure process Black volatility</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Notice how it does not jump at the dividend date, and how the cash dividend results in a lower Black volatility at maturity. The local volatility is:
-<figure><img src="/post/dupire_labordere_ll3_localvol.png"><figcaption>
-      <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3_localvol.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
 </figure>
 </p>
 <p>While the one of the pure process is:
-<figure><img src="/post/dupire_labordere_ll3_purelv.png"><figcaption>
-      <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3_purelv.png"/><figcaption>
+            <h4>Pure Process Local Volatility under the spot model with jump at dividend date = 3.5</h4>
+        </figcaption>
 </figure>
 </p>
 <p>It falls towards zero for low pure strikes or equivalently near the market strike corresponding to the dividend amount.</p>
@@ -309,15 +335,15 @@ classic Gatheral formulation in terms of total implied variance \(w(y,T)\) funct
 <p>Not applying any particular policy would mean that the stock price can become negative:
 \(V(S,K,t_\alpha^-) = V(S-\alpha,K, t_\alpha^+) \) also when \( S &lt; \alpha \).</p>
 <p>Which one should we use? The approximation formulae (when not adjusted by the call price at strike 0) actually correspond to the &ldquo;no dividend policy&rdquo; rule. It can be verified numerically on extreme scenarios. It appears then natural that the finite difference scheme should also follow the same policy. And the volatility slice after the dividend date is really a constant size shift of the volatility slice just before.</p>
-<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure><img src="/post/dupire_labordere_liquidator_modelvol.png"><figcaption>
-      <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
-    </figcaption>
+<p>It becomes however more surprising if the model of reference is the liquidator (or the survivor) policy, that is, the market option prices are computed with a nearly exact numerical method according to the liquidator policy. In this case the volatility slice after the dividend date is not merely a constant size shift anymore, as the dividend policy will impact the option price continuity relationship. <figure><img src="/post/dupire_labordere_liquidator_modelvol.png"/><figcaption>
+            <h4>Liquidator model volatility. Before,At = before the dividend, at the dividend. Notice the difference in the BeforeShifted curve compared to the graph with no dividend policy.</h4>
+        </figcaption>
 </figure>
 
 It turns out, that then, using the same policy in the FDM scheme at the dividend dates will actually create a bias, while discarding the dividend policy will make the method converge to the correct price. How can this be? My interpretation is that the Dupire local volatility already includes the dividend policy effect, and therefore it should not be taken into account once more in the finite difference scheme dividend jump condition. It is only a partial explanation, since imposing a liquidator policy via the jump condition seems to actually never work with Dupire (on non flat vols), even if the Dupire local volatility does not include the dividend policy effect.
-<figure><img src="/post/dupire_labordere_liquidator_localvol.png"><figcaption>
-      <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_liquidator_localvol.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with liquidator policy and jump at dividend date = 3.5</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Of course, this is not true when the volatility is constant until the option maturity (no smile, no Dupire). In this case, the policy must be enforced via the jump condition in the finite difference scheme.</p>
@@ -339,42 +365,42 @@ approximations available to price an option supposing a constant (spot) volatili
 <p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
 we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
 <p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
-<figure><img src="/post/dupire_labordere_ll1.png"><figcaption>
-      <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll1.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
 </figure>
 
 <p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have</p>
 <!-- raw HTML omitted -->
-<p><figure><img src="/post/dupire_labordere_ll3.png"><figcaption>
-      <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
-    </figcaption>
+<p><figure><img src="/post/dupire_labordere_ll3.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/dupire_labordere_ll3shift.png"><figcaption>
-      <h4>Look, when we shift by the dividend!</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_ll3shift.png"/><figcaption>
+            <h4>Look, when we shift by the dividend!</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The slightly funny shape of the local volatility in the left wing, before the dividend, is due to linear extrapolation use.</p>
 <p>Interestingly, there is quite a difference in the local volatility for low strikes, depending on the dividend policy, here is how it looks for a single dividend with liquidator vs survivor policy.
-<figure><img src="/post/dupire_labordere_policy.png"><figcaption>
-      <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_policy.png"/><figcaption>
+            <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5 on a single constant in time spot smile.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The analytical approximations lead to another different local volatility from both policies, but don&rsquo;t differ much from each other. Guyon and Labordere approximation based on the skew averaging technique of Piterbarg, not displayed here, is the worst. Gocsei-Sahel approximation has some issues for the lower strikes, the Etore-Gobet expansions on strike or on Lehman and the Zhang approximation are very stable and accurate, except for the very low strikes, where the dividend policy starts playing a more important role.
 Those differences  however don&rsquo;t impact the prices very much as the prices with the various methods (excepting the Guyon-Labordère approximation) are very close, and differ of a magnitude much smaller than the error to the true price.</p>
 <p>The continuous yield approach consist in first building the equivalent Black volatility and use the regular Dupire on it. This is qualitatively different from a cash dividend jump, and is closer to a proportional dividend jump. Note that there is still a jump in the continuous yield local volatility:
-<figure><img src="/post/dupire_labordere_yield3.png"><figcaption>
-      <h4>Dupire Local Volatility under the forward model.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_yield3.png"/><figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
 </figure>
 
 The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happening around:
-<figure><img src="/post/dupire_labordere_yield3e.png"><figcaption>
-      <h4>Dupire Local Volatility under the forward model.</h4>
-    </figcaption>
+<figure><img src="/post/dupire_labordere_yield3e.png"/><figcaption>
+            <h4>Dupire Local Volatility under the forward model.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Overall, when the dividends happens early, the Dupire formula for cash dividends works well, but when the dividends are closer to maturity there is a marked bias in the prices, that does not disappear with more steps in the FDM. Typically, at \(0.7T\), the absolute price error is around 0.01 and more or less constant accross strikes. In contrast, the classic continuous yield Dupire behaves well, despite the spike, and the error decreases with the number of steps, I obtain around 5E-4 with 500 steps.</p>
@@ -389,9 +415,9 @@ The huge spike at 3.5 don&rsquo;t allow us to see much about what&rsquo;s happen
   <time datetime="2016-05-12T19:32:42&#43;0200" class="post-date">Thu, May 12, 2016</time>
   <p>In a <a href="/post/least_squares_spline">previous post</a>, I took a look at least squares spline and parabola fits on AAPL 1m options market volatilities. I would have imagined SVI to fit even  better since it has 5 parameters, and SABR to do reasonably well.</p>
 <p>It turns out that the simple parabola has the lowest RMSE, and SVI is not really better than SABR on that example.</p>
-<figure><img src="/post/svi_sabr_parabola.png"><figcaption>
-      <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
-    </figcaption>
+<figure><img src="/post/svi_sabr_parabola.png"/><figcaption>
+            <h4>SVI, SABR, least squares parabola fitted to AAPL 1m options</h4>
+        </figcaption>
 </figure>
 
 <p>Note that this is just one single example, unlikely to be representative of anything, but I thought this was interesting that in practice, a simple parabola can compare favorably to more complex models.</p>
@@ -439,39 +465,39 @@ in the Numerical recipe implementation resulted in a much better solution, bette
 which looked robust, but was actually not so much.</p>
 <p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
 (NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
-<figure><img src="/post/rational_fit_value.png"><figcaption>
-      <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
-    </figcaption>
+<figure><img src="/post/rational_fit_value.png"/><figcaption>
+            <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+        </figcaption>
 </figure>
 
 <p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>RMSE</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Polynomial Naive</td>
-          <td>0.234</td>
-      </tr>
-      <tr>
-          <td>Polynomial NRI</td>
-          <td>0.039</td>
-      </tr>
-      <tr>
-          <td>Rational   NRI</td>
-          <td>0.001</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Polynomial Naive</td>
+<td>0.234</td>
+</tr>
+<tr>
+<td>Polynomial NRI</td>
+<td>0.039</td>
+</tr>
+<tr>
+<td>Rational   NRI</td>
+<td>0.001</td>
+</tr>
+</tbody>
 </table>
 <p>A 10/10 rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
 visually to understand how large is the difference:</p>
-<figure><img src="/post/rational_fit_error.png"><figcaption>
-      <h4>Least squares polynomial fit error of degree 20.</h4>
-    </figcaption>
+<figure><img src="/post/rational_fit_error.png"/><figcaption>
+            <h4>Least squares polynomial fit error of degree 20.</h4>
+        </figcaption>
 </figure>
 
 <p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the
@@ -480,26 +506,6 @@ away from the minimax. The errors I got suggest I would need a few rational func
 all that appealing compared to the table of Chebyshev polynomials.</p>
 <p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
 <p><strong>Update</strong> - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
-  </h1>
-  <time datetime="2016-02-19T18:29:33&#43;0100" class="post-date">Fri, Feb 19, 2016</time>
-  <p>I am experimenting a bit with least squares splines. Existing algorithms (for example from the NSWC Fortran library) usually work
-with B-splines, a relatively simple explanation of how it works is given in <a href="http://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf">this paper</a> (I think this is how De Boor coded it in the NSWC library).
-Interestingly there is <a href="http://educ.jmu.edu/~lucassk/Papers/Spline3.pdf">an equivalent formulation in terms of standard cubic splines</a>, although it seems that the
-pseudo code on that paper has errors.</p>
-<p>Least squares splines give a very good fit for option implied volatilities with only a few parameters.
-In theory, the number of parameters is N+2 where N is the number of interpolation points.
-I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
-<figure><img src="/post/least_squares_spline.png"><figcaption>
-      <h4>least squares spline on 1m AAPL options.</h4>
-    </figcaption>
-</figure>
-
-<p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
 
   
 </article>

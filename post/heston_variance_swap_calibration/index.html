@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -73,21 +73,21 @@
   <h1>Calibrating Heston to Variance Swaps - a bad idea?</h1>
   <time datetime=2025-02-11T12:56:42&#43;0100 class="post-date">Tue, Feb 11, 2025</time>
   <p>An interesting idea to calibrate the Heston model in a more stable manner and reduce the calibration time is to make use of variance swap prices. Indeed, there is a simple formula for the theoretical price of a variance swap in the Heston model.
-<figure><img src="/post/heston_varswap_formula.png">
+<figure><img src="/post/heston_varswap_formula.png"/>
 </figure>
 
 It is not perfect since it approximates the variance swap price by the expectation of the integrated variance process over time. In particular it does not take into account eventual jumps (obviously), finiteness of replication, and discreteness of observations. But it may be good enough. Thanks to this formula, we can calibrate three parameters of the Heston model: the initial variance, the long-term mean variance, and the speed of mean reversion to the term-structure of variance swaps. We do not need market prices of variance swaps, we may simply use a replication based on market vanilla options prices, such as the model-free replication of Fukasawa.</p>
 <p>The idea was studied in the paper <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=2255550">Heston model: the variance swap calibration</a> by F. Guillaume and W. Schoutens back in 2014. The authors however only used the variance swap calibration as an initial guess. How bad would it be to fix the parameters altogether, as in a variance curve approach?</p>
 <p>It turns out it can be quite bad since the Heston model does not allow to represent many shapes of the variance swap term structure. Below is an example of term-structure calibration on SPX as of October 2024.</p>
-<figure><img src="/post/heston_varswap_ts.png"><figcaption>
-      <h4>Term-structure of variance swap prices.</h4>
-    </figcaption>
+<figure><img src="/post/heston_varswap_ts.png"/><figcaption>
+            <h4>Term-structure of variance swap prices.</h4>
+        </figcaption>
 </figure>
 
 <p>The term-structure is V-shaped, and Heston can not fit well to this. The best fit leads to non-sensical parameters with a nearly zero kappa (mean reversion speed) and an exploding long-term mean theta. The next figure shows why it is non-sensical: because the kappa is very small, the variance will very often reach zero.</p>
-<figure><img src="/post/heston_smallkappa_vol_path.png"><figcaption>
-      <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
-    </figcaption>
+<figure><img src="/post/heston_smallkappa_vol_path.png"/><figcaption>
+            <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
+        </figcaption>
 </figure>
 
 <p>The calibration using inverse vega weights on vanilla option prices leads a not much worse fit of the variance swap term structure, but exhibits a much to high, unrealistic vol-of-vol of 184%, while a calibration on equally weighted option prices does not fit the term structure well at all.</p>

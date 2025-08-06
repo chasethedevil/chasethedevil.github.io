@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,40 +76,40 @@
 <p>I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto). If the accuracy of the integration is 1e-6, Attari maximum accuracy will also be 1E-6, this means that very out of the money options will be completely mispriced (might even be negative). In a sense it is similar to what I observed on the Cos method.</p>
 <p>&ldquo;Lord-Kahl&rdquo; uses 1e-4 integration accuracy, &ldquo;Attari&rdquo; uses 1E-6, and &ldquo;Cos&rdquo; uses 128 points. The reference is computed using <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii">Lord-Kahl</a> with Newton-Cotes and 1E-10 integration accuracy.
 Well here are the results in terms of accuracy:
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png"/>
 </figure>
 </p>
 <p>As expected, Lord-Kahl absolute accuracy is only 1E-5 (a bit better than 1E-4 integration accuracy), while Attari is a bit better than 1E-6, and Cos is nearly 1E-7 (higher inaccuracy in the high strikes, probably because of the truncation inherent in the Cos method).
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png"/>
 </figure>
 </p>
 <p>The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price">optimal alpha</a> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.</p>
 <p>What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>Time</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Cos</td>
-          <td>0.012s</td>
-      </tr>
-      <tr>
-          <td>Lord-Kahl</td>
-          <td>0.099s</td>
-      </tr>
-      <tr>
-          <td>Attari</td>
-          <td>0.086s</td>
-      </tr>
-      <tr>
-          <td>Reference</td>
-          <td>0.682s</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cos</td>
+<td>0.012s</td>
+</tr>
+<tr>
+<td>Lord-Kahl</td>
+<td>0.099s</td>
+</tr>
+<tr>
+<td>Attari</td>
+<td>0.086s</td>
+</tr>
+<tr>
+<td>Reference</td>
+<td>0.682s</td>
+</tr>
+</tbody>
 </table>
 <p>The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.</p>
 <p>It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.</p>

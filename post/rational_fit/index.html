@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -98,39 +98,39 @@ in the Numerical recipe implementation resulted in a much better solution, bette
 which looked robust, but was actually not so much.</p>
 <p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
 (NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
-<figure><img src="/post/rational_fit_value.png"><figcaption>
-      <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
-    </figcaption>
+<figure><img src="/post/rational_fit_value.png"/><figcaption>
+            <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+        </figcaption>
 </figure>
 
 <p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>RMSE</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Polynomial Naive</td>
-          <td>0.234</td>
-      </tr>
-      <tr>
-          <td>Polynomial NRI</td>
-          <td>0.039</td>
-      </tr>
-      <tr>
-          <td>Rational   NRI</td>
-          <td>0.001</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Polynomial Naive</td>
+<td>0.234</td>
+</tr>
+<tr>
+<td>Polynomial NRI</td>
+<td>0.039</td>
+</tr>
+<tr>
+<td>Rational   NRI</td>
+<td>0.001</td>
+</tr>
+</tbody>
 </table>
 <p>A 10/10 rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
 visually to understand how large is the difference:</p>
-<figure><img src="/post/rational_fit_error.png"><figcaption>
-      <h4>Least squares polynomial fit error of degree 20.</h4>
-    </figcaption>
+<figure><img src="/post/rational_fit_error.png"/><figcaption>
+            <h4>Least squares polynomial fit error of degree 20.</h4>
+        </figcaption>
 </figure>
 
 <p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the

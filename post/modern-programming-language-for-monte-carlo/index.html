@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -80,55 +80,55 @@
 </ul>
 <p>I decided to see how well suited they would be on a simple Monte-Carlo simulation of a forward start option under the Black model. I am no expert at all in any of the languages, so this is a beginner&rsquo;s test. I compared the runtime for executing 16K simulations times a multiplier.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Multipl.</th>
-          <th>Scala</th>
-          <th>Julia</th>
-          <th>JuliaA</th>
-          <th>Dart</th>
-          <th>Python</th>
-          <th>Rust</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>0.03</td>
-          <td>0.08</td>
-          <td>0.09</td>
-          <td>0.03</td>
-          <td>0.4</td>
-          <td>0.004</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>0.07</td>
-          <td>0.02</td>
-          <td>0.06</td>
-          <td>0.11</td>
-          <td>3.9</td>
-          <td>0.04</td>
-      </tr>
-      <tr>
-          <td>100</td>
-          <td>0.51</td>
-          <td>0.21</td>
-          <td>0.40</td>
-          <td>0.88</td>
-          <td></td>
-          <td>0.23</td>
-      </tr>
-      <tr>
-          <td>1000</td>
-          <td>4.11</td>
-          <td>2.07</td>
-          <td>4.17</td>
-          <td>8.04</td>
-          <td></td>
-          <td>2.01</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Multipl.</th>
+<th>Scala</th>
+<th>Julia</th>
+<th>JuliaA</th>
+<th>Dart</th>
+<th>Python</th>
+<th>Rust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.03</td>
+<td>0.08</td>
+<td>0.09</td>
+<td>0.03</td>
+<td>0.4</td>
+<td>0.004</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0.07</td>
+<td>0.02</td>
+<td>0.06</td>
+<td>0.11</td>
+<td>3.9</td>
+<td>0.04</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.51</td>
+<td>0.21</td>
+<td>0.40</td>
+<td>0.88</td>
+<td></td>
+<td>0.23</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>4.11</td>
+<td>2.07</td>
+<td>4.17</td>
+<td>8.04</td>
+<td></td>
+<td>2.01</td>
+</tr>
+</tbody>
 </table>
 <p><strong>About performance</strong></p>
 <p>I am quite impressed at Dart performance versus Scala (or vs. Java, as it has the same performance as Scala) given that it is much less strict about types and its focus is not at all on this kind of stuff.</p>
@@ -144,30 +144,30 @@
 <p><strong>Update</strong></p>
 <p>Using FastMath.exp instead of Math.exp leads a slightly better performance for Scala:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Multipl.</th>
-          <th>Scala</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>0.06</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>0.05</td>
-      </tr>
-      <tr>
-          <td>100</td>
-          <td>0.39</td>
-      </tr>
-      <tr>
-          <td>1000</td>
-          <td>2.66</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Multipl.</th>
+<th>Scala</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.06</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.39</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>2.66</td>
+</tr>
+</tbody>
 </table>
 <p>I did not expect that this would still be true in 2015 with Java 8 Oracle JVM.</p>
 

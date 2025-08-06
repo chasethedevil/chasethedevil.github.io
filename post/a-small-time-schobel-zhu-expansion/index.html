@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,17 +74,17 @@
   <time datetime=2014-02-10T18:30:00Z class="post-date">Mon, Feb 10, 2014</time>
   <p>The paper <a href="http://arxiv.org/abs/1306.5447">implied vol for any local stochastic vol model</a> from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).</p>
 <p>I tried it on the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDIQFjAB&amp;url=http%3A%2F%2Fssrn.com%2Fabstract%3D100831&amp;ei=3gr5UtzkOYm90QWD7IDwBA&amp;usg=AFQjCNFY9anH_AU0A5pWRX4Qdo6Kp2CjEg&amp;sig2=teGVgsV4uneROlzZCuUFBw&amp;bvm=bv.60983673,d.d2k">Schobel-Zhu</a> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <a href="/post/heston-schobel-zhu-bates-double-heston-fit">fit was as good</a>, while the <a href="/post/brownian-bridge-or-not-with-heston">simulation under the QE scheme</a> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:</p>
-<figure><img src="/post/SZ_EXP1.png">
+<figure><img src="/post/SZ_EXP1.png"/>
 </figure>
 
 <p>And this is how it behaves on some realistic input:</p>
-<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"><figcaption>
-      <h4>T=0.1</h4>
-    </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"/><figcaption>
+            <h4>T=0.1</h4>
+        </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"><figcaption>
-       <h4>T=0.5</h4>
-     </figcaption>
+ <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"/><figcaption>
+             <h4>T=0.5</h4>
+         </figcaption>
  </figure>
 </p>
 <p>In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.</p>

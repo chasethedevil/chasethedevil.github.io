@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.148.0">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 181842. All rights reserved. </p>
+    <p>&copy; 60618. All rights reserved. </p>
   </div>
 </aside>
 
@@ -73,13 +73,13 @@
   <h1>Forward Variance Models and Calibration</h1>
   <time datetime=2025-06-21T17:27:00Z class="post-date">Sat, Jun 21, 2025</time>
   <p>The modern rough volatility models adopt a forward variance curve terminology (see for example <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=3191578">this paper on a rational approximation for the rough Heston</a>, or <a href="https://mfe.baruch.cuny.edu/wp-content/uploads/2024/03/AFVPricingDevelopmentsQuantminds2022.pdf">this presentation on affine forward variance models</a> or <a href="https://arxiv.org/pdf/1801.06416">this paper on affine forward variance models</a>). In this form, the rough Heston model reads:</p>
-<figure><img src="/post/rough_heston_eqn.png">
+<figure><img src="/post/rough_heston_eqn.png"/>
 </figure>
 
 <p>According to the litterature, the initial forward variance curve is typically built from the implied volatilities through the variance swap replication: for each maturity, the price of a newly issued variance swap is computed to this maturity, using the implied volatilities for this maturity. Then we may compute the forward variance by interpolating linearly the variance swap prices and differentiating. This leads to the plot below.</p>
-<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"><figcaption>
-      <h4>Forward variance curves for SPX500 as of October 2024.</h4>
-    </figcaption>
+<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"/><figcaption>
+            <h4>Forward variance curves for SPX500 as of October 2024.</h4>
+        </figcaption>
 </figure>
 
 <p>One immediate question is how much does the truncation range play a role in this forward variance curve? Above, we plot the replications prices based on filtering the input data up to 10 Delta / 90 Delta for each maturity. Beyond this range, liquidity is usually much lower and the reliability of the input quotes may not be as good.  The short end, and not so short forward variance up to 4 years is quite different. The long end is more aligned with something that looks like a basis spread between the two curves.</p>

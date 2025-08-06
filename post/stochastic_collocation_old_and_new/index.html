@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.123.7">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Stochastic Collocation - Old And New &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 60618. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Stochastic Collocation - Old And New</h1>
+  <time datetime=2025-08-05T17:27:00Z class="post-date">Tue, Aug 5, 2025</time>
+  <p>Thomas Roos recently put a preprint on SSRN called <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5215592">Simple, Flexible, Analytic, Arbitrage Free Volatility Interpolation</a>. Being interested in the subject, I had a detailed look at it. It turns out that Thomas stumbled upon <a href="https://www.mdpi.com/2227-9091/7/1/30">spline stochastic collocation</a> without realizing it.</p>
+<p>There are a few differences in his approach:</p>
+<ul>
+<li>The optimization is on the x&rsquo;s instead of the y&rsquo;s, meaning the strike axis is fixed.</li>
+<li>An original approach to avoid spurious modes, although I would have liked more details on it, with concrete examples of the penalty. Penalties are often challenging to get right.</li>
+<li>A nice analysis of the asymptotic behavior in the wings, showing that an exponentially quadratic form for extrapolation corresponds to linear slopes in implied variance.</li>
+</ul>
+<p>I had  also explored a fixed strike axis initially (even back in 2014 - I uploaded <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5381580">some old notes on SSRN around this</a>). I found it to be somewhat unstable back then, but it may well be that I did not put enough efforts into it, especially since optimizing the y&rsquo;s instead of the x&rsquo;s allowed for a straightforward use of B-splines, which is very attractive. It is very direct to impose monotonicity with B-splines.</p>
+<p>The main advantage of optimizing on the x&rsquo;s instead of the y&rsquo;s is that the knots are defined in the more usual strike space.</p>
+<p>Now I find interesting that someone else stumbled upon essentially the same idea starting from another point of view. There may be more merits to this parameterization than I thought.</p>
+<p>The challenges I found with stochastic collocations were:</p>
+<ul>
+<li>spurious spike when the collocation function derivative is close to zero which happens on occasion. This is not really like an extra mode - it is not smooth. Penalty or minimal slope are possible workarounds, but challenging to make robust.</li>
+<li>dependency on the choice of knots, especially if nearly exact interpolation is required.</li>
+<li>more minor, non-predictable runtime: the non-linear optimization is sometimes very fast, sometimes much slower. This is the case of most arbitrage-free interpolation techniques.</li>
+</ul>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>
