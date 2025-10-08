@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -81,29 +81,29 @@ I looked at BNP warrant prices on the CAC40 French index, with a maturity of Mar
 <li>Some RBF collocation of the implied vols. Best fit, with regularization, and very smooth density, which however becomes negative in the high strikes.</li>
 <li>Some experimental Andreasen-Huge like technique, with a minimal grid and good regularization.</li>
 </ul>
-<figure><img src="/post/cac40_mar9_dens.png"/><figcaption>
-            <h4>Implied probability density for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_dens.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 <p>The implied forward price was around 4745.5. Interestingly, this corresponds to the first small peak visible on the blue and red plots. The strongest peak
 is located a little beyond 5000, which could mean that the market believes that the index will go back up above 5000. This does not mean that you should buy however, as there are other, more complex explanations. For example, the peak could be a latent phenomenon related to the previous days.</p>
 <p>Now here is how the plot is with the &ldquo;raw&rdquo; optimal collocation polynomial:
-<figure><img src="/post/cac40_mar9_dens_0.png"/><figcaption>
-            <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_dens_0.png"><figcaption>
+      <h4>Implied probability density for March 20, CAC40 warrants with raw optimal polynomial collocation.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Notice the spurious peak. In terms of implied volatility, this corresponds to a strange, unnatural angle in the smile. The reason for this unnatural peak lies in the details of the stochastic collocation technique: the polynomial we fit is monotonic, but ends up with slope close to zero at some point in order to better fit the data. If the slope is exactly zero, there is a discontinuity in the density. Here the very low slope tranlates to the peak. The fix is simply to impose a floor on the slope (although it may not be obvious in advance to know how much this floor should be).</p>
-<figure><img src="/post/cac40_mar9_collo.png"/><figcaption>
-            <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_collo.png"><figcaption>
+      <h4>Collocation polynomials for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 <p>And for the curious, here are the implied vol plots:</p>
-<figure><img src="/post/cac40_mar9_vol.png"/><figcaption>
-            <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
-        </figcaption>
+<figure><img src="/post/cac40_mar9_vol.png"><figcaption>
+      <h4>Implied vol fits for March 20, CAC40 warrants.</h4>
+    </figcaption>
 </figure>
 
 

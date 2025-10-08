@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,25 +78,25 @@
 <li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li>
 </ul>
 <p>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the <a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation">Fokker-Planck</a> (forward) equation.
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png">
 </figure>
 
 The \(\alpha D(F)\) is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png">
 </figure>
 
 A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a> of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:
-<figure><img src="/post/hagan_dens1.png"/>
+<figure><img src="/post/hagan_dens1.png">
 </figure>
 
-<figure><img src="/post/hagan_iv.png"/>
+<figure><img src="/post/hagan_iv.png">
 </figure>
 
 The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:
-<figure><img src="/post/ah_dens1.png"/>
+<figure><img src="/post/ah_dens1.png">
 </figure>
 
-<figure><img src="/post/ah_iv1.png"/>
+<figure><img src="/post/ah_iv1.png">
 </figure>
 </p>
 <p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>

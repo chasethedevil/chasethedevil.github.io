@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -75,14 +75,14 @@
   <p>I looked nearly two years ago already at <a href="/post/sabr-with-new-hagan-pde-approach">the arbitrage free SABR of Andreasen-Huge in comparison to the arbitrage free PDE of Hagan</a> and showed how close the <a href="/post/arbitrage-free-sabr---another-view-on-hagan-approach">ideas were</a>: Andreasen-Huge relies on the normal Dupire forward PDE using a slightly simpler local vol (no time dependent exponential term) while Hagan works directly on the Fokker-Planck PDE (you can think of it as the Dupire Forward PDE for the density) and uses an expansion of same order as the original SABR formula (which leads to an additional exponential term in the local volatility).</p>
 <p>One clever idea from Andreasen-Huge is the use of a single step. It turns out that their idea is not completely new. Daniel Duffy sent me some old papers from Shishkin around fitted schemes (<a href="http://oai.cwi.nl/oai/asset/10209/10209A.pdf">here is one</a>). This is very much the same thing, except Shishkin concern is about a good handling of discontinuity in the initial condition, and therefore makes the association step function =&gt; cumulative density to fit the diffusion parameter. Andreasen-Huge work directly with the call prices as this is what they solve.</p>
 <p>One drawback of Andreasen-Huge one step method is the inability to match the standard SABR smile: the parameters don&rsquo;t have exactly the same meaning. It turns out that by just shifting proportionally the local volatility by a constant factor, Andreasen Huge matches Hagan PDE vols quite closely.</p>
-<p><figure><img src="/post/Screenshot_2015-04-30_17-12-43.png"/><figcaption>
-            <h4>Implied Black volatilities</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot_2015-04-30_17-12-43.png"><figcaption>
+      <h4>Implied Black volatilities</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/Screenshot_2015-04-30_17-09-53.png"/><figcaption>
-            <h4>Probability density</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot_2015-04-30_17-09-53.png"><figcaption>
+      <h4>Probability density</h4>
+    </figcaption>
 </figure>
 </p>
 <p>While this is interesting in itself, it&rsquo;s still not so simple to backup this factor without solving for it (and then the method looses appeal).</p>

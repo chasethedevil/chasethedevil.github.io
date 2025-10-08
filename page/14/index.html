@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/new-sabr-formulae/">New SABR Formulae</a>
+  </h1>
+  <time datetime="2014-07-16T22:35:00Z" class="post-date">Wed, Jul 16, 2014</time>
+   
+
+In a talk at the Global Derivatives conference of Amsterdam (2014), Pat Hagan presented some new SABR formulas, supposedly close to the arbitrage free PDE behavior.<br /><br />I tried to code those from the slides, but somehow that did not work out well on his example, I just had something very close to the good old SABR formulas. I am not 100% sure (only 99%) that it is due to a mistake in my code. Here is what I was looking to reproduce:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-gSpOYAndMkk/U8bfHfczKEI/AAAAAAAAHZ8/-eBE_igGVgw/s1600/Screenshot+from+2014-07-16+22:21:08.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-gSpOYAndMkk/U8bfHfczKEI/AAAAAAAAHZ8/-eBE_igGVgw/s1600/Screenshot+from+2014-07-16+22:21:08.png" height="328" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Pat Hagan Global Derivatives example</td></tr></tbody></table><br />Fortunately, I then found in some thesis the idea of using Andersen &amp; Brotherton-Ratcliffe local volatility expansion. In deed, the arbitrage free PDE from Hagan is equivalent to some Dupire local volatility forward PDE (see <a href="http://papers.ssrn.com/abstract=2402001">http://papers.ssrn.com/abstract=2402001</a>), so Hagan just gave us the local volatility expansion to expand on&nbsp; (the thesis uses Doust, which is not so different in this case).<br /><br />And then it produces on this global derivatives example the following:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-xH6i6aZ0O0A/U8bhUO5EQlI/AAAAAAAAHaI/oobJM0YaWQs/s1600/Screenshot+-+07162014+-+10:32:04+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-xH6i6aZ0O0A/U8bhUO5EQlI/AAAAAAAAHaI/oobJM0YaWQs/s1600/Screenshot+-+07162014+-+10:32:04+PM.png" height="267" width="400" /></a></div><br />The AB suffix are the new SABR formula. Even though the formulas are different, that looks very much like Hagan's own illustration (with a better scale)!<br /><br />I have a draft paper around this and more practical ideas to calibrate SABR:<br /><a href="http://papers.ssrn.com/abstract=2467231">http://papers.ssrn.com/abstract=2467231</a><br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/heston-or-schobel-zhu-issues-with-short-expiries/">Heston or Schobel-Zhu issues with short expiries</a>
   </h1>
@@ -122,12 +134,12 @@ I have found a particularly nice initial guess to calibrate SABR. As it is quite
   <time datetime="2014-06-12T17:31:00Z" class="post-date">Thu, Jun 12, 2014</time>
   <p>While I was playing around calibrating the arbitrage free SABR model from Hagan (using the PDE on probability density approach), I noticed a misbehavior for some short maturity smiles. I thought it was due to the PDE implementation. Actually some of it was, but the remaining large error was due to the bpvol solver.</p>
 <p>I initially took the same approach as Choi et al. in <a href="/post/building-a-more-accurate-basis-point-volatility-formula">my solver</a>, that is to work with in-the-money prices (they work with straddles) because it&rsquo;s nice and convenient. I thought it was no big deal if prices lower than 1E-16 were not solved. It turns out I was wrong. Choi et al. solver has the same issue.
-<figure><img src="/post/Screenshot%20-%2006122014%20-%2005%2024%2027%20PM.png"/>
+<figure><img src="/post/Screenshot%20-%2006122014%20-%2005%2024%2027%20PM.png">
 </figure>
 </p>
 <p>In the above figure, CKK denotes the Choi et al algorithm (similar with my old algorithm) and Chebyshev is my updated algorithm that is accurate with far out-of-the-money option. What happens is that even though the market price at the lowest strike is not very low, the price at the lowest strike stemming from the best fit smile is extremely low, and when we want to invert it, CKK produces a large error due to lack of representation of numbers near 1.0 as it uses indirectly the in-the-money price. That&rsquo;s where it introduces a particularly big error in this case.</p>
 <p>I have updated my solver since, to work with out-of-the-money option prices as well, and have near machine accuracy on the whole range. I also reduced the number of Chebyshev polynomials used in the process. All the details are in my updated paper at <a href="http://papers.ssrn.com/abstract=2420757">http://papers.ssrn.com/abstract=2420757</a>
-<figure><img src="/post/Screenshot%20-%2006122014%20-%2005%2024%2013%20PM.png"/>
+<figure><img src="/post/Screenshot%20-%2006122014%20-%2005%2024%2013%20PM.png">
 </figure>
 </p>
 
@@ -162,7 +174,7 @@ Many people (and notoriously, Linus Torvald) complained about Gnome-shell, espec
   </h1>
   <time datetime="2014-05-20T12:08:00Z" class="post-date">Tue, May 20, 2014</time>
   <p>While playing around with <a href="/post/good--popular-algorithms-are-simple/">differential evolution</a> to calibrate SABR, I noticed that sometimes, several set of parameters can lead to a very similar smile, usually the good one is for relatively low vol of vol and the bad one is for relatively high vol of vol. I first looked for errors in my implementation, but it&rsquo;s a real phenomenon.
-<figure><img src="/post/Screenshot%20from%202014-05-19%2017%2055%2050.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-19%2017%2055%2050.png">
 </figure>
 </p>
 <p>I used the normal implied volatility formula with beta=1, then converted it to lognormal (Black) volatility. While it might not be a great idea to rely on the normal formula with beta=1, I noticed the same phenomenon with the <a href="/post/sabr-with-new-hagan-pde-approach">arbitrage free PDE density approach</a>, especially for long maturities. Interestingly, I did not notice such behavior before with other stochastic volatility models like Heston or Schobel-Zhu: I suspect it has to do with the approximations rather than with the true behavior of SABR.</p>
@@ -176,53 +188,28 @@ Many people (and notoriously, Linus Torvald) complained about Gnome-shell, espec
   </h1>
   <time datetime="2014-05-15T22:06:00Z" class="post-date">Thu, May 15, 2014</time>
   <p>Some people use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1496982&amp;ei=nx11U6QOoozQBcrfgIAK&amp;usg=AFQjCNHi149E0_JiOzZRT9kgDWWYvHWlFQ&amp;sig2=ZnhySOuJd8V-jBcWo4Ky2w&amp;bvm=bv.66699033,d.d2k">Heston to fit one slice</a> of a volatility surface. In this case, some parameters are clearly redundant. Still, I was wondering how it fared against SABR, which is always used to fit a slice. And what about Schobel-Zhu?
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>With Heston, the calibration is actually slightly better with kappa=0, that is, without mean reversion, because the global optimization is easier and the mean reversion is fully redundant. It&rsquo;s still quite remarkable that 3 parameters result in a fit as good as 5 parameters.</p>
 <p>This is however not the case for Schobel-Zhu, where each &ldquo;redundant parameter&rdquo; seem to make a slight difference in the quality of calibration. kappa = 0 deteriorate a little bit the fit (the mean error is clearly higher), and theta near 0 (so calibrating 4 parameters) is also a little worse (although better than kappa = 0). Also interestingly, the five parameters Schobel-Zhu fit is slightly better than Heston, but not so when one reduce the number of free parameters.</p>
 <p>So what about Heston vs SABR. It is interesting to consider the case of general Beta and Beta=1: it turns out that as confirmed for equities, beta=1 is actually a better choice.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Overall on my 10 surfaces composed each of around 10 slices, an admittedly small sample, Heston (without mean-reversion) fit is a little bit better than SABR. Also the <a href="/post/svi-on-top-of-sabr">SVI-SABR</a> idea from Gatheral is not great: the fit is clearly worse than SABR with Beta=1 and even worse than a simple quadratic.
 Of course the best overall fit is achieved with the classic SVI, because it has 6 parameters while the others have only 3.</p>
 <p>All the calibrations so far were done slice by slice independently, using levenberg marquardt on an initial guess found by differential evolution. Some people advocate for speed or stability of parameters reasons the idea of calibrating each slice using the previous slice as initial guess with a local optimizer like levenberg marquardt, in a bootstrapping fashion.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png">
 </figure>
 </p>
 <p>The results can be quite different, especially for SVI, which then becomes the worst, even worse than SVI-SABR, which is actually a subset of SVI with fewer parameters. How can this be?</p>
 <p>This is because as the number of parameters increases, the first slices optimizations have a disproportionate influence, and finding the real minimum is much more difficult, even with differential evolution for the first slice. It&rsquo;s easy to picture that you&rsquo;ll have much more chances to get stuck in some local minimum. It&rsquo;s interesting to note that the real stochastic volatility models are actually better behaved in this regard, but I am not so sure that this kind of calibration is such a great idea in general.</p>
 <p>In practice, the SVI parameters fitted independently evolve in a given surface on each slice in a smooth manner, mostly monotonically. It&rsquo;s just that to go from one set on one slice to the other on the next slice, you might have to do something more than a local optimization.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/quadratic-spline-with-knots-at-mid-points/">Quadratic Spline with Knots at Mid-Points</a>
-  </h1>
-  <time datetime="2014-05-14T14:12:00Z" class="post-date">Wed, May 14, 2014</time>
-  <p>Two months ago, I looked at <a href="/post/arbitrage-free-interpolation-of-option-prices-using-piecewise-constant-density">arbitrage free interpolation using piecewise-constant density</a>. This is equivalent to a piecewise quadratic polynomial in call prices where each piece is centered around each call strike.</p>
-<p>I wondered at the time what a quadratic spline would look like on this problem, as it should be very close in theory, except that we can ensure that it is C1, a condition for a good looking implied volatility.</p>
-<p>For a while, I did not find any references around splines where knots are in between two interpolation points and derived my own formula. And then I lost the paper, but out of curiosity, I looked at the excellent De Boor book &ldquo;<a href="http://www.amazon.com/Practical-Splines-Applied-Mathematical-Sciences/dp/0387953663">A Practical Guide to Splines</a>&rdquo; and found that there was actually a chapter around this: quadratic splines with knots at mid-points. Interestingly, it turns out that a quadratic spline on standard knots is not always well defined, which is why, if one does quadratic splines, the knots need to be moved.<!-- raw HTML omitted --><!-- raw HTML omitted -->The papers from this era are quite rudimentary in their presentation (the book is much better). I found the paper from Demko 1977 &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.sciencedirect.com%2Fscience%2Farticle%2Fpii%2F0021904578900904&amp;ei=oldzU8i0EsTY0QX3xIH4Bg&amp;usg=AFQjCNH8gbNKzPTyFH3xI-FDPJZIAFJAbg&amp;sig2=5fGbnp0Kaf3fx-KZDf5AiA&amp;bvm=bv.66699033,d.d2k">Interpolation by Quadratic Splines</a>&rdquo; quite usable for coding. I adjusted the boundaries to make the first and last quadratic fit the first two/last two strikes (adding a first strike at 0 and a large last strike if necessary) and spend countless time worrying about indices. The result on a simple classic example is interesting.
-<figure><img src="/post/Screenshot%20from%202014-05-14%2013%2052%2054.png"/>
-</figure>
-</p>
-<p>On the non monotonic discrete density data of my earlier blog entry, this gives:
-<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2000%2008.png"/><figcaption>
-            <h4>QSpline is the quadratic spline</h4>
-        </figcaption>
-</figure>
-</p>
-<p>Unfortunately, interpolating small prices with such a spline results in a highly oscillating interpolation: this is the <a href="http://www.sciencedirect.com/science/article/pii/0021904591900348">Gibbs phenomenon for splines</a>. We need to loose strict C1 continuity for practical applications, and use a first derivative approximation instead, very much like the Harmonic cubic spline.
-<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2004%2033.png"/><figcaption>
-            <h4>On Jaeckel data, the quadratic spline on prices is highly oscillating</h4>
-        </figcaption>
-</figure>
-</p>
 
   
 </article>

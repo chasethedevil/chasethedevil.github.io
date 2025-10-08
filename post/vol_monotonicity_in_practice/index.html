@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -81,28 +81,28 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
 </span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
 <p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
-<figure><img src="/post/bs_price.png"/>
+<figure><img src="/post/bs_price.png">
 </figure>
 </p>
 <p>Peter Jaeckel proposes several improvements, the first simple one is to use the scaled complementary error function <code>erfcx</code> rather than the cumulative normal distribution function directly. A second improvement is to use Taylor expansions for small prices. It turns out that on the example with strike K=2.0, forward F=1.0, vol=0.125, the Taylor expansion is being used.</p>
-<figure><img src="/post/bs_price_jaeckel.png"/>
+<figure><img src="/post/bs_price_jaeckel.png">
 </figure>
 
 <p>The error is much lower, with Taylor being even a little bit better. But the price is still not monotonic.</p>
 <p>How would the implied vol corresponding to those prices look like? If we apply Peter Jaeckel implied vol solver to the naive Black-Scholes formula, we end up with an accuracy limited by the naive formula.
-<figure><img src="/post/bs_vol_naive.png"/>
+<figure><img src="/post/bs_vol_naive.png">
 </figure>
 </p>
 <p>If we apply it to the exact prices or to erfcx or to Taylor, we still end up with a non monotonic implied vol:</p>
-<figure><img src="/post/bs_vol_jaeckel.png"/>
+<figure><img src="/post/bs_vol_jaeckel.png">
 </figure>
 
 <p>There is no visible difference in accuracy if we start from the erfcx prices and apply the SR Householder solver of <a href="https://github.com/jherekhealy/AQFED.jl/tree/master/src/black">Jherek Healy</a>:</p>
-<figure><img src="/post/bs_vol_erfcx.png"/>
+<figure><img src="/post/bs_vol_erfcx.png">
 </figure>
 
 <p>It should not be too surprising: if we compose the Black-Scholes formula with the associated solver from Peter Jaeckel, we do not obtain the identity function. Because the option prices are not monotonic with the vol, there are several vols which may be solution to the same price, and the solver is guaranteed to not solve exactly, which leads to the numerical noise we see on the plots. In contrast, it is remarkable that if we compose exp with log we have a nice monotonic shape:</p>
-<figure><img src="/post/logexp.png"/>
+<figure><img src="/post/logexp.png">
 </figure>
 
 <p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>

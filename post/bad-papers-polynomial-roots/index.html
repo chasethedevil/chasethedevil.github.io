@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -85,9 +85,9 @@ Furthermore, the method is not particularly fast either compared to some other a
 <p>I find it a bit incredible that this gets published, although I am not too surprised since the bar for publication is low for many journals (see <a href="https://quantsrus.github.io/post/on-the-quality-of-research-publications/">this enlightening post</a> by J. Healy),  and even for more serious journals, referees almost never actually try the method in question, so they have to blindly trust the results and focus mostly on style/presentation of ideas.</p>
 <p>Fortunately, some papers are very good, such as <a href="https://arxiv.org/abs/1611.02435">Fast and backward stable computation of roots of polynomials, Part II: backward error analysis; companion matrix and companion pencil</a>. In this case, the authors even provide <a href="https://github.com/jverzani/AMRVW.jl">a library in Julia</a>, so the claims can be easily verified, and without surprise, it works very well, and is (very) fast. It also supports multiple precision, if needed. For the specific case of the Mersenne-Twister polynomial, it leads to the correct entropy value, working only with 64-bit floats, even though many eigenvalues have a not-so-small error. It is still relatively fast (compared to a standard LinearAlgebra.eigvals) using quadruple precision (128-bits), and there, the error in the eigenvalues is small.</p>
 <p>Overall, I found with this method an entropy of 10.377 (quite different from what is stated in K. Savvidy paper), although the plot of the distribution looks similar (but with a different scale: the total number of eigenvalues reported in K. Savvidy paper just does not add up to 19937, which is somewhat puzzling). A naive companion matrix solution led to 10.482. More problematic, if we look directly for the eigenvalues of the Mersenne-Twister transition matrix (Appendix A of the MT paper), we find 10.492, perhaps it is again an issue with the limited precision of 64-bits here.</p>
-<figure><img src="/post/mt19937_hist64_poly128roots.png"/><figcaption>
-            <h4>Distribution of the eigenvalues of the Mersenne-Twister.</h4>
-        </figcaption>
+<figure><img src="/post/mt19937_hist64_poly128roots.png"><figcaption>
+      <h4>Distribution of the eigenvalues of the Mersenne-Twister.</h4>
+    </figcaption>
 </figure>
 
 <p>Below is the Mersenne-Twister polynomial, expressed in Julia code.

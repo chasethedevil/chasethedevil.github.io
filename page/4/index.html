@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,39 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/monte-carlo-vectorization-or-not/">Monte-Carlo Parallelization: to vectorize or not?</a>
+  </h1>
+  <time datetime="2022-04-09T21:56:42&#43;0100" class="post-date">Sat, Apr 9, 2022</time>
+  <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
+I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span><span style="color:#bbb"> </span>i<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#40a070">0</span>;<span style="color:#bbb"> </span>i<span style="color:#bbb"> </span>&lt;<span style="color:#bbb"> </span>numSimulations;<span style="color:#bbb"> </span>i<span style="color:#666">++</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path)<span style="color:#bbb"> </span><span style="color:#007020">//path contains an array of n time-steps of float64.</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>statistics.<span style="color:#06287e">RecordValue</span>(output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}</span></span></code></pre></div>
+A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths)<span style="color:#bbb"> </span><span style="color:#007020">//paths contains an array of n time-steps of vectors of size numSimulations </span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
+<p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
+<p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
+<p>Which one is most appropriate?</p>
+<p>I first heard about this debate in a Quantlib user meeting a long time ago. Alexander Sokol was arguing for (B) as it simplified the implementation of AAD, while Peter Caspers was more a (A) kind of guy. At the time, I had not fully grasped the interest of (B) as it seemed more complex to put in place properly.</p>
+<p>It is interesting to think about those in terms of parallelization. At first, it may seem that (A) is simple to parallelize: you just process N/M package where M is the number of processors and N the total number of paths. Unfortunately, such a design implies a stateful payoff, which is not necessarily trivial to make thread-safe (actually very challenging). So the first drawback is that you may have to limit the parallelization to the path generation and to perform the payoff evaluation in a single thread. And then if you think more about it, you notice that while the first package is being computed, the payoff evaluation will just wait there. Sure, other packages will be computed in parallel, but this may again blow off the memory as you essentially keep all the paths in each package in memory. In practice, we would thus need to compute each path in some sort of thread pool and push those to a path queue of fixed length (blocking), which is read by the single thread, by taking a path from the queue, evaluate the payoff on this path, and pushing it back to a free queue in order to recycle the path. Alternatively, some sort of <a href="https://www.baeldung.com/java-ring-buffer">ring buffer</a> structure could be used for the paths. One has also to be quite careful as well about the random number generator skipping to the correct position in order to keep the same sequence of random numbers as in a fully single threaded approach.</p>
+<p>Taking parallelization into account, (A) is not that the trivial approach anymore. In contrast, (B) or (C) would parallelize the payoff evaluation by design, making the implementation of the full simulation parallelization much easier. Arguably, the package of paths approach may consume less memory than (C), as (1) the path generation usually involves many intermediate time-steps which may be discarded (kept only in cache per core) while in a vectorized approach, the full vector of those intermediate time-steps may be needed (typically for a classical Brownian-Bridge variance reduction), (2) the payoff evaluates scalars (and its state is thus comprised of scalars). A clever vectorized payoff evaluation would however reuse most vectors. The memory reduction may not be real in practice.</p>
+<p>Now, if we include callability or particle method kind of evaluation,  full vectorization, but keeping only the payoff (vector) variables in memory and building up the path step by step may be the most effective as described in <a href="https://www.amazon.fr/Applied-Quantitative-Finance-Equity-Derivatives/dp/B08VCM9HBL">Jherek Healy&rsquo;s book</a>.</p>
+<p>To conclude, not vectorizing the path generation and payoff evaluation would be a design mistake nowadays.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/more-automatic-differentiation-awkwardness/">More Automatic Differentiation Awkwardness</a>
   </h1>
@@ -99,8 +125,7 @@ But in reality, it is really N-dimensional, where N is the number of terms in th
 And thus, for least-squares, backward automatic differentiation will likely be slower than forward since the number of terms in the sum is typically larger than the number of input parameters we are trying to fit.</p>
 <p>Interestingly, the <a href="https://fr.mathworks.com/help/optim/ug/autodiff-background.html">Matlab documentation</a> mentions explicitly this use case:</p>
 <blockquote>
-<p>lsqnonlin defaults to forward AD when the number of elements in the objective vector is greater than or equal to the number of variables. Otherwise, lsqnonlin defaults to reverse AD.</p>
-</blockquote>
+<p>lsqnonlin defaults to forward AD when the number of elements in the objective vector is greater than or equal to the number of variables. Otherwise, lsqnonlin defaults to reverse AD.</p></blockquote>
 
   
 </article><article class="post">
@@ -115,30 +140,30 @@ constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional rea
 <p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
 <p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the <a href="https://oxfordcontrol.github.io/COSMO.jl/stable/">COSMO solver</a> on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Solver</th>
-<th style="text-align:right">RMSE</th>
-<th style="text-align:right">Time (ms)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">GoldfarbIdnaniSolver</td>
-<td style="text-align:right">0.0031130349998388157</td>
-<td style="text-align:right">0.205</td>
-</tr>
-<tr>
-<td style="text-align:left">COSMO</td>
-<td style="text-align:right">0.0031130309597602370</td>
-<td style="text-align:right">21.485</td>
-</tr>
-<tr>
-<td style="text-align:left">SCS</td>
-<td style="text-align:right">0.0031130429769795193</td>
-<td style="text-align:right">8.381</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Solver</th>
+          <th style="text-align: right">RMSE</th>
+          <th style="text-align: right">Time (ms)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">GoldfarbIdnaniSolver</td>
+          <td style="text-align: right">0.0031130349998388157</td>
+          <td style="text-align: right">0.205</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">COSMO</td>
+          <td style="text-align: right">0.0031130309597602370</td>
+          <td style="text-align: right">21.485</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">SCS</td>
+          <td style="text-align: right">0.0031130429769795193</td>
+          <td style="text-align: right">8.381</td>
+      </tr>
+  </tbody>
 </table>
 
   
@@ -170,12 +195,11 @@ There is no real numerical challenge to implement the idea. However it turns out
 A recurring theme is plots presented without context/with the wrong context. Many times, when we extend the time span in the past, a very different picture emerges of cyclic variations with cycles of different lengths and amplitudes. Other times, the choice of measure is not appropriate. Yey another aspect is the uncertainty of the models, which seems too rarely discussed in reports/papers, as well as the necessary model parameters tweaking.</p>
 <p>When it comes to CO2, Koonin explains that the decrease in cooling power is much much lower from 400ppm to 800ppm than from 0ppm to 400ppm, because, at 400ppm (the 2019 average) most of the light frequencies are already absorbed. The doubling corresponds only to a 0.8% change in heat intercepting. 1% is however not so small, as it corresponds to 3 degrees Kelvin/Celcius variation. Furthermore, while humans may increase warming with greenhouse gas, they also increase cooling via aerosols, the latter being much less well known and measured (with those taken into account, we arrive at the 1 degree Celcius impact). The author also presents some plots on CO2 on a scale of millions of years to explain that we live in an era of low CO2 ppm. While an interesting fact, this may be a bit misleading since, if we look at at <a href="https://climate.nasa.gov/vital-signs/carbon-dioxide/">up to 800,000 years back</a>, the CO2 concentration stayed between 200 and 250 ppm, with an explosion only in the recent decades. The <a href="https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide">climate.gov website</a> provides more context around the latter plot:</p>
 <blockquote>
-<p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p>
-</blockquote>
+<p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p></blockquote>
 <p>What I found disappointing is the absence of the <a href="https://www.climatefiles.com/exxonmobil/1982-memo-to-exxon-management-about-co2-greenhouse-effect/">famous 1982 plot from Exxon</a> (p. 7), see also <a href="https://gizmodo.com/exxon-predicted-2019-s-ominous-co2-milestone-in-1982-1834748763">the following article with nice red lines for 2019</a>.</p>
-<figure><img src="/post/exxon_co2ppm.jpg"/><figcaption>
-            <h4>The Exxon 1982 PPM Plot.</h4>
-        </figcaption>
+<figure><img src="/post/exxon_co2ppm.jpg"><figcaption>
+      <h4>The Exxon 1982 PPM Plot.</h4>
+    </figcaption>
 </figure>
 
 <p>On this plot, the relation between the temperature increase and the CO2 ppm looks linear, which would be somewhat more alarming.</p>
@@ -215,21 +239,17 @@ A recurring theme is plots presented without context/with the wrong context. Man
   <p>One thing that motivated me for vaccination is the fake news propaganda against the Covid-19 vaccines.</p>
 <p>A mild example relates to the data from Israel about the delta variant. <a href="https://trialsitenews.com/covid-19-case-data-in-israel-a-troubling-trend/">This kind of article</a>, with the title &ldquo;Covid 19 Case Data in Israel, a Troubling Trend&rdquo;, puts emphasis on the doubts on the effectivness of the vaccine:</p>
 <blockquote>
-<p>the vaccine appears to have a negligible effect on an individual as to whether he/she catches the current strain. Moreover, the data indicates that the current vaccines used (Moderna, Pfizer-BioNTech, AstraZeneca) may have a decreasing effect on reduced hospitalizations and death if one does get infected with the Delta variant.</p>
-</blockquote>
+<p>the vaccine appears to have a negligible effect on an individual as to whether he/she catches the current strain. Moreover, the data indicates that the current vaccines used (Moderna, Pfizer-BioNTech, AstraZeneca) may have a decreasing effect on reduced hospitalizations and death if one does get infected with the Delta variant.</p></blockquote>
 <p>CNBC (far from the best news site) is much more balanced and precise in contrast:</p>
 <blockquote>
-<p>However, the two-dose vaccine still works very well in preventing people from getting seriously sick, demonstrating 88% effectiveness against hospitalization and 91% effectiveness against severe illness, according to the Israeli data published Thursday.</p>
-</blockquote>
+<p>However, the two-dose vaccine still works very well in preventing people from getting seriously sick, demonstrating 88% effectiveness against hospitalization and 91% effectiveness against severe illness, according to the Israeli data published Thursday.</p></blockquote>
 <p>Much more shocking is a <a href="https://twitter.com/pbhushan1/status/1417842166366236679">tweet from Prashant Bhushan</a> (whoever that is) which was relayed widely enough that I got to see it</p>
 <blockquote>
-<p>Public Health Scotland have revealed that 5,522 people have died within twenty-eight days of having a Covid-19 vaccine within the past 6 months in Scotland alone! This is 9 times the people who died due to Covid from March 2020 till Jan 2021 in Scotland!</p>
-</blockquote>
+<p>Public Health Scotland have revealed that 5,522 people have died within twenty-eight days of having a Covid-19 vaccine within the past 6 months in Scotland alone! This is 9 times the people who died due to Covid from March 2020 till Jan 2021 in Scotland!</p></blockquote>
 <p>It points to <a href="https://dailyexpose.co.uk/2021/07/18/5522-people-have-died-within-28-days-of-having-a-covid-19-vaccine-in-scotland-according-to-public-health-scotland/">an article</a> in the Daily Expose (worse than a tabloid?) with <a href="https://beta.publichealthscotland.scot/media/8183/21-06-23-covid19-publication_report.pdf">a link to the actual study</a>. Giving an actual link to the source is a very good practice, even if in this case, the authors of the news article write a lengthy text which says the opposite as the paper they cite as being the source. Indeed, p.27 of the paper says</p>
 <blockquote>
 <p>Using the 5-year average monthly death rate (by age band and gender) from 2015 to 2019 for comparison, 8,718 deaths would have been expected among the vaccinated population within 28 days of receiving their COVID-19 vaccination.
-This means the observed number of deaths is lower than expected compared with mortality rates for the same time period in previous years&hellip;</p>
-</blockquote>
+This means the observed number of deaths is lower than expected compared with mortality rates for the same time period in previous years&hellip;</p></blockquote>
 <p><strong>Why do people write such fake news articles?</strong></p>
 <p>I can imagine 3 kinds of motivations:</p>
 <ol>
@@ -309,59 +329,17 @@ some arab name servers, and the country of registration is Saudi Arabia. When I 
   </h1>
   <time datetime="2020-11-21T07:56:42&#43;0100" class="post-date">Sat, Nov 21, 2020</time>
   <p>I stumbled upon a new  short book <a href="https://link.springer.com/book/10.1007%2F978-3-030-57496-3">Financial Models in Production</a> from O. Kettani and A. Reghai. A page attracted my attention</p>
-<figure><img src="/post/reghai_coincidences.png"/><figcaption>
-            <h4>A page from Kettani and Reghai&#39;s book.</h4>
-        </figcaption>
+<figure><img src="/post/reghai_coincidences.png"><figcaption>
+      <h4>A page from Kettani and Reghai&#39;s book.</h4>
+    </figcaption>
 </figure>
 
 <p>This is the same example as I used on <a href="/post/implied-volatility-from-black-scholes-price/">my blog</a>, where I also present the Li&rsquo;s SOR method combined with the good initial guess from Stefanica. The idea has also been expanded on in <a href="https://jherekhealy.github.io">Jherek Healy&rsquo;s book</a>. What is shocking is that, beside reusing my example, <strong>they reuse my timing</strong> for Jäckel and my implementation is in <a href="https://golang.org">Google Go</a>, with a timing done on some older laptop. The numbers given are thus highly inconsistent. Of course, none of this is mentioned anywhere, and the book does not reference my blog.</p>
 <p>I also find the description of how they improve the implied volatility algorithm (detailed on the next page) to not make much sense. After this kind of stuff, you can&rsquo;t really trust anything that is in the book&hellip;</p>
 <p>Worst perhaps, is that the authors advertise their &ldquo;novel&rdquo; technique in otherwise decent talks and conferences, such as <a href="https://www.mathfinance.com/newsletter-october-2020-mathfinance-conference-recap/">the one from mathfinance</a>. Here is a quote</p>
 <blockquote>
-<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p>
-</blockquote>
+<p>Enforced Numerical Monotonicity (ENM) beats Jäckel’s implied volatility calculations – an implied vol calculator that never breaks and automatically fits vanilla option prices.</p></blockquote>
 <p>It is really unfortunate that the world we live in encourages such boasting. Papers always need  to present some novel ideas to be published, but there is too often no check on whether the idea actually works, or is worth it. The temptation to make exagerated claims is very high for authors. In the end, it becomes not so easy to sort out the good from the bad.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/bad-papers-polynomial-roots/">Bad papers and the roots of high degree polynomials</a>
-  </h1>
-  <time datetime="2020-11-07T07:56:42&#43;0100" class="post-date">Sat, Nov 7, 2020</time>
-  <p>I was wondering what were exactly the eigenvalues of the Mersenne-Twister random number generator transition matrix. An <a href="https://arxiv.org/abs/1403.5355">article</a> by K. Savvidy sparked my interest on this.
-This article mentioned a poor entropy (sum of log of eigenvalues amplitudes which are greater than 1), with eigenvalues falling almost on the unit circle.</p>
-<p>The eigenvalues are also the roots of the characteristic polynomial. It turns out, that for jumping ahead in the random number sequence, we use the characteristic polynomial. There is a twist however,
-we use it in F2 (modulo 2), for entropy, we are interested in the characteristic polynomial in Z (no modulo), specified in Appendix A of <a href="https://dl.acm.org/doi/10.1145/272991.272995">the Mersenne-Twister paper</a>. The roots of the two polynomials are of course very different.</p>
-<p>Now the degree of the polynomial is 19937, which is quite high. I searched for some techniques to compute quickly the roots, and found the paper <a href="https://www.sciencedirect.com/science/article/abs/pii/S1877750316304641">&ldquo;Efficient high degree polynomial root finding
-using GPU&rdquo;</a>, whose main idea is relatively simple: use <a href="https://en.wikipedia.org/wiki/Aberth_method">the Aberth method</a>, with a Gauss-Seidel like iteration (instead of a Jacobi like iteration) for parallelization. Numerical issues are supposedly
-handled by taking the log of the polynomial and its derivative in the formulae.</p>
-<p>When I tried this, I immediately encountered numerical issues due to the limited precision of 64-bit floating point numbers. How to evaluate the log of the polynomial (and its derivative) in a stable way? It&rsquo;s just not a simple problem at all.
-Furthermore, the method is not particularly fast either compared to some other alternatives, such as calling eigvals on <a href="https://en.wikipedia.org/wiki/Companion_matrix">the companion matrix</a>, a formulation which tends to help avoiding limited precision issues. And it requires a very good initial guess (in my case, on the unit circle, anything too large blows up).</p>
-<p>The authors in the paper do not mention which polynomials they actually have tested, only the degree of some &ldquo;full polynomial&rdquo; and some &ldquo;sparse polynomial&rdquo;, and claim their technique works with full polynomials of degree 1 000 000 ! This may be true for some very specific polynomial where the log gives an accurate value, but is just plain false for the general case.</p>
-<p>I find it a bit incredible that this gets published, although I am not too surprised since the bar for publication is low for many journals (see <a href="https://quantsrus.github.io/post/on-the-quality-of-research-publications/">this enlightening post</a> by J. Healy),  and even for more serious journals, referees almost never actually try the method in question, so they have to blindly trust the results and focus mostly on style/presentation of ideas.</p>
-<p>Fortunately, some papers are very good, such as <a href="https://arxiv.org/abs/1611.02435">Fast and backward stable computation of roots of polynomials, Part II: backward error analysis; companion matrix and companion pencil</a>. In this case, the authors even provide <a href="https://github.com/jverzani/AMRVW.jl">a library in Julia</a>, so the claims can be easily verified, and without surprise, it works very well, and is (very) fast. It also supports multiple precision, if needed. For the specific case of the Mersenne-Twister polynomial, it leads to the correct entropy value, working only with 64-bit floats, even though many eigenvalues have a not-so-small error. It is still relatively fast (compared to a standard LinearAlgebra.eigvals) using quadruple precision (128-bits), and there, the error in the eigenvalues is small.</p>
-<p>Overall, I found with this method an entropy of 10.377 (quite different from what is stated in K. Savvidy paper), although the plot of the distribution looks similar (but with a different scale: the total number of eigenvalues reported in K. Savvidy paper just does not add up to 19937, which is somewhat puzzling). A naive companion matrix solution led to 10.482. More problematic, if we look directly for the eigenvalues of the Mersenne-Twister transition matrix (Appendix A of the MT paper), we find 10.492, perhaps it is again an issue with the limited precision of 64-bits here.</p>
-<figure><img src="/post/mt19937_hist64_poly128roots.png"/><figcaption>
-            <h4>Distribution of the eigenvalues of the Mersenne-Twister.</h4>
-        </figcaption>
-</figure>
-
-<p>Below is the Mersenne-Twister polynomial, expressed in Julia code.
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DynamicPolynomials
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">import</span> AMRVW
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Quadmath
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#555;font-weight:bold">@polyvar</span> t
-</span></span><span style="display:flex;"><span>n <span style="color:#666">=</span> <span style="color:#40a070">624</span>
-</span></span><span style="display:flex;"><span>m <span style="color:#666">=</span> <span style="color:#40a070">397</span>
-</span></span><span style="display:flex;"><span>cp <span style="color:#666">=</span> DynamicPolynomials<span style="color:#666">.</span>Polynomial((t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">31</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">30</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">29</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">28</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">27</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">26</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">24</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">23</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">18</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">17</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">15</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">11</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">6</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">3</span><span style="color:#666">+</span>(t<span style="color:#666">^</span>n<span style="color:#666">+</span>t<span style="color:#666">^</span>m)<span style="color:#666">*</span>(t<span style="color:#666">^</span>(n<span style="color:#666">-</span><span style="color:#40a070">1</span>)<span style="color:#666">+</span>t<span style="color:#666">^</span>(m<span style="color:#666">-</span><span style="color:#40a070">1</span>))<span style="color:#666">^</span><span style="color:#40a070">2</span><span style="color:#666">+</span><span style="color:#40a070">1</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>c <span style="color:#666">=</span> zeros(Float128,DynamicPolynomials<span style="color:#666">.</span>degree(terms(cp)[<span style="color:#40a070">1</span>])<span style="color:#666">+</span><span style="color:#40a070">1</span>)
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> te <span style="color:#007020;font-weight:bold">in</span> terms(cp)
-</span></span><span style="display:flex;"><span>  c[DynamicPolynomials<span style="color:#666">.</span>degree(te)<span style="color:#666">+</span><span style="color:#40a070">1</span>] <span style="color:#666">=</span> coefficient(te)
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span>
-</span></span><span style="display:flex;"><span>v128 <span style="color:#666">=</span> AMRVW<span style="color:#666">.</span>roots(c)
-</span></span><span style="display:flex;"><span>sum(x <span style="color:#666">-&gt;</span> log(abs(x)),filter(x <span style="color:#666">-&gt;</span> abs(x) <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span>, v128))</span></span></code></pre></div></p>
 
   
 </article>

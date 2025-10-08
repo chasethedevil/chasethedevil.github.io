@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/productivity-zero/">Productivity Zero</a>
+  </h1>
+  <time datetime="2013-01-24T22:03:00Z" class="post-date">Thu, Jan 24, 2013</time>
+  <p>Sometimes it feels like big companies try to enforce the Productivity Zero rule.</p>
+<p>Here is a guide:</p>
+<ul>
+<li>involve as many team as possible. It will help ensuring endless discussions about who is doing what, and then how do I interface with them. This is most (in)efficient when team managers interact and are not very technically competent. One consequence is that nobody is fully responsible/accountable, which helps reinforce the productivity zero.</li>
+<li>meetings, meetings and meetings. FUD (Fear Uncertainty and Doubt) is king here. By spreading FUD, there will be more and more meetings. Even if the &ldquo;project&rdquo; is actually not a real project, but amounts to 10 lines of code, it is possible to have many meetings around it, over the span of several months (because everybody is always busy with other tasks). Another strategy is to use vocabulary, talk about technical or functional parts the others don&rsquo;t understand. Some people are masters are talking technical to functional people and vice versa.</li>
+<li>multiply by 20, not 2. It is surprisingly easy to tell upper management something is going to take 3 months, when, in fact, it can be done in 3 days. This is a bit like bargaining in South East Asia: it&rsquo;s always amazing to find out how much you can push the price down (or how much they push it up).</li>
+<li>hire as many well paid managers and product specialists as you can, and make sure they know nothing about the product or the functional parts but are very good at playing the political game without any content. Those people often manage to stay a long time, a real talent.</li>
+</ul>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/better-finite-difference-boundaries-with-a-tridiagonal-solver/">Better Finite Difference Boundaries with a Tridiagonal Solver</a>
   </h1>
@@ -110,7 +125,7 @@ I was looking for an implementation of the non central chi squared distribution 
 <p>$$ f&rsquo;(x) = \frac{f(x_{i+1})-f(x_{i-1})}{x_{i+1} - x_{i-1}} $$</p>
 <p>However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \(f(x_{i+1})\) and \(f(x_{i-1})\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).</p>
 <p>This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0, 0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.</p>
-<figure><img src="/post/cir_bond_euler_discretizations.png"/>
+<figure><img src="/post/cir_bond_euler_discretizations.png">
 </figure>
 
 <p>I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:<!-- raw HTML omitted -->
@@ -189,18 +204,6 @@ This will be a very technical post, I am not sure that it will be very understan
    
 
 It's a bit incredible, but in 2012, some linux distros (like Fedora, or Kubuntu) still have trouble to have pretty fonts everywhere. I found a nice tip initially for Google Chrome but that seems to improve more than Chrome: create ~/.fonts.conf with the following:<br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">[match target="font"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit name="autohint" mode="assign"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [bool]true[/bool]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit name="hinting" mode="assign"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [bool]true[/bool]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [edit mode="assign" name="hintstyle"]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; &nbsp; [const]hintslight[/const]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">&nbsp; &nbsp; [/edit]</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">[/match]</span><br /><div><br /></div><div>replace [ and ] with brackets &lt; and &gt;<br /><br />Update from 2013 - This can be done system wide, see <a href="http://chasethedevil.blogspot.com/2013/08/better-fonts-in-fedora-than-in-ubuntu.html">http://chasethedevil.blogspot.com/2013/08/better-fonts-in-fedora-than-in-ubuntu.html</a> </div><pre></pre>
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/fedora-17-vs-ubuntu-12.04/">Fedora 17 vs Ubuntu 12.04</a>
-  </h1>
-  <time datetime="2012-09-12T18:03:00Z" class="post-date">Wed, Sep 12, 2012</time>
-   
-
-I had the bad idea to upgrade to the beta Ubuntu 12.10. Something awfully broke in the upgrade. After too much struggling with apt-get &amp; dpkg, I decided to install Fedora 17.<br /><br />Strangely Fedora feels much faster than Ubuntu 12.04 (the boot time especially). Yum seems also faster than apt-get, especially the update part. Also while the Unity dock is not bad (better than gnome shell dock), the Unity dash thing just makes me crazy, the gnome shell activities, while close, are much easier to use.<br /><br />But it needs a bit more steps to install, although I had no problem to install <a href="http://www.if-not-true-then-false.com/2012/fedora-17-nvidia-guide/">nvidia drivers</a>,&nbsp;<a href="http://obiee2go.blogspot.fr/2012/06/oracle-11g-oracle-database-11g.html">Oracle 11g xe</a>, Java, MP3, nice fonts, nice icons thanks to the guides <a href="http://www.mjmwired.net/resources/mjm-fedora-f17.html">here</a> and <a href="http://smashingweb.info/fedora-17-post-installation-guide-things-to-do-after-installing-fedora-17/">there</a>. SSD Trim instructions are the same (basically use "discard" instead of "default" in /etc/fstab). I have the most troubles with Oracle: somehow the start script does not work and I currently log in as "oracle" and start&nbsp;/u01/app/oracle/product/11.2.0/xe/config/scripts/startdb.sh from there (after having added the proper .bashrc for this user)<br /><br />I even managed the peculiarities of my laptop a similar way as ubuntu: I want Nvidia card when plugged in to a monitor (to be able to use it) and Intel card when not (to be able to use the LCD screen). My solution is to use the boot screen (in reality one just need to restart X11): this amounted to add a "hdmi" in "/etc/grub.d/40_custom" and creating a link to "/etc/rc3.d/S10DriverSelect" the following script (a dirty hack):<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">#!/bin/sh</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">if grep -q hdmi /proc/cmdline</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules.bak/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.hdmi /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules.bak/extensions/nvidia /usr/lib64/xorg/modules/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">else</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.intel /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules/extensions/nvidia /usr/lib64/xorg/modules.bak/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">fi</span><br /><br />Linux distros are really becoming closer in terms of configuration, LSB has made great progress.<br /><div><br />Edit from November 29: After a few weeks, I noticed that the system was quite unstable unfortunately. As a result, I moved back to Ubuntu on my laptop. I am running OpenSuse on my home computer. 1 year later, I am back to Fedora 19, 20 on my desktop - no stability issue, I prefer Gnome over KDE. </div>
 
 
 

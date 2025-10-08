@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,38 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-8---the-comeback/">Fedora 8 - The Comeback</a>
+  </h1>
+  <time datetime="2007-12-23T02:28:00Z" class="post-date">Sun, Dec 23, 2007</time>
+  <p>My previous post about <a href="/posts/ubuntu-7.10-vs-fedora-core-8---gutsy-vs-werewolf">Ubuntu Gutsy vs Fedora 8</a> was weak. It is difficult to find a very good distro. Depending on the computer, I have had different experiences. On some computers, Ubuntu really shines and work with minimal tweaking. On some others, Ubuntu is unstable/does not handle wireless correctly and Fedora is much more stable.</p>
+<p>The main issues I can see with Fedora 8 are:</p>
+<ul>
+<li>LVM by default. I don&rsquo;t think it is a good idea to go LVM by default since lots of basic tools are still not handling it properly. And if you want to read your disk by something else than a distro with LVM you are screwed. Ext3 straight is imho a much wiser choice. Plus it is rarely a problem to resize partitions as it is not something one does often.</li>
+<li>Fewer programs in the repositories available. Under ubuntu, I was using gtkguitune to tune my guitar, it was in the default repositories. It does not exist for Fedora and I did not manage to compile it due to too old dependencies (GTK 1.2). I found accordeur on sourceforge which is a better program and is available as RPM, so in the end I found something. But while searching I saw the choice was not as wide as with Ubuntu.</li>
+<li>Packages too small: it is not exactly clear what packages you need to start compiling programs with Fedora. If you look in the default categorization, way too many things are silly to enable by default. Also generally package management seems less stable/less easy to use than with Ubuntu.</li>
+</ul>
+<p>What I like:</p>
+<ul>
+<li>newer Linux kernel, with better scheduler. Fedora seems more responsive.</li>
+<li>bluetooth relatively well handled by default. The standard method of editing /etc/bluetooth/default works well to plug keyboard.</li>
+<li>wifi well handled by default. I had lots of problems with Ubuntu on my computer and the wifi card, I don&rsquo;t have them with Fedora.</li>
+</ul>
+<p>Next step:</p>
+<ul>
+<li>maybe try Suse 10.3 as I just found out that Amarok is the best music player on earth today. As music playing is very important for my computer, a KDE based distro makes sense.</li>
+</ul>
+<p>But that would be a silly typical Linux user reaction.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/haskell-fibonacci-revisited/">Haskell Fibonacci Revisited</a>
   </h1>
@@ -179,8 +204,7 @@ I am currently experimenting with Scala. It seems quite convenient for web appli
 <p>I had not seen that before, and was wondering why one would do such a thing. It seems to be unintuitive. I found my answer through&hellip; GWT widgets. In <a href="http://gwt-widget.sourceforge.net/?q=node/39">this page</a>, the author explain motivations behind doing such a thing:</p>
 <blockquote>
 <p>While not 100% in tune with the MVC pattern, it is often convenient to access the servlet container, the HTTP session or the current HTTP request from the business layer. The GWT-SL provides several strategies to achieve this which pose a compromise in the amount of configuration  required to set up and the class dependencies introduced to the business code.
-The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class which provides convenience methods for accessing the <code>HttpServletRequest</code> and <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables  and will obviously not return correct values if used in any other than the invoking thread.</p>
-</blockquote>
+The easiest way to obtain the current HTTP request is by using the <code>ServletUtils</code> class which provides convenience methods for accessing the <code>HttpServletRequest</code> and <code>HttpServletResponse</code> instances. Please note that it makes use of thread local variables  and will obviously not return correct values if used in any other than the invoking thread.</p></blockquote>
 <p>Still one can doubt if this is good design. In my long experience of web apps in Java I never had the need to do such a thing. Have you seen that pattern before?</p>
 
   
@@ -194,15 +218,6 @@ The easiest way to obtain the current HTTP request is by using the <code>Servlet
 Here is my Vim setup information for reference<br><br>in .vimrc or _vimrc, add at the beginning:<br><blockquote style="border-left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex;" class="gmail_quote"> set langmenu=en_US.ISO_8859-1<br>set gfn=Bitstream_Vera_Sans_Mono:h9:cANSI<br>colorscheme oceandeep<br></blockquote><br>First line is to avoid menus in French.<br>The font (you can <a href="http://ftp.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/"> find here</a>) is simply <a href="http://www.kuro5hin.org/story/2004/12/6/11739/5249">the best programmer&#39;s font</a>.<br>oceandeep mode can be found <a href="http://www.tomsdiner.org/vim/oceandeep/index.html">here</a> .<br> 
 
 
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/why-eclipse-is-better/">Why Eclipse Is Better</a>
-  </h1>
-  <time datetime="2007-07-27T14:37:00Z" class="post-date">Fri, Jul 27, 2007</time>
-  <p>Initially I adopted Eclipse instead of Emacs because it was more powerful to search code, and it allowed refactoring. I regularly tried other IDEs but always end up back to Eclipse, even though there has been less big improvements in Eclipse in the past years (but lots of small ones).</p>
-<p>I just saw today that Eclipse allowed <a href="http://www.eclipse.org/articles/article.php?file=Article-Unleashing-the-Power-of-Refactoring/index.html">programmatic refactoring</a>. Now that&rsquo;s something quite amazing, and I don&rsquo;t think other IDEs do that yet.  <a href="http://langexplr.blogspot.com/2007/07/creating-java-refactorings-with-scala.html">Someone</a> even had fun writing an Eclipse extension in Scala to add a particular kind of refactoring to Eclipse.</p>
 
   
 </article>

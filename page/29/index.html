@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,29 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-art-of-multiprocessor-programming-book-review/">The Art of Multiprocessor Programming Book Review</a>
+  </h1>
+  <time datetime="2008-09-11T19:32:00Z" class="post-date">Thu, Sep 11, 2008</time>
+  <p>I don&rsquo;t remember why I started to subscribe to the Java concurrency-interest list. I find that overall, it is an excellent mailing list.</p>
+<p>There was <a href="http://cs.oswego.edu/pipermail/concurrency-interest/2008-June/005329.html">a post</a> at one point about the Dante Inferno&rsquo;s problem. It triggered my attention, so I decided to buy the book the post was referring to, <em>The Art of Multiprocessor Programming</em> by M Herlihy and N. Shavit.</p>
+<p>The books starts with the basics, and is very didactic in its approach. I enjoyed to learn how locks work and how to build them almost out of nothing. The progression is good, starting with a half broken but simple lock and evolving to the more standard algorithm, like the <a href="http://en.wikipedia.org/wiki/Lamport%27s_bakery_algorithm">Bakery Lock</a> algorithm. The algorithms are extremely well explained. Later it explains the differences between spin locks (Bakery for example) and blocking locks, while presenting new algorithms for blocking locks.<!-- raw HTML omitted --> <!-- raw HTML omitted -->What is described in the many chapters is mainly how to write the javax.concurrency.utils library, why, and what to add to it.<!-- raw HTML omitted --> <!-- raw HTML omitted -->Here are the main subjects I found interesting even if they are not always well presented:</p>
+<ul>
+<li><em><a href="http://www.inf.fh-flensburg.de/lang/algorithmen/sortieren/bitonic/bitonicen.htm">Bitonic networks</a></em>: I had not read about it before and I found the subject fascinating. Go and click on the link if you don&rsquo;t know what I am talking about.</li>
+<li><em>Skip Lists</em>: while I found the subject to be very interesting, I found the skip lists were not presented in a very clear manner. I find the <a href="http://en.wikipedia.org/wiki/Skip_list">wikipedia page about Skip Lists</a> and the <a href="ftp://ftp.cs.umd.edu/pub/skipLists/skiplists.pdf">original paper</a> much better to understand skip lists. Fortunately the authors talk about how to make it more concurrent friendly, and that part is well explained.</li>
+<li><em>Software transactional memory</em>: I have the same opinion than with skip list, except the wikipedia page is very short on details, and the book does give much more details. We feel it is the end of the book and the authors took less time to present it an easily understandable manner. One need to read the chapter several times or to have read before about it to really understand.</li>
+</ul>
+<p>I like books that make me learn new concepts. In <em>The Art of Multiprocessor Programming</em>, there are plenty of concepts, ideas I had never heard about before, even though most of it is probably well known to specialists in the field. So even if some rare subjects could be presented better, I recommend that book to anybody interested in concurrent programming.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/oo-desillusion/">OO Desillusion</a>
   </h1>
@@ -91,8 +107,7 @@
   <time datetime="2008-07-17T11:38:00Z" class="post-date">Thu, Jul 17, 2008</time>
   <p>Today&rsquo;s popular story is <a href="http://article.gmane.org/gmane.linux.kernel/706950">Linus Torvalds message</a> to OpenBSD where he writes:</p>
 <blockquote>
-<p>I think the OpenBSD crowd is a bunch of masturbating monkeys</p>
-</blockquote>
+<p>I think the OpenBSD crowd is a bunch of masturbating monkeys</p></blockquote>
 <p>Beside that provoking sentence he has a valid point. Security bugs should not be more important than other bugs. Too often, management and psychology encourage making security bugs a very important issue and security people VIPs. I have seen this over and over.</p>
 
   
@@ -176,18 +191,6 @@ I tried <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3</a> twice befo
    
 
 It took me a long time to have the Apple Bluetooth Keyboard (slim aluminium model) working well with Fedora 9. Thanks to the Ubuntu documentation, it is quite easy to establish a connection manually through hidd commands. It was unfortunately much more difficult to have it automatically recognized and not disconnected after a few minutes without use.<br /><br />The following configuration should work with any other distro and probably other bluetooth keyboards as well.<br /><br />2 configurations files need to be updated to make it work:<br /><ul><li>/etc/default/bluetooth should contain the following, with the mac address replaced by the one from your keyboard (hidd --search to see it).<br /></li></ul><span style="font-family:courier new;"><span style="font-size:85%;"><span style="font-family:courier new;">BLUETOOTH_ENABLED=1</span><br /><br /><span style="font-family:courier new;">HIDD_ENABLED=1</span><br /><span style="font-family:courier new;">HIDD_OPTIONS="--timeout 8 --connect 00:1D:4F:A7:15:CC --server"</span></span><br /></span><br /><ul><li>/etc/bluetooth/hcid.conf should be appended with<br /></li></ul><span style="font-size:85%;"><span style="font-family:courier new;">device 00:1D:4F:A7:15:CC {</span><br /><span style="font-family:courier new;">        name "Apple Wireless Keyboard";</span><br /><span style="font-family:courier new;">        auth enable;</span><br /><span style="font-family:courier new;">        encrypt enable;</span><br /><span style="font-family:courier new;">        lm master;</span><br /><span style="font-family:courier new;">}</span></span><br /><br />The 2 tricky parameters are "lm master" (makes it connect automatically), and "--timeout 8" that makes it not disconnect contrary to what the option tells. Without the option the timeout of the keyboard is about 11 minutes. If the computer timeout is lower, the connection will be reestablished automatically, thus the value of 8.<br /><br /><span style="font-weight: bold;">Jun 16th update</span>: I still had disconnections, the only way I found to get rid of them was to <a href="http://kernel.ubuntu.com/git?p=ubuntu/ubuntu-hardy.git;a=blobdiff;f=net/bluetooth/hidp/core.c;h=dfaef02ba7b49f9503b6ae796090b39f6cc59a08;hp=42dd2b972cbe630acbedfefc334263b07aeac60b;hb=3923c54f44b4e8d31118b8a8b096cc85013d859f;hpb=97ea54575ec58a5bcf13ccf20556f4e68d961bf1">patch the kernel</a>. I find surprising it was needed, I thought there would have been enough people complaining that the patch would have already been applied in Fedora kernel.
-
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/decimalformat-is-broken/">DecimalFormat Is Broken</a>
-  </h1>
-  <time datetime="2008-05-14T18:19:00Z" class="post-date">Wed, May 14, 2008</time>
-   
-
-A friend of mine recently noticed that the good old DecimalFormat class is "broken". If you try to parse a string that is not a number but is starting with a number, the DecimalFormat.parse will return what it managed to parse.<br /><br />The correct behavior should be to throw a parse exception IMHO. Judging from an old post in the Sun bug tracker, The folks at Sun don't think it really is, they call the default mode of parsing the "lenient" mode. It accepts bad inputs. Then why throwing ParseException at all and why not return 0/NaN when the first character is not a number? Why accepting <span style="font-family: courier new;">1toto2</span> as a number and not <span style="font-family: courier new;">toto2</span>?<br /><br />In reality it can really create unexpected problems. For example, in France,<span style="font-family: courier new;"> 0.1</span> is <span style="font-family: courier new;">0,1</span> because of the Locale conventions. If a user enters<span style="font-family: courier new;"> 0.1</span> in a French Locale, a method using DecimalFormat.parse will interpret it as <span style="font-family: courier new;">0</span> without throwing any exception.<br /><br />Note that DateFormat does not have that problem, at one point Sun added setLenient flag to be able to be in non Lenient mode. It would be very simple to do it with DecimalFormat, I did it myself as an exercise. In DecimalFormat.subparse, the 2 last break statements should stop processing in lenient mode. Lines 1528 to 1531:<br /><span style="font-size:85%;"> <span style="font-family: courier new;">                        sawExponent = true;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // Whether we fail or succeed, we exit this loop</span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span><br /> become:<br /><span style="font-size:85%;"><br /><span style="font-family: courier new;">                         sawExponent = true;</span><br /><span style="font-family: courier new;">                    } else {</span><br /><span style="font-family: courier new;">                        if (isLenient()) {</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                            return false;</span><br /><span style="font-family: courier new;">                        }</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break; // we succeed, we exit this loop</span><br /><span style="font-family: courier new;">                    </span><br /><span style="font-family: courier new;">                }</span><br /><span style="font-family: courier new;">                else {</span><br /><span style="font-family: courier new;">                    if (isLenient()) {</span><br /><span style="font-family: courier new;">                        parsePosition.index = oldStart;</span><br /><span style="font-family: courier new;">                        parsePosition.errorIndex = oldStart;</span><br /><span style="font-family: courier new;">                        return false;</span><br /><span style="font-family: courier new;">                    }</span><br /><span style="font-family: courier new;">                    break;</span><br /><span style="font-family: courier new;">                }</span></span>
 
 
 

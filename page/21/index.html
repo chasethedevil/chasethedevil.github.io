@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,7 +65,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -73,17 +73,33 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii/">Root finding in Lord Kahl Method to Compute Heston Call Price (Part II)</a>
+  </h1>
+  <time datetime="2013-04-11T16:29:00Z" class="post-date">Thu, Apr 11, 2013</time>
+  <p>In my <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price/">previous post</a>, I explored the <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord-Kahl method</a> to compute the call option prices under the Heston model. One of the advantages of this method is to go beyond machine epsilon accuracy and be able to compute very far out of the money prices or very short maturities. The standard methods to compute the Heston price are based on a sum/difference where both sides are far from 0 and will therefore be limited to less than machine epsilon accuracy even if the integration is very precise.</p>
+<p>However the big trick in it is to find the optimal alpha used in the integration. A suboptimal alpha will often lead to high inaccuracy, because of some strong oscillations that will appear in the integration. So the method is robust only if the root finding (for the optimal alpha) is robust.</p>
+<p>The original paper looks the Ricatti equation for B where B is the following term in the characteristic function:
+$$\phi(u) = e^{iuf+A(u,t)+B(u,t)\sigma_0}$$</p>
+<p>The solution defines the \(\alpha_{max}\) where the characteristic function explodes. While the Ricatti equation is complex but not complicated:
+$$ dB/dt = \hat{\alpha}(u)-\beta(u) B+\gamma B^2 $$</p>
+<p>I initially did not understand its role (to compute \(\alpha_{max}\)), so that, later, one can compute alpha_optimal with a good bracketing. The bracketing is particularly important to use a decent solver, like the Brent solver. Otherwise, one is left with, mostly, Newton&rsquo;s method. It turns out that I explored a reduced function, which is quite simpler than the Ricatti and seems to work in all the cases I have found/tried: solve $$1/B = 0$$<!-- raw HTML omitted --> If B explodes, \(\phi\) will explode. The trick, like when solving the Ricatti equation, is to have either a good starting point (for Newton) or, better, a bracketing. It turns out that Lord and Kahl give a bracketing for (1/B), even if they don&rsquo;t present it like this: their \(\tau_{D+}\) on page 10 for the lower bracket, and \(\tau_+\) for the upper bracket. \(\tau_+\) will make \(1/B\) explode, exactly. One could also find the next periods by adding \(4\pi/t\) instead of \(2\pi/t\) like they do to move from \(\tau_{D+}\) to \(\tau_+\). But this does not have much interest as we don&rsquo;t want to go past the first explosion.</p>
+<p>It&rsquo;s quite interesting to see that my simple approach is actually closely related to the more involved Ricatti approach. The starting point could be the same. Although it is much more robust to just use Brent solver on the bracketed max. I actually believe that the Ricatti equation explodes at the same points, except, maybe for some rare combination of Heston parameters.</p>
+<p>From a coding perspective, I found that <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CDUQFjAA&amp;url=http%3A%2F%2Fcommons.apache.org%2Fmath&amp;ei=kctmUajvIoWs0QXC-4HoDQ&amp;usg=AFQjCNFaOPmpFKpVp5Ba9fVtRNSgefKwhA&amp;sig2=vQZ7geKUB1iGDu5cDOjO0g&amp;bvm=bv.45107431,d.d2k">Apache commons maths</a> was a decent library to do complex calculus or solve/minimize functions. The complex part was better than some in-house implementation: for example the square root was more precise in commons maths, and the solvers are robust. It even made me think that it is often a mistake to reinvent to wheel. It&rsquo;s good to choose the best implementations/algorithms as possible. But reinventing a Brent solver??? a linear interpolator??? Also the commons maths library imposes a good structure. In house stuff tends to be messy (not real interfaces, or many different ones). I believe the right approach is to use and embrace/extends Apache commons maths. If some algorithms are badly coded/not performing well, then write your own using the same kind of interfaces as commons maths (or some other good maths library).<!-- raw HTML omitted --><!-- raw HTML omitted -->The next part of this series on Lord-Kahl method is <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii/">here</a>.</p>
+
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price/">Root finding in Lord Kahl Method to Compute Heston Call Price</a>
   </h1>
   <time datetime="2013-04-09T19:49:00Z" class="post-date">Tue, Apr 9, 2013</time>
-  <p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2009.png"/>
+  <p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2009.png">
 </figure>
 
 I just tried to implement <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=921336">Lord Kahl algorithm to compute the Heston call price</a>. The big difficulty of their method is to find the optimal alpha.  That&rsquo;s what make it work or break. The tricky part is that the function  of alpha we want to minimize has multiple discontinuities (it&rsquo;s  periodic in some ways). This is why the authors rely on the computation  of an alpha_max: bracketing is very important, otherwise your optimizer  will jump the discontinuity without even noticing it, while you really  want to stay in the region before the first discontinuity.</p>
 <p>To find alpha_max, they solve a non linear differential equation,  for which I would need a few more readings to really understand it.  Given that the problem looked simple: if you graph the function to  minimize, it seems so simple to find the first discontinuity. So I just  tried to do it directly. Numerically, I was surprised it was not so  simple. I did find a solution that, amazingly seems to work in all the  examples of the paper, but it&rsquo;s luck. I use Newton-Raphson to find the  discontinuity, on a reduced function where the discontinuity really  lies. I solve the inverse of the discontinuity so that I can just solve  for 0. Earlier on I reduced the function too much and it did not work,  this is why I believe it is not very robust. Newton-Raphson is quite  simple, but also simple to understand why it breaks if it breaks, and  does not need a bracketing (what I am looking for in the first place).  Once I find the discontinuity, I can just use Brent on the right  interval and it works well.</p>
-<p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2030.png"/>
+<p><figure><img src="/post/Screenshot%20from%202013-04-09%2019%2042%2030.png">
 </figure>
- <figure><img src="/post/Screenshot%20from%202013-04-09%2019%2045%2039.png"/>
+ <figure><img src="/post/Screenshot%20from%202013-04-09%2019%2045%2039.png">
  </figure>
 </p>
 <p>In the end, it&rsquo;s neat to be able to compute option prices under  machine epsilon. But in practice, it&rsquo;s probably not that useful. For  calibration, those options should have a very small (insignificant)  weight. The only use case I found is really for graphing so that you  don&rsquo;t have some flat extrapolation too quickly, especially for short  maturities. I was curious as well about the accuracy of some  approximations of the implied volatility in the wings, to see if I could  use them instead of all this machinery.</p>
@@ -121,9 +137,9 @@ I just tried to implement <a href="https://papers.ssrn.com/sol3/papers.cfm?abstr
 <li>Real world effect</li>
 </ol>
 <p>Let&rsquo;s make x move by machine epsilon and see how the result varies using the naive implementation <code class="code-inline language-C"><span style="color:#06287e">exp</span>(<span style="color:#666">-</span><span style="color:#40a070">0.5</span><span style="color:#666">*</span>x<span style="color:#666">*</span>x)</code> and using the refined Cody way. We take x=20, and add machine epsilon a number of times (frac).
-<figure><img src="/post/snapshot1.png"/><figcaption>
-            <h4>PDF</h4>
-        </figcaption>
+<figure><img src="/post/snapshot1.png"><figcaption>
+      <h4>PDF</h4>
+    </figcaption>
 </figure>
 
 The staircase happens because if we add machine epsilon to 20, this results in the same 20, until we add it enough to describe the next number in double precision accuracy. But what&rsquo;s interesting is that Cody staircase is regular, the stairs have similar height while the Naive implementation has stairs of uneven height.</p>
@@ -131,15 +147,15 @@ The staircase happens because if we add machine epsilon to 20, this results in t
 <strong>Update March 22, 2013</strong>
 I thus looked for a higher precision exp implementation, that can go beyond double precision. I initially found an online calculator (not so great to do tests on), and after more search, I found one very simple way: mpmath python library. I did some initial tests with the calculator and thought Cody was in reality not much better than the Naive implementation. The problem is that my tests were wrong, because the online calculator expects an input in terms of human digits, and I did not always use the correct amount of digits. For example a double of -37.7 is actually -37.</p>
 <p>Here is a plot of the relative error of our methods compared to the high accuracy python implementation, but using as input strict double numbers around x=20. The horizontal axis is x-20, the vertical is the relative error.
-<figure><img src="/post/snapshot5.png"/><figcaption>
-            <h4>PDF relative error around x=20</h4>
-        </figcaption>
+<figure><img src="/post/snapshot5.png"><figcaption>
+      <h4>PDF relative error around x=20</h4>
+    </figcaption>
 </figure>
 
 We can see that Cody is really much more accurate (more than 20x). The difference will be lower when x is smaller, but there is still a factor 10 around x=-5.7:
-<figure><img src="/post/snapshot7.png"/><figcaption>
-            <h4>PDF relative error around x=-5.7</h4>
-        </figcaption>
+<figure><img src="/post/snapshot7.png"><figcaption>
+      <h4>PDF relative error around x=-5.7</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Any calculation using a Cody like Gaussian density implementation, will likely not be as careful as this, so one can doubt of the usefulness in practice of such accuracy tricks. The Cody implementation uses 2 exponentials, which can be costly to evaluate, however Gary Kennedy commented out that we can cache the exp xsq because of fint and therefore have accuracy and speed.</p>
@@ -177,12 +193,12 @@ This is very much what's in the Carr-Lee paper "Robust Replication of Volatility
   </h1>
   <time datetime="2013-03-12T21:36:00Z" class="post-date">Tue, Mar 12, 2013</time>
   <p>A <a href="https://en.wikipedia.org/wiki/Volatility_swap">Volatility swap</a> is a forward contract on future realized volatility. The pricing of such a contract used to be particularly challenging, often either using an unprecise popular expansion in the variance, or a model specific way (like Heston or local volatility with Jumps). Carr and Lee have recently proposed a way to price those contracts in a model independent way in their paper &ldquo;<em>robust replication of volatility derivatives</em>&rdquo;. Here is the difference between the value of a synthetic volatility swap payoff at maturity (a newly issued one, with no accumulated variance) and a straddle.</p>
-<p><figure><img src="/post/Screenshot%20from%202013-03-12%2018%2014%2034.png"/>
+<p><figure><img src="/post/Screenshot%20from%202013-03-12%2018%2014%2034.png">
 </figure>
 
 Those are very close payoffs!</p>
 <p>I wonder how good is the discrete Derman approach compared to a standard integration for such a payoff as well as how important is the extrapolation of the implied volatility surface.The real payoff (very easy to obtain through Carr-Lee Bessel formula):
-<figure><img src="/post/Screenshot%20from%202013-03-14%2019%2046%2016.png"/>
+<figure><img src="/post/Screenshot%20from%202013-03-14%2019%2046%2016.png">
 </figure>
 </p>
 
@@ -220,21 +236,6 @@ Those are very close payoffs!</p>
 </ul>
 <p>When people say OpenSuse is rock solid, I don&rsquo;t have that impression, at least on the desktop. It might have been true in the past. But in the past, most distros were very stable. I never remember having big stability issues until, maybe, late 2010. In the early 2000s, a laptop would work very well with Linux, suspend included. I remember that my Dell Inspiron 8200 was working perfectly with Mandrake and WindowMaker. Nowadays, it never seem to work that well, but is just ok: Optimus comes to mind (especially with external screen), suspend problems, wifi (not anymore).</p>
 <p>So far I can see that Ubuntu 13.04 is prettier than the past versions, the installer is great. I encrypted my two hard disks, it was just a matter of ticking a box - very nice. Unity Launcher, while interesting, is still not the greatest tool to find an installed application (compared to KDE launcher or Gnome Shell). I don&rsquo;t notice any stability issue so far, even though I have some popup messages that sometimes tells me something crashed (typical for an alpha version). If I just ignore the messages, everything seems fine. OpenSuse-KDE was logging me out (session crash), or just stopped completely being responsive (hard reset necessary).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/productivity-zero/">Productivity Zero</a>
-  </h1>
-  <time datetime="2013-01-24T22:03:00Z" class="post-date">Thu, Jan 24, 2013</time>
-  <p>Sometimes it feels like big companies try to enforce the Productivity Zero rule.</p>
-<p>Here is a guide:</p>
-<ul>
-<li>involve as many team as possible. It will help ensuring endless discussions about who is doing what, and then how do I interface with them. This is most (in)efficient when team managers interact and are not very technically competent. One consequence is that nobody is fully responsible/accountable, which helps reinforce the productivity zero.</li>
-<li>meetings, meetings and meetings. FUD (Fear Uncertainty and Doubt) is king here. By spreading FUD, there will be more and more meetings. Even if the &ldquo;project&rdquo; is actually not a real project, but amounts to 10 lines of code, it is possible to have many meetings around it, over the span of several months (because everybody is always busy with other tasks). Another strategy is to use vocabulary, talk about technical or functional parts the others don&rsquo;t understand. Some people are masters are talking technical to functional people and vice versa.</li>
-<li>multiply by 20, not 2. It is surprisingly easy to tell upper management something is going to take 3 months, when, in fact, it can be done in 3 days. This is a bit like bargaining in South East Asia: it&rsquo;s always amazing to find out how much you can push the price down (or how much they push it up).</li>
-<li>hire as many well paid managers and product specialists as you can, and make sure they know nothing about the product or the functional parts but are very good at playing the political game without any content. Those people often manage to stay a long time, a real talent.</li>
-</ul>
 
   
 </article>

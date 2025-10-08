@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -77,7 +77,7 @@
 <p>$$ f&rsquo;(x) = \frac{f(x_{i+1})-f(x_{i-1})}{x_{i+1} - x_{i-1}} $$</p>
 <p>However there are some other possibilities. For example one can find a formula directly out of the Taylor expansions of \(f(x_{i+1})\) and \(f(x_{i-1})\). <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC0QFjAA&amp;url=http%3A%2F%2Fwww.nada.kth.se%2Fkurser%2Fkth%2F2D1263%2Fl6.pdf&amp;ei=q07QUNH8GuW80QW804GIAw&amp;usg=AFQjCNGunxdXHqGsHh0czcX7e4gCnAU1WQ&amp;bvm=bv.1355534169,d.d2k">This paper</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2153-3490.1970.tb01933.x/abstract">that one</a> seems to indicate it is more precise, especially when the grid does not vary smoothly (a typical example is uniform by parts).</p>
 <p>This can make a big difference in practice, here is the example of a Bond priced under the Cox-Ingersoll-Ross model by finite differences. EULER is the classic central approximation, EULER1 uses the more refined approximation based on Taylor expansion, EULER2 uses Taylor expansion approximation as well as a higher order boundary condition. I used the same parameters as in the Tavella-Randall book example and a uniform grid between [0, 0.2] except that I have added 2 points at the far end at 0.5 and 1.0. So the only difference between EULER and EULER1 lies in the computation of derivatives at the 3 last points.</p>
-<figure><img src="/post/cir_bond_euler_discretizations.png"/>
+<figure><img src="/post/cir_bond_euler_discretizations.png">
 </figure>
 
 <p>I also computed the backward 2nd order first derivative on a non uniform grid (for the refined boundary). I was surprised not to find this easily on the web, so here it is:<!-- raw HTML omitted -->

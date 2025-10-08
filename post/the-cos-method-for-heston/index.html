@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,15 +76,15 @@
 <p>The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple <a href="http://en.wikipedia.org/wiki/Fourier_series">Fourier series</a> are used instead of the standard Fourier transform. As a consequence there are a few more approximations that are done related to the truncation of the domain of integration and the result is already discrete, so no need for a Gaussian quadrature.</p>
 <p>In practice, the promise is to be faster. I was wondering how stable it was, especially with regards to short maturities/large strikes.</p>
 <p>It&rsquo;s quite easy to code, I made only one mistake initially: I forgot to handle the first element of the sum differently. It is however very unstable for call options prices, because the upper integration boundary is then used in an exponential, which explodes in most cases I have tried, while for put options, the lower boundary is used in an exponential, and the lower boundary is negative.</p>
-<figure><img src="/post/snapshot33.png"/><figcaption>
-            <h4>Price is too low at high strikes</h4>
-        </figcaption>
+<figure><img src="/post/snapshot33.png"><figcaption>
+      <h4>Price is too low at high strikes</h4>
+    </figcaption>
 </figure>
 
 <p>So one has to rely on the put-call parity formula to compute call prices. This means that we are limited to something around machine epsilon accuracy and can&rsquo;t compute a very out-of-the-money call price, contrary to the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii">Lord-Kahl</a> method. However it seemed stable for the various Heston parameters I have tried and accurate as long as the resulting price is not too small as the following graph shows.
-<figure><img src="/post/snapshot34.png"/><figcaption>
-            <h4>Price is way too high at low strikes</h4>
-        </figcaption>
+<figure><img src="/post/snapshot34.png"><figcaption>
+      <h4>Price is way too high at low strikes</h4>
+    </figcaption>
 </figure>
 </p>
 <p>I was surprised to see that the more in-the-money put options also have inaccuracy: the price given is actually less than the final payoff. This is related to the domain of truncation. If I double it (L=24 instead of L=12), those disappear, what remains is that OTM puts can&rsquo;t go beyond 1e-12 for the COS method.</p>

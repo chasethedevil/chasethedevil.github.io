@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/fedora-17-vs-ubuntu-12.04/">Fedora 17 vs Ubuntu 12.04</a>
+  </h1>
+  <time datetime="2012-09-12T18:03:00Z" class="post-date">Wed, Sep 12, 2012</time>
+   
+
+I had the bad idea to upgrade to the beta Ubuntu 12.10. Something awfully broke in the upgrade. After too much struggling with apt-get &amp; dpkg, I decided to install Fedora 17.<br /><br />Strangely Fedora feels much faster than Ubuntu 12.04 (the boot time especially). Yum seems also faster than apt-get, especially the update part. Also while the Unity dock is not bad (better than gnome shell dock), the Unity dash thing just makes me crazy, the gnome shell activities, while close, are much easier to use.<br /><br />But it needs a bit more steps to install, although I had no problem to install <a href="http://www.if-not-true-then-false.com/2012/fedora-17-nvidia-guide/">nvidia drivers</a>,&nbsp;<a href="http://obiee2go.blogspot.fr/2012/06/oracle-11g-oracle-database-11g.html">Oracle 11g xe</a>, Java, MP3, nice fonts, nice icons thanks to the guides <a href="http://www.mjmwired.net/resources/mjm-fedora-f17.html">here</a> and <a href="http://smashingweb.info/fedora-17-post-installation-guide-things-to-do-after-installing-fedora-17/">there</a>. SSD Trim instructions are the same (basically use "discard" instead of "default" in /etc/fstab). I have the most troubles with Oracle: somehow the start script does not work and I currently log in as "oracle" and start&nbsp;/u01/app/oracle/product/11.2.0/xe/config/scripts/startdb.sh from there (after having added the proper .bashrc for this user)<br /><br />I even managed the peculiarities of my laptop a similar way as ubuntu: I want Nvidia card when plugged in to a monitor (to be able to use it) and Intel card when not (to be able to use the LCD screen). My solution is to use the boot screen (in reality one just need to restart X11): this amounted to add a "hdmi" in "/etc/grub.d/40_custom" and creating a link to "/etc/rc3.d/S10DriverSelect" the following script (a dirty hack):<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">#!/bin/sh</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">if grep -q hdmi /proc/cmdline</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules.bak/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.hdmi /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules.bak/extensions/nvidia /usr/lib64/xorg/modules/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">else</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; if [ -d /usr/lib64/xorg/modules/extensions/nvidia ];</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; then</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; cp -f /etc/X11/xorg.conf.intel /etc/X11/xorg.conf</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; &nbsp; mv /usr/lib64/xorg/modules/extensions/nvidia /usr/lib64/xorg/modules.bak/extensions/</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">&nbsp; fi</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: xx-small;">fi</span><br /><br />Linux distros are really becoming closer in terms of configuration, LSB has made great progress.<br /><div><br />Edit from November 29: After a few weeks, I noticed that the system was quite unstable unfortunately. As a result, I moved back to Ubuntu on my laptop. I am running OpenSuse on my home computer. 1 year later, I am back to Fedora 19, 20 on my desktop - no stability issue, I prefer Gnome over KDE. </div>
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/binary-voting/">Binary Voting</a>
   </h1>
@@ -90,8 +102,7 @@ How many reports have you had to fill up with a number of stars to choose? How m
   <time datetime="2012-08-21T21:23:00Z" class="post-date">Tue, Aug 21, 2012</time>
   <p>These days the expression &ldquo;move the needle&rdquo; is popular where I work. I did not know it was an expression of Steve Jobs.</p>
 <blockquote>
-<p>“The company starts valuing the great salesmen, because they’re the  ones who can move the needle on revenues, not the product engineers and  designers. So the salespeople end up running the company&hellip; Then the  product guys don’t matter so much, and a lot of them just turn off. It  happened at Apple when John Sculley came in, which was my fault, and  it happened when Ballmer took over at Microsoft. Apple was lucky and it  rebounded, but I don’t think anything will change at Microsoft as long  as Ballmer is running it.”</p>
-</blockquote>
+<p>“The company starts valuing the great salesmen, because they’re the  ones who can move the needle on revenues, not the product engineers and  designers. So the salespeople end up running the company&hellip; Then the  product guys don’t matter so much, and a lot of them just turn off. It  happened at Apple when John Sculley came in, which was my fault, and  it happened when Ballmer took over at Microsoft. Apple was lucky and it  rebounded, but I don’t think anything will change at Microsoft as long  as Ballmer is running it.”</p></blockquote>
 <p>This is from the biography, just saw that in an interesting article about Microsoft problems:</p>
 <p><a href="http://www.vanityfair.com/business/2012/08/microsoft-lost-mojo-steve-ballmer?mbid=social_retweet">http://www.vanityfair.com/business/2012/08/microsoft-lost-mojo-steve-ballmer?mbid=social_retweet</a></p>
 <p>I would not take those words literally: I have seen a company with the inverse problem: developping technical stuff for the sake of it, without a connection to what the market (or the users) are really after.</p>
@@ -104,7 +115,7 @@ How many reports have you had to fill up with a number of stars to choose? How m
   </h1>
   <time datetime="2012-08-21T21:14:00Z" class="post-date">Tue, Aug 21, 2012</time>
   <p>I thought I would add another word about <a href="/post/keyboard-porn">keyboard trends</a>. A coworker has bought the <a href="http://search.yahoo.com/r/_ylt=A0oG7hB23TNQAF0AE8FXNyoA;_ylu=X3oDMTE1N201OTNsBHNlYwNzcgRwb3MDMQRjb2xvA2FjMgR2dGlkA1ZJUDEzNF8xOTc-/SIG=12jtgdin3/EXP=1345605110/**http%3a//www.logitech.com/en-us/keyboards/keyboards/k750-keyboard">Logitech K750</a>, the one with solar panels to recharge the battery. This keyboard has excellent reviews on many websites, or even on Amazon. I somehow always found the idea a bit strange, it looked like the old solar panel calculators that used to be trendy when I was in primary school.</p>
-<figure><img src="https://www.logitech.com/assets/33482/4/logitech-wireless-solar-keyboard-k750-feature-image.png"/>
+<figure><img src="https://www.logitech.com/assets/33482/4/logitech-wireless-solar-keyboard-k750-feature-image.png">
 </figure>
 
 <p>Well after maybe 6 months of use, he needs to change the battery! It sounds like the solar panels were just a marketing plot after all.</p>
@@ -128,22 +139,22 @@ Where I work, I have to regularly enter my time in JIRA using their crappy portl
   </h1>
   <time datetime="2012-07-30T10:49:00Z" class="post-date">Mon, Jul 30, 2012</time>
   <p>I have been browsing the web, looking for a nice computer keyboard. Programming is a big part of my job, a comfortable keyboard is therefore important to my daily life.</p>
-<p><figure><img src="/post/mskeybd.jpg"/><figcaption>
-            <h4>MS Natural keyboard</h4>
-        </figcaption>
+<p><figure><img src="/post/mskeybd.jpg"><figcaption>
+      <h4>MS Natural keyboard</h4>
+    </figcaption>
 </figure>
 
 I have some nostalgia for the original Microsoft natural keyboard, the white one with standard home and end keys. When it came out it looked revolutionary. I remember really improving my typing speed on it. The only minor annoyance was the heavy and loud space bar. It&rsquo;s sad that MS does not make those in azerty anymore (I know qwerty is better for programming - I used it while I was working in the US, but it&rsquo;s just too annoying to have a different layout from 95% of the people around). The new MS ergonomic model just looks ugly and scary with all those extra keys.</p>
-<p><figure><img src="/post/logitechk800.jpg"/><figcaption>
-            <h4>Logitech K800</h4>
-        </figcaption>
+<p><figure><img src="/post/logitechk800.jpg"><figcaption>
+      <h4>Logitech K800</h4>
+    </figcaption>
 </figure>
 
 At home I have a Logitech K800, very practical as I often use it from the couch and at nighttime. When I tried it, I was impressed with the key feel: the action is a bit longer than a laptop keyboard (especially the Apple ones), and smooth. But one day, my son, by keeping on hammering on it with all the force of a 2 years old, damaged it. Some keys would print many times other letters. Still after unmounting some keys, and after washing the keyboard several times and waiting a couple of weeks it started working again. But now the keys feel very mushy and not very nice to type on. This is obviously due to the strong abuse, and the fact that the back is flexible plastic probably did not help. And I wonder if a new K800 (or a Logitech Illuminated) would not just age the same way.</p>
 <p>I looked and looked, read the forums. The <a href="http://www.codinghorror.com/blog/2010/10/the-keyboard-cult.html">hip keyboards seem to be the mechanical</a> ones. It tempted me to get a <a href="http://www.wasdkeyboards.com/index.php/products/semi-custom-keyboard.html">WASD keyboard</a> even though I never liked the feel and sound of my uncle&rsquo;s IBM model M keyboard. WASD offers the combination of red cherry switches and o rings which should be significantly better for me.</p>
-<p><figure><img src="/post/mk_wiredkb600_large.jpg"/><figcaption>
-            <h4>MS Wired Desktop 600</h4>
-        </figcaption>
+<p><figure><img src="/post/mk_wiredkb600_large.jpg"><figcaption>
+      <h4>MS Wired Desktop 600</h4>
+    </figcaption>
 </figure>
 
 Somehow despite all this research for a better keyboard, I kind of like my current work keyboard, which is just a cheap Microsoft Wired Keyboard 600. It does feel comfortable, and easy to type on. If it ages, it is just $17 to replace. I am less convinced that another keyboard would improve things significantly, I disliked the very clicky feeling of IBM model M and the old, not so comfortable (because relatively high), straight keyboards. I found also the Apple keyboards to be sadly a bit tiring with their very short action, I enjoyed their compactness but I suspect this is what made me place my hands in bad positions.</p>
@@ -181,8 +192,7 @@ Regularly, the unity dock made some applications inaccessible: clicking on the a
   <time datetime="2012-04-27T06:40:00Z" class="post-date">Fri, Apr 27, 2012</time>
   <p>This is the interesting bit</p>
 <blockquote>
-<p>&ldquo;Modify some of your utility object code to return new copies instead of  self-mutating, and try throwing const in front of practically every  non-iterator variable you use&rdquo;.</p>
-</blockquote>
+<p>&ldquo;Modify some of your utility object code to return new copies instead of  self-mutating, and try throwing const in front of practically every  non-iterator variable you use&rdquo;.</p></blockquote>
 <p><a href="http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/">http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/</a></p>
 
   
@@ -193,15 +203,6 @@ Regularly, the unity dock made some applications inaccessible: clicking on the a
   <time datetime="2012-03-27T00:38:00Z" class="post-date">Tue, Mar 27, 2012</time>
   <p>Many people are not enthusiastic of this phone sound if you read silly forums. They are wrong! the sound coming out of this thin phone is amazing, at least with high quality headphones. I find the akg q601 incredible with it: much much better than with the old ipod nano or the cowon i7.</p>
 <p>In general most complaints i have read about the phone were wrong. The battery is ok, the size is great.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/why-primitive-arrays-matter-in-java/">Why primitive arrays matter in Java</a>
-  </h1>
-  <time datetime="2012-02-29T10:01:00Z" class="post-date">Wed, Feb 29, 2012</time>
-  <p>In the past, I have seen that one could greatly improve performance of some Monte-Carlo simulation by using as much as possible <code>double[][]</code> instead of arrays of objects.</p>
-<p>It was interesting to read <a href="http://flavor8.com/index.php/2012/02/25/java-performance-autoboxing-and-data-structure-choice-obviously-matter-but-by-how-much/">this blog post explaining why that happens</a>: it is all about memory access.</p>
 
   
 </article>

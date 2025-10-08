@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -87,38 +87,38 @@ it was around twice slower than Mersenne-Twister to generate random double preci
 which can result in a 5% performance loss for a local volatility simulation.
 The relative slowness could be explained by the type of processor used, but it is still competitive for Monte-Carlo use.</p>
 <p>The code is extremely simple, with many possible variations around the same idea. Here is mine
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">type</span> AES2RNG <span style="color:#007020;font-weight:bold">struct</span> {
-</span></span><span style="display:flex;"><span>	counter <span style="color:#902000">uint64</span>
-</span></span><span style="display:flex;"><span>	bs      []<span style="color:#902000">byte</span>
-</span></span><span style="display:flex;"><span>	block   cipher.Block
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">New2</span>() (<span style="color:#666">*</span>AES2RNG, <span style="color:#902000">error</span>) {
-</span></span><span style="display:flex;"><span>	bs <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>, aes.BlockSize)
-</span></span><span style="display:flex;"><span>	counter <span style="color:#666">:=</span> <span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)
-</span></span><span style="display:flex;"><span>	key <span style="color:#666">:=</span> []<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>) <span style="color:#60a0b0;font-style:italic">//16 bytes
-</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	block, err <span style="color:#666">:=</span> aes.<span style="color:#06287e">NewCipher</span>(key)
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>, err
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>AES2RNG{counter, bs, block}, <span style="color:#007020;font-weight:bold">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Uint64</span>() <span style="color:#902000">uint64</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span> <span style="color:#666">==</span> <span style="color:#40a070">0</span> {
-</span></span><span style="display:flex;"><span>		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs, u.counter)
-</span></span><span style="display:flex;"><span>		u.counter<span style="color:#666">++</span>
-</span></span><span style="display:flex;"><span>		binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:], u.counter)
-</span></span><span style="display:flex;"><span>		u.block.<span style="color:#06287e">Encrypt</span>(u.bs, u.bs)
-</span></span><span style="display:flex;"><span>		<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	u.counter<span style="color:#666">++</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (u <span style="color:#666">*</span>AES2RNG) <span style="color:#06287e">Float64OO</span>() <span style="color:#902000">float64</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> (<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span> <span style="color:#666">/</span> <span style="color:#40a070">4503599627370496.0</span>)
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">type</span><span style="color:#bbb"> </span>AES2RNG<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">struct</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>counter<span style="color:#bbb"> </span><span style="color:#902000">uint64</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>bs<span style="color:#bbb">      </span>[]<span style="color:#902000">byte</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>block<span style="color:#bbb">   </span>cipher.Block<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">func</span><span style="color:#bbb"> </span><span style="color:#06287e">New2</span>()<span style="color:#bbb"> </span>(<span style="color:#666">*</span>AES2RNG,<span style="color:#bbb"> </span><span style="color:#902000">error</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>bs<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#007020">make</span>([]<span style="color:#902000">byte</span>,<span style="color:#bbb"> </span>aes.BlockSize)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>counter<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#007020">uint64</span>(<span style="color:#40a070">0</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>key<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span>[]<span style="color:#007020">byte</span>(<span style="color:#4070a0">&#34;AES128_16charkey&#34;</span>)<span style="color:#bbb"> </span><span style="color:#007020">//16 bytes</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>block,<span style="color:#bbb"> </span>err<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span>aes.<span style="color:#06287e">NewCipher</span>(key)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">if</span><span style="color:#bbb"> </span>err<span style="color:#bbb"> </span><span style="color:#666">!=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">nil</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">nil</span>,<span style="color:#bbb"> </span>err<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span><span style="color:#666">&amp;</span>AES2RNG{counter,<span style="color:#bbb"> </span>bs,<span style="color:#bbb"> </span>block},<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">nil</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">func</span><span style="color:#bbb"> </span>(u<span style="color:#bbb"> </span><span style="color:#666">*</span>AES2RNG)<span style="color:#bbb"> </span><span style="color:#06287e">Uint64</span>()<span style="color:#bbb"> </span><span style="color:#902000">uint64</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">if</span><span style="color:#bbb"> </span>u.counter<span style="color:#666">&amp;</span><span style="color:#40a070">0x1</span><span style="color:#bbb"> </span><span style="color:#666">==</span><span style="color:#bbb"> </span><span style="color:#40a070">0</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs,<span style="color:#bbb"> </span>u.counter)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>u.counter<span style="color:#666">++</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>binary.LittleEndian.<span style="color:#06287e">PutUint64</span>(u.bs[<span style="color:#40a070">8</span>:],<span style="color:#bbb"> </span>u.counter)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>u.block.<span style="color:#06287e">Encrypt</span>(u.bs,<span style="color:#bbb"> </span>u.bs)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span>binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>u.counter<span style="color:#666">++</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span>binary.LittleEndian.<span style="color:#06287e">Uint64</span>(u.bs[<span style="color:#40a070">8</span>:])<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">func</span><span style="color:#bbb"> </span>(u<span style="color:#bbb"> </span><span style="color:#666">*</span>AES2RNG)<span style="color:#bbb"> </span><span style="color:#06287e">Float64OO</span>()<span style="color:#bbb"> </span><span style="color:#902000">float64</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span>(<span style="color:#007020">float64</span>(u.<span style="color:#06287e">Uint64</span>()<span style="color:#666">&gt;&gt;</span><span style="color:#40a070">12</span>)<span style="color:#bbb"> </span><span style="color:#666">+</span><span style="color:#bbb"> </span><span style="color:#40a070">0.5</span>)<span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span>(<span style="color:#40a070">1.0</span><span style="color:#bbb"> </span><span style="color:#666">/</span><span style="color:#bbb"> </span><span style="color:#40a070">4503599627370496.0</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}</span></span></code></pre></div></p>
 <p>Interestingly, the above code was 40% faster with Go 1.7 compared to Go 1.6, which resulted in a local vol Monte-Carlo simulation performance improvement of around 10%.</p>
 <p>The stream cipher <a href="https://en.wikipedia.org/wiki/Salsa20">Salsa20</a> is another possible candidate to use as counter-based PRNG.
 The algorithm has been selected as a Phase 3 design in the 2008 eSTREAM project organised by the European Union ECRYPT network,

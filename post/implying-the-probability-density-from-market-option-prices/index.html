@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,9 +76,9 @@
 I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
 technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
 <p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
-<figure><img src="/post/spw_density_spline_nodes.png"/><figcaption>
-            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
-        </figcaption>
+<figure><img src="/post/spw_density_spline_nodes.png"><figcaption>
+      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+    </figcaption>
 </figure>
 
 <p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
@@ -131,32 +131,32 @@ the same plot as with the spline approach, that is we choose every N market stri
 optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
 in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
 narrower peaks.</p>
-<figure><img src="/post/spw_density_kernel_nodes.png"/><figcaption>
-            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
-        </figcaption>
+<figure><img src="/post/spw_density_kernel_nodes.png"><figcaption>
+      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+    </figcaption>
 </figure>
 
 <p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
 The fit can be much better by adding nodes at
 f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
 will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
-<figure><img src="/post/spw_vol_kernel2.png"/><figcaption>
-            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        </figcaption>
+<figure><img src="/post/spw_vol_kernel2.png"><figcaption>
+      <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+    </figcaption>
 </figure>
 
 <p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
-<figure><img src="/post/spw_density_kernel2.png"/><figcaption>
-            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        </figcaption>
+<figure><img src="/post/spw_density_kernel2.png"><figcaption>
+      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+    </figcaption>
 </figure>
 
 <p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
 then we impose where the peaks will be located eventually.</p>
 <p>It is interesting to compare the graph with the one before the volatility jump:</p>
-<figure><img src="/post/spw_density_janfeb_kernel2.png"/><figcaption>
-            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        </figcaption>
+<figure><img src="/post/spw_density_janfeb_kernel2.png"><figcaption>
+      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+    </figcaption>
 </figure>
 
 <p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>

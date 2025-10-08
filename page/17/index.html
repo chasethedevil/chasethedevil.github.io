@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,23 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/random-hardware-issues/">Random Hardware Issues</a>
+  </h1>
+  <time datetime="2014-01-06T18:44:00Z" class="post-date">Mon, Jan 6, 2014</time>
+  <p>Today, after wondering why my desktop computer became so unstable (frequent crashes under Fedora), I found out that the micro usb port of my cell phone has some kind of short circuit. My phone behaves strangely in 2014, it lasted nearly 1 week on battery (I lost it for half of the week), and seems to shutdown for no particular reason once in a while.</p>
+<p>On the positive side, I also discovered, after owning my monitor for around 5 years, that it has SD card slots on the side, as well as USB ports. I always used the USB ports of my desktop and never really looked at the side of my monitor&hellip;</p>
+<p>I also managed to seriously boost the speed of my home network with a cheap TP-Link wifi router. The one included in the ISP box-modem only supported 802.11g and had really crap coverage, so crap that it was seriously limiting the internet traffic. In the end it was just a matter of disabling wifi and DHCP on the box, adding the new router in the DMZ, and adding a static WAN IP for the box in the router configuration. I did not realize how much of a difference this could make, even on simple websites. I was also surprised that, for some strange reason, routers are cheaper than access points these days.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/levenberg-marquardt--constraints-by-domain-transformation/">Levenberg Marquardt &amp; Constraints by Domain Transformation</a>
   </h1>
@@ -93,25 +103,25 @@ The Fortran <a href="http://www.netlib.org/minpack/">minpack</a> library has a g
 <li>The other way is due to Hagan himself, where he numerically solves an approximate PDE in the probability density, and then price with options by integrating on this density.</li>
 </ul>
 <p>It turns out that the two ways are much closer than I first thought. Hagan PDE in the probability density is actually just the <a href="http://en.wikipedia.org/wiki/Fokker%E2%80%93Planck_equation">Fokker-Planck</a> (forward) equation.
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2026%2043.png">
 </figure>
 
 The \(\alpha D(F)\) is just the equivalent local volatility. Andreasen and Huge use nearly the same local volatility formula but without the exponential part (that is often negligible except for long maturities), directly in Dupire forward PDE:
-<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202013-12-13%2023%2031%2018.png">
 </figure>
 
 A common derivation (for example in <a href="http://www.amazon.com/The-Volatility-Surface-Practitioners-Finance/dp/0471792519/ref=sr_1_1?ie=UTF8&amp;qid=1386974691&amp;sr=8-1&amp;keywords=Gatheral+the+volatility">Gatheral book</a> of the Dupire forward PDE is to actually use the Fokker-Planck equation in the probability density integral formula. Out of curiosity, I tried to price direcly with Dupire forward PDE and the Hagan local volatility formula, using just linear boundary conditions. Here are the results on Hagan own example:
-<figure><img src="/post/hagan_dens1.png"/>
+<figure><img src="/post/hagan_dens1.png">
 </figure>
 
-<figure><img src="/post/hagan_iv.png"/>
+<figure><img src="/post/hagan_iv.png">
 </figure>
 
 The Local Vol direct approach overlaps the Density approach nearly exactly, except at the high strike boundary, when it comes to probability density measure or to implied volatility smile. On Andreasen and Huge data, it gives the following:
-<figure><img src="/post/ah_dens1.png"/>
+<figure><img src="/post/ah_dens1.png">
 </figure>
 
-<figure><img src="/post/ah_iv1.png"/>
+<figure><img src="/post/ah_iv1.png">
 </figure>
 </p>
 <p>One can see that the one step method approximation gives the overall same shape of smile, but shifted, while the PDE, in local vol or density matches the Hagan formula at the money.</p>
@@ -135,13 +145,13 @@ The Local Vol direct approach overlaps the Density approach nearly exactly, exce
   </h1>
   <time datetime="2013-11-20T13:33:00Z" class="post-date">Wed, Nov 20, 2013</time>
   <p>Using precise vanilla option pricing engine for Heston or Schobel-Zhu, like the Cos method with enough points and a large enough truncation can still lead to spikes in the Dupire local volatility (using the variance based formula).</p>
-<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"/><figcaption>
-            <h4>Local volatility</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202013-11-20%2012%2053%2032.png"><figcaption>
+      <h4>Local volatility</h4>
+    </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"/><figcaption>
-             <h4>Implied volatility</h4>
-         </figcaption>
+ <figure><img src="/post/Screenshot%20from%202013-11-20%2012%2054%2039.png"><figcaption>
+       <h4>Implied volatility</h4>
+     </figcaption>
  </figure>
 </p>
 <p>The large spikes in the local volatility 3d surface are due to constant extrapolation, but there are spikes even way before the extrapolation takes place at longer maturities. Even if the Cos method is precise, it seems to be not enough, especially for large strikes so that the second derivative over the strike combined with the first derivative over time can strongly oscillate.</p>
@@ -185,32 +195,32 @@ $$c_2 = g&rsquo;&rsquo;(0)$$</p>
 <p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
 $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
 <p>In contrast, the paper formula was:
-<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png">
 </figure>
 </p>
 <p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
 <p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
 <table>
-<thead>
-<tr>
-<th>Formula</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>New</td>
-<td>0.1640581405</td>
-</tr>
-<tr>
-<td>Paper</td>
-<td>0.1743425406</td>
-</tr>
-<tr>
-<td>N=30 with 10000 points</td>
-<td>0.1640581423</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Formula</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>New</td>
+          <td>0.1640581405</td>
+      </tr>
+      <tr>
+          <td>Paper</td>
+          <td>0.1743425406</td>
+      </tr>
+      <tr>
+          <td>N=30 with 10000 points</td>
+          <td>0.1640581423</td>
+      </tr>
+  </tbody>
 </table>
 <p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
 
@@ -236,18 +246,6 @@ Regarding Taylor expansion, there seems to be quite a few options possible, but 
   <p>I tried today the <a href="https://www.coursera.org/course/progfun">Scala courses on coursera</a> by the Scala creator, Martin Odersky. I was quite impressed by the quality: I somehow believed Scala to be only a better Java, now I think otherwise. Throughout the course, even though it all sounds very basic, you understand the key concepts of Scala and why functional programming + OO concepts are a natural idea. What&rsquo;s nice about Scala is that it avoids the functional vs OO or even the functional vs procedural debate by allowing both, because both can be important, at different scales. Small details can be (and probably should be) procedural for efficiency, because a processor is a processor, but higher level should probably be more functional (immutable) to be clearer, easier to evolve and more easily parallelized.</p>
 <p>I recently saw a very good example at work recently of how mutability could be very problematic, with no gain in this case because it was high level (and likely just the result of being too used to OO concepts).</p>
 <p>I believe it will make my code more functional programming oriented in the future, especially at the high level.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/setting-values-in-java-enum---a-bad-idea/">Setting Values in Java Enum - A Bad Idea</a>
-  </h1>
-  <time datetime="2013-09-12T10:06:00Z" class="post-date">Thu, Sep 12, 2013</time>
-   
-
-My Scala habits have made me create a stupid bug related to Java enums. In Scala, the concept of <a href="http://www.scala-lang.org/old/node/107">case classes</a> is very neat and recently, I just confused enum in Java with what I sometimes do in Scala case classes.<br /><br />I wrote an enum with a setter like:<br /><br />&nbsp;<span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; public static enum BlackVariateType {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V0,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZERO_DERIVATIVE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private double volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public double getBlackVolatilitySquare() {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void setBlackVolatilitySquare(double volSquare) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.volSquare = volSquare;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></span><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">&nbsp;&nbsp; }</span></span><br /><br />Here, calling setBlackVolatilitySquare will override any previous value, and thus, if several parts are calling it with different values, it will be a mess as there is only a single instance.<br /><br />I am not sure if there is actually one good use case to have a setter on an enum. This sounds like a very dangerous practice in general. Member variables allowed should be only final. <br /><br />
-
-
 
   
 </article>

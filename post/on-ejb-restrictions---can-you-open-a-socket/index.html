@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,8 +74,7 @@
   <time datetime=2006-06-19T11:48:00Z class="post-date">Mon, Jun 19, 2006</time>
   <p>During job interviews, one of the frequent questions is</p>
 <blockquote>
-<p>&ldquo;What restrictions are imposed on EJBs?&rdquo;.</p>
-</blockquote>
+<p>&ldquo;What restrictions are imposed on EJBs?&rdquo;.</p></blockquote>
 <p>I had a chat recently with someone about it, and we still don&rsquo;t agree on the answer.</p>
 <p>He believes we can&rsquo;t open sockets, while I believe it is perfectly allowed, if you don&rsquo;t retain the socket connection between method calls. His arguments are based on an analogy with files. After all in Linux, files are sockets. Here are his interpretations on <a href="http://java.sun.com/blueprints/qanda/ejb_tier/restrictions.html">a document about EJB restrictions on java.sun.com</a>:</p>
 <ul>
@@ -90,13 +89,10 @@ Passivation will only happen after or before a method call, not in the middle.
 Good point, rollback seems hard with sockets.
 The real problem with files and deployability is about clustering. I quote the same source:</p>
 <blockquote>
-<p>&ldquo;if an enterprise bean running in a JVM on a particular machine is using or holding an open file descriptor to a file in the filesystem, that enterprise bean cannot easily be moved from one JVM or machine to another, without losing its reference to the file.&rdquo; Basically it says what&rsquo;s bad with files is if you use them to store some kind of state, because then this state will be different on different servers. This issue does not exist with sockets. What you mention is simply a configuration issue. Your datasources will vary as well from one JVM to another (on different servers)</p>
-</blockquote>
-</blockquote>
+<p>&ldquo;if an enterprise bean running in a JVM on a particular machine is using or holding an open file descriptor to a file in the filesystem, that enterprise bean cannot easily be moved from one JVM or machine to another, without losing its reference to the file.&rdquo; Basically it says what&rsquo;s bad with files is if you use them to store some kind of state, because then this state will be different on different servers. This issue does not exist with sockets. What you mention is simply a configuration issue. Your datasources will vary as well from one JVM to another (on different servers)</p></blockquote></blockquote>
 <p>I have the advantage that my interpretation is more <a href="http://www.javaworld.com/javaworld/jw-08-2000/jw-0825-ejbrestrict.html">common</a>. But his arguments are still clever and EJBs specs could have been a bit more explicit about the use of java.io.Socket. Here is the line about it in the specs:</p>
 <blockquote>
-<p>&ldquo;The EJB architecture allows an enterprise bean instance to be a network socket client, but it does not allow it to be a network server. Allowing the instance to become a network server would conflict with the basic function of the enterprise bean&ndash; to serve the EJB clients&rdquo;</p>
-</blockquote>
+<p>&ldquo;The EJB architecture allows an enterprise bean instance to be a network socket client, but it does not allow it to be a network server. Allowing the instance to become a network server would conflict with the basic function of the enterprise bean&ndash; to serve the EJB clients&rdquo;</p></blockquote>
 <p>Our disagreement shows how such a simple subject, what you can and can&rsquo;t do in EJBs, is most of the time badly understood.</p>
 
 </div>

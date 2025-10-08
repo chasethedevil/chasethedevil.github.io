@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -80,32 +80,32 @@ $$c_2 = g&rsquo;&rsquo;(0)$$</p>
 <p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
 $$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
 <p>In contrast, the paper formula was:
-<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png">
 </figure>
 </p>
 <p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
 <p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
 <table>
-<thead>
-<tr>
-<th>Formula</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>New</td>
-<td>0.1640581405</td>
-</tr>
-<tr>
-<td>Paper</td>
-<td>0.1743425406</td>
-</tr>
-<tr>
-<td>N=30 with 10000 points</td>
-<td>0.1640581423</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Formula</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>New</td>
+          <td>0.1640581405</td>
+      </tr>
+      <tr>
+          <td>Paper</td>
+          <td>0.1743425406</td>
+      </tr>
+      <tr>
+          <td>N=30 with 10000 points</td>
+          <td>0.1640581423</td>
+      </tr>
+  </tbody>
 </table>
 <p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
 

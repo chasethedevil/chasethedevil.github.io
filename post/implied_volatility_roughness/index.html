@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,49 +76,49 @@
 Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
 <p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
 It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
-            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
+      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
-            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
+      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
-            <h4>SPX roughness index sliding estimate with K=50.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
+      <h4>SPX roughness index sliding estimate with K=50.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
-            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
+      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+    </figcaption>
 </figure>
 </p>
 <p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
 <p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-        </figcaption>
+<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
 <p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
-            <h4>VIX roughness index sliding estimate with K=51.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
+      <h4>VIX roughness index sliding estimate with K=51.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
-            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
+      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+    </figcaption>
 </figure>
 </p>
 <p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>

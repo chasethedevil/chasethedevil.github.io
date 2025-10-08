@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,87 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/rational_fit/">Least Squares Rational Function</a>
+  </h1>
+  <time datetime="2016-04-21T16:37:24&#43;0200" class="post-date">Thu, Apr 21, 2016</time>
+  <p>In my paper <a href="http://ssrn.com/abstract=2420757">&ldquo;Fast and Accurate Analytic Basis Point Volatility&rdquo;</a>,
+I use a table of Chebyshev polynomials to provide an accurate representation of some function. This is
+an idea I first saw in the <a href="http://ab-initio.mit.edu/wiki/index.php/Faddeeva_Package">Faddeeva package</a> to
+represent the cumulative normal distribution with high accuracy, and high performance. It is also
+simple to find out the Chebyshev polynomials, and which intervals are the most appropriate for those, which
+makes this technique quite appealing.</p>
+<p>Still, it would have been nice to have also a more visually appealing rational function representation, as <a href="http://www.kcl.ac.uk/nms/depts/mathematics/research/finmath/publications/2007Shaw.pdf">W. Shaw</a>
+did for the cumulative normal distribution (again). Popular algorithms to find the best rational function representation
+seem to be minimax or Remez. But I could not find an open-source library where those were implemented. There is an
+interesting implementation in <a href="http://www.chebfun.org">chebfun</a> but this depends on Matlab.</p>
+<p>The Numerical recipe book provides a simple algorithm in <a href="http://www.aip.de/groups/soe/local/numres/bookcpdf/c5-13.pdf">chapter 5.13</a>, not looking for the best possible rational function, but just for one
+that would be &ldquo;good enough&rdquo;. Interestingly, the first part of the algorithm merely computes a least squares solution
+on some chebyshev like nodes. I however quickly noticed funny behaviors with the code: it could produce a worse fit
+for a higher order numerator or denominator. Then I tried some <a href="http://www.scientificpython.net/pyblog/rational-least-squares-approximation">least squares python code</a> which ended up being just buggy:
+I am not sure what the code actually does with all the numpy and scipy magic, it gives solutions with poles in the data, and clearly not the least squares solution. I can&rsquo;t fully understand why one would propose such a code.</p>
+<p>It turns out that I had an alternative very basic least squares polynomial fit implementation, which is based on <a href="http://math.stackexchange.com/questions/924482/least-squares-regression-matrix-for-rational-functions">this matrix representation</a>.
+I wondered if it would be as prone to errors as Numerical recipe code (where they use SVD internally to solve).</p>
+<p>The answer is: it depends. It depends on the solver used. If I use a QR solver, then the implementation looks robust on my test data,
+much more than Numerical recipe code. If I use LU, it just fails in some cases. If I use SVD, it is sometimes better sometimes worse than Numerical recipe.</p>
+<p>Interestingly, I thought, that, maybe, a <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> could allow to regain the lost accuracy with SVD, using
+as starting point, the SVD guess. However, it does not work, it just converges more or less to the same (bad) solution.</p>
+<p>Another interesting point, is that the using QR decomposition (instead of SVD)
+in the Numerical recipe implementation resulted in a much better solution, better even than my basic least squares fit,
+which looked robust, but was actually not so much.</p>
+<p>Armed with this improved Numerical recipe code (labeled NRI), here is a comparison of fit of my naive code (with QR) against the improved numerical recipe
+(NRI) for a polynomial of degree 20. We can visually see the difference (when we zoom)!</p>
+<figure><img src="/post/rational_fit_value.png"><figcaption>
+      <h4>Least squares polynomial fit of degree 20 zoomed.</h4>
+    </figcaption>
+</figure>
+
+<p>The RMSE difference on the full interval [0,1] on 1000 equidistant points is huge:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Method</th>
+          <th>RMSE</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Polynomial Naive</td>
+          <td>0.234</td>
+      </tr>
+      <tr>
+          <td>Polynomial NRI</td>
+          <td>0.039</td>
+      </tr>
+      <tr>
+          <td>Rational   NRI</td>
+          <td>0.001</td>
+      </tr>
+  </tbody>
+</table>
+<p>A 10/10 rational function (numerator of degree 10, denominator of degree 10) gives a much better fit than a polynomial of degree 20. It is interesting to look at the error
+visually to understand how large is the difference:</p>
+<figure><img src="/post/rational_fit_error.png"><figcaption>
+      <h4>Least squares polynomial fit error of degree 20.</h4>
+    </figcaption>
+</figure>
+
+<p>I still can draw a conclusion to my quest for a rational function approximation: I won&rsquo;t find a good one with the
+change of variables I am using in my paper, as I would imagine the least squares solution to be at worst around one order of magnitudes
+away from the minimax. The errors I got suggest I would need a few rational functions, maybe 3 or more, and then it does not look
+all that appealing compared to the table of Chebyshev polynomials.</p>
+<p>I thought this was a good example of how relatively simple numerical tasks can be challenging in practice.</p>
+<p><strong>Update</strong> - The paper now contains a solution for the normal volatility inversion problem with only 3 rational functions.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/least_squares_spline/">Least Squares Spline for Volatility Interpolation</a>
   </h1>
@@ -83,9 +157,9 @@ pseudo code on that paper has errors.</p>
 <p>Least squares splines give a very good fit for option implied volatilities with only a few parameters.
 In theory, the number of parameters is N+2 where N is the number of interpolation points.
 I tried on some of my AAPL 1 month option chain, with only 3 points (so 2 splines or 5 free parameters).</p>
-<figure><img src="/post/least_squares_spline.png"/><figcaption>
-            <h4>least squares spline on 1m AAPL options.</h4>
-        </figcaption>
+<figure><img src="/post/least_squares_spline.png"><figcaption>
+      <h4>least squares spline on 1m AAPL options.</h4>
+    </figcaption>
 </figure>
 
 <p>It would be interesting to add the natural constraints so that it can be linearly extrapolated. Maybe for next time.</p>
@@ -107,9 +181,9 @@ I also relied on a simple implied volatility algorithm that can be summarized in
 <li>Solve numerically the volatilities one by one with the TOMS748 algorithm so that the model prices match the market mid out-of-the-money option prices.</li>
 </ul>
 <p>Then I just fit a least squares parabola in variance on log-moneyness, using options trading volumes as weights and obtain the following figure:</p>
-<figure><img src="/post/mystic_parabola.png"/><figcaption>
-            <h4>least squares parabola on 2y AAPL options.</h4>
-        </figcaption>
+<figure><img src="/post/mystic_parabola.png"><figcaption>
+      <h4>least squares parabola on 2y AAPL options.</h4>
+    </figcaption>
 </figure>
 
 <p>Isn&rsquo;t the fit just amazing?
@@ -168,9 +242,9 @@ the spike just becomes bigger on a smaller time interval. A simple work-around i
 This means that intraday, we interpolate the dividend yield.</p>
 <p>If we simply interpolate the yields linearly intraday, then the yield becomes continuous again, and numerical schemes will work much better.
 But if we take a look at the actual curve of &ldquo;forward&rdquo; yields, it becomes sawtooth shaped!
-<figure><img src="/post/linear_flat_forward.png"/><figcaption>
-            <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
-        </figcaption>
+<figure><img src="/post/linear_flat_forward.png"><figcaption>
+      <h4>effective forward drift used in the finite difference grid with 4 time-steps per day</h4>
+    </figcaption>
 </figure>
 
 On the above figure, we can see the Dirac like forward yield if we work with the direct formulas, while interpolating intraday allows to smooth out the initial Dirac overall the interval corresponding to 1-day.</p>
@@ -228,18 +302,6 @@ There is something funny going on with upcoming generic top level domains (gTLDs
 <p>Most of it is easy to read and follow, except the last part around sets and transfinite numbers. This last part is actually quite significant as it tries to explain why we still have no satisfying theory around the problems raised by infinity especially in the context of a Sets theory. I did not expect to learn much around the subject, I was disappointed. The book showed me how naive I was and how tricky the concept of infinity can be.</p>
 <p>While I found the different explanations around <a href="https://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno&rsquo;s paradox of the arrow</a> very clever, there is one other view possible: the arrow really does not move at each instant (you could think of those as a snapshot) but an interval of time is just not a simple succession of instants. This is not so far of Aristotle attack, but the key here is around what is an interval really. DFW suggests slightly this interpretation as well p144 but it&rsquo;s not very explicit.</p>
 <p>I had not heard about Kronecker&rsquo;s conception that only integers were mathematically real (against decimals, irrationals, infinite sets). I find it very appropriate in the frame of computer science. Everything ends up as finite integers (a binary representation) and we are always confronted to the process of transforming the continuous, that despite all its conceptual issues is often simpler to reason in to solve concrete problems, to the finite discrete.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/crank-nicolson-and-rannacher-issues-with-touch-options/">Crank-Nicolson and Rannacher Issues with Touch options</a>
-  </h1>
-  <time datetime="2015-09-30T13:34:00Z" class="post-date">Wed, Sep 30, 2015</time>
-   
-
-I just stumbled upon this particularly illustrative case where the Crank-Nicolson finite difference scheme behaves badly, and the Rannacher smoothing (2-steps backward Euler) is less than ideal: <a href="http://www.investopedia.com/terms/d/doubleonetouch.asp">double one touch</a> and <a href="http://www.investopedia.com/terms/d/doublenotouch.asp">double no touch</a> options.<br /><br />It is particularly evident when the option is sure to be hit, for example when the barriers are narrow, that is our delta should be around zero as well as our gamma. Let's consider a double one touch option with spot=100, upBarrier=101, downBarrier=99.9, vol=20%, T=1 month and a payout of 50K.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="326" src="http://3.bp.blogspot.com/-skVEtpSetds/VgvDcK5MycI/AAAAAAAAIIc/BPj70_3z4lo/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A11%253A13.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson shows big spikes in the delta near the boundary</td><td class="tr-caption" style="text-align: center;"><br /></td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://3.bp.blogspot.com/-w0esoFRdaSA/VgvD6QgMDwI/AAAAAAAAIIk/-qdQ6BcTAmU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A13%253A33.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher shows spikes in the delta as well</td></tr></tbody></table>Crank-Nicolson spikes are so high that the price is actually a off itself.<br /><br />The Rannacher smoothing reduces the spikes by 100x but it's still quite high, and would be higher had we placed the spot closer to the boundary. The gamma is worse. Note that we applied the smoothing only at maturity. In reality as the barrier is continuous, the smoothing should really be applied at each step, but then the scheme would be not so different from a simple Backward Euler.<br /><br />In contrast, with a proper second order finite difference scheme, there is no spike.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://2.bp.blogspot.com/-mj0mUfRCSJk/VgvGiUPP1nI/AAAAAAAAIIw/KKK9sXTrne4/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A27.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the TR-BDF2 finite difference method - the scale goes from -0.00008 to 0.00008.</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s1600/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="325" src="http://1.bp.blogspot.com/-okMVRlfdJGw/VgvGsntsjbI/AAAAAAAAII4/xNVchYODHGU/s400/Screenshot%2Bfrom%2B2015-09-30%2B13%253A24%253A42.png" width="400" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Delta with the Lawson-Morris finite difference scheme - the scale goes from -0.00005 to 0.00005</td></tr></tbody></table>Both <a href="http://www.risk.net/journal-of-computational-finance/technical-paper/2330321/tr-bdf2-for-fast-stable-american-option-pricing">TR-BDF2</a> and Lawson-Morris (based on a local Richardson extrapolation of backward Euler) have a very low delta error, similarly, their gamma is very clean. This is reminiscent of the behavior on American options, but the effect is magnified here.<br /><br /><br />
-
-
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,147 +76,147 @@
 The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
 <p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0679</td>
-<td style="text-align:right">-0.0167</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0302</td>
-<td style="text-align:right">-0.0545</td>
-</tr>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0645</td>
-<td style="text-align:right">-0.0202</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0416</td>
-<td style="text-align:right">-0.0431</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">1M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0679</td>
+          <td style="text-align: right">-0.0167</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0302</td>
+          <td style="text-align: right">-0.0545</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0645</td>
+          <td style="text-align: right">-0.0202</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0416</td>
+          <td style="text-align: right">-0.0431</td>
+      </tr>
+  </tbody>
 </table>
 <p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.01 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
 <p>It is not only less accurate, but also slower, because it requires 3 random numbers per time-step, compared to 2 random numbers for QE or DVSS2X. The paper is very well written, and this small example may not be representative but it does cast some doubts about how great is this new scheme in practice.</p>
 <p>While writing this, I noticed that the paper actually uses this same example, it corresponds to their Case 3 and it is indeed not obvious from the plots in the paper that this new IVI scheme is significanly better. There is one case, deep in the money (strike=60%), and very few time-steps (2 per year for example):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.1579</td>
-<td style="text-align:right">-0.1721</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.2852</td>
-<td style="text-align:right">-0.0449</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">4</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.2946</td>
-<td style="text-align:right">-0.0353</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3113</td>
-<td style="text-align:right">-0.0187</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">8</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.3275</td>
-<td style="text-align:right">-0.0025</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3239</td>
-<td style="text-align:right">-0.0061</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.1579</td>
+          <td style="text-align: right">-0.1721</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.2852</td>
+          <td style="text-align: right">-0.0449</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">4</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.2946</td>
+          <td style="text-align: right">-0.0353</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3113</td>
+          <td style="text-align: right">-0.0187</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">8</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.3275</td>
+          <td style="text-align: right">-0.0025</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3239</td>
+          <td style="text-align: right">-0.0061</td>
+      </tr>
+  </tbody>
 </table>
 <p>So the new scheme works reasonably well for (very) large time-steps, better than DVSS2 and likely better than QE (although, again, it is around 1.5x more costly). For smaller steps (but not that small), it may not be as accurate as QE and DVSS2. This is why QE was such a big deal at the time, it was significantly more accurate than a Euler discretization and allowed to use much less time-steps: from 100 or more to 10 (a factor larger than 10). IVI may be an improvement for very large step sizes, but it will matter much less for typical exotics pricing where observation dates are at worst yearly.</p>
 <p><strong>Update June 19, 2025</strong>
 Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for-heston_part2/">forward start option test</a>. In the Table below I use 4M paths.</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0184</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">QE</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0190</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">IVI</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0116</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0185</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0191</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: right">Price</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0184</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QE</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0190</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0116</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0185</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0191</td>
+      </tr>
+  </tbody>
 </table>
 <p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The price with 4+1 steps is very off, especially compared to the other schemes. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 

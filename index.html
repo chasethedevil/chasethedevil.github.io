@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,26 @@
     </ul>
  </nav>
 
-    <p>&copy; 60617. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/deep_neural_networks_and_julia/">Deep Neural Networks and Julia</a>
+  </h1>
+  <time datetime="2025-10-07T17:27:00Z" class="post-date">Tue, Oct 7, 2025</time>
+  <p>Recently, I have spent some time on simple neural networks. The idea is to employ them as universal function approximators for some problems appearing in quantitative finance. There are some great papers on it such as the one from <a href="https://mathematicsinindustry.springeropen.com/articles/10.1186/s13362-019-0066-7">Liu et al. (2019)</a> or <a href="https://arxiv.org/abs/1901.09647">Horvath et al. (2019) Deep Learning Volatility</a> or <a href="https://arxiv.org/abs/2107.01611">Rosenbaum &amp; Zhang (2021)</a>.
+Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020.</p>
+<p>I thought I would try out what Julia offers in terms of library for neural networks. Being a very trendy subject, and Julia a modern language for the scientific community, I had imagined the libraris to be of good quality (like the many I have been using in the past). Surprisingly, I was wrong.</p>
+<p>First, I tried <a href="https://github.com/PumasAI/SimpleChains.jl">SimpleChain</a>, which just crashed (core dumped!) on a very simple example. I did not bother finding the root cause, I decided to look for another library. I then tried <a href="https://lux.csail.mit.edu/stable/">LUX</a>. The execution kept going forever without returning with the @compile keyword. I probably was not being lucky, even though my code was only 10s of lines long. So I decided to use <a href="https://fluxml.ai/">Flux</a>, which actually is as simple to use as <a href="https://pytorch.org/">Pytorch</a>, a well-known library in the Python world.</p>
+<p>Things works with Flux, and I do manage to do many experiments. But the performance is not great. This was another surprise: Pytorch was actually faster for many tasks on the CPU (no GPU). For example, to train a multi-layer-perceptron with 4 hidden layers of 200 neurons, Julia was taking several hours, until I hit CTRL+C and launched the same training in Pytorch (which took 15 minutes). I think it may be something with AdamW optimizer and relatively wide (but not really compared to LMM stuff) networks.</p>
+<p>Overall, the experience is pretty disappointing. Maybe it shows how much effort has been put in the Python ecosystem.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/stochastic_collocation_old_and_new/">Stochastic Collocation - Old And New</a>
   </h1>
@@ -105,9 +118,9 @@
 <p>The NUFFT becomes interesting to compute the option price at many many strikes at the same time. The strikes do not need to be equidistant and can be (almost) arbitrarily chosen. In Andersen and Lake paper, even a very fast technique such as the COS method reaches a threshold of option per second throughput, as the number of strikes is increased, mainly because of the repeated evaluation of the sum over different strikes, so the cost becomes proportional to the number of strikes.</p>
 <p>Evaluating at many many points becomes not much more expensive than evaluating at a few points only. This is what opens up the possibilities for the first 2 approaches based on the density.</p>
 <p>It turns out that it is not very difficult to rewrite the COS method so that it can make use of the NUFFT as well. I explain how to do it <a href="https://arxiv.org/abs/2507.13186v1">here</a>. Below is the throughput using NFFT.jl Julia package:
-<figure><img src="/post/heston_nufft.png"/><figcaption>
-            <h4>Throughput on the Heston model with M=256 points.</h4>
-        </figcaption>
+<figure><img src="/post/heston_nufft.png"><figcaption>
+      <h4>Throughput on the Heston model with M=256 points.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>While a neat trick, it is however not 100% clear to me at this point where this is really useful: calibration typically involve a small number of strikes per maturity.</p>
@@ -119,13 +132,13 @@
   </h1>
   <time datetime="2025-06-21T17:27:00Z" class="post-date">Sat, Jun 21, 2025</time>
   <p>The modern rough volatility models adopt a forward variance curve terminology (see for example <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=3191578">this paper on a rational approximation for the rough Heston</a>, or <a href="https://mfe.baruch.cuny.edu/wp-content/uploads/2024/03/AFVPricingDevelopmentsQuantminds2022.pdf">this presentation on affine forward variance models</a> or <a href="https://arxiv.org/pdf/1801.06416">this paper on affine forward variance models</a>). In this form, the rough Heston model reads:</p>
-<figure><img src="/post/rough_heston_eqn.png"/>
+<figure><img src="/post/rough_heston_eqn.png">
 </figure>
 
 <p>According to the litterature, the initial forward variance curve is typically built from the implied volatilities through the variance swap replication: for each maturity, the price of a newly issued variance swap is computed to this maturity, using the implied volatilities for this maturity. Then we may compute the forward variance by interpolating linearly the variance swap prices and differentiating. This leads to the plot below.</p>
-<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"/><figcaption>
-            <h4>Forward variance curves for SPX500 as of October 2024.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"><figcaption>
+      <h4>Forward variance curves for SPX500 as of October 2024.</h4>
+    </figcaption>
 </figure>
 
 <p>One immediate question is how much does the truncation range play a role in this forward variance curve? Above, we plot the replications prices based on filtering the input data up to 10 Delta / 90 Delta for each maturity. Beyond this range, liquidity is usually much lower and the reliability of the input quotes may not be as good.  The short end, and not so short forward variance up to 4 years is quite different. The long end is more aligned with something that looks like a basis spread between the two curves.</p>
@@ -143,147 +156,147 @@ If we were to use the true replication based forward variance curve, we would ef
 The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
 <p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0679</td>
-<td style="text-align:right">-0.0167</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0302</td>
-<td style="text-align:right">-0.0545</td>
-</tr>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0645</td>
-<td style="text-align:right">-0.0202</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0416</td>
-<td style="text-align:right">-0.0431</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">1M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0679</td>
+          <td style="text-align: right">-0.0167</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0302</td>
+          <td style="text-align: right">-0.0545</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0645</td>
+          <td style="text-align: right">-0.0202</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0416</td>
+          <td style="text-align: right">-0.0431</td>
+      </tr>
+  </tbody>
 </table>
 <p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.01 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
 <p>It is not only less accurate, but also slower, because it requires 3 random numbers per time-step, compared to 2 random numbers for QE or DVSS2X. The paper is very well written, and this small example may not be representative but it does cast some doubts about how great is this new scheme in practice.</p>
 <p>While writing this, I noticed that the paper actually uses this same example, it corresponds to their Case 3 and it is indeed not obvious from the plots in the paper that this new IVI scheme is significanly better. There is one case, deep in the money (strike=60%), and very few time-steps (2 per year for example):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.1579</td>
-<td style="text-align:right">-0.1721</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.2852</td>
-<td style="text-align:right">-0.0449</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">4</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.2946</td>
-<td style="text-align:right">-0.0353</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3113</td>
-<td style="text-align:right">-0.0187</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">8</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.3275</td>
-<td style="text-align:right">-0.0025</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3239</td>
-<td style="text-align:right">-0.0061</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.1579</td>
+          <td style="text-align: right">-0.1721</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.2852</td>
+          <td style="text-align: right">-0.0449</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">4</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.2946</td>
+          <td style="text-align: right">-0.0353</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3113</td>
+          <td style="text-align: right">-0.0187</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">8</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.3275</td>
+          <td style="text-align: right">-0.0025</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3239</td>
+          <td style="text-align: right">-0.0061</td>
+      </tr>
+  </tbody>
 </table>
 <p>So the new scheme works reasonably well for (very) large time-steps, better than DVSS2 and likely better than QE (although, again, it is around 1.5x more costly). For smaller steps (but not that small), it may not be as accurate as QE and DVSS2. This is why QE was such a big deal at the time, it was significantly more accurate than a Euler discretization and allowed to use much less time-steps: from 100 or more to 10 (a factor larger than 10). IVI may be an improvement for very large step sizes, but it will matter much less for typical exotics pricing where observation dates are at worst yearly.</p>
 <p><strong>Update June 19, 2025</strong>
 Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for-heston_part2/">forward start option test</a>. In the Table below I use 4M paths.</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0184</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">QE</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0190</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">IVI</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0116</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0185</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0191</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: right">Price</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0184</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QE</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0190</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0116</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0185</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0191</td>
+      </tr>
+  </tbody>
 </table>
 <p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The price with 4+1 steps is very off, especially compared to the other schemes. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 
@@ -311,71 +324,71 @@ should be
 <p>The formula for the piecewise-constant coefficients also contains errors: for example, the total variance variable wT is wrong. It should be a double sum instead of the standard constant Heston like formula. Finally, the many sums are rederived in the book, differently from the paper and are not simplified (unlike in the paper where they are all single sums).</p>
 <p>Indeed, with the original code from Rouah, the prices in the table of the paper from Benhamou Gobet and Miri are not reproduced to the last digit. With the above changes, they are.</p>
 <p>On the second point, it is surprising that the book does not mention that the approximation is not great. In particular, it does not mention that the calibrated parameters between Table 9.6 and Table 9.3 are vastly different (except for v0). The calibrated smile is plotted, which is great, but it is only plotted with the approximation formula. Plotting the same using the nearly exact semi-analytical representation of vanlla option prices would have been enlightening. We do it below, as Fabrice Rouah gives all the inputs (a very good thing):</p>
-<figure><img src="/post/hestonhagan_bgm_37d.png"/><figcaption>
-            <h4>DJIA 37 days maturity.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_bgm_37d.png"><figcaption>
+      <h4>DJIA 37 days maturity.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/hestonhagan_bgm_226d.png"/><figcaption>
-            <h4>DJIA 226 days maturity.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_bgm_226d.png"><figcaption>
+      <h4>DJIA 226 days maturity.</h4>
+    </figcaption>
 </figure>
 
 <p>It looks like in the range the calibration stays in the range of applicability of the formula, which is good, but not necessarily always true. The main issue is however that the calibrated parameters with the approximation are not necessarily a good guess for the parameters of the true time-dependent Heston model, precisely because the actual optimal parameters are way outside the range where the approximation is accurate. This is clear in the 226D plot, the best fit from the approx (which is great) ends up a not so good fit for the real time-dependent Heston model. Somewhat interestingly, the approx is actually not so bad on the actual optimal parameters, gotten from a calibration of the model with the Cos method - it is however a less good fit with the approx than the optimal parameters gotten from a calibration of the model with the approximation.</p>
 <p>More recently, Pat Hagan proposed a new approximation for the model, based on a SABR mapping. It seems a bit more precise than the approximation of Benhamou Gobet and Miri, but is not great either. And it is disappointing that the paper does not present any number, nor any plot to assess the quality of the approximation given. Van der Zwaard <a href="https://repository.tudelft.nl/file/File_bf06c85f-2c44-4fef-b94d-9d41e3e6704f">gives</a> some relatively realistic yet simple set of parameters for the Heston model (using Hagan&rsquo;s reparameterization with constant expected variance = 1) and on those, the approximated prices of <strong>at-the-money</strong> options are just not usable:</p>
 <p>If we consider his Table 5.9 (maturity = 1.75 year), we have the following</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">Method</th>
-<th style="text-align:center">Price</th>
-<th style="text-align:center">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">BGM</td>
-<td style="text-align:center">4.2206</td>
-<td style="text-align:center">0.21</td>
-</tr>
-<tr>
-<td style="text-align:center">Hagan</td>
-<td style="text-align:center">3.3441</td>
-<td style="text-align:center">0.66</td>
-</tr>
-<tr>
-<td style="text-align:center">Reference</td>
-<td style="text-align:center">4.0039</td>
-<td style="text-align:center">0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">Method</th>
+          <th style="text-align: center">Price</th>
+          <th style="text-align: center">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">BGM</td>
+          <td style="text-align: center">4.2206</td>
+          <td style="text-align: center">0.21</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Hagan</td>
+          <td style="text-align: center">3.3441</td>
+          <td style="text-align: center">0.66</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Reference</td>
+          <td style="text-align: center">4.0039</td>
+          <td style="text-align: center">0</td>
+      </tr>
+  </tbody>
 </table>
 <p>With Table 5.10 (maturity = 1.3 year), it is even worse:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">Method</th>
-<th style="text-align:center">Price</th>
-<th style="text-align:center">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">BGM</td>
-<td style="text-align:center">0.6659</td>
-<td style="text-align:center">1.17</td>
-</tr>
-<tr>
-<td style="text-align:center">Hagan</td>
-<td style="text-align:center">0.2263</td>
-<td style="text-align:center">1.61</td>
-</tr>
-<tr>
-<td style="text-align:center">Reference</td>
-<td style="text-align:center">1.8407</td>
-<td style="text-align:center">0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">Method</th>
+          <th style="text-align: center">Price</th>
+          <th style="text-align: center">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">BGM</td>
+          <td style="text-align: center">0.6659</td>
+          <td style="text-align: center">1.17</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Hagan</td>
+          <td style="text-align: center">0.2263</td>
+          <td style="text-align: center">1.61</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Reference</td>
+          <td style="text-align: center">1.8407</td>
+          <td style="text-align: center">0</td>
+      </tr>
+  </tbody>
 </table>
 
   
@@ -389,19 +402,19 @@ should be
 <p>During my Easter holidays, I took the time to further extend the idea <a href="https://arxiv.org/abs/2504.16011">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
 Somewhat interestingly, I noticed that the first order expansion (which is not much more accurate than the proxy itself) seemed to correspond to a previously published approximation from <a href="https://www.scirp.org/journal/paperinformation?paperid=72439">Tommaso Pellegrino</a>, an extension of Bjerksund-Stensland approximation for spread options, although my derivation is very different and allows for higher-order formulae.</p>
 <p>Below is an excerpt of some of the results</p>
-<figure><img src="/post/deelstra_table_basket_spread.png"/><figcaption>
-            <h4>Original example from Deelstra et al. for an Basket spread option.</h4>
-        </figcaption>
+<figure><img src="/post/deelstra_table_basket_spread.png"><figcaption>
+      <h4>Original example from Deelstra et al. for an Basket spread option.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/deelstra_table_asian_basket.png"/><figcaption>
-            <h4>Original example from Deelstra et al. for an Asian Basket spread option. The Taylor approximation perform even better due to the Asianing.</h4>
-        </figcaption>
+<figure><img src="/post/deelstra_table_asian_basket.png"><figcaption>
+      <h4>Original example from Deelstra et al. for an Asian Basket spread option. The Taylor approximation perform even better due to the Asianing.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/krekel_table_asian_spread.png"/><figcaption>
-            <h4>Original example from Martin Krekel for an Asian spread option. It was actually challenging to compute accurate Quasi Monte-Carlo prices.</h4>
-        </figcaption>
+<figure><img src="/post/krekel_table_asian_spread.png"><figcaption>
+      <h4>Original example from Martin Krekel for an Asian spread option. It was actually challenging to compute accurate Quasi Monte-Carlo prices.</h4>
+    </figcaption>
 </figure>
 
 <p>The MM of Martin Krekel consists in a one-dimensional integration of two lognormal moment-mached distributions. It seems that the one-dimensional integration (which is exact for simple spread options) does not really improve the accuracy for the more general asian spread option case: the loss of accuracy due to moment matching dominates the error.</p>
@@ -436,13 +449,12 @@ différents car ils nécessitent plus d&rsquo;énergie pour maintenir leur nivea
 répondre à leurs besoins énergétiques supérieurs, ce qui peut inclure des aliments riches en protéines, vitamines et minéraux.</p>
 <p>En bref, les besoins alimentaires de chaque individu peuvent être influencés par différents facteurs tels que son âge, son genre, sa taille, son poids, son
 niveau d&rsquo;activité physique et son état de santé. Il est donc important de comprendre ces facteurs pour assurer que nous consommons une alimentation adaptée à
-nos besoins nutritifs uniques.</p>
-</blockquote>
+nos besoins nutritifs uniques.</p></blockquote>
 <p>The introduction and the conclusion are the same. Closely repeated words are another issue: spécifiquement. Furthermore, this word is likely a bad translation from English in the sentence.
 &ldquo;spécifiquement importants&rdquo; does not sound quite correct in French. Finally, it&rsquo;s funny that they always produce the same structure of answer, small intro, a few points, and &ldquo;En bref&hellip;&rdquo;. At first it looks good, but very quickly, you
 understand it as noise. In fact if we analyze the points given as answer by LLMs, we start to notice that they are not as distinct as their presentation and wording suggest. It is not uncommon to see very similar sentences in distincts enumerated points.</p>
 <p>Google&rsquo;s internal LLM is not great either as it does not necessarily give the correct context for understanding.
-<figure><img src="/post/google_bad_answer.png"/>
+<figure><img src="/post/google_bad_answer.png">
 </figure>
 
 It makes you believe that 1g of protein has 4 calories. But which <a href="https://en.wikipedia.org/wiki/Calorie">kind of calorie</a>? the large <strong>C</strong>alorie (kcal or C) or the small <strong>c</strong>alorie (c) ? The reality is 4000 c or 4 kcal. Btw, I did not know both were introduced by French scientists, and that the large calorie variant was from Marcelin Berthelot. This is a neat feature of websites or books compared to LLMs, you get more contextual information.</p>
@@ -456,21 +468,21 @@ Here it is to the point that children forget about the actual detailed guideline
   </h1>
   <time datetime="2025-02-11T12:56:42&#43;0100" class="post-date">Tue, Feb 11, 2025</time>
   <p>An interesting idea to calibrate the Heston model in a more stable manner and reduce the calibration time is to make use of variance swap prices. Indeed, there is a simple formula for the theoretical price of a variance swap in the Heston model.
-<figure><img src="/post/heston_varswap_formula.png"/>
+<figure><img src="/post/heston_varswap_formula.png">
 </figure>
 
 It is not perfect since it approximates the variance swap price by the expectation of the integrated variance process over time. In particular it does not take into account eventual jumps (obviously), finiteness of replication, and discreteness of observations. But it may be good enough. Thanks to this formula, we can calibrate three parameters of the Heston model: the initial variance, the long-term mean variance, and the speed of mean reversion to the term-structure of variance swaps. We do not need market prices of variance swaps, we may simply use a replication based on market vanilla options prices, such as the model-free replication of Fukasawa.</p>
 <p>The idea was studied in the paper <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=2255550">Heston model: the variance swap calibration</a> by F. Guillaume and W. Schoutens back in 2014. The authors however only used the variance swap calibration as an initial guess. How bad would it be to fix the parameters altogether, as in a variance curve approach?</p>
 <p>It turns out it can be quite bad since the Heston model does not allow to represent many shapes of the variance swap term structure. Below is an example of term-structure calibration on SPX as of October 2024.</p>
-<figure><img src="/post/heston_varswap_ts.png"/><figcaption>
-            <h4>Term-structure of variance swap prices.</h4>
-        </figcaption>
+<figure><img src="/post/heston_varswap_ts.png"><figcaption>
+      <h4>Term-structure of variance swap prices.</h4>
+    </figcaption>
 </figure>
 
 <p>The term-structure is V-shaped, and Heston can not fit well to this. The best fit leads to non-sensical parameters with a nearly zero kappa (mean reversion speed) and an exploding long-term mean theta. The next figure shows why it is non-sensical: because the kappa is very small, the variance will very often reach zero.</p>
-<figure><img src="/post/heston_smallkappa_vol_path.png"/><figcaption>
-            <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
-        </figcaption>
+<figure><img src="/post/heston_smallkappa_vol_path.png"><figcaption>
+      <h4>Sample path of the variance process (in terms of vol) using the Euler scheme with full truncation.</h4>
+    </figcaption>
 </figure>
 
 <p>The calibration using inverse vega weights on vanilla option prices leads a not much worse fit of the variance swap term structure, but exhibits a much to high, unrealistic vol-of-vol of 184%, while a calibration on equally weighted option prices does not fit the term structure well at all.</p>
@@ -491,18 +503,6 @@ related issues, even when disabling the feature or changing the settings in the 
 <p>I thought most rolling distributions would fit the bill. It turns out they don&rsquo;t, EndeavourOS or Manjaro have relatively recent live install but (a) they are not small enough to fit on the USB key and (b) the images are a few months old where the kernel is too old.</p>
 <p><a href="https://get.opensuse.org/tumbleweed/">OpenSuse Tumbleweed</a> provides a daily updated network installer iso (and a live CD), this is the only thing that worked, and it worked well.</p>
 <p>Overall I was a bit surprised that it was so challenging to find an installable distribution with the latest kernel.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/saving_us_book_review/">Saving Us - Book Review</a>
-  </h1>
-  <time datetime="2024-10-13T12:56:42&#43;0100" class="post-date">Sun, Oct 13, 2024</time>
-  <p>I had the opportunity to receive a free book on climate change, through the company I am working for. I had not heard of that book before, it called <em>Saving Us</em> and is written by an actual climate scientist (Katharine Hayhoe).
-Unfortunately, written by does not mean that it is a scientific book, and it&rsquo;s not. The author does not spend much effort explaining the physics or the reports, but focuses on how to convince people this is an important problem to tackle. It is mildly interesting at first, as it presents the problem from a psychological angle. But it becomes quickly repetitive. The method is always the same, connect with what&rsquo;s important to an audience who initially rejects climate warming (mostly the phenomenon, sometimes proposals around it), and make them understand that climate warming plays a role in their life, in the very matters they care about. It is presented as a series of personal experiences of the author, a list of examples.</p>
-<p>There is a small part on taxing carbon, it&rsquo;s only 3 pages, and quite optimistic. It consists in a socialist approach (which I am not necessarily opposed to). There is no mention of carbon trades, no mention of what can go wrong with the taxing or the trade of carbon.</p>
-<p>On the global warming subject, <a href="/post/koonin-on-climate-book-review/">I much preferred</a> the more controversial book <em>Unsettled</em> of Steve Koonin, sometimes quoted by climate warming deniers (who may have not read it at all) and often <a href="https://www.scientificamerican.com/article/a-new-book-manages-to-get-climate-science-badly-wrong/">denounced</a> by climate warming supporters (who may have read it too closely). The arguments made were clearer, more scientific. Even if the book was not that great either, I found it helped discovering the subject from various angles.</p>
-<p>Overall it&rsquo;s a bit strange that this kind of book is given away by companies. On one hand, I can see how it resonates with business values such as how to deal with antagonistic people, how to talk to people around you. On the other hand, it feels like a waste of time and money. There are much better books or courses that can teach you more in a shorter time. For example, I attended by accident two 4h courses around <a href="https://en.wikipedia.org/wiki/Myers%E2%80%93Briggs_Type_Indicator">Myers-Briggs</a>, and found it to make a much bigger impact.</p>
 
   
 </article>

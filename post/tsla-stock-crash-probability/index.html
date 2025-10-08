@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,51 +76,51 @@
 As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
 and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
 This results in the following graph</p>
-<figure><img src="/post/tsla2020_vol.png"/><figcaption>
-            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
-        </figcaption>
+<figure><img src="/post/tsla2020_vol.png"><figcaption>
+      <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+    </figcaption>
 </figure>
 
 <p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
 include an inverse relative bid-ask spread weighting in the calibration. Note that I
 removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
 <p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
-<figure><img src="/post/tsla2020_cum.png"/><figcaption>
-            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
-        </figcaption>
+<figure><img src="/post/tsla2020_cum.png"><figcaption>
+      <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+    </figcaption>
 </figure>
 
 <p>More explicitely, we obtain</p>
 <table>
-<thead>
-<tr>
-<th>Model</th>
-<th>probability of TSLA &lt; 100</th>
-<th>probability of TSLA &lt; 15</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Collocation</td>
-<td>15.4%</td>
-<td>7.2%</td>
-</tr>
-<tr>
-<td>Lognormal Mixture</td>
-<td>15.2%</td>
-<td>8.0%</td>
-</tr>
-<tr>
-<td>Andreasen-Huge regularized</td>
-<td>15.0%</td>
-<td>7.7%</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Model</th>
+          <th>probability of TSLA &lt; 100</th>
+          <th>probability of TSLA &lt; 15</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Collocation</td>
+          <td>15.4%</td>
+          <td>7.2%</td>
+      </tr>
+      <tr>
+          <td>Lognormal Mixture</td>
+          <td>15.2%</td>
+          <td>8.0%</td>
+      </tr>
+      <tr>
+          <td>Andreasen-Huge regularized</td>
+          <td>15.0%</td>
+          <td>7.7%</td>
+      </tr>
+  </tbody>
 </table>
 <p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
-<figure><img src="/post/tsla2020_rnd.png"/><figcaption>
-            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
-        </figcaption>
+<figure><img src="/post/tsla2020_rnd.png"><figcaption>
+      <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+    </figcaption>
 </figure>
 
 <p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
@@ -129,26 +129,26 @@ the constant of the Tikhonov regularization, at the cost of a slightly worse fit
 <p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
 and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
 <table>
-<thead>
-<tr>
-<th>Model</th>
-<th>weighted root mean square error in vols</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Collocation</td>
-<td>0.00484</td>
-</tr>
-<tr>
-<td>Lognormal Mixture</td>
-<td>0.00432</td>
-</tr>
-<tr>
-<td>Andreasen-Huge regularized</td>
-<td>0.00435</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Model</th>
+          <th>weighted root mean square error in vols</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Collocation</td>
+          <td>0.00484</td>
+      </tr>
+      <tr>
+          <td>Lognormal Mixture</td>
+          <td>0.00432</td>
+      </tr>
+      <tr>
+          <td>Andreasen-Huge regularized</td>
+          <td>0.00435</td>
+      </tr>
+  </tbody>
 </table>
 <p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
 It is expected that the probability of going under $100 will be larger when the stock price moves down,

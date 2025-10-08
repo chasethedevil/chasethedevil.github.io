@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.151.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 60618. All rights reserved. </p>
+    <p>&copy; 8081. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,15 +78,15 @@
 Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
 for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
 <p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
-<figure><img src="/post/rnd_nonic_collocation.png"/><figcaption>
-            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-        </figcaption>
+<figure><img src="/post/rnd_nonic_collocation.png"><figcaption>
+      <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+    </figcaption>
 </figure>
 
 <p>There is now just one mode, and the fit in implied volatilities is much better.</p>
-<figure><img src="/post/nonic_collocation_vol.png"/><figcaption>
-            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-        </figcaption>
+<figure><img src="/post/nonic_collocation_vol.png"><figcaption>
+      <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+    </figcaption>
 </figure>
 
 <p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
@@ -96,16 +96,16 @@ that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a 
 His Tikhonov regularization consists here in applying a roughness penalty consisting
 in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
 This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
-<figure><img src="/post/rnd_ah_tikhonov.png"/><figcaption>
-            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
-        </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov.png"><figcaption>
+      <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+    </figcaption>
 </figure>
 
 <p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
 the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
-<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"/><figcaption>
-            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-        </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"><figcaption>
+      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+    </figcaption>
 </figure>
 
 <p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
