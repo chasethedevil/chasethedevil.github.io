@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.152.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Owen Scrambling in Quantlib &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 18186. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Owen Scrambling in Quantlib</h1>
+  <time datetime=2025-12-17T17:27:00Z class="post-date">Wed, Dec 17, 2025</time>
+  <p>The state of the art of Sobol scrambling has changed slightly recently, thanks to the paper from Brent Burley of Walt Disney Studios <a href="https://jcgt.org/published/0009/04/01/paper.pdf">Practical Hash-based Owen Scrambling</a>.
+Before that, <a href="https://dl.acm.org/doi/10.1145/779359.779360">ACM Algorithm 823</a> by Hickernell and Hong was the usual reference. Brent Burley&rsquo;s algorithm is both faster and with better properties. In particular it performs both shuffling and scrambling.</p>
+<p><a href="https://quantlib.wordpress.com/2024/02/03/scrambled-sobol-sequences/">Peter Caspers</a> implemented the new algorithm in Quantlib. It&rsquo;s neat to have some decent <a href="https://github.com/lballabio/QuantLib/blob/master/ql/math/randomnumbers/burley2020sobolrsg.cpp">implementation in CPP</a>. In applying the algorithm of the paper, a few sub-optimal choices were made:</p>
+<ul>
+<li>The base RNG for seeds (for the shuffling and scrambling) is Mersenne-Twister. Contrary to what I thought at the beginning, it is not used for skipping/jumping as the seeds are only set in the initialization, and are then constant for all numbers in the sequence. The skipping/jumping logic is however absent from the Quantlib CPP code, which is a bit unfortunate, but is almost trivial to code (just update the nextSequenceCounter_ variable).</li>
+<li>There is a 4-by-4 seeding logic which looks odd. The paper code processes 4 dimensions as it is specialized to CG, although even then, it processes those 4 dimensions slightly differently: a much simpler hash function is used (it is given in the code URL inside the paper) and the seed value is not updated by the hash function: the seed is merely hashed with the dimension number, for 4 dimensions.</li>
+</ul>
+<p>I don&rsquo;t really see what there is  to gain to follow this 4-by-4 seeding. It would be simpler and less concerning to simply use the RNG to produce N seeds where N is the number of dimensions (instead of N/4). The only possible gain with the 4-by-4 seeding is some memory (as only N/4 seeds are kept in memory), but the total amount is not significant: for 21000 dimensions, keeping all in memory takes around 656 KB (yes, 640 KB is not all we need!). The cost of 4-by-4 seeding is a potentially  less random scrambling.</p>
+<p>On the same subject, there is another new low discrepancy sequence which appears to have some good properties as well as being as fast to generate as Sobol, it&rsquo;s called [SZ Sequence]https://dl.acm.org/doi/10.1145/3763272).</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

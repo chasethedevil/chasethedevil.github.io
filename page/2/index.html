@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.151.0">
+  <meta name="generator" content="Hugo 0.152.1">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 8081. All rights reserved. </p>
+    <p>&copy; 18186. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/opensuse_tumbleweed/">OpenSuse Tumbleweed to the Rescue</a>
+  </h1>
+  <time datetime="2025-02-06T12:56:42&#43;0100" class="post-date">Thu, Feb 6, 2025</time>
+  <p>I recently upgraded a desktop computer, and to my surprise, the new motherboard was not fully supported by most Linux distributions.
+The main culprit was the network adapter, although the secure boot setup gave me lots of troubles as well. I had only a small usb key (2GB)
+and most (all?) live distributions do not fit on 2GB anymore. With the exception of Ubuntu images, I did not manage to boot from USB hard drive where I dumped the live image ISO, due to Secure boot
+related issues, even when disabling the feature or changing the settings in the BIOS. Using the small USB key worked with Secure boot enabled only.</p>
+<p>So I had to find a distribution with a small size and with a new kernel which supported the network adapter (6.13+). I tried the rawhide Fedora, which has a small network install image, but that just did not work, because it&rsquo;s too alpha.</p>
+<p>I thought most rolling distributions would fit the bill. It turns out they don&rsquo;t, EndeavourOS or Manjaro have relatively recent live install but (a) they are not small enough to fit on the USB key and (b) the images are a few months old where the kernel is too old.</p>
+<p><a href="https://get.opensuse.org/tumbleweed/">OpenSuse Tumbleweed</a> provides a daily updated network installer iso (and a live CD), this is the only thing that worked, and it worked well.</p>
+<p>Overall I was a bit surprised that it was so challenging to find an installable distribution with the latest kernel.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/saving_us_book_review/">Saving Us - Book Review</a>
   </h1>
@@ -132,7 +147,8 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
   <p>When computing the derivative of a function by finite difference, which step size is optimal? The answer depends on the kind of difference (forward, backward or central), and the degree of the derivative (first or second typically for finance).</p>
 <p>For the first derivative, the result is very quick to find (it&rsquo;s on <a href="https://en.wikipedia.org/wiki/Numerical_differentiation">wikipedia</a>). For the second derivative, it&rsquo;s more challenging. The <a href="https://paulklein.ca/newsite/teaching/Notes_NumericalDifferentiation.pdf">Lecture Notes</a> of Karen Kopecky provide an answer. I wonder if Copilot or ChatGPT would find a good solution to the question:</p>
 <blockquote>
-<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p></blockquote>
+<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p>
+</blockquote>
 <p>Here is the answer of copilot:
 <figure><img src="/post/step_size_copilot.png">
 </figure>
@@ -256,58 +272,6 @@ $$ \bar{\sigma}_i^2(t_0)(t_1-t_0) = \int_{t_0}^{t_1} \sigma_i^2(s) ds.$$</p>
 </figure>
 </p>
 <p>Similarly the Gatheral-Rosenbaum estimate has no issue finding H=0.5.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/roughness_of_stochastic_volatility/">Roughness of Stochastic Volatility with Jumps</a>
-  </h1>
-  <time datetime="2023-12-07T20:56:42&#43;0100" class="post-date">Thu, Dec 7, 2023</time>
-  <p>I was wondering if adding jumps to stochastic volatility, as is done in the SVCJ model of Duffie, Singleton and Pan <em>&ldquo;Transform Analysis and Asset Pricing for Affine Jump-Diffusion&rdquo;</em> also in Broadie and Kaya <em>&ldquo;Exact simulation of stochastic volatility and other affine jump diffusion processes&rdquo;</em>, would lead to rougher paths, or if it would mislead the roughness estimators.</p>
-<p>The answer to the first question can almost be answered visually:
-<figure><img src="/post/svcj_variance_path.png">
-</figure>
-</p>
-<p>The parameters used are the one from Broadie and Kaya: v0=0.007569, kappa=3.46, theta=0.008, rho=-0.82, sigma=0.14 (Heston), jump correlation -0.38, jump intensity 0.47, jump vol 0.0001, jump mean 0.05, jump drift -0.1.</p>
-<p>The Rough Heston with H=0.1 is much &ldquo;noisier&rdquo;. There is not apparent difference between SVCJ and Heston in the path of the variance.</p>
-<p>The estimator of Cont and Das (on a subsampled path) leads to a Hurst exponent H=0.503, in line with a standard Brownian motion.
-<figure><img src="/post/svcj_estimate.png"><figcaption>
-      <h4>Cont-Das estimate H=0.503.</h4>
-    </figcaption>
-</figure>
-</p>
-<p>The estimator from Rosenbaum and Gatheral leads to a Hurst exponent (slope of the regression) H=0.520 with well behaved regressions:
-<figure><img src="/post/svcj_estimate_gatheral_1.png"><figcaption>
-      <h4>Regressions for each q.</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/post/svcj_estimate_gatheral_2.png"><figcaption>
-      <h4>Regression over all qs which leads to the estimate of H.</h4>
-    </figcaption>
-</figure>
-</p>
-<p>On this example, there are relatively few jumps during the 1 year duration. If we multiply the jump intensity by 1000 and reduce the jump mean accordingly, the conclusions are the same. Jumps and roughness are fundamentally different.</p>
-<p>Of course this does not mean that the short term realized volatility does not look rough as evidenced in Cont and Das paper:
-<figure><img src="/post/svcj_rv.png"><figcaption>
-      <h4>The 1 hour realized volatility looks rough.</h4>
-    </figcaption>
-</figure>
-
-I computed the realized volatility on a subsampled path, using disjoint windows of 1h of length.</p>
-<p>It is not really rough, estimators will have a tough time leading to stable estimates on it.
-<figure><img src="/post/svcj_rv_estimate.png"><figcaption>
-      <h4>Hurst exponent estimation based on the 1h realized variance. The mean H=0.054 but is clearly not reliable.</h4>
-    </figcaption>
-</figure>
-</p>
-<p>This is very visible with the Rosenbaum-Gatheral way of estimating H, we see that the observations do not fall on a line at all but flatten:
-<figure><img src="/post/svcj_rv_estimate_gatheral_1.png"><figcaption>
-      <h4>Regressions for each q based on the 1h realized variance.</h4>
-    </figcaption>
-</figure>
-</p>
-<p>The pure Heston model leads to similar observations.</p>
 
   
 </article>

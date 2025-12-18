@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.151.0">
+  <meta name="generator" content="Hugo 0.152.1">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,29 @@
     </ul>
  </nav>
 
-    <p>&copy; 8081. All rights reserved. </p>
+    <p>&copy; 18186. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/owen_scrambling_in_quantlib/">Owen Scrambling in Quantlib</a>
+  </h1>
+  <time datetime="2025-12-17T17:27:00Z" class="post-date">Wed, Dec 17, 2025</time>
+  <p>The state of the art of Sobol scrambling has changed slightly recently, thanks to the paper from Brent Burley of Walt Disney Studios <a href="https://jcgt.org/published/0009/04/01/paper.pdf">Practical Hash-based Owen Scrambling</a>.
+Before that, <a href="https://dl.acm.org/doi/10.1145/779359.779360">ACM Algorithm 823</a> by Hickernell and Hong was the usual reference. Brent Burley&rsquo;s algorithm is both faster and with better properties. In particular it performs both shuffling and scrambling.</p>
+<p><a href="https://quantlib.wordpress.com/2024/02/03/scrambled-sobol-sequences/">Peter Caspers</a> implemented the new algorithm in Quantlib. It&rsquo;s neat to have some decent <a href="https://github.com/lballabio/QuantLib/blob/master/ql/math/randomnumbers/burley2020sobolrsg.cpp">implementation in CPP</a>. In applying the algorithm of the paper, a few sub-optimal choices were made:</p>
+<ul>
+<li>The base RNG for seeds (for the shuffling and scrambling) is Mersenne-Twister. Contrary to what I thought at the beginning, it is not used for skipping/jumping as the seeds are only set in the initialization, and are then constant for all numbers in the sequence. The skipping/jumping logic is however absent from the Quantlib CPP code, which is a bit unfortunate, but is almost trivial to code (just update the nextSequenceCounter_ variable).</li>
+<li>There is a 4-by-4 seeding logic which looks odd. The paper code processes 4 dimensions as it is specialized to CG, although even then, it processes those 4 dimensions slightly differently: a much simpler hash function is used (it is given in the code URL inside the paper) and the seed value is not updated by the hash function: the seed is merely hashed with the dimension number, for 4 dimensions.</li>
+</ul>
+<p>I don&rsquo;t really see what there is  to gain to follow this 4-by-4 seeding. It would be simpler and less concerning to simply use the RNG to produce N seeds where N is the number of dimensions (instead of N/4). The only possible gain with the 4-by-4 seeding is some memory (as only N/4 seeds are kept in memory), but the total amount is not significant: for 21000 dimensions, keeping all in memory takes around 656 KB (yes, 640 KB is not all we need!). The cost of 4-by-4 seeding is a potentially  less random scrambling.</p>
+<p>On the same subject, there is another new low discrepancy sequence which appears to have some good properties as well as being as fast to generate as Sobol, it&rsquo;s called [SZ Sequence]https://dl.acm.org/doi/10.1145/3763272).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/deep_neural_networks_and_julia/">Deep Neural Networks and Julia</a>
   </h1>
@@ -449,7 +465,8 @@ différents car ils nécessitent plus d&rsquo;énergie pour maintenir leur nivea
 répondre à leurs besoins énergétiques supérieurs, ce qui peut inclure des aliments riches en protéines, vitamines et minéraux.</p>
 <p>En bref, les besoins alimentaires de chaque individu peuvent être influencés par différents facteurs tels que son âge, son genre, sa taille, son poids, son
 niveau d&rsquo;activité physique et son état de santé. Il est donc important de comprendre ces facteurs pour assurer que nous consommons une alimentation adaptée à
-nos besoins nutritifs uniques.</p></blockquote>
+nos besoins nutritifs uniques.</p>
+</blockquote>
 <p>The introduction and the conclusion are the same. Closely repeated words are another issue: spécifiquement. Furthermore, this word is likely a bad translation from English in the sentence.
 &ldquo;spécifiquement importants&rdquo; does not sound quite correct in French. Finally, it&rsquo;s funny that they always produce the same structure of answer, small intro, a few points, and &ldquo;En bref&hellip;&rdquo;. At first it looks good, but very quickly, you
 understand it as noise. In fact if we analyze the points given as answer by LLMs, we start to notice that they are not as distinct as their presentation and wording suggest. It is not uncommon to see very similar sentences in distincts enumerated points.</p>
@@ -488,21 +505,6 @@ It is not perfect since it approximates the variance swap price by the expectati
 <p>The calibration using inverse vega weights on vanilla option prices leads a not much worse fit of the variance swap term structure, but exhibits a much to high, unrealistic vol-of-vol of 184%, while a calibration on equally weighted option prices does not fit the term structure well at all.</p>
 <p>Somewhat interestingly, the Double-Heston model allows to fit the term-structure much better, but it is far from obvious that the resulting calibrated parameters are much more realistic as it typically leads to process with very small kappa or a process with very small theta (but as there are two processes, it may be more acceptable).</p>
 <p>Previously, <a href="/post/unrealistic_variance_swaps_under_schobel_zhu/">I had explored</a> a similar subject for the Schobel-Zhu model. It turns out that Heston is not much more practical either.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/opensuse_tumbleweed/">OpenSuse Tumbleweed to the Rescue</a>
-  </h1>
-  <time datetime="2025-02-06T12:56:42&#43;0100" class="post-date">Thu, Feb 6, 2025</time>
-  <p>I recently upgraded a desktop computer, and to my surprise, the new motherboard was not fully supported by most Linux distributions.
-The main culprit was the network adapter, although the secure boot setup gave me lots of troubles as well. I had only a small usb key (2GB)
-and most (all?) live distributions do not fit on 2GB anymore. With the exception of Ubuntu images, I did not manage to boot from USB hard drive where I dumped the live image ISO, due to Secure boot
-related issues, even when disabling the feature or changing the settings in the BIOS. Using the small USB key worked with Secure boot enabled only.</p>
-<p>So I had to find a distribution with a small size and with a new kernel which supported the network adapter (6.13+). I tried the rawhide Fedora, which has a small network install image, but that just did not work, because it&rsquo;s too alpha.</p>
-<p>I thought most rolling distributions would fit the bill. It turns out they don&rsquo;t, EndeavourOS or Manjaro have relatively recent live install but (a) they are not small enough to fit on the USB key and (b) the images are a few months old where the kernel is too old.</p>
-<p><a href="https://get.opensuse.org/tumbleweed/">OpenSuse Tumbleweed</a> provides a daily updated network installer iso (and a live CD), this is the only thing that worked, and it worked well.</p>
-<p>Overall I was a bit surprised that it was so challenging to find an installable distribution with the latest kernel.</p>
 
   
 </article>
