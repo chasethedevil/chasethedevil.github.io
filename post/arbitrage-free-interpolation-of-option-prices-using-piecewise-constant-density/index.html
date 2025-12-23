@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 18186. All rights reserved. </p>
+    <p>&copy; 232331. All rights reserved. </p>
   </div>
 </aside>
 
@@ -72,7 +72,115 @@
     <div class="post">
   <h1>Arbitrage Free Interpolation of Option Prices using Piecewise Constant Density</h1>
   <time datetime=2014-03-17T15:25:00Z class="post-date">Mon, Mar 17, 2014</time>
-  <p>Tension splines can produce in some cases <!-- raw HTML omitted -->arbitrage free C2 interpolation<!-- raw HTML omitted --> of options, but unfortunately this is not guaranteed. It turns out that, on some not so nice looking data, where the discrete probability density is not monotone but only positive, all previously considered interpolation fail (spline in volatility or variance, tension spline in log prices, harmonic spline on prices).<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->K     vol   put   b-slope  b-convexity<!-- raw HTML omitted -->300.0 0.682 0.090 0.00e+00 0.00e+00<!-- raw HTML omitted -->310.0 0.654 0.136 4.60e-03 0.00e+00<!-- raw HTML omitted -->320.0 0.621 0.192 5.60e-03 1.00e-03<!-- raw HTML omitted -->330.0 0.594 0.288 9.60e-03 4.00e-03<!-- raw HTML omitted -->340.0 0.560 0.404 1.16e-02 2.00e-03<!-- raw HTML omitted -->350.0 0.520 0.530 1.26e-02 1.00e-03<!-- raw HTML omitted -->360.0 0.484 0.736 2.06e-02 8.00e-03<!-- raw HTML omitted -->370.0 0.467 1.232 4.96e-02 2.90e-02<!-- raw HTML omitted -->380.0 0.442 1.898 6.66e-02 1.70e-02<!-- raw HTML omitted -->390.0 0.427 3.104 1.21e-01 5.40e-02<!-- raw HTML omitted -->400.0 0.412 4.930 1.83e-01 6.20e-02<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->Possibly the simplest arbitrage free interpolation is to postulate the density as piecewise constant, ideally centered around each strike (if not centered, there is no guarantee that it will be positive). If a spline is used for interpolation, this means a quadratic spline. Unfortunately, because it is not C2, it then still fails to be arbitrage free.<!-- raw HTML omitted -->It is also possible to price by integrating the payoff over the density. There is then one degree of freedom, the Fmin (minimum forward allowed before absorption) that can be adjusted so as to make the density always positive. This produces our only arbitrage free interpolation of the above input put option prices.<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->The implied volatility looks reasonable on this strange input: very much like a spline on volatilities. In contrast, the parabolic interpolator produces an oddly looking implied volatility shape, even though the density is in a way similar: piecewise constant. This is likely because I forced the second derivatives to match the discrete curvature, it is then not C1 in prices.<!-- raw HTML omitted --><!-- raw HTML omitted -->Unfortunately, the piecewise constant density interpolant can also produce some strange implied volatility shapes, for example on P. Jaeckel example data:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->We find back the wiggles for large strikes. The lower end is particularly funny (which could be due to the fact that I don&rsquo;t have the data for low strikes). This is the corresponding density:<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->It appears then not so easy to produce a simple generally good looking interpolation.<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+  <p>Tension splines can produce in some cases <a href="/post/c2-arbitrage-free-interpolation-with-tension-splines">arbitrage free C2 interpolation</a> of options, but unfortunately this is not guaranteed. It turns out that, on some not so nice looking data, where the discrete probability density is not monotone but only positive, all previously considered interpolation fail (spline in volatility or variance, tension spline in log prices, harmonic spline on prices).</p>
+<table>
+  <thead>
+      <tr>
+          <th>K</th>
+          <th>vol</th>
+          <th>put</th>
+          <th>b-slope</th>
+          <th>b-convexity</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>300.0</td>
+          <td>0.682</td>
+          <td>0.090</td>
+          <td>0.00e+00</td>
+          <td>0.00e+00</td>
+      </tr>
+      <tr>
+          <td>310.0</td>
+          <td>0.654</td>
+          <td>0.136</td>
+          <td>4.60e-03</td>
+          <td>0.00e+00</td>
+      </tr>
+      <tr>
+          <td>320.0</td>
+          <td>0.621</td>
+          <td>0.192</td>
+          <td>5.60e-03</td>
+          <td>1.00e-03</td>
+      </tr>
+      <tr>
+          <td>330.0</td>
+          <td>0.594</td>
+          <td>0.288</td>
+          <td>9.60e-03</td>
+          <td>4.00e-03</td>
+      </tr>
+      <tr>
+          <td>340.0</td>
+          <td>0.560</td>
+          <td>0.404</td>
+          <td>1.16e-02</td>
+          <td>2.00e-03</td>
+      </tr>
+      <tr>
+          <td>350.0</td>
+          <td>0.520</td>
+          <td>0.530</td>
+          <td>1.26e-02</td>
+          <td>1.00e-03</td>
+      </tr>
+      <tr>
+          <td>360.0</td>
+          <td>0.484</td>
+          <td>0.736</td>
+          <td>2.06e-02</td>
+          <td>8.00e-03</td>
+      </tr>
+      <tr>
+          <td>370.0</td>
+          <td>0.467</td>
+          <td>1.232</td>
+          <td>4.96e-02</td>
+          <td>2.90e-02</td>
+      </tr>
+      <tr>
+          <td>380.0</td>
+          <td>0.442</td>
+          <td>1.898</td>
+          <td>6.66e-02</td>
+          <td>1.70e-02</td>
+      </tr>
+      <tr>
+          <td>390.0</td>
+          <td>0.427</td>
+          <td>3.104</td>
+          <td>1.21e-01</td>
+          <td>5.40e-02</td>
+      </tr>
+      <tr>
+          <td>400.0</td>
+          <td>0.412</td>
+          <td>4.930</td>
+          <td>1.83e-01</td>
+          <td>6.20e-02</td>
+      </tr>
+  </tbody>
+</table>
+<figure><img src="http://4.bp.blogspot.com/-AILZMFsJ09w/Uyb9SWnrYbI/AAAAAAAAHFE/3wzhISGziaU/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:34:04.png">
+</figure>
+
+<p>Possibly the simplest arbitrage free interpolation is to postulate the density as piecewise constant, ideally centered around each strike (if not centered, there is no guarantee that it will be positive). If a spline is used for interpolation, this means a quadratic spline. Unfortunately, because it is not C2, it then still fails to be arbitrage free.</p>
+<p>It is also possible to price by integrating the payoff over the density. There is then one degree of freedom, the Fmin (minimum forward allowed before absorption) that can be adjusted so as to make the density always positive. This produces our only arbitrage free interpolation of the above input put option prices.</p>
+<figure><img src="http://3.bp.blogspot.com/-oyqkgeadz-I/Uyb_kjOjQ7I/AAAAAAAAHFQ/M0s2yemHbOA/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:39.png">
+</figure>
+
+<p>The implied volatility looks reasonable on this strange input: very much like a spline on volatilities. In contrast, the parabolic interpolator produces an oddly looking implied volatility shape, even though the density is in a way similar: piecewise constant. This is likely because I forced the second derivatives to match the discrete curvature, it is then not C1 in prices.</p>
+<p>Unfortunately, the piecewise constant density interpolant can also produce some strange implied volatility shapes, for example on P. Jaeckel example data:</p>
+<figure><img src="http://3.bp.blogspot.com/-14AO4VdMh78/UycAWtv4TrI/AAAAAAAAHFY/lkqUFsJQY4A/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:02.png">
+</figure>
+
+<p>We find back the wiggles for large strikes. The lower end is particularly funny (which could be due to the fact that I don&rsquo;t have the data for low strikes). This is the corresponding density:</p>
+<figure><img src="http://2.bp.blogspot.com/-GBq_zDoLDyE/UycAuk7Ui0I/AAAAAAAAHFg/f1fmWrcq1XY/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:32:27.png">
+</figure>
+
+<p>It appears then not so easy to produce a simple generally good looking interpolation.</p>
 
 </div>
 
