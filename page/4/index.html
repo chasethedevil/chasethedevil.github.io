@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.152.1">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,28 @@
     </ul>
  </nav>
 
-    <p>&copy; 232331. All rights reserved. </p>
+    <p>&copy; 90911. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/linux-in-2022/">Desktop Linux in 2022</a>
+  </h1>
+  <time datetime="2022-10-26T07:56:42&#43;0100" class="post-date">Wed, Oct 26, 2022</time>
+  <p>I have been a long time user of Fedora at work and have been happy quite happy about it. Around 6 months ago, I moved to Manjaro under VirtualBox in a Windows host, because the company imposes the use of a VPN client that does not run on Linux. It&rsquo;s much less great for several reasons:</p>
+<ul>
+<li>VirtualBox makes everything graphics much slower. It is still way better than WSL2 as I found WSL2 to be a poor man&rsquo;s Linux, where graphics is via some half broken X11 client for Windows. With VirtualBox, programming is ok, watching videos is not (you need to use the host for that). Something relatively neat is that the VM can be run on any other host, including a Linux host by just copying the vm file.</li>
+<li>I picked Manjaro out of curiosity and because it was perhaps faster/more optimized than Fedora. I don&rsquo;t have too many issues with it. But I found out that the use of AUR packages would frequently break on upgrades. Futhermore, it is updated less frequently than Fedora, which is a bit surprising for a rolling release. I also installed it with ext4. With hindsight, I think both choices were poor, Fedora with brtfs is the way to go, or some Ubuntu variant.</li>
+<li>Work also imposes various antivirus programs which tend to always keep the cpu busy.</li>
+</ul>
+<p>Overall I am still much more productive than with a raw Windows, which is surprisingly slow for many software development related tasks. Having to deal more with Windows showed me how slow the system is, and how poor the experience is. Before using it again (after many years completely off it), I had started thinking it was good (well, it does crash much less than back in the days).</p>
+<p>I otherwise use Fedora with either KDE or Gnome on my personal desktop and laptop with very few issues overall. Gnome seems much better since 42 even if overall, Gnome shell has not been the most stable in the past. Steam runs great. I also encountered some grub bootloader bug recently, which disappeared once I upgraded my bios.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/implied_volatility_roughness/">Roughness of the Implied Volatility</a>
   </h1>
@@ -80,49 +95,49 @@
 Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
 <p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
 It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
-      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
+            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
-      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
+            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+        </figcaption>
 </figure>
 </p>
 <p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
-      <h4>SPX roughness index sliding estimate with K=50.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
+            <h4>SPX roughness index sliding estimate with K=50.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
-      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
+            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+        </figcaption>
 </figure>
 </p>
 <p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
 <p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
-      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-    </figcaption>
+<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
+            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_msft.png"><figcaption>
-      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_msft.png"/><figcaption>
+            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
 <p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
-      <h4>VIX roughness index sliding estimate with K=51.</h4>
-    </figcaption>
+<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
+            <h4>VIX roughness index sliding estimate with K=51.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
-      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-    </figcaption>
+<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
+            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+        </figcaption>
 </figure>
 </p>
 <p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
@@ -158,15 +173,15 @@ a fractional Brownian motion is used. The idea of using a fractional Brownian mo
   <time datetime="2022-04-09T21:56:42&#43;0100" class="post-date">Sat, Apr 9, 2022</time>
   <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
 I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span><span style="color:#bbb"> </span>i<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#40a070">0</span>;<span style="color:#bbb"> </span>i<span style="color:#bbb"> </span>&lt;<span style="color:#bbb"> </span>numSimulations;<span style="color:#bbb"> </span>i<span style="color:#666">++</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path)<span style="color:#bbb"> </span><span style="color:#007020">//path contains an array of n time-steps of float64.</span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>statistics.<span style="color:#06287e">RecordValue</span>(output)<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; numSimulations; i<span style="color:#666">++</span> {
+</span></span><span style="display:flex;"><span>	pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path) <span style="color:#60a0b0;font-style:italic">//path contains an array of n time-steps of float64.
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path, output)
+</span></span><span style="display:flex;"><span>	statistics.<span style="color:#06287e">RecordValue</span>(output)
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths)<span style="color:#bbb"> </span><span style="color:#007020">//paths contains an array of n time-steps of vectors of size numSimulations </span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths) <span style="color:#60a0b0;font-style:italic">//paths contains an array of n time-steps of vectors of size numSimulations 
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths, output)
+</span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
 <p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
 <p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
 <p>Which one is most appropriate?</p>
@@ -221,30 +236,30 @@ constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional rea
 <p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
 <p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the <a href="https://oxfordcontrol.github.io/COSMO.jl/stable/">COSMO solver</a> on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Solver</th>
-          <th style="text-align: right">RMSE</th>
-          <th style="text-align: right">Time (ms)</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">GoldfarbIdnaniSolver</td>
-          <td style="text-align: right">0.0031130349998388157</td>
-          <td style="text-align: right">0.205</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">COSMO</td>
-          <td style="text-align: right">0.0031130309597602370</td>
-          <td style="text-align: right">21.485</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SCS</td>
-          <td style="text-align: right">0.0031130429769795193</td>
-          <td style="text-align: right">8.381</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:left">Solver</th>
+<th style="text-align:right">RMSE</th>
+<th style="text-align:right">Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GoldfarbIdnaniSolver</td>
+<td style="text-align:right">0.0031130349998388157</td>
+<td style="text-align:right">0.205</td>
+</tr>
+<tr>
+<td style="text-align:left">COSMO</td>
+<td style="text-align:right">0.0031130309597602370</td>
+<td style="text-align:right">21.485</td>
+</tr>
+<tr>
+<td style="text-align:left">SCS</td>
+<td style="text-align:right">0.0031130429769795193</td>
+<td style="text-align:right">8.381</td>
+</tr>
+</tbody>
 </table>
 
   
@@ -279,9 +294,9 @@ A recurring theme is plots presented without context/with the wrong context. Man
 <p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p>
 </blockquote>
 <p>What I found disappointing is the absence of the <a href="https://www.climatefiles.com/exxonmobil/1982-memo-to-exxon-management-about-co2-greenhouse-effect/">famous 1982 plot from Exxon</a> (p. 7), see also <a href="https://gizmodo.com/exxon-predicted-2019-s-ominous-co2-milestone-in-1982-1834748763">the following article with nice red lines for 2019</a>.</p>
-<figure><img src="/post/exxon_co2ppm.jpg"><figcaption>
-      <h4>The Exxon 1982 PPM Plot.</h4>
-    </figcaption>
+<figure><img src="/post/exxon_co2ppm.jpg"/><figcaption>
+            <h4>The Exxon 1982 PPM Plot.</h4>
+        </figcaption>
 </figure>
 
 <p>On this plot, the relation between the temperature increase and the CO2 ppm looks linear, which would be somewhat more alarming.</p>
@@ -353,23 +368,6 @@ This means the observed number of deaths is lower than expected compared with mo
 </ul>
 <p><strong>Conclusion</strong></p>
 <p>This was not the only motivator, another strong one is a Russian friend who caught the Covid-19 in July 2021, who was not very pro-vaccination, but thought, once it was too late, &ldquo;I really should have applied for the vaccine&rdquo;, as he realized it impacted the whole circle of relations around him. Then, one by one, his whole family caught the Covid. Fortunately, no-one died.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/are-tradional-banks-ready-for-the-21st/">Are traditional banks ready for the 21st century?</a>
-  </h1>
-  <time datetime="2021-06-12T07:56:42&#43;0100" class="post-date">Sat, Jun 12, 2021</time>
-  <p>This is a follow up on my parents phishing scam.</p>
-<p>After several weeks, my parents and I were finally able to have a real world meeting with the advisor at the bank. The advisor is a young woman with an obvious background in sales.</p>
-<p>In order to process the paperwork around the reimbursement of the phishing scam, the main issue was the request of the original phishing e-mail by the bank, as my mother had deleted the e-mail. It turns out, that in Thunderbird, deleted e-mails are not deleted on disk until an operation of compactification of the mailbox is done. I was thus able to recover the deleted e-mail. Interestingly, the deleted e-mail was not in the trash file, but directly in the inbox file.</p>
-<p>At first, I sent the message source as PDF, along with a screenshot to the bank. The bank asked to forward the e-mail instead. Interestingly, it turns out that once a phishing e-mail is registered in the various anti-phishing filters, it is not possible to forward (directly or in attachment) or copy paste the email as most servers (including the bank servers) will detect the new email as potential phishing and directly reject the e-mail (reject error).</p>
-<p>So the standard process of the bank is not really appropriate. It can be followed only during the very short period (more luck than anything) where the phishing has not yet been registered in the anti-phishing filters. I noticed by a simple Google search that many other institution follow a similar process, where they ask to forward the phishing e-mail to a specific e-mail address.</p>
-<p>The good news so far is that officially, the advisor pushed the fraud case forward, although it is not entirely clear at this point if it will be processed properly. What shocked me more was the speech of the bank advisor. First, she scared us by telling stories of various credit card frauds (obviously not related to our bank credentials fraud). When she mentioned insurances against credit card frauds, without selling them yet to us, her goal became clear. Then she thought comforting that this kind of fraud only happens once, because once you are confronted to a fraud, you would then be more careful and not make the same mistake anymore, not a convincing argument at all in my views. She indirectly kept blaming my mother for entering her credentials, but was much less clear about the strong authentication at the bank, especially when I explained that, usually, at another bank, I receive a text message with a unique code to enter each time I try to wire money towards a new account, something this bank obviously did not implement properly. Strong authentication is now part of the European law (<a href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072026/LEGISCTA000035407258/#LEGISCTA000035407332">DSP-2</a>). Then she found every single argument to not close some of the accounts of my parents (they have far too many pointless accounts at this bank). And finally she tried to sell us some special managed account for stock trading (managed by the bank entirely, with the money from my parents), claiming the economy was really great in these COVID-19 times.</p>
-<p>Overall there is a real important problem with bank frauds in the 21st century. The system currently in place expects that most people, including 80 years old, must be tech experts, who know how to carefully look at any suspicious email header, such as the from field email address (which could also be better forged than the phishing email my parents received). It expects that everybody carefully checks the http address in the browser (which may also interestingly forged via UTF-8 codes). It relies on somewhat buggy phone applications, which constantly change, and are different for every bank. It expects that most people never click on a link, but then banks themselves send emails with links to promote various products they sell. Banks should really think of adopting a more unified, standard approach to authentication, such as <a href="https://freeotp.github.io/">FreeOTP</a>, based on <a href="https://www.ietf.org/rfc/rfc4226.txt">HOTP</a> and <a href="https://www.ietf.org/rfc/rfc6238.txt">TOTP</a>.</p>
-<p>My mother became so paranoid that she does not recognize a valid message from the bank as a normal, standard communication from the bank anymore.
-And we are left me with a bank advisor who is not far of being a fraudster him/herself. One may wonder if things would really be much worse with a bitcoin wallet.</p>
-<p>By the time I am writing this, my parents were fully reimbursed by the bank, the phishing e-mail was really all they needed.</p>
 
   
 </article>

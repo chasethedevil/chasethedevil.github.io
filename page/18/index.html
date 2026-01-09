@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.152.1">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,56 @@
     </ul>
  </nav>
 
-    <p>&copy; 232331. All rights reserved. </p>
+    <p>&copy; 90911. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/second-cumulant-of-heston/">Second Cumulant of Heston</a>
+  </h1>
+  <time datetime="2013-10-03T17:27:00Z" class="post-date">Thu, Oct 3, 2013</time>
+  <p>I recently stumbled upon an error in the various papers related to the Heston <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;ved=0CEEQFjAC&amp;url=http%3A%2F%2Fta.twi.tudelft.nl%2Fmf%2Fusers%2Foosterle%2Foosterlee%2FCOS.pdf&amp;ei=qYxNUqryFqXJ0QW5u4HYDA&amp;usg=AFQjCNGaMK8Lotud1DP5qReeLWgpoCA0aA&amp;sig2=fljLmTq0WhG8SCgzaOxXxA&amp;bvm=bv.53537100,d.d2k">Cos method</a> regarding the second cumulant. It is used to define the boundaries of the Cos method. Letting phi be Heston characteristic function, the cumulant generating function is:
+$$g(u) = \log(\phi(-iu))$$</p>
+<p>And the second cumulant is defined a:
+$$c_2 = g&rsquo;&rsquo;(0)$$</p>
+<p>Compared to a numerical implementation, the c_2 from the paper is really off in many use cases.</p>
+<p>This is where <a href="/post/maxima-for-symbolic-calculus">Maxima</a> comes useful, even if I had to simplify the results by hand. It leads to the following analytical formula:
+$$c_2 = \frac{v_0}{4\kappa^3}{ 4 \kappa^2 \left(1+(\rho\sigma t -1)e^{-\kappa t}\right) + \kappa \left(4\rho\sigma(e^{-\kappa t}-1)-2\sigma^2 t e^{-\kappa t}\right)+\sigma^2(1-e^{-2\kappa t}) }\\+ \frac{\theta}{8\kappa^3} { 8 \kappa^3 t - 8 \kappa^2 \left(1+ \rho\sigma t + (\rho\sigma t-1)e^{-\kappa t}\right) + 2\kappa \left( (1+2e^{-\kappa t})\sigma^2 t+8(1-e^{-\kappa t})\rho\sigma \right) \\+ \sigma^2(e^{-2\kappa t} + 4e^{-\kappa t}-5) }$$</p>
+<p>In contrast, the paper formula was:
+<figure><img src="/post/Screenshot%20from%202013-10-03%2017%2023%2028.png"/>
+</figure>
+</p>
+<p>I saw this while trying to calibrate Heston on a bumped surface: the results were very different with the Cos method than with the other methods. The short maturities were mispriced, except if one pushed the truncation level L to 24 (instead of the usual 12), and as a result one would also need to significantly raise the number of points used in the Cos method. With the corrected formula, it works well with L=12.</p>
+<p>Here is an example of failure on a call option of strike, spot 1.0 and maturity 1.0 and not-so-realistic Heston parameters $$\kappa=0.1, \theta=1.12, \sigma=1.0, v_0=0.2, \rho=-0377836$$ using 200 points:</p>
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New</td>
+<td>0.1640581405</td>
+</tr>
+<tr>
+<td>Paper</td>
+<td>0.1743425406</td>
+</tr>
+<tr>
+<td>N=30 with 10000 points</td>
+<td>0.1640581423</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Update March 2014</strong> - this is now described in my paper <a href="http://ssrn.com/abstract=2362968">Fourier Integration and Stochastic Volatility Calibration</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/maxima-for-symbolic-calculus/">Maxima for Symbolic Calculus</a>
   </h1>
@@ -112,64 +155,64 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
   </h1>
   <time datetime="2013-09-05T17:35:00Z" class="post-date">Thu, Sep 5, 2013</time>
   <p>A coworker pointed to me that Andersen and Piterbarg book &ldquo;Interest Rate Modeling&rdquo; had a chapter on Fourier integration applied to Heston. The authors rely on the Lewis formula to price vanilla call options under Heston.
-<figure><img src="/post/lewis_formula.png"><figcaption>
-      <h4>Lewis formula</h4>
-    </figcaption>
+<figure><img src="/post/lewis_formula.png"/><figcaption>
+            <h4>Lewis formula</h4>
+        </figcaption>
 </figure>
 </p>
 <p>More importantly, they strongly advise the use of a Black-Scholes control variate. I had read about that idea before, and actually tried it in the Cos method, but it did not improve anything for the Cos method. So I was a bit sceptical. I decided to add the control variate to <a href="/post/attari-lord-kahl--cos-methods-comparison-on-heston/">my Attari code</a>. The results were very encouraging. So I pursued on implementing the Lewis formula and their basic integration scheme (no change of variable).
-<figure><img src="/post/attari_formula.png"><figcaption>
-      <h4>Attari formula</h4>
-    </figcaption>
+<figure><img src="/post/attari_formula.png"/><figcaption>
+            <h4>Attari formula</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/carrmadan_formula.png"><figcaption>
-      <h4>Carr-Madan formula (used by Lord-Kahl)</h4>
-    </figcaption>
+<figure><img src="/post/carrmadan_formula.png"/><figcaption>
+            <h4>Carr-Madan formula (used by Lord-Kahl)</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/heston_formula.png"><figcaption>
-      <h4>Heston formula</h4>
-    </figcaption>
+<figure><img src="/post/heston_formula.png"/><figcaption>
+            <h4>Heston formula</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/cos_formula.png"><figcaption>
-      <h4>Cos formula</h4>
-    </figcaption>
+<figure><img src="/post/cos_formula.png"/><figcaption>
+            <h4>Cos formula</h4>
+        </figcaption>
 </figure>
 </p>
 <p>My impression is that the Lewis formula is not so different from the Attari formula in practice: both have a quadratic denominator, and are of similar complexity. The Lewis formula makes the Black-Scholes control variate real (the imaginary part of the characteristic function is null). The Cos formula looks quite different, but it actually is not that much different as the Vk are quadratic in the denominator as well. I still have this idea of showing how close it is to Attari in spirit.</p>
 <p>My initial implementation of Attari relied on the log transform described by Kahl-Jaeckel to move from an infinite integration domain to a finite domain. As a result adaptive quadratures (for example based on Simpson) provide better performance/accuracy ratio than a very basic trapezoidal rule as used by Andersen and Piterbarg. If I remove the log transform and truncate the integration according by Andersen and Piterbarg criteria, pricing is faster by a factor of x2 to x3.</p>
 <p>This is one of the slightly surprising aspect of Andersen-Piterbarg method: using a very basic integration like the Trapezoidal rule is enough. A more sophisticated integration, be it a Simpson 3/8 rule or some fancy adaptive Newton-Cotes rule does not lead to any better accuracy. The Simpson 3/8 rule won&rsquo;t increase accuracy at all (although it does not cost more to compute) while the adaptive quadratures will often lead to a higher number of function evaluations or a lower overall accuracy.</p>
 <p>Here is the accuracy on put options with a maturity of 2 years:
-<figure><img src="/post/cos_a_p_2y.png">
+<figure><img src="/post/cos_a_p_2y.png"/>
 </figure>
 </p>
 <p>I had to push to 512 points for the Cos method and L=24 (truncation) in order to have a similar accuracy as Attari and Andersen-Piterbarg with 200 points and a control variate. For 1000 options here are the computation times (the difference is smaller for 10 options, around 30%):</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>Time</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Attari</td>
-          <td>0.023s</td>
-      </tr>
-      <tr>
-          <td>Andersen-Piterbarg</td>
-          <td>0.024s</td>
-      </tr>
-      <tr>
-          <td>Cos</td>
-          <td>0.05s</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Attari</td>
+<td>0.023s</td>
+</tr>
+<tr>
+<td>Andersen-Piterbarg</td>
+<td>0.024s</td>
+</tr>
+<tr>
+<td>Cos</td>
+<td>0.05s</td>
+</tr>
+</tbody>
 </table>
 <p>Here is the accuracy on put options with a maturity of 2 days:
-<figure><img src="/post/cos_a_p_2d.png">
+<figure><img src="/post/cos_a_p_2d.png"/>
 </figure>
 </p>
 <p>All methods used 200 points. The error is nearly the same for all. And the Cos method takes now only 0.02s. The results are similar with a maturity of 2 weeks.</p>
@@ -198,40 +241,40 @@ My Scala habits have made me create a stupid bug related to Java enums. In Scala
 <p>I noticed that Attari method accuracy is directly linked to the underlying Gaussian quadrature method accuracy. I found that the doubly adaptive Newton-Cotes quadrature by Espelid (coteda) was the most accurate/fastest on this problem (compared to Gauss-Laguerre/Legendre/Extrapolated Simpson/Lobatto). If the accuracy of the integration is 1e-6, Attari maximum accuracy will also be 1E-6, this means that very out of the money options will be completely mispriced (might even be negative). In a sense it is similar to what I observed on the Cos method.</p>
 <p>&ldquo;Lord-Kahl&rdquo; uses 1e-4 integration accuracy, &ldquo;Attari&rdquo; uses 1E-6, and &ldquo;Cos&rdquo; uses 128 points. The reference is computed using <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-ii">Lord-Kahl</a> with Newton-Cotes and 1E-10 integration accuracy.
 Well here are the results in terms of accuracy:
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2020%2029.png"/>
 </figure>
 </p>
 <p>As expected, Lord-Kahl absolute accuracy is only 1E-5 (a bit better than 1E-4 integration accuracy), while Attari is a bit better than 1E-6, and Cos is nearly 1E-7 (higher inaccuracy in the high strikes, probably because of the truncation inherent in the Cos method).
-<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png">
+<figure><img src="/post/Screenshot%20from%202013-08-28%2017%2021%2022.png"/>
 </figure>
 </p>
 <p>The relative error tells a different story, Lord-Kahl is 1E-4 accurate here, over the full range of strikes. It is the only method to be accurate for very out of the money options: the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price">optimal alpha</a> allows to go beyond machine epsilon without problems. The Cos method can only go to absolute accuracy of around 5E-10 and will oscillate around, while the reference prices can be as low as 1E-25. Similarly Attari method will oscillate around 5E-8.</p>
 <p>What&rsquo;s interesting is how much time it takes to price 1000 options of various strikes and same maturity. In Attari, the charateristic function is cached.</p>
 <table>
-  <thead>
-      <tr>
-          <th>Method</th>
-          <th>Time</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Cos</td>
-          <td>0.012s</td>
-      </tr>
-      <tr>
-          <td>Lord-Kahl</td>
-          <td>0.099s</td>
-      </tr>
-      <tr>
-          <td>Attari</td>
-          <td>0.086s</td>
-      </tr>
-      <tr>
-          <td>Reference</td>
-          <td>0.682s</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Method</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cos</td>
+<td>0.012s</td>
+</tr>
+<tr>
+<td>Lord-Kahl</td>
+<td>0.099s</td>
+</tr>
+<tr>
+<td>Attari</td>
+<td>0.086s</td>
+</tr>
+<tr>
+<td>Reference</td>
+<td>0.682s</td>
+</tr>
+</tbody>
 </table>
 <p>The Cos method is around 7x faster than Attari, for a higher accuracy. Lord-Kahl is almost 8x slower than Cos, which is still quite impressive given that here, the characteristic function is not cached, plus it can price very OTM options while following a more useful relative accuracy measure. When pricing 10 options only, Lord-Kahl becomes faster than Attari, but Cos is still faster by a factor of 3 to 5.</p>
 <p>It&rsquo;s also quite impressive that on my small laptop I can price nearly 100K options per second with Heston.</p>
@@ -264,45 +307,21 @@ Well here are the results in terms of accuracy:
 <p>The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple <a href="http://en.wikipedia.org/wiki/Fourier_series">Fourier series</a> are used instead of the standard Fourier transform. As a consequence there are a few more approximations that are done related to the truncation of the domain of integration and the result is already discrete, so no need for a Gaussian quadrature.</p>
 <p>In practice, the promise is to be faster. I was wondering how stable it was, especially with regards to short maturities/large strikes.</p>
 <p>It&rsquo;s quite easy to code, I made only one mistake initially: I forgot to handle the first element of the sum differently. It is however very unstable for call options prices, because the upper integration boundary is then used in an exponential, which explodes in most cases I have tried, while for put options, the lower boundary is used in an exponential, and the lower boundary is negative.</p>
-<figure><img src="/post/snapshot33.png"><figcaption>
-      <h4>Price is too low at high strikes</h4>
-    </figcaption>
+<figure><img src="/post/snapshot33.png"/><figcaption>
+            <h4>Price is too low at high strikes</h4>
+        </figcaption>
 </figure>
 
 <p>So one has to rely on the put-call parity formula to compute call prices. This means that we are limited to something around machine epsilon accuracy and can&rsquo;t compute a very out-of-the-money call price, contrary to the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii">Lord-Kahl</a> method. However it seemed stable for the various Heston parameters I have tried and accurate as long as the resulting price is not too small as the following graph shows.
-<figure><img src="/post/snapshot34.png"><figcaption>
-      <h4>Price is way too high at low strikes</h4>
-    </figcaption>
+<figure><img src="/post/snapshot34.png"/><figcaption>
+            <h4>Price is way too high at low strikes</h4>
+        </figcaption>
 </figure>
 </p>
 <p>I was surprised to see that the more in-the-money put options also have inaccuracy: the price given is actually less than the final payoff. This is related to the domain of truncation. If I double it (L=24 instead of L=12), those disappear, what remains is that OTM puts can&rsquo;t go beyond 1e-12 for the COS method.</p>
 <p>In practice the COS method was effectively 2x to 3x faster than my Lord-Kahl implementation. As a side note, on this problem, Java is only 2x faster than Octave.</p>
 <p>As long as we don&rsquo;t care about very small option prices, it is an interesting alternative, especially because it is simple.</p>
 <p><strong>Update April 2014</strong> - There is more information on the subject in my paper at <a href="http://papers.ssrn.com/abstract=2362968">http://papers.ssrn.com/abstract=2362968</a></p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/">Octave vs Scilab for PDEs in Finance</a>
-  </h1>
-  <time datetime="2013-07-30T12:10:00Z" class="post-date">Tue, Jul 30, 2013</time>
-  <p>I was used to <a href="https://www.scilab.org">Scilab</a> for small experiments involving linear algebra. I also like some of Scilab choices in algorithms: for example it provides PCHIM monotonic spline algorithm, and uses Cody for the cumulative normal distribution.</p>
-<p>Matlab like software is particularly well suited to express PDE solvers in a relatively concise manner. To illustrate some of my experiments, I started to write a Scilab script for the <a href="/post/sabr-with-the-new-hagan-pde-approach/">Arbitrage Free SABR problem</a>. It worked nicely and is a bit nicer to read than my equivalent Scala program. But I was a bit surprised by the low performance.</p>
-<p>Then I heard about <a href="https://www.gnu.org/software/octave/">Octave</a>, which is even closer to Matlab syntax than Scilab and started wondering if it was better or faster. Here are my results for 1000 points and 10 time-steps:</p>
-<ul>
-<li>Scilab 4.3s</li>
-<li>Octave 4.1s</li>
-</ul>
-<p>I then added the keyword sparse when I build the tridiagonal matrix and end up with:</p>
-<ul>
-<li>Scilab 0.04s</li>
-<li>Octave 0.02s</li>
-<li>Scala 0.034s (first run)</li>
-<li>Scala 0.004s (once Hotpot has kicked in)</li>
-</ul>
-<p>So Octave looks a bit better than Scilab in terms of performance. However I could not figure out from the documentation what algorithm was used for the cumulative normal distribution and if there was a monotonic spline interpolation in Octave.</p>
-<p>In general I find it impressive that Octave is faster than the first run of Scala or Java, and impressive as well that the Hotspot makes gain of x10.</p>
-<p><strong>Update 2024</strong> I now use <a href="https://www.julialang.org">Julia</a>, which offers good performance with concise code.</p>
 
   
 </article>

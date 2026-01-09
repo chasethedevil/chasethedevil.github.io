@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.152.1">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 232331. All rights reserved. </p>
+    <p>&copy; 90911. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/controlling-the-sabr-wings-with-hagan-pde/">Controlling the SABR wings with Hagan PDE </a>
+  </h1>
+  <time datetime="2015-12-15T10:56:00Z" class="post-date">Tue, Dec 15, 2015</time>
+   
+
+On the <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=78001&amp;FTVAR_MSGDBTABLE=&amp;STARTPAGE=4">Wilmott forum</a>, Pat Hagan has recently suggested to cap the equivalent local volatility in order to control the wings and better match CMS prices. It also helps making the SABR approximation better behaved as the expansion is only valid when<br /><div>$$ 1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K) $$</div><div>is close to 1.&nbsp;</div><div><br /><div>In the PDE approach (especially the non transformed one), it is very simple, one just needs to update the equivalent local vol as&nbsp;</div></div><div>$$\alpha K^\beta \min\left(M, \sqrt{1 + 2\frac{\rho\nu}{\alpha}y(K)+\frac{\nu^2}{\alpha^2}y^2(K)}\right)$$</div><div><br /></div><div>While it is straightforward to include in the PDE, it is more difficult to derive a good approximation. The zero-th order behaves as expected, but the first order formula has a unnatural kink, likely because of the non differentiability due to the min function.&nbsp;</div><div><br /></div><div>The following graphs presents the non capped PDE, the capped PDE with M=4*nu (PDEC4) and M=6*nu (PDEC6) as well as the approximation (Andersen Ratcliffe / Gatheral first order) where I have only taken care of the right wing. The SABR parameters are alpha = 0.0630, beta = 0.7, rho = -0.363, nu = 0.421, T = 10, f = 0.0439.</div><div><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s1600/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="400" src="http://1.bp.blogspot.com/-7N928DyGhHY/Vm_ibyWlVcI/AAAAAAAAIP0/YF7Mfcpm4w4/s400/Screenshot%2Bfrom%2B2015-12-15%2B10-25-16.png" width="385" /></a></div><div><br /></div><div>We can see that the higher the cap is, the closer we are to the standard SABR PDE, and the lower the cap is, the flatter are the wings.<br /><br />The approximation matches well ATM (it is then equivalent to standard SABR PDE) but then has a discontinuous derivative for the K that reaches the threshold M. Far away, it matches very well again.</div>
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/broken-internet/">Broken Internet?</a>
   </h1>
@@ -130,49 +142,49 @@ I was wondering how to generate some nice cloudy like texture with a simple prog
 <p>So what about my small Monte-Carlo test?</p>
 <p>Well it turns out that Go is quite fast on it:</p>
 <table>
-  <thead>
-      <tr>
-          <th>Multipl.</th>
-          <th>Rust</th>
-          <th>Go</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>0.005</td>
-          <td>0.007</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>0.03</td>
-          <td>0.03</td>
-      </tr>
-      <tr>
-          <td>100</td>
-          <td>0.21</td>
-          <td>0.29</td>
-      </tr>
-      <tr>
-          <td>1000</td>
-          <td>2.01</td>
-          <td>2.88</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Multipl.</th>
+<th>Rust</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.005</td>
+<td>0.007</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0.03</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.21</td>
+<td>0.29</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>2.01</td>
+<td>2.88</td>
+</tr>
+</tbody>
 </table>
 <p>It is faster than Java/Scala and not too far off Rust, except if one uses FastMath in Scala, then the longest test is slighly faster with Java (not the other ones).</p>
 <p>There are some issues with the Go language: there is no operator overloading, which can make matrix/vector algebra more tedious and there is no generic/template. The later is somewhat mitigated by the automatic interface implementation. And fortunately for the former, complex numbers are a standard type. Still, automatic differentiation would be painful.</p>
 <p>Still it was extremely quick to grasp and write code, because it&rsquo;s so simple, especially when compared to Rust. But then, contrary to Rust, there is not as much safety provided by the language. Rust is quite impressive on this side (but unfortunately that implies less readable code). I&rsquo;d say that Go could become a serious alternative to Java.</p>
 <p>I also found an interesting minor performance issue with the default Go <a href="https://golang.org/src/math/rand/rand.go">Rand.Float64</a>, the library convert an Int63 to a double precision number this way:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span><span style="color:#bbb"> </span>(r<span style="color:#bbb"> </span><span style="color:#666">*</span>Rand)<span style="color:#bbb"> </span><span style="color:#06287e">Float64</span>()<span style="color:#bbb"> </span><span style="color:#902000">float64</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>f<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>())<span style="color:#bbb"> </span><span style="color:#666">/</span><span style="color:#bbb"> </span>(<span style="color:#40a070">1</span><span style="color:#bbb"> </span><span style="color:#666">&lt;&lt;</span><span style="color:#bbb"> </span><span style="color:#40a070">63</span>)<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">if</span><span style="color:#bbb"> </span>f<span style="color:#bbb"> </span><span style="color:#666">==</span><span style="color:#bbb"> </span><span style="color:#40a070">1</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>f<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#40a070">0</span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span><span style="color:#007020;font-weight:bold">return</span><span style="color:#bbb"> </span>f<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> (r <span style="color:#666">*</span>Rand) <span style="color:#06287e">Float64</span>() <span style="color:#902000">float64</span> {
+</span></span><span style="display:flex;"><span>	f <span style="color:#666">:=</span> <span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>()) <span style="color:#666">/</span> (<span style="color:#40a070">1</span> <span style="color:#666">&lt;&lt;</span> <span style="color:#40a070">63</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">if</span> f <span style="color:#666">==</span> <span style="color:#40a070">1</span> {
+</span></span><span style="display:flex;"><span>		f = <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#007020;font-weight:bold">return</span> f
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 I was interested in having a number in (0,1) and not [0,1), so I just used the conversion pattern from MersenneTwister 64 code:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>f<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span>(<span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>()<span style="color:#bbb"> </span><span style="color:#666">&gt;&gt;</span><span style="color:#bbb"> </span><span style="color:#40a070">11</span>)<span style="color:#bbb"> </span><span style="color:#666">+</span><span style="color:#bbb"> </span><span style="color:#40a070">0.5</span>)<span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span>(<span style="color:#40a070">1.0</span><span style="color:#666">/</span><span style="color:#40a070">4503599627370496.0</span>)</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>f <span style="color:#666">:=</span> (<span style="color:#007020">float64</span>(r.<span style="color:#06287e">Int63</span>() <span style="color:#666">&gt;&gt;</span> <span style="color:#40a070">11</span>) <span style="color:#666">+</span> <span style="color:#40a070">0.5</span>) <span style="color:#666">*</span> (<span style="color:#40a070">1.0</span><span style="color:#666">/</span><span style="color:#40a070">4503599627370496.0</span>)</span></span></code></pre></div>
 The reasoning behind this later code is that the mantissa is 52 bits, and this is the most accuracy we can have between 0 and 1. There is no need to go further, this also avoids the issue around 1. It&rsquo;s also straightforward that is will preserve the uniform property, while it&rsquo;s not so clear to me that r.Int63()/2^63 is going to preserve uniformity as double accuracy is higher around 0 (as the exponent part can be used there) and lesser around 1: there is going to be much more multiple identical results near 1 than near 0.</p>
 <p>It turns out that the if check adds 5% performance penalty on this test, likely because of processor caching issues. I was surprised by that since there are many other ifs afterwards in the code, for the inverse cumulative function, and for the payoff.</p>
 
@@ -197,21 +209,21 @@ In his book "<i>Monte Carlo Methods in Finance</i>", P. Jäckel explains a simpl
   <p>There are not many arbitrage free extrapolation schemes. Benaim et al. extrapolation is one of the few that claims it. However, despite the paper&rsquo;s title, it is not truely arbitrage free. The density might be positive, but the forward is not preserved by the implied density. It can also lead to wings that don&rsquo;t obey Lee&rsquo;s moments condition.</p>
 <p>On a Wilmott forum, <a href="http://www.wilmott.com/messageview.cfm?catid=4&amp;threadid=95309">P. Caspers proposed</a> the following counter-example based on extrapolating SABR: \( \alpha=15%, \beta=80%, \nu=50%, \rho=-48%, f=3%, T=20.0 \). He cut this smile at 2.5% and 6% and used the BDK extrapolation scheme with mu=nu=1.</p>
 <p>A truly arbitrage free extrapolation can be obtained through <a href="http://ssrn.com/abstract=1694972">Andreasen Huge volatility interpolation</a>, making sure the grid is wide enough to allow extrapolation. Their method is basically a one step finite difference implicit Euler scheme applied to a local volatility parameterization that has as many parameters than prices. The method is presented with piecewise constant local volatility, but actually used with piecewise linear local volatility in their example.</p>
-<p><figure><img src="/post/Screenshot-Untitled%20Window-5.png"><figcaption>
-      <h4>Smile.</h4>
-    </figcaption>
+<p><figure><img src="/post/Screenshot-Untitled%20Window-5.png"/><figcaption>
+            <h4>Smile.</h4>
+        </figcaption>
 </figure>
- <figure><img src="/post/Screenshot-Untitled%20Window-4.png"><figcaption>
-       <h4>Density with piecewise linear local volatility.</h4>
-     </figcaption>
+ <figure><img src="/post/Screenshot-Untitled%20Window-4.png"/><figcaption>
+             <h4>Density with piecewise linear local volatility.</h4>
+         </figcaption>
  </figure>
 </p>
 <p>There is still a tiny oscillation that makes the density negative, but one understands why typical extrapolations fail on the example: the change in density must be very steep.
 Note that moving the left extrapolation point even closer to the forward might fix BDK negative density, but we  are already very close, and we can really wonder if going closer is  really a good idea since we would effectively use a somewhat arbitrary  extrapolation in most of the interpolation zone.</p>
 <p>It turns out that we can also use a cubic spline local volatility with linear extrapolation, and the density would look then:
-<figure><img src="/post/Screenshot-Untitled%20Window-3.png"><figcaption>
-      <h4>Density with cubic spline local volatility.</h4>
-    </figcaption>
+<figure><img src="/post/Screenshot-Untitled%20Window-3.png"/><figcaption>
+            <h4>Density with cubic spline local volatility.</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Interestingly, the right side of the density is much better captured.
@@ -236,21 +248,21 @@ $$ p_{f,\Sigma} = k N(-d_2) - f N(-d_1)$$</p>
 <p>Inverting \( p_0&rsquo; \) is going to lead to a specific \( d_2 \), and you are not guaranteed that you can push \( f \) high and have \( p_{f, \Sigma} \) large enough to match \( p_0 \). As example we can just take \(p_0 \geq k N(-d_2)\) which will only be matched if \( f \leq 0 \).</p>
 <p>This is slightly unintuitive as put-call parity would suggest some kind of equivalence. The problem here is that we would need to consider the function of \(k\) instead of \(f\) for it to work, so we can&rsquo;t really work with a put directly.</p>
 <p>Here are the two different extrapolations on Kahale own example:
-<figure><img src="/post/Screenshot-Untitled.png"><figcaption>
-      <h4>Window Extrapolation of the left wing with calls (blue doted line)</h4>
-    </figcaption>
+<figure><img src="/post/Screenshot-Untitled.png"/><figcaption>
+            <h4>Window Extrapolation of the left wing with calls (blue doted line)</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/Screenshot-Untitled%20Window-1.png"><figcaption>
-      <h4>Extrapolation of the left wing with puts (blue doted line)</h4>
-    </figcaption>
+<figure><img src="/post/Screenshot-Untitled%20Window-1.png"/><figcaption>
+            <h4>Extrapolation of the left wing with puts (blue doted line)</h4>
+        </figcaption>
 </figure>
 </p>
 <p>Displaced diffusion extrapolation is sometimes advocated. It is not the same as Kahale extrapolation: In Kahale, only the forward variable is varying in the Black-Scholes formula, and there is no real underlying stochastic process. In a displaced diffusion setting, we would adjust both strike and forward, keeping put-call parity at the formula level. But unfortunately, it suffers from the same kind of problem: it can not always be solved for slope and price. When it can however, it will give a more consistent extrapolation.
 I find it interesting that some smiles can not be extrapolated by displaced diffusion in a C1 manner except if one allows negative volatilities in the formula (in which case we are not anymore in a pure displaced diffusion setting).</p>
-<figure><img src="/post/Screenshot-Untitled%20Window-2.png"><figcaption>
-      <h4>Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)</h4>
-    </figcaption>
+<figure><img src="/post/Screenshot-Untitled%20Window-2.png"/><figcaption>
+            <h4>Extrapolation of the left wing using negative displaced diffusion volatilities (blue dotted line)</h4>
+        </figcaption>
 </figure>
 
 
@@ -271,22 +283,10 @@ I find it interesting that some smiles can not be extrapolated by displaced diff
 <li>OpenSuse 13.2 with KDE 4. I use that on my desktop, all issues are gone, and the integration of KDE in OpenSuse is clearly the best I have experienced. In contrast, KDE 5 on Ubuntu was a disaster for me. I also managed to fuck up the apt dependencies so much that I thought it would be simpler to reinstall a new distribution.</li>
 <li>Mate on Ubuntu 15.04. Very impressed so far. It&rsquo;s probably what Gnome should have been instead of going to 3.0. Even if there are nice aspects of the Gnome shell, Mate is fast, pretty, user friendly, much better than Cinnamon. There are even a few layouts to choose (most of them are good), here is &ldquo;Eleven with Mate menu&rdquo; (it installed and setup the Plank dock automatically for that layout, more traditional layouts without dock are available):</li>
 </ul>
-<figure><img src="/post/Mate-Eleven.png"><figcaption>
-      <h4>Mate Eleven</h4>
-    </figcaption>
+<figure><img src="/post/Mate-Eleven.png"/><figcaption>
+            <h4>Mate Eleven</h4>
+        </figcaption>
 </figure>
-
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/square-root-crank-nicolson/">Square Root Crank-Nicolson</a>
-  </h1>
-  <time datetime="2015-06-19T16:41:00Z" class="post-date">Fri, Jun 19, 2015</time>
-   
-
-C. Reisinger kindly pointed out to me <a href="http://arxiv.org/abs/1210.5487">this paper around square root Crank-Nicolson</a>. The idea is to apply a square root of time transformation to the PDE, and discretize the resulting PDE with Crank-Nicolson. Two reasons come to mind to try this: <br /><ul><li>the square root transform will result in small steps initially, where the solution is potentially not so smooth, making Crank-Nicolson behave better.</li><li>&nbsp;it is the natural time of the Brownian motion.</li></ul>Interestingly, it has nicer properties than what those reasons may suggest. On the Fokker-Planck density PDE, it does not oscillate under some very mild conditions and <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2605160">preserves density positivity at the peak</a>.<br /><br />Out of curiosity I tried it to price a one touch barrier option. Of course there is an analytical solution in my test case (Black-Scholes assumptions), but as soon as rates are assumed not constant or local volatility is used, there is no other solution than a numerical method. In the later case, finite difference methods are quite good in terms of performance vs accuracy.<br /><br />The classic Crank-Nicolson gives a reasonable price, but the strong oscillations near the barrier, at every time step are not very comforting.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="337" src="http://3.bp.blogspot.com/-XNr7vE77Dfo/VYQoBELx2KI/AAAAAAAAICw/FVVYrehW39Y/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A24%253A59.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />Moving to square root of time removes nearly all oscillations on this problem, even with a relatively low number of time steps compared to the number of space steps.<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-JXVRuhLrMOQ/VYQodTFBDGI/AAAAAAAAIC4/hrsSdQbA5Wo/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A14.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Square Root Crank-Nicolson Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />We can see that the second step prices are a bit higher than the third step (the lines cross), which looks like a small numerical oscillation in time, even if there is no oscillation is space.<br /><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://1.bp.blogspot.com/-d-xXHOvO1H0/VYQon2V5eiI/AAAAAAAAIDA/4g-YYby4R0A/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A06.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">TR-BDF2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />As a comparison, the TR-BDF2 scheme does relatively well: oscillations are removed after the second step, even with the extreme ratio of time steps vs space steps used on this example so that illustrations are clearer - Crank-Nicolson would still oscillate a lot with 10 times less space steps but we would not see oscillation on the square root Crank-Nicolson and a very mild one on TR-BDF2.<br /><br />The LMG2 scheme (a local richardson extrapolation) does not oscillate at all on this problem but is the slowest:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s1600/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://3.bp.blogspot.com/-HTxKtzO8au4/VYQo8t-wkdI/AAAAAAAAIDI/oPOjJWs0SI0/s640/Screenshot%2Bfrom%2B2015-06-19%2B16%253A25%253A53.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">LMG2 Prices near the Barrier. Each line is a different time.</td></tr></tbody></table><br />The square root Crank-Nicolson is quite elegant. It can however not be applied to that many problems in practice, as often some grid times are imposed by the payoff to evaluate, for example in a case of a discrete weekly barrier. But for continuous time problems (density PDE, Vanilla, American, continuous barriers) it's quite good.<br /><br />In reality, with a continuous barrier, the payoff is not discontinuous at every step, but it is only discontinuous at the first step. So Rannacher smoothing would work very well on that problem:<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a href="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s1600/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="338" src="http://4.bp.blogspot.com/-A-qqKczuefQ/VYQwf2ba_MI/AAAAAAAAIDY/2cYpi_3Y_pI/s640/Screenshot%2Bfrom%2B2015-06-19%2B17%253A08%253A35.png" width="640" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Rannacher Prices near the Barrier. Each line is a different time.</td></tr></tbody></table>The somewhat interesting payoff left for the square root Crank-Nicolson is the American.<br />
-
 
 
   

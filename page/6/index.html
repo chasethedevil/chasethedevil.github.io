@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.152.1">
+  <meta name="generator" content="Hugo 0.123.7">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,29 @@
     </ul>
  </nav>
 
-    <p>&copy; 232331. All rights reserved. </p>
+    <p>&copy; 90911. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/42/">42</a>
+  </h1>
+  <time datetime="2019-12-05T20:56:42&#43;0100" class="post-date">Thu, Dec 5, 2019</time>
+  <p>Today my 6-years old son came with a math homework. The stated goal was to learn the different ways to make 10 out of smaller numbers. I was impressed. Immediately, I wondered</p>
+<blockquote>
+<p>how many ways are there to make 10 out of smaller numbers?</p>
+</blockquote>
+<p>This is one of the beauties of maths: a very simple problem, which a 6-years old can understand, may actually be quite fundamental. If you want to solve this in the general case, for any number instead of 10, you end up with the <a href="https://en.wikipedia.org/wiki/Partition_(number_theory)#Restricted_part_size_or_number_of_parts">partition function</a>. And in order to find this, you will probably learn recurrence relations. So what is the answer for 10?</p>
+<blockquote>
+<p>42</p>
+</blockquote>
+<p>Then I looked at one exercise they did in class, which was simply to find different ways to pay 10 euros with bills of 10, 5 and coins of 2 and 1 euro(s).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/python-numba-overrated/">Numba, Pypy Overrated?</a>
   </h1>
@@ -137,9 +153,9 @@ In addition you might find the following interesting:</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#06287e">print</span>(sol<span style="color:#666">$</span>solution) <span style="color:#60a0b0;font-style:italic"># this gives all NaNs</span></span></span></code></pre></div>
 <p>Other people stumbled on <a href="https://stats.stackexchange.com/questions/259993/why-would-quadratic-program-in-svm-not-work-for-very-large-or-very-small-lambda">similar</a> issues.</p>
 <p>In my specific case, I was able to debug the quadprog algorithm and find the root cause: two variables \(g_c\) and \(g_s\) can become very small, and their square becomes essentially zero, creating a division by zero. If, instead of computing \( \frac{g_s^2}{g_c^2} \) we compute \( \left(\frac{g_s}{g_c}\right)^2 \), then the division by zero is avoided as the two variables are of the same order.</p>
-<figure><img src="/post/quadprog_nan_fix.png"><figcaption>
-      <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
-    </figcaption>
+<figure><img src="/post/quadprog_nan_fix.png"/><figcaption>
+            <h4>Sample code change [on github](https://github.com/cran/quadprog/pull/1/commits/7f51915f7c662c7fac3d4e2ab067cfbc292767f8).</h4>
+        </figcaption>
 </figure>
 
 <p>While it probably does not catter for all the possible NaN use cases, it did fix all the cases I stumbled upon.</p>
@@ -155,61 +171,61 @@ of a TSLA stock crash, reproducing the <a href="https://www.linkedin.com/pulse/o
 <p>According to the implied cumulative probability density, TSLA has around 15% chance of crashing below $100. Is this really
 high compared to other stocks? or is it the interpretation of the data erroneous?</p>
 <p>Here I take a look at NFLX (Netflix). Below is the implied volatility according to three different models.</p>
-<figure><img src="/post/nflx2020_vol.png"><figcaption>
-      <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
-    </figcaption>
+<figure><img src="/post/nflx2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 <p>Again, the shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
 include an inverse relative bid-ask spread weighting in the calibration.</p>
 <p>The corresponding implied cumulative density is</p>
-<figure><img src="/post/nflx2020_cum.png"><figcaption>
-      <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
-    </figcaption>
+<figure><img src="/post/nflx2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 <p>More explicitely, we obtain</p>
 <table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>probability of NFLX &lt; 130</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Collocation</td>
-          <td>3.3%</td>
-      </tr>
-      <tr>
-          <td>Lognormal Mixture</td>
-          <td>3.6%</td>
-      </tr>
-      <tr>
-          <td>Andreasen-Huge regularized</td>
-          <td>3.7%</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of NFLX &lt; 130</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>3.3%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>3.6%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>3.7%</td>
+</tr>
+</tbody>
 </table>
 <p>The probability of NFLX moving below $130 is significantly smaller than the probability of TSLA moving below $100 (which is also around the same 1/3 of the spot price).</p>
 <p>For completeness, the implied probability density is</p>
-<figure><img src="/post/nflx2020_rnd.png"><figcaption>
-      <h4>Probability density implied from Jan 2020 NFLX options.</h4>
-    </figcaption>
+<figure><img src="/post/nflx2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 NFLX options.</h4>
+        </figcaption>
 </figure>
 
 <p>I did not particularly optimize the regularization constant here. The lognormal mixture can have a tendency to produce
 too large bumps in the density at specific strikes, suggesting that it could also benefit of some regularization.</p>
 <p>What about risky stocks like SNAP (Snapchat)? It is more challenging to imply the density for SNAP as there are
 much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below is an attempt.</p>
-<figure><img src="/post/snap2020_vol.png"><figcaption>
-      <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
-    </figcaption>
+<figure><img src="/post/snap2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
 </figure>
 
-<figure><img src="/post/snap2020_cum.png"><figcaption>
-      <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
-    </figcaption>
+<figure><img src="/post/snap2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 SNAP options.</h4>
+        </figcaption>
 </figure>
 
 <p>We find a probability of moving below 1/3 of the current price lower than with TSLA: around 12% SNAP vs 15% for TSLA.</p>
@@ -224,51 +240,51 @@ much fewer traded options on the NASDAQ: less strikes, and a lower volume. Below
 As I was also recently looking at the TSLA options, I was a bit intrigued. I looked at the option chain on July 10th,
 and implied the European volatility from the American option prices. I then fit a few of my favorite models: Andreasen-Huge with Tikhonov regularization, the lognormal mixture, and a polynomial collocation of degree 7.
 This results in the following graph</p>
-<figure><img src="/post/tsla2020_vol.png"><figcaption>
-      <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_vol.png"/><figcaption>
+            <h4>Black volatility implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>The shape is not too difficult to fit, and all models give nearly the same fit, within the bid-ask spread as long as we
 include an inverse relative bid-ask spread weighting in the calibration. Note that I
 removed the quote for strike 30, as the bid-ask spread was, unusually extremely large and would only introduce noise.</p>
 <p>Like Timothy Klassen, we can look at the implied cumulative density of each model.</p>
-<figure><img src="/post/tsla2020_cum.png"><figcaption>
-      <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_cum.png"/><figcaption>
+            <h4>Cumulative density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>More explicitely, we obtain</p>
 <table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>probability of TSLA &lt; 100</th>
-          <th>probability of TSLA &lt; 15</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Collocation</td>
-          <td>15.4%</td>
-          <td>7.2%</td>
-      </tr>
-      <tr>
-          <td>Lognormal Mixture</td>
-          <td>15.2%</td>
-          <td>8.0%</td>
-      </tr>
-      <tr>
-          <td>Andreasen-Huge regularized</td>
-          <td>15.0%</td>
-          <td>7.7%</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Model</th>
+<th>probability of TSLA &lt; 100</th>
+<th>probability of TSLA &lt; 15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>15.4%</td>
+<td>7.2%</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>15.2%</td>
+<td>8.0%</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>15.0%</td>
+<td>7.7%</td>
+</tr>
+</tbody>
 </table>
 <p>It would have been great of Timothy Klassen had shown the implied density as well, in the spirit of my <a href="/post/implying-the-probability-density-from-market-option-prices-ii">earlier posts on a similar subject</a>.</p>
-<figure><img src="/post/tsla2020_rnd.png"><figcaption>
-      <h4>Probability density implied from Jan 2020 TSLA options.</h4>
-    </figcaption>
+<figure><img src="/post/tsla2020_rnd.png"/><figcaption>
+            <h4>Probability density implied from Jan 2020 TSLA options.</h4>
+        </figcaption>
 </figure>
 
 <p>In particular, the choice of model has a much stronger impact on the implied density. Even though Andreasen-Huge has more
@@ -277,26 +293,26 @@ the constant of the Tikhonov regularization, at the cost of a slightly worse fit
 <p>The collocation produces a significantly simpler shape. This is not necessarily a drawback, since the fit is quite good
 and more importantly, it does not have a tendency to overfit (unlike the two other models considered).</p>
 <table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>weighted root mean square error in vols</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Collocation</td>
-          <td>0.00484</td>
-      </tr>
-      <tr>
-          <td>Lognormal Mixture</td>
-          <td>0.00432</td>
-      </tr>
-      <tr>
-          <td>Andreasen-Huge regularized</td>
-          <td>0.00435</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Model</th>
+<th>weighted root mean square error in vols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collocation</td>
+<td>0.00484</td>
+</tr>
+<tr>
+<td>Lognormal Mixture</td>
+<td>0.00432</td>
+</tr>
+<tr>
+<td>Andreasen-Huge regularized</td>
+<td>0.00435</td>
+</tr>
+</tbody>
 </table>
 <p>The most interesting from T. Klassen plot, is the comparison with the stock price across time.
 It is expected that the probability of going under $100 will be larger when the stock price moves down,
@@ -346,15 +362,15 @@ no error in their third moment.</p>
 Gaussian kernel approaches will, by construction, tend to exhibit such modes. It is not so obvious to know if those are real or artificial. There are other ways to apply the Gaussian kernel,
 for example by optimizing the nodes locations and the standard deviation of each Gaussian. The resulting density with those is very similar looking.</p>
 <p>Following is the risk neutral density implied by nonic polynomial collocation out of the same quotes (Kees and I were looking at robust ways to apply the stochastic collocation):</p>
-<figure><img src="/post/rnd_nonic_collocation.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_nonic_collocation.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 <p>There is now just one mode, and the fit in implied volatilities is much better.</p>
-<figure><img src="/post/nonic_collocation_vol.png"><figcaption>
-      <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
-    </figcaption>
+<figure><img src="/post/nonic_collocation_vol.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with stochastic collocation on a nonic polynomial.</h4>
+        </figcaption>
 </figure>
 
 <p>In a related experiment, <a href="https://quantsrus.github.io/post/staying-arbitrage-free-with-andreasen-huge-volatility-interpolation/">Jherek Healy showed</a>
@@ -364,16 +380,16 @@ that the Andreasen-Huge arbitrage-free single-step interpolation will lead to a 
 His Tikhonov regularization consists here in applying a roughness penalty consisting
 in the sum of squares of the consecutive local volatility slope differences. This is nearly the same as using the matrix of discrete second derivatives as Tikhonov matrix. The same idea can be found in cubic spline smoothing.
 This roughness penalty can be added in the calibration of the Andreasen-Huge piecewise-linear discrete local volatilities and we obtain then a smooth RND:</p>
-<figure><img src="/post/rnd_ah_tikhonov.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with Andreasen-Huge and Tikhonov regularization.</h4>
+        </figcaption>
 </figure>
 
 <p>One difficulty however is to find the appropriate penalty factor \( \lambda \). On this example, the optimal penalty factor can be guessed from the L-curve which consists in plotting
 the L2 norm of the objective against the L2 norm of the penalty term (without the factor lambda) in log-log scale, see for example <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjQ28KQ5qjbAhUFWRQKHXIQA2cQFggoMAA&amp;url=https%3A%2F%2Fwww.sintef.no%2Fglobalassets%2Fproject%2Fevitameeting%2F2005%2Flcurve.pdf&amp;usg=AOvVaw18VTDweUhAT0nzDdL2KZtR">this document</a>. Below I plot a closely related function: the log of the penalty (with the lambda factor) divided by the log of the objective, against lambda. The point of highest curvature corresponds to the optimal penalty factor.</p>
-<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/rnd_ah_tikhonov_lcurve.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>Note that in practice, this requires multiple calibrations the model with different values of the penalty factor, which can be slow.
@@ -410,9 +426,9 @@ on this example, the Andreasen-Huge method has 75 free-parameters while the noni
 I created it from a least squares spline fit of the market mid implied volatilities (weighted by the inverse of the bid-ask spread). While it looks reasonable, the underlying
 technique is not very robust. It is particularly sensitive to the number of options strikes used as spline nodes.</p>
 <p>Below I vary the number of nodes, by considering nodes at every N market strikes, for different values of N.</p>
-<figure><img src="/post/spw_density_spline_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_spline_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Least squares spline approach</h4>
+        </figcaption>
 </figure>
 
 <p>With \(N \leq 6\), the density has large wiggles, that go into the negative half-plane. As expected, a large N produces a flatter and smoother density. It is not
@@ -465,64 +481,37 @@ the same plot as with the spline approach, that is we choose every N market stri
 optimized the kernel bandwidth (here the standard deviation of each Gaussian density), and found that it was relatively insensitive to the number of nodes,
 in our case around 33.0 (in general it is expected to be about three times the order the distance between two consecutive strikes, which is 5 to 10 in our case), a smaller value will translate to
 narrower peaks.</p>
-<figure><img src="/post/spw_density_kernel_nodes.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_kernel_nodes.png"/><figcaption>
+            <h4>probability density of the SPX implied from 1-month SPW options with nodes located at every N market strike, for different values of N. Kernel slice approach.</h4>
+        </figcaption>
 </figure>
 
 <p>Even if we consider here more than 37 nodes (m=75 market strikes), the optimal solution actually use only 13 nodes, as all the other nodes have a calibrated weight of 0.
 The fit can be much better by adding nodes at
 f * 0.5, f * 0.8, f * 0.85, f * 0.9, f * 0.95, f * 0.98, f, f * 1.02, f * 1.05, f * 1.1, f * 1.2, f * 1.5, where f is the forward price, even though the optimal solution
 will only use 13 nodes again. We can see this by looking at the implied volatility.</p>
-<figure><img src="/post/spw_vol_kernel2.png"><figcaption>
-      <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_vol_kernel2.png"/><figcaption>
+            <h4>implied volatility of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>Using only the market nodes does not allow to capture right wing of the smile. The density is quite different between the two.</p>
-<figure><img src="/post/spw_density_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>I found (surprisingly) that even those specific nodes by themselves (without any market strike) work better than using all market strikes (without those nodes), but
 then we impose where the peaks will be located eventually.</p>
 <p>It is interesting to compare the graph with the one before the volatility jump:</p>
-<figure><img src="/post/spw_density_janfeb_kernel2.png"><figcaption>
-      <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
-    </figcaption>
+<figure><img src="/post/spw_density_janfeb_kernel2.png"/><figcaption>
+            <h4>density of the SPX implied from 1-month SPW options with nodes located at every 2 market strike.</h4>
+        </figcaption>
 </figure>
 
 <p>So in calm markets, the density is much smoother and has really only one main mode/peak.</p>
 <p>It is possible to use other kernels than the Gaussian kernel. The problem to solve would be exactly the same. It is not clear what would be the advantages
 of another kernel, except, possibly, speed to solve the linear system in O(n) operations for a compact kernel spanning at most 3 nodes (which would translate to a tridiagonal system).</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/spx500_bets_after_rates_hike/">Where is the S&amp;P 500 going to end?</a>
-  </h1>
-  <time datetime="2018-02-06T19:56:42&#43;0100" class="post-date">Tue, Feb 6, 2018</time>
-  <p>Yesterday the American stocks went a bit crazy along with the VIX that jumped from 17.50 to 38. It&rsquo;s not exactly clear why, the news mention that the Fed might raise its interest rates, the bonds yield have been recently increasing substantially, and the market self-correcting
-after stocks grew steadily for months in a low VIX environment.</p>
-<p>I don&rsquo;t exactly follow the SPX/SPW options daily. But I had taken a snapshot two weeks ago when the market was quiet. We can imply the probability density from the market option prices.
-It&rsquo;s not an exact science. Here I do this with a least-squares spline on the implied volatilities (the least squares smoothes out the noise). I will show another approach in a subsequent post.</p>
-<figure><img src="/post/spw_density.png"><figcaption>
-      <h4>probability density of the SPX implied from 1-month SPW options.</h4>
-    </figcaption>
-</figure>
-
-<p>We can clearly see two bumps and a smaller third one further away in the left tail. This means that the market participants expect the SPX500 to go mostly to 2780 (slightly below where the spx future used to be) one month from now.
-Some market participants are more cautious and believe it could hover around 2660. Finally a few pessimists think more of 2530.</p>
-<p>Option traders like to look at the implied volatilities (below).</p>
-<figure><img src="/post/spw_vol.png"><figcaption>
-      <h4>implied volatilities of 1-month SPW options.</h4>
-    </figcaption>
-</figure>
-
-<p>On the graph above, it&rsquo;s really not clear that there is some sort of trimodal distribution. There is however an extremely sharp edge, that we normally see only for much shorter maturities. The vols are interpolated with
-a cubic spline above, not with a least-squares spline, in order to show the edge more clearly.</p>
-<p>This is a bit reminiscent of the Brexit bets where Iain Clark shows <a href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=3&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjG3r-RtZLZAhVE1hQKHXrfACAQFghGMAI&amp;url=http%3A%2F%2Fwww.mdpi.com%2F2227-9091%2F5%2F3%2F35%2Fpdf&amp;usg=AOvVaw1aThssEEa8as5Lui41T6Fj">two modes in the probability density of the GBP/USD</a>.</p>
 
   
 </article>
