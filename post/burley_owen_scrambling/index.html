@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 90945. All rights reserved. </p>
+    <p>&copy; 90922. All rights reserved. </p>
   </div>
 </aside>
 
@@ -77,10 +77,10 @@ Brent Burley of Walt Disney Studios <a href="https://jcgt.org/published/0009/04/
 <p>Because it originates from the CG community, I had assumed that this was faster than the more classic scrambling <a href="https://dl.acm.org/doi/10.1145/779359.779360">ACM Algorithm 823</a> by Hickernell and Hong. I was wrong. It may be faster for specific use cases, but in general it is (much) slower, especially for the kind of (quasi) Monte-Carlo simulation that we use in quantitative finance.</p>
 <p>The slowness is because we can&rsquo;t just generate the next number from the sequence, we must jump to each number instead. The shuffling is implemented by jumping to some hash based location. And jumping is somewhat significantly slower than getting the next number. Furthermore, the grey code optimization can not be applied anymore.</p>
 <p>In my code, for arbirary dimension (on the example to integrate successively a function from dimension 1 to dimension 5000 using a 100 steps on the dimension side), the Burley implementation (actually optimized to skip faster a la Quantlib instead of the original code from Burley) is <strong>3 times slower than Algorithm 823</strong>.</p>
-<p>It is also not obviously better on the example of Ilya M. Sobol’, Danil Asotsky in [Construction and Comparison
-of High-Dimensional Sobol’ Generators] (Equation 6.1 and Figures 8 and 9), also reproduced by <a href="https://quantlib.wordpress.com/2024/02/03/scrambled-sobol-sequences/">Peter Caspers</a>.
+<p>It is also not obviously better on the example of Ilya M. Sobol’, Danil Asotsky in <a href="https://www.broda.co.uk/doc/HD_SobolGenerator.pdf">Construction and Comparison
+of High-Dimensional Sobol’ Generators</a> (Equation 6.1 and Figures 8 and 9), also reproduced by <a href="https://quantlib.wordpress.com/2024/02/03/scrambled-sobol-sequences/">Peter Caspers</a>.
 $$
-I_1 = \int_{[0,1]^d} \prod_{i=1}^d \left( 1 + 0.01(x_i - 0.75) \right) , dx_1 , dx_2 \dots dx_d ,.
+I_1 = \int_{[0,1]^d} \prod_{i=1}^d \left( 1 + 0.01(x_i - 0.5) \right)  dx_1  dx_2 \dots dx_d .
 $$</p>
 <figure><img src="/post/burley_sobol_integral1.png"/><figcaption>
             <h4>Absolute error in integral I1 computed with different Sobol sequences</h4>
