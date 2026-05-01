@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,129 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/arbitrage-free-interpolation-of-option-prices-using-piecewise-constant-density/">Arbitrage Free Interpolation of Option Prices using Piecewise Constant Density</a>
+  </h1>
+  <time datetime="2014-03-17T15:25:00Z" class="post-date">Mon, Mar 17, 2014</time>
+  <p>Tension splines can produce in some cases <a href="/post/c2-arbitrage-free-interpolation-with-tension-splines">arbitrage free C2 interpolation</a> of options, but unfortunately this is not guaranteed. It turns out that, on some not so nice looking data, where the discrete probability density is not monotone but only positive, all previously considered interpolation fail (spline in volatility or variance, tension spline in log prices, harmonic spline on prices).</p>
+<table>
+  <thead>
+      <tr>
+          <th>K</th>
+          <th>vol</th>
+          <th>put</th>
+          <th>b-slope</th>
+          <th>b-convexity</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>300.0</td>
+          <td>0.682</td>
+          <td>0.090</td>
+          <td>0.00e+00</td>
+          <td>0.00e+00</td>
+      </tr>
+      <tr>
+          <td>310.0</td>
+          <td>0.654</td>
+          <td>0.136</td>
+          <td>4.60e-03</td>
+          <td>0.00e+00</td>
+      </tr>
+      <tr>
+          <td>320.0</td>
+          <td>0.621</td>
+          <td>0.192</td>
+          <td>5.60e-03</td>
+          <td>1.00e-03</td>
+      </tr>
+      <tr>
+          <td>330.0</td>
+          <td>0.594</td>
+          <td>0.288</td>
+          <td>9.60e-03</td>
+          <td>4.00e-03</td>
+      </tr>
+      <tr>
+          <td>340.0</td>
+          <td>0.560</td>
+          <td>0.404</td>
+          <td>1.16e-02</td>
+          <td>2.00e-03</td>
+      </tr>
+      <tr>
+          <td>350.0</td>
+          <td>0.520</td>
+          <td>0.530</td>
+          <td>1.26e-02</td>
+          <td>1.00e-03</td>
+      </tr>
+      <tr>
+          <td>360.0</td>
+          <td>0.484</td>
+          <td>0.736</td>
+          <td>2.06e-02</td>
+          <td>8.00e-03</td>
+      </tr>
+      <tr>
+          <td>370.0</td>
+          <td>0.467</td>
+          <td>1.232</td>
+          <td>4.96e-02</td>
+          <td>2.90e-02</td>
+      </tr>
+      <tr>
+          <td>380.0</td>
+          <td>0.442</td>
+          <td>1.898</td>
+          <td>6.66e-02</td>
+          <td>1.70e-02</td>
+      </tr>
+      <tr>
+          <td>390.0</td>
+          <td>0.427</td>
+          <td>3.104</td>
+          <td>1.21e-01</td>
+          <td>5.40e-02</td>
+      </tr>
+      <tr>
+          <td>400.0</td>
+          <td>0.412</td>
+          <td>4.930</td>
+          <td>1.83e-01</td>
+          <td>6.20e-02</td>
+      </tr>
+  </tbody>
+</table>
+<figure><img src="http://4.bp.blogspot.com/-AILZMFsJ09w/Uyb9SWnrYbI/AAAAAAAAHFE/3wzhISGziaU/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:34:04.png">
+</figure>
+
+<p>Possibly the simplest arbitrage free interpolation is to postulate the density as piecewise constant, ideally centered around each strike (if not centered, there is no guarantee that it will be positive). If a spline is used for interpolation, this means a quadratic spline. Unfortunately, because it is not C2, it then still fails to be arbitrage free.</p>
+<p>It is also possible to price by integrating the payoff over the density. There is then one degree of freedom, the Fmin (minimum forward allowed before absorption) that can be adjusted so as to make the density always positive. This produces our only arbitrage free interpolation of the above input put option prices.</p>
+<figure><img src="http://3.bp.blogspot.com/-oyqkgeadz-I/Uyb_kjOjQ7I/AAAAAAAAHFQ/M0s2yemHbOA/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:39.png">
+</figure>
+
+<p>The implied volatility looks reasonable on this strange input: very much like a spline on volatilities. In contrast, the parabolic interpolator produces an oddly looking implied volatility shape, even though the density is in a way similar: piecewise constant. This is likely because I forced the second derivatives to match the discrete curvature, it is then not C1 in prices.</p>
+<p>Unfortunately, the piecewise constant density interpolant can also produce some strange implied volatility shapes, for example on P. Jaeckel example data:</p>
+<figure><img src="http://3.bp.blogspot.com/-14AO4VdMh78/UycAWtv4TrI/AAAAAAAAHFY/lkqUFsJQY4A/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:02.png">
+</figure>
+
+<p>We find back the wiggles for large strikes. The lower end is particularly funny (which could be due to the fact that I don&rsquo;t have the data for low strikes). This is the corresponding density:</p>
+<figure><img src="http://2.bp.blogspot.com/-GBq_zDoLDyE/UycAuk7Ui0I/AAAAAAAAHFg/f1fmWrcq1XY/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:32:27.png">
+</figure>
+
+<p>It appears then not so easy to produce a simple generally good looking interpolation.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/c2-arbitrage-free-interpolation-with-tension-splines/">C2 Arbitrage Free Interpolation with Tension Splines</a>
   </h1>
@@ -82,13 +198,13 @@
 $$f&rsquo;^2 + f&rsquo;&rsquo; \geq 0$$</p>
 <p>This condition makes the interpolation on the log prices arbitrage free. As a first draft experiment, I just ensured numerically that the condition was valid, the resulting algorithm was fast enough and worked reasonably well.</p>
 <p>Here is how the normalized density looks like with a simple harmonic spline on the call prices, a cubic spline in the logarithm of call prices, and an optimized tension spline in the logarithm of call prices.</p>
-<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"/><figcaption>
-            <h4>logarithm of the curvature</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-03-12%2018%2023%2002.png"><figcaption>
+      <h4>logarithm of the curvature</h4>
+    </figcaption>
 </figure>
 
 The blank spot for the Log curve (spline) corresponds to negative curvature, that is, arbitrage. Notice how the tension spline is fully continuous, with no real spikes.</p>
-<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png"/>
+<figure><img src="/post/Screenshot%20from%202014-03-11%2016%2050%2037.png">
 </figure>
 
 <p>The implied volatility curve is very close to a more classic cubic spline interpolation on the implied variance.</p>
@@ -150,11 +266,11 @@ Several papers show that the limit for large strikes of <a href="http://www.goog
   <p>With a <a href="/post/a-small-time-schobel-zhu-expansion">small time expansion</a>, it is easy to derive a reasonable initial guess, without resorting to some global minimizer.</p>
 <p>Like <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">Forde did for Heston</a>, one can find the 5 Schobel-Zhu parameters through 5 points at coordinates (0,0), (x0,t1), (-x0,t1), (x0,t2), (-x0,t2), where x0 is a chosen the log-moneyness, for example, 0.1 and t1, t2 relatively short expiries (for example, 0.1, 0.25).</p>
 <p>We can truncate the small time expansion so that the polynomial in (x,t) is fully captured by those 5 points. In practice, I have noticed that using a more refined expansion with more terms resulted not only in more complex formulas to lookup the original stochastic volatility parameters, but also in an increased error, because of the redundancy of parameters in the polynomial expansion. My previous Schobel-Zhu expansion becomes just:</p>
-<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2007%2007.png"/>
+<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2007%2007.png">
 </figure>
 
 <p>In practice, I have found that the procedure works rather well.</p>
-<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2004%2033.png"/>
+<figure><img src="/post/Screenshot%20from%202014-02-19%2018%2004%2033.png">
 </figure>
 
 <p>On some more extreme surfaces, where theta=0, the error in kappa and theta is higher. Interestingly, I received a few real world surfaces like this, where theta=0, which I found a bit puzzling. I wondered if it was because those surfaces were preprocessed with SABR, that has no mean reversion, but I could not fit those exactly with SABR.</p>
@@ -169,14 +285,14 @@ Several papers show that the limit for large strikes of <a href="http://www.goog
   <p>Small time expansions for Heston can be useful during the calibration of the implied volatility surface, in order to find an initial guess for a local minimizer (for example, Levenberg-Marquardt). Even if they are not so accurate, they capture the dynamic of the model parameters, and that is often enough.</p>
 <p>In 2011, Forde et al. proposed <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCgQFjAA&amp;url=http%3A%2F%2Fpage.math.tu-berlin.de%2F~jacquier%2Findex_files%2FJacquier%2520-%2520SmallTimeHeston2.pdf&amp;ei=72D7Ur6NHeqP0AX7soFo&amp;usg=AFQjCNGkx9ifAh3UQQI4UE_pD8osCzH7Rg&amp;sig2=lIcs-s2yrxWZsxidkQlxOA&amp;bvm=bv.61190604,d.d2k">a second order small time expansion</a> around the money, which I found to work well for calibration. More recently, Lorig et al. proposed <a href="http://arxiv.org/abs/1306.5447">different expansions up to order-3</a> around the money. I already looked at the later in my <a href="/post/a-small-time-schobel-zhu-expansion">previous post</a>, applying the idea to Schobel-Zhu.</p>
 <p>I noticed, however, that on some surfaces, the Lorig expansion was quickly very inaccurate (LPP1 for order-1, LPP2 for order-2, LPP3 for order-3). Those surfaces seem to be the ones were the Feller condition is largely violated. In practice, in my set of volatility surfaces for 10 different equities/indices, the best fit is always produced by Heston parameters where the Feller condition is violated.</p>
-<figure><img src="/post/heston_expansions_order3a.png"/><figcaption>
-            <h4>T=0.5, Feller condition largely violated</h4>
-        </figcaption>
+<figure><img src="/post/heston_expansions_order3a.png"><figcaption>
+      <h4>T=0.5, Feller condition largely violated</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/heston_expansions_order3b.png"/><figcaption>
-            <h4>T=0.5, Feller condition slightly violated</h4>
-        </figcaption>
+<figure><img src="/post/heston_expansions_order3b.png"><figcaption>
+      <h4>T=0.5, Feller condition slightly violated</h4>
+    </figcaption>
 </figure>
 
 <p>Out of curiosity, I calibrated my surfaces feeding the order-1 approximation to the differential evolution, in order to find my initial guess, and it worked for all surfaces.
@@ -190,17 +306,17 @@ The order-3 formula, even though it is more precise at the money, was actually m
   <time datetime="2014-02-10T18:30:00Z" class="post-date">Mon, Feb 10, 2014</time>
   <p>The paper <a href="http://arxiv.org/abs/1306.5447">implied vol for any local stochastic vol model</a> from Lorig et al. presents a very generic and simple formula to compute implied volatility expansions up to order-2 (there is actually an order-3 formula available in their Mathematica CDF file).</p>
 <p>I tried it on the <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDIQFjAB&amp;url=http%3A%2F%2Fssrn.com%2Fabstract%3D100831&amp;ei=3gr5UtzkOYm90QWD7IDwBA&amp;usg=AFQjCNFY9anH_AU0A5pWRX4Qdo6Kp2CjEg&amp;sig2=teGVgsV4uneROlzZCuUFBw&amp;bvm=bv.60983673,d.d2k">Schobel-Zhu</a> stochastic volatility model. This model is an interesting alternative to Heston. I found that, in practice, the implied volatility surface <a href="/post/heston-schobel-zhu-bates-double-heston-fit">fit was as good</a>, while the <a href="/post/brownian-bridge-or-not-with-heston">simulation under the QE scheme</a> is quite faster (and simpler) than Heston. Here is the result of applying their technique on Schobel-Zhu:</p>
-<figure><img src="/post/SZ_EXP1.png"/>
+<figure><img src="/post/SZ_EXP1.png">
 </figure>
 
 <p>And this is how it behaves on some realistic input:</p>
-<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"/><figcaption>
-            <h4>T=0.1</h4>
-        </figcaption>
+<p><figure><img src="/post/Screenshot%20from%202014-02-10%2018%2016%2006.png"><figcaption>
+      <h4>T=0.1</h4>
+    </figcaption>
 </figure>
- <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"/><figcaption>
-             <h4>T=0.5</h4>
-         </figcaption>
+ <figure><img src="/post/Screenshot%20from%202014-02-10%2018%2028%2032.png"><figcaption>
+       <h4>T=0.5</h4>
+     </figcaption>
  </figure>
 </p>
 <p>In practice, while not extremely good, it seems to be enough for Calibration to find an initial guess via differential evolution.</p>
@@ -216,18 +332,6 @@ The order-3 formula, even though it is more precise at the money, was actually m
 <p>As the laptop SSD connector (SATA) and power follow the desktop computers standards, and as I use Linux, I just plugged the SSD to my home desktop and booted off the SSD. I had to change slightly the X configuration but otherwise everything worked. Linux is great for that</p>
 <p>The same way, I just plugged the SSD to the desktop at work and it worked. Instead of carrying a laptop, I carry now my small and ultra-light SSD.</p>
 <p>The experience is so good, that it seems to me it should be an option to everybody. Before, hard drives were very sensitive to travel, but now with SSDs, I don&rsquo;t really see why we should carry a screen and a keyboard unless we use them (for example in a travel). Also I find that I actually notice the speed difference between my desktops and former laptop, which I never really paid too much attention to before.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/brownian-bridge-or-not-with-heston-quadratic-exponential-qmc/">Brownian Bridge or Not with Heston Quadratic Exponential QMC</a>
-  </h1>
-  <time datetime="2014-01-24T19:35:00Z" class="post-date">Fri, Jan 24, 2014</time>
-   
-
-At first I did not make use of the Brownian Bridge technique in Heston QMC, because the variance process is not simulated like a Brownian Motion under the <a href="http://www.google.com/url?q=http://www.javaquant.net/papers/LeifAndersenHeston.pdf&amp;sa=U&amp;ei=p9jjUtPJK8uUhQfb_YGgAw&amp;ved=0CB4QFjAA&amp;sig2=EjKPr39tR0ni1vq5gK9mkA&amp;usg=AFQjCNGQyqSaDu2kl6_KpP-s-KwMvJ6hPg">Quadratic Exponential algorithm from Andersen</a>.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kWmb0WWAYzA/UuPX4UMySRI/AAAAAAAAG-4/cBcjRgfTc5s/s1600/Screenshot+from+2014-01-25+16:26:05.png" /></a></div><br />It is, however, perfectly possible to use the Brownian Bridge on the asset process. Does it make a difference? In my small test, it does not seem to make a difference. An additional question would be, is it better to take first N for the asset and next N for the variance or vice versa or intertwined? Intertwined would seem the most natural (this is what I used without Brownian Bridge, but for simplicity I did Brownian bridge on first N).<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-WN5frRWHix4/UuKyR69BtbI/AAAAAAAAG-g/BTXm5K2XOQo/s1600/heston_bnp_sobol2.png" height="222" width="320" /></a></div><br /><br />By contrast, Schobel-Zhu QE scheme can make full use of the Brownian Bridge technique, in the asset process as well as in the variance process. Here is a summary of the volatility process under the QE scheme from <a href="http://www.google.com/url?q=http://arno.uvt.nl/show.cgi%3Ffid%3D99534&amp;sa=U&amp;ei=itjjUo2jD6Wa0AXqzYHgCQ&amp;ved=0CB4QFjAA&amp;sig2=KdYdo3sAFjV6fwPS4Gak0A&amp;usg=AFQjCNEZ8DRGCf4EXOxCXs3oPc_98628hA">van Haastrecht</a>:<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-kYpBO8PfEkw/UuPX_40DnbI/AAAAAAAAG_A/v7QAN_lX9oM/s1600/Screenshot+from+2014-01-25+16:26:23.png" /></a></div><br />Another nice property of Schobel-Zhu is that the QE simulation is as fast as Euler, and therefore 2.5x faster than the Heston QE.<br /><br />I calibrated the model to the same surface, and the QMC price of a ATM call option seems to have a similar accuracy as Heston QMC. But we can see that the Brownian Bridge does increase accuracy in this case. I was surprised that accuracy was not much better than Heston, but maybe it is because I did yet not implement the Martingale correction, while I did so in the Heston case.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/--mK4u1K8nOk/UuKyR2y6FHI/AAAAAAAAG-k/QSOjDwosqLo/s1600/sz_bnp_sobol3.png" height="222" width="320" /></a></div><br /><br />
-
-
 
   
 </article>

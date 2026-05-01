@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,39 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/the-cos-method-for-heston/">The COS method for Heston</a>
+  </h1>
+  <time datetime="2013-08-02T14:19:00Z" class="post-date">Fri, Aug 2, 2013</time>
+  <p>Fang, in <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC4QFjAA&amp;url=http%3A%2F%2Frepository.tudelft.nl%2Fassets%2Fuuid%3A9aa17357-af21-4c09-86a2-3904ced4b873%2Fthesis.pdf&amp;ei=Epf7Uam8CYWChQeCroCgCw&amp;usg=AFQjCNGyjjlwi-ylN6cl2xoUp5A32wwePA&amp;sig2=m-qvIkWMgVH-qw4hq_Y5Ow&amp;bvm=bv.50165853,d.ZG4%22">her thesis</a>, has the idea of the COS method and applies it to Heston. There are several published papers around it to price options under various models that have a known characteristic function, as well as to price more exotic options like barriers or bermudans.</p>
+<p>The COS method is very close to the more standard Heston quasi analytic formula (use transform of characteristic function for the density and integrates the payoff with the density, exchanging summation), except that the more simple <a href="http://en.wikipedia.org/wiki/Fourier_series">Fourier series</a> are used instead of the standard Fourier transform. As a consequence there are a few more approximations that are done related to the truncation of the domain of integration and the result is already discrete, so no need for a Gaussian quadrature.</p>
+<p>In practice, the promise is to be faster. I was wondering how stable it was, especially with regards to short maturities/large strikes.</p>
+<p>It&rsquo;s quite easy to code, I made only one mistake initially: I forgot to handle the first element of the sum differently. It is however very unstable for call options prices, because the upper integration boundary is then used in an exponential, which explodes in most cases I have tried, while for put options, the lower boundary is used in an exponential, and the lower boundary is negative.</p>
+<figure><img src="/post/snapshot33.png"><figcaption>
+      <h4>Price is too low at high strikes</h4>
+    </figcaption>
+</figure>
+
+<p>So one has to rely on the put-call parity formula to compute call prices. This means that we are limited to something around machine epsilon accuracy and can&rsquo;t compute a very out-of-the-money call price, contrary to the <a href="/post/root-finding-in-lord-kahl-method-to-compute-heston-call-price-part-iii">Lord-Kahl</a> method. However it seemed stable for the various Heston parameters I have tried and accurate as long as the resulting price is not too small as the following graph shows.
+<figure><img src="/post/snapshot34.png"><figcaption>
+      <h4>Price is way too high at low strikes</h4>
+    </figcaption>
+</figure>
+</p>
+<p>I was surprised to see that the more in-the-money put options also have inaccuracy: the price given is actually less than the final payoff. This is related to the domain of truncation. If I double it (L=24 instead of L=12), those disappear, what remains is that OTM puts can&rsquo;t go beyond 1e-12 for the COS method.</p>
+<p>In practice the COS method was effectively 2x to 3x faster than my Lord-Kahl implementation. As a side note, on this problem, Java is only 2x faster than Octave.</p>
+<p>As long as we don&rsquo;t care about very small option prices, it is an interesting alternative, especially because it is simple.</p>
+<p><strong>Update April 2014</strong> - There is more information on the subject in my paper at <a href="http://papers.ssrn.com/abstract=2362968">http://papers.ssrn.com/abstract=2362968</a></p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/octave-vs-scilab-for-pdes-in-finance/">Octave vs Scilab for PDEs in Finance</a>
   </h1>
@@ -116,9 +142,9 @@
   <p>This is a kind of following to the <a href="http://chasethedevil.github.io/post/the-cuda-performance-myth/">CUDA performance myth</a>. There is a recent news on the java concurrent mailing list about <a href="http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/SplittableRandom.java?revision=1.7&amp;view=markup">SplittableRandom class</a> proposed for JDK8. It is a new parallel random number generator a priori usable for Monte-Carlo simulations.</p>
 <p>It seems to rely on some very recent algorithm. There are some a bit older ones: the ancestor, L&rsquo;Ecuyer <a href="http://www.iro.umontreal.ca/~simardr/rng/MRG32k3a.c">MRG32k3a</a> that can be parallelized through relatively costless skipTo methods, a Mersenne Twister variant <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MTGP/">MTGP</a>, and even the less rigourous XorWow popularized by NVidia CUDA.</p>
 <p>The book <a href="http://my.safaribooksonline.com/book/-/9780123849885/chapter-16dot-parallelization-techniques-for-random-number-generators/232#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDEyMzg0OTg4NS8yNDQ=">GPU Computing Gems</a> provides some interesting stats as to GPU vs CPU performance for various generators (L&rsquo;Ecuyer, Sobol, and Mersenne Twister)</p>
-<figure><img src="/post/snapshot32.png"/><figcaption>
-            <h4>Excerpt from the book</h4>
-        </figcaption>
+<figure><img src="/post/snapshot32.png"><figcaption>
+      <h4>Excerpt from the book</h4>
+    </figcaption>
 </figure>
 
 <p>A Quad core Xeon is only 4 times slower to generate normally distributed random numbers with Sobol. Fermi cards are faster now, but probably so are newer Xeons. I would have expected this kind of task to be the typical not too complex parallelizable task doable by a GPU, and yet the improvements are not very good (except if you look at raw random numbers, which is almost useless in applications). It confirms the idea that many real world algorithms are not so much faster with GPUs than with CPUs. I suppose what&rsquo;s interesting is that the GPU abstractions forces you to be relatively efficient, while the CPU flexibility might make you lazy.</p>
@@ -181,7 +207,7 @@ and to ensure that \(\theta \geq 0 \):
 $$b \frac{\Delta t}{(\Delta x)^2} \geq \frac{1}{6}$$</p>
 <p>Crank-Nicolson has a similar requirement to ensure the absence of oscillations given non smooth initial value, but because it is unconditionality stable, the condition is actually much weaker if \(b\) depends on \(x\). Crank-Nicolson will be oscillation free if \(b(x_{j0}) \frac{\Delta t}{(\Delta x)^2} &lt; 1\) where \(j0\) is the index of the discontinuity, while the theta scheme needs to be stable, that is \(\max(b) \frac{\Delta t}{(\Delta x)^2} \leq \frac{5}{6}\)</p>
 <p>This is a much stricter condition if \(b\) varies a lot, as it is the case for the <a href="https://chasethedevil.github.io/post/sabr-with-the-new-hagan-pde-approach/">arbitrage free SABR PDE</a> where \(\max(b) &gt; 200 b_{j0}\)
-<figure><img src="/post/snapshot23.png"/>
+<figure><img src="/post/snapshot23.png">
 </figure>
 
 The advantages of such a scheme are then not clear compared to a simpler explicit scheme (eventually predictor corrector), that will have a similar constraint on the ratio \( \frac{\Delta t}{(\Delta x)^2} \).</p>
@@ -206,18 +232,6 @@ The advantages of such a scheme are then not clear compared to a simpler explici
 <code>var a = tuple._1</code>
 <code>var b = tuple._2</code></p>
 <p>This does not look so nice.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/akima-for-yield-curve-interpolation-/">Akima for Yield Curve Interpolation ?</a>
-  </h1>
-  <time datetime="2013-06-03T00:07:00Z" class="post-date">Mon, Jun 3, 2013</time>
-   
-
-On my test of <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDgQFjAB&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D2175002&amp;ei=d8GrUb70CJCChQeA7IHoCg&amp;usg=AFQjCNHHizgzORef228lnYX3HygLb9okAg&amp;sig2=NYbhD30aD7sD8TS7CYodzw&amp;bvm=bv.47244034,d.ZG4">yield curve interpolations</a>, focusing on parallel delta versus sequential delta, <a href="http://200.17.213.49/lib/exe/fetch.php/wiki:internas:biblioteca:akima.pdf">Akima</a> is the worst of the lot. I am not sure why this interpolation is still popular when most alternatives seem much better. Hyman presented some of the issues with Akima in <a href="http://epubs.siam.org/doi/abs/10.1137/0904045">his paper</a> in 1983. <br /><br />In the following graph, a higher value is a higher parallel-vs-sequential difference. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-y1jkd6Pu4Y8/UavBtMgvLQI/AAAAAAAAGc4/CDRwTqv-suc/s1600/snapshot18.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="272" src="http://4.bp.blogspot.com/-y1jkd6Pu4Y8/UavBtMgvLQI/AAAAAAAAGc4/CDRwTqv-suc/s400/snapshot18.png" width="400" /></a></div><div class="separator" style="clear: both; text-align: center;"></div>That plus the Hagan-West example of a tricky curve looks a bit convoluted with it (although it does not have any negative forward).<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-kKk7NEYtUaw/UavB245C8OI/AAAAAAAAGdA/elBq-es3jWY/s1600/snapshot19.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="225" src="http://4.bp.blogspot.com/-kKk7NEYtUaw/UavB245C8OI/AAAAAAAAGdA/elBq-es3jWY/s400/snapshot19.png" width="400" /></a></div>I have used Quantlib implementation, those results make me wonder if there is not something wrong with the boundaries.
-
-
 
   
 </article>

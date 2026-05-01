@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,175 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/almost-explicit-implied-volatility/">Almost Explicit Implied Volatility</a>
+  </h1>
+  <time datetime="2026-04-30T18:10:00Z" class="post-date">Thu, Apr 30, 2026</time>
+  <p>Several years ago, <a href="/post/fast-and-accurate-implied-volatility-solver/">I had explored</a> accuracy and performance of different ways to imply the Black-Scholes volatility. Jherek Healy proposed some improvements over my naive algorithm on <a href="https://jherekhealy.github.io/blog/post/implied_volatility_algorithms_go_julia/">his blog</a>. Recently, a Linkedin post mentioned <a href="https://arxiv.org/html/2604.24480v2">a new paper from Wolfgang Schadner</a> which presents an <em>almost</em> explicit formula for the implied volatility. <em>Almost</em> because it actually relies on some implementation of the quantile function for the inverse Gaussian distribution: it requires a specialized numerical algorithm in practice, such as the one from <a href="https://arxiv.org/abs/1603.06687">Giner and Smyth</a>.</p>
+<p>The idea is actually not new, the same formula has been used back in 2016 by <a href="https://github.com/PyFE/FE-R/blob/main/pkg/R/blackscholes_impvol.R">Jaehyuk Choi</a> in his github repository.
+If we have a good inverse Gaussian distribution function, the algorithm is clean and simple:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Distributions
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">export</span> impliedVolatilityIG
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">const</span> N <span style="color:#666">=</span> Normal()
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> impliedVolatilityIG(isCall<span style="color:#666">::</span><span style="color:#902000">Bool</span>, price<span style="color:#666">::</span><span style="color:#902000">T</span>, forward, strike,  timeToExpiry, df) <span style="color:#007020;font-weight:bold">where</span> {<span style="color:#902000">T</span>}
+</span></span><span style="display:flex;"><span>    c, ex <span style="color:#666">=</span> normalizePrice(isCall, price, forward, strike, df)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> c <span style="color:#666">&gt;=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex <span style="color:#666">||</span> c <span style="color:#666">&gt;=</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>        throw(<span style="color:#902000">DomainError</span>(c, string(<span style="color:#4070a0">&#34;price higher than intrinsic value &#34;</span>, <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex)))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">elseif</span> c <span style="color:#666">&lt;=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>        throw(<span style="color:#902000">DomainError</span>(c, <span style="color:#4070a0">&#34;price is negative&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#666">=</span> log(ex)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">if</span> abs(x) <span style="color:#666">&lt;</span> <span style="color:#40a070">4</span> <span style="color:#666">*</span> eps(T)
+</span></span><span style="display:flex;"><span>        <span style="color:#40a070">2</span> <span style="color:#666">*</span> quantile(N, (c <span style="color:#666">+</span> <span style="color:#40a070">1</span>) <span style="color:#666">/</span> <span style="color:#40a070">2</span>) <span style="color:#666">/</span> sqrt(timeToExpiry)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        mu <span style="color:#666">=</span> <span style="color:#40a070">2</span> <span style="color:#666">/</span> abs(x)
+</span></span><span style="display:flex;"><span>        u <span style="color:#666">=</span> cquantile(InverseGaussian(mu), c)
+</span></span><span style="display:flex;"><span>        <span style="color:#40a070">2</span> <span style="color:#666">/</span> sqrt(u <span style="color:#666">*</span> timeToExpiry)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<p>reusing the price normalization idea of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1027282">Li</a>.
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> normalizePrice(isCall<span style="color:#666">::</span><span style="color:#902000">Bool</span>, price, f, strike, df)
+</span></span><span style="display:flex;"><span>    c <span style="color:#666">=</span> price <span style="color:#666">/</span> (f <span style="color:#666">*</span> df)
+</span></span><span style="display:flex;"><span>    ex <span style="color:#666">=</span> f <span style="color:#666">/</span> strike
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> <span style="color:#666">!</span>isCall
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">if</span> ex <span style="color:#666">&lt;=</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> c <span style="color:#666">+</span> <span style="color:#40a070">1</span> <span style="color:#666">-</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex <span style="color:#60a0b0;font-style:italic"># put call parity</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">else</span> <span style="color:#60a0b0;font-style:italic">#duality + put call parity            </span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> ex <span style="color:#666">*</span> c
+</span></span><span style="display:flex;"><span>            ex <span style="color:#666">=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">if</span> ex <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span> <span style="color:#60a0b0;font-style:italic"># use c(-x0, v)            </span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> (f <span style="color:#666">*</span> (c <span style="color:#666">-</span> <span style="color:#40a070">1</span>) <span style="color:#666">+</span> strike) <span style="color:#666">/</span> strike <span style="color:#60a0b0;font-style:italic"># in out duality, c = ex*c + 1 - ex </span>
+</span></span><span style="display:flex;"><span>            ex <span style="color:#666">=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> c, ex
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div></p>
+<p>I was wondering how accurate it was especially for very out-of-the-money options, and how fast it was in practice. Below I compare various implementations in <a href="https://www.julialang.org">Julia</a>:</p>
+<ul>
+<li><a href="http://www.jaeckel.org/LetsBeRational.pdf">Peter Jaeckel</a>, which is arguably the industry standard.</li>
+<li><a href="https://jherekhealy.github.io/blog/post/implied_volatility_algorithms_go_julia/">Jherek Healy</a>, which consists in (log-)Householder iterations on top of a good explcit initial guess.</li>
+<li>The inverse Gaussian approach using Julia&rsquo;s Distribution.jl package (as in the above code).</li>
+<li>The inverse Gaussian approach using a basic port of statsmod R algorithm, adapted to compute the complementary quantile function. This corresponds to a different implementation of <code>cquantile(InverseGaussian(mu),c)</code>.</li>
+</ul>
+<p>I consider call optiun prices for a fixed strike K = 200 for a forward F = 100, and a time to maturity T = 1.0 year, varying the volatility from 0.02 to 4.0 in steps of 0.01. This constitute 399 samples.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>vol RMSD</th>
+          <th>vol MAXAD</th>
+          <th>Price MAXAD</th>
+          <th>Rel. Price MAXAD</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel</td>
+          <td>8.66e-16</td>
+          <td>4.00e-15</td>
+          <td>4.26e-14</td>
+          <td>1.81e-12</td>
+          <td>104 μs</td>
+      </tr>
+      <tr>
+          <td>Healy</td>
+          <td>1.57e-15</td>
+          <td>9.77e-15</td>
+          <td>8.53e-14</td>
+          <td>3.02e-10</td>
+          <td>107  μs</td>
+      </tr>
+      <tr>
+          <td>IG Distribution</td>
+          <td>7.37e-16</td>
+          <td>5.41e-15</td>
+          <td>2.84e-14</td>
+          <td>8.99e-11</td>
+          <td>246 μs</td>
+      </tr>
+      <tr>
+          <td>IG statsmod</td>
+          <td>7.77e-16</td>
+          <td>7.55e-15</td>
+          <td>8.24e-13</td>
+          <td>3.03e-10</td>
+          <td>311 μs</td>
+      </tr>
+  </tbody>
+</table>
+<p>The inverse Gaussian approach is competitive but still twice slower than Peter Jaeckel&rsquo;s algorithm on this example. How does the error in volatility actually look like?</p>
+<figure><img src="/post/iv_ig_2_400.png"><figcaption>
+      <h4>Error in impled volatility of the various algorithms</h4>
+    </figcaption>
+</figure>
+
+<p>The accuracy of the inverse Gaussian looks as good as Jackel&rsquo;s algorithm, when using Julia&rsquo;s package Distibutions.jl (it is slightly less accurate towards low vol, but slightly more accurate for high vols).</p>
+<p>It is revealing to also look at the case of varying strikes for a fixed volatility. We consider a volatility fixed to 0.1 (or 10%) and vary the strike from 100 to 500 by steps of 1.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>vol RMSD</th>
+          <th>vol MAXAD</th>
+          <th>Price MAXAD</th>
+          <th>Rel. Price MAXAD</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>JAECKEL</td>
+          <td>6.50e-16</td>
+          <td>2.73e-15</td>
+          <td>7.11e-15</td>
+          <td>6.59e-12</td>
+          <td>154  μs</td>
+      </tr>
+      <tr>
+          <td>HEALY</td>
+          <td>6.56e-16</td>
+          <td>2.73e-15</td>
+          <td>3.55e-14</td>
+          <td>6.59e-12</td>
+          <td>110 μs</td>
+      </tr>
+      <tr>
+          <td>IG Distribution</td>
+          <td>1.21e-15</td>
+          <td>7.76e-15</td>
+          <td>1.78e-14</td>
+          <td>1.95e-11</td>
+          <td>1704 μs</td>
+      </tr>
+      <tr>
+          <td>IG statsmod</td>
+          <td>8.68e-16</td>
+          <td>4.27e-15</td>
+          <td>1.06e-14</td>
+          <td>1.32e-11</td>
+          <td>288 μs</td>
+      </tr>
+  </tbody>
+</table>
+<p>On this example the Julia Distributions.jl leads to a performance degradation by a factor of 10 and is less accurate. It would be worth investigating exactly where lies the bottleneck, as statsmod custom implementation keeps a good performance profile.</p>
+<figure><img src="/post/iv_ig_K100_500.png"><figcaption>
+      <h4>Error in impled volatility of the various algorithms</h4>
+    </figcaption>
+</figure>
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/burley_owen_scrambling/">Owen Scrambling a la Burley</a>
   </h1>
@@ -86,9 +248,9 @@ of High-Dimensional Sobol’ Generators</a> (Equation 6.1 and Figures 8 and 9), 
 $$
 I_1 = \int_{[0,1]^d} \prod_{i=1}^d \left( 1 + 0.01(x_i - 0.5) \right)  dx_1  dx_2 \dots dx_d .
 $$</p>
-<figure><img src="/post/burley_sobol_integral1.png"/><figcaption>
-            <h4>Absolute error in integral I1 computed with different Sobol sequences</h4>
-        </figcaption>
+<figure><img src="/post/burley_sobol_integral1.png"><figcaption>
+      <h4>Absolute error in integral I1 computed with different Sobol sequences</h4>
+    </figcaption>
 </figure>
 
 <p>In the Figure above, I did not use 30031 points of the sequence as in the original test, but the closest power of 2, that is 32768, which is supposed to be more optimal (the choice of 30031 is strange but actually does not really change the outcome). Except for Sobol-Harase, all use <a href="https://web.maths.unsw.edu.au/~fkuo/sobol/">Joe Kuo new-joe-kuo-6.21201</a> direction numbers. Sobol-Harase uses <a href="https://github.com/sharase/niederreiter-nut">Shin Harase niederreiter-nut-s21201.txt</a>, which interestingly, does not fare as well as the more classic Joe Kuo set.</p>
@@ -102,7 +264,7 @@ $$</p>
   <time datetime="2025-12-22T17:27:00Z" class="post-date">Mon, Dec 22, 2025</time>
   <p>I struggled a bit having <a href="https://jackaudio.org/">Jack Audio Connection Kit</a> working in Opensuse Tumbleweed.
 My error was to install the jack package. The solution is actually extremely simple: use pipewire-jack instead of jack.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zypper in pipewire-jack qjackctl</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zypper in pipewire-jack qjackctl</span></span></code></pre></div>
 
   
 </article><article class="post">
@@ -168,9 +330,9 @@ Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020
 <p>The NUFFT becomes interesting to compute the option price at many many strikes at the same time. The strikes do not need to be equidistant and can be (almost) arbitrarily chosen. In Andersen and Lake paper, even a very fast technique such as the COS method reaches a threshold of option per second throughput, as the number of strikes is increased, mainly because of the repeated evaluation of the sum over different strikes, so the cost becomes proportional to the number of strikes.</p>
 <p>Evaluating at many many points becomes not much more expensive than evaluating at a few points only. This is what opens up the possibilities for the first 2 approaches based on the density.</p>
 <p>It turns out that it is not very difficult to rewrite the COS method so that it can make use of the NUFFT as well. I explain how to do it <a href="https://arxiv.org/abs/2507.13186v1">here</a>. Below is the throughput using NFFT.jl Julia package:
-<figure><img src="/post/heston_nufft.png"/><figcaption>
-            <h4>Throughput on the Heston model with M=256 points.</h4>
-        </figcaption>
+<figure><img src="/post/heston_nufft.png"><figcaption>
+      <h4>Throughput on the Heston model with M=256 points.</h4>
+    </figcaption>
 </figure>
 </p>
 <p>While a neat trick, it is however not 100% clear to me at this point where this is really useful: calibration typically involve a small number of strikes per maturity.</p>
@@ -182,13 +344,13 @@ Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020
   </h1>
   <time datetime="2025-06-21T17:27:00Z" class="post-date">Sat, Jun 21, 2025</time>
   <p>The modern rough volatility models adopt a forward variance curve terminology (see for example <a href="https://papers.ssrn.com/sol3/Delivery.cfm?abstractid=3191578">this paper on a rational approximation for the rough Heston</a>, or <a href="https://mfe.baruch.cuny.edu/wp-content/uploads/2024/03/AFVPricingDevelopmentsQuantminds2022.pdf">this presentation on affine forward variance models</a> or <a href="https://arxiv.org/pdf/1801.06416">this paper on affine forward variance models</a>). In this form, the rough Heston model reads:</p>
-<figure><img src="/post/rough_heston_eqn.png"/>
+<figure><img src="/post/rough_heston_eqn.png">
 </figure>
 
 <p>According to the litterature, the initial forward variance curve is typically built from the implied volatilities through the variance swap replication: for each maturity, the price of a newly issued variance swap is computed to this maturity, using the implied volatilities for this maturity. Then we may compute the forward variance by interpolating linearly the variance swap prices and differentiating. This leads to the plot below.</p>
-<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"/><figcaption>
-            <h4>Forward variance curves for SPX500 as of October 2024.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_forwarvariance_oct2024.png"><figcaption>
+      <h4>Forward variance curves for SPX500 as of October 2024.</h4>
+    </figcaption>
 </figure>
 
 <p>One immediate question is how much does the truncation range play a role in this forward variance curve? Above, we plot the replications prices based on filtering the input data up to 10 Delta / 90 Delta for each maturity. Beyond this range, liquidity is usually much lower and the reliability of the input quotes may not be as good.  The short end, and not so short forward variance up to 4 years is quite different. The long end is more aligned with something that looks like a basis spread between the two curves.</p>
@@ -206,147 +368,147 @@ If we were to use the true replication based forward variance curve, we would ef
 The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
 <p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0679</td>
-<td style="text-align:right">-0.0167</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0302</td>
-<td style="text-align:right">-0.0545</td>
-</tr>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">13.0645</td>
-<td style="text-align:right">-0.0202</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">13.0416</td>
-<td style="text-align:right">-0.0431</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">1M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0679</td>
+          <td style="text-align: right">-0.0167</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0302</td>
+          <td style="text-align: right">-0.0545</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">13.0645</td>
+          <td style="text-align: right">-0.0202</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">13.0416</td>
+          <td style="text-align: right">-0.0431</td>
+      </tr>
+  </tbody>
 </table>
 <p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.01 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
 <p>It is not only less accurate, but also slower, because it requires 3 random numbers per time-step, compared to 2 random numbers for QE or DVSS2X. The paper is very well written, and this small example may not be representative but it does cast some doubts about how great is this new scheme in practice.</p>
 <p>While writing this, I noticed that the paper actually uses this same example, it corresponds to their Case 3 and it is indeed not obvious from the plots in the paper that this new IVI scheme is significanly better. There is one case, deep in the money (strike=60%), and very few time-steps (2 per year for example):</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">N</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">4M</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.1579</td>
-<td style="text-align:right">-0.1721</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.2852</td>
-<td style="text-align:right">-0.0449</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">4</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.2946</td>
-<td style="text-align:right">-0.0353</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3113</td>
-<td style="text-align:right">-0.0187</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">8</td>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:right">44.3275</td>
-<td style="text-align:right">-0.0025</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">IVI</td>
-<td style="text-align:right">44.3239</td>
-<td style="text-align:right">-0.0061</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">N</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: right">Price</th>
+          <th style="text-align: right">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">4M</td>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.1579</td>
+          <td style="text-align: right">-0.1721</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.2852</td>
+          <td style="text-align: right">-0.0449</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">4</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.2946</td>
+          <td style="text-align: right">-0.0353</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3113</td>
+          <td style="text-align: right">-0.0187</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">8</td>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: right">44.3275</td>
+          <td style="text-align: right">-0.0025</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: right">44.3239</td>
+          <td style="text-align: right">-0.0061</td>
+      </tr>
+  </tbody>
 </table>
 <p>So the new scheme works reasonably well for (very) large time-steps, better than DVSS2 and likely better than QE (although, again, it is around 1.5x more costly). For smaller steps (but not that small), it may not be as accurate as QE and DVSS2. This is why QE was such a big deal at the time, it was significantly more accurate than a Euler discretization and allowed to use much less time-steps: from 100 or more to 10 (a factor larger than 10). IVI may be an improvement for very large step sizes, but it will matter much less for typical exotics pricing where observation dates are at worst yearly.</p>
 <p><strong>Update June 19, 2025</strong>
 Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for-heston_part2/">forward start option test</a>. In the Table below I use 4M paths.</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Scheme</th>
-<th style="text-align:left">Steps/Year</th>
-<th style="text-align:right">Price</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">DVSS2X</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0184</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">QE</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0190</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0196</td>
-</tr>
-<tr>
-<td style="text-align:left">IVI</td>
-<td style="text-align:left">4+1</td>
-<td style="text-align:right">0.0116</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">80</td>
-<td style="text-align:right">0.0185</td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">160</td>
-<td style="text-align:right">0.0191</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Scheme</th>
+          <th style="text-align: left">Steps/Year</th>
+          <th style="text-align: right">Price</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">DVSS2X</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0184</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">QE</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0190</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0196</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">IVI</td>
+          <td style="text-align: left">4+1</td>
+          <td style="text-align: right">0.0116</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">80</td>
+          <td style="text-align: right">0.0185</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">160</td>
+          <td style="text-align: right">0.0191</td>
+      </tr>
+  </tbody>
 </table>
 <p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The price with 4+1 steps is very off, especially compared to the other schemes. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 
@@ -364,111 +526,82 @@ Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for
 <li>The expansion is not really good in practice.</li>
 </ul>
 <p>There are two errors in the code: one in the cross derivative of PHIgxy2 (first order on x and second order on y), and one in the second order cross derivative of the Black-Scholes price dPdx2dy2.</p>
-<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>(phigx<span style="color:#666">*</span>(f<span style="color:#666">+</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span>) <span style="color:#666">+</span> phig<span style="color:#666">*</span>(fx<span style="color:#666">+</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f<span style="color:#666">*</span>fx<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span>));</span></span></code></pre></div>
+<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  (<span style="color:#40a070">1</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>(phigx<span style="color:#666">*</span>(f<span style="color:#666">+</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span>) <span style="color:#666">+</span> phig<span style="color:#666">*</span>(fx<span style="color:#666">+</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f<span style="color:#666">*</span>fx<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span><span style="color:#666">-</span>f^<span style="color:#40a070">2</span><span style="color:#666">*</span>gx<span style="color:#666">/</span><span style="color:#40a070">2</span>));</span></span></code></pre></div>
 should be
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#666">-</span>(<span style="color:#40a070">3</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">+</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phigy<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>fy<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>f<span style="color:#666">*</span>gy<span style="color:#666">/</span><span style="color:#40a070">2</span>;</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>PHIgxy2 =  <span style="color:#666">-</span>(<span style="color:#40a070">3</span><span style="color:#666">/</span><span style="color:#40a070">2</span>)<span style="color:#666">*</span>y^(<span style="color:#666">-</span><span style="color:#40a070">2.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">+</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phigy<span style="color:#666">*</span>(<span style="color:#40a070">1</span><span style="color:#666">-</span>f<span style="color:#666">*</span>g)<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>fy<span style="color:#666">*</span>g<span style="color:#666">/</span><span style="color:#40a070">2</span> <span style="color:#666">-</span> y^(<span style="color:#666">-</span><span style="color:#40a070">1.5</span>)<span style="color:#666">*</span>phig<span style="color:#666">*</span>f<span style="color:#666">*</span>gy<span style="color:#666">/</span><span style="color:#40a070">2</span>;</span></span></code></pre></div></p>
 <p>and</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy <span style="color:#666">+</span> PHIgx2y <span style="color:#666">+</span> PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy <span style="color:#666">+</span> PHIgx2y <span style="color:#666">+</span> PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>should be</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-matlab" data-lang="matlab"><span style="display:flex;"><span>dPdx2dy2 = K<span style="color:#666">*</span><span style="color:#007020">exp</span>(<span style="color:#666">-</span>rf<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>PHIfx2y2<span style="color:#666">*</span>PHIfx2y2 <span style="color:#666">-</span> <span style="color:#007020">exp</span>(<span style="color:#666">-</span>q<span style="color:#666">*</span>T(NT))<span style="color:#666">*</span>S<span style="color:#666">*</span>(PHIgy2 <span style="color:#666">+</span> <span style="color:#40a070">2</span><span style="color:#666">*</span>PHIgxy2 <span style="color:#666">+</span> PHIgx2y2);</span></span></code></pre></div>
 <p>The formula for the piecewise-constant coefficients also contains errors: for example, the total variance variable wT is wrong. It should be a double sum instead of the standard constant Heston like formula. Finally, the many sums are rederived in the book, differently from the paper and are not simplified (unlike in the paper where they are all single sums).</p>
 <p>Indeed, with the original code from Rouah, the prices in the table of the paper from Benhamou Gobet and Miri are not reproduced to the last digit. With the above changes, they are.</p>
 <p>On the second point, it is surprising that the book does not mention that the approximation is not great. In particular, it does not mention that the calibrated parameters between Table 9.6 and Table 9.3 are vastly different (except for v0). The calibrated smile is plotted, which is great, but it is only plotted with the approximation formula. Plotting the same using the nearly exact semi-analytical representation of vanlla option prices would have been enlightening. We do it below, as Fabrice Rouah gives all the inputs (a very good thing):</p>
-<figure><img src="/post/hestonhagan_bgm_37d.png"/><figcaption>
-            <h4>DJIA 37 days maturity.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_bgm_37d.png"><figcaption>
+      <h4>DJIA 37 days maturity.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/hestonhagan_bgm_226d.png"/><figcaption>
-            <h4>DJIA 226 days maturity.</h4>
-        </figcaption>
+<figure><img src="/post/hestonhagan_bgm_226d.png"><figcaption>
+      <h4>DJIA 226 days maturity.</h4>
+    </figcaption>
 </figure>
 
 <p>It looks like in the range the calibration stays in the range of applicability of the formula, which is good, but not necessarily always true. The main issue is however that the calibrated parameters with the approximation are not necessarily a good guess for the parameters of the true time-dependent Heston model, precisely because the actual optimal parameters are way outside the range where the approximation is accurate. This is clear in the 226D plot, the best fit from the approx (which is great) ends up a not so good fit for the real time-dependent Heston model. Somewhat interestingly, the approx is actually not so bad on the actual optimal parameters, gotten from a calibration of the model with the Cos method - it is however a less good fit with the approx than the optimal parameters gotten from a calibration of the model with the approximation.</p>
 <p>More recently, Pat Hagan proposed a new approximation for the model, based on a SABR mapping. It seems a bit more precise than the approximation of Benhamou Gobet and Miri, but is not great either. And it is disappointing that the paper does not present any number, nor any plot to assess the quality of the approximation given. Van der Zwaard <a href="https://repository.tudelft.nl/file/File_bf06c85f-2c44-4fef-b94d-9d41e3e6704f">gives</a> some relatively realistic yet simple set of parameters for the Heston model (using Hagan&rsquo;s reparameterization with constant expected variance = 1) and on those, the approximated prices of <strong>at-the-money</strong> options are just not usable:</p>
 <p>If we consider his Table 5.9 (maturity = 1.75 year), we have the following</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">Method</th>
-<th style="text-align:center">Price</th>
-<th style="text-align:center">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">BGM</td>
-<td style="text-align:center">4.2206</td>
-<td style="text-align:center">0.21</td>
-</tr>
-<tr>
-<td style="text-align:center">Hagan</td>
-<td style="text-align:center">3.3441</td>
-<td style="text-align:center">0.66</td>
-</tr>
-<tr>
-<td style="text-align:center">Reference</td>
-<td style="text-align:center">4.0039</td>
-<td style="text-align:center">0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">Method</th>
+          <th style="text-align: center">Price</th>
+          <th style="text-align: center">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">BGM</td>
+          <td style="text-align: center">4.2206</td>
+          <td style="text-align: center">0.21</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Hagan</td>
+          <td style="text-align: center">3.3441</td>
+          <td style="text-align: center">0.66</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Reference</td>
+          <td style="text-align: center">4.0039</td>
+          <td style="text-align: center">0</td>
+      </tr>
+  </tbody>
 </table>
 <p>With Table 5.10 (maturity = 1.3 year), it is even worse:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">Method</th>
-<th style="text-align:center">Price</th>
-<th style="text-align:center">Error</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">BGM</td>
-<td style="text-align:center">0.6659</td>
-<td style="text-align:center">1.17</td>
-</tr>
-<tr>
-<td style="text-align:center">Hagan</td>
-<td style="text-align:center">0.2263</td>
-<td style="text-align:center">1.61</td>
-</tr>
-<tr>
-<td style="text-align:center">Reference</td>
-<td style="text-align:center">1.8407</td>
-<td style="text-align:center">0</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">Method</th>
+          <th style="text-align: center">Price</th>
+          <th style="text-align: center">Error</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">BGM</td>
+          <td style="text-align: center">0.6659</td>
+          <td style="text-align: center">1.17</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Hagan</td>
+          <td style="text-align: center">0.2263</td>
+          <td style="text-align: center">1.61</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Reference</td>
+          <td style="text-align: center">1.8407</td>
+          <td style="text-align: center">0</td>
+      </tr>
+  </tbody>
 </table>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/new_spread_option_approximation/">A New Asian Basket Spread Option Approximation</a>
-  </h1>
-  <time datetime="2025-04-22T12:56:42&#43;0100" class="post-date">Tue, Apr 22, 2025</time>
-  <p>Around 10 years ago, while reading the excellent paper of Etore and Gobet on <a href="https://hal.science/hal-00507787v1/document">stochastic Taylor expansions for the pricing of vanilla options with discrete (cash) dividends</a>, I had the idea of a small improvement, by using <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">a more precise proxy</a> for the Taylor expansion.</p>
-<p>More recently, I applied the idea to <a href="https://arxiv.org/abs/2402.17684v1">approximate arithmetic Asian options prices</a> by using the geometric Asian option price as a proxy (with some adjustments). This worked surprisingly well, and is competitive with the best implementations of Curran approach to Asian options pricing. I quickly noticed that I could apply the same idea to <a href="https://arxiv.org/abs/2402.17684">approximate Basket option prices</a>, and from it obtain another approximation for vanilla options with cash dividends through the <a href="https://arxiv.org/abs/2106.12971">mapping described by J. Healy</a>. Interestingly the resulting approximation is the most accurate amongst all other approximations for cash dividends.</p>
-<p>During my Easter holidays, I took the time to further extend the idea <a href="https://arxiv.org/abs/2504.16011">to cover general spread options</a> such as Asian Basket spread options. I was slightly surprised at the resulting accuracy: the approximation is by far more accurate than any other published approximation on this problem.
-Somewhat interestingly, I noticed that the first order expansion (which is not much more accurate than the proxy itself) seemed to correspond to a previously published approximation from <a href="https://www.scirp.org/journal/paperinformation?paperid=72439">Tommaso Pellegrino</a>, an extension of Bjerksund-Stensland approximation for spread options, although my derivation is very different and allows for higher-order formulae.</p>
-<p>Below is an excerpt of some of the results</p>
-<figure><img src="/post/deelstra_table_basket_spread.png"/><figcaption>
-            <h4>Original example from Deelstra et al. for an Basket spread option.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/deelstra_table_asian_basket.png"/><figcaption>
-            <h4>Original example from Deelstra et al. for an Asian Basket spread option. The Taylor approximation perform even better due to the Asianing.</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/post/krekel_table_asian_spread.png"/><figcaption>
-            <h4>Original example from Martin Krekel for an Asian spread option. It was actually challenging to compute accurate Quasi Monte-Carlo prices.</h4>
-        </figcaption>
-</figure>
-
-<p>The MM of Martin Krekel consists in a one-dimensional integration of two lognormal moment-mached distributions. It seems that the one-dimensional integration (which is exact for simple spread options) does not really improve the accuracy for the more general asian spread option case: the loss of accuracy due to moment matching dominates the error.</p>
-<p>The preprint is <a href="https://arxiv.org/abs/2504.16011">available on Arxiv</a>.</p>
 
   
 </article>

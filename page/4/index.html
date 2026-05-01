@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,36 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/princeton_fintech_conference/">Princeton Fintech and Quant conference of December 2022</a>
+  </h1>
+  <time datetime="2022-12-04T07:56:42&#43;0100" class="post-date">Sun, Dec 4, 2022</time>
+  <p>I recently presented my latest published paper <a href="https://wilmott.com/wilmott-magazine-november-2022-issue/">On the Bachelier implied volatility at extreme strikes</a> at the Princeton Fintech and Quant conference.
+The presenters were of quite various backgrounds. The first presentations were much more business oriented with lots of AI keywords, but relatively little technical content while the last presentation was
+about parallel programming. Many were a pitch to recruit to employees.</p>
+<p>The diversity was interesting: it was refreshing to hear about quantitative finance from vastly different perspectives. The presentation from Morgan Stanley about <a href="https://github.com/morganstanley/optimus-cirrus">their scala annotation framework</a> to ease up
+parallel programming was enlightening. The main issue they were trying to solve is the necessity for all the boilerplate code to handle concurrency, caching, robustness, which obfuscates significantly the business logic in the code.
+This is an old problem. Decades ago, rule engines were the trend for similar reasons. Using the example of pricing bonds, the presenters put very well forward the issues in evidence, issues that I found
+very relevant.</p>
+<p>While writing my own presentation, I realized I had not tried to plot the Bachelier implied volatility fractals. The one corresponding to the Householder method is pretty, and not too far off from
+the Black-Scholes case, possibly because the first, second and third derivatives towards the vol are similar between the two models.</p>
+<figure><img src="/post/bachelier_householder_factor2_5.png"><figcaption>
+      <h4>Iterations of the Householder method on the problem of solving the Bachelier implied volatility for a given strike and maturity. Each point corresponds to an initial guess in the complex plane.</h4>
+    </figcaption>
+</figure>
+
+<p>Of course, this is purely for the fun as this has no practical importance, since we can invert the Bachelier price with near machine accuracy through a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">fast analytic formula</a>.</p>
+<p><a href="/post/lefloch_bachelier_slides.pdf">Slides of the presentation</a>.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/linux-in-2022/">Desktop Linux in 2022</a>
   </h1>
@@ -95,49 +118,49 @@
 Oxford-Man Institute of Quantitative Finance</a> and it is thus relatively straightforward to reproduce the numbers presented in the paper.</p>
 <p>Using a sampling of K=75 and L=75*75, I obtain an rounghness index H=0.181. The paper uses K=70 and L = 70x70, and their Figure 19 of the paper states 0.187.
 It turns out that there are more than L observations in the time-series, and, with K=70, I end up with a roughness index H=0.222 when I start from the first observation (year 2000), up to the observation L+1. But it is possible to slide this window and compute the roughness index at each starting point. The results are enlightening.
-<figure><img src="/post/roughness_spx_K70_oxford.png"/><figcaption>
-            <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K70_oxford.png"><figcaption>
+      <h4>SPX historical vol roughness index sliding estimate with K=70.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K70_oxford.png"/><figcaption>
-            <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K70_oxford.png"><figcaption>
+      <h4>density of SPX historical vol roughness index estimate with K=70. The mean is 0.158 with a standard deviation of 0.034</h4>
+    </figcaption>
 </figure>
 </p>
 <p>The mean estimated roughness is 0.158 with a standard deviation of 0.034. The results of the paper are within one standard deviation. But it shows it may be dangerous to use a single window for the estimate. If we use a smaller window size K=50, L=50x50, we can see regimes of roughness in time.
-<figure><img src="/post/roughness_spx_K50_oxford.png"/><figcaption>
-            <h4>SPX roughness index sliding estimate with K=50.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_spx_K50_oxford.png"><figcaption>
+      <h4>SPX roughness index sliding estimate with K=50.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_spx_K50_oxford.png"/><figcaption>
-            <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_spx_K50_oxford.png"><figcaption>
+      <h4>density of SPX roughness index estimate with K=70. The mean is 0.145 with a standard deviation of 0.048</h4>
+    </figcaption>
 </figure>
 </p>
 <p>I also double checked that the SPX closing prices resulted in an estimate H=0.5, for the two window sizes. The SPX price process follows the standard Brownian motion statistics.</p>
 <p>The paper explains that using the 5 minutes realized volatility is not necessarily a good proxy to measure the true underlying instant volatility roughness. I wondered then what happened if we use the daily quotes of the short term at-the-money (ATM) implied volatility as a proxy. Indeed, in a given stochastic volatility model, the short term ATM implied volatility is approximately the instant volatility of the stochastic volatility process. It turns out that there is some freely available data from the Nasdaq for MSFT, but only for the period 2015-01-02 to 2018-12-32 (four years). This constitutes 1006 samples. For the 30-day implied volatility, with K=28, the data implies a roughness index close to 0.5 (0.448).</p>
-<p><figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
-        </figcaption>
+<p><figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 30-day implied volatility roughness index estimate. The mean is 0.448 with a standard deviation of 0.059</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_msft.png"/><figcaption>
-            <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_msft.png"><figcaption>
+      <h4>density of MSFT 10-day implied volatility roughness index estimate. The mean is 0.350 with a standard deviation of 0.049</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Roughness is apparent in the 10-day implied volatility, with H=0.35. For the 60-day implied vol, I measure a roughness H=0.41 with a deviation of 0.06, so again not significantly different from the standard Brownian motion roughness. The roughness of the implied volatility skew, also available in this data, is more pronounced.</p>
 <p>Another interesting analysis is the roughness of the VIX index, which can be mapped to the price of a newly issued 30 days variance swap on the SPX index. I am actually slightly surprised that the various papers on rough volatility have not looked at it already. I just took the quotes from Yahoo. With K=51, I find H=0.347 with a standard deviation of 0.026. This is close to the 10-day implied volatility roughness measured previously.
-<figure><img src="/post/roughness_vix_K51_close.png"/><figcaption>
-            <h4>VIX roughness index sliding estimate with K=51.</h4>
-        </figcaption>
+<figure><img src="/post/roughness_vix_K51_close.png"><figcaption>
+      <h4>VIX roughness index sliding estimate with K=51.</h4>
+    </figcaption>
 </figure>
 
-<figure><img src="/post/roughness_density_vix_K51_close.png"/><figcaption>
-            <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
-        </figcaption>
+<figure><img src="/post/roughness_density_vix_K51_close.png"><figcaption>
+      <h4>density of VIX roughness index estimate with K=51. The mean is 0.347 with a standard deviation of 0.026</h4>
+    </figcaption>
 </figure>
 </p>
 <p>What about the Heston model? What is the estimate of the roughness index on a simulated stochastic variance path? Using one time-step per day for 5 years, and K=25, we find H=0.505 with a standard deviation of 0.032 for the roughness of the instantaneous variance, as well as for the one of the one-month at-the-money implied volatility (using v(t) and constant Heston parameters). This is, as expected, the standard roughness of the underlying Brownian motion.</p>
@@ -173,15 +196,15 @@ a fractional Brownian motion is used. The idea of using a fractional Brownian mo
   <time datetime="2022-04-09T21:56:42&#43;0100" class="post-date">Sat, Apr 9, 2022</time>
   <p>When writing a Monte-Carlo simulation to price financial derivative contracts, the most straightforward is to code a loop over the number of paths, in which each path is fully calculated. Inside the loop, a payoff function takes this path to compute the present value of the contract on the given path. The present values are recorded to lead to the Monte-Carlo statistics (mean, standard deviation).
 I ignore here any eventual callability of the payoff which may still be addressed with some work-arounds in this setup. The idea can be schematized by the following go code:
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; numSimulations; i<span style="color:#666">++</span> {
-</span></span><span style="display:flex;"><span>	pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path) <span style="color:#60a0b0;font-style:italic">//path contains an array of n time-steps of float64.
-</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>	pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path, output)
-</span></span><span style="display:flex;"><span>	statistics.<span style="color:#06287e">RecordValue</span>(output)
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">for</span><span style="color:#bbb"> </span>i<span style="color:#bbb"> </span><span style="color:#666">:=</span><span style="color:#bbb"> </span><span style="color:#40a070">0</span>;<span style="color:#bbb"> </span>i<span style="color:#bbb"> </span>&lt;<span style="color:#bbb"> </span>numSimulations;<span style="color:#bbb"> </span>i<span style="color:#666">++</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathGenerator.<span style="color:#06287e">ComputeNextPath</span>(<span style="color:#666">&amp;</span>path)<span style="color:#bbb"> </span><span style="color:#007020">//path contains an array of n time-steps of float64.</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>pathEvaluator.<span style="color:#06287e">Evaluate</span>(<span style="color:#666">&amp;</span>path,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>statistics.<span style="color:#06287e">RecordValue</span>(output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 A python programmer would likely not write a simulation this way, as the python code inside the large loop will not be fast. Instead, the python programmer will write a vectorized simulation, generating all paths at the same time.
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths) <span style="color:#60a0b0;font-style:italic">//paths contains an array of n time-steps of vectors of size numSimulations 
-</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths, output)
-</span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>pathGenerator.<span style="color:#06287e">ComputeAllPaths</span>(<span style="color:#666">&amp;</span>paths)<span style="color:#bbb"> </span><span style="color:#007020">//paths contains an array of n time-steps of vectors of size numSimulations </span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span>pathEvaluator.<span style="color:#06287e">EvaluateAll</span>(<span style="color:#666">&amp;</span>paths,<span style="color:#bbb"> </span>output)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span>statistics.<span style="color:#06287e">RecordValues</span>(output)</span></span></code></pre></div></p>
 <p>The latter approach sounds nice, but may easily blow up the memory, if all paths are stored in memory. One solution is to store only packages of path, and do the simulation multiple times, being careful as to where we start the random numbers along the way. It is possible to further optimize memory by not keeping each full path in memory, but just the current path values, along with a list of vector variables which track the payoff path dependency. This requires a special Brownian-bridge implementation in the context of Sobol quasi-random numbers, as described in Jherek Healy&rsquo;s book.</p>
 <p>We can thus summarize the various approaches by (A) iterative on scalars (B) fully vectorized (C) iterative on vectors. I intentionally abuse the language here as the scalars are not scalars, but 1 path comprised of values at all relevant times - in this terminology, scalar means a single path.</p>
 <p>Which one is most appropriate?</p>
@@ -201,7 +224,7 @@ A python programmer would likely not write a simulation this way, as the python 
 into the product of two parts where one part goes to infinity and the other to zero, and we know the overall result must go to zero (or to some other specific number).
 This decomposition may be relatively simple to handle for the value of the function, but becomes far less trivial to think of in advance, at the derivative level.</p>
 <p>I played myself with Julia&rsquo;s excellent ForwardDiff package, and found out a completely different example which illustrates a simple and easy trap with automatic differentiation. The example is a typical cubic spline evaluation routine:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> evaluate(self, z)
 </span></span><span style="display:flex;"><span>  i <span style="color:#666">=</span> searchsortedfirst(self<span style="color:#666">.</span>x, z)  <span style="color:#60a0b0;font-style:italic"># x[i-1]&lt;z&lt;=x[i]</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#007020;font-weight:bold">if</span> z <span style="color:#666">==</span> self<span style="color:#666">.</span>x[i]
 </span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> self<span style="color:#666">.</span>a[i]
@@ -236,30 +259,30 @@ constraints \( A^T x \geq b_0 \), were \(D\) is a \(n \times n\)-dimensional rea
 <p>In <a href="https://quantsrus.github.io/post/state_of_convex_quadratic_programming_solvers/">a blog post dating from 2018</a>, Jherek Healy found that the sparse solve_qp solver of scilab was the most efficient across various open-source alternatives. The underlying algorithm is actually Berwin Turlach <a href="https://github.com/cran/quadprog">quadprog</a>, originally coded in Fortran, and available as a R package. I had used this algorithm to implement the techniques described in my paper (and even proposed <a href="https://chasethedevil.github.io/post/quadprog-nans/">a small improvement</a> regarding machine epsilon accuracy treatment, now included in the latest version of quadprog).</p>
 <p>Julia, like Python, offers several good convex optimizers. But those support a richer set of problems than only the basic standard quadratic programming problem. As a consequence, they are not optimized for our simple use case. Indeed, I have <a href="https://github.com/fabienlefloch/GoldfarbIdnaniSolver.jl">ported the algorithm to Julia</a>, and found out a 100x performance increase over the <a href="https://oxfordcontrol.github.io/COSMO.jl/stable/">COSMO solver</a> on the closest arbitrage-free option prices problem. Below is a table summarizing the results (also detailed on the github repo main page).</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Solver</th>
-<th style="text-align:right">RMSE</th>
-<th style="text-align:right">Time (ms)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">GoldfarbIdnaniSolver</td>
-<td style="text-align:right">0.0031130349998388157</td>
-<td style="text-align:right">0.205</td>
-</tr>
-<tr>
-<td style="text-align:left">COSMO</td>
-<td style="text-align:right">0.0031130309597602370</td>
-<td style="text-align:right">21.485</td>
-</tr>
-<tr>
-<td style="text-align:left">SCS</td>
-<td style="text-align:right">0.0031130429769795193</td>
-<td style="text-align:right">8.381</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Solver</th>
+          <th style="text-align: right">RMSE</th>
+          <th style="text-align: right">Time (ms)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">GoldfarbIdnaniSolver</td>
+          <td style="text-align: right">0.0031130349998388157</td>
+          <td style="text-align: right">0.205</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">COSMO</td>
+          <td style="text-align: right">0.0031130309597602370</td>
+          <td style="text-align: right">21.485</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">SCS</td>
+          <td style="text-align: right">0.0031130429769795193</td>
+          <td style="text-align: right">8.381</td>
+      </tr>
+  </tbody>
 </table>
 
   
@@ -294,9 +317,9 @@ A recurring theme is plots presented without context/with the wrong context. Man
 <p>In fact, the last time the atmospheric CO₂ amounts were this high was more than 3 million years ago, when temperature was 2°–3°C (3.6°–5.4°F) higher than during the pre-industrial era, and sea level was 15–25 meters (50–80 feet) higher than today.</p>
 </blockquote>
 <p>What I found disappointing is the absence of the <a href="https://www.climatefiles.com/exxonmobil/1982-memo-to-exxon-management-about-co2-greenhouse-effect/">famous 1982 plot from Exxon</a> (p. 7), see also <a href="https://gizmodo.com/exxon-predicted-2019-s-ominous-co2-milestone-in-1982-1834748763">the following article with nice red lines for 2019</a>.</p>
-<figure><img src="/post/exxon_co2ppm.jpg"/><figcaption>
-            <h4>The Exxon 1982 PPM Plot.</h4>
-        </figcaption>
+<figure><img src="/post/exxon_co2ppm.jpg"><figcaption>
+      <h4>The Exxon 1982 PPM Plot.</h4>
+    </figcaption>
 </figure>
 
 <p>On this plot, the relation between the temperature increase and the CO2 ppm looks linear, which would be somewhat more alarming.</p>
@@ -314,60 +337,18 @@ A recurring theme is plots presented without context/with the wrong context. Man
   <p>Github recently moved to support only ssh access via public/private keys. As I use github to host this blog, I was impacted.</p>
 <p>The setup on Linux is not very complicated, and relatively well documented on <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github itself</a> but all the steps are not listed in a simplistic manner, and some Google search is still required to find out how to setup multiple private keys for various different servers or different repos.</p>
 <p>Here is my short guide. In bash, do the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></span></span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-keygen -t ed25519 -C <span style="color:#4070a0">&#34;your_email@example.com&#34;</span></span></span></code></pre></div>
 <p>Make sure to give a specific name, e.g. <code>/home/you/.ssh/id_customrepo_ed25519</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#007020">eval</span> <span style="color:#4070a0">&#34;</span><span style="color:#007020;font-weight:bold">$(</span>ssh-agent -s<span style="color:#007020;font-weight:bold">)</span><span style="color:#4070a0">&#34;</span>
 </span></span><span style="display:flex;"><span>ssh-add ~/.ssh/id_customrepo_ed25519</span></span></code></pre></div>
 <p>Create <code>~/.ssh/config</code> with
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Host github-as-customrepo
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Host github-as-customrepo
 </span></span><span style="display:flex;"><span>        HostName github.com
 </span></span><span style="display:flex;"><span>        User git
 </span></span><span style="display:flex;"><span>        IdentityFile ~/.ssh/id_customrepo_ed25519
 </span></span><span style="display:flex;"><span>        IdentitiesOnly yes</span></span></code></pre></div></p>
 <p>Eventually follow the official doc to <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection">test the connection</a>, e.g. <code>ssh -T git@github-as-customrepo</code>. Update the git URL via</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</span></span></code></pre></div>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/covid19-fake-news/">Covid-19 Fake News</a>
-  </h1>
-  <time datetime="2021-08-10T07:56:42&#43;0100" class="post-date">Tue, Aug 10, 2021</time>
-  <p>One thing that motivated me for vaccination is the fake news propaganda against the Covid-19 vaccines.</p>
-<p>A mild example relates to the data from Israel about the delta variant. <a href="https://trialsitenews.com/covid-19-case-data-in-israel-a-troubling-trend/">This kind of article</a>, with the title &ldquo;Covid 19 Case Data in Israel, a Troubling Trend&rdquo;, puts emphasis on the doubts on the effectivness of the vaccine:</p>
-<blockquote>
-<p>the vaccine appears to have a negligible effect on an individual as to whether he/she catches the current strain. Moreover, the data indicates that the current vaccines used (Moderna, Pfizer-BioNTech, AstraZeneca) may have a decreasing effect on reduced hospitalizations and death if one does get infected with the Delta variant.</p>
-</blockquote>
-<p>CNBC (far from the best news site) is much more balanced and precise in contrast:</p>
-<blockquote>
-<p>However, the two-dose vaccine still works very well in preventing people from getting seriously sick, demonstrating 88% effectiveness against hospitalization and 91% effectiveness against severe illness, according to the Israeli data published Thursday.</p>
-</blockquote>
-<p>Much more shocking is a <a href="https://twitter.com/pbhushan1/status/1417842166366236679">tweet from Prashant Bhushan</a> (whoever that is) which was relayed widely enough that I got to see it</p>
-<blockquote>
-<p>Public Health Scotland have revealed that 5,522 people have died within twenty-eight days of having a Covid-19 vaccine within the past 6 months in Scotland alone! This is 9 times the people who died due to Covid from March 2020 till Jan 2021 in Scotland!</p>
-</blockquote>
-<p>It points to <a href="https://dailyexpose.co.uk/2021/07/18/5522-people-have-died-within-28-days-of-having-a-covid-19-vaccine-in-scotland-according-to-public-health-scotland/">an article</a> in the Daily Expose (worse than a tabloid?) with <a href="https://beta.publichealthscotland.scot/media/8183/21-06-23-covid19-publication_report.pdf">a link to the actual study</a>. Giving an actual link to the source is a very good practice, even if in this case, the authors of the news article write a lengthy text which says the opposite as the paper they cite as being the source. Indeed, p.27 of the paper says</p>
-<blockquote>
-<p>Using the 5-year average monthly death rate (by age band and gender) from 2015 to 2019 for comparison, 8,718 deaths would have been expected among the vaccinated population within 28 days of receiving their COVID-19 vaccination.
-This means the observed number of deaths is lower than expected compared with mortality rates for the same time period in previous years&hellip;</p>
-</blockquote>
-<p><strong>Why do people write such fake news articles?</strong></p>
-<p>I can imagine 3 kinds of motivations:</p>
-<ol>
-<li>The author wants to make money/be famous. Writing controversial things, even if completely false, seems to work wonder to attract readership, as long as there is a trend of readers curious about this controverse. The author will gather page views and followers easily, which he may then monetize.</li>
-<li>The author is just someone so convinced in his beliefs that everything is interpreted through a very narrow band-pass filter. They will read and pay attention only to the words in the text that will validate their beliefs and forget everything else. I know examples (not on this particular subject) in my own family.</li>
-<li>Farm trolls. There are many farm trolls (we always hear of the Russian farm trolls, but they really exist in most countries), where people are paid to spread disinformation on social media. A simple example is the fake reviews on Amazon. Sometimes the goal is to promote a particular political party ideas. Sometimes this political party is financed by a foreign country with specific interests.</li>
-</ol>
-<p>The third motivation may act as an amplifier of the first two.</p>
-<p><strong>Why are fake news successful?</strong></p>
-<ul>
-<li>People do not trust the official government message. On the coronavirus, the French government was initially quite bad at presenting the situation, with the famous &ldquo;masks are useless&rdquo; (because they did not have any stock), a couple of months before enforcing masks everywhere. Too many decisions are purely political. A good example is the policy to close a school class on a single positive test when the full school is being tested for coronavirus. The false positive rate guarantees that at least 1/3 of the classes will close. Initially the policy was 3 positive tests, which was much more rational, but not as obvious to understand for the masses. My son ended up being one of those false positives, and it wasn&rsquo;t a particularly nice experience.</li>
-<li>People do not trust traditional media anymore. As the quality of standard newspapers dwindled with the rise of the internet, people do not trust those much anymore. Also, perhaps fairly, it is not clear if classic tradional media present better news than free modern social media. There are exceptions of course (typically with monthly publications).</li>
-<li>Social media bias: almost all social networks act as narrow band-pass filter. If you look at one video of cat on youtube, you will end up with videos of cats in your youtube frontpage every day. Controversial subjects/videos are given a considerable space. A main reason for this behavior is that they are optimized for page views/to attract your attention.</li>
-<li>Generalized attention deficit disorder due to the ubiquity of smart phones. Twitter got famous because of the 127 characters message limit. Newspaper articles are perhaps five times shorter than they used to be in the early 1990s. The time we have is limited and a lot of it is spent reading/writing short updates to various Whatsapp groups or other social network apps.</li>
-</ul>
-<p><strong>Conclusion</strong></p>
-<p>This was not the only motivator, another strong one is a Russian friend who caught the Covid-19 in July 2021, who was not very pro-vaccination, but thought, once it was too late, &ldquo;I really should have applied for the vaccine&rdquo;, as he realized it impacted the whole circle of relations around him. Then, one by one, his whole family caught the Covid. Fortunately, no-one died.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote set-url origin git@github-as-customrepo:customrepo/customrepo.github.io.git</span></span></code></pre></div>
 
   
 </article>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,7 +74,7 @@
   <time datetime=2009-01-08T12:26:00Z class="post-date">Thu, Jan 8, 2009</time>
   <p>Alex Miller has a very <a href="http://tech.puredanger.com/2009/01/05/scala-ring/">interesting test of Actors</a>. He finds out Scala performance is relatively low compared to Erlang, and Kilim is very near Erlang. But Kilim code is the most difficult to read in the lot.</p>
 <p>I thought it would be simple to just do the same test in plain Java. I wrote the code for it duplicating the scala logic using Threads instead of Actors.</p>
-<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">SimpleRing</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">SimpleRing</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#902000">void</span><span style="color:#bbb"> </span><span style="color:#06287e">main</span>(String<span style="color:#666">[]</span><span style="color:#bbb"> </span>args)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>SimpleRing<span style="color:#bbb"> </span>ring<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">new</span><span style="color:#bbb"> </span>SimpleRing();<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>RingNode<span style="color:#bbb"> </span>node<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>ring.<span style="color:#4070a0">startRing</span>(Integer.<span style="color:#4070a0">parseInt</span>(args<span style="color:#666">[</span>0<span style="color:#666">]</span>));<span style="color:#bbb">
@@ -260,7 +260,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}</span></span></code></pre></div>
+</span></span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 I was a bit surprised by the result. It was slow and only 1 thread was really active at one time. This is why the test is particularly good. It is not trivial to reproduce the functionality in plain Java in an effective manner. It really shows how the concept of Actors can be useful.</p>
 <ul>
 <li>

@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,13 +65,25 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/throws-exception/">throws Exception</a>
+  </h1>
+  <time datetime="2014-05-27T10:49:00Z" class="post-date">Tue, May 27, 2014</time>
+   
+
+There was a big debate at work around Exception declaration in a Java API. I was quite surprised that such an apparently simple subject could end up being so controversial. The controversy was around the choice of declaring in the interfaces:<br /><br /><span style="font-size: x-small;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">void myMethod() throws Exception</span></span><br /><br />instead of<br /><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() throws MyAPIRuntimeException</span></span><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;"><span style="font-size: x-small;">void myMethod() </span></span><br /><br />where MyAPI represents either a generic API related exception or a specific exception related to the method in question.<br /><br />The choice of "throws Exception" did not even occur to me as a possibility, but after some digging, I found that some relatively famous libraries actually followed that principle at one point, for example Apache Struts 1.x or Spring MVC. <br /><br />More modern libraries, like Google Guava, commons-math 3.x, Struts 2.x generally favor MyAPIRuntimeException where MyAPI is actually context-specific. Some old popular libraries declare a checked Exception, for example the HibernateException in Hibernate.<br /><br />This seems to be a recurring subject on Stackoverflow:<br /><a href="http://stackoverflow.com/questions/20530221/java-interface-throws-exception-best-practice" target="_blank">Stackoverflow - Java interface throws Exception best practice</a><br /><a href="http://stackoverflow.com/questions/4283634/what-to-put-in-the-throws-clause-of-an-interface-method" target="_blank">Stackoverflow - What to put in the throws clause of an interface method</a><br /><br />But those are quite poor in terms of explanations. The best comments on this subjects are from:<br /><a href="http://www.artima.com/intv/handcuffs.html"><span class="ts">Anders         Hejlsberg (C#, Delphi, Turbo Pascal creator) - The Trouble with         Checked Exceptions</span></a><br />    <a href="http://www.artima.com/intv/solid2.html"><span class="ts">James         Gosling (Java creator) - Failure and Exceptions</span></a><br /><br />    <br />This comment from Anders is particularly acute:<br />    "<b>To work around this requirement, people do ridiculous things.       For example, they decorate every method with, "</b><b><code>throws         Exception</code></b><b>." That just completely defeats the       feature, and you just made the programmer write more gobbledy       gunk. That doesn't help anybody.</b>    "<br />    <br /><br />         <br />Today I believe the API in question declares "throws Exception"... <br />         <br /><br />
+
+
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/kde-xfce-gnome-shell-in-2014/">KDE, XFCE, Gnome-Shell in 2014</a>
   </h1>
@@ -89,7 +101,7 @@ Many people (and notoriously, Linus Torvald) complained about Gnome-shell, espec
   </h1>
   <time datetime="2014-05-20T12:08:00Z" class="post-date">Tue, May 20, 2014</time>
   <p>While playing around with <a href="/post/good--popular-algorithms-are-simple/">differential evolution</a> to calibrate SABR, I noticed that sometimes, several set of parameters can lead to a very similar smile, usually the good one is for relatively low vol of vol and the bad one is for relatively high vol of vol. I first looked for errors in my implementation, but it&rsquo;s a real phenomenon.
-<figure><img src="/post/Screenshot%20from%202014-05-19%2017%2055%2050.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-19%2017%2055%2050.png">
 </figure>
 </p>
 <p>I used the normal implied volatility formula with beta=1, then converted it to lognormal (Black) volatility. While it might not be a great idea to rely on the normal formula with beta=1, I noticed the same phenomenon with the <a href="/post/sabr-with-new-hagan-pde-approach">arbitrage free PDE density approach</a>, especially for long maturities. Interestingly, I did not notice such behavior before with other stochastic volatility models like Heston or Schobel-Zhu: I suspect it has to do with the approximations rather than with the true behavior of SABR.</p>
@@ -103,23 +115,23 @@ Many people (and notoriously, Linus Torvald) complained about Gnome-shell, espec
   </h1>
   <time datetime="2014-05-15T22:06:00Z" class="post-date">Thu, May 15, 2014</time>
   <p>Some people use <a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fpapers.ssrn.com%2Fsol3%2Fpapers.cfm%3Fabstract_id%3D1496982&amp;ei=nx11U6QOoozQBcrfgIAK&amp;usg=AFQjCNHi149E0_JiOzZRT9kgDWWYvHWlFQ&amp;sig2=ZnhySOuJd8V-jBcWo4Ky2w&amp;bvm=bv.66699033,d.d2k">Heston to fit one slice</a> of a volatility surface. In this case, some parameters are clearly redundant. Still, I was wondering how it fared against SABR, which is always used to fit a slice. And what about Schobel-Zhu?
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2020%2028.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>With Heston, the calibration is actually slightly better with kappa=0, that is, without mean reversion, because the global optimization is easier and the mean reversion is fully redundant. It&rsquo;s still quite remarkable that 3 parameters result in a fit as good as 5 parameters.</p>
 <p>This is however not the case for Schobel-Zhu, where each &ldquo;redundant parameter&rdquo; seem to make a slight difference in the quality of calibration. kappa = 0 deteriorate a little bit the fit (the mean error is clearly higher), and theta near 0 (so calibrating 4 parameters) is also a little worse (although better than kappa = 0). Also interestingly, the five parameters Schobel-Zhu fit is slightly better than Heston, but not so when one reduce the number of free parameters.</p>
 <p>So what about Heston vs SABR. It is interesting to consider the case of general Beta and Beta=1: it turns out that as confirmed for equities, beta=1 is actually a better choice.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"/><figcaption>
-            <h4>Aggregated error in fit per slice on 10 surfaces</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2034%2049.png"><figcaption>
+      <h4>Aggregated error in fit per slice on 10 surfaces</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Overall on my 10 surfaces composed each of around 10 slices, an admittedly small sample, Heston (without mean-reversion) fit is a little bit better than SABR. Also the <a href="/post/svi-on-top-of-sabr">SVI-SABR</a> idea from Gatheral is not great: the fit is clearly worse than SABR with Beta=1 and even worse than a simple quadratic.
 Of course the best overall fit is achieved with the classic SVI, because it has 6 parameters while the others have only 3.</p>
 <p>All the calibrations so far were done slice by slice independently, using levenberg marquardt on an initial guess found by differential evolution. Some people advocate for speed or stability of parameters reasons the idea of calibrating each slice using the previous slice as initial guess with a local optimizer like levenberg marquardt, in a bootstrapping fashion.
-<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-15%2021%2051%2018.png">
 </figure>
 </p>
 <p>The results can be quite different, especially for SVI, which then becomes the worst, even worse than SVI-SABR, which is actually a subset of SVI with fewer parameters. How can this be?</p>
@@ -135,19 +147,19 @@ Of course the best overall fit is achieved with the classic SVI, because it has 
   <p>Two months ago, I looked at <a href="/post/arbitrage-free-interpolation-of-option-prices-using-piecewise-constant-density">arbitrage free interpolation using piecewise-constant density</a>. This is equivalent to a piecewise quadratic polynomial in call prices where each piece is centered around each call strike.</p>
 <p>I wondered at the time what a quadratic spline would look like on this problem, as it should be very close in theory, except that we can ensure that it is C1, a condition for a good looking implied volatility.</p>
 <p>For a while, I did not find any references around splines where knots are in between two interpolation points and derived my own formula. And then I lost the paper, but out of curiosity, I looked at the excellent De Boor book &ldquo;<a href="http://www.amazon.com/Practical-Splines-Applied-Mathematical-Sciences/dp/0387953663">A Practical Guide to Splines</a>&rdquo; and found that there was actually a chapter around this: quadratic splines with knots at mid-points. Interestingly, it turns out that a quadratic spline on standard knots is not always well defined, which is why, if one does quadratic splines, the knots need to be moved.<!-- raw HTML omitted --><!-- raw HTML omitted -->The papers from this era are quite rudimentary in their presentation (the book is much better). I found the paper from Demko 1977 &ldquo;<a href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=http%3A%2F%2Fwww.sciencedirect.com%2Fscience%2Farticle%2Fpii%2F0021904578900904&amp;ei=oldzU8i0EsTY0QX3xIH4Bg&amp;usg=AFQjCNH8gbNKzPTyFH3xI-FDPJZIAFJAbg&amp;sig2=5fGbnp0Kaf3fx-KZDf5AiA&amp;bvm=bv.66699033,d.d2k">Interpolation by Quadratic Splines</a>&rdquo; quite usable for coding. I adjusted the boundaries to make the first and last quadratic fit the first two/last two strikes (adding a first strike at 0 and a large last strike if necessary) and spend countless time worrying about indices. The result on a simple classic example is interesting.
-<figure><img src="/post/Screenshot%20from%202014-05-14%2013%2052%2054.png"/>
+<figure><img src="/post/Screenshot%20from%202014-05-14%2013%2052%2054.png">
 </figure>
 </p>
 <p>On the non monotonic discrete density data of my earlier blog entry, this gives:
-<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2000%2008.png"/><figcaption>
-            <h4>QSpline is the quadratic spline</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2000%2008.png"><figcaption>
+      <h4>QSpline is the quadratic spline</h4>
+    </figcaption>
 </figure>
 </p>
 <p>Unfortunately, interpolating small prices with such a spline results in a highly oscillating interpolation: this is the <a href="http://www.sciencedirect.com/science/article/pii/0021904591900348">Gibbs phenomenon for splines</a>. We need to loose strict C1 continuity for practical applications, and use a first derivative approximation instead, very much like the Harmonic cubic spline.
-<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2004%2033.png"/><figcaption>
-            <h4>On Jaeckel data, the quadratic spline on prices is highly oscillating</h4>
-        </figcaption>
+<figure><img src="/post/Screenshot%20from%202014-05-14%2014%2004%2033.png"><figcaption>
+      <h4>On Jaeckel data, the quadratic spline on prices is highly oscillating</h4>
+    </figcaption>
 </figure>
 </p>
 
@@ -225,212 +237,96 @@ P. Jaeckel has defied the limits of accuracy with his<a href="http://www.pjaecke
 <p>A few years ago, P. Jaeckel produced a much better algorithm than a simple Newton or Brent solver, in his paper <a href="http://www.jaeckel.org/ByImplication.pdf">By Implication</a>. There is also a much <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1027282">simpler algorithm from Li</a>, based on SOR and a good initial guess for SOR, which I found to be actually quite robust and fast. Now P. Jaeckel has <a href="http://www.jaeckel.org/LetsBeRational.pdf">a newer algorithm</a>, faster and more accurate, close to double accuracy.</p>
 <p>I have tested those on 1 million options of random volatility (between 0.001 and 3), random strikes (N deviations with a cap at 1M) for a few expiries.<!-- raw HTML omitted --><!-- raw HTML omitted -->In terms of performance, the results are independent of expiries, but in terms of accuracy, the new Jaeckel algorithm is particularly more accurate for the long-term options (5y and 15y).</p>
 <table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Expiry</th>
-<th>Vol RMSE</th>
-<th>Price RMSE</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Jaeckel2014</td>
-<td>5y</td>
-<td>3.8E-16</td>
-<td>2.1E-16</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>Jaeckel2006</td>
-<td>5y</td>
-<td>1.3E-10</td>
-<td>1.1E-10</td>
-<td>3.0s</td>
-</tr>
-<tr>
-<td>Jaeckel2014</td>
-<td>15y</td>
-<td>2.0E-12</td>
-<td>2.4E-16</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>Jaeckel2006</td>
-<td>15y</td>
-<td>1.5E-7</td>
-<td>8.0E-11</td>
-<td>2.7s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>Expiry</th>
+          <th>Vol RMSE</th>
+          <th>Price RMSE</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>5y</td>
+          <td>3.8E-16</td>
+          <td>2.1E-16</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2006</td>
+          <td>5y</td>
+          <td>1.3E-10</td>
+          <td>1.1E-10</td>
+          <td>3.0s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>15y</td>
+          <td>2.0E-12</td>
+          <td>2.4E-16</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2006</td>
+          <td>15y</td>
+          <td>1.5E-7</td>
+          <td>8.0E-11</td>
+          <td>2.7s</td>
+      </tr>
+  </tbody>
 </table>
 <p>The maximum error from Jaeckel2006 is around 1e-8, while the one from Jaeckel2014 is 2e-15 (for very large unrealistic strike)</p>
 <p>As a comparison, the simpler Li SOR-TS algorithm follows the given price accuracy independently of the expiry; I have tested with 1E-12. The error in implied volatility will be slightly higher: different close vols can give the same price due to the maximum achievable accuracy of the Black-Scholes formula with double numbers, even with <a href="/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution">a good cumulative normal distribution implementation</a>. Its performance is however dependent on the number of deviations considered: closer to ATM means faster for Li algorithm.&lt;</p>
 <table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Expiry</th>
-<th>Deviation</th>
-<th>Vol RMSE</th>
-<th>Price RMSE</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Jaeckel2014</td>
-<td>1y</td>
-<td>5</td>
-<td>4.2E-16</td>
-<td>2.0E-17</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>LiSORTS</td>
-<td>1y</td>
-<td>5</td>
-<td>8.5E-9</td>
-<td>1.9E-13</td>
-<td>2.1s</td>
-</tr>
-<tr>
-<td>Jaeckel2014</td>
-<td>1y</td>
-<td>3</td>
-<td>3.1E-16</td>
-<td>5.9E-17</td>
-<td>1.7s</td>
-</tr>
-<tr>
-<td>LiSORTS</td>
-<td>1y</td>
-<td>3</td>
-<td>4.3E-12</td>
-<td>1.6E-13</td>
-<td>1.3s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>Expiry</th>
+          <th>Deviation</th>
+          <th>Vol RMSE</th>
+          <th>Price RMSE</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>1y</td>
+          <td>5</td>
+          <td>4.2E-16</td>
+          <td>2.0E-17</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>LiSORTS</td>
+          <td>1y</td>
+          <td>5</td>
+          <td>8.5E-9</td>
+          <td>1.9E-13</td>
+          <td>2.1s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>1y</td>
+          <td>3</td>
+          <td>3.1E-16</td>
+          <td>5.9E-17</td>
+          <td>1.7s</td>
+      </tr>
+      <tr>
+          <td>LiSORTS</td>
+          <td>1y</td>
+          <td>3</td>
+          <td>4.3E-12</td>
+          <td>1.6E-13</td>
+          <td>1.3s</td>
+      </tr>
+  </tbody>
 </table>
 <p>Actually, I have cheated in my Li SOR-TS implementation: I have reused the idea from P. Jaeckel to compute the Black-Scholes price with <code>erfc_x</code> (unscaled erfc) instead of <code>erfc</code>. This simple change divides the number of <code>exp</code> calls by 2. Without this trick, for 5 deviations, SOR-TS took 3.6s (almost twice the time).</p>
 <p>I would not be surprised if this was the main performance improvement between the two Jaeckels.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/arbitrage-free-interpolation-of-option-prices-using-piecewise-constant-density/">Arbitrage Free Interpolation of Option Prices using Piecewise Constant Density</a>
-  </h1>
-  <time datetime="2014-03-17T15:25:00Z" class="post-date">Mon, Mar 17, 2014</time>
-  <p>Tension splines can produce in some cases <a href="/post/c2-arbitrage-free-interpolation-with-tension-splines">arbitrage free C2 interpolation</a> of options, but unfortunately this is not guaranteed. It turns out that, on some not so nice looking data, where the discrete probability density is not monotone but only positive, all previously considered interpolation fail (spline in volatility or variance, tension spline in log prices, harmonic spline on prices).</p>
-<table>
-<thead>
-<tr>
-<th>K</th>
-<th>vol</th>
-<th>put</th>
-<th>b-slope</th>
-<th>b-convexity</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>300.0</td>
-<td>0.682</td>
-<td>0.090</td>
-<td>0.00e+00</td>
-<td>0.00e+00</td>
-</tr>
-<tr>
-<td>310.0</td>
-<td>0.654</td>
-<td>0.136</td>
-<td>4.60e-03</td>
-<td>0.00e+00</td>
-</tr>
-<tr>
-<td>320.0</td>
-<td>0.621</td>
-<td>0.192</td>
-<td>5.60e-03</td>
-<td>1.00e-03</td>
-</tr>
-<tr>
-<td>330.0</td>
-<td>0.594</td>
-<td>0.288</td>
-<td>9.60e-03</td>
-<td>4.00e-03</td>
-</tr>
-<tr>
-<td>340.0</td>
-<td>0.560</td>
-<td>0.404</td>
-<td>1.16e-02</td>
-<td>2.00e-03</td>
-</tr>
-<tr>
-<td>350.0</td>
-<td>0.520</td>
-<td>0.530</td>
-<td>1.26e-02</td>
-<td>1.00e-03</td>
-</tr>
-<tr>
-<td>360.0</td>
-<td>0.484</td>
-<td>0.736</td>
-<td>2.06e-02</td>
-<td>8.00e-03</td>
-</tr>
-<tr>
-<td>370.0</td>
-<td>0.467</td>
-<td>1.232</td>
-<td>4.96e-02</td>
-<td>2.90e-02</td>
-</tr>
-<tr>
-<td>380.0</td>
-<td>0.442</td>
-<td>1.898</td>
-<td>6.66e-02</td>
-<td>1.70e-02</td>
-</tr>
-<tr>
-<td>390.0</td>
-<td>0.427</td>
-<td>3.104</td>
-<td>1.21e-01</td>
-<td>5.40e-02</td>
-</tr>
-<tr>
-<td>400.0</td>
-<td>0.412</td>
-<td>4.930</td>
-<td>1.83e-01</td>
-<td>6.20e-02</td>
-</tr>
-</tbody>
-</table>
-<figure><img src="http://4.bp.blogspot.com/-AILZMFsJ09w/Uyb9SWnrYbI/AAAAAAAAHFE/3wzhISGziaU/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:34:04.png"/>
-</figure>
-
-<p>Possibly the simplest arbitrage free interpolation is to postulate the density as piecewise constant, ideally centered around each strike (if not centered, there is no guarantee that it will be positive). If a spline is used for interpolation, this means a quadratic spline. Unfortunately, because it is not C2, it then still fails to be arbitrage free.</p>
-<p>It is also possible to price by integrating the payoff over the density. There is then one degree of freedom, the Fmin (minimum forward allowed before absorption) that can be adjusted so as to make the density always positive. This produces our only arbitrage free interpolation of the above input put option prices.</p>
-<figure><img src="http://3.bp.blogspot.com/-oyqkgeadz-I/Uyb_kjOjQ7I/AAAAAAAAHFQ/M0s2yemHbOA/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:39.png"/>
-</figure>
-
-<p>The implied volatility looks reasonable on this strange input: very much like a spline on volatilities. In contrast, the parabolic interpolator produces an oddly looking implied volatility shape, even though the density is in a way similar: piecewise constant. This is likely because I forced the second derivatives to match the discrete curvature, it is then not C1 in prices.</p>
-<p>Unfortunately, the piecewise constant density interpolant can also produce some strange implied volatility shapes, for example on P. Jaeckel example data:</p>
-<figure><img src="http://3.bp.blogspot.com/-14AO4VdMh78/UycAWtv4TrI/AAAAAAAAHFY/lkqUFsJQY4A/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:33:02.png"/>
-</figure>
-
-<p>We find back the wiggles for large strikes. The lower end is particularly funny (which could be due to the fact that I don&rsquo;t have the data for low strikes). This is the corresponding density:</p>
-<figure><img src="http://2.bp.blogspot.com/-GBq_zDoLDyE/UycAuk7Ui0I/AAAAAAAAHFg/f1fmWrcq1XY/s1600/Screenshot&#43;from&#43;2014-03-17&#43;14:32:27.png"/>
-</figure>
-
-<p>It appears then not so easy to produce a simple generally good looking interpolation.</p>
 
   
 </article>

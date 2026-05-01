@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,7 +74,7 @@
   <time datetime=2023-11-07T20:56:42&#43;0100 class="post-date">Tue, Nov 7, 2023</time>
   <p>I received a few e-mails asking me for the code I used to measure roughness in my preprint on the <a href="/post/implied_volatility_roughness">roughness of the implied volatility</a>. Unfortunately, the code I wrote for this paper is not in a <em>good</em> state, it&rsquo;s all in one long file line by line, not necessarily in order of execution, with comments that are only meaningful to myself.</p>
 <p>In this post I will present the code relevant to measuring the oxford man institute roughness with Julia. I won&rsquo;t go into generating Heston or rough volatility model implied volatilities, and focus only on the measure on roughness based on some CSV like input. I downloaded the oxfordmanrealizedvolatilityindices.csv from the Oxford Man Institute website (unfortunately now discontinued, data bought by Refinitiv but still available in some github repos) to my home directory</p>
-<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones 
+<p><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> DataFrames, CSV, Statistics, Plots, StatsPlots, Dates, TimeZones 
 </span></span><span style="display:flex;"><span>df <span style="color:#666">=</span> DataFrame(CSV<span style="color:#666">.</span>File(<span style="color:#4070a0">&#34;/home/fabien/Downloads/oxfordmanrealizedvolatilityindices.csv&#34;</span>))
 </span></span><span style="display:flex;"><span>df1 <span style="color:#666">=</span>  df[df<span style="color:#666">.</span><span style="color:#902000">Symbol</span> <span style="color:#666">.==</span> <span style="color:#4070a0">&#34;.SPX&#34;</span>,<span style="color:#666">:</span>]
 </span></span><span style="display:flex;"><span>dsize <span style="color:#666">=</span>  trunc(<span style="color:#902000">Int</span>,length(df1<span style="color:#666">.</span>close_time)<span style="color:#666">/</span><span style="color:#40a070">1.0</span>)
@@ -110,7 +110,7 @@
 </span></span><span style="display:flex;"><span>meanValue, stdValue, cm <span style="color:#666">=</span> meanRoughness(tm, ivm, K0,K0<span style="color:#666">^</span><span style="color:#40a070">2</span>)
 </span></span><span style="display:flex;"><span>density(cm,label<span style="color:#666">=</span><span style="color:#4070a0">&#34;H&#34;</span>,ylabel<span style="color:#666">=</span><span style="color:#4070a0">&#34;Density&#34;</span>)</span></span></code></pre></div>
 The last plot should look like
-<figure><img src="/post/oxford_spx500_roughness.png"/>
+<figure><img src="/post/oxford_spx500_roughness.png">
 </figure>
 
 It may be slightly different, depending on the date (and thus the number of observations) of the CSV file (the ones I found on github are not as recent as the one I used initially in the paper).</p>

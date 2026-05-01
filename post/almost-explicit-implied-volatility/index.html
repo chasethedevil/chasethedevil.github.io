@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.160.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Almost Explicit Implied Volatility &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 10159. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Almost Explicit Implied Volatility</h1>
+  <time datetime=2026-04-30T18:10:00Z class="post-date">Thu, Apr 30, 2026</time>
+  <p>Several years ago, <a href="/post/fast-and-accurate-implied-volatility-solver/">I had explored</a> accuracy and performance of different ways to imply the Black-Scholes volatility. Jherek Healy proposed some improvements over my naive algorithm on <a href="https://jherekhealy.github.io/blog/post/implied_volatility_algorithms_go_julia/">his blog</a>. Recently, a Linkedin post mentioned <a href="https://arxiv.org/html/2604.24480v2">a new paper from Wolfgang Schadner</a> which presents an <em>almost</em> explicit formula for the implied volatility. <em>Almost</em> because it actually relies on some implementation of the quantile function for the inverse Gaussian distribution: it requires a specialized numerical algorithm in practice, such as the one from <a href="https://arxiv.org/abs/1603.06687">Giner and Smyth</a>.</p>
+<p>The idea is actually not new, the same formula has been used back in 2016 by <a href="https://github.com/PyFE/FE-R/blob/main/pkg/R/blackscholes_impvol.R">Jaehyuk Choi</a> in his github repository.
+If we have a good inverse Gaussian distribution function, the algorithm is clean and simple:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">using</span> Distributions
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">export</span> impliedVolatilityIG
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">const</span> N <span style="color:#666">=</span> Normal()
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> impliedVolatilityIG(isCall<span style="color:#666">::</span><span style="color:#902000">Bool</span>, price<span style="color:#666">::</span><span style="color:#902000">T</span>, forward, strike,  timeToExpiry, df) <span style="color:#007020;font-weight:bold">where</span> {<span style="color:#902000">T</span>}
+</span></span><span style="display:flex;"><span>    c, ex <span style="color:#666">=</span> normalizePrice(isCall, price, forward, strike, df)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> c <span style="color:#666">&gt;=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex <span style="color:#666">||</span> c <span style="color:#666">&gt;=</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>        throw(<span style="color:#902000">DomainError</span>(c, string(<span style="color:#4070a0">&#34;price higher than intrinsic value &#34;</span>, <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex)))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">elseif</span> c <span style="color:#666">&lt;=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>        throw(<span style="color:#902000">DomainError</span>(c, <span style="color:#4070a0">&#34;price is negative&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#666">=</span> log(ex)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">if</span> abs(x) <span style="color:#666">&lt;</span> <span style="color:#40a070">4</span> <span style="color:#666">*</span> eps(T)
+</span></span><span style="display:flex;"><span>        <span style="color:#40a070">2</span> <span style="color:#666">*</span> quantile(N, (c <span style="color:#666">+</span> <span style="color:#40a070">1</span>) <span style="color:#666">/</span> <span style="color:#40a070">2</span>) <span style="color:#666">/</span> sqrt(timeToExpiry)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        mu <span style="color:#666">=</span> <span style="color:#40a070">2</span> <span style="color:#666">/</span> abs(x)
+</span></span><span style="display:flex;"><span>        u <span style="color:#666">=</span> cquantile(InverseGaussian(mu), c)
+</span></span><span style="display:flex;"><span>        <span style="color:#40a070">2</span> <span style="color:#666">/</span> sqrt(u <span style="color:#666">*</span> timeToExpiry)
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
+<p>reusing the price normalization idea of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1027282">Li</a>.
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> normalizePrice(isCall<span style="color:#666">::</span><span style="color:#902000">Bool</span>, price, f, strike, df)
+</span></span><span style="display:flex;"><span>    c <span style="color:#666">=</span> price <span style="color:#666">/</span> (f <span style="color:#666">*</span> df)
+</span></span><span style="display:flex;"><span>    ex <span style="color:#666">=</span> f <span style="color:#666">/</span> strike
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> <span style="color:#666">!</span>isCall
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">if</span> ex <span style="color:#666">&lt;=</span> <span style="color:#40a070">1</span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> c <span style="color:#666">+</span> <span style="color:#40a070">1</span> <span style="color:#666">-</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex <span style="color:#60a0b0;font-style:italic"># put call parity</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">else</span> <span style="color:#60a0b0;font-style:italic">#duality + put call parity            </span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> ex <span style="color:#666">*</span> c
+</span></span><span style="display:flex;"><span>            ex <span style="color:#666">=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">if</span> ex <span style="color:#666">&gt;</span> <span style="color:#40a070">1</span> <span style="color:#60a0b0;font-style:italic"># use c(-x0, v)            </span>
+</span></span><span style="display:flex;"><span>            c <span style="color:#666">=</span> (f <span style="color:#666">*</span> (c <span style="color:#666">-</span> <span style="color:#40a070">1</span>) <span style="color:#666">+</span> strike) <span style="color:#666">/</span> strike <span style="color:#60a0b0;font-style:italic"># in out duality, c = ex*c + 1 - ex </span>
+</span></span><span style="display:flex;"><span>            ex <span style="color:#666">=</span> <span style="color:#40a070">1</span> <span style="color:#666">/</span> ex
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> c, ex
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div></p>
+<p>I was wondering how accurate it was especially for very out-of-the-money options, and how fast it was in practice. Below I compare various implementations in <a href="https://www.julialang.org">Julia</a>:</p>
+<ul>
+<li><a href="http://www.jaeckel.org/LetsBeRational.pdf">Peter Jaeckel</a>, which is arguably the industry standard.</li>
+<li><a href="https://jherekhealy.github.io/blog/post/implied_volatility_algorithms_go_julia/">Jherek Healy</a>, which consists in (log-)Householder iterations on top of a good explcit initial guess.</li>
+<li>The inverse Gaussian approach using Julia&rsquo;s Distribution.jl package (as in the above code).</li>
+<li>The inverse Gaussian approach using a basic port of statsmod R algorithm, adapted to compute the complementary quantile function. This corresponds to a different implementation of <code>cquantile(InverseGaussian(mu),c)</code>.</li>
+</ul>
+<p>I consider call optiun prices for a fixed strike K = 200 for a forward F = 100, and a time to maturity T = 1.0 year, varying the volatility from 0.02 to 4.0 in steps of 0.01. This constitute 399 samples.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>vol RMSD</th>
+          <th>vol MAXAD</th>
+          <th>Price MAXAD</th>
+          <th>Rel. Price MAXAD</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel</td>
+          <td>8.66e-16</td>
+          <td>4.00e-15</td>
+          <td>4.26e-14</td>
+          <td>1.81e-12</td>
+          <td>104 μs</td>
+      </tr>
+      <tr>
+          <td>Healy</td>
+          <td>1.57e-15</td>
+          <td>9.77e-15</td>
+          <td>8.53e-14</td>
+          <td>3.02e-10</td>
+          <td>107  μs</td>
+      </tr>
+      <tr>
+          <td>IG Distribution</td>
+          <td>7.37e-16</td>
+          <td>5.41e-15</td>
+          <td>2.84e-14</td>
+          <td>8.99e-11</td>
+          <td>246 μs</td>
+      </tr>
+      <tr>
+          <td>IG statsmod</td>
+          <td>7.77e-16</td>
+          <td>7.55e-15</td>
+          <td>8.24e-13</td>
+          <td>3.03e-10</td>
+          <td>311 μs</td>
+      </tr>
+  </tbody>
+</table>
+<p>The inverse Gaussian approach is competitive but still twice slower than Peter Jaeckel&rsquo;s algorithm on this example. How does the error in volatility actually look like?</p>
+<figure><img src="/post/iv_ig_2_400.png"><figcaption>
+      <h4>Error in impled volatility of the various algorithms</h4>
+    </figcaption>
+</figure>
+
+<p>The accuracy of the inverse Gaussian looks as good as Jackel&rsquo;s algorithm, when using Julia&rsquo;s package Distibutions.jl (it is slightly less accurate towards low vol, but slightly more accurate for high vols).</p>
+<p>It is revealing to also look at the case of varying strikes for a fixed volatility. We consider a volatility fixed to 0.1 (or 10%) and vary the strike from 100 to 500 by steps of 1.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>vol RMSD</th>
+          <th>vol MAXAD</th>
+          <th>Price MAXAD</th>
+          <th>Rel. Price MAXAD</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>JAECKEL</td>
+          <td>6.50e-16</td>
+          <td>2.73e-15</td>
+          <td>7.11e-15</td>
+          <td>6.59e-12</td>
+          <td>154  μs</td>
+      </tr>
+      <tr>
+          <td>HEALY</td>
+          <td>6.56e-16</td>
+          <td>2.73e-15</td>
+          <td>3.55e-14</td>
+          <td>6.59e-12</td>
+          <td>110 μs</td>
+      </tr>
+      <tr>
+          <td>IG Distribution</td>
+          <td>1.21e-15</td>
+          <td>7.76e-15</td>
+          <td>1.78e-14</td>
+          <td>1.95e-11</td>
+          <td>1704 μs</td>
+      </tr>
+      <tr>
+          <td>IG statsmod</td>
+          <td>8.68e-16</td>
+          <td>4.27e-15</td>
+          <td>1.06e-14</td>
+          <td>1.32e-11</td>
+          <td>288 μs</td>
+      </tr>
+  </tbody>
+</table>
+<p>On this example the Julia Distributions.jl leads to a performance degradation by a factor of 10 and is less accurate. It would be worth investigating exactly where lies the bottleneck, as statsmod custom implementation keeps a good performance profile.</p>
+<figure><img src="/post/iv_ig_K100_500.png"><figcaption>
+      <h4>Error in impled volatility of the various algorithms</h4>
+    </figcaption>
+</figure>
+
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

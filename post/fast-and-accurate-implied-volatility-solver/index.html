@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.123.7">
+  <meta name="generator" content="Hugo 0.160.0">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 90922. All rights reserved. </p>
+    <p>&copy; 10159. All rights reserved. </p>
   </div>
 </aside>
 
@@ -77,93 +77,93 @@
 <p>A few years ago, P. Jaeckel produced a much better algorithm than a simple Newton or Brent solver, in his paper <a href="http://www.jaeckel.org/ByImplication.pdf">By Implication</a>. There is also a much <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1027282">simpler algorithm from Li</a>, based on SOR and a good initial guess for SOR, which I found to be actually quite robust and fast. Now P. Jaeckel has <a href="http://www.jaeckel.org/LetsBeRational.pdf">a newer algorithm</a>, faster and more accurate, close to double accuracy.</p>
 <p>I have tested those on 1 million options of random volatility (between 0.001 and 3), random strikes (N deviations with a cap at 1M) for a few expiries.<!-- raw HTML omitted --><!-- raw HTML omitted -->In terms of performance, the results are independent of expiries, but in terms of accuracy, the new Jaeckel algorithm is particularly more accurate for the long-term options (5y and 15y).</p>
 <table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Expiry</th>
-<th>Vol RMSE</th>
-<th>Price RMSE</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Jaeckel2014</td>
-<td>5y</td>
-<td>3.8E-16</td>
-<td>2.1E-16</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>Jaeckel2006</td>
-<td>5y</td>
-<td>1.3E-10</td>
-<td>1.1E-10</td>
-<td>3.0s</td>
-</tr>
-<tr>
-<td>Jaeckel2014</td>
-<td>15y</td>
-<td>2.0E-12</td>
-<td>2.4E-16</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>Jaeckel2006</td>
-<td>15y</td>
-<td>1.5E-7</td>
-<td>8.0E-11</td>
-<td>2.7s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>Expiry</th>
+          <th>Vol RMSE</th>
+          <th>Price RMSE</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>5y</td>
+          <td>3.8E-16</td>
+          <td>2.1E-16</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2006</td>
+          <td>5y</td>
+          <td>1.3E-10</td>
+          <td>1.1E-10</td>
+          <td>3.0s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>15y</td>
+          <td>2.0E-12</td>
+          <td>2.4E-16</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2006</td>
+          <td>15y</td>
+          <td>1.5E-7</td>
+          <td>8.0E-11</td>
+          <td>2.7s</td>
+      </tr>
+  </tbody>
 </table>
 <p>The maximum error from Jaeckel2006 is around 1e-8, while the one from Jaeckel2014 is 2e-15 (for very large unrealistic strike)</p>
 <p>As a comparison, the simpler Li SOR-TS algorithm follows the given price accuracy independently of the expiry; I have tested with 1E-12. The error in implied volatility will be slightly higher: different close vols can give the same price due to the maximum achievable accuracy of the Black-Scholes formula with double numbers, even with <a href="/post/from-double-precision-normal-density-to-double-precision-cumulative-normal-distribution">a good cumulative normal distribution implementation</a>. Its performance is however dependent on the number of deviations considered: closer to ATM means faster for Li algorithm.&lt;</p>
 <table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Expiry</th>
-<th>Deviation</th>
-<th>Vol RMSE</th>
-<th>Price RMSE</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Jaeckel2014</td>
-<td>1y</td>
-<td>5</td>
-<td>4.2E-16</td>
-<td>2.0E-17</td>
-<td>1.8s</td>
-</tr>
-<tr>
-<td>LiSORTS</td>
-<td>1y</td>
-<td>5</td>
-<td>8.5E-9</td>
-<td>1.9E-13</td>
-<td>2.1s</td>
-</tr>
-<tr>
-<td>Jaeckel2014</td>
-<td>1y</td>
-<td>3</td>
-<td>3.1E-16</td>
-<td>5.9E-17</td>
-<td>1.7s</td>
-</tr>
-<tr>
-<td>LiSORTS</td>
-<td>1y</td>
-<td>3</td>
-<td>4.3E-12</td>
-<td>1.6E-13</td>
-<td>1.3s</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Algorithm</th>
+          <th>Expiry</th>
+          <th>Deviation</th>
+          <th>Vol RMSE</th>
+          <th>Price RMSE</th>
+          <th>Time</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>1y</td>
+          <td>5</td>
+          <td>4.2E-16</td>
+          <td>2.0E-17</td>
+          <td>1.8s</td>
+      </tr>
+      <tr>
+          <td>LiSORTS</td>
+          <td>1y</td>
+          <td>5</td>
+          <td>8.5E-9</td>
+          <td>1.9E-13</td>
+          <td>2.1s</td>
+      </tr>
+      <tr>
+          <td>Jaeckel2014</td>
+          <td>1y</td>
+          <td>3</td>
+          <td>3.1E-16</td>
+          <td>5.9E-17</td>
+          <td>1.7s</td>
+      </tr>
+      <tr>
+          <td>LiSORTS</td>
+          <td>1y</td>
+          <td>3</td>
+          <td>4.3E-12</td>
+          <td>1.6E-13</td>
+          <td>1.3s</td>
+      </tr>
+  </tbody>
 </table>
 <p>Actually, I have cheated in my Li SOR-TS implementation: I have reused the idea from P. Jaeckel to compute the Black-Scholes price with <code>erfc_x</code> (unscaled erfc) instead of <code>erfc</code>. This simple change divides the number of <code>exp</code> calls by 2. Without this trick, for 5 deviations, SOR-TS took 3.6s (almost twice the time).</p>
 <p>I would not be surprised if this was the main performance improvement between the two Jaeckels.</p>
