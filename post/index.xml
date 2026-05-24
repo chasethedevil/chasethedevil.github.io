@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2018 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 30 Apr 2026 18:10:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 23 May 2026 03:43:00 +0000</lastBuildDate>
     <atom:link href="https://chasethedevil.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Faster Monotone Implied Volatiltty Solver</title>
+      <link>https://chasethedevil.github.io/post/a-faster-monotone-implied-volatility-solver/</link>
+      <pubDate>Sat, 23 May 2026 03:43:00 +0000</pubDate>
+      <guid>https://chasethedevil.github.io/post/a-faster-monotone-implied-volatility-solver/</guid>
+      <description>&lt;p&gt;Choi, Huh and Su have &lt;a href=&#34;https://arxiv.org/pdf/2302.08758&#34;&gt;a very good paper&lt;/a&gt; entitled  &lt;em&gt;Tighter uniform bounds for Black–Scholes implied volatility and the applications to root-finding&lt;/em&gt;. What&amp;rsquo;s particularly great is that it gives both a decent lower bound and a proof a monotone convergence using Newton&amp;rsquo;s method starting from this lower bound.&lt;/p&gt;&#xA;&lt;p&gt;The industry standard for solving the Black-Scholes implied volatility is Peter Jäckel &lt;a href=&#34;http://www.jaeckel.org/LetsBeRational.pdf&#34;&gt;&lt;em&gt;Let&amp;rsquo;s be rational&lt;/em&gt;&lt;/a&gt;. I was wondering if one could not create a robust mathematically backed solver at least as fast and accurate as Jäckel&amp;rsquo;s algorithm.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Almost Explicit Implied Volatility</title>
       <link>https://chasethedevil.github.io/post/almost-explicit-implied-volatility/</link>
@@ -644,7 +651,7 @@
       <link>https://chasethedevil.github.io/post/dupire_cash_dividend/</link>
       <pubDate>Thu, 19 May 2016 17:01:00 +0200</pubDate>
       <guid>https://chasethedevil.github.io/post/dupire_cash_dividend/</guid>
-      <description>&lt;p&gt;The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.&#xA;The extension to continuous dividend yield is described in many papers or books:&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate&#xA;approximations available to price an option supposing a constant (spot) volatility and jumps, for example, &lt;a href=&#34;http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;</description>
+      <description>&lt;p&gt;The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.&#xA;The extension to continuous dividend yield is described in many papers or books:&lt;/p&gt;&#xA;&lt;p&gt;$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial C}{\partial T}+(r_B-q)K \frac{\partial C}{\partial K} + q C(K,T)}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$&lt;/p&gt;&#xA;&lt;p&gt;In this case, \(C\) is a regular market Call option price, that can also be obtained from market volatilities via the Black-Scholes formula.&lt;/p&gt;</description>
     </item>
     <item>
       <title>SVI, SABR, or parabola on AAPL?</title>

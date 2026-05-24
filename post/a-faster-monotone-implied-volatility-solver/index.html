@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.161.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>A Faster Monotone Implied Volatiltty Solver &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 24242. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>A Faster Monotone Implied Volatiltty Solver</h1>
+  <time datetime=2026-05-23T03:43:00Z class="post-date">Sat, May 23, 2026</time>
+  <p>Choi, Huh and Su have <a href="https://arxiv.org/pdf/2302.08758">a very good paper</a> entitled  <em>Tighter uniform bounds for Black–Scholes implied volatility and the applications to root-finding</em>. What&rsquo;s particularly great is that it gives both a decent lower bound and a proof a monotone convergence using Newton&rsquo;s method starting from this lower bound.</p>
+<p>The industry standard for solving the Black-Scholes implied volatility is Peter Jäckel <a href="http://www.jaeckel.org/LetsBeRational.pdf"><em>Let&rsquo;s be rational</em></a>. I was wondering if one could not create a robust mathematically backed solver at least as fast and accurate as Jäckel&rsquo;s algorithm.</p>
+<p>It turns out that it is not so difficult to extend the monotone convergence proof to the Euler-Chebyshev method on the logarithm of normalized price. This is however not numerically robust enough when the normalized call option price (c) is close to 1: c is between 0 and 1, and when close to 1, the misbehaves numerically due to the limited floating point accuracy. It is not a convergence issue, but a true floating point arithmetic issue. A remedy is to switch to the log of the complementary normalized price (1-c). But then the Euler-Chebyshev method is not monotone on it. Fortunately, it turns out that <a href="https://en.wikipedia.org/wiki/Halley%27s_method">Halley&rsquo;s method</a> is monotone on the logarithm of the complementary normalized price. Overall, when combined, the methods lead to a much faster pricing: 3 iterations are enough to reach machine epsilon level of accuracy.</p>
+<figure><img src="/post/newton_chebyshev_halley.png"><figcaption>
+      <h4>Newton, Euler-Chebyshev and Halley&#39;s methods from Iterative Methods for the Solution of Equations by Traub (1964).</h4>
+    </figcaption>
+</figure>
+
+<p>For a truly robust solver, this is not enough. There are more floating point or practical convergence issues: a Bachelier based refinement for tiny prices is necessary, and polishing via the very accurate Jäckel Black-Scholes price function allows to reach closer to machine epsilon accuracy. This last polishing step end up relatively expensive compared to the rest (20% of computational time).</p>
+<p>Above, I have described the journey behind creating this new solver. The reverse journey also tells an interesting tale. We could start from the Black-Scholes option price, and notice that a really accurate Black-Scholes formula implementation (close to machine epsilon) is not trivial. The textbook formula based on the normal CDF, often used in various software systems used at banks or hedge funds, is not very accurate in many cases. One should really use Peter Jäckel&rsquo;s implementation everywhere, otherwise it is pointless to attempt to solve with such a high accuracy (in the paper, I thus make the Jäckel polishing step optional).</p>
+<figure><img src="/post/black_formula_accuracy.png"><figcaption>
+      <h4>Error in the Black-Scholes price with different formulas: textbook CDF, more advanced erfcx, and Jäckel&#39;s expansion. On those realistic examples, we hit Jäckel&#39;s expansion zone.</h4>
+    </figcaption>
+</figure>
+
+<p>I named the resulting solver with the somewhat cryptic name Thiophene, as <a href="https://en.wikipedia.org/wiki/Thiophene">Thiophene</a> is a chemical compound with formula \[ C_4 - H_4 - S \], and C-H-S are the initials of Choi, Huh and Su.</p>
+<p><strong>Conclusion</strong></p>
+<p>A mathematical proof of convergence is great to have, but far from enough to obtain a robust solver. The paper on the Thiophene implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.22427">https://arxiv.org/abs/2605.22427</a> and <a href="/post/thiophene-iv-minimal-java.zip">example Java code here</a>.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

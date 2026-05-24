@@ -3,7 +3,7 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.160.0">
+  <meta name="generator" content="Hugo 0.161.1">
 
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 10159. All rights reserved. </p>
+    <p>&copy; 24242. All rights reserved. </p>
   </div>
 </aside>
 
@@ -74,11 +74,13 @@
   <time datetime=2016-05-19T17:01:00&#43;0200 class="post-date">Thu, May 19, 2016</time>
   <p>The Dupire equation for local volatility has been derived under the assumption of Martingality, that means no dividends or interest rates.
 The extension to continuous dividend yield is described in many papers or books:</p>
-<!-- raw HTML omitted -->
+<p>$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial C}{\partial T}+(r_B-q)K \frac{\partial C}{\partial K} + q C(K,T)}{\frac{1}{2}K^2\frac{\partial^2 C}{\partial K^2}}$$</p>
+<p>In this case, \(C\) is a regular market Call option price, that can also be obtained from market volatilities via the Black-Scholes formula.</p>
 <p>With cash dividends however, the Black-Scholes formula is not valid anymore if we suppose that the asset jumps at the dividend date of the dividend amount. There are various relatively accurate
 approximations available to price an option supposing a constant (spot) volatility and jumps, for example, <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2698283">this one</a>.</p>
 <p>Labordère, in his paper <a href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=1493306">Calibration of local stochastic volatility models to market smiles</a>, describes a mapping to obtain the market local volatility corresponding to the model with jumps, from the local volatility of a pure Martingale. Assuming no interest rates and no proportional dividend, the equations looks particularly simple, it can be simplified to:</p>
-<!-- raw HTML omitted -->
+<p>$$\sigma^{\star 2}\left(K, T\right) = \frac{\frac{\partial \hat{C}}{\partial T}}{\frac{1}{2}K^2\frac{\partial^2 \hat{C}}{\partial K^2}}$$</p>
+<p>where \( \hat{C} \) is the market Call option price, that can be obtained via an approximation of the spot model with dividend jumps, of strike K and maturity T. Yes, if you look carefully at the Labordere formulae, most of it simplifies.</p>
 <p>While it appears very simple, in practice, it is not so much. For example, let&rsquo;s consider a single maturity smile (a smile, constant in time) as the market reference spot vols. Which volatility should be used in the formula for \( \hat{C} \)? logically, it should be the volatility corresponding to the market option price of strike K and maturity T. The numerical derivatives will therefore make use of 4 distinct volatilities for K, K+dK, K-dK and T+dT. In the pricing formula,
 we can wonder if at T+dT, the price should include the eventual additional dividend or not (as it is infinitesimal, probably not).</p>
 <p>It turns out that applying the above formula leads to jumps in time in the local volatility, around the dividend date, even though our initial market vols were flat in time.</p>
@@ -88,7 +90,9 @@ we can wonder if at T+dT, the price should include the eventual additional divid
 </figure>
 
 <p>The mistake is not that clear. It turns out that, when using a single volatility slice, extrapolated in constant manner, the option continuity relationship around the dividend maturity is not respected. We must have</p>
-<!-- raw HTML omitted -->
+<p>$$C(S_0,K,t_{\alpha_i}^-) = C(S_0, K-\alpha_i,t_{\alpha_i}^+)$$</p>
+<p>As the spot model with constant vol obeys this relationship, this implies that the slice immediately before the dividend must be a shifted representation of the slice immediately after in order for this relationship to stay true with a smile. If we add this slice, the error in repricing under local volatility with jumps becomes much smaller, although it is still
+quite larger than the regular local volatility, even with a somewhat discontinuous yield.</p>
 <p><figure><img src="/post/dupire_labordere_ll3.png"><figcaption>
       <h4>Dupire Local Volatility under the spot model with jump at dividend date = 3.5, introducing a slice before the dividend date to enforce the price continuity relationship.</h4>
     </figcaption>
