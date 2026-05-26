@@ -65,13 +65,780 @@
     </ul>
  </nav>
 
-    <p>&copy; 24242. All rights reserved. </p>
+    <p>&copy; 262632. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/erfcx-cody-commons-johnson/">Which erfcx?</a>
+  </h1>
+  <time datetime="2026-05-24T03:43:00Z" class="post-date">Sun, May 24, 2026</time>
+  <p>The <a href="/post/a-faster-monotone-implied-volatility-solver/">use of erfcx</a> instead of direct erfc or CDF in a Black-Scholes implied volatility solver leads to gain in accuracy and performance in general. But which erfcx should we use?</p>
+<p>This note compares practical erfcx implementations for Rust implied volatility solvers:</p>
+<ul>
+<li>Commons: the local Rust port of <a href="https://github.com/apache/commons-numbers/blob/master/commons-numbers-gamma/src/main/java/org/apache/commons/numbers/gamma/BoostErf.java">Apache Commons Numbers</a> <code>BoostErf.erfcx</code></li>
+<li>Cody: the <a href="https://docs.rs/jaeckel/latest/jaeckel/fn.erfcx_cody.html">Cody rational approximation</a> exposed by the <code>jaeckel = 0.2.0</code> crate during this comparison, originally coming from Netlib.</li>
+<li>Johnson: Steven G. Johnson&rsquo;s Faddeeva implementation, as exposed by <code>errorfunctions = 0.2.0</code>, <a href="https://github.com/Cactus-proj/special-functions/tree/main/sys/faddeeva-sys"><code>faddeeva-sys = 0.1.0</code></a>, and Julia <code>SpecialFunctions.erfcx(::Float64)</code></li>
+</ul>
+<p>The Commons-style implementation is a local Rust port of the Apache Commons Numbers/BoostErf approach. It computes the small central region through the local <code>erf</code> rational approximation and uses <code>exp_m1(x*x)</code> to avoid cancellation in <code>exp(x^2) * erfc(x)</code> near zero. For positive inputs it uses several rational subintervals: a central polynomial/rational <code>erf</code> branch, erfc-style rational branches around <code>0.5..1.5</code>, <code>1.5..2.5</code>, and <code>2.5..4</code>, and an asymptotic rational in <code>1/x^2</code> beyond that. For very large positive <code>x</code>, it returns <code>1 / (sqrt(pi) * x)</code>. For negative <code>x</code>, it uses the reflected form with a split-square exponential, returns <code>Inf</code> below the finite overflow cutoff, and otherwise computes <code>2 exp(x^2) - erfcx(|x|)</code> in a way that preserves more bits near the overflow boundary.</p>
+<p>The Cody implementation used here is the <code>jaeckel</code> crate&rsquo;s Cody/CALERF-style implementation. It has three main positive-side rational regions: <code>AB</code> for <code>|x| &lt;= 0.46875</code>, <code>CD</code> for <code>0.46875 &lt; |x| &lt;= 4</code>, and <code>PQ</code> as an asymptotic rational in <code>1/x^2</code> for <code>|x| &gt; 4</code>. It uses smoothed exponentials by splitting <code>x</code> onto a 1/16 grid before applying the residual exponential. For negative <code>x</code>, it reflects with <code>erfcx(-x) = 2 exp(x^2) - erfcx(x)</code> and clamps below its <code>XNEG</code> threshold to <code>f64::MAX</code>.</p>
+<figure><img src="/post/erfcx-cody-near-overflow-spike.png"><figcaption>
+      <h4>Cody near-overflow spike.</h4>
+    </figcaption>
+</figure>
+
+<p>The rare Cody spike in the finite negative overflow-boundary window is not caused by using the wrong rational interval but is <strong>deliberate</strong>. Cody/CALERF does use the <code>PQ</code> asymptotic rational for the positive <code>|x| &gt; 4</code> part, but the negative-side fix-up is still the reflected <code>2 exp(x^2) - erfcx(|x|)</code> form with an <code>XNEG</code> overflow guard. The published IEEE double CALERF constant is the rounded <code>XNEG = -26.628D0</code>; the public Rust crate uses a refined <code>XNEG = -26.6287357137514</code> with a source comment noting that the original value was <code>-26.628</code>. The plot spike is therefore boundary/guard behavior inherited from the CALERF-style negative branch, with a refined but still conservative cutoff near the true finite Float64 overflow boundary. A literal Cody reference would clamp even earlier rather than use a separate high-accuracy negative-tail expansion in that range.</p>
+<p><code>errorfunctions = 0.2.0</code> is a close Rust translation of Steven G. Johnson&rsquo;s Faddeeva C/C++ package. Its real <code>erfcx</code> implementation uses:</p>
+<ul>
+<li>a 100-interval Chebyshev table after the map <code>y = 4 / (4 + x)</code> for <code>0 &lt;= x &lt;= 50</code></li>
+<li>a continued-fraction expansion for <code>x &gt; 50</code></li>
+<li>the reflection identity <code>erfcx(-x) = 2 exp(x^2) - erfcx(x)</code> for negative <code>x</code></li>
+</ul>
+<p>Julia <code>SpecialFunctions.erfcx(::Float64)</code> calls <code>Faddeeva_erfcx_re</code> from <code>libopenspecfun</code>, and <code>faddeeva-sys</code> binds the same Johnson C symbol. On the sampled Float64 grid below, <code>errorfunctions</code>, <code>faddeeva-sys</code>, and Julia SpecialFunctions were bit-identical.</p>
+<h2 id="generic-erfcx-accuracy">Generic Erfcx Accuracy</h2>
+<p>Reference: Julia <code>BigFloat</code> <code>erfcx(x)</code> at 256-bit precision, rounded back to <code>Float64</code>. The grid used 7021 total samples, of which 6272 had finite rounded <code>Float64</code> references.</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>samples</th>
+          <th>invalid</th>
+          <th>max_ulp</th>
+          <th>max_rel</th>
+          <th>max_abs</th>
+          <th>worst_x</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Commons</td>
+          <td>6272</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1.2e-16</td>
+          <td>4.990e291</td>
+          <td>-2.6600845000e1</td>
+      </tr>
+      <tr>
+          <td>Cody</td>
+          <td>6272</td>
+          <td>0</td>
+          <td>337</td>
+          <td>3.7e-14</td>
+          <td>6.726e294</td>
+          <td>-2.6628735714e1</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td>6272</td>
+          <td>0</td>
+          <td>491</td>
+          <td>5.5e-14</td>
+          <td>1.614e212</td>
+          <td>-2.2769845000e1</td>
+      </tr>
+  </tbody>
+</table>
+<p>The large absolute errors occur where <code>erfcx(x)</code> itself is enormous. The relative errors are still small, but the ULP differences matter because the IV tests include very sensitive tiny and saturated cases.</p>
+<h2 id="512-ulp-local-window-accuracy">512-ULP Local Window Accuracy</h2>
+<p>The coarse grid above is useful for broad coverage, but it does not answer the more local question: what happens across consecutive representable inputs near the sensitive regions? I ran a temporary Rust verifier that generated 512 consecutive <code>Float64</code> inputs around 37 representative centers, including the old coarse-grid worst tail locations and the finite overflow boundary. References are Julia <code>BigFloat</code> <code>erfcx(x)</code> at 256-bit precision rounded back to <code>Float64</code>. ULP error is the positive-Float64 bit-distance from that rounded reference.</p>
+<p>The windows covered 18,944 input values. The finite-reference tables below use 18,176 values; 768 inputs from the overflow-boundary windows round to <code>Inf</code> and are excluded from the finite-error percentiles.</p>
+<p>Global local-window stats:</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>samples</th>
+          <th>invalid</th>
+          <th>exact_bits</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>max_rel</th>
+          <th>worst_x</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Commons</td>
+          <td>18176</td>
+          <td>0</td>
+          <td>13682</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3.6e-16</td>
+          <td>2.5000000000e0</td>
+      </tr>
+      <tr>
+          <td>Cody</td>
+          <td>18176</td>
+          <td>0</td>
+          <td>10375</td>
+          <td>0</td>
+          <td>2</td>
+          <td>3</td>
+          <td>41238</td>
+          <td>4.6e-12</td>
+          <td>-2.6628735714e1</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td>18176</td>
+          <td>0</td>
+          <td>6490</td>
+          <td>1</td>
+          <td>395</td>
+          <td>509</td>
+          <td>511</td>
+          <td>5.7e-14</td>
+          <td>-2.6628700000e1</td>
+      </tr>
+  </tbody>
+</table>
+<p>The p95/p99 picture is clearer than the max alone. Commons-style stays within 1 ulp at p99 and within 2 ulps at max. Cody is usually close, but has a rare near-overflow-tail spike. Johnson is the opposite shape: no huge single outlier here, but the negative tail is broadly hundreds of ulps away.</p>
+<p>In the mid negative tail around <code>x = -24</code>, Johnson is consistently about 510 ulps away while Cody and Default/Commons stay close to the rounded BigFloat reference.</p>
+<table>
+  <thead>
+      <tr>
+          <th>region</th>
+          <th>backend</th>
+          <th>samples</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>negative near-overflow tail</td>
+          <td>Commons</td>
+          <td>256</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>negative near-overflow tail</td>
+          <td>Cody</td>
+          <td>256</td>
+          <td>19083</td>
+          <td>36126</td>
+          <td>41238</td>
+      </tr>
+      <tr>
+          <td>negative near-overflow tail</td>
+          <td>Johnson</td>
+          <td>256</td>
+          <td>487</td>
+          <td>506</td>
+          <td>511</td>
+      </tr>
+      <tr>
+          <td>negative tail</td>
+          <td>Commons</td>
+          <td>512</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>negative tail</td>
+          <td>Cody</td>
+          <td>512</td>
+          <td>4</td>
+          <td>5</td>
+          <td>5</td>
+      </tr>
+      <tr>
+          <td>negative tail</td>
+          <td>Johnson</td>
+          <td>512</td>
+          <td>510</td>
+          <td>510</td>
+          <td>510</td>
+      </tr>
+  </tbody>
+</table>
+<p>Zone definitions:</p>
+<ul>
+<li>neg-near-overflow  x &lt; -26</li>
+<li>neg-tail           -26 &lt;= x &lt; -6.1</li>
+<li>neg-transition     -6.1 &lt;= x &lt; -0.5</li>
+<li>central            -0.5 &lt;= x &lt;= 0.5</li>
+<li>pos-core           0.5 &lt; x &lt; 4</li>
+<li>pos-tail           4 &lt;= x &lt;= 50</li>
+<li>pos-far-tail       x &gt; 50</li>
+</ul>
+<p>Per-zone local-window stats:</p>
+<table>
+  <thead>
+      <tr>
+          <th>zone</th>
+          <th>backend</th>
+          <th>samples</th>
+          <th>invalid</th>
+          <th>exact_bits</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>max_rel</th>
+          <th>worst_x</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>neg-near-overflow</td>
+          <td>Commons</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>2682</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1.9e-16</td>
+          <td>-2.6e1</td>
+      </tr>
+      <tr>
+          <td>neg-near-overflow</td>
+          <td>Cody</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>1611</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>41238</td>
+          <td>4.6e-12</td>
+          <td>-2.7e1</td>
+      </tr>
+      <tr>
+          <td>neg-near-overflow</td>
+          <td>Johnson</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>34</td>
+          <td>218</td>
+          <td>460</td>
+          <td>496</td>
+          <td>511</td>
+          <td>5.7e-14</td>
+          <td>-2.7e1</td>
+      </tr>
+      <tr>
+          <td>neg-tail</td>
+          <td>Commons</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>2885</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2.1e-16</td>
+          <td>-6.1e0</td>
+      </tr>
+      <tr>
+          <td>neg-tail</td>
+          <td>Cody</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>2069</td>
+          <td>0</td>
+          <td>2</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6.3e-16</td>
+          <td>-2.4e1</td>
+      </tr>
+      <tr>
+          <td>neg-tail</td>
+          <td>Johnson</td>
+          <td>3584</td>
+          <td>0</td>
+          <td>872</td>
+          <td>26</td>
+          <td>509</td>
+          <td>510</td>
+          <td>510</td>
+          <td>5.7e-14</td>
+          <td>-2.4e1</td>
+      </tr>
+      <tr>
+          <td>neg-transition</td>
+          <td>Commons</td>
+          <td>2048</td>
+          <td>0</td>
+          <td>1446</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2.3e-16</td>
+          <td>-5.0e-1</td>
+      </tr>
+      <tr>
+          <td>neg-transition</td>
+          <td>Cody</td>
+          <td>2048</td>
+          <td>0</td>
+          <td>1155</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>3.4e-16</td>
+          <td>-5.0e-1</td>
+      </tr>
+      <tr>
+          <td>neg-transition</td>
+          <td>Johnson</td>
+          <td>2048</td>
+          <td>0</td>
+          <td>1291</td>
+          <td>0</td>
+          <td>15</td>
+          <td>24</td>
+          <td>26</td>
+          <td>3.6e-15</td>
+          <td>-6.1e0</td>
+      </tr>
+      <tr>
+          <td>central</td>
+          <td>Commons</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>1649</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3.6e-16</td>
+          <td>5.0e-1</td>
+      </tr>
+      <tr>
+          <td>central</td>
+          <td>Cody</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>1313</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>3.6e-16</td>
+          <td>-5.0e-1</td>
+      </tr>
+      <tr>
+          <td>central</td>
+          <td>Johnson</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>902</td>
+          <td>1</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>7.2e-16</td>
+          <td>2.5e-1</td>
+      </tr>
+      <tr>
+          <td>pos-core</td>
+          <td>Commons</td>
+          <td>2559</td>
+          <td>0</td>
+          <td>1772</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3.6e-16</td>
+          <td>2.5e0</td>
+      </tr>
+      <tr>
+          <td>pos-core</td>
+          <td>Cody</td>
+          <td>2559</td>
+          <td>0</td>
+          <td>982</td>
+          <td>1</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6.6e-16</td>
+          <td>2.5e0</td>
+      </tr>
+      <tr>
+          <td>pos-core</td>
+          <td>Johnson</td>
+          <td>2559</td>
+          <td>0</td>
+          <td>793</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>7.2e-16</td>
+          <td>5.0e-1</td>
+      </tr>
+      <tr>
+          <td>pos-tail</td>
+          <td>Commons</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>1294</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2.0e-16</td>
+          <td>5.0e1</td>
+      </tr>
+      <tr>
+          <td>pos-tail</td>
+          <td>Cody</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>1291</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2.0e-16</td>
+          <td>5.0e1</td>
+      </tr>
+      <tr>
+          <td>pos-tail</td>
+          <td>Johnson</td>
+          <td>2049</td>
+          <td>0</td>
+          <td>1047</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2</td>
+          <td>4.1e-16</td>
+          <td>2.0e1</td>
+      </tr>
+      <tr>
+          <td>pos-far-tail</td>
+          <td>Commons</td>
+          <td>2303</td>
+          <td>0</td>
+          <td>1954</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1.9e-16</td>
+          <td>1.0e8</td>
+      </tr>
+      <tr>
+          <td>pos-far-tail</td>
+          <td>Cody</td>
+          <td>2303</td>
+          <td>0</td>
+          <td>1954</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1.9e-16</td>
+          <td>1.0e8</td>
+      </tr>
+      <tr>
+          <td>pos-far-tail</td>
+          <td>Johnson</td>
+          <td>2303</td>
+          <td>0</td>
+          <td>1551</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3.1e-16</td>
+          <td>1.0e2</td>
+      </tr>
+  </tbody>
+</table>
+<p>Local-window timing on the same 18,944 samples, best of five passes with 1000 sweeps per pass:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">backend</th>
+          <th style="text-align: center">ns/call</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">Commons</td>
+          <td style="text-align: center">9.86</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Cody</td>
+          <td style="text-align: center">10.04</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Johnson</td>
+          <td style="text-align: center">6.28</td>
+      </tr>
+  </tbody>
+</table>
+<p>So yes: the tail is the right place to look. The worst Johnson behavior is the negative tail and near-overflow tail. Cody has a rare sharper spike right at the finite overflow boundary. Commons is the most stable over these consecutive-ULP windows.</p>
+<h2 id="generic-erfcx-timing">Generic Erfcx Timing</h2>
+<p>Mixed grid, 24003 samples, best of five timing passes, 100 sweeps per pass.</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th style="text-align: right">ns/call</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Commons</td>
+          <td style="text-align: right">6.29</td>
+      </tr>
+      <tr>
+          <td>Cody</td>
+          <td style="text-align: right">6.55</td>
+      </tr>
+      <tr>
+          <td>Johnson/errorfunctions</td>
+          <td style="text-align: right">6.05</td>
+      </tr>
+      <tr>
+          <td>Johnson/faddeeva-sys</td>
+          <td style="text-align: right">4.92</td>
+      </tr>
+      <tr>
+          <td>Julia SpecialFunctions</td>
+          <td style="text-align: right">4.62</td>
+      </tr>
+  </tbody>
+</table>
+<p>The Julia number is measured inside one Julia process launched by the Rust diagnostic program; it is a Julia-loop function-call timing, not per-call Rust-to-Julia FFI overhead.</p>
+<h2 id="impact-on-thiopheneiv-implied-volatility-solver">Impact on ThiopheneIV Implied Volatility Solver</h2>
+<p>Values are max error in ULPs of reference total volatility on a specific set of options (see <a href="https://arxiv.org/pdf/2605.22427">the ThiopheneIV paper</a> for the definition of the exact zones). The rust implementation of the solver is <a href="/post/thiophene-iv-rust-full.zip">available here</a></p>
+<p>ThiopheneIV max ulp</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th style="text-align: right">CLY-3D</th>
+          <th style="text-align: right">CLY-20</th>
+          <th style="text-align: right">CLY-80</th>
+          <th style="text-align: right">Jaeckel</th>
+          <th style="text-align: right">Market</th>
+          <th style="text-align: right">Corners</th>
+          <th style="text-align: right">Stress</th>
+          <th style="text-align: right">HighVol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cody</td>
+          <td style="text-align: right">190</td>
+          <td style="text-align: right">52</td>
+          <td style="text-align: right">8</td>
+          <td style="text-align: right">142</td>
+          <td style="text-align: right">520</td>
+          <td style="text-align: right">557</td>
+          <td style="text-align: right">285</td>
+          <td style="text-align: right">2</td>
+      </tr>
+      <tr>
+          <td>Commons</td>
+          <td style="text-align: right">133</td>
+          <td style="text-align: right">49</td>
+          <td style="text-align: right">8</td>
+          <td style="text-align: right">63</td>
+          <td style="text-align: right">177</td>
+          <td style="text-align: right">329</td>
+          <td style="text-align: right">138</td>
+          <td style="text-align: right">2</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td style="text-align: right">400</td>
+          <td style="text-align: right">71</td>
+          <td style="text-align: right">16</td>
+          <td style="text-align: right">97</td>
+          <td style="text-align: right">1210</td>
+          <td style="text-align: right">537</td>
+          <td style="text-align: right">484</td>
+          <td style="text-align: right">3</td>
+      </tr>
+  </tbody>
+</table>
+<p>ThiopheneIV+ max ulp</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th style="text-align: right">CLY-3D</th>
+          <th style="text-align: right">CLY-20</th>
+          <th style="text-align: right">CLY-80</th>
+          <th style="text-align: right">Jaeckel</th>
+          <th style="text-align: right">Market</th>
+          <th style="text-align: right">Corners</th>
+          <th style="text-align: right">Stress</th>
+          <th style="text-align: right">HighVol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cody</td>
+          <td style="text-align: right">23</td>
+          <td style="text-align: right">5</td>
+          <td style="text-align: right">4</td>
+          <td style="text-align: right">14</td>
+          <td style="text-align: right">30</td>
+          <td style="text-align: right">41</td>
+          <td style="text-align: right">33</td>
+          <td style="text-align: right">2</td>
+      </tr>
+      <tr>
+          <td>Commons</td>
+          <td style="text-align: right">23</td>
+          <td style="text-align: right">5</td>
+          <td style="text-align: right">4</td>
+          <td style="text-align: right">13</td>
+          <td style="text-align: right">29</td>
+          <td style="text-align: right">41</td>
+          <td style="text-align: right">33</td>
+          <td style="text-align: right">2</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td style="text-align: right">22</td>
+          <td style="text-align: right">5</td>
+          <td style="text-align: right">7</td>
+          <td style="text-align: right">13</td>
+          <td style="text-align: right">29</td>
+          <td style="text-align: right">41</td>
+          <td style="text-align: right">32</td>
+          <td style="text-align: right">3</td>
+      </tr>
+  </tbody>
+</table>
+<p>The polished <code>ThiopheneIV+</code> path is robust across erfcx choices. The unpolished fast solver is where Commons is clearly better for benchmark.</p>
+<h2 id="impact-on-thiopheneiv-performance">Impact on ThiopheneIV Performance</h2>
+<p>ThiopheneIV ns/call</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th style="text-align: right">CLY-3D</th>
+          <th style="text-align: right">CLY-20</th>
+          <th style="text-align: right">CLY-80</th>
+          <th style="text-align: right">Jaeckel</th>
+          <th style="text-align: right">Market</th>
+          <th style="text-align: right">Corners</th>
+          <th style="text-align: right">Stress</th>
+          <th style="text-align: right">HighVol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cody</td>
+          <td style="text-align: right">146</td>
+          <td style="text-align: right">146</td>
+          <td style="text-align: right">148</td>
+          <td style="text-align: right">146</td>
+          <td style="text-align: right">147</td>
+          <td style="text-align: right">155</td>
+          <td style="text-align: right">155</td>
+          <td style="text-align: right">150</td>
+      </tr>
+      <tr>
+          <td>Commons</td>
+          <td style="text-align: right">155</td>
+          <td style="text-align: right">147</td>
+          <td style="text-align: right">147</td>
+          <td style="text-align: right">156</td>
+          <td style="text-align: right">153</td>
+          <td style="text-align: right">159</td>
+          <td style="text-align: right">157</td>
+          <td style="text-align: right">151</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td style="text-align: right">179</td>
+          <td style="text-align: right">180</td>
+          <td style="text-align: right">188</td>
+          <td style="text-align: right">211</td>
+          <td style="text-align: right">203</td>
+          <td style="text-align: right">185</td>
+          <td style="text-align: right">204</td>
+          <td style="text-align: right">161</td>
+      </tr>
+  </tbody>
+</table>
+<p>ThiopheneIV+ ns/call</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th style="text-align: right">CLY-3D</th>
+          <th style="text-align: right">CLY-20</th>
+          <th style="text-align: right">CLY-80</th>
+          <th style="text-align: right">Jaeckel</th>
+          <th style="text-align: right">Market</th>
+          <th style="text-align: right">Corners</th>
+          <th style="text-align: right">Stress</th>
+          <th style="text-align: right">HighVol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cody</td>
+          <td style="text-align: right">199</td>
+          <td style="text-align: right">200</td>
+          <td style="text-align: right">199</td>
+          <td style="text-align: right">185</td>
+          <td style="text-align: right">193</td>
+          <td style="text-align: right">210</td>
+          <td style="text-align: right">205</td>
+          <td style="text-align: right">187</td>
+      </tr>
+      <tr>
+          <td>Commons</td>
+          <td style="text-align: right">202</td>
+          <td style="text-align: right">203</td>
+          <td style="text-align: right">197</td>
+          <td style="text-align: right">197</td>
+          <td style="text-align: right">200</td>
+          <td style="text-align: right">214</td>
+          <td style="text-align: right">210</td>
+          <td style="text-align: right">189</td>
+      </tr>
+      <tr>
+          <td>Johnson</td>
+          <td style="text-align: right">233</td>
+          <td style="text-align: right">229</td>
+          <td style="text-align: right">245</td>
+          <td style="text-align: right">249</td>
+          <td style="text-align: right">251</td>
+          <td style="text-align: right">240</td>
+          <td style="text-align: right">254</td>
+          <td style="text-align: right">210</td>
+      </tr>
+  </tbody>
+</table>
+<p>Cody is slightly faster than Commons for <code>ThiopheneIV</code>, but Commons is close and much more accurate. Johnson is slower in the solver context despite competitive standalone erfcx timing, most likely because its branch/table structure interacts differently with the full pricing paths.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Use the Commons erfcx implementation. It gives the best generic erfcx accuracy against the BigFloat reference among the tested Rust-callable implementations, the most stable 512-consecutive-ULP local-window profile, the best unpolished ThiopheneIV accuracy, and passes the strict reference/corner suite. Cody remains a good fast approximation, but it is of slighly lower accuracy (which impacts non-polished <a href="/post/a-faster-monotone-implied-volatility-solver/">ThiopheneIV</a> implied vols) and has a near-overflow-tail spike (very likely without impact on my use case).</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-faster-monotone-implied-volatility-solver/">A Faster Monotone Implied Volatiltty Solver</a>
   </h1>
@@ -93,7 +860,7 @@
 
 <p>I named the resulting solver with the somewhat cryptic name Thiophene, as <a href="https://en.wikipedia.org/wiki/Thiophene">Thiophene</a> is a chemical compound with formula \[ C_4 - H_4 - S \], and C-H-S are the initials of Choi, Huh and Su.</p>
 <p><strong>Conclusion</strong></p>
-<p>A mathematical proof of convergence is great to have, but far from enough to obtain a robust solver. The paper on the Thiophene implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.22427">https://arxiv.org/abs/2605.22427</a> and <a href="/post/thiophene-iv-minimal-java.zip">example Java code here</a>.</p>
+<p>A mathematical proof of convergence is great to have, but far from enough to obtain a robust solver. The paper on the Thiophene implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.22427">https://arxiv.org/abs/2605.22427</a> and <a href="/post/thiophene-iv-minimal-java.zip">minimal Java code here</a> and <a href="/post/thiophene-iv-rust-full.zip">Rust code here</a>.</p>
 
   
 </article><article class="post">
@@ -382,160 +1149,6 @@ Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020
 <p>We may also calibrate the forward variance curve model directly to the implied volatilities during the model calibration, at the same time as the other stochastic volatility parameters (using a time-dependent correlation and vol-of-vol). This time-dependent Heston parameterization has effectively 3 parameters per expiry. In this case, we may want to also filter the input data to focus on  the 10 Delta / 90 Delta range as we expect the stochastic volatility model to fit well where it matters the most - where the vanillas are liquid.</p>
 <p>In the figure above, we also plot the forward variance curve implied by the model, through a calibration against vanilla options. We can see it is again quite different.
 If we were to use the true replication based forward variance curve, we would effectively attempt to fit far away vols in the wings, which somehow seems wrong. Now if the model was able to fit everything well there would be no issue, but with 3 parameters per maturity, a choice has to be made. And the choice of the full replication does not look particularly great, as we fit exactly something that is not liquid.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/not-so-great-new-scheme-heston/">A Not So Great New Simulation Scheme for the Heston Model</a>
-  </h1>
-  <time datetime="2025-06-18T22:27:00Z" class="post-date">Wed, Jun 18, 2025</time>
-  <p>I recently saw a news about a great <a href="https://arxiv.org/pdf/2412.11264">new simulation scheme for the Heston model by Abi Jaber</a>.
-The paper suggests it is better than the popular alternatives such as the QE scheme of Leif Andersen. Reading it quickly, perhaps too quickly, I had the impression it would be more accurate especially when the number of time-steps is small.</p>
-<p>The scheme is simple to implement so I decided to spend a few minutes to try it out. I had some test example for the <a href="/post/a-new-scheme-for-heston_part2/">DVSS2X scheme</a> pricing a vanilla at-the-money option with Heston parameters v0=0.04, kappa=0.5, theta=0.04, rho=-0.9, sigma=1.0, and a time to maturity of 10 years. I don&rsquo;t remember exactly where those parameters come from, possibly from Andersen paper. My example was using 8 time-steps per year, which is not that much. And here are the results with 1M paths (using scrambled Sobol):</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">N</th>
-          <th style="text-align: left">Scheme</th>
-          <th style="text-align: right">Price</th>
-          <th style="text-align: right">Error</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">1M</td>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: right">13.0679</td>
-          <td style="text-align: right">-0.0167</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: right">13.0302</td>
-          <td style="text-align: right">-0.0545</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">4M</td>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: right">13.0645</td>
-          <td style="text-align: right">-0.0202</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: right">13.0416</td>
-          <td style="text-align: right">-0.0431</td>
-      </tr>
-  </tbody>
-</table>
-<p>With Sobol scrambling and 1 million paths, the standard error of the Monte-Carlo simulation is lower than 0.01 and the error with this new IVI scheme is (much) larger than 3 standard deviations, indicating that the dominating error in the simulation is due to the discretization.</p>
-<p>It is not only less accurate, but also slower, because it requires 3 random numbers per time-step, compared to 2 random numbers for QE or DVSS2X. The paper is very well written, and this small example may not be representative but it does cast some doubts about how great is this new scheme in practice.</p>
-<p>While writing this, I noticed that the paper actually uses this same example, it corresponds to their Case 3 and it is indeed not obvious from the plots in the paper that this new IVI scheme is significanly better. There is one case, deep in the money (strike=60%), and very few time-steps (2 per year for example):</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">N</th>
-          <th style="text-align: left">Steps/Year</th>
-          <th style="text-align: left">Scheme</th>
-          <th style="text-align: right">Price</th>
-          <th style="text-align: right">Error</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">4M</td>
-          <td style="text-align: left">2</td>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: right">44.1579</td>
-          <td style="text-align: right">-0.1721</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: right">44.2852</td>
-          <td style="text-align: right">-0.0449</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">4</td>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: right">44.2946</td>
-          <td style="text-align: right">-0.0353</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: right">44.3113</td>
-          <td style="text-align: right">-0.0187</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">8</td>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: right">44.3275</td>
-          <td style="text-align: right">-0.0025</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: right">44.3239</td>
-          <td style="text-align: right">-0.0061</td>
-      </tr>
-  </tbody>
-</table>
-<p>So the new scheme works reasonably well for (very) large time-steps, better than DVSS2 and likely better than QE (although, again, it is around 1.5x more costly). For smaller steps (but not that small), it may not be as accurate as QE and DVSS2. This is why QE was such a big deal at the time, it was significantly more accurate than a Euler discretization and allowed to use much less time-steps: from 100 or more to 10 (a factor larger than 10). IVI may be an improvement for very large step sizes, but it will matter much less for typical exotics pricing where observation dates are at worst yearly.</p>
-<p><strong>Update June 19, 2025</strong>
-Out of curiosity I wondered how it behaved on my <a href="/post/a-new-scheme-for-heston_part2/">forward start option test</a>. In the Table below I use 4M paths.</p>
-<table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Scheme</th>
-          <th style="text-align: left">Steps/Year</th>
-          <th style="text-align: right">Price</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">DVSS2X</td>
-          <td style="text-align: left">4+1</td>
-          <td style="text-align: right">0.0184</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">80</td>
-          <td style="text-align: right">0.0196</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">QE</td>
-          <td style="text-align: left">4+1</td>
-          <td style="text-align: right">0.0190</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">160</td>
-          <td style="text-align: right">0.0196</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">IVI</td>
-          <td style="text-align: left">4+1</td>
-          <td style="text-align: right">0.0116</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">80</td>
-          <td style="text-align: right">0.0185</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">160</td>
-          <td style="text-align: right">0.0191</td>
-      </tr>
-  </tbody>
-</table>
-<p>Clearly, the IVI scheme is not adequate here, it seems to converge very slowly. The price with 4+1 steps is very off, especially compared to the other schemes. The implementation is fairly straighforward, so the IVI scheme may well have a flaw.</p>
 
   
 </article>
