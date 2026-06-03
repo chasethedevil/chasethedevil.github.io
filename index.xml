@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2006-2018 Fabien Le Floc&#39;h. This work is licensed under a Creative Commons Attribution 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 24 May 2026 03:43:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2026 03:43:00 +0000</lastBuildDate>
     <atom:link href="https://chasethedevil.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Role of Erfcx and Erfc in the Black-Scholes Formula</title>
+      <link>https://chasethedevil.github.io/post/black-formula-erfcx-erfc-backends/</link>
+      <pubDate>Sat, 30 May 2026 03:43:00 +0000</pubDate>
+      <guid>https://chasethedevil.github.io/post/black-formula-erfcx-erfc-backends/</guid>
+      <description>&lt;p&gt;This note compares special-function choices at the level that matters to the &lt;a href=&#34;https://chasethedevil.github.io/post/a-faster-monotone-implied-volatility-solver/&#34;&gt;implied volatility solvers&lt;/a&gt;: the normalized Black beta price, not &lt;a href=&#34;https://chasethedevil.github.io/post/erfcx-cody-commons-johnson/&#34;&gt;standalone &lt;code&gt;erfcx(x)&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;For &lt;code&gt;x = log(F/K) &amp;lt;= 0&lt;/code&gt; and total volatility &lt;code&gt;s = sigma sqrt(T)&lt;/code&gt;, the beta-space OTM call price is&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;B(x, s) = 0.5 * (exp(x/2) * erfc(q1) - exp(-x/2) * erfc(q2))&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;q1 = -(x/s + s/2) / sqrt(2)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;q2 = -(x/s - s/2) / sqrt(2)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The corresponding forward-normalized OTM-call price is &lt;code&gt;c = B(x, s) / sqrt(ex)&lt;/code&gt;, with &lt;code&gt;ex = exp(x)&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Which erfcx?</title>
       <link>https://chasethedevil.github.io/post/erfcx-cody-commons-johnson/</link>

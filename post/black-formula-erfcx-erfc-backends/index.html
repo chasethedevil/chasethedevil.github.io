@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.161.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>The Role of Erfcx and Erfc in the Black-Scholes Formula &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 30332. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>The Role of Erfcx and Erfc in the Black-Scholes Formula</h1>
+  <time datetime=2026-05-30T03:43:00Z class="post-date">Sat, May 30, 2026</time>
+  <p>This note compares special-function choices at the level that matters to the <a href="/post/a-faster-monotone-implied-volatility-solver/">implied volatility solvers</a>: the normalized Black beta price, not <a href="/post/erfcx-cody-commons-johnson/">standalone <code>erfcx(x)</code></a>.</p>
+<p>For <code>x = log(F/K) &lt;= 0</code> and total volatility <code>s = sigma sqrt(T)</code>, the beta-space OTM call price is</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>B(x, s) = 0.5 * (exp(x/2) * erfc(q1) - exp(-x/2) * erfc(q2))
+</span></span><span style="display:flex;"><span>q1 = -(x/s + s/2) / sqrt(2)
+</span></span><span style="display:flex;"><span>q2 = -(x/s - s/2) / sqrt(2)
+</span></span></code></pre></div><p>The corresponding forward-normalized OTM-call price is <code>c = B(x, s) / sqrt(ex)</code>, with <code>ex = exp(x)</code>.</p>
+<h3 id="implementations-compared">Implementations Compared</h3>
+<ul>
+<li><code>Default/current</code>: Jaeckel Region I/II expansions and falls back to the Apache Commons mixed <code>erfc</code>/<code>erfcx</code> formula in the middle region.</li>
+<li><code>Jaeckel acc libm+Commons</code>: the same Jaeckel region-dispatched, included into the temporary harness, using system <code>erf</code>/<code>erfc</code> and the local Apache Commons <code>erfcx</code>.</li>
+<li><code>Jaeckel acc Cody+Cody</code>: the same Jaeckel region-dispatched formula, using Cody <code>erf</code>, <code>erfc</code>, and <code>erfcx</code> from <code>jaeckel = 0.2.0</code>.</li>
+<li><code>Jaeckel acc Johnson+Johnson</code>: the same Jaeckel region-dispatched formula, using Johnson/Faddeeva <code>erf</code>, <code>erfc</code>, and <code>erfcx</code> through <code>errorfunctions = 0.2.0</code>.</li>
+<li><code>Jaeckel acc libm+Cody</code> and <code>Jaeckel acc libm+Johnson</code>: the same formula with system <code>erf</code>/<code>erfc</code> fixed and only <code>erfcx</code> swapped, to isolate the scaled-erfc backend effect.</li>
+<li><code>Jaeckel I/II + pure Commons</code>: Jaeckel Region I/II expansions are kept, but the Region III/middle fallback is replaced by the always-erfcx identity with the local Apache Commons <code>erfcx</code>.</li>
+<li><code>IG statmod upper</code>: the inverse-Gaussian upper-tail representation of the Black beta price, using a scalar Rust port of the CRAN <code>statmod</code> 1.5.2 <code>.pinvgauss</code> mean-one upper-tail log-probability core, with the final <code>log(1-exp(r))</code> evaluated by a Rust <code>log1mexp</code> helper near cancellation. This is not a full <code>statmod</code> port: it omits R vectorization, NA/Inf handling, finite/infinite-mean special cases, and R&rsquo;s exact <code>pnorm</code> implementation. The public-wrapper small-CV gamma approximation is also omitted because, under the Black mapping here, it would require <code>dispersion=-2/x &lt; 1e-14</code>, or <code>x &lt; -2e14</code>, far outside the finite <code>Float64</code> <code>x=log(ex)</code> domain. No purpose-built Rust inverse-Gaussian crate was found in <code>cargo search inverse-gaussian</code> / <code>cargo search invgauss</code>; <code>statrs</code> 0.18.0 source also did not contain an inverse-Gaussian/Wald distribution implementation.</li>
+<li><code>Commons erfcx-mixed</code>: the Cody/Jaeckel threshold formula with the local Apache Commons Numbers <code>erfcx</code> port and system <code>erfc</code>.</li>
+<li><code>Cody erfcx-mixed</code>: the same threshold formula using <code>jaeckel = 0.2.0</code> <code>erfcx_cody</code>.</li>
+<li><code>Johnson erfcx-mixed</code>: the same threshold formula using <code>errorfunctions = 0.2.0</code> Johnson/Faddeeva <code>erfcx</code>.</li>
+<li><code>libm erfc direct</code>: the direct formula above, using system C <code>erfc</code> through FFI. Rust <code>std</code> does not provide <code>erfc</code> or <code>erfcx</code>.</li>
+<li><code>Commons/Cody/Johnson pure-erfcx</code>: the always-erfcx identity <code>0.5 * exp(-0.5*(h^2+t^2)) * (erfcx(q1) - erfcx(q2))</code>, included to show why the mixed formula avoids some high-volatility tail problems.</li>
+</ul>
+<h3 id="mixed-erfcerfcx-fallback-logic">Mixed Erfc/Erfcx Fallback Logic</h3>
+<p>The mixed formula starts from the direct beta-space Black expression:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>2B = exp(x/2) * erfc(q1) - exp(-x/2) * erfc(q2)
+</span></span></code></pre></div><p>with</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>h = x / s
+</span></span><span style="display:flex;"><span>t = s / 2
+</span></span><span style="display:flex;"><span>q1 = -(h + t) / sqrt(2)
+</span></span><span style="display:flex;"><span>q2 = -(h - t) / sqrt(2)
+</span></span></code></pre></div><p>For either term, the stable tail identity is:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>exp( x/2) * erfc(q1) = exp(-0.5 * (h^2 + t^2)) * erfcx(q1)
+</span></span><span style="display:flex;"><span>exp(-x/2) * erfc(q2) = exp(-0.5 * (h^2 + t^2)) * erfcx(q2)
+</span></span></code></pre></div><p>because <code>q1^2 = 0.5 * (h + t)^2</code>, <code>q2^2 = 0.5 * (h - t)^2</code>, and <code>x = h*s = 2*h*t</code>. The mixed implementation uses that identity term by term instead of forcing both terms through one representation.</p>
+<p>The branch threshold is Cody&rsquo;s <code>0.46875</code>, the same split used by the classic error-function approximations. Arguments below it are kept in the ordinary <code>erfc</code> representation; arguments above it use scaled <code>erfcx</code> so that the small tail probability is not represented as a nearly-underflowed <code>erfc</code> multiplied by a compensating exponential.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>if q1 &lt; 0.46875 and q2 &lt; 0.46875:
+</span></span><span style="display:flex;"><span>    2B = exp(x/2) * erfc(q1)
+</span></span><span style="display:flex;"><span>       - exp(-x/2) * erfc(q2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>if q1 &lt; 0.46875 and q2 &gt;= 0.46875:
+</span></span><span style="display:flex;"><span>    2B = exp(x/2) * erfc(q1)
+</span></span><span style="display:flex;"><span>       - exp(-0.5 * (h^2 + t^2)) * erfcx(q2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>if q1 &gt;= 0.46875 and q2 &lt; 0.46875:
+</span></span><span style="display:flex;"><span>    2B = exp(-0.5 * (h^2 + t^2)) * erfcx(q1)
+</span></span><span style="display:flex;"><span>       - exp(-x/2) * erfc(q2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>if q1 &gt;= 0.46875 and q2 &gt;= 0.46875:
+</span></span><span style="display:flex;"><span>    2B = exp(-0.5 * (h^2 + t^2)) * (erfcx(q1) - erfcx(q2))
+</span></span></code></pre></div><p>On the valid Black domain, the third formal case is actually unreachable. Since <code>t = s/2 &gt;= 0</code>,</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>q2 - q1 = sqrt(2) * t &gt;= 0,
+</span></span></code></pre></div><p>so <code>q1 &gt;= rho</code> implies <code>q2 &gt;= rho</code> as well. The <code>erfcx, erfc</code> branch would require <code>q1 &gt;= rho</code> and <code>q2 &lt; rho</code> at the same time; that would need negative <code>t</code>, not merely positive <code>h = x/s</code>. It is kept in the branch table only as the symmetric algebraic case.</p>
+<p>So “mixed” does not mean that <code>erfc</code> is a fallback after <code>erfcx</code> fails. It means each of the two Black terms is routed to the representation that is locally better conditioned. Negative or central arguments stay with <code>erfc</code>, where <code>erfc(q)</code> is order one and cheap. Positive tail arguments switch to <code>erfcx</code>, where the scaled value remains order <code>1/q</code> and avoids underflow.</p>
+<p>This explains two patterns in the tables below. In the low-volatility OTM tail, direct <code>erfc</code> loses many ulps because it subtracts two tiny tail probabilities after ordinary scaling; the mixed erfcx versions are much better. In the high-volatility upper-price window, the pure-erfcx identity is worse because it exposes the cancellation in <code>erfcx(q1) - erfcx(q2)</code> even when ordinary <code>erfc</code> would have kept one side well behaved.</p>
+<h3 id="reference-and-local-windows">Reference And Local Windows</h3>
+<p>Reference values are Julia <code>BigFloat</code> at 512-bit precision, rounded back to <code>Float64</code>. ULP error is the positive-Float64 bit distance to that rounded reference. Each window contains 512 consecutive <code>Float64</code> values in either <code>s</code> or <code>x</code>, with the other coordinate fixed.</p>
+<table>
+  <thead>
+      <tr>
+          <th>id</th>
+          <th>zone</th>
+          <th>axis</th>
+          <th>x</th>
+          <th>s</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>central-atm</td>
+          <td>central</td>
+          <td>s</td>
+          <td>-1.000000e-2</td>
+          <td>2.000000e-1</td>
+      </tr>
+      <tr>
+          <td>tiny-near-atm</td>
+          <td>tiny-near-atm</td>
+          <td>s</td>
+          <td>-1.000000e-8</td>
+          <td>1.000000e-4</td>
+      </tr>
+      <tr>
+          <td>erfc-threshold</td>
+          <td>branch-transition</td>
+          <td>s</td>
+          <td>-1.000000e-1</td>
+          <td>1.364500e-1</td>
+      </tr>
+      <tr>
+          <td>moderate-otm</td>
+          <td>moderate-otm</td>
+          <td>s</td>
+          <td>-1.000000e0</td>
+          <td>5.000000e-1</td>
+      </tr>
+      <tr>
+          <td>low-vol-otm</td>
+          <td>lower-tail</td>
+          <td>s</td>
+          <td>-1.000000e-1</td>
+          <td>2.000000e-2</td>
+      </tr>
+      <tr>
+          <td>deep-otm</td>
+          <td>lower-tail</td>
+          <td>s</td>
+          <td>-3.000000e0</td>
+          <td>7.000000e-1</td>
+      </tr>
+      <tr>
+          <td>far-otm</td>
+          <td>lower-tail</td>
+          <td>s</td>
+          <td>-6.000000e0</td>
+          <td>1.000000e0</td>
+      </tr>
+      <tr>
+          <td>high-vol</td>
+          <td>upper-price</td>
+          <td>s</td>
+          <td>-1.000000e-2</td>
+          <td>1.000000e1</td>
+      </tr>
+      <tr>
+          <td>very-high-vol</td>
+          <td>upper-price</td>
+          <td>s</td>
+          <td>-1.000000e0</td>
+          <td>5.000000e1</td>
+      </tr>
+      <tr>
+          <td>near-overflow-vol</td>
+          <td>upper-price</td>
+          <td>s</td>
+          <td>-1.000000e0</td>
+          <td>7.500000e1</td>
+      </tr>
+      <tr>
+          <td>x-central</td>
+          <td>x-window</td>
+          <td>x</td>
+          <td>-1.000000e-2</td>
+          <td>2.000000e-1</td>
+      </tr>
+      <tr>
+          <td>x-lower-tail</td>
+          <td>x-window</td>
+          <td>x</td>
+          <td>-4.000000e0</td>
+          <td>8.000000e-1</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="global-accuracy">Global Accuracy</h3>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>samples</th>
+          <th>invalid</th>
+          <th>exact_bits</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>max_rel</th>
+          <th>worst_window</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2301</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>7.4e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Commons</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2301</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>7.4e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Cody+Cody</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2291</td>
+          <td>1</td>
+          <td>14</td>
+          <td>22</td>
+          <td>40</td>
+          <td>7.4e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Johnson+Johnson</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2296</td>
+          <td>1</td>
+          <td>15</td>
+          <td>25</td>
+          <td>42</td>
+          <td>7.8e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Cody</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2291</td>
+          <td>1</td>
+          <td>14</td>
+          <td>22</td>
+          <td>40</td>
+          <td>7.4e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Johnson</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>2296</td>
+          <td>1</td>
+          <td>15</td>
+          <td>25</td>
+          <td>42</td>
+          <td>7.8e-15</td>
+          <td>far-otm</td>
+      </tr>
+      <tr>
+          <td>Jaeckel I/II + pure Commons</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1277</td>
+          <td>4</td>
+          <td>686</td>
+          <td>1202</td>
+          <td>1570</td>
+          <td>2.9e-13</td>
+          <td>near-overflow-vol</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1212</td>
+          <td>5</td>
+          <td>2823</td>
+          <td>3019</td>
+          <td>3068</td>
+          <td>5.2e-13</td>
+          <td>tiny-near-atm</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1158</td>
+          <td>7</td>
+          <td>6372</td>
+          <td>6568</td>
+          <td>7666</td>
+          <td>1.5e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1180</td>
+          <td>6</td>
+          <td>2823</td>
+          <td>3019</td>
+          <td>3068</td>
+          <td>5.2e-13</td>
+          <td>tiny-near-atm</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1161</td>
+          <td>6</td>
+          <td>2823</td>
+          <td>3019</td>
+          <td>3068</td>
+          <td>5.2e-13</td>
+          <td>tiny-near-atm</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>1116</td>
+          <td>10</td>
+          <td>3049</td>
+          <td>5952</td>
+          <td>10329</td>
+          <td>2.0e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>Commons pure-erfcx</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>255</td>
+          <td>13</td>
+          <td>1776</td>
+          <td>1972</td>
+          <td>2021</td>
+          <td>3.4e-13</td>
+          <td>tiny-near-atm</td>
+      </tr>
+      <tr>
+          <td>Cody pure-erfcx</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>174</td>
+          <td>15</td>
+          <td>9968</td>
+          <td>10164</td>
+          <td>10213</td>
+          <td>1.7e-12</td>
+          <td>tiny-near-atm</td>
+      </tr>
+      <tr>
+          <td>Johnson pure-erfcx</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>257</td>
+          <td>19</td>
+          <td>59120</td>
+          <td>59316</td>
+          <td>59365</td>
+          <td>1.0e-11</td>
+          <td>tiny-near-atm</td>
+      </tr>
+  </tbody>
+</table>
+<p>The headline is different from the raw <code>erfcx</code> comparison. In the normalized Black formula, the largest errors in these local windows are not the raw negative-erfcx overflow tail. They are tiny near-ATM and low-volatility OTM cancellation zones. The default is much better there because it uses Jaeckel Region I/II expansions before falling back to the mixed <code>erfc</code>/<code>erfcx</code> formula. Once that region-dispatched formula is kept, backend choice barely moves the result: all Jaeckel-accurate variants have global p50 = 1 ulp and max = 40 to 42 ulps on this sample set.</p>
+<h3 id="jaeckel-accurate-backend-sensitivity">Jaeckel Accurate Backend Sensitivity</h3>
+<p>The Jaeckel accurate path is not just the mixed formula with a different <code>erfcx</code>. It routes first through:</p>
+<ul>
+<li>Region I: asymptotic expansion times the normalized vega. This path is independent of <code>erf</code>, <code>erfc</code>, and <code>erfcx</code>.</li>
+<li>Region II: small-<code>t</code> expansion times the normalized vega. This path uses <code>erfcx</code> only in the central <code>y_prime</code> branch; deeper left-tail <code>y_prime</code> is rational.</li>
+<li>Region III/middle: the mixed Cody/Jaeckel <code>erfc</code>/<code>erfcx</code> formula described above.</li>
+</ul>
+<p>That dispatch is why the special-function backend differences collapse compared with the generic mixed or pure-erfcx formulas.</p>
+<p>Selected Jaeckel-accurate rows:</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>global p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>tiny max</th>
+          <th>low-vol max</th>
+          <th>erfc-threshold max</th>
+          <th>far-otm max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>40</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Commons</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>40</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Cody+Cody</td>
+          <td>1</td>
+          <td>14</td>
+          <td>22</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>40</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Johnson+Johnson</td>
+          <td>1</td>
+          <td>15</td>
+          <td>25</td>
+          <td>42</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>42</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Cody</td>
+          <td>1</td>
+          <td>14</td>
+          <td>22</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>40</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Johnson</td>
+          <td>1</td>
+          <td>15</td>
+          <td>25</td>
+          <td>42</td>
+          <td>1</td>
+          <td>17</td>
+          <td>2</td>
+          <td>42</td>
+      </tr>
+  </tbody>
+</table>
+<p>The paired Cody rows match the libm+Cody rows in aggregate, and the paired Johnson rows match the libm+Johnson rows in aggregate. In these windows, the small residual backend sensitivity comes from <code>erfcx</code>, not from swapping the ordinary <code>erf</code>/<code>erfc</code> implementation. Cody is fractionally better than Commons by p95/p99 in the far-OTM-dominated aggregate; Johnson is fractionally worse, with a 42-ulp maximum instead of 40. Those differences are tiny next to the thousands of ulps lost by the non-Jaeckel mixed/direct formulas in the tiny near-ATM and low-vol OTM windows.</p>
+<h3 id="jaeckel-iii-with-pure-erfcx-fallback">Jaeckel I/II With Pure-Erfcx Fallback</h3>
+<p>A tempting simplification is to keep Jaeckel Regions I and II, but replace the Region III/middle fallback with the pure-erfcx identity:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>B = 0.5 * exp(-0.5 * (h^2 + t^2)) * (erfcx(q1) - erfcx(q2))
+</span></span></code></pre></div><p>With Apache Commons <code>erfcx</code>, this is not as accurate as the default (Apache Commons erfc and erfcx with all Jaeckel zones) overall:</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>global p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>tiny max</th>
+          <th>low-vol max</th>
+          <th>high-vol max</th>
+          <th>very-high max</th>
+          <th>near-overflow max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Commons</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>Jaeckel I/II + pure Commons</td>
+          <td>4</td>
+          <td>686</td>
+          <td>1202</td>
+          <td>1570</td>
+          <td>1</td>
+          <td>17</td>
+          <td>60</td>
+          <td>745</td>
+          <td>1570</td>
+      </tr>
+  </tbody>
+</table>
+<p>The simplification keeps the important Region II tiny near-ATM behavior and the Region I/II lower-tail behavior, so those windows match the default. The loss comes from middle/fallback cases, especially the high-volatility upper-price windows. There the pure-erfcx identity exposes cancellation in <code>erfcx(q1) - erfcx(q2)</code>, while the mixed fallback keeps the locally better <code>erfc</code> representation for negative or central arguments.</p>
+<p>It is not meaningfully faster in this diagnostic either. On the same optimized local-window timing run, the pure fallback row was <code>24.83 ns/call</code>, compared with <code>24.80 ns/call</code> for the same included Jaeckel formula with the mixed Commons fallback and <code>25.07 ns/call</code> for the <code>Default/current</code> path. That difference is inside normal microbenchmark noise, and the generic pure-erfcx kernel was slower than the generic mixed Commons kernel (<code>21.32</code> vs <code>19.80 ns/call</code>).</p>
+<h3 id="inverse-gaussian-formula-experiment">Inverse Gaussian Formula Experiment</h3>
+<p>For <code>x &lt; 0</code>, the Black beta price can be written as an inverse-Gaussian upper tail. In the <code>statmod</code> mean-one parameterization, let</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>q = -2x / s^2
+</span></span><span style="display:flex;"><span>dispersion = -2 / x
+</span></span><span style="display:flex;"><span>Y ~ IG(mean = 1, dispersion)
+</span></span></code></pre></div><p>Then</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>B(x, s) = exp(x/2) * P(Y &gt; q).
+</span></span></code></pre></div><p>The statmod upper-tail formula is</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(Y &gt; q) = Phi(-(q-1)/sqrt(dispersion*q))
+</span></span><span style="display:flex;"><span>         - exp(2/dispersion) * Phi(-(q+1)/sqrt(dispersion*q)).
+</span></span></code></pre></div><p>Substituting <code>q=-2x/s^2</code> and <code>dispersion=-2/x</code> gives the ordinary Black expression in a different parameterization. The temporary Rust harness ports the statmod <code>.pinvgauss</code> core branch for this scalar mean-one upper tail, including its asymptotic right-tail override, and evaluates the normal log tails with the local Apache Commons <code>erfcx</code> support.</p>
+<p>One Rust-side numerical improvement was kept: statmod writes the upper-tail combination as <code>a + log1p(-exp(b-a))</code>; the harness uses the equivalent <code>a + log1mexp(b-a)</code>, switching to <code>log(-expm1(b-a))</code> when <code>b-a</code> is close to zero. That slightly reduces cancellation in the tiny near-ATM and low-volatility OTM windows, but it does not change the conclusion.</p>
+<p>The one public-wrapper branch that looks relevant at first glance is statmod&rsquo;s small-CV gamma approximation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>if mean * dispersion &lt; 1e-14:
+</span></span><span style="display:flex;"><span>    pgamma(q, shape=1/(mean*dispersion), scale=(mean*dispersion)*mean)
+</span></span></code></pre></div><p>For this Black identity <code>mean=1</code> and <code>dispersion=-2/x</code>, so the branch would need <code>x &lt; -2e14</code>. A finite <code>Float64</code> normalized Black input derived from <code>ex=exp(x)&gt;0</code> has <code>x &gt;= log(5e-324) ~= -744.44</code>. The gamma approximation therefore cannot trigger on the valid Black domain tested here; implementing it would not change these results.</p>
+<p>After installing R, the temporary harness was checked against the actual R code by sourcing the CRAN <code>statmod</code> 1.5.2 <code>R/invgauss.R</code> file. The <code>statmod</code> package was not installed as an R library on this machine, so this is a source-level check of the same public R implementation rather than a namespace-loaded package check. On the 6144 Black-mapped local-window samples, R&rsquo;s public <code>pinvgauss(..., lower.tail=FALSE, log.p=TRUE)</code> and the literal <code>.pinvgauss</code> core agree exactly in price space, confirming that no wrapper special case is active on this domain.</p>
+<p>The remaining Rust-vs-R price differences come from the normal log-tail backend and the final cancellation. Comparing prices directly:</p>
+<table>
+  <thead>
+      <tr>
+          <th>comparison</th>
+          <th>exact</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>max_rel</th>
+          <th>worst</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Rust log1mexp price vs R pinvgauss</td>
+          <td>3020</td>
+          <td>1</td>
+          <td>648</td>
+          <td>2406</td>
+          <td>7348</td>
+          <td>1.4e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>Rust literal price vs R core literal</td>
+          <td>4671</td>
+          <td>0</td>
+          <td>64</td>
+          <td>2461</td>
+          <td>7421</td>
+          <td>1.4e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>R wrapper vs R core literal price</td>
+          <td>6144</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.0e0</td>
+          <td>central-atm</td>
+      </tr>
+      <tr>
+          <td>R log1mexp core vs R literal price</td>
+          <td>4115</td>
+          <td>0</td>
+          <td>648</td>
+          <td>648</td>
+          <td>648</td>
+          <td>1.1e-13</td>
+          <td>tiny-near-atm</td>
+      </tr>
+  </tbody>
+</table>
+<p>Against the Julia BigFloat references, literal R/statmod does not improve the Black price accuracy versus the literal Rust port; it lands on the same conclusion as the Rust experiment:</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend/formula</th>
+          <th>exact</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>max_rel</th>
+          <th>worst</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Rust IG with log1mexp</td>
+          <td>1158</td>
+          <td>7</td>
+          <td>6372</td>
+          <td>6568</td>
+          <td>7666</td>
+          <td>1.5e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>Rust literal statmod</td>
+          <td>1174</td>
+          <td>7</td>
+          <td>7017</td>
+          <td>7212</td>
+          <td>7739</td>
+          <td>1.5e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>R pinvgauss literal statmod</td>
+          <td>1691</td>
+          <td>8</td>
+          <td>7017</td>
+          <td>7214</td>
+          <td>7739</td>
+          <td>1.5e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+      <tr>
+          <td>R core with log1mexp</td>
+          <td>1665</td>
+          <td>8</td>
+          <td>6373</td>
+          <td>6570</td>
+          <td>7666</td>
+          <td>1.5e-12</td>
+          <td>low-vol-otm</td>
+      </tr>
+  </tbody>
+</table>
+<p>So R fidelity is good for the relevant scalar statmod formula, and the only measurable Rust-side deviation kept here is the <code>log1mexp</code> substitution. It slightly improves the IG formula relative to literal R/statmod, but the formula remains far less accurate than the Jaeckel Region I/II expansions in the sensitive Black windows.</p>
+<p>This representation is not Jaeckel-accurate on the sensitive windows:</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>global p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+          <th>tiny max</th>
+          <th>low-vol max</th>
+          <th>high-vol max</th>
+          <th>very-high max</th>
+          <th>near-overflow max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>1</td>
+          <td>15</td>
+          <td>24</td>
+          <td>40</td>
+          <td>1</td>
+          <td>17</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>5</td>
+          <td>2823</td>
+          <td>3019</td>
+          <td>3068</td>
+          <td>3068</td>
+          <td>593</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>7</td>
+          <td>6372</td>
+          <td>6568</td>
+          <td>7666</td>
+          <td>6608</td>
+          <td>7666</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+  </tbody>
+</table>
+<p>The inverse-Gaussian form is fine in the high-volatility upper-price windows, but it is worse than the mixed erfc/erfcx formula in the tiny near-ATM and low-volatility OTM cancellation windows. It is also slower in this scalar Rust port: <code>63.00 ns/call</code> on the same local-window timing harness, compared with about <code>25 ns/call</code> for the Jaeckel-dispatched default and about <code>20 ns/call</code> for the generic Commons mixed formula.</p>
+<h3 id="selected-windows">Selected Windows</h3>
+<figure><img src="/post/black-formula-local-window-examples.png"><figcaption>
+      <h4>Black formula local window examples.</h4>
+    </figcaption>
+</figure>
+
+<p>Selected 512-ULP window stats:</p>
+<p>window = tiny-near-atm</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>2864</td>
+          <td>3048</td>
+          <td>3064</td>
+          <td>3068</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>6404</td>
+          <td>6588</td>
+          <td>6604</td>
+          <td>6608</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>2864</td>
+          <td>3048</td>
+          <td>3064</td>
+          <td>3068</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>2864</td>
+          <td>3048</td>
+          <td>3064</td>
+          <td>3068</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>2864</td>
+          <td>3048</td>
+          <td>3064</td>
+          <td>3068</td>
+      </tr>
+      <tr>
+          <td>Johnson pure-erfcx</td>
+          <td>59161</td>
+          <td>59345</td>
+          <td>59361</td>
+          <td>59365</td>
+      </tr>
+  </tbody>
+</table>
+<p>window = low-vol-otm</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>6</td>
+          <td>14</td>
+          <td>16</td>
+          <td>17</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>146</td>
+          <td>429</td>
+          <td>548</td>
+          <td>593</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>2299</td>
+          <td>5108</td>
+          <td>7130</td>
+          <td>7666</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>254</td>
+          <td>683</td>
+          <td>885</td>
+          <td>1345</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>180</td>
+          <td>493</td>
+          <td>649</td>
+          <td>831</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>3526</td>
+          <td>6657</td>
+          <td>7242</td>
+          <td>10329</td>
+      </tr>
+  </tbody>
+</table>
+<p>window = erfc-threshold</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>7</td>
+          <td>18</td>
+          <td>23</td>
+          <td>28</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>9</td>
+          <td>24</td>
+          <td>28</td>
+          <td>32</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>8</td>
+          <td>22</td>
+          <td>28</td>
+          <td>31</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>20</td>
+          <td>43</td>
+          <td>57</td>
+          <td>74</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>7</td>
+          <td>21</td>
+          <td>27</td>
+          <td>34</td>
+      </tr>
+  </tbody>
+</table>
+<p>window = high-vol</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>p50</th>
+          <th>p95</th>
+          <th>p99</th>
+          <th>max</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Johnson pure-erfcx</td>
+          <td>39</td>
+          <td>56</td>
+          <td>56</td>
+          <td>57</td>
+      </tr>
+  </tbody>
+</table>
+<p>Interpretation by region:</p>
+<ul>
+<li>Tiny near-ATM: backend choice is almost irrelevant for the mixed formula; all mixed/direct forms lose about 3000 ulps. The default Region II expansion stays within 1 ulp.</li>
+<li>Low-volatility OTM tail: direct <code>erfc</code> is worst because it subtracts two close tail probabilities. The erfcx-mixed formulas are much better, and Commons is best among the three erfcx backends in this window. The default expansion is better again.</li>
+<li>Branch transition: this is where backend differences are visible but modest. Commons and Cody are close; Johnson is weaker but still far from the direct-erfc lower-tail failure.</li>
+<li>Upper-price high-volatility: the mixed formula and direct-erfc formula are all within 1 ulp in this window. The pure-erfcx identity is worse because it exposes cancellation/rounding in <code>erfcx(q1) - erfcx(q2)</code> instead of routing negative-side arguments through <code>erfc</code>.</li>
+</ul>
+<h3 id="timing">Timing</h3>
+<p>Timing was measured on the same 6144 local-window samples, best of five passes with 2000 sweeps per pass, using <code>cargo run --release</code>.</p>
+<table>
+  <thead>
+      <tr>
+          <th>backend</th>
+          <th>ns/call</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Default/current</td>
+          <td>25.07</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Commons</td>
+          <td>24.80</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Cody+Cody</td>
+          <td>26.55</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc Johnson+Johnson</td>
+          <td>25.39</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Cody</td>
+          <td>23.44</td>
+      </tr>
+      <tr>
+          <td>Jaeckel acc libm+Johnson</td>
+          <td>24.28</td>
+      </tr>
+      <tr>
+          <td>Jaeckel I/II + pure Commons</td>
+          <td>24.83</td>
+      </tr>
+      <tr>
+          <td>Commons erfcx-mixed</td>
+          <td>19.80</td>
+      </tr>
+      <tr>
+          <td>IG statmod upper</td>
+          <td>63.00</td>
+      </tr>
+      <tr>
+          <td>Cody erfcx-mixed</td>
+          <td>17.92</td>
+      </tr>
+      <tr>
+          <td>Johnson erfcx-mixed</td>
+          <td>19.27</td>
+      </tr>
+      <tr>
+          <td>libm erfc direct</td>
+          <td>26.89</td>
+      </tr>
+      <tr>
+          <td>Commons pure-erfcx</td>
+          <td>21.32</td>
+      </tr>
+      <tr>
+          <td>Cody pure-erfcx</td>
+          <td>19.20</td>
+      </tr>
+      <tr>
+          <td>Johnson pure-erfcx</td>
+          <td>19.59</td>
+      </tr>
+  </tbody>
+</table>
+<p>These timings are for the formula kernels on this artificial local-window mix, not for the full IV solvers. The temporary Jaeckel backend rows include a small runtime selector used only by the diagnostic harness. The default is slower than the generic mixed formulas because it does more routing and uses the Region I/II expansion machinery, but the accuracy gain in tiny near-ATM and low-volatility OTM zones is large.</p>
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li>A raw <code>erfcx(x)</code> benchmark overstates the relevance of the negative-erfcx tail for the stable Black price. The mixed formula avoids much of that tail by using <code>erfc</code> on negative-side arguments.</li>
+<li>The most important Black-formula accuracy zones here are tiny near-ATM and low-volatility OTM, where formula structure dominates backend choice.</li>
+<li>For a generic erfcx-mixed Black formula, Apache Commons is the best of the three tested erfcx backends on the low-vol OTM window, Cody is usually close, and Johnson is somewhat weaker near the branch transition.</li>
+<li>For the full Jaeckel accurate formula, all tested backend combinations are essentially tied: global p50 = 1 ulp, max = 40 to 42 ulps, and the sensitive tiny near-ATM window stays within 1 ulp for every backend.</li>
+<li>In these sampled windows, swapping Cody or Johnson <code>erf</code>/<code>erfc</code> together with <code>erfcx</code> gives the same aggregate result as keeping libm <code>erf</code>/<code>erfc</code> and swapping only <code>erfcx</code>.</li>
+<li>Keeping Jaeckel Regions I/II but using a pure Commons-erfcx fallback is simpler, but not accuracy-equivalent to the default: it matches the default in tiny near-ATM and lower-tail windows, then loses up to 1570 ulps in the high-volatility upper-price fallback region.</li>
+<li>The pure-erfcx fallback is not a clear speed win either; in this release-mode diagnostic it was effectively tied with the mixed Jaeckel fallback, while the generic pure-erfcx kernel was slower than the generic mixed Commons kernel.</li>
+<li>The inverse-Gaussian/statmod representation is a valid Black formula, but not an accuracy replacement for Jaeckel&rsquo;s expanded evaluator here: even with a Rust <code>log1mexp</code> cancellation tweak, it loses up to 6608 ulps in the tiny near-ATM window and 7666 ulps in the low-volatility OTM window, and the straightforward scalar port is much slower.</li>
+<li>The default remains the accuracy-favored choice because the Jaeckel Region I/II expansions reduce errors from thousands of ulps to tens of ulps or better in the sensitive windows.</li>
+</ul>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

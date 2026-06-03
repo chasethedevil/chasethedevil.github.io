@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 262632. All rights reserved. </p>
+    <p>&copy; 30332. All rights reserved. </p>
   </div>
 </aside>
 
@@ -94,7 +94,7 @@
 <li>the reflection identity <code>erfcx(-x) = 2 exp(x^2) - erfcx(x)</code> for negative <code>x</code></li>
 </ul>
 <p>Julia <code>SpecialFunctions.erfcx(::Float64)</code> calls <code>Faddeeva_erfcx_re</code> from <code>libopenspecfun</code>, and <code>faddeeva-sys</code> binds the same Johnson C symbol. On the sampled Float64 grid below, <code>errorfunctions</code>, <code>faddeeva-sys</code>, and Julia SpecialFunctions were bit-identical.</p>
-<h2 id="generic-erfcx-accuracy">Generic Erfcx Accuracy</h2>
+<h3 id="generic-erfcx-accuracy">Generic Erfcx Accuracy</h3>
 <p>Reference: Julia <code>BigFloat</code> <code>erfcx(x)</code> at 256-bit precision, rounded back to <code>Float64</code>. The grid used 7021 total samples, of which 6272 had finite rounded <code>Float64</code> references.</p>
 <table>
   <thead>
@@ -139,7 +139,7 @@
   </tbody>
 </table>
 <p>The large absolute errors occur where <code>erfcx(x)</code> itself is enormous. The relative errors are still small, but the ULP differences matter because the IV tests include very sensitive tiny and saturated cases.</p>
-<h2 id="512-ulp-local-window-accuracy">512-ULP Local Window Accuracy</h2>
+<h3 id="512-ulp-local-window-accuracy">512-ULP Local Window Accuracy</h3>
 <p>The coarse grid above is useful for broad coverage, but it does not answer the more local question: what happens across consecutive representable inputs near the sensitive regions? I ran a temporary Rust verifier that generated 512 consecutive <code>Float64</code> inputs around 37 representative centers, including the old coarse-grid worst tail locations and the finite overflow boundary. References are Julia <code>BigFloat</code> <code>erfcx(x)</code> at 256-bit precision rounded back to <code>Float64</code>. ULP error is the positive-Float64 bit-distance from that rounded reference.</p>
 <p>The windows covered 18,944 input values. The finite-reference tables below use 18,176 values; 768 inputs from the overflow-boundary windows round to <code>Inf</code> and are excluded from the finite-error percentiles.</p>
 <p>Global local-window stats:</p>
@@ -588,7 +588,7 @@
   </tbody>
 </table>
 <p>So yes: the tail is the right place to look. The worst Johnson behavior is the negative tail and near-overflow tail. Cody has a rare sharper spike right at the finite overflow boundary. Commons is the most stable over these consecutive-ULP windows.</p>
-<h2 id="generic-erfcx-timing">Generic Erfcx Timing</h2>
+<h3 id="generic-erfcx-timing">Generic Erfcx Timing</h3>
 <p>Mixed grid, 24003 samples, best of five timing passes, 100 sweeps per pass.</p>
 <table>
   <thead>
@@ -621,7 +621,7 @@
   </tbody>
 </table>
 <p>The Julia number is measured inside one Julia process launched by the Rust diagnostic program; it is a Julia-loop function-call timing, not per-call Rust-to-Julia FFI overhead.</p>
-<h2 id="impact-on-thiopheneiv-implied-volatility-solver">Impact on ThiopheneIV Implied Volatility Solver</h2>
+<h3 id="impact-on-thiopheneiv-implied-volatility-solver">Impact on ThiopheneIV Implied Volatility Solver</h3>
 <p>Values are max error in ULPs of reference total volatility on a specific set of options (see <a href="https://arxiv.org/pdf/2605.22427">the ThiopheneIV paper</a> for the definition of the exact zones). The rust implementation of the solver is <a href="/post/thiophene-iv-rust-full.zip">available here</a></p>
 <p>ThiopheneIV max ulp</p>
 <table>
@@ -726,7 +726,7 @@
   </tbody>
 </table>
 <p>The polished <code>ThiopheneIV+</code> path is robust across erfcx choices. The unpolished fast solver is where Commons is clearly better for benchmark.</p>
-<h2 id="impact-on-thiopheneiv-performance">Impact on ThiopheneIV Performance</h2>
+<h3 id="impact-on-thiopheneiv-performance">Impact on ThiopheneIV Performance</h3>
 <p>ThiopheneIV ns/call</p>
 <table>
   <thead>
