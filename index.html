@@ -65,7 +65,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 30332. All rights reserved. </p>
+    <p>&copy; 40424. All rights reserved. </p>
   </div>
 </aside>
 
@@ -1106,6 +1106,24 @@
 <li>The inverse-Gaussian/statmod representation is a valid Black formula, but not an accuracy replacement for Jaeckel&rsquo;s expanded evaluator here: even with a Rust <code>log1mexp</code> cancellation tweak, it loses up to 6608 ulps in the tiny near-ATM window and 7666 ulps in the low-volatility OTM window, and the straightforward scalar port is much slower.</li>
 <li>The default remains the accuracy-favored choice because the Jaeckel Region I/II expansions reduce errors from thousands of ulps to tens of ulps or better in the sensitive windows.</li>
 </ul>
+<h2 id="references">References</h2>
+<ul>
+<li>For the Cody <a href="https://www.netlib.org/slatec/src/">Netlib Slatec code</a> <em>Rational Chebyshev approximations for the error function</em>  by W. J. Cody, Math. Comp., 1969, PP. 631-638</li>
+<li>For the Apache Commons Number code, <a href="https://issues.apache.org/jira/si/jira.issueviews:issue-html/NUMBERS-177/NUMBERS-177.html">this issue description</a> gives a good overview of the implementation, which is a mix of Boost rational functions and Cody rational function to obtain the best accuracy.</li>
+<li>Steven G. Johnson mentions <a href="https://github.com/JuliaMath/openspecfun/blob/main/Faddeeva/Faddeeva.cc">in his code</a> the following:</li>
+</ul>
+<blockquote>
+<p>(&hellip;) I originally used
+an erfcx routine derived from DERFC in SLATEC, but I have
+since replaced it with a much faster routine written by
+me which uses a combination of continued-fraction expansions
+and a lookup table of Chebyshev polynomials.  For speed,
+I implemented a similar algorithm for Im[w(x)] of real x,
+since this comes up frequently in the other error functions.</p>
+</blockquote>
+<ul>
+<li>TensorFlow <a href="https://github.com/tensorflow/probability/blob/v0.23.0/tensorflow_probability/python/math/special.py#L1147-L1166">makes use of</a> a Chebyshev approximation from  M. Shepherd and J. Laframboise, <a href="https://www.ams.org/journals/mcom/1981-36-153/S0025-5718-1981-0595058-X/"><em>Chebyshev approximation of (1 + 2 * x) * exp(x^2) * erfc(x)</em> (1981)</a></li>
+</ul>
 
   
 </article><article class="post">
@@ -1117,10 +1135,10 @@
 <p>This note compares practical erfcx implementations for Rust implied volatility solvers:</p>
 <ul>
 <li>Commons: the local Rust port of <a href="https://github.com/apache/commons-numbers/blob/master/commons-numbers-gamma/src/main/java/org/apache/commons/numbers/gamma/BoostErf.java">Apache Commons Numbers</a> <code>BoostErf.erfcx</code></li>
-<li>Cody: the <a href="https://docs.rs/jaeckel/latest/jaeckel/fn.erfcx_cody.html">Cody rational approximation</a> exposed by the <code>jaeckel = 0.2.0</code> crate during this comparison, originally coming from Netlib.</li>
+<li>Cody: the <a href="https://docs.rs/jaeckel/latest/jaeckel/fn.erfcx_cody.html">Cody rational approximation</a> exposed by the <code>jaeckel = 0.2.0</code> crate during this comparison, originally coming from   <a href="https://www.netlib.org/slatec/src/">Netlib SLATEC library</a>.</li>
 <li>Johnson: Steven G. Johnson&rsquo;s Faddeeva implementation, as exposed by <code>errorfunctions = 0.2.0</code>, <a href="https://github.com/Cactus-proj/special-functions/tree/main/sys/faddeeva-sys"><code>faddeeva-sys = 0.1.0</code></a>, and Julia <code>SpecialFunctions.erfcx(::Float64)</code></li>
 </ul>
-<p>The Commons-style implementation is a local Rust port of the Apache Commons Numbers/BoostErf approach. It computes the small central region through the local <code>erf</code> rational approximation and uses <code>exp_m1(x*x)</code> to avoid cancellation in <code>exp(x^2) * erfc(x)</code> near zero. For positive inputs it uses several rational subintervals: a central polynomial/rational <code>erf</code> branch, erfc-style rational branches around <code>0.5..1.5</code>, <code>1.5..2.5</code>, and <code>2.5..4</code>, and an asymptotic rational in <code>1/x^2</code> beyond that. For very large positive <code>x</code>, it returns <code>1 / (sqrt(pi) * x)</code>. For negative <code>x</code>, it uses the reflected form with a split-square exponential, returns <code>Inf</code> below the finite overflow cutoff, and otherwise computes <code>2 exp(x^2) - erfcx(|x|)</code> in a way that preserves more bits near the overflow boundary.</p>
+<p>The Commons-style implementation is a local Rust port of the <a href="https://issues.apache.org/jira/si/jira.issueviews:issue-html/NUMBERS-177/NUMBERS-177.html">Apache Commons Numbers/BoostErf approach</a>. It computes the small central region through the local <code>erf</code> rational approximation and uses <code>exp_m1(x*x)</code> to avoid cancellation in <code>exp(x^2) * erfc(x)</code> near zero. For positive inputs it uses several rational subintervals: a central polynomial/rational <code>erf</code> branch, erfc-style rational branches around <code>0.5..1.5</code>, <code>1.5..2.5</code>, and <code>2.5..4</code>,  and a rational function taken from <em>Rational Chebyshev approximations for the error function</em>  by W. J. Cody, Math. Comp., 1969, PP. 631-638 beyond that. For very large positive <code>x</code>, it returns <code>1 / (sqrt(pi) * x)</code>. For negative <code>x</code>, it uses the reflected form with a split-square exponential, returns <code>Inf</code> below the finite overflow cutoff, and otherwise computes <code>2 exp(x^2) - erfcx(|x|)</code> in a way that preserves more bits near the overflow boundary.</p>
 <p>The Cody implementation used here is the <code>jaeckel</code> crate&rsquo;s Cody/CALERF-style implementation. It has three main positive-side rational regions: <code>AB</code> for <code>|x| &lt;= 0.46875</code>, <code>CD</code> for <code>0.46875 &lt; |x| &lt;= 4</code>, and <code>PQ</code> as an asymptotic rational in <code>1/x^2</code> for <code>|x| &gt; 4</code>. It uses smoothed exponentials by splitting <code>x</code> onto a 1/16 grid before applying the residual exponential. For negative <code>x</code>, it reflects with <code>erfcx(-x) = 2 exp(x^2) - erfcx(x)</code> and clamps below its <code>XNEG</code> threshold to <code>f64::MAX</code>.</p>
 <figure><img src="/post/erfcx-cody-near-overflow-spike.png"><figcaption>
       <h4>Cody near-overflow spike.</h4>

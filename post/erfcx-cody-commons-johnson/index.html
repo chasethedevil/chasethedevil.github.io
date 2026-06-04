@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 30332. All rights reserved. </p>
+    <p>&copy; 40424. All rights reserved. </p>
   </div>
 </aside>
 
@@ -76,10 +76,10 @@
 <p>This note compares practical erfcx implementations for Rust implied volatility solvers:</p>
 <ul>
 <li>Commons: the local Rust port of <a href="https://github.com/apache/commons-numbers/blob/master/commons-numbers-gamma/src/main/java/org/apache/commons/numbers/gamma/BoostErf.java">Apache Commons Numbers</a> <code>BoostErf.erfcx</code></li>
-<li>Cody: the <a href="https://docs.rs/jaeckel/latest/jaeckel/fn.erfcx_cody.html">Cody rational approximation</a> exposed by the <code>jaeckel = 0.2.0</code> crate during this comparison, originally coming from Netlib.</li>
+<li>Cody: the <a href="https://docs.rs/jaeckel/latest/jaeckel/fn.erfcx_cody.html">Cody rational approximation</a> exposed by the <code>jaeckel = 0.2.0</code> crate during this comparison, originally coming from   <a href="https://www.netlib.org/slatec/src/">Netlib SLATEC library</a>.</li>
 <li>Johnson: Steven G. Johnson&rsquo;s Faddeeva implementation, as exposed by <code>errorfunctions = 0.2.0</code>, <a href="https://github.com/Cactus-proj/special-functions/tree/main/sys/faddeeva-sys"><code>faddeeva-sys = 0.1.0</code></a>, and Julia <code>SpecialFunctions.erfcx(::Float64)</code></li>
 </ul>
-<p>The Commons-style implementation is a local Rust port of the Apache Commons Numbers/BoostErf approach. It computes the small central region through the local <code>erf</code> rational approximation and uses <code>exp_m1(x*x)</code> to avoid cancellation in <code>exp(x^2) * erfc(x)</code> near zero. For positive inputs it uses several rational subintervals: a central polynomial/rational <code>erf</code> branch, erfc-style rational branches around <code>0.5..1.5</code>, <code>1.5..2.5</code>, and <code>2.5..4</code>, and an asymptotic rational in <code>1/x^2</code> beyond that. For very large positive <code>x</code>, it returns <code>1 / (sqrt(pi) * x)</code>. For negative <code>x</code>, it uses the reflected form with a split-square exponential, returns <code>Inf</code> below the finite overflow cutoff, and otherwise computes <code>2 exp(x^2) - erfcx(|x|)</code> in a way that preserves more bits near the overflow boundary.</p>
+<p>The Commons-style implementation is a local Rust port of the <a href="https://issues.apache.org/jira/si/jira.issueviews:issue-html/NUMBERS-177/NUMBERS-177.html">Apache Commons Numbers/BoostErf approach</a>. It computes the small central region through the local <code>erf</code> rational approximation and uses <code>exp_m1(x*x)</code> to avoid cancellation in <code>exp(x^2) * erfc(x)</code> near zero. For positive inputs it uses several rational subintervals: a central polynomial/rational <code>erf</code> branch, erfc-style rational branches around <code>0.5..1.5</code>, <code>1.5..2.5</code>, and <code>2.5..4</code>,  and a rational function taken from <em>Rational Chebyshev approximations for the error function</em>  by W. J. Cody, Math. Comp., 1969, PP. 631-638 beyond that. For very large positive <code>x</code>, it returns <code>1 / (sqrt(pi) * x)</code>. For negative <code>x</code>, it uses the reflected form with a split-square exponential, returns <code>Inf</code> below the finite overflow cutoff, and otherwise computes <code>2 exp(x^2) - erfcx(|x|)</code> in a way that preserves more bits near the overflow boundary.</p>
 <p>The Cody implementation used here is the <code>jaeckel</code> crate&rsquo;s Cody/CALERF-style implementation. It has three main positive-side rational regions: <code>AB</code> for <code>|x| &lt;= 0.46875</code>, <code>CD</code> for <code>0.46875 &lt; |x| &lt;= 4</code>, and <code>PQ</code> as an asymptotic rational in <code>1/x^2</code> for <code>|x| &gt; 4</code>. It uses smoothed exponentials by splitting <code>x</code> onto a 1/16 grid before applying the residual exponential. For negative <code>x</code>, it reflects with <code>erfcx(-x) = 2 exp(x^2) - erfcx(x)</code> and clamps below its <code>XNEG</code> threshold to <code>f64::MAX</code>.</p>
 <figure><img src="/post/erfcx-cody-near-overflow-spike.png"><figcaption>
       <h4>Cody near-overflow spike.</h4>
