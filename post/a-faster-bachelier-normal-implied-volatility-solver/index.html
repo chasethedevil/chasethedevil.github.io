@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.161.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>A Bachelier Normal Implied Volatility Solver &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 90926. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>A Bachelier Normal Implied Volatility Solver</h1>
+  <time datetime=2026-06-07T03:43:00Z class="post-date">Sun, Jun 7, 2026</time>
+  <p><a href="https://www.clarusft.com/bachelier-model-fast-accurate-implied-volatility/">Around 2014</a>, I <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">proposed</a> a few Bachelier implied volatility &ldquo;solvers&rdquo;. The first one was inspired by Steven G. Johnson&rsquo;s Faddeeva package for the complex error function: it used a piecewise Chebyshev polynomial representation to have a near machine accurate representation of the Bachelier implied volatility. Why did I put &ldquo;solver&rdquo; in quotes? Because the problem can be reduced to a 1D function representation (as originally shown by <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=990747">Choi, Kim and Kwak</a> in 2009). Then, I was encouraged by Gary Kennedy to find a simpler rational function approximation, I used 3 or 4 rational functions to cover the full range of the Bachelier implied volatility function.</p>
+<p>Recently, I decided to revisit a little bit the idea, using simpler transformations for some zones to make the solver even faster (and slightly more accurate). Compared to Peter Jäckel&rsquo;s <a href="http://www.jaeckel.org/ImpliedNormalVolatility.pdf">Implied Normal Volatility</a> solver, it is more than twice as fast. This is because there is a correction step involving the normal density function in P.J.&rsquo;s solver. Interestingly, testing out initially Quantlib&rsquo;s implementation gave me the impression it wasn&rsquo;t so accurate. There may be something wrong there as a direct port of P.J. algo to Rust or Java was very accurate.</p>
+<figure><img src="/post/lfk2026_double_error.png"><figcaption>
+      <h4>Relative error in Bachelier implied volatility as a function of |d|=|K-F|/(sigma*sqrt(T)) when evaluated fully in 64-bit arithmetic.</h4>
+    </figcaption>
+</figure>
+
+<p>The paper on the new LFK2026 Normal implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.18343">https://arxiv.org/abs/2605.18343</a> and <a href="/post/lfk2026-java.zip">minimal Java code here</a>.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

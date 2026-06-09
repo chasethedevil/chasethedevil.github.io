@@ -65,13 +65,32 @@
     </ul>
  </nav>
 
-    <p>&copy; 40424. All rights reserved. </p>
+    <p>&copy; 90926. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/nufft_and_cos/">NUFFT and COS</a>
+  </h1>
+  <time datetime="2025-07-14T17:27:00Z" class="post-date">Mon, Jul 14, 2025</time>
+  <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4335916">Leif Andersen and Mark Lake</a> recently proposed the use of Non-Uniform Fast Fourier Transform for option pricing via the characteristic function. Fourier techniques are most commonly used for pricing vanilla options under the Heston model, in order to calibrate the model. They can be applied to other models, typically with known characteristic function, but also with numerically solved characteristic function as in the rough Heston model, and to different kind of payoffs, for example variance/volatility swaps, options. The subject has been vastly explored already so what&rsquo;s new with this paper?</p>
+<p>At first, it was not obvious to me. The paper presents 3 different approaches, two where the probability density and cumulative density is first computed at a (not so sparse) set of knots and the payoff is integrated over it. The remaining approach is the classic one presented in the <a href="https://www.researchgate.net/profile/Dilip-Madan-2/publication/2519144_Option_Valuation_Using_the_Fast_Fourier_Transform/links/55235a820cf2a2d9e146f0bf/Option-Valuation-Using-the-Fast-Fourier-Transform.pdf">Carr and Madan paper from 1999</a> as well as in most of the litterature on the subject. The only additional trick is really the use of NUFFT along with some clever adaptive quadrature to compute the integral.</p>
+<p>I thought the main cost in the standard Fourier techniques was the evaluation of the characteristic function at many points, because the characteristic function is usually relatively complicated. And, in practice, it mainly is. So what does the new NUFFT algorithm bring? Surely the characteristic function must still be evaluated at the same points.</p>
+<p>The NUFFT becomes interesting to compute the option price at many many strikes at the same time. The strikes do not need to be equidistant and can be (almost) arbitrarily chosen. In Andersen and Lake paper, even a very fast technique such as the COS method reaches a threshold of option per second throughput, as the number of strikes is increased, mainly because of the repeated evaluation of the sum over different strikes, so the cost becomes proportional to the number of strikes.</p>
+<p>Evaluating at many many points becomes not much more expensive than evaluating at a few points only. This is what opens up the possibilities for the first 2 approaches based on the density.</p>
+<p>It turns out that it is not very difficult to rewrite the COS method so that it can make use of the NUFFT as well. I explain how to do it <a href="https://arxiv.org/abs/2507.13186v1">here</a>. Below is the throughput using NFFT.jl Julia package:
+<figure><img src="/post/heston_nufft.png"><figcaption>
+      <h4>Throughput on the Heston model with M=256 points.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>While a neat trick, it is however not 100% clear to me at this point where this is really useful: calibration typically involve a small number of strikes per maturity.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/forward-variance-models-and-calibration/">Forward Variance Models and Calibration</a>
   </h1>
@@ -502,32 +521,6 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 </figure>
 
 <p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/copilot_vs_chatgpt_optimal_step_size/">Copilot vs ChatGPT on the Optimal Finite Difference Step-Size</a>
-  </h1>
-  <time datetime="2024-07-25T12:56:42&#43;0100" class="post-date">Thu, Jul 25, 2024</time>
-  <p>When computing the derivative of a function by finite difference, which step size is optimal? The answer depends on the kind of difference (forward, backward or central), and the degree of the derivative (first or second typically for finance).</p>
-<p>For the first derivative, the result is very quick to find (it&rsquo;s on <a href="https://en.wikipedia.org/wiki/Numerical_differentiation">wikipedia</a>). For the second derivative, it&rsquo;s more challenging. The <a href="https://paulklein.ca/newsite/teaching/Notes_NumericalDifferentiation.pdf">Lecture Notes</a> of Karen Kopecky provide an answer. I wonder if Copilot or ChatGPT would find a good solution to the question:</p>
-<blockquote>
-<p>&ldquo;What is the optimal step size to compute the second derivative of a function by centered numerical differentiation?&rdquo;</p>
-</blockquote>
-<p>Here is the answer of copilot:
-<figure><img src="/post/step_size_copilot.png">
-</figure>
-
-and the one of chatGPT:
-<figure><img src="/post/step_size_chatgpt1.png">
-</figure>
-
-and a second answer from chatGPT:
-<figure><img src="/post/step_size_chatgpt2.png">
-</figure>
-</p>
-<p>Copilot always fails to provide a valid answer. ChatGPT v4 proves to be quite impressive: it is able to reproduce some of the reasoning presented in the lecture notes.</p>
-<p>Interestingly, with centered difference, for a given accuracy, the optimal step size is different for the first and for the second derivative. It may, at first, seem like a good idea to use a different size for each. In reality, when both the first and second derivative of the function are needed (for example the Delta and Gamma greeks of a financial product), it is rarely a good idea to use a different step size for each. Firstly, it will be slower since more the function will be evaluated at more points. Secondly, if there is a discontinuity in the function or in its derivatives, the first derivative may be estimated without going over the discontinuity while the second derivative may be estimated going over the discontinuity, leading to puzzling results.</p>
 
   
 </article>
