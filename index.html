@@ -65,7 +65,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 90926. All rights reserved. </p>
+    <p>&copy; 171715. All rights reserved. </p>
   </div>
 </aside>
 
@@ -78,12 +78,29 @@
   <time datetime="2026-06-07T03:43:00Z" class="post-date">Sun, Jun 7, 2026</time>
   <p><a href="https://www.clarusft.com/bachelier-model-fast-accurate-implied-volatility/">Around 2014</a>, I <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2420757">proposed</a> a few Bachelier implied volatility &ldquo;solvers&rdquo;. The first one was inspired by Steven G. Johnson&rsquo;s Faddeeva package for the complex error function: it used a piecewise Chebyshev polynomial representation to have a near machine accurate representation of the Bachelier implied volatility. Why did I put &ldquo;solver&rdquo; in quotes? Because the problem can be reduced to a 1D function representation (as originally shown by <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=990747">Choi, Kim and Kwak</a> in 2009). Then, I was encouraged by Gary Kennedy to find a simpler rational function approximation, I used 3 or 4 rational functions to cover the full range of the Bachelier implied volatility function.</p>
 <p>Recently, I decided to revisit a little bit the idea, using simpler transformations for some zones to make the solver even faster (and slightly more accurate). Compared to Peter Jäckel&rsquo;s <a href="http://www.jaeckel.org/ImpliedNormalVolatility.pdf">Implied Normal Volatility</a> solver, it is more than twice as fast. This is because there is a correction step involving the normal density function in P.J.&rsquo;s solver. Interestingly, testing out initially Quantlib&rsquo;s implementation gave me the impression it wasn&rsquo;t so accurate. There may be something wrong there as a direct port of P.J. algo to Rust or Java was very accurate.</p>
-<figure><img src="/post/lfk2026_double_error.png"><figcaption>
+<figure><img src="/post/bachelier_random_profiles_h.png"><figcaption>
       <h4>Relative error in Bachelier implied volatility as a function of |d|=|K-F|/(sigma*sqrt(T)) when evaluated fully in 64-bit arithmetic.</h4>
     </figcaption>
 </figure>
 
 <p>The paper on the new LFK2026 Normal implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.18343">https://arxiv.org/abs/2605.18343</a> and <a href="/post/lfk2026-java.zip">minimal Java code here</a>.</p>
+<p><strong>Update June 16</strong>
+I have tried two new things:</p>
+<ol>
+<li>Use of Fused-Multply-Add instructions (FMA) for the Horner evaluation. This speeds up the calculation even more: the new approximations are nearly  3x faster than Jäckel. Another advantage is reduced error overall. This is not so visible in terms of maximum error, the effect is more obvious if we look at the RMSE.
+<figure><img src="/post/bachelier_random_profiles_hfma.png"><figcaption>
+      <h4>Relative error in Bachelier implied volatility as a function of |d|=|K-F|/(sigma*sqrt(T)) when evaluated fully in 64-bit arithmetic with FMA.</h4>
+    </figcaption>
+</figure>
+</li>
+<li>Use of corrected FMA Horner scheme. This allows to gain a few extra (typically two) machine epsilons in accuracy. The cost is decrease in performance (nearly 2x computational cost).
+<figure><img src="/post/bachelier_random_profiles_chfma.png"><figcaption>
+      <h4>Relative error in Bachelier implied volatility as a function of |d|=|K-F|/(sigma*sqrt(T)) when evaluated fully in 64-bit arithmetic with corrected FMA Horner scheme.</h4>
+    </figcaption>
+</figure>
+</li>
+</ol>
+<p>Overall it is quite challenging to increase accuracy further. While it is an interesting problem to look at, it is not necessarily so practical: is this gain of one to three machine epsilons really worth the cost?</p>
 
   
 </article><article class="post">
