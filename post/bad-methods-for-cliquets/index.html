@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.161.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Non-practical Pricing Techniques for Cliquets? &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 252529. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Non-practical Pricing Techniques for Cliquets?</h1>
+  <time datetime=2026-06-24T03:43:00Z class="post-date">Wed, Jun 24, 2026</time>
+  <p>I have been looking at various techniques for <a href="https://en.wikipedia.org/wiki/Cliquet_option">cliquet</a> pricing with a focus on the Heston model. The obvious way is to use Monte-Carlo. Can we do better?</p>
+<p>The difficulty of the somewhat simple contract I was looking at is the presence of a global floor, without a local floor, but with a local cap. The payoff reads
+\( max(0, min(C, \sum_{i=1}^n \frac{S(t_i)-S(t_{i-1})}{S(t_{i-1})})) \)</p>
+<p>where 0 is the global floor, and C is the local cap.</p>
+<p>Without global floor, it is just a series of forward starting options and can be easily priced with Heston through a simple Fourier based formula (e.g., the COS method).</p>
+<p>With global floor, the option becomes more strongly path-dependent. In a Black-Scholes settings, it all simplifies and pricing it is not so difficult (there are several papers on this, I somewhat wonder if one could not apply the Jamshidian trick as well).</p>
+<p>There is a paper from Deng et al. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2396145">Efficient Valuation of Equity-Indexed Annuities Under Lévy Processes Using Fourier-Cosine Series</a> limited Lévy processes. Even in this simpler setting (because one can avoid integrating over the variance as in Heston), I have doubts on the efficiency of the method proposed, in particular, there is a small note at the bottom of page 10 which says:
+<figure><img src="/post/deng_levy_caveat.png"><figcaption>
+      <h4>An important footnote.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>In the tests, N is typically around 1000, so this means a million steps to compute the integral, for evaluating the characteristic function on a single u, and we need N times that. Furthermore, the paper omits any interest rate or dividend yield. Adding those means having to compute a different characteristic function for each period of the cliquet.  One can decently wonder then if this is really faster than Monte-Carlo given that the accuracy is not that great either as per Table 1 of that paper.</p>
+<p>There is some newer paper on the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3095323">PROJ method combined with CTMC</a>, it looks very complex to implement, and there are some similar equations as in Deng, so one can wonder if it is not as slow (but it does handle Heston, through a continuous Markov chain approximation).</p>
+<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:[Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models] (<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
+<p>There is also the more <a href="https://cs.uwaterloo.ca/~paforsyt/cliquet.pdf">classic paper</a> named <em>Numerical Methods and Volatility Models for Valuing Cliquet Options</em> by Windcliff, Forsyth and Vetzal on using finite differencing on the PDE, with two additional variables (one for the previous fixing, one for the running sum). On the 2D Heston PDE, it is maybe competitive with Monte-Carlo, maybe not.</p>
+<p>Overall, many papers, but none provide any comparison with Monte-Carlo, which is somewhat surprising. Furthermore one may reduce Monte-Carlo variance using the cliquet without global floor as control variate.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

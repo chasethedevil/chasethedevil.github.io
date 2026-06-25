@@ -65,13 +65,36 @@
     </ul>
  </nav>
 
-    <p>&copy; 171715. All rights reserved. </p>
+    <p>&copy; 252529. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/stochastic_collocation_old_and_new/">Stochastic Collocation - Old And New</a>
+  </h1>
+  <time datetime="2025-08-05T17:27:00Z" class="post-date">Tue, Aug 5, 2025</time>
+  <p>Thomas Roos recently put a preprint on SSRN called <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5215592">Simple, Flexible, Analytic, Arbitrage Free Volatility Interpolation</a>. Being interested in the subject, I had a detailed look at it. It turns out that Thomas stumbled upon <a href="https://www.mdpi.com/2227-9091/7/1/30">spline stochastic collocation</a> without realizing it.</p>
+<p>There are a few differences in his approach:</p>
+<ul>
+<li>The optimization is on the x&rsquo;s instead of the y&rsquo;s, meaning the strike axis is fixed.</li>
+<li>An original approach to avoid spurious modes, although I would have liked more details on it, with concrete examples of the penalty. Penalties are often challenging to get right.</li>
+<li>A nice analysis of the asymptotic behavior in the wings, showing that an exponentially quadratic form for extrapolation corresponds to linear slopes in implied variance.</li>
+</ul>
+<p>I had  also explored a fixed strike axis initially (even back in 2014 - I uploaded <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5381580">some old notes on SSRN around this</a>). I found it to be somewhat unstable back then, but it may well be that I did not put enough efforts into it, especially since optimizing the y&rsquo;s instead of the x&rsquo;s allowed for a straightforward use of B-splines, which is very attractive. It is very direct to impose monotonicity with B-splines.</p>
+<p>The main advantage of optimizing on the x&rsquo;s instead of the y&rsquo;s is that the knots are defined in the more usual strike space.</p>
+<p>Now I find interesting that someone else stumbled upon essentially the same idea starting from another point of view. There may be more merits to this parameterization than I thought.</p>
+<p>The challenges I found with stochastic collocations were:</p>
+<ul>
+<li>spurious spike when the collocation function derivative is close to zero which happens on occasion. This is not really like an extra mode - it is not smooth. Penalty or minimal slope are possible workarounds, but challenging to make robust.</li>
+<li>dependency on the choice of knots, especially if nearly exact interpolation is required.</li>
+<li>more minor, non-predictable runtime: the non-linear optimization is sometimes very fast, sometimes much slower. This is the case of most arbitrage-free interpolation techniques.</li>
+</ul>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/nufft_and_cos/">NUFFT and COS</a>
   </h1>
@@ -480,47 +503,6 @@ Unfortunately, written by does not mean that it is a scientific book, and it&rsq
 <p>There is a small part on taxing carbon, it&rsquo;s only 3 pages, and quite optimistic. It consists in a socialist approach (which I am not necessarily opposed to). There is no mention of carbon trades, no mention of what can go wrong with the taxing or the trade of carbon.</p>
 <p>On the global warming subject, <a href="/post/koonin-on-climate-book-review/">I much preferred</a> the more controversial book <em>Unsettled</em> of Steve Koonin, sometimes quoted by climate warming deniers (who may have not read it at all) and often <a href="https://www.scientificamerican.com/article/a-new-book-manages-to-get-climate-science-badly-wrong/">denounced</a> by climate warming supporters (who may have read it too closely). The arguments made were clearer, more scientific. Even if the book was not that great either, I found it helped discovering the subject from various angles.</p>
 <p>Overall it&rsquo;s a bit strange that this kind of book is given away by companies. On one hand, I can see how it resonates with business values such as how to deal with antagonistic people, how to talk to people around you. On the other hand, it feels like a waste of time and money. There are much better books or courses that can teach you more in a shorter time. For example, I attended by accident two 4h courses around <a href="https://en.wikipedia.org/wiki/Myers%E2%80%93Briggs_Type_Indicator">Myers-Briggs</a>, and found it to make a much bigger impact.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/vol_monotonicity_in_practice/">Monotonicity of the Black-Scholes Option Prices in Practice</a>
-  </h1>
-  <time datetime="2024-09-29T12:56:42&#43;0100" class="post-date">Sun, Sep 29, 2024</time>
-  <p>It is well known that vanilla option prices must increase when we increase the implied volatility. Recently, a post on the Wilmott forums wondered about the true accuracy of Peter Jaeckel implied volatility solver, whether it was truely IEEE 754 compliant. In fact, the author noticed some inaccuracy in the option price itself. Unfortunately I can not reply to the forum, its login process does not seem to be working anymore, and so I am left to blog about it.</p>
-<p>It can be quite challenging to evaluate the accuracy. For example, one potential error that the author makes is to use numbers that are not exactly representable in IEEE 754 standard such as 4.45 or 0.04. In Julia, and I believe in Python mpmath as well, there is a difference between a BigFloat(4.45) and a BigFloat(&ldquo;4.45&rdquo;):</p>
-<p><code>BigFloat(4.45)  = 4.45000000000000017763568394002504646778106689453125 BigFloat(&quot;4.45&quot;)= 4.449999999999999999999999999999999999999999999999999999999999999999999999999972</code></p>
-<p>If we work only on usual 64-bit floats, we likely want to estimate the accuracy of an implementation using BigFloat(4.45) as input rather than BigFloat(&ldquo;4.45&rdquo;). To compute a vanilla option price, the naive way would be through the cumulative normal distribution function (the textbook way), which looks like</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">function</span> bs(strike, forward, voltte)
-</span></span><span style="display:flex;"><span>    d1 <span style="color:#666">=</span> (log(forward<span style="color:#666">/</span>strike)<span style="color:#666">+</span>voltte<span style="color:#666">^</span><span style="color:#40a070">2</span> <span style="color:#666">/</span> <span style="color:#40a070">2</span>)<span style="color:#666">/</span>voltte
-</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> forward<span style="color:#666">*</span>cdf(Normal(),d1)<span style="color:#666">-</span>strike<span style="color:#666">*</span>cdf(Normal(),d1<span style="color:#666">-</span>voltte)
-</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">end</span></span></span></code></pre></div>
-<p>It turns out that this produces relatively high error for out of the money prices. In fact, the prices are far from being monotonic if we increase the vol by 1 ulp a hundred times we obtain:
-<figure><img src="/post/bs_price.png">
-</figure>
-</p>
-<p>Peter Jaeckel proposes several improvements, the first simple one is to use the scaled complementary error function <code>erfcx</code> rather than the cumulative normal distribution function directly. A second improvement is to use Taylor expansions for small prices. It turns out that on the example with strike K=2.0, forward F=1.0, vol=0.125, the Taylor expansion is being used.</p>
-<figure><img src="/post/bs_price_jaeckel.png">
-</figure>
-
-<p>The error is much lower, with Taylor being even a little bit better. But the price is still not monotonic.</p>
-<p>How would the implied vol corresponding to those prices look like? If we apply Peter Jaeckel implied vol solver to the naive Black-Scholes formula, we end up with an accuracy limited by the naive formula.
-<figure><img src="/post/bs_vol_naive.png">
-</figure>
-</p>
-<p>If we apply it to the exact prices or to erfcx or to Taylor, we still end up with a non monotonic implied vol:</p>
-<figure><img src="/post/bs_vol_jaeckel.png">
-</figure>
-
-<p>There is no visible difference in accuracy if we start from the erfcx prices and apply the SR Householder solver of <a href="https://github.com/jherekhealy/AQFED.jl/tree/master/src/black">Jherek Healy</a>:</p>
-<figure><img src="/post/bs_vol_erfcx.png">
-</figure>
-
-<p>It should not be too surprising: if we compose the Black-Scholes formula with the associated solver from Peter Jaeckel, we do not obtain the identity function. Because the option prices are not monotonic with the vol, there are several vols which may be solution to the same price, and the solver is guaranteed to not solve exactly, which leads to the numerical noise we see on the plots. In contrast, it is remarkable that if we compose exp with log we have a nice monotonic shape:</p>
-<figure><img src="/post/logexp.png">
-</figure>
-
-<p>The prerequisite for a more accurate solver would be a Black-Scholes function which is actually monotonic.</p>
 
   
 </article>

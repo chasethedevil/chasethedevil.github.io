@@ -65,13 +65,37 @@
     </ul>
  </nav>
 
-    <p>&copy; 171715. All rights reserved. </p>
+    <p>&copy; 252529. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/bad-methods-for-cliquets/">Non-practical Pricing Techniques for Cliquets?</a>
+  </h1>
+  <time datetime="2026-06-24T03:43:00Z" class="post-date">Wed, Jun 24, 2026</time>
+  <p>I have been looking at various techniques for <a href="https://en.wikipedia.org/wiki/Cliquet_option">cliquet</a> pricing with a focus on the Heston model. The obvious way is to use Monte-Carlo. Can we do better?</p>
+<p>The difficulty of the somewhat simple contract I was looking at is the presence of a global floor, without a local floor, but with a local cap. The payoff reads
+\( max(0, min(C, \sum_{i=1}^n \frac{S(t_i)-S(t_{i-1})}{S(t_{i-1})})) \)</p>
+<p>where 0 is the global floor, and C is the local cap.</p>
+<p>Without global floor, it is just a series of forward starting options and can be easily priced with Heston through a simple Fourier based formula (e.g., the COS method).</p>
+<p>With global floor, the option becomes more strongly path-dependent. In a Black-Scholes settings, it all simplifies and pricing it is not so difficult (there are several papers on this, I somewhat wonder if one could not apply the Jamshidian trick as well).</p>
+<p>There is a paper from Deng et al. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2396145">Efficient Valuation of Equity-Indexed Annuities Under Lévy Processes Using Fourier-Cosine Series</a> limited Lévy processes. Even in this simpler setting (because one can avoid integrating over the variance as in Heston), I have doubts on the efficiency of the method proposed, in particular, there is a small note at the bottom of page 10 which says:
+<figure><img src="/post/deng_levy_caveat.png"><figcaption>
+      <h4>An important footnote.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>In the tests, N is typically around 1000, so this means a million steps to compute the integral, for evaluating the characteristic function on a single u, and we need N times that. Furthermore, the paper omits any interest rate or dividend yield. Adding those means having to compute a different characteristic function for each period of the cliquet.  One can decently wonder then if this is really faster than Monte-Carlo given that the accuracy is not that great either as per Table 1 of that paper.</p>
+<p>There is some newer paper on the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3095323">PROJ method combined with CTMC</a>, it looks very complex to implement, and there are some similar equations as in Deng, so one can wonder if it is not as slow (but it does handle Heston, through a continuous Markov chain approximation).</p>
+<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:[Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models] (<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
+<p>There is also the more <a href="https://cs.uwaterloo.ca/~paforsyt/cliquet.pdf">classic paper</a> named <em>Numerical Methods and Volatility Models for Valuing Cliquet Options</em> by Windcliff, Forsyth and Vetzal on using finite differencing on the PDE, with two additional variables (one for the previous fixing, one for the running sum). On the 2D Heston PDE, it is maybe competitive with Monte-Carlo, maybe not.</p>
+<p>Overall, many papers, but none provide any comparison with Monte-Carlo, which is somewhat surprising. Furthermore one may reduce Monte-Carlo variance using the cliquet without global floor as control variate.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/a-faster-bachelier-normal-implied-volatility-solver/">A Bachelier Normal Implied Volatility Solver</a>
   </h1>
@@ -2173,29 +2197,6 @@ Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020
 <p>First, I tried <a href="https://github.com/PumasAI/SimpleChains.jl">SimpleChain</a>, which just crashed (core dumped!) on a very simple example. I did not bother finding the root cause, I decided to look for another library. I then tried <a href="https://lux.csail.mit.edu/stable/">LUX</a>. The execution kept going forever without returning with the @compile keyword. I probably was not being lucky, even though my code was only 10s of lines long. So I decided to use <a href="https://fluxml.ai/">Flux</a>, which actually is as simple to use as <a href="https://pytorch.org/">Pytorch</a>, a well-known library in the Python world.</p>
 <p>Things works with Flux, and I do manage to do many experiments. But the performance is not great. This was another surprise: Pytorch was actually faster for many tasks on the CPU (no GPU). For example, to train a multi-layer-perceptron with 4 hidden layers of 200 neurons, Julia was taking several hours, until I hit CTRL+C and launched the same training in Pytorch (which took 15 minutes). I think it may be something with AdamW optimizer and relatively wide (but not really compared to LMM stuff) networks.</p>
 <p>Overall, the experience is pretty disappointing. Maybe it shows how much effort has been put in the Python ecosystem.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/stochastic_collocation_old_and_new/">Stochastic Collocation - Old And New</a>
-  </h1>
-  <time datetime="2025-08-05T17:27:00Z" class="post-date">Tue, Aug 5, 2025</time>
-  <p>Thomas Roos recently put a preprint on SSRN called <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5215592">Simple, Flexible, Analytic, Arbitrage Free Volatility Interpolation</a>. Being interested in the subject, I had a detailed look at it. It turns out that Thomas stumbled upon <a href="https://www.mdpi.com/2227-9091/7/1/30">spline stochastic collocation</a> without realizing it.</p>
-<p>There are a few differences in his approach:</p>
-<ul>
-<li>The optimization is on the x&rsquo;s instead of the y&rsquo;s, meaning the strike axis is fixed.</li>
-<li>An original approach to avoid spurious modes, although I would have liked more details on it, with concrete examples of the penalty. Penalties are often challenging to get right.</li>
-<li>A nice analysis of the asymptotic behavior in the wings, showing that an exponentially quadratic form for extrapolation corresponds to linear slopes in implied variance.</li>
-</ul>
-<p>I had  also explored a fixed strike axis initially (even back in 2014 - I uploaded <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5381580">some old notes on SSRN around this</a>). I found it to be somewhat unstable back then, but it may well be that I did not put enough efforts into it, especially since optimizing the y&rsquo;s instead of the x&rsquo;s allowed for a straightforward use of B-splines, which is very attractive. It is very direct to impose monotonicity with B-splines.</p>
-<p>The main advantage of optimizing on the x&rsquo;s instead of the y&rsquo;s is that the knots are defined in the more usual strike space.</p>
-<p>Now I find interesting that someone else stumbled upon essentially the same idea starting from another point of view. There may be more merits to this parameterization than I thought.</p>
-<p>The challenges I found with stochastic collocations were:</p>
-<ul>
-<li>spurious spike when the collocation function derivative is close to zero which happens on occasion. This is not really like an extra mode - it is not smooth. Penalty or minimal slope are possible workarounds, but challenging to make robust.</li>
-<li>dependency on the choice of knots, especially if nearly exact interpolation is required.</li>
-<li>more minor, non-predictable runtime: the non-linear optimization is sometimes very fast, sometimes much slower. This is the case of most arbitrage-free interpolation techniques.</li>
-</ul>
 
   
 </article>
