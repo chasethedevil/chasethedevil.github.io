@@ -65,13 +65,26 @@
     </ul>
  </nav>
 
-    <p>&copy; 252529. All rights reserved. </p>
+    <p>&copy; 262622. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/deep_neural_networks_and_julia/">Deep Neural Networks and Julia</a>
+  </h1>
+  <time datetime="2025-10-07T17:27:00Z" class="post-date">Tue, Oct 7, 2025</time>
+  <p>Recently, I have spent some time on simple neural networks. The idea is to employ them as universal function approximators for some problems appearing in quantitative finance. There are some great papers on it such as the one from <a href="https://mathematicsinindustry.springeropen.com/articles/10.1186/s13362-019-0066-7">Liu et al. (2019)</a> or <a href="https://arxiv.org/abs/1901.09647">Horvath et al. (2019) Deep Learning Volatility</a> or <a href="https://arxiv.org/abs/2107.01611">Rosenbaum &amp; Zhang (2021)</a>.
+Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020.</p>
+<p>I thought I would try out what Julia offers in terms of library for neural networks. Being a very trendy subject, and Julia a modern language for the scientific community, I had imagined the libraris to be of good quality (like the many I have been using in the past). Surprisingly, I was wrong.</p>
+<p>First, I tried <a href="https://github.com/PumasAI/SimpleChains.jl">SimpleChain</a>, which just crashed (core dumped!) on a very simple example. I did not bother finding the root cause, I decided to look for another library. I then tried <a href="https://lux.csail.mit.edu/stable/">LUX</a>. The execution kept going forever without returning with the @compile keyword. I probably was not being lucky, even though my code was only 10s of lines long. So I decided to use <a href="https://fluxml.ai/">Flux</a>, which actually is as simple to use as <a href="https://pytorch.org/">Pytorch</a>, a well-known library in the Python world.</p>
+<p>Things works with Flux, and I do manage to do many experiments. But the performance is not great. This was another surprise: Pytorch was actually faster for many tasks on the CPU (no GPU). For example, to train a multi-layer-perceptron with 4 hidden layers of 200 neurons, Julia was taking several hours, until I hit CTRL+C and launched the same training in Pytorch (which took 15 minutes). I think it may be something with AdamW optimizer and relatively wide (but not really compared to LMM stuff) networks.</p>
+<p>Overall, the experience is pretty disappointing. Maybe it shows how much effort has been put in the Python ecosystem.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/stochastic_collocation_old_and_new/">Stochastic Collocation - Old And New</a>
   </h1>
@@ -491,18 +504,6 @@ related issues, even when disabling the feature or changing the settings in the 
 <p>I thought most rolling distributions would fit the bill. It turns out they don&rsquo;t, EndeavourOS or Manjaro have relatively recent live install but (a) they are not small enough to fit on the USB key and (b) the images are a few months old where the kernel is too old.</p>
 <p><a href="https://get.opensuse.org/tumbleweed/">OpenSuse Tumbleweed</a> provides a daily updated network installer iso (and a live CD), this is the only thing that worked, and it worked well.</p>
 <p>Overall I was a bit surprised that it was so challenging to find an installable distribution with the latest kernel.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/saving_us_book_review/">Saving Us - Book Review</a>
-  </h1>
-  <time datetime="2024-10-13T12:56:42&#43;0100" class="post-date">Sun, Oct 13, 2024</time>
-  <p>I had the opportunity to receive a free book on climate change, through the company I am working for. I had not heard of that book before, it called <em>Saving Us</em> and is written by an actual climate scientist (Katharine Hayhoe).
-Unfortunately, written by does not mean that it is a scientific book, and it&rsquo;s not. The author does not spend much effort explaining the physics or the reports, but focuses on how to convince people this is an important problem to tackle. It is mildly interesting at first, as it presents the problem from a psychological angle. But it becomes quickly repetitive. The method is always the same, connect with what&rsquo;s important to an audience who initially rejects climate warming (mostly the phenomenon, sometimes proposals around it), and make them understand that climate warming plays a role in their life, in the very matters they care about. It is presented as a series of personal experiences of the author, a list of examples.</p>
-<p>There is a small part on taxing carbon, it&rsquo;s only 3 pages, and quite optimistic. It consists in a socialist approach (which I am not necessarily opposed to). There is no mention of carbon trades, no mention of what can go wrong with the taxing or the trade of carbon.</p>
-<p>On the global warming subject, <a href="/post/koonin-on-climate-book-review/">I much preferred</a> the more controversial book <em>Unsettled</em> of Steve Koonin, sometimes quoted by climate warming deniers (who may have not read it at all) and often <a href="https://www.scientificamerican.com/article/a-new-book-manages-to-get-climate-science-badly-wrong/">denounced</a> by climate warming supporters (who may have read it too closely). The arguments made were clearer, more scientific. Even if the book was not that great either, I found it helped discovering the subject from various angles.</p>
-<p>Overall it&rsquo;s a bit strange that this kind of book is given away by companies. On one hand, I can see how it resonates with business values such as how to deal with antagonistic people, how to talk to people around you. On the other hand, it feels like a waste of time and money. There are much better books or courses that can teach you more in a shorter time. For example, I attended by accident two 4h courses around <a href="https://en.wikipedia.org/wiki/Myers%E2%80%93Briggs_Type_Indicator">Myers-Briggs</a>, and found it to make a much bigger impact.</p>
 
   
 </article>

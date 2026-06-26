@@ -64,7 +64,7 @@
     </ul>
  </nav>
 
-    <p>&copy; 252529. All rights reserved. </p>
+    <p>&copy; 262622. All rights reserved. </p>
   </div>
 </aside>
 
@@ -86,7 +86,7 @@
 </p>
 <p>In the tests, N is typically around 1000, so this means a million steps to compute the integral, for evaluating the characteristic function on a single u, and we need N times that. Furthermore, the paper omits any interest rate or dividend yield. Adding those means having to compute a different characteristic function for each period of the cliquet.  One can decently wonder then if this is really faster than Monte-Carlo given that the accuracy is not that great either as per Table 1 of that paper.</p>
 <p>There is some newer paper on the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3095323">PROJ method combined with CTMC</a>, it looks very complex to implement, and there are some similar equations as in Deng, so one can wonder if it is not as slow (but it does handle Heston, through a continuous Markov chain approximation).</p>
-<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:[Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models] (<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
+<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510">Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
 <p>There is also the more <a href="https://cs.uwaterloo.ca/~paforsyt/cliquet.pdf">classic paper</a> named <em>Numerical Methods and Volatility Models for Valuing Cliquet Options</em> by Windcliff, Forsyth and Vetzal on using finite differencing on the PDE, with two additional variables (one for the previous fixing, one for the running sum). On the 2D Heston PDE, it is maybe competitive with Monte-Carlo, maybe not.</p>
 <p>Overall, many papers, but none provide any comparison with Monte-Carlo, which is somewhat surprising. Furthermore one may reduce Monte-Carlo variance using the cliquet without global floor as control variate.</p>
 

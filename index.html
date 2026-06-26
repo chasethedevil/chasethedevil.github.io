@@ -65,13 +65,40 @@
     </ul>
  </nav>
 
-    <p>&copy; 252529. All rights reserved. </p>
+    <p>&copy; 262622. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/what-can-go-wrong-during-caplet-stripping/">What Can Go Wrong During Caplet Stripping?</a>
+  </h1>
+  <time datetime="2026-06-25T03:43:00Z" class="post-date">Thu, Jun 25, 2026</time>
+  <p>You may or may not have heard that a piecewise-linear interpolation of caplet vols is not stable, it leads to oscillations in the caplet stripping procedure (implying caplet volatilities from cap vol market quotes). And many revert to piecewise-constant interpolation as a consequence.</p>
+<p>Several years ago, such a case was brought upon myself and I thought at the time that maybe if we used knots at mid-points it would be more stable as it would balance out the weights in the matrix representation, similarly to what is shown in the book <a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=a+practical+guide+to+splines&amp;btnG=">A Practical Guide To Splines</a>, which I particularly enjoyed. I also believed that we must be able to do better than piecewise-constant, which has discontinuities in time, and could thus be problematic for any Theta related measure (sensitivity to time).</p>
+<p>During week-ends and off work hours, with my wife wondering what I was spending my time on, I only recently took the time to look at an example of oscillating caplet vols in more details. This led me to many different very interesting paths:</p>
+<ul>
+<li>The idea of knots at mid-points indeed works.</li>
+<li>The root cause was actually some outliers quotes (although piecewise linear on caplet maturities is not so stable - I explain why). There are ways to filter those out.</li>
+<li>Cubic splines also suffer from moderate oscillations when used at caplet maturities vs mid-points.</li>
+<li>The piecewise-constant bootstrap stripping is compatible with some piecewise-linear or piecewise-smooth representations.</li>
+<li>Gary came up with a direct stripping method based on interpolating prices, which I refined to interpolate time values instead.</li>
+<li>The representation with time-values gives immediate clues about arbitrageable quotes (no-arbitrage conditions).</li>
+</ul>
+<p>I even asked my children to interpolate bootstrapped caplet volatilities:
+<figure><img src="/post/caplet_stripping_by_child.png"><figcaption>
+      <h4>Proof that a child does not use piecewise-constant interpolation.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>It&rsquo;s really a joint analysis with Gary Kennedy and this is all detailed in the preprint <a href="https://arxiv.org/abs/2605.05140">A Practical Guide to Strip Caplet Volatilities</a> with a clear nod to the book of Carl de Boor. I give code in Java <a href="/post/caplet_stripper.zip">here</a> that allows reproducing some of the results presented (not for production, may contain errors).</p>
+<p>Now, the <a href="https://www.amazon.com/Interest-Rate-Modeling-Products-Management/dp/0984422129">quant bible</a> from Andersen and Piterbarg does not really discuss such stripping methods, which aim at reproducing nearly exactly the market quotes of caps. Instead, it presents a SABR-like fitting procedure in Section 16.2, which is more consistent with the volatility smile at given maturities, but will not match market (or external preprocessed) quotes that well. This reduces the chances of arbitrages in the strike dimension, while I focus only on the maturity dimension (and the caplet vols in the strike dimension may look awkward).</p>
+<p>On noisy quotes, the SABR fitting is the better approach. However, nearly exact caplet stripping is very often used in various banking systems.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/bad-methods-for-cliquets/">Non-practical Pricing Techniques for Cliquets?</a>
   </h1>
@@ -90,7 +117,7 @@
 </p>
 <p>In the tests, N is typically around 1000, so this means a million steps to compute the integral, for evaluating the characteristic function on a single u, and we need N times that. Furthermore, the paper omits any interest rate or dividend yield. Adding those means having to compute a different characteristic function for each period of the cliquet.  One can decently wonder then if this is really faster than Monte-Carlo given that the accuracy is not that great either as per Table 1 of that paper.</p>
 <p>There is some newer paper on the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3095323">PROJ method combined with CTMC</a>, it looks very complex to implement, and there are some similar equations as in Deng, so one can wonder if it is not as slow (but it does handle Heston, through a continuous Markov chain approximation).</p>
-<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:[Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models] (<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510)</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
+<p>Finally I found an older paper from Peter den Iseger and Emölde Oldenkamp:<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1013510">Cliquet Options: Pricing and Greeks in Deterministic and Stochastic Volatility Models</a>. This looks much more promising, it details the Black-Scholes simplification, and uses a fancy Legendre basis to not use too many integration points. Still the Heston implementation seems very heavy handed. The more worrying part is that there is no comparison given at all for Heston, no number. The only provided numbers are for the  Black-Scholes setting.</p>
 <p>There is also the more <a href="https://cs.uwaterloo.ca/~paforsyt/cliquet.pdf">classic paper</a> named <em>Numerical Methods and Volatility Models for Valuing Cliquet Options</em> by Windcliff, Forsyth and Vetzal on using finite differencing on the PDE, with two additional variables (one for the previous fixing, one for the running sum). On the 2D Heston PDE, it is maybe competitive with Monte-Carlo, maybe not.</p>
 <p>Overall, many papers, but none provide any comparison with Monte-Carlo, which is somewhat surprising. Furthermore one may reduce Monte-Carlo variance using the cliquet without global floor as control variate.</p>
 
@@ -107,7 +134,7 @@
     </figcaption>
 </figure>
 
-<p>The paper on the new LFK2026 Normal implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.18343">https://arxiv.org/abs/2605.18343</a> and <a href="/post/lfk2026-java.zip">minimal Java code here</a>.</p>
+<p>The paper on the new LFK2026 Normal implied volatlity solver is available at <a href="https://arxiv.org/abs/2605.18343">https://arxiv.org/abs/2605.18343</a> and <a href="/post/lfk2026-java.zip">minimal Java code here</a>. I also give minimal Rust code in the below update (the performance increase is even more significant with Rust).</p>
 <p><strong>Update June 16</strong>
 I have tried two new things:</p>
 <ol>
@@ -125,6 +152,7 @@ I have tried two new things:</p>
 </li>
 </ol>
 <p>Overall it is quite challenging to increase accuracy further. While it is an interesting problem to look at, it is not necessarily so practical: is this gain of one to three machine epsilons really worth the cost?</p>
+<p><a href="/post/lfk2026_rust.zip">Rust code</a> for the LFK solvers and reproduction of the results presented in the paper (instructions in the README.md).</p>
 
   
 </article><article class="post">
@@ -2184,19 +2212,6 @@ Before that, <a href="https://dl.acm.org/doi/10.1145/779359.779360">ACM Algorith
 </ul>
 <p>I don&rsquo;t really see what there is  to gain to follow this 4-by-4 seeding. It would be simpler and less concerning to simply use the RNG to produce N seeds where N is the number of dimensions (instead of N/4). The only possible gain with the 4-by-4 seeding is some memory (as only N/4 seeds are kept in memory), but the total amount is not significant: for 21000 dimensions, keeping all in memory takes around 656 KB (yes, 640 KB is not all we need!). The cost of 4-by-4 seeding is a potentially  less random scrambling.</p>
 <p>On the same subject, there is another new low discrepancy sequence which appears to have some good properties as well as being as fast to generate as Sobol, it&rsquo;s called <a href="https://dl.acm.org/doi/10.1145/3763272">SZ Sequence</a>.</p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/deep_neural_networks_and_julia/">Deep Neural Networks and Julia</a>
-  </h1>
-  <time datetime="2025-10-07T17:27:00Z" class="post-date">Tue, Oct 7, 2025</time>
-  <p>Recently, I have spent some time on simple neural networks. The idea is to employ them as universal function approximators for some problems appearing in quantitative finance. There are some great papers on it such as the one from <a href="https://mathematicsinindustry.springeropen.com/articles/10.1186/s13362-019-0066-7">Liu et al. (2019)</a> or <a href="https://arxiv.org/abs/1901.09647">Horvath et al. (2019) Deep Learning Volatility</a> or <a href="https://arxiv.org/abs/2107.01611">Rosenbaum &amp; Zhang (2021)</a>.
-Incidentally, I met Liu back when I was finishing my PhD in TU Delft around 2020.</p>
-<p>I thought I would try out what Julia offers in terms of library for neural networks. Being a very trendy subject, and Julia a modern language for the scientific community, I had imagined the libraris to be of good quality (like the many I have been using in the past). Surprisingly, I was wrong.</p>
-<p>First, I tried <a href="https://github.com/PumasAI/SimpleChains.jl">SimpleChain</a>, which just crashed (core dumped!) on a very simple example. I did not bother finding the root cause, I decided to look for another library. I then tried <a href="https://lux.csail.mit.edu/stable/">LUX</a>. The execution kept going forever without returning with the @compile keyword. I probably was not being lucky, even though my code was only 10s of lines long. So I decided to use <a href="https://fluxml.ai/">Flux</a>, which actually is as simple to use as <a href="https://pytorch.org/">Pytorch</a>, a well-known library in the Python world.</p>
-<p>Things works with Flux, and I do manage to do many experiments. But the performance is not great. This was another surprise: Pytorch was actually faster for many tasks on the CPU (no GPU). For example, to train a multi-layer-perceptron with 4 hidden layers of 200 neurons, Julia was taking several hours, until I hit CTRL+C and launched the same training in Pytorch (which took 15 minutes). I think it may be something with AdamW optimizer and relatively wide (but not really compared to LMM stuff) networks.</p>
-<p>Overall, the experience is pretty disappointing. Maybe it shows how much effort has been put in the Python ecosystem.</p>
 
   
 </article>

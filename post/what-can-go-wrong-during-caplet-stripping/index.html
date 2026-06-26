@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.161.1">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>What Can Go Wrong During Caplet Stripping? &middot; Chase the Devil</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://chasethedevil.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://chasethedevil.github.io/"><h1 style="font-family: 'UnifrakturMaguntia', cursive;font-weight: normal;">Chase the Devil</h1></a>
+      <p class="lead">
+       A personal, independent, technical blog 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://chasethedevil.github.io/">Blog</a> </li>
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+
+        <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <script type="text/javascript">document.write("<a href=\"mail" + "to:" + new Array("fabien","2ipi.com").join("@") + "?subject=your%20blog\">" + '<i class="fa fa-envelope fa-3x"></i>' + "</" + "a>");</script>
+      
+      
+      
+      
+      
+      
+      <a href="https://twitter.com/logos01"><i class="fa fa-twitter-square fa-3x"></i></a>
+      
+      <a href="https://chasethedevil.github.io/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+ </nav>
+
+    <p>&copy; 262622. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>What Can Go Wrong During Caplet Stripping?</h1>
+  <time datetime=2026-06-25T03:43:00Z class="post-date">Thu, Jun 25, 2026</time>
+  <p>You may or may not have heard that a piecewise-linear interpolation of caplet vols is not stable, it leads to oscillations in the caplet stripping procedure (implying caplet volatilities from cap vol market quotes). And many revert to piecewise-constant interpolation as a consequence.</p>
+<p>Several years ago, such a case was brought upon myself and I thought at the time that maybe if we used knots at mid-points it would be more stable as it would balance out the weights in the matrix representation, similarly to what is shown in the book <a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=a+practical+guide+to+splines&amp;btnG=">A Practical Guide To Splines</a>, which I particularly enjoyed. I also believed that we must be able to do better than piecewise-constant, which has discontinuities in time, and could thus be problematic for any Theta related measure (sensitivity to time).</p>
+<p>During week-ends and off work hours, with my wife wondering what I was spending my time on, I only recently took the time to look at an example of oscillating caplet vols in more details. This led me to many different very interesting paths:</p>
+<ul>
+<li>The idea of knots at mid-points indeed works.</li>
+<li>The root cause was actually some outliers quotes (although piecewise linear on caplet maturities is not so stable - I explain why). There are ways to filter those out.</li>
+<li>Cubic splines also suffer from moderate oscillations when used at caplet maturities vs mid-points.</li>
+<li>The piecewise-constant bootstrap stripping is compatible with some piecewise-linear or piecewise-smooth representations.</li>
+<li>Gary came up with a direct stripping method based on interpolating prices, which I refined to interpolate time values instead.</li>
+<li>The representation with time-values gives immediate clues about arbitrageable quotes (no-arbitrage conditions).</li>
+</ul>
+<p>I even asked my children to interpolate bootstrapped caplet volatilities:
+<figure><img src="/post/caplet_stripping_by_child.png"><figcaption>
+      <h4>Proof that a child does not use piecewise-constant interpolation.</h4>
+    </figcaption>
+</figure>
+</p>
+<p>It&rsquo;s really a joint analysis with Gary Kennedy and this is all detailed in the preprint <a href="https://arxiv.org/abs/2605.05140">A Practical Guide to Strip Caplet Volatilities</a> with a clear nod to the book of Carl de Boor. I give code in Java <a href="/post/caplet_stripper.zip">here</a> that allows reproducing some of the results presented (not for production, may contain errors).</p>
+<p>Now, the <a href="https://www.amazon.com/Interest-Rate-Modeling-Products-Management/dp/0984422129">quant bible</a> from Andersen and Piterbarg does not really discuss such stripping methods, which aim at reproducing nearly exactly the market quotes of caps. Instead, it presents a SABR-like fitting procedure in Section 16.2, which is more consistent with the volatility smile at given maturities, but will not match market (or external preprocessed) quotes that well. This reduces the chances of arbitrages in the strike dimension, while I focus only on the maturity dimension (and the caplet vols in the strike dimension may look awkward).</p>
+<p>On noisy quotes, the SABR fitting is the better approach. However, nearly exact caplet stripping is very often used in various banking systems.</p>
+
+</div>
+
+<h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chasethedevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </main>
+
+    
+      
+    
+  </body>
+</html>

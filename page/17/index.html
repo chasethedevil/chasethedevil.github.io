@@ -65,13 +65,24 @@
     </ul>
  </nav>
 
-    <p>&copy; 252529. All rights reserved. </p>
+    <p>&copy; 262622. All rights reserved. </p>
   </div>
 </aside>
 
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://chasethedevil.github.io/post/adjoint-delta-for-monte-carlo/">Adjoint Delta for Monte-Carlo</a>
+  </h1>
+  <time datetime="2014-02-25T18:37:00Z" class="post-date">Tue, Feb 25, 2014</time>
+  <p>In an earlier post, I have been quickly exploring <a href="/post/adjoint-algorithmic-differentiation-for-black-scholes/">adjoint differentiation</a> in the context of analytical Black-Scholes. Today, I tried to mix it in a simple Black-Scholes Monte-Carlo as described in <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCsQFjAA&amp;url=http%3A%2F%2Fwww.luca-capriotti.net%2Fpdfs%2FFinance%2Fjcf_capriotti_press_web.pdf&amp;ei=rNMMU4_wGKjt0gWQpYGIAQ&amp;usg=AFQjCNFovkw47-Y1WrIKkt-m5FQ1lhmqYA&amp;sig2=vmiqHzd6SJuq5Fp2TlPjdA&amp;bvm=bv.61725948,d.d2k">L. Capriotti paper</a>, and measured the performance to compute delta compared to a numerical single sided finite difference delta.</p>
+<p>I was a bit surprised that even on a single underlying, without any real optimization, adjoint delta was faster by a factor of nearly 40%. I suspect this is mostly due to exp evaluations being /2.</p>
+<p>On a basket of 4 assets, the adjoint method was 3.25x faster.</p>
+<p>It&rsquo;s quick to have such results on basic payoffs: it took me a few hours and worked on the first run, even though my Monte-Carlo is slightly different from the Capriotti paper. It is much more challenging to have it working across a wide variety of payoffs, and to automatize some of it.</p>
+
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://chasethedevil.github.io/post/svi-on-top-of-sabr/">SVI on top of SABR</a>
   </h1>
@@ -239,16 +250,6 @@ Pooley et al., in <a href="https://cs.uwaterloo.ca/~paforsyt/report.pdf">Converg
 </figure>
 </p>
 <p><strong>Update March 2014</strong> - I have now a paper with Matlab code <a href="http://ssrn.com/abstract=2402001">Finite Difference Techniques for Arbitrage Free SABR</a></p>
-
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://chasethedevil.github.io/post/random-hardware-issues/">Random Hardware Issues</a>
-  </h1>
-  <time datetime="2014-01-06T18:44:00Z" class="post-date">Mon, Jan 6, 2014</time>
-  <p>Today, after wondering why my desktop computer became so unstable (frequent crashes under Fedora), I found out that the micro usb port of my cell phone has some kind of short circuit. My phone behaves strangely in 2014, it lasted nearly 1 week on battery (I lost it for half of the week), and seems to shutdown for no particular reason once in a while.</p>
-<p>On the positive side, I also discovered, after owning my monitor for around 5 years, that it has SD card slots on the side, as well as USB ports. I always used the USB ports of my desktop and never really looked at the side of my monitor&hellip;</p>
-<p>I also managed to seriously boost the speed of my home network with a cheap TP-Link wifi router. The one included in the ISP box-modem only supported 802.11g and had really crap coverage, so crap that it was seriously limiting the internet traffic. In the end it was just a matter of disabling wifi and DHCP on the box, adding the new router in the DMZ, and adding a static WAN IP for the box in the router configuration. I did not realize how much of a difference this could make, even on simple websites. I was also surprised that, for some strange reason, routers are cheaper than access points these days.</p>
 
   
 </article>
